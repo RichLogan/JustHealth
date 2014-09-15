@@ -15,6 +15,6 @@ Label, assign and use milestones properly
 You can use this to work out what state you working directory is in. It will show you've changed that you haven't added, what's been added but not committed, and in what state your working directory is in compared to master.
 * * *
     $ git pull
-Remeber to do this in order to pull down other peoples changes.
+Remember to do this in order to pull down other peoples changes.
 * * *
 Remember to use branches! A branch should be created for each feature. All code on the master branch should be deployable at any time. 
