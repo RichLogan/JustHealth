@@ -65,8 +65,13 @@ For example, imagine there is a file with one word on Master and the word is Per
 <div>
 Steve
 </div>
+<div>
 =======
-<div>Rich</div>
+</div>
+<div>
+Rich
+</div>
+<div>
 >>>>>>> master
 </div>
 
