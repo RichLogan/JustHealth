@@ -1,3 +1,0 @@
-Rich
-Steve 
-Charlotte
