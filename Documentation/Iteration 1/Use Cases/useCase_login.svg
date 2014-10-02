@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" font-family="Arial" font-size="13" width="612" height="252">
+	<desc>UML diagram model</desc>
+	<g id="_qD-LkCnhEDKKWpGczG0v8g">
+		<defs>
+			<linearGradient id="greyGradient" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad">
+				<stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" />
+				<stop offset="100%" stop-color="#E5E5E5" stop-opacity="1" />
+				
+			</linearGradient>
+			<linearGradient id="packageGradient" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad">
+				<stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" />
+				<stop offset="100%" stop-color="#EFE9DE" stop-opacity="1" />
+				
+			</linearGradient>
+			
+		</defs>
+		<g id="_qeXokCnhEDKKWpGczG0v8g">
+			<ellipse cx="52" cy="57" rx="10" ry="10" fill="white" stroke="black" stroke-width="1.5" />
+			<line x1="52" y1="67" x2="52" y2="101" stroke-width="1.5" stroke="black" />
+			<line x1="52" y1="101" x2="65" y2="122" stroke-width="1.5" stroke="black" />
+			<line x1="52" y1="101" x2="39" y2="122" stroke-width="1.5" stroke="black" />
+			<line x1="65" y1="84" x2="39" y2="84" stroke-width="1.5" stroke="black" />
+			<text x="52" y="137" text-anchor="middle" font-style="normal" font-weight="normal" fill="black">User</text>
+			
+		</g>
+		<g id="_Ie75MCniEDKKWpGczG0v8g">
+			<rect x="172" y="2" width="420" height="230" rx="2" ry="0" fill="#fff" fill-opacity="0.5" stroke="#CCCCCC" stroke-width="1" />
+			<text x="177" y="20" font-style="normal" font-weight="bold" fill="#2d2d2d">Login System</text>
+			
+		</g>
+		<g id="_sMmE8CnhEDKKWpGczG0v8g">
+			<ellipse cx="252" cy="80" rx="50" ry="28" fill="url(#greyGradient)" stroke="#CCCCCC" stroke-width="1.0" />
+			<text x="252" y="64" text-anchor="middle" font-style="normal" font-weight="bold" fill="#033656">
+				<tspan x="252" y="77" font-size="12" text-anchor="middle" dy="5">Login</tspan>
+				
+			</text>
+			
+		</g>
+		<g id="_uQ1NkCnhEDKKWpGczG0v8g">
+			<ellipse cx="492" cy="40" rx="60" ry="28" fill="url(#greyGradient)" stroke="#CCCCCC" stroke-width="1.0" />
+			<text x="492" y="24" text-anchor="middle" font-style="normal" font-weight="bold" fill="#033656">
+				<tspan x="492" y="37" font-size="12" text-anchor="middle" dy="5">Reset Password</tspan>
+				
+			</text>
+			
+		</g>
+		<g id="_GbMf0CniEDKKWpGczG0v8g">
+			<ellipse cx="252" cy="170" rx="50" ry="28" fill="url(#greyGradient)" stroke="#CCCCCC" stroke-width="1.0" />
+			<text x="252" y="154" text-anchor="middle" font-style="normal" font-weight="bold" fill="#033656">
+				<tspan x="252" y="167" font-size="12" text-anchor="middle" dy="5">Logout</tspan>
+				
+			</text>
+			
+		</g>
+		<g id="_s-LykCnkEDKKWpGczG0v8g">
+			<ellipse cx="464" cy="150" rx="82" ry="28" fill="url(#greyGradient)" stroke="#CCCCCC" stroke-width="1.0" />
+			<text x="464" y="134" text-anchor="middle" font-style="normal" font-weight="bold" fill="#033656">
+				<tspan x="464" y="147" font-size="12" text-anchor="middle" dy="5">Lockout after 5 attempts</tspan>
+				
+			</text>
+			
+		</g>
+		<g id="_qozhgCniEDKKWpGczG0v8g">
+			<polyline fill="none" stroke-width="1" stroke="#000000" points="432,50 302,71" stroke-dasharray="10, 5" />
+			<g transform="translate(302,71)">
+				<g transform="rotate(-99)">
+					<polyline fill="none" stroke-width="1" stroke="#000000" points="-4,8 0,0 4,8" />
+					
+				</g>
+				
+			</g>
+			
+		</g>
+		<g id="_rjmV0SniEDKKWpGczG0v8g">
+			<polyline fill="none" stroke-width="1" stroke="#000000" points="102,89 202,83" />
+			
+		</g>
+		<g id="_r5npICniEDKKWpGczG0v8g">
+			<polyline fill="none" stroke-width="1" stroke="#000000" points="102,111 202,150" />
+			
+		</g>
+		<g id="_v0MWYCnkEDKKWpGczG0v8g">
+			<polyline fill="none" stroke-width="1" stroke="#000000" points="382,122 302,96" stroke-dasharray="10, 5" />
+			<g transform="translate(302,96)">
+				<g transform="rotate(-72)">
+					<polyline fill="none" stroke-width="1" stroke="#000000" points="-4,8 0,0 4,8" />
+					
+				</g>
+				
+			</g>
+			
+		</g>
+		<text x="342" y="50" fill="#000000">« extend »</text>
+		<text x="316" y="97" fill="#000000">« extend »</text>
+		
+	</g>
+	
+</svg>
