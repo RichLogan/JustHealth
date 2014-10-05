@@ -12,12 +12,12 @@ email CHAR(100) NOT NULL
 
 Password
 --------
-userId SERIAL {PK} {FK}
+userId INTEGER {PK} {FK}
 password CHAR(100) NOT NULL
 
 Prescription
 --------
-userId SERIAL {PK} {FK}
+userId INTEGER {PK} {FK}
 medicationId INTEGER {PK} {FK}
 dosage CHAR(100) {PK}
 frequency CHAR(100)
