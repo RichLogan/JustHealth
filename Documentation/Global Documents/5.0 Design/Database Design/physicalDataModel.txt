@@ -1,12 +1,12 @@
 Patient
 --------
-userId SERIAL NOT NULL {PK} {FK}
+userId SERIAL {PK}
 username CHAR(100) NOT NULL
 email CHAR(100) NOT NULL
 
 Carer
 --------
-userId SERIAL NOT NULL {PK} {FK}
+userId SERIAL {PK}
 username CHAR(100) NOT NULL
 email CHAR(100) NOT NULL
 
