@@ -1,0 +1,35 @@
+Patient
+--------
+userId SERIAL NOT NULL {PK} {FK}
+username CHAR(100) NOT NULL
+email CHAR(100) NOT NULL
+
+Carer
+--------
+userId SERIAL NOT NULL {PK} {FK}
+username CHAR(100) NOT NULL
+email CHAR(100) NOT NULL
+
+Password
+--------
+userId SERIAL {PK} {FK}
+password CHAR(100) NOT NULL
+
+Prescription
+--------
+userId SERIAL {PK} {FK}
+medicationId INTEGER {PK} {FK}
+dosage CHAR(100) {PK}
+frequency CHAR(100)
+
+Medication
+--------
+medicationId SERIAL {PK}
+medicationName CHAR(100) NOT NULL
+description TEXT
+imageLink CHAR(100)
+
+Assignment
+--------
+patientId INTEGER {PK} {FK}
+carerId INTEGER {PK} {FK}
