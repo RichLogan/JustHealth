@@ -28,6 +28,8 @@ CREATE TABLE Prescription (
   userId INTEGER,
   medicationId INTEGER,
   dosage CHAR(100),
+  dosageUnit CHAR(100),
+  frequency CHAR(100),
   frequency CHAR(100),
   PRIMARY KEY (userId, medicationId, dosage)
   FOREIGN KEY userId REFERENCES Patient(userId),
