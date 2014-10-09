@@ -1,6 +1,6 @@
 from peewee import *
 
-db = PostgresqlDatabase("dci29t33tqegt2", host="ec2-50-17-207-54.compute-1.amazonaws.com",port=5432,user="phweeqpzeffqac",password="9Kg9eyFSQtGX-fLxrt-LTmenj8")
+db = PostgresqlDatabase("justhealth", host="penguin.kent.ac.uk",port=5432,user="justhealth",password="dsomoid")
 
 class Client(Model):
     username = PrimaryKeyField()
