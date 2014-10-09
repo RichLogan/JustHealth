@@ -2,60 +2,48 @@
 
 {% block title %}Registration{% endblock %}
 
-
-
 {% block content %}
+
+<h1>Registration</h1>
+
   <form action="" method="POST">
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">
     </div>
 
-    <br />
-
     <div class="form-group">
         <label for="firstName">First Name</label>
         <input class="form-control" type="text" name="firstName">
     </div>
-
-    <br />
 
     <div class="form-group">
         <label for="surname">Surname</label>
         <input class="form-control" type="text" name="surname">
     </div>
 
-    <br />
-
     <div class="form-group">
         <label for="dob">D.O.B.</label>
         <input class="form-control" type="date" name="dob">
     </div>
 
-    <br />
-
     <div class="form-group">
         <label for="isMale">Gender</label>
+
         <input class="form-control" type="radio" name="isMale" value="true">Male
         <input class="form-control" type="radio" name="isMale" value="false">Female
     </div>
-
-    <br />
 
     <div class="form-group">
         <label for="isCarer">Account Type</label>
         <input class="form-control" type="radio" name="isCarer" value="true">Carer
         <input class="form-control" type="radio" name="isCarer" value="false">Patient
     </div>
-    
-    <br />
 
     <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" name="email">
     </div>
-    
-    <br />
 
     <div class="form-group">
         <label for="password">Password</label>

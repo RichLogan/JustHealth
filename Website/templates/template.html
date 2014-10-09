@@ -3,18 +3,28 @@
   <head>
     <title>{% block title %}{% endblock %} | JustHealth</title>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
   </head>
 
   <header>
-    <!-- Logo, login/logout, home, profile -->
-    <!-- search -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navBar">
+      <div class="container">
+        <img src="/static/images/logo.png" id="mainLogo"></img>
+
+        <a href="/settings" class="pull-right"><i class="fa fa-cog smallIcon"></i></a>
+        <a href="/" class="pull-right"><i class="fa fa-home smallIcon"></i></a>
+      </div>
+    </nav>
   </header>
 
   <body>
     {% block content %}{% endblock %}
   </body>
 
+  <div class="container-fluid">
   <footer>
-    <!-- Contact Us, Sitemap, Legal, Privacy/Cookies, Accessibility -->
+
   </footer>
+</div>
 </html>

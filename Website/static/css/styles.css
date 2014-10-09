@@ -1,0 +1,31 @@
+.smallIcon {
+  font-size: 50px;
+  padding: 10px;
+  color: #FFFFFF;
+}
+
+#navBar {
+  height: 75px;
+  background-color:#2272EB;
+}
+
+#mainLogo {
+  height: 70px;
+}
+
+body {
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 85px;
+  background-color: #FAFAFA;
+}
+
+footer {
+  height: 50px;
+  background-color: #000000;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin-top: 50px;
+}
