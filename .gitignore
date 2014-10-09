@@ -7,4 +7,6 @@
 ehthumbs.db
 Thumbs.db
 
+# Python
 venv/
+*.py[cod]
