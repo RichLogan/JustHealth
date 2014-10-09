@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request
-import database
+from database import *
 app = Flask(__name__)
 
-@app.route('/register')
+@app.route('/register', methods=['POST', 'GET'])
 def registration():
     if request.method == 'POST':
+      profile = {}
       profile['username'] = request.form['username']
       profile['firstName'] = request.form['firstName']
       profile['surname'] = request.form['surname']
@@ -15,6 +16,23 @@ def registration():
       profile['password'] = request.form['password']
       profile['confirmPassword'] = request.form['confirmPassword']
 
+
+      userInsert = Client.insert(username = profile['username'],
+                                firstname = profile['firstName'],
+                                surname = profile['surname'],
+                                dob = profile['dob'],
+                                ismale = profile['isMale'],
+                                iscarer = profile['isCarer'],
+                                email = profile['email'])
+
+      userPassword = uq8LnAWi7D.insert(username = profile['username'],
+                                      password = profile['password'],
+                                      iscurrent = 'TRUE',
+                                      expirydate = '10/10/2014')
+      userInsert.execute()
+      userPassword.execute()
+
+      return 'Registered'
 
 
     else:
