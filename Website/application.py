@@ -15,8 +15,13 @@ def registration():
       profile['isMale'] = request.form['isMale']
       profile['isCarer'] = request.form['isCarer']
       profile['email'] = request.form['email']
-      profile['password'] = sha256_crypt.encrypt(str(request.form['password']))
+      profile['password'] = request.form['password']
       profile['confirmPassword'] = request.form['confirmPassword']
+
+      for key in profile:
+        profile[key] = profile[key].strip()
+
+      profile['password'] = sha256_crypt.encrypt(profile['password'])
 
       userInsert = Client.insert(username = profile['username'],
                                 firstname = profile['firstName'],
