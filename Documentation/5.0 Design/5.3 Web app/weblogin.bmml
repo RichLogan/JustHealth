@@ -1,0 +1,83 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1197" measuredH="519" mockupW="1074" mockupH="492">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="278" y="27" w="741" h="492" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14540253</color>
+        <text>JustHealth%0Ahttp%3A//www.justhealth.uk/</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Image" x="285" y="106" w="153" h="66" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logo</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::HelpButton" x="732" y="331" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Link" x="750" y="351" w="-1" h="-1" measuredW="136" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Forgot%20your%20password%3F</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::PointyButton" x="564" y="327" w="-1" h="-1" measuredW="55" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Log%20in</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::TextInput" x="564" y="260" w="168" h="-1" measuredW="79" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::TextInput" x="567" y="294" w="165" h="-1" measuredW="79" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="492" y="263" w="-1" h="-1" measuredW="65" measuredH="21" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Username</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="492" y="296" w="-1" h="-1" measuredW="60" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Password</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Link" x="750" y="330" w="-1" h="-1" measuredW="107" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>I%20need%20to%20register</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Arrow" x="869" y="245" w="328" h="95" measuredW="150" measuredH="100" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>-1</curvature>
+        <direction>bottom</direction>
+        <rightArrow>false</rightArrow>
+        <text>Links%20to%20registration%20page</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Arrow" x="905" y="359" w="279" h="100" measuredW="150" measuredH="100" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <rightArrow>false</rightArrow>
+        <text>Automatic%20email%20notification%20with%20password%20reset</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Arrow" x="958" y="138" w="-1" h="-1" measuredW="150" measuredH="100" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <rightArrow>false</rightArrow>
+        <text>Stretch%20background%20colour%20of%20logo%20across%20to%20create%20block%20header</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Arrow" x="123" y="210" w="201" h="100" measuredW="150" measuredH="100" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <leftArrow>false</leftArrow>
+        <rightArrow>true</rightArrow>
+        <text>White%20background</text>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::HRule" x="438" y="162" w="575" h="-1" measuredW="100" measuredH="10" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
