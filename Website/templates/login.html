@@ -3,7 +3,9 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <form action="" method="POST">
+<h1> Login </h1>
+
+  <form action="/login" method="POST">
     <div class="form-group">
       <label for="username">Username</label>
       <input class="form-control" type="text" name="username">
@@ -14,5 +16,7 @@
       <input class="form-control" type="password" name="password">
     </div>
   <a href="/resetpassword">Forgot Password</a>
+
+  <input class="form-control" type="submit" value="login">
   </form>
 {% endblock %}
