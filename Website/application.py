@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request
-<<<<<<< HEAD
-=======
 from passlib.hash import sha256_crypt
->>>>>>> 917bf717e372efc7c01f7df42a0306a9146be901
-import crypt, bcrypt
 from database import *
+
 app = Flask(__name__)
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -18,7 +15,7 @@ def registration():
       profile['isMale'] = request.form['isMale']
       profile['isCarer'] = request.form['isCarer']
       profile['email'] = request.form['email']
-      profile['password'] = sha256_crypt.encrypt(request.form['password'])
+      profile['password'] = sha256_crypt.encrypt(str(request.form['password']))
       profile['confirmPassword'] = request.form['confirmPassword']
 
       userInsert = Client.insert(username = profile['username'],
@@ -30,7 +27,7 @@ def registration():
                                 email = profile['email'])
 
       userPassword = uq8LnAWi7D.insert(username = profile['username'],
-                                      password = crypt.crypt(profile['password'], bcrypt.gensalt(12)),
+                                      password = profile['password'],
                                       iscurrent = 'TRUE',
                                       expirydate = '10/10/2014')
       userInsert.execute()
@@ -47,20 +44,9 @@ def resetpassword():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-<<<<<<< HEAD
-      profile = {}
-      profile['username'] = request.form['username']
-      profile['password'] = request.form['password']
-
-
-      if uq8LnAWi7D.get(username=profile['username']) == crypt.crypt(profile['password'],bcrypt.gensalt(12)):
-        return 'Logged in'
-      else:
-        return render_template('login.html')
-=======
-      hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password
-      return sha256_crypt.verify(request.form['password'], hashedPassword)
->>>>>>> 917bf717e372efc7c01f7df42a0306a9146be901
+      hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
+      password = request.form['password']
+      return str(sha256_crypt.verify(password, hashedPassword))
     return render_template('login.html')
 
 if __name__ == '__main__':
