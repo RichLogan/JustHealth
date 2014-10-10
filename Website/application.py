@@ -16,7 +16,6 @@ def registration():
       profile['password'] = request.form['password']
       profile['confirmPassword'] = request.form['confirmPassword']
 
-
       userInsert = Client.insert(username = profile['username'],
                                 firstname = profile['firstName'],
                                 surname = profile['surname'],
@@ -33,8 +32,6 @@ def registration():
       userPassword.execute()
 
       return 'Registered'
-
-
     else:
       return render_template('register.html')
 
@@ -45,8 +42,6 @@ def login():
 @app.route('/resetpassword')
 def resetpassword():
   return render_template('resetpassword.html')
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
