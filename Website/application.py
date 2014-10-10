@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import crypt, bcrypt
 from database import *
 app = Flask(__name__)
 
@@ -25,7 +26,7 @@ def registration():
                                 email = profile['email'])
 
       userPassword = uq8LnAWi7D.insert(username = profile['username'],
-                                      password = profile['password'],
+                                      password = crypt.crypt(profile['password'], bcrypt.gensalt(12)),
                                       iscurrent = 'TRUE',
                                       expirydate = '10/10/2014')
       userInsert.execute()
