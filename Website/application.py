@@ -35,13 +35,23 @@ def registration():
     else:
       return render_template('register.html')
 
-@app.route('/login')
-def login():
-  return render_template('login.html')
-
 @app.route('/resetpassword')
 def resetpassword():
   return render_template('resetpassword.html')
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+      profile = {}
+      profile['username'] = request.form['username']
+      profile['password'] = request.form['password']
+
+
+      if uq8LnAWi7D.get(username=profile['username']) == crypt.crypt(profile['password'],bcrypt.gensalt(12)):
+        return 'Logged in'
+      else:
+        return render_template('login.html')
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
