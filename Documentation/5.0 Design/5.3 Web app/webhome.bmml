@@ -70,7 +70,7 @@
         <icon>SmallClockIcon%7Clarge</icon>
       </controlProperties>
     </control>
-    <control controlID="35" controlTypeID="com.balsamiq.mockups::Icon" x="781" y="210" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="20" locked="false" isInGroup="-1">
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::Icon" x="778" y="210" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="20" locked="false" isInGroup="-1">
       <controlProperties>
         <color>13369344</color>
         <icon>Alert2Icon%7Clarge</icon>
@@ -86,48 +86,30 @@
         <icon>InfoIcon%7Clarge</icon>
       </controlProperties>
     </control>
-    <control controlID="41" controlTypeID="com.balsamiq.mockups::Icon" x="781" y="330" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="23" locked="false" isInGroup="-1">
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Icon" x="778" y="330" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="23" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>GearIcon%7Clarge</icon>
       </controlProperties>
     </control>
-    <control controlID="49" controlTypeID="com.balsamiq.mockups::Image" x="468" y="454" w="-1" h="-1" measuredW="52" measuredH="35" zOrder="24" locked="false" isInGroup="-1">
-      <controlProperties>
-        <src>./assets/overlappedicon.png</src>
-        <text/>
-      </controlProperties>
-    </control>
-    <control controlID="50" controlTypeID="com.balsamiq.mockups::Image" x="622" y="454" w="-1" h="-1" measuredW="52" measuredH="35" zOrder="25" locked="false" isInGroup="-1">
-      <controlProperties>
-        <src>./assets/overlappedicon.png</src>
-        <text/>
-      </controlProperties>
-    </control>
-    <control controlID="51" controlTypeID="com.balsamiq.mockups::Image" x="776" y="454" w="-1" h="-1" measuredW="52" measuredH="35" zOrder="26" locked="false" isInGroup="-1">
-      <controlProperties>
-        <src>./assets/overlappedicon.png</src>
-        <text/>
-      </controlProperties>
-    </control>
-    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="618" y="273" w="-1" h="-1" measuredW="60" measuredH="17" zOrder="27" locked="false" isInGroup="-1">
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="618" y="273" w="-1" h="-1" measuredW="60" measuredH="17" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Reminders%29</text>
       </controlProperties>
     </control>
-    <control controlID="53" controlTypeID="com.balsamiq.mockups::Label" x="780" y="393" w="-1" h="-1" measuredW="49" measuredH="17" zOrder="28" locked="false" isInGroup="-1">
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::Label" x="780" y="393" w="-1" h="-1" measuredW="49" measuredH="17" zOrder="25" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Settings%29</text>
       </controlProperties>
     </control>
-    <control controlID="54" controlTypeID="com.balsamiq.mockups::Label" x="632" y="393" w="-1" h="-1" measuredW="32" measuredH="17" zOrder="29" locked="false" isInGroup="-1">
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::Label" x="632" y="393" w="-1" h="-1" measuredW="32" measuredH="17" zOrder="26" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Help%29</text>
       </controlProperties>
     </control>
-    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="457" y="393" w="-1" h="-1" measuredW="71" measuredH="17" zOrder="30" locked="false" isInGroup="-1">
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="457" y="393" w="-1" h="-1" measuredW="71" measuredH="17" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Health%20Check%29</text>
@@ -137,6 +119,24 @@
       <controlProperties>
         <leftArrow>false</leftArrow>
         <text>Extra%20Tiles</text>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Image" x="620" y="454" w="-1" h="-1" measuredW="51" measuredH="34" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/cut_icon.png</src>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::Image" x="776" y="454" w="-1" h="-1" measuredW="51" measuredH="34" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/cut_icon.png</src>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Image" x="468" y="455" w="-1" h="-1" measuredW="51" measuredH="34" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/cut_icon.png</src>
+        <text/>
       </controlProperties>
     </control>
   </controls>
