@@ -4,7 +4,7 @@ $(window).resize (
     }
 );
 
-
+//check form fields are not null
 function validateForm() {
     var x = document.forms["register"]["username","firstName","surname","dob", "email", "confirmPassword", "password"].value;
     if (x==null || x=="") {
@@ -12,7 +12,7 @@ function validateForm() {
     }
 }
 
-
+//check email is vaild and correct format
 function validateEmail() {
     var x = document.forms["register"]["email"].value;
     var atpos = x.indexOf("@");
@@ -23,6 +23,7 @@ function validateEmail() {
     }
 }
 
+//check dob is correct format
 function validateDob() {
   var pattern =/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
   if(pattern.test(dob) ==false {
