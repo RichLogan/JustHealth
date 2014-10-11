@@ -5,12 +5,14 @@ from database import *
 
 app = Flask(__name__)
 
+# Checks to see if a session is set. If not, kicks to login screen.
 def needLogin(f):
   @wraps(f)
   def loginCheck(*args, **kwargs):
     try:
       session['username']
     except KeyError, e:
+      # session['username'] doesn't exist, kick to login screen
       return redirect(url_for('login'))
     return f(*args, **kwargs)
   return loginCheck
@@ -87,6 +89,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/logout')
+@needLogin
 def logout():
   session.pop('username', None)
   return redirect(url_for('index'))
