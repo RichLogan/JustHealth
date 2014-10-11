@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 from passlib.hash import sha256_crypt
 from database import *
 
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+  if 'username' in session:
+    return session['username']
+  return redirect(url_for('login'))
 
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
@@ -63,8 +69,13 @@ def login():
       # Retrieve and compare saved and entered passwords
       hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
       password = request.form['password']
-      return str(sha256_crypt.verify(password, hashedPassword))
+
+      if sha256_crypt.verify(password, hashedPassword):
+        session['username'] = request.form['username']
+        return redirect(url_for('index'))
     return render_template('login.html')
+
+app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f\xa1Z'
 
 if __name__ == '__main__':
     app.run(debug=True)
