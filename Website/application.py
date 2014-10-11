@@ -14,6 +14,7 @@ def needLogin(f):
     except KeyError, e:
       # session['username'] doesn't exist, kick to login screen
       return redirect(url_for('login'))
+    # User logged in, continue as normal
     return f(*args, **kwargs)
   return loginCheck
 
