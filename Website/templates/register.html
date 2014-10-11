@@ -6,7 +6,7 @@
 
 <h1>Registration</h1>
 
-  <form action="" method="POST">
+  <form name= "register" form action="" onsubmit= "return !!(validateForm() & validateEmail());" method="POST">
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">
