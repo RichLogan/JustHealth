@@ -70,10 +70,16 @@ def login():
       hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
       password = request.form['password']
 
+      # If valid, set SESSION on username
       if sha256_crypt.verify(password, hashedPassword):
         session['username'] = request.form['username']
         return redirect(url_for('index'))
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+  session.pop('username', None)
+  return redirect(url_for('index'))
 
 app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f\xa1Z'
 
