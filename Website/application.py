@@ -1,14 +1,24 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+from functools import wraps
 from passlib.hash import sha256_crypt
 from database import *
 
 app = Flask(__name__)
 
+def needLogin(f):
+  @wraps(f)
+  def loginCheck(*args, **kwargs):
+    try:
+      session['username']
+    except KeyError, e:
+      return redirect(url_for('login'))
+    return f(*args, **kwargs)
+  return loginCheck
+
 @app.route('/')
+@needLogin
 def index():
-  if 'username' in session:
     return session['username']
-  return redirect(url_for('login'))
 
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
