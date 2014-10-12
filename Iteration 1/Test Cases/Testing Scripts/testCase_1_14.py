@@ -16,14 +16,16 @@ class testCase_1_14(unittest.TestCase):
     deletePasswords.execute()
 
   def test_1_14_1(self):
-    newUser = database.Client.insert (username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUser.execute()
+    with database.db.transaction():
+      newUser = database.Client.insert(
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUser.execute()
 
   def tearDown(self):
     deleteUsers = database.Client.delete()
