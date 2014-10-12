@@ -26,7 +26,7 @@ function validateEmail() {
 //check dob is correct format
 function validateDob() {
   var pattern =/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
-  if(pattern.test(dob) ==false {
+  if(pattern.test(dob) == false) {
      alert("Invalid date");
      return false;
    }
