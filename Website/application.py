@@ -87,6 +87,15 @@ def login():
       if sha256_crypt.verify(password, hashedPassword):
         session['username'] = request.form['username']
         return redirect(url_for('index'))
+      else:
+        # lock account if 5 attempts
+        try: 
+          session['count'] += 1
+        except KeyError, e:
+          session['count'] = 1
+        if session['count'] >= 5:
+          Client.update(accountlocked = 'true').where(Client.username == request.form['username'].strip())
+          return str(Client.get(Client.username == request.form['username']).accountlocked)
     return render_template('login.html')
 
 @app.route('/logout')
