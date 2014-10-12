@@ -64,14 +64,14 @@
     <control controlID="16" controlTypeID="com.balsamiq.mockups::Arrow" x="958" y="138" w="-1" h="-1" measuredW="150" measuredH="100" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
         <rightArrow>false</rightArrow>
-        <text>Stretch%20background%20colour%20of%20logo%20across%20to%20create%20block%20header</text>
+        <text>Fill%20header%20with%20logo%20background</text>
       </controlProperties>
     </control>
     <control controlID="17" controlTypeID="com.balsamiq.mockups::Arrow" x="123" y="210" w="201" h="100" measuredW="150" measuredH="100" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <leftArrow>false</leftArrow>
         <rightArrow>true</rightArrow>
-        <text>White%20background</text>
+        <text>Off-white%20background</text>
       </controlProperties>
     </control>
     <control controlID="18" controlTypeID="com.balsamiq.mockups::HRule" x="438" y="162" w="575" h="-1" measuredW="100" measuredH="10" zOrder="14" locked="false" isInGroup="-1">
