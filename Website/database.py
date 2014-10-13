@@ -21,11 +21,12 @@ class Client(BaseModel):
     surname = CharField(max_length=100)
     username = CharField(max_length=25, primary_key=True)
     verified = BooleanField()
+    accountlocked = BooleanField()
 
     class Meta:
         db_table = 'client'
 
-class uq8Lnawi7D(BaseModel):
+class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
     password = CharField(max_length=255)
