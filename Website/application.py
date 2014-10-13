@@ -96,6 +96,11 @@ def registration():
 def resetpassword():
   return render_template('resetpassword.html')
 
+#finds the value of the loginattempts field in the database
+def getLoginAttempts(username):
+  loginAttempts = Client.get(username=request.form['username']).loginattempts
+  return loginAttempts
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -109,21 +114,20 @@ def login():
         # If valid, set SESSION on username
         if sha256_crypt.verify(password, hashedPassword):
           session['username'] = request.form['username']
-          session['count'] = 0
+          updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
+          updateLoginAttempts.execute()
           return redirect(url_for('index'))
         else:
-          # lock account if 5 attempts
-          try:
-            session['count'] += 1
-          except KeyError, e:
-            session['count'] = 1
-          if session['count'] >= 5:
+        # lock account if 5 attempts
+          getLoginAttempts(request.form['username'])
+          updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
+          updateLoginAttempts.execute()
+          if getLoginAttempts(request.form['username']) >= 5:
             updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
             updateAccountLocked.execute()
-            return str(Client.username)
+            return "Account locked Bro"
       else:
-        return "Account locked Bro"
-        session['count'] = 0
+        return "Account locked Bro"        
       # Retrieve and compare saved and entered passwords
       hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
       password = request.form['password']
@@ -144,3 +148,4 @@ app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f
 
 if __name__ == '__main__':
     app.run(debug=True)
+
