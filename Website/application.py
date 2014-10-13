@@ -143,38 +143,41 @@ def logout():
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPassword(): 
-  return render_template('resetpassword.html')
   if request.method == 'POST':
     try:
         profile = {}
         profile['username'] = request.form['username']
-        profile['confirmemail'] = request.form['email']
-        profile['newpassword'] = request.form['password']
-        profile['confirmnewpassword'] = request.form['confirmpassword']
-        profile['confirmdob'] = request.form['dob']
+        profile['confirmemail'] = request.form['confirmemail']
+        profile['newpassword'] = request.form['newpassword']
+        profile['confirmnewpassword'] = request.form['confirmnewpassword']
+        profile['confirmdob'] = request.form['confirmdob']
     except KeyError, e:
       return "All fields must be filled out"
       
-      getEmail = client.get(username=profile['username']).email
-      getDob = client.get(username=profile['username']).dob
+    getEmail = Client.get(username=profile['username']).email.strip()
+    getDob = str(Client.get(username=profile['username']).dob)
 
-      if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
+    if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
 
-        #set the old password to iscurrent = false
-        notCurrent = uq8LnAWi7D.update(iscurrent=false).where(username=profile['username'])
-       
-        # Build insert password query
-        newCredentials = uq8LnAWi7D.insert(
-          username = profile['username'],
-          password = profile['password'],
-          iscurrent = 'TRUE',
-          expirydate = '10/10/2014'
-        )
+      #set the old password to iscurrent = false
+      notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == request.form['username'])
 
-        notCurrent.execute()
-        newCredentials.execute()
-      else:
-        return render_template('login.html',invalid='true')
+      #encrypt the password
+      profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
+
+      # Build insert password query
+      newCredentials = uq8LnAWi7D.insert(
+        username = profile['username'],
+        password = profile['newpassword'],
+        iscurrent = True,
+        expirydate = '10/10/2014'
+      )
+
+      notCurrent.execute()
+      newCredentials.execute()
+      return notCurrent
+    else:
+      return render_template('resetpassword.html',invalid='true')
   return render_template('resetpassword.html')
 
 
