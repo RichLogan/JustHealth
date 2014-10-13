@@ -30,3 +30,37 @@ footer {
   width: 100%;
   margin-top: 50px;
 }
+
+#register {
+	margin-left:100px;	
+}
+#register label{
+	margin-right:5px;
+}
+#register input {
+	padding:5px 7px;
+	border:1px solid #d5d9da;
+	box-shadow: 0 0 5px #e8e9eb inset;
+	font-size:1em;
+	outline:0;
+}
+
+#result{
+	margin-left:5px;
+}
+
+#register.short{
+	color:#FF0000;
+}
+
+#register.weak{
+	color:#E66C2C;
+}
+
+#register.good{
+	color:#2D98F3;
+}
+
+#register.strong{
+	color:#006400;
+}
