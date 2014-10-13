@@ -79,23 +79,31 @@ def resetpassword():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-      # Retrieve and compare saved and entered passwords
-      hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
-      password = request.form['password']
+      isAccountLocked = Client.get(username=request.form['username']).accountlocked
+      if isAccountLocked == False:
+      
+        # Retrieve and compare saved and entered passwords
+        hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
+        password = request.form['password']
 
-      # If valid, set SESSION on username
-      if sha256_crypt.verify(password, hashedPassword):
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
+        # If valid, set SESSION on username
+        if sha256_crypt.verify(password, hashedPassword):
+          session['username'] = request.form['username']
+          session['count'] = 0
+          return redirect(url_for('index'))
+        else:
+          # lock account if 5 attempts
+          try: 
+            session['count'] += 1
+          except KeyError, e:
+            session['count'] = 1
+          if session['count'] >= 5:
+            updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
+            updateAccountLocked.execute()
+            return str(Client.username)
       else:
-        # lock account if 5 attempts
-        try: 
-          session['count'] += 1
-        except KeyError, e:
-          session['count'] = 1
-        if session['count'] >= 5:
-          Client.update(accountlocked = 'true').where(Client.username == request.form['username'].strip())
-          return str(Client.get(Client.username == request.form['username']).accountlocked)
+        return "Account locked Bro"
+        session['count'] = 0
     return render_template('login.html')
 
 @app.route('/logout')
