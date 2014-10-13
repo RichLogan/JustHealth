@@ -42,6 +42,16 @@ def registration():
       for key in profile:
         profile[key] = profile[key].strip()
 
+      if (profile['username'] or profile['firstname'] or profile['surname'] or profile['dob'] or profile['email'] or profile['password'] or profile['confirm password'] == None)
+      return 'All fields must be filled in'
+
+      if (len(profile['username']) >25)
+      return 'username can not be longer then 25 characters'
+
+      if(len(profile['firstname'] >100 or profile['surname']>100 or profile['email']>100))
+      return 'firstname, surname and email can not be longer then 100 characters'
+
+
       # Encrypt password with SHA 256
       profile['password'] = sha256_crypt.encrypt(profile['password'])
 
@@ -87,15 +97,6 @@ def login():
       if sha256_crypt.verify(password, hashedPassword):
         session['username'] = request.form['username']
         return redirect(url_for('index'))
-      else:
-        # lock account if 5 attempts
-        try: 
-          session['count'] += 1
-        except KeyError, e:
-          session['count'] = 1
-        if session['count'] >= 5:
-          Client.update(accountlocked = 'true').where(Client.username == request.form['username'].strip())
-          return str(Client.get(Client.username == request.form['username']).accountlocked)
     return render_template('login.html')
 
 @app.route('/logout')
