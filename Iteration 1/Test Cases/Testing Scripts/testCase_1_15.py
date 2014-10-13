@@ -5,20 +5,20 @@ from peewee import *
 import unittest
 import imp
 
-database = imp.load_source('database', '../../../Website/database.py')
+testDatabase = imp.load_source('testDatabase', '../../../Website/testDatabase.py')
 
 class testCase_1_15(unittest.TestCase):
 
   def setUp(self):
-    deleteUsers = database.Client.delete()
-    deletePasswords = database.uq8LnAWi7D.delete()
+    deleteUsers = testDatabase.Client.delete()
+    deletePasswords = testDatabase.uq8LnAWi7D.delete()
     deleteUsers.execute()
     deletePasswords.execute()
 
   def test_1_15_1(self):
-    with database.db.transaction():
+    with testDatabase.database.transaction():
       with self.assertRaises(DataError):
-        newUser = database.Client.insert(
+        newUser = testDatabase.Client.insert(
           username='testtesttesttesttesttestte',
           firstname='test',
           surname='test',
@@ -29,9 +29,9 @@ class testCase_1_15(unittest.TestCase):
         newUser.execute()
 
   def test_1_15_2(self):
-    with database.db.transaction():
+    with testDatabase.database.transaction():
       with self.assertRaises(DataError):
-        newUser = database.Client.insert(
+        newUser = testDatabase.Client.insert(
           username='test',
           firstname='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestt',
           surname='test',
@@ -42,9 +42,9 @@ class testCase_1_15(unittest.TestCase):
         newUser.execute()
 
   def test_1_15_3(self):
-    with database.db.transaction():
+    with testDatabase.database.transaction():
       with self.assertRaises(DataError):
-        newUser = database.Client.insert(
+        newUser = testDatabase.Client.insert(
           username= 'test',
           firstname='test',
           surname='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestt',
@@ -55,9 +55,9 @@ class testCase_1_15(unittest.TestCase):
         newUser.execute()
 
   def test_1_15_4(self):
-    with database.db.transaction():
+    with testDatabase.database.transaction():
       with self.assertRaises(DataError):
-        newUser = database.Client.insert(
+        newUser = testDatabase.Client.insert(
           username= 'test',
           firstname='test',
           surname='test',
@@ -68,9 +68,9 @@ class testCase_1_15(unittest.TestCase):
         newUser.execute()
 
   def test_1_15_5(self):
-    with database.db.transaction():
+    with testDatabase.database.transaction():
       with self.assertRaises(DataError):
-        newUser = database.Client.insert(
+        newUser = testDatabase.Client.insert(
           username= 'test',
           firstname='test',
           surname='test',
@@ -81,8 +81,8 @@ class testCase_1_15(unittest.TestCase):
         newUser.execute()
 
   def tearDown(self):
-    deleteUsers = database.Client.delete()
-    deletePasswords = database.uq8LnAWi7D.delete()
+    deleteUsers = testDatabase.Client.delete()
+    deletePasswords = testDatabase.uq8LnAWi7D.delete()
     deleteUsers.execute()
     deletePasswords.execute()
 
