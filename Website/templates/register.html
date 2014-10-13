@@ -15,9 +15,7 @@
 {% block content %}
 
 <h1>Registration</h1>
-
-  <form name= "register" form action="" id="register" onsubmit= "return !!(validateForm() && validateEmail() && validateDob() && terms());" method="POST">
-
+  <form name="register" action="/register" id="register" onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" method="POST">
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">
@@ -68,7 +66,8 @@
     </div>
 
     <input type="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
-    <input class="form-control" type="submit" value="Register">
+
+		<input class="form-control" type="submit" value="Register">
 		<br/>
   </form>
 {% endblock %}
