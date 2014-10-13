@@ -24,6 +24,7 @@ function validateEmail() {
     }
 }
 
+
 //check dob is correct format
 function validateDob() {
   var pattern =/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
@@ -31,7 +32,7 @@ function validateDob() {
   if(pattern.test(dob) == false) {
      alert("Invalid date");
      return false;
-   }
+	}
 }
 
 //password checking function
@@ -100,3 +101,33 @@ function terms()
     }
     return true;
   }
+
+  //check the registration passwords match
+  //http://keithscode.com/tutorials/javascript/3-a-simple-javascript-password-validator.html
+ function passwordCheck() {
+ 
+    //Store the password field objects into variables
+    var password = document.getElementById('password');
+    var password2 = document.getElementById('password2');
+    //Store the Confimation Message
+    var message = document.getElementById('confirmationMessage');
+    //Set field background colours
+    var yesColour = "#66cc66";
+    var noColour = "#ff6666";
+	
+    //Compare the values in the password field and the confirmation field
+    if(password.value == password2.value) {
+        //The passwords match. 
+        //Set the colour to yesColour and show message
+        password2.style.backgroundColor = yesColour;
+        message.style.color = yesColour;
+        message.innerHTML = "<i class='fa fa-check'></i>"
+    }
+	else {
+        //The passwords do not match.
+        //Set the colour to noColour and show message
+        password2.style.backgroundColor = noColour;
+        message.style.color = noColour;
+        message.innerHTML = "<i class='fa fa-times'></i>"
+    }
+}  
