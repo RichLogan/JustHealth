@@ -42,6 +42,10 @@ def registration():
         profile['confirmpassword'] = request.form['confirmpassword']
       except KeyError, e:
         return "All fields must be filled out"
+      try:
+        profile['terms'] = request.form['terms']
+      except KeyError, e:
+        return "Terms and Conditions must be accepted"
 
       # Validate all input
       for key in profile:
@@ -58,9 +62,9 @@ def registration():
       # Validate email correct format
       pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
       if re.match(pattern, profile['email']):
-        return True
+        return "True"
       else:
-        return False
+        return "False"
 
       # Encrypt password with SHA 256
       profile['password'] = sha256_crypt.encrypt(profile['password'])
