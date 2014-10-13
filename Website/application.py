@@ -41,25 +41,25 @@ def registration():
       # Validate all input
       for key in profile:
         profile[key] = profile[key].strip()
-        
+
       # Validate fields not null
-      if (profile['username'] or profile['firstname'] or profile['surname'] or profile['dob'] or profile['email'] or profile['password'] or profile['confirm password'] == None):
-        return 'All fields must be filled in'
+    #  if (profile['username'] or profile['firstname'] or profile['surname'] or profile['dob'] or profile['email'] or profile['password'] or profile['confirm password'] == None):
+    #    return 'All fields must be filled in'
 
       # Validate username >25
-      if (len(profile['username']) >25):
-        return 'username can not be longer then 25 characters'
+      #if (len(profile['username']) >25):
+      #  return 'username can not be longer then 25 characters'
 
       # Validate firstname, surname and email >25
-      if(len(profile['firstname'] >100 or profile['surname']>100 or profile['email']>100)):
-        return 'firstname, surname and email can not be longer then 100 characters'
+    #  if(len(profile['firstname'] >100 or profile['surname']>100 or profile['email']>100)):
+    #    return 'firstname, surname and email can not be longer then 100 characters'
 
       # Validate email correct format
-      pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
-      if re.match(pattern, profile['email']):
-          return True
-      else:
-          return False
+    #  pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
+    #  if re.match(pattern, profile['email']):
+    #      return True
+    #  else:
+    #      return False
 
 
       # Encrypt password with SHA 256
@@ -72,7 +72,7 @@ def registration():
         surname = profile['surname'],
         dob = profile['dob'],
         ismale = profile['ismale'],
-        iscarer = profile['isCarer'],
+        iscarer = profile['iscarer'],
         email = profile['email']
       )
 
