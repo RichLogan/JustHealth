@@ -27,23 +27,21 @@ def index():
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
     if request.method == 'POST':
-      try:
-        for key in request.form:
-          request.form[key]
-      except KeyError, e:
-        return "All fields must be filled out"
 
       # Build User Registration
-      profile = {}
-      profile['username'] = request.form['username']
-      profile['firstname'] = request.form['firstname']
-      profile['surname'] = request.form['surname']
-      profile['dob'] = request.form['dob']
-      profile['ismale'] = request.form['ismale']
-      profile['iscarer'] = request.form['iscarer']
-      profile['email'] = request.form['email']
-      profile['password'] = request.form['password']
-      profile['confirmpassword'] = request.form['confirmpassword']
+      try:
+        profile = {}
+        profile['username'] = request.form['username']
+        profile['firstname'] = request.form['firstname']
+        profile['surname'] = request.form['surname']
+        profile['dob'] = request.form['dob']
+        profile['ismale'] = request.form['ismale']
+        profile['iscarer'] = request.form['iscarer']
+        profile['email'] = request.form['email']
+        profile['password'] = request.form['password']
+        profile['confirmpassword'] = request.form['confirmpassword']
+      except KeyError, e:
+        return "All fields must be filled out"
 
       # Validate all input
       for key in profile:
@@ -51,11 +49,11 @@ def registration():
 
       # Validate username >25
       if len(profile['username']) > 25:
-        return 'username can not be longer then 25 characters'
+        return 'Username can not be longer then 25 characters'
 
       # Validate firstname, surname and email >25
       if len(profile['firstname']) > 100 or len(profile['surname']) > 100 or len(profile['email']) > 100:
-        return 'firstname, surname and email can not be longer then 100 characters'
+        return 'Firstname, surname and email can not be longer then 100 characters'
 
       # Validate email correct format
       pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
