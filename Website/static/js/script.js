@@ -32,3 +32,14 @@ function validateDob() {
      return false;
    }
 }
+
+//http://www.the-art-of-web.com/html/html5-checkbox-required/
+function terms()
+  {
+    if(!register.terms.checked) {
+      alert("Please indicate that you accept the Terms and Conditions");
+      form.terms.focus();
+      return false;
+    }
+    return true;
+  }

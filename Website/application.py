@@ -96,6 +96,10 @@ def registration():
 def resetpassword():
   return render_template('resetpassword.html')
 
+@app.route('/termsandconditions')
+def terms():
+  return render_template('termsandconditions.html')
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':

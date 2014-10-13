@@ -6,7 +6,7 @@
 
 <h1>Registration</h1>
 
-  <form name= "register" form action="" onsubmit= "return !!(validateForm() & validateEmail() & validateDob());" method="POST">
+  <form name= "register" form action="" onsubmit= "return !!(validateForm() & validateEmail() & validateDob() & terms());" method="POST">
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">
@@ -55,7 +55,7 @@
         <input class="form-control" type="password" name="confirmpassword">
 		<p id="errorEmail"></p>
     </div>
-
+    <input type="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
     <input class="form-control" type="submit" value="Register">
   </form>
 {% endblock %}
