@@ -1,3 +1,9 @@
+a:link    {color:#A8A8A8; background-color:transparent}
+a:visited {color:#A8A8A8; background-color:transparent}
+a:hover   {color:#ff0000; background-color:transparent}
+a:active  {color:#ff0000; background-color:transparent}
+
+
 .smallIcon {
   font-size: 50px;
   padding: 10px;
@@ -23,7 +29,7 @@ body {
 footer {
   height: 50px;
   background-color: #2272EB;
-  color: #DDDDDD;
+  color: #A8A8A8;
   position: absolute;
   left: 0;
   right: 0;
@@ -57,7 +63,7 @@ margin-top: 1%;
 }
 
 #register {
-	margin-left:100px;	
+	margin-left:100px;
 }
 #register label{
 	margin-right:5px;

@@ -27,6 +27,7 @@ function validateEmail() {
 //check dob is correct format
 function validateDob() {
   var pattern =/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
+  var dob = $('dob').val();
   if(pattern.test(dob) == false) {
      alert("Invalid date");
      return false;
@@ -35,50 +36,50 @@ function validateDob() {
 
 //password checking function
 //(http://runnable.com/UfJrnXtk2tZXAAA1/how-to-check-password-strength-using-jquery)
-	
+
 function checkStrength(password)
 {
 	//default strength
 	var strength = 0
-	
+
 	//if the password length is less than 6, return message
-	if (password.length < 6) { 
+	if (password.length < 6) {
 		$('#result').removeClass()
 		$('#result').addClass('short')
-		return 'Too short' 
+		return 'Too short'
 	}
-	
+
 	//length is okay, continue.
-	
+
 	//if length is 8 characters or more, increase strength value
 	if (password.length > 7) strength += 1
-	
+
 	//if password contains both lower and uppercase characters, increase strength value
 	if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/))  strength += 1
-	
+
 	//if it has numbers and characters, increase strength value
-	if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/))  strength += 1 
-	
+	if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/))  strength += 1
+
 	//if it has one special character, increase strength value
 	if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/))  strength += 1
-	
+
 	//if it has two special characters, increase strength value
 	if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1
-	
+
 	//return messages on strength value
-	
+
 	//if value is less than 2
 	if (strength < 2 )
 	{
 		$('#result').removeClass();
 		$('#result').addClass('weak');
-		return 'Weak'			
+		return 'Weak'
 	}
 	else if (strength == 2 )
 	{
 		$('#result').removeClass();
 		$('#result').addClass('good');
-		return 'Good'		
+		return 'Good'
 	}
 	else
 	{
