@@ -41,6 +41,7 @@ def registration():
       # Validate all input
       for key in profile:
         profile[key] = profile[key].strip()
+        
       # Validate fields not null
       if (profile['username'] or profile['firstname'] or profile['surname'] or profile['dob'] or profile['email'] or profile['password'] or profile['confirm password'] == None):
         return 'All fields must be filled in'
