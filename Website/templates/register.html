@@ -11,7 +11,7 @@
 });
 </script>
 {% endblock %}
-	
+
 {% block content %}
 
 <h1>Registration</h1>
@@ -34,21 +34,19 @@
     </div>
 
     <div class="form-group">
-        <label for="dob">D.O.B.</label>
+        <label for="dob">Date of Birth</label>
         <input class="form-control" type="date" name="dob" oninput="validateDob()">
     </div>
 
     <div class="form-group">
-        <label for="isMale">Gender</label>
-
-        <input class="form-control" type="radio" name="ismale" value="true">Male
-        <input class="form-control" type="radio" name="ismale" value="false">Female
-    </div>
-
+        <label for="isMale">Gender </label>
+        <input class="" type="radio" name="ismale" value="true">Male&nbsp;
+        <input class="" type="radio" name="ismale" value="false">Female&nbsp;
+		</div>
     <div class="form-group">
         <label for="isCarer">Account Type</label>
-        <input class="form-control" type="radio" name="iscarer" value="true">Carer
-        <input class="form-control" type="radio" name="iscarer" value="false">Patient
+        <input class="" type="radio" name="iscarer" value="true">Carer&nbsp;
+        <input class="" type="radio" name="iscarer" value="false">Patient&nbsp;
     </div>
 
     <div class="form-group">
@@ -69,5 +67,6 @@
     </div>
     <input type="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
     <input class="form-control" type="submit" value="Register">
+		<br/>
   </form>
 {% endblock %}
