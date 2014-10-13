@@ -108,7 +108,7 @@ def login():
       if isAccountLocked == False:
 
         # Retrieve and compare saved and entered passwords
-        hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
+        hashedPassword = uq8LnAWi7D.get(username=request.form['username'], iscurrent=True).password.strip()
         password = request.form['password']
 
         # If valid, set SESSION on username
@@ -150,3 +150,37 @@ app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f
 if __name__ == '__main__':
     app.run(debug=True)
 
+@app.route('/resetpassword', methods=['GET', 'POST'])
+def resetPassword(): 
+  if request.method == 'POST':
+    try:
+        profile = {}
+        profile['username'] = request.form['username']
+        profile['confirmemail'] = request.form['email']
+        profile['newpassword'] = request.form['password']
+        profile['confirmnewpassword'] = request.form['confirmpassword']
+        profile['confirmdob'] = request.form['dob']
+    except KeyError, e:
+      return "All fields must be filled out"
+      
+      getEmail = client.get(username=profile['username']).email
+      getDob = client.get(username=profile['username']).dob
+
+      if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
+
+        #set the old password to iscurrent = false
+        notCurrent = uq8LnAWi7D.update(iscurrent=false).where(username=profile['username'])
+       
+        # Build insert password query
+        newCredentials = uq8LnAWi7D.insert(
+          username = profile['username'],
+          password = profile['password'],
+          iscurrent = 'TRUE',
+          expirydate = '10/10/2014'
+        )
+
+        notCurrent.execute()
+        newCredentials.execute()
+      else:
+        return render_template('login.html',invalid='true')
+      
