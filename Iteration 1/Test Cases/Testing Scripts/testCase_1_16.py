@@ -5,19 +5,19 @@ from peewee import *
 import unittest
 import imp
 
-database = imp.load_source('database', '../../../Website/database.py')
+testDatabase = imp.load_source('testDatabase', '../../../Website/testDatabase.py')
 
 class testCase_1_16(unittest.TestCase):
 
   def setUp(self):
-    deleteUsers = database.Client.delete()
-    deletePasswords = database.uq8LnAWi7D.delete()
+    deleteUsers = testDatabase.Client.delete()
+    deletePasswords = testDatabase.uq8LnAWi7D.delete()
     deleteUsers.execute()
     deletePasswords.execute()
 
   def test_1_16_1(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= '',
         firstname='test',
         surname='test',
@@ -28,8 +28,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def test_1_16_2(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= 'test',
         firstname='',
         surname='test',
@@ -40,8 +40,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def test_1_16_3(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= 'test',
         firstname='test',
         surname='',
@@ -52,8 +52,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def test_1_16_4(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= 'test',
         firstname='test',
         surname='test',
@@ -64,8 +64,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def test_1_16_5(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= 'test',
         firstname='test',
         surname='test',
@@ -76,8 +76,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def test_1_16_6(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= 'test',
         firstname='test',
         surname='test',
@@ -88,8 +88,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def test_1_16_7(self):
-    with database.db.transaction():
-      newUser = database.Client.insert(
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
         username= 'test',
         firstname='test',
         surname='test',
@@ -100,8 +100,8 @@ class testCase_1_16(unittest.TestCase):
       newUser.execute()
 
   def tearDown(self):
-    deleteUsers = database.Client.delete()
-    deletePasswords = database.uq8LnAWi7D.delete()
+    deleteUsers = testDatabase.Client.delete()
+    deletePasswords = testDatabase.uq8LnAWi7D.delete()
     deleteUsers.execute()
     deletePasswords.execute()
 
