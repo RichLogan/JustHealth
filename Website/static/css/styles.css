@@ -31,6 +31,31 @@ footer {
   margin-top: 50px;
 }
 
+#footer1 {
+   float: right;
+    width: 110px;
+    height: 90px;
+    margin: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #register {
 	margin-left:100px;	
 }
@@ -63,4 +88,3 @@ footer {
 
 #register.strong{
 	color:#006400;
-}

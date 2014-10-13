@@ -33,11 +33,8 @@ function validateDob() {
    }
 }
 
-/*
-check password strength 
-(http://runnable.com/UfJrnXtk2tZXAAA1/how-to-check-password-strength-using-jquery)
-*/
 //password checking function
+//(http://runnable.com/UfJrnXtk2tZXAAA1/how-to-check-password-strength-using-jquery)
 	
 function checkStrength(password)
 {
@@ -90,3 +87,15 @@ function checkStrength(password)
 		return 'Strong'
 	}
 }
+
+//terms and conditions check
+//http://www.the-art-of-web.com/html/html5-checkbox-required/
+function terms()
+  {
+    if(!register.terms.checked) {
+      alert("Please indicate that you accept the Terms and Conditions");
+      form.terms.focus();
+      return false;
+    }
+    return true;
+  }
