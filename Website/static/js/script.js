@@ -112,8 +112,8 @@ function terms()
     //Store the Confimation Message
     var message = document.getElementById('confirmationMessage');
     //Set field background colours
-    var yesColour = "#66cc66";
-    var noColour = "#ff6666";
+    var yesColour = "#30D917";
+    var noColour = "#DF111C";
 	
     //Compare the values in the password field and the confirmation field
     if(password.value == password2.value) {
