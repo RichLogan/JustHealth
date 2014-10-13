@@ -11,6 +11,7 @@ CREATE TABLE Client (
   email CHAR(100) NOT NULL UNIQUE,
   verified BOOLEAN NOT NULL DEFAULT FALSE,
   accountLocked BOOLEAN NOT NULL DEFAULT FALSE,
+  loginattempts int NOT NULL DEFAULT 0,
   PRIMARY KEY(username)
 );
 
