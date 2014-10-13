@@ -92,10 +92,6 @@ def registration():
     else:
       return render_template('register.html')
 
-@app.route('/resetpassword')
-def resetpassword():
-  return render_template('resetpassword.html')
-
 #finds the value of the loginattempts field in the database
 def getLoginAttempts(username):
   loginAttempts = Client.get(username=request.form['username']).loginattempts
@@ -145,13 +141,9 @@ def logout():
   session.pop('username', None)
   return redirect(url_for('index'))
 
-app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f\xa1Z'
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-@app.route('/resetpassword', methods=['GET', 'POST'])
+@app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPassword(): 
+  return render_template('resetpassword.html')
   if request.method == 'POST':
     try:
         profile = {}
@@ -183,4 +175,11 @@ def resetPassword():
         newCredentials.execute()
       else:
         return render_template('login.html',invalid='true')
-      
+  return render_template('resetpassword.html')
+
+
+app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f\xa1Z'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
