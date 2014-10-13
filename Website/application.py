@@ -4,6 +4,8 @@ from functools import wraps
 from passlib.hash import sha256_crypt
 from database import *
 import re
+import smtplib
+import datetime
 
 app = Flask(__name__)
 
@@ -12,10 +14,26 @@ def getSerializer(secret_key=None):
         secret_key = app.secret_key
     return URLSafeSerializer(secret_key)
 
-def getVerifyLink(username):
+def sendVerificationEmail(username):
     s = getSerializer()
     payload = s.dumps(username)
-    return url_for('verifyUser', payload=payload, _external=True)
+    verifyLink = url_for('verifyUser', payload=payload, _external=True)
+
+    #Send Link to users email
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Verification"
+    message = "Thanks for registering! Please verify your account here: " + str(verifyLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
+
+@app.route('/testVerify')
+def testVerify():
+  sendVerificationEmail('richlogan')
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
@@ -25,7 +43,7 @@ def verifyUser(payload):
     except BadSignature:
         abort(404)
 
-    verifiedTrue = Client.update(verified = "true").where(str(Client.username).strip() == retrievedUsername)
+    verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return redirect(url_for('index'))
 
@@ -113,7 +131,8 @@ def registration():
       userInsert.execute()
       userPassword.execute()
 
-      return getVerifyLink(request.form['username'])
+      sendVerificationEmail(profile['username'])
+      return "You will see a verification email shortly!"
     else:
       return render_template('register.html')
 
