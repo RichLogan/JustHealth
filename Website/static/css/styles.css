@@ -28,14 +28,32 @@ footer {
   left: 0;
   right: 0;
   width: 100%;
-  margin-top: 50px;
+  bottom margin: 100%;
+  overflow: scroll;
 }
 
 #footer1 {
-   float: right;
-    width: 110px;
-    height: 90px;
-    margin: 5px;
+   float: left;
+  margin-left: 10%;
+  margin-top: 1%;
+}
+
+#footer2{
+  float:left;
+  margin-left: 10%;
+  margin-top: 1%;
+}
+
+#footer3{
+float:left;
+margin-left: 10%;
+margin-top: 1%;
+}
+
+#footer4{
+float:left;
+margin-left: 10%;
+margin-top: 1%;
 }
 
 
