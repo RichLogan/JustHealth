@@ -125,9 +125,9 @@ def login():
           if getLoginAttempts(request.form['username']) >= 5:
             updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
             updateAccountLocked.execute()
-            return "Account locked Bro"
+            return render_template('login.html',locked='true')
       else:
-        return "Account locked Bro"        
+        return render_template('login.html',locked='true')      
       # Retrieve and compare saved and entered passwords
       hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
       password = request.form['password']
@@ -136,8 +136,9 @@ def login():
       if sha256_crypt.verify(password, hashedPassword):
         session['username'] = request.form['username']
         return redirect(url_for('index'))
+      else:
+        return render_template('login.html',wrongCredentials='true')
     return render_template('login.html')
-
 @app.route('/logout')
 @needLogin
 def logout():

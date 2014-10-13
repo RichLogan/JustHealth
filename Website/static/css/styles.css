@@ -4,6 +4,10 @@
   color: #FFFFFF;
 }
 
+.wrongInputs { 
+  color: #F50404;
+}
+
 #navBar {
   height: 75px;
   background-color:#2272EB;
