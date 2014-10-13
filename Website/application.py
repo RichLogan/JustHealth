@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from functools import wraps
 from passlib.hash import sha256_crypt
 from database import *
+import re
 
 app = Flask(__name__)
 
@@ -26,6 +27,12 @@ def index():
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
     if request.method == 'POST':
+      try:
+        for key in request.form:
+          request.form[key]
+      except KeyError, e:
+        return "All fields must be filled out"
+
       # Build User Registration
       profile = {}
       profile['username'] = request.form['username']
@@ -42,25 +49,20 @@ def registration():
       for key in profile:
         profile[key] = profile[key].strip()
 
-      # Validate fields not null
-    #  if (profile['username'] or profile['firstname'] or profile['surname'] or profile['dob'] or profile['email'] or profile['password'] or profile['confirm password'] == None):
-    #    return 'All fields must be filled in'
-
       # Validate username >25
-      #if (len(profile['username']) >25):
-      #  return 'username can not be longer then 25 characters'
+      if len(profile['username']) > 25:
+        return 'username can not be longer then 25 characters'
 
       # Validate firstname, surname and email >25
-    #  if(len(profile['firstname'] >100 or profile['surname']>100 or profile['email']>100)):
-    #    return 'firstname, surname and email can not be longer then 100 characters'
+      if len(profile['firstname']) > 100 or len(profile['surname']) > 100 or len(profile['email']) > 100:
+        return 'firstname, surname and email can not be longer then 100 characters'
 
       # Validate email correct format
-    #  pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
-    #  if re.match(pattern, profile['email']):
-    #      return True
-    #  else:
-    #      return False
-
+      pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
+      if re.match(pattern, profile['email']):
+        return True
+      else:
+        return False
 
       # Encrypt password with SHA 256
       profile['password'] = sha256_crypt.encrypt(profile['password'])
@@ -99,10 +101,9 @@ def resetpassword():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-<<<<<<< HEAD
       isAccountLocked = Client.get(username=request.form['username']).accountlocked
       if isAccountLocked == False:
-      
+
         # Retrieve and compare saved and entered passwords
         hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
         password = request.form['password']
@@ -114,7 +115,7 @@ def login():
           return redirect(url_for('index'))
         else:
           # lock account if 5 attempts
-          try: 
+          try:
             session['count'] += 1
           except KeyError, e:
             session['count'] = 1
@@ -125,7 +126,6 @@ def login():
       else:
         return "Account locked Bro"
         session['count'] = 0
-=======
       # Retrieve and compare saved and entered passwords
       hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
       password = request.form['password']
@@ -134,7 +134,6 @@ def login():
       if sha256_crypt.verify(password, hashedPassword):
         session['username'] = request.form['username']
         return redirect(url_for('index'))
->>>>>>> 407251bf835fbdd20b8f28dc13bcd9380e63fd03
     return render_template('login.html')
 
 @app.route('/logout')
