@@ -1,10 +1,33 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
+from itsdangerous import URLSafeSerializer, BadSignature
 from functools import wraps
 from passlib.hash import sha256_crypt
 from database import *
 import re
 
 app = Flask(__name__)
+
+def getSerializer(secret_key=None):
+    if secret_key is None:
+        secret_key = app.secret_key
+    return URLSafeSerializer(secret_key)
+
+def getVerifyLink(username):
+    s = getSerializer()
+    payload = s.dumps(username)
+    return url_for('verifyUser', payload=payload, _external=True)
+
+@app.route('/users/activate/<payload>')
+def verifyUser(payload):
+    s = getSerializer()
+    try:
+        retrievedUsername = s.loads(payload)
+    except BadSignature:
+        abort(404)
+
+    verifiedTrue = Client.update(verified = "true").where(str(Client.username).strip() == retrievedUsername)
+    verifiedTrue.execute()
+    return redirect(url_for('index'))
 
 # Checks to see if a session is set. If not, kicks to login screen.
 def needLogin(f):
@@ -61,10 +84,8 @@ def registration():
 
       # Validate email correct format
       pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
-      if re.match(pattern, profile['email']):
-        return "True"
-      else:
-        return "False"
+      if not re.match(pattern, profile['email']):
+        return "Fail email verification"
 
       # Encrypt password with SHA 256
       profile['password'] = sha256_crypt.encrypt(profile['password'])
@@ -92,7 +113,7 @@ def registration():
       userInsert.execute()
       userPassword.execute()
 
-      return 'Registered'
+      return getVerifyLink(request.form['username'])
     else:
       return render_template('register.html')
 
