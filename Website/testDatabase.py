@@ -22,7 +22,7 @@ class Client(BaseModel):
     username = CharField(max_length=25, primary_key=True)
     verified = BooleanField()
     accountlocked = BooleanField()
-    loginattempts() = IntegerField()
+    loginattempts = IntegerField()
 
     class Meta:
         db_table = 'client'
