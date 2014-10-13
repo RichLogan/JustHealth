@@ -25,7 +25,7 @@ class Client(BaseModel):
     class Meta:
         db_table = 'client'
 
-class Uq8Lnawi7D(BaseModel):
+class uq8Lnawi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
     password = CharField(max_length=255)
