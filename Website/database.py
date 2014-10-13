@@ -2,14 +2,14 @@
 # $ pwiz.py -e postgresql -u justhealth -H penguin.kent.ac.uk -p 5432 justhealth -P dsomoid
 from peewee import *
 
-database = PostgresqlDatabase('justhealth', **{'host': 'penguin.kent.ac.uk', 'password': 'dsomoid', 'port': 5432, 'user': 'justhealth'})
+db = PostgresqlDatabase('justhealth', **{'host': 'penguin.kent.ac.uk', 'password': 'dsomoid', 'port': 5432, 'user': 'justhealth'})
 
 class UnknownField(object):
     pass
 
 class BaseModel(Model):
     class Meta:
-        database = database
+        database = db
 
 class Client(BaseModel):
     accountlocked = BooleanField()
