@@ -12,7 +12,7 @@ function validateForm() {
     }
 }
 
-//check email is vaild and correct format
+/*check email is vaild and correct format
 function validateEmail() {
     var x = document.forms["register"]["email"].value;
     var atpos = x.indexOf("@");
@@ -23,21 +23,25 @@ function validateEmail() {
         return false;
     }
 }
+*/
 
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return re.test(email);
+}
 
-//check dob is correct format
+//check date of birth is correct format
 function validateDob() {
-  var pattern =/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
-  var dob = $('dob').val();
-  if(pattern.test(dob) == false) {
-     alert("Invalid date");
-     return false;
+	var pattern =/^\d{2}\/\d{2}\/\d{4}$/;
+	var dob = $('dob').val();
+	if(pattern.test(dob) == false) {
+		alert("Invalid date");
+		return false;
 	}
 }
 
 //password checking function
 //(http://runnable.com/UfJrnXtk2tZXAAA1/how-to-check-password-strength-using-jquery)
-
 function checkStrength(password)
 {
 	//default strength

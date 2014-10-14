@@ -3,12 +3,23 @@
 {% block title %}Registration{% endblock %}
 
 {% block scriptsAndStyles %}
-<script> $(document).ready(function() {
+<script>
+$(document).ready(function() {
 	//keyup event on password field so code will execute on every keypress
 	$('#password').keyup(function() {
 		$('#result').html(checkStrength($('#password').val()));
 	});
+	
+	$('#validateEmail').focusout(function() {
+		if(validateEmail($('#validateEmail').val())) {
+			$('#emailValidate').html('<i class="fa fa-check"></i> Email is valid');
+		}
+		else {
+			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid');
+		}
+	});
 });
+
 </script>
 {% endblock %}
 
@@ -51,7 +62,7 @@
     <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" id="validateEmail" name="email">
-		<span id="errorEmail"></span>
+		<span id="emailValidate" class="confirmMessage"></span>
 	</div>
 
     <div class="form-group">
