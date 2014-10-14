@@ -117,6 +117,10 @@ def registration():
       # Encrypt password with SHA 256
       profile['password'] = sha256_crypt.encrypt(profile['password'])
 
+      #Check for existing username
+      if Client.select().where(Client.username == profile['username']).count() != 0:
+        return render_template('register.html', errorMessage = "Username already taken")
+
       # Build insert user query
       userInsert = Client.insert(
         username = profile['username'],
