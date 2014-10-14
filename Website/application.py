@@ -170,7 +170,8 @@ def login():
       if isAccountLocked == False:
         if isAccountVerified == True:
           # Retrieve and compare saved and entered passwords
-          hashedPassword = uq8LnAWi7D.get(username=request.form['username'], iscurrent=True).password.strip()
+          hashedPassword = uq8LnAWi7D.get(uq8LnAWi7D.username==request.form['username'], uq8LnAWi7D.iscurrent==True).password.strip()
+
           password = request.form['password']
 
           # If valid, set SESSION on username
