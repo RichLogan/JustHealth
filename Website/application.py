@@ -31,6 +31,23 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
+def sendPasswordResetEmail(username):
+  s = getSerializer()
+  payload = s.dumps(username)
+  verifyLink = url_for('passwordReset', payload=payload, _external=True)
+
+  #Send Link to users email
+  server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+  server.login('justhealth@richlogan.co.uk', "justhealth")
+
+  sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+  recipient = Client.get(username = username).email
+  subject = "JustHealth Password Reset Verification"
+  message = "Your password has been reset. Please verify this here: " + str(verifyLink)
+  m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+  server.sendmail(sender, recipient, m+message)
+  server.quit()
+
 def sendUnlockEmail(username):
     #Send Link to users email
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
@@ -55,6 +72,19 @@ def verifyUser(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return redirect(url_for('index'))
+
+@app.route('/users/activate/<payload>')
+def passwordReset(payload):
+    s = getSerializer()
+    try:
+        retrievedUsername = s.loads(payload)
+    except BadSignature:
+        abort(404)
+
+    verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
+    verifiedTrue.execute()
+    return redirect(url_for('index'))
+
 
 # Checks to see if a session is set. If not, kicks to login screen.
 def needLogin(f):
@@ -237,7 +267,8 @@ def resetPassword():
       notCurrent.execute()
       notVerified.execute()
       newCredentials.execute()
-      return render_template('login.html')
+      sendPasswordResetEmail(profile['username'])
+      return "You will receive a password reset verification email shortly."
     else:
       return render_template('resetpassword.html',invalid='true')
   return render_template('resetpassword.html')
