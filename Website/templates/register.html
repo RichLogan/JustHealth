@@ -23,11 +23,10 @@ $(document).ready(function() {
 			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
 		}
 	});
-	
-	//
+
 	$('form').submit(function(e) {
 		if (!validateForm()) {
-			e.preventDefault();
+			// e.preventDefault();
 			alert("All fields must be filled out")
 		}
 	});

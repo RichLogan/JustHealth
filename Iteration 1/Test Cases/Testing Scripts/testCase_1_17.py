@@ -29,6 +29,21 @@ class testCase_1_17(unittest.TestCase):
     newUserDelete.execute()
     self.assertEqual(testDatabase.Client.select().count(),0)
 
+
+  def test_1_17_2(self):
+    newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstName='test',
+        surname='test',
+        dob='01/01/2001',
+        isMale='TRUE',
+        isCarer='TRUE',
+        email='test@test.com')
+    newUserInsert.execute()
+    newUserDelete = testDatabase.Client.delete().where(testDatabase.Client.email == 'test@test.com')
+    newUserDelete.execute()
+    self.assertEqual(testDatabase.Client.select().count(),0)
+
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()
     deletePasswords = testDatabase.uq8LnAWi7D.delete()
