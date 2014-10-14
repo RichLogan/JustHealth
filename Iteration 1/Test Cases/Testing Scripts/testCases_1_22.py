@@ -18,26 +18,27 @@ class testCase_1_22(unittest.TestCase):
   def test_1_22_1(self):
     newUser = testDatabase.Client.insert(
       username= 'test',
-      firstName='test',
-      surname='test'
+      firstname='test',
+      surname='test',
       dob='01/01/2001',
-      isMale='TRUE',
-      isCarer='TRUE',
+      ismale='TRUE',
+      iscarer='TRUE',
       email='test@test.com')
     newUser.execute()
     newPassword = testDatabase.uq8LnAWi7D.insert(
       username ='test',
-      password =crypt.crypt('password',bcrypt.gensalt(12))
-      isCurrent = TRUE,
-      expiryDate = '10/10/2014')
+      password ='password',
+      iscurrent = 'TRUE',
+      expirydate = '10/10/2014')
     newPassword.execute()
     #We need to check that the records are inserted correctly
-    testDatabase.Client.select()
-    testDatabase.uq8LnAWi7D.select()
-    clientDelete = testDatabase.Client.delete().where(username ='test')
+    self.assertEqual(testDatabase.Client.select().count(),1)
+    self.assertEqual(testDatabase.uq8LnAWi7D.select().count(),1)
+    clientDelete = testDatabase.Client.delete().where(testDatabase.Client.username =='test')
     #We need to check that the records are deleted from password and client table
-    testDatabase.Client.select()
-    testDatabase.uq8LnAWi7D.select()
+    self.assertEqual(testDatabase.Client.select().count(),0)
+    self.assertEqual(testDatabase.uq8LnAWi7D.select().count(),0)
+
 
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()
