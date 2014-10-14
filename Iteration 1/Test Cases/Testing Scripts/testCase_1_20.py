@@ -17,39 +17,79 @@ class testCase_1_20(unittest.TestCase):
 
   def test_1_20_1(self):
     with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUser.execute()
       newPassword2 = testDatabase.uq8LnAWi7D.insert(
         username ='notintable',
-        password =crypt.crypt('password',bcrypt.gensalt(12))
-        isCurrent = TRUE,
-        expiryDate = '10/10/2014')
-        newPassword2.execute()
+        password ='password',
+        iscurrent = 'TRUE',
+        expirydate = '10/10/2014')
+      newPassword2.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_20_2(self):
     with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUser.execute()
       newPassword = testDatabase.uq8LnAWi7D.insert(
       username ='test',
-      password =crypt.crypt('passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword',bcrypt.gensalt(12))
-      isCurrent = TRUE,
-      expiryDate = '10/10/2014')
+      password ='passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword',
+      iscurrent = 'TRUE',
+      expirydate = '10/10/2014')
     newPassword.execute()
+    self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_20_3(self):
-    with testDatabase.database.transaction()
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUser.execute()
       newPassword = testDatabase.uq8LnAWi7D.insert(
         username ='test',
-        password =crypt.crypt('password',bcrypt.gensalt(12))
-        isCurrent = 'test',
-        expiryDate = '10/10/2014')
-      newPassword.execute()
+        password ='password',
+        iscurrent = 'test',
+        expirydate = '10/10/2014')
+    newPassword.execute()
+    self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_20_4(self):
-    with testDatabase.database.transaction()
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUser.execute()
       newPassword = testDatabase.uq8LnAWi7D.insert(
         username ='test',
-        password =crypt.crypt('password',bcrypt.gensalt(12))
-        isCurrent = TRUE,
-        expiryDate = '19/17/1993')
-      newPassword.execute()
+        password ='password',
+        iscurrent = 'TRUE',
+        expirydate = '19/17/1993')
+    newPassword.execute()
+    self.assertEqual(testDatabase.Client.select().count(),1)
 
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()
