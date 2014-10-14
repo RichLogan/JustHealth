@@ -4,16 +4,6 @@
 //    }
 //);
 
-//check form fields are not null
-function validateForm() {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        return false;
-      }
-      return true;
-    });
-}
-
 function validateFormResetPassword() {
     var x = document.forms["resetpassword"]["username","confirmdob", "confirmemail", "confirmnewpassword", "newpassword"].value;
     if (x==null || x=="") {
@@ -44,7 +34,7 @@ function validateEmailResetPassword() {
 }
 */
 
-function validateEmail(email) { 
+function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(email);
 }

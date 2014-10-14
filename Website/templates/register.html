@@ -10,7 +10,7 @@ $(document).ready(function() {
 	$('#password').keyup(function() {
 		$('#result').html(checkStrength($('#password').val()));
 	});
-	
+
 	//check if email is valid
 	//focus out: validation is performed when different field is active
 	$('#validateEmail').focusout(function() {
@@ -25,10 +25,13 @@ $(document).ready(function() {
 	});
 
 	$('form').submit(function(e) {
-		if (!validateForm()) {
-			// e.preventDefault();
-			alert("All fields must be filled out")
-		}
+		$("form :input").each(function(){
+			if ($(this).val() == null || $(this).val() == "") {
+				alert("All fields must be filled out");
+				e.preventDefault();
+				return false;
+			}
+		});
 	});
 });
 </script>
