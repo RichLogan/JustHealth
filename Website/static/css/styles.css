@@ -89,16 +89,17 @@ margin-top: 1%;
 }
 
 #register .short{
-	color:#FF0000;
+	color: #FF0000;
 }
 
 #register .weak{
-	color:#E66C2C;
+	color: #E66C2C;
 }
 
 #register .good{
-	color:#2D98F3;
+	color: #2D98F3;
 }
 
 #register .strong{
-	color:#006400;
+	color: #006400;
+}

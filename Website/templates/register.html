@@ -5,20 +5,26 @@
 {% block scriptsAndStyles %}
 <script>
 $(document).ready(function() {
+	//check password strength
 	//keyup event on password field so code will execute on every keypress
 	$('#password').keyup(function() {
 		$('#result').html(checkStrength($('#password').val()));
 	});
 	
+	//check if email is valid
+	//focus out: validation is performed when different field is active
 	$('#validateEmail').focusout(function() {
 		if(validateEmail($('#validateEmail').val())) {
+			//show message if email is valid
 			$('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
 		}
 		else {
+			//show message if email is not valid
 			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
 		}
 	});
 	
+	//
 	$('form').submit(function(e) {
 		if (!validateForm()) {
 			e.preventDefault();
