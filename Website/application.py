@@ -31,9 +31,18 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
-@app.route('/testVerify')
-def testVerify():
-  sendVerificationEmail('richlogan')
+def sendUnlockEmail(username):
+    #Send Link to users email
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Accounts Locked"
+    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: " + url_for('resetpassword', _external=True) + " to reset your password."
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
@@ -170,11 +179,12 @@ def login():
             if getLoginAttempts(request.form['username']) >= 5:
               updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
               updateAccountLocked.execute()
+              sendUnlockEmail(request.form['username'])
               return render_template('login.html',locked='true')
-        else: 
+        else:
           return render_template('login.html',verified='false')
       else:
-        return render_template('login.html',locked='true')      
+        return render_template('login.html',locked='true')
       # Retrieve and compare saved and entered passwords
       hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
       password = request.form['password']
@@ -194,7 +204,7 @@ def logout():
   return redirect(url_for('index'))
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
-def resetPassword(): 
+def resetPassword():
   if request.method == 'POST':
     try:
         profile = {}
@@ -205,7 +215,7 @@ def resetPassword():
         profile['confirmdob'] = request.form['confirmdob']
     except KeyError, e:
       return "All fields must be filled out"
-      
+
     getEmail = Client.get(username=profile['username']).email.strip()
     getDob = str(Client.get(username=profile['username']).dob)
 
@@ -237,4 +247,3 @@ app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f
 
 if __name__ == '__main__':
     app.run(debug=True)
-
