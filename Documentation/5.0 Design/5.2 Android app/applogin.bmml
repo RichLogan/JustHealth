@@ -40,7 +40,7 @@
       </controlProperties>
     </control>
     <control controlID="11" controlTypeID="com.balsamiq.mockups::iPhoneKeyboard" x="321" y="278" w="-1" h="-1" measuredW="227" measuredH="160" zOrder="9" locked="false" isInGroup="-1"/>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Arrow" x="413" y="208" w="150" h="64" measuredW="150" measuredH="100" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Arrow" x="321" y="208" w="242" h="64" measuredW="150" measuredH="100" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <direction>bottom</direction>
         <text>Tap%20each%20input%20box%2C%20keyboard%20will%20appear</text>
