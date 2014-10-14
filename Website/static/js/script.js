@@ -14,6 +14,13 @@ function validateForm() {
     });
 }
 
+function validateFormResetPassword() {
+    var x = document.forms["resetpassword"]["username","confirmdob", "confirmemail", "confirmnewpassword", "newpassword"].value;
+    if (x==null || x=="") {
+        alert("All fields be filled out");
+    }
+}
+
 //check email is vaild and correct format
 function validateEmail() {
     var x = document.forms["register"]["email"].value;
@@ -21,7 +28,17 @@ function validateEmail() {
     var dotpos = x.lastIndexOf(".");
     if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
         document.getElementById('errorEmail').innerHTML = "Not a valid e-mail address";
-		alert("Not a valid e-mail address");
+		    return false;
+    }
+}
+
+//check email is vaild and correct format
+function validateEmailResetPassword() {
+    var x = document.forms["resetpassword"]["confirmemail"].value;
+    var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+        document.getElementById('errorEmail').innerHTML = "Not a valid e-mail address";
         return false;
     }
 }
