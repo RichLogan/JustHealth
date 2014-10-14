@@ -101,27 +101,30 @@ def getLoginAttempts(username):
 def login():
     if request.method == 'POST':
       isAccountLocked = Client.get(username=request.form['username']).accountlocked
+      isAccountVerified = Client.get(username=request.form['username']).verified
       if isAccountLocked == False:
+        if isAccountVerified == True:
+          # Retrieve and compare saved and entered passwords
+          hashedPassword = uq8LnAWi7D.get(username=request.form['username'], iscurrent=True).password.strip()
+          password = request.form['password']
 
-        # Retrieve and compare saved and entered passwords
-        hashedPassword = uq8LnAWi7D.get(username=request.form['username'], iscurrent=True).password.strip()
-        password = request.form['password']
-
-        # If valid, set SESSION on username
-        if sha256_crypt.verify(password, hashedPassword):
-          session['username'] = request.form['username']
-          updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
-          updateLoginAttempts.execute()
-          return redirect(url_for('index'))
-        else:
-        # lock account if 5 attempts
-          getLoginAttempts(request.form['username'])
-          updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
-          updateLoginAttempts.execute()
-          if getLoginAttempts(request.form['username']) >= 5:
-            updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
-            updateAccountLocked.execute()
-            return render_template('login.html',locked='true')
+          # If valid, set SESSION on username
+          if sha256_crypt.verify(password, hashedPassword):
+            session['username'] = request.form['username']
+            updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
+            updateLoginAttempts.execute()
+            return redirect(url_for('index'))
+          else:
+          # lock account if 5 attempts
+            getLoginAttempts(request.form['username'])
+            updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
+            updateLoginAttempts.execute()
+            if getLoginAttempts(request.form['username']) >= 5:
+              updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
+              updateAccountLocked.execute()
+              return render_template('login.html',locked='true')
+        else: 
+          return render_template('login.html',verified='false')
       else:
         return render_template('login.html',locked='true')      
       # Retrieve and compare saved and entered passwords
@@ -135,6 +138,7 @@ def login():
       else:
         return render_template('login.html',wrongCredentials='true')
     return render_template('login.html')
+
 @app.route('/logout')
 @needLogin
 def logout():
@@ -160,8 +164,8 @@ def resetPassword():
     if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
 
       #set the old password to iscurrent = false
-      notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == request.form['username'])
-
+      notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
+      notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
       #encrypt the password
       profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
 
@@ -172,10 +176,10 @@ def resetPassword():
         iscurrent = True,
         expirydate = '10/10/2014'
       )
-
       notCurrent.execute()
+      notVerified.execute()
       newCredentials.execute()
-      return notCurrent
+      return render_template('login.html')
     else:
       return render_template('resetpassword.html',invalid='true')
   return render_template('resetpassword.html')
