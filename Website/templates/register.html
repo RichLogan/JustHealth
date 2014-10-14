@@ -33,6 +33,13 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	if ($('#showErrorMessage').text() != null && $('#showErrorMessage').text() != "") {
+		$('#showErrorMessage').removeClass("hidden");
+	}
+	else {
+		$('#showErrorMessage').addClass("hidden");
+	}
 });
 </script>
 {% endblock %}
@@ -41,6 +48,7 @@ $(document).ready(function() {
 
 <h1>Registration</h1>
   <form name="register" action="/register" id="register" method="POST">
+		<div id="showErrorMessage" class="alert alert-danger hidden" role="alert">{{errorMessage}}</div>
 		<!-- onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" -->
     <div class="form-group">
         <label for="username">Username</label>
