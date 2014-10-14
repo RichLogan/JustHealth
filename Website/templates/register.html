@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$('#password').keyup(function() {
 		$('#result').html(checkStrength($('#password').val()));
 	});
-	
+
 	$('#validateEmail').focusout(function() {
 		if(validateEmail($('#validateEmail').val())) {
 			$('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
@@ -18,10 +18,10 @@ $(document).ready(function() {
 			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
 		}
 	});
-	
+
 	$('form').submit(function(e) {
 		if (!validateForm()) {
-			e.preventDefault();
+			// e.preventDefault();
 			alert("All fields must be filled out")
 		}
 	});
