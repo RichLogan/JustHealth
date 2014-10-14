@@ -21,29 +21,7 @@ function validateFormResetPassword() {
     }
 }
 
-/*check email is vaild and correct format
-function validateEmail() {
-    var x = document.forms["register"]["email"].value;
-    var atpos = x.indexOf("@");
-    var dotpos = x.lastIndexOf(".");
-    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
-        document.getElementById('errorEmail').innerHTML = "Not a valid e-mail address";
-		    return false;
-    }
-}
-
 //check email is vaild and correct format
-function validateEmailResetPassword() {
-    var x = document.forms["resetpassword"]["confirmemail"].value;
-    var atpos = x.indexOf("@");
-    var dotpos = x.lastIndexOf(".");
-    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
-        document.getElementById('errorEmail').innerHTML = "Not a valid e-mail address";
-        return false;
-    }
-}
-*/
-
 function validateEmail(email) { 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(email);
@@ -61,15 +39,14 @@ function validateDob() {
 
 //password checking function
 //(http://runnable.com/UfJrnXtk2tZXAAA1/how-to-check-password-strength-using-jquery)
-function checkStrength(password)
-{
+function checkStrength(password) {
 	//default strength
 	var strength = 0
 
 	//if the password length is less than 6, return message
 	if (password.length < 6) {
 		$('#result').removeClass()
-		$('#result').addClass('short')
+		$('#result').addClass('passwordShort')
 		return 'Too short'
 	}
 
@@ -96,19 +73,19 @@ function checkStrength(password)
 	if (strength < 2 )
 	{
 		$('#result').removeClass();
-		$('#result').addClass('weak');
+		$('#result').addClass('passwordWeak');
 		return 'Weak'
 	}
 	else if (strength == 2 )
 	{
 		$('#result').removeClass();
-		$('#result').addClass('good');
+		$('#result').addClass('passwordGood');
 		return 'Good'
 	}
 	else
 	{
 		$('#result').removeClass();
-		$('#result').addClass('strong');
+		$('#result').addClass('passwordStrong');
 		return 'Strong'
 	}
 }
@@ -131,7 +108,7 @@ function terms()
 
     //Store the password field objects into variables
     var password = document.getElementById('password');
-    var password2 = document.getElementById('password2');
+    var confirmPassword = document.getElementById('confirmPassword');
     //Store the Confimation Message
     var message = document.getElementById('confirmationMessage');
     //Set field background colours
@@ -139,17 +116,17 @@ function terms()
     var noColour = "#DF111C";
 
     //Compare the values in the password field and the confirmation field
-    if(password.value == password2.value) {
+    if(password.value == confirmPassword.value) {
         //The passwords match.
         //Set the colour to yesColour and show message
-        password2.style.backgroundColor = yesColour;
+        confirmPassword.style.backgroundColor = yesColour;
         message.style.color = yesColour;
         message.innerHTML = "<i class='fa fa-check'></i>"
     }
 	else {
         //The passwords do not match.
         //Set the colour to noColour and show message
-        password2.style.backgroundColor = noColour;
+        confirmPassword.style.backgroundColor = noColour;
         message.style.color = noColour;
         message.innerHTML = "<i class='fa fa-times'></i>"
     }

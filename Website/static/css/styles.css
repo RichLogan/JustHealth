@@ -88,18 +88,18 @@ margin-top: 1%;
 	margin-left:5px;
 }
 
-#register .short{
-	color: #FF0000;
+.passwordShort{
+	color: #DF111C;
 }
 
-#register .weak{
-	color: #E66C2C;
+.passwordWeak{
+	color: #A349A4;
 }
 
-#register .good{
-	color: #2D98F3;
+.passwordGood{
+	color: #FFC90E;
 }
 
-#register .strong{
-	color: #006400;
+.passwordStrong{
+	color: #30D917;
 }
