@@ -161,6 +161,10 @@ def terms():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
+      #is username registered?
+      if Client.select().where(Client.username == request.form['username']).count() == 0:
+        return render_template('login.html',wrongCredentials='true')
+
       isAccountLocked = Client.get(username=request.form['username']).accountlocked
       isAccountVerified = Client.get(username=request.form['username']).verified
       if isAccountLocked == False:
