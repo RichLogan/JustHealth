@@ -18,15 +18,22 @@ $(document).ready(function() {
 			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid');
 		}
 	});
+	
+	$('form').submit(function(e) {
+		if (!validateForm()) {
+			e.preventDefault();
+			alert("All fields must be filled out")
+		}
+	});
 });
-
 </script>
 {% endblock %}
 
 {% block content %}
 
 <h1>Registration</h1>
-  <form name="register" action="/register" id="register" onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" method="POST">
+  <form name="register" action="/register" id="register" method="POST">
+		<!-- onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" -->
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">
@@ -61,9 +68,15 @@ $(document).ready(function() {
 
     <div class="form-group">
         <label for="email">Email Address</label>
+<<<<<<< HEAD
         <input class="form-control" type="text" id="validateEmail" name="email">
 		<span id="emailValidate" class="confirmMessage"></span>
 	</div>
+=======
+        <input class="form-control" type="text" name="email" oninput="validateEmail()" id="validateEmail">
+        <span id="errorEmail"></span>
+    </div>
+>>>>>>> origin/master
 
     <div class="form-group">
         <label for="password">Password</label>
@@ -73,7 +86,7 @@ $(document).ready(function() {
 
     <div class="form-group">
         <label for="confirmpassword">Confirm Password</label>
-        <input class="form-control" type="password" id="password2" name="confirmpassword" onkeyup="passwordCheck(); return false;">
+        <input class="form-control" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
 		<span id="confirmationMessage" class="confirmMessage"></span>
     </div>
 

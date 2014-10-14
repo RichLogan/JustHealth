@@ -7,7 +7,7 @@ import imp
 
 testDatabase = imp.load_source('testDatabase', '../../../Website/testDatabase.py')
 
-class testCase_1_14(unittest.TestCase):
+class testCase_1_17(unittest.TestCase):
 
   def setUp(self):
     deleteUsers = testDatabase.Client.delete()
