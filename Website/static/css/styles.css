@@ -11,7 +11,11 @@ a:active  {color:#ff0000; background-color:transparent}
 }
 
 .wrongInputs { 
-  color: #F50404;
+  color: #DF111C;
+}
+
+.rightInputs {
+  color: #30D917;
 }
 
 #navBar {
