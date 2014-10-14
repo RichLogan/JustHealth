@@ -3,19 +3,27 @@
 {% block title %}Registration{% endblock %}
 
 {% block scriptsAndStyles %}
-<script> $(document).ready(function() {
-	//keyup event on password field so code will execute on every keypress
-	$('#password').keyup(function() {
-		$('#result').html(checkStrength($('#password').val()));
+<script>
+	$(document).ready(function() {
+		//keyup event on password field so code will execute on every keypress
+		$('#password').keyup(function() {
+			$('#result').html(checkStrength($('#password').val()));
+		});
+		$('form').submit(function(e) {
+			if (!validateForm()) {
+				e.preventDefault();
+				alert("All fields must be filled out")
+			}
+		});
 	});
-});
 </script>
 {% endblock %}
 
 {% block content %}
 
 <h1>Registration</h1>
-  <form name="register" action="/register" id="register" onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" method="POST">
+  <form name="register" action="/register" id="register" method="POST">
+		<!-- onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" -->
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">

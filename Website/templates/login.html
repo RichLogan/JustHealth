@@ -2,6 +2,19 @@
 
 {% block title %}Login{% endblock %}
 
+{% block scriptsAndStyles %}
+<script>
+  $(document).ready(function() {
+    $('form').submit(function(e) {
+      if (!validateForm()) {
+        e.preventDefault();
+        alert("All fields must be filled out")
+      }
+    });
+  });
+</script>
+{% endblock %}
+
 {% block content %}
 <h1> Login </h1>
 

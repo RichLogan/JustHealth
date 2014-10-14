@@ -6,10 +6,12 @@
 
 //check form fields are not null
 function validateForm() {
-    var x = document.forms["register"]["username","firstName","surname","dob", "email", "confirmPassword", "password"].value;
-    if (x==null || x=="") {
-        alert("All fields be filled out");
-    }
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        return false;
+      }
+      return true;
+    });
 }
 
 //check email is vaild and correct format
@@ -105,7 +107,7 @@ function terms()
   //check the registration passwords match
   //http://keithscode.com/tutorials/javascript/3-a-simple-javascript-password-validator.html
  function passwordCheck() {
- 
+
     //Store the password field objects into variables
     var password = document.getElementById('password');
     var password2 = document.getElementById('password2');
@@ -114,10 +116,10 @@ function terms()
     //Set field background colours
     var yesColour = "#30D917";
     var noColour = "#DF111C";
-	
+
     //Compare the values in the password field and the confirmation field
     if(password.value == password2.value) {
-        //The passwords match. 
+        //The passwords match.
         //Set the colour to yesColour and show message
         password2.style.backgroundColor = yesColour;
         message.style.color = yesColour;
@@ -130,4 +132,4 @@ function terms()
         message.style.color = noColour;
         message.innerHTML = "<i class='fa fa-times'></i>"
     }
-}  
+}
