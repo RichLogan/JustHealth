@@ -31,9 +31,18 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
-@app.route('/testVerify')
-def testVerify():
-  sendVerificationEmail('richlogan')
+def sendUnlockEmail(username):
+    #Send Link to users email
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Accounts Locked"
+    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: " + url_for('resetpassword', _external=True) + " to reset your password."
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
@@ -168,6 +177,7 @@ def login():
           if session['count'] >= 5:
             updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
             updateAccountLocked.execute()
+            sendUnlockEmail(request.form['username'])
             return str(Client.username)
       else:
         return "Account locked Bro"
