@@ -1,10 +1,51 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, abort
+from itsdangerous import URLSafeSerializer, BadSignature
 from functools import wraps
 from passlib.hash import sha256_crypt
 from database import *
 import re
+import smtplib
+import datetime
 
 app = Flask(__name__)
+
+def getSerializer(secret_key=None):
+    if secret_key is None:
+        secret_key = app.secret_key
+    return URLSafeSerializer(secret_key)
+
+def sendVerificationEmail(username):
+    s = getSerializer()
+    payload = s.dumps(username)
+    verifyLink = url_for('verifyUser', payload=payload, _external=True)
+
+    #Send Link to users email
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Verification"
+    message = "Thanks for registering! Please verify your account here: " + str(verifyLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
+
+@app.route('/testVerify')
+def testVerify():
+  sendVerificationEmail('richlogan')
+
+@app.route('/users/activate/<payload>')
+def verifyUser(payload):
+    s = getSerializer()
+    try:
+        retrievedUsername = s.loads(payload)
+    except BadSignature:
+        abort(404)
+
+    verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
+    verifiedTrue.execute()
+    return redirect(url_for('index'))
 
 # Checks to see if a session is set. If not, kicks to login screen.
 def needLogin(f):
@@ -42,6 +83,10 @@ def registration():
         profile['confirmpassword'] = request.form['confirmpassword']
       except KeyError, e:
         return "All fields must be filled out"
+      try:
+        profile['terms'] = request.form['terms']
+      except KeyError, e:
+        return "Terms and Conditions must be accepted"
 
       # Validate all input
       for key in profile:
@@ -57,10 +102,8 @@ def registration():
 
       # Validate email correct format
       pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
-      if re.match(pattern, profile['email']):
-        return True
-      else:
-        return False
+      if not re.match(pattern, profile['email']):
+        return "Fail email verification"
 
       # Encrypt password with SHA 256
       profile['password'] = sha256_crypt.encrypt(profile['password'])
@@ -88,7 +131,8 @@ def registration():
       userInsert.execute()
       userPassword.execute()
 
-      return 'Registered'
+      sendVerificationEmail(profile['username'])
+      return "You will see a verification email shortly!"
     else:
       return render_template('register.html')
 
@@ -100,6 +144,10 @@ def resetpassword():
 def getLoginAttempts(username):
   loginAttempts = Client.get(username=request.form['username']).loginattempts
   return loginAttempts
+
+@app.route('/termsandconditions')
+def terms():
+  return render_template('termsandconditions.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
