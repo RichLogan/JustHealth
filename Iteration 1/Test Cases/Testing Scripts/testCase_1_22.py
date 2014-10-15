@@ -32,12 +32,12 @@ class testCase_1_22(unittest.TestCase):
       expirydate = '10/10/2014')
     newPassword.execute()
     #We need to check that the records are inserted correctly
-    self.assertEqual(testDatabase.Client.select().count(),1)
-    self.assertEqual(testDatabase.uq8LnAWi7D.select().count(),1)
+    self.assertEqual(int(testDatabase.Client.select().count()),1)
+    self.assertEqual(int(testDatabase.uq8LnAWi7D.select().count()),1)
     clientDelete = testDatabase.Client.delete().where(testDatabase.Client.username =='test')
-    #We need to check that the records are deleted from password and client table
-    self.assertEqual(testDatabase.Client.select().count(),0)
-    self.assertEqual(testDatabase.uq8LnAWi7D.select().count(),0)
+    clientDelete.execute()
+    self.assertEqual(int(testDatabase.Client.select().count()),0)
+    self.assertEqual(int(testDatabase.uq8LnAWi7D.select().count()),0)
 
 
   def tearDown(self):
