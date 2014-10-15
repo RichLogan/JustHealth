@@ -61,7 +61,18 @@ class testCase_1_15(unittest.TestCase):
           username= 'test',
           firstname='test',
           surname='test',
-          dob='01/01/2001',
+          dob='01111/01/2001',
+          ismale='test',
+          iscarer='TRUE',
+          email='test@test.com')
+        newUser.execute()
+    with testDatabase.database.transaction():
+      with self.assertRaises(DataError):
+        newUser = testDatabase.Client.insert(
+          username= 'test',
+          firstname='test',
+          surname='test',
+          dob='01/0111111/2001',
           ismale='test',
           iscarer='TRUE',
           email='test@test.com')
