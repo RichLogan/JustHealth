@@ -31,6 +31,23 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
+def sendPasswordResetEmail(username):
+  s = getSerializer()
+  payload = s.dumps(username)
+  verifyLink = url_for('passwordReset', payload=payload, _external=True)
+
+  #Send Link to users email
+  server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+  server.login('justhealth@richlogan.co.uk', "justhealth")
+
+  sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+  recipient = Client.get(username = username).email
+  subject = "JustHealth Password Reset Verification"
+  message = "Your password has been reset. Please verify this here: " + str(verifyLink)
+  m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+  server.sendmail(sender, recipient, m+message)
+  server.quit()
+
 def sendUnlockEmail(username):
     #Send Link to users email
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
@@ -55,6 +72,19 @@ def verifyUser(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return redirect(url_for('index'))
+
+@app.route('/users/activate/<payload>')
+def passwordReset(payload):
+    s = getSerializer()
+    try:
+        retrievedUsername = s.loads(payload)
+    except BadSignature:
+        abort(404)
+
+    verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
+    verifiedTrue.execute()
+    return redirect(url_for('index'))
+
 
 # Checks to see if a session is set. If not, kicks to login screen.
 def needLogin(f):
@@ -161,49 +191,40 @@ def terms():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-      #is username registered?
-      if Client.select().where(Client.username == request.form['username']).count() == 0:
-        return render_template('login.html',wrongCredentials='true')
+      session.pop('username', None)
+      try: 
+        isAccountLocked = Client.get(username=request.form['username']).accountlocked
+        isAccountVerified = Client.get(username=request.form['username']).verified
+        if isAccountLocked == False:
+          if isAccountVerified == True:
+            # Retrieve and compare saved and entered passwords 
+            hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username==request.form['username']) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+            password = request.form['password']
 
-      isAccountLocked = Client.get(username=request.form['username']).accountlocked
-      isAccountVerified = Client.get(username=request.form['username']).verified
-      if isAccountLocked == False:
-        if isAccountVerified == True:
-          # Retrieve and compare saved and entered passwords
-          hashedPassword = uq8LnAWi7D.get(uq8LnAWi7D.username==request.form['username'], uq8LnAWi7D.iscurrent==True).password.strip()
-
-          password = request.form['password']
-
-          # If valid, set SESSION on username
-          if sha256_crypt.verify(password, hashedPassword):
-            session['username'] = request.form['username']
-            updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
-            updateLoginAttempts.execute()
-            return redirect(url_for('index'))
+            # If valid, set SESSION on username
+            if sha256_crypt.verify(password, hashedPassword):
+              session['username'] = request.form['username']
+              updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts.execute()
+              return redirect(url_for('index'))
+            else:
+            # lock account if 5 attempts
+              getLoginAttempts(request.form['username'])
+              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts.execute()
+              if getLoginAttempts(request.form['username']) >= 5:
+                updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
+                updateAccountLocked.execute()
+                sendUnlockEmail(request.form['username'])
+                return render_template('login.html',locked='true')
+              else:
+                return render_template('login.html',wrongCredentials='true')
           else:
-          # lock account if 5 attempts
-            getLoginAttempts(request.form['username'])
-            updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
-            updateLoginAttempts.execute()
-            if getLoginAttempts(request.form['username']) >= 5:
-              updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
-              updateAccountLocked.execute()
-              sendUnlockEmail(request.form['username'])
-              return render_template('login.html',locked='true')
+            return render_template('login.html',verified='false')
         else:
-          return render_template('login.html',verified='false')
-      else:
-        return render_template('login.html',locked='true')
-      # Retrieve and compare saved and entered passwords
-      hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
-      password = request.form['password']
-
-      # If valid, set SESSION on username
-      if sha256_crypt.verify(password, hashedPassword):
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-      else:
-        return render_template('login.html',wrongCredentials='true')
+          return render_template('login.html',locked='true')
+      except Client.DoesNotExist: 
+        return render_template('login.html',wrongCredentials='true') 
     return render_template('login.html')
 
 @app.route('/logout')
@@ -232,7 +253,8 @@ def resetPassword():
 
       #set the old password to iscurrent = false
       notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
-      notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
+      #notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
+      
       #encrypt the password
       profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
 
@@ -244,9 +266,11 @@ def resetPassword():
         expirydate = '10/10/2014'
       )
       notCurrent.execute()
-      notVerified.execute()
+      #notVerified.execute()
       newCredentials.execute()
-      return render_template('login.html')
+      sendPasswordResetEmail(profile['username'])
+      session.pop('username', None)
+      return "You will receive a password reset verification email shortly."
     else:
       return render_template('resetpassword.html',invalid='true')
   return render_template('resetpassword.html')
