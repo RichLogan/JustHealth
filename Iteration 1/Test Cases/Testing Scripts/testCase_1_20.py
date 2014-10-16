@@ -46,12 +46,12 @@ class testCase_1_20(unittest.TestCase):
         email='test@test.com')
       newUser.execute()
       newPassword = testDatabase.uq8LnAWi7D.insert(
-      username ='test',
-      password ='passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword',
-      iscurrent = 'TRUE',
-      expirydate = '10/10/2014')
-    newPassword.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+        username ='test',
+        password ='passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword',
+        iscurrent = 'TRUE',
+        expirydate = '10/10/2014')
+      newPassword.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_20_3(self):
     with testDatabase.database.transaction():
@@ -69,8 +69,8 @@ class testCase_1_20(unittest.TestCase):
         password ='password',
         iscurrent = 'test',
         expirydate = '10/10/2014')
-    newPassword.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+      newPassword.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_20_4(self):
     with testDatabase.database.transaction():
@@ -88,8 +88,8 @@ class testCase_1_20(unittest.TestCase):
         password ='password',
         iscurrent = 'TRUE',
         expirydate = '19/17/1993')
-    newPassword.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+      newPassword.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()

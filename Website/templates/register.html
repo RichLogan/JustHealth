@@ -33,6 +33,14 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	//check if date format is valid
+	$('#validateDOB').focusout(function() {
+		if(validateDOB($('#validateDOB').val())) {
+			//alert user that date format is invalid
+			alert("Date not valid");
+		}
+	});	
 
 	if ($('#showErrorMessage').text() != null && $('#showErrorMessage').text() != "") {
 		$('#showErrorMessage').removeClass("hidden");
@@ -67,7 +75,8 @@ $(document).ready(function() {
 
     <div class="form-group">
         <label for="dob">Date of Birth</label>
-        <input class="form-control" type="date" name="dob" oninput="validateDob()">
+        <input class="form-control" type="date" name="dob" id="validateDOB">
+		<span id="DOBValidation"></span>
     </div>
 
     <div class="form-group">

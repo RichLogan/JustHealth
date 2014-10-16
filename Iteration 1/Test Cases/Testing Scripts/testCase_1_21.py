@@ -15,27 +15,26 @@ class testCase_1_21(unittest.TestCase):
     deleteUsers.execute()
     deletePasswords.execute()
 
-
   def test_1_21_1(self):
-    newUser = testDatabase.Client.insert(
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUser.execute()
-    newPassword = testDatabase.uq8LnAWi7D.insert(
-      username ='test',
-      password ='password',
-      iscurrent = 'TRUE',
-      expirydate = '10/10/2014')
-    newPassword.execute()
-    newPasswordDelete = testDatabase.uq8LnAWi7D.delete().where(testDatabase.uq8LnAWi7D.username == 'test')
-    newPasswordDelete.execute()
-    self.assertEqual(testDatabase.uq8LnAWi7D.select().count(),0)
-
+    with testDatabase.database.transaction():
+      newUser = testDatabase.Client.insert(
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUser.execute()
+      newPassword = testDatabase.uq8LnAWi7D.insert(
+        username ='test',
+        password ='password',
+        iscurrent = 'TRUE',
+        expirydate = '10/10/2014')
+      newPassword.execute()
+      newPasswordDelete = testDatabase.uq8LnAWi7D.delete().where(testDatabase.uq8LnAWi7D.username == 'test')
+      newPasswordDelete.execute()
+      self.assertEqual(testDatabase.uq8LnAWi7D.select().count(),0)
 
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()

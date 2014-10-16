@@ -32,7 +32,7 @@ class uq8LnAWi7D(BaseModel):
     iscurrent = BooleanField(null=True)
     password = CharField(max_length=255)
     recordid = PrimaryKeyField()
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', on_delete ='CASCADE')
 
     class Meta:
         db_table = 'uq8lnawi7d'

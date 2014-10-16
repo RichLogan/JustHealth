@@ -15,132 +15,140 @@ class testCase_1_18(unittest.TestCase):
     deleteUsers.execute()
     deletePasswords.execute()
 
-
   def test_1_18_1(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(username='testingUpdate').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(username='testingUpdate').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_2(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(firstname='testingFirstname').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(firstname='testingFirstname').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_3(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(surname='testingSurname').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(surname='testingSurname').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_4(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(dob='03/03/1993').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(dob='03/03/1993').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_5(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(ismale='False').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(ismale='False').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_6(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(iscarer='False').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(iscarer='False').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_7(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(email='testingUpdate@testingUpdate.com').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(email='testingUpdate@testingUpdate.com').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_8(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(verified='TRUE').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(verified='TRUE').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def test_1_18_9(self):
-    newUserInsert = testDatabase.Client.insert (
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserUpdate = testDatabase.Client.update(accountlocked='TRUE').where(testDatabase.Client.username == 'test')
-    newUserUpdate.execute()
-    self.assertEqual(testDatabase.Client.select().count(),1)
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+        username= 'test',
+        firstname='test',
+        surname='test',
+        dob='01/01/2001',
+        ismale='TRUE',
+        iscarer='TRUE',
+        email='test@test.com')
+      newUserInsert.execute()
+      newUserUpdate = testDatabase.Client.update(accountlocked='TRUE').where(testDatabase.Client.username == 'test')
+      newUserUpdate.execute()
+      self.assertEqual(testDatabase.Client.select().count(),1)
 
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()

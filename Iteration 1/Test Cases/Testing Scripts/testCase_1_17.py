@@ -16,22 +16,8 @@ class testCase_1_17(unittest.TestCase):
     deletePasswords.execute()
 
   def test_1_17_1(self):
-    newUserInsert = testDatabase.Client.insert(
-      username= 'test',
-      firstname='test',
-      surname='test',
-      dob='01/01/2001',
-      ismale='TRUE',
-      iscarer='TRUE',
-      email='test@test.com')
-    newUserInsert.execute()
-    newUserDelete = testDatabase.Client.delete().where(testDatabase.Client.username == 'test')
-    newUserDelete.execute()
-    self.assertEqual(testDatabase.Client.select().count(),0)
-
-
-  def test_1_17_2(self):
-    newUserInsert = testDatabase.Client.insert (
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert(
         username= 'test',
         firstname='test',
         surname='test',
@@ -39,10 +25,26 @@ class testCase_1_17(unittest.TestCase):
         ismale='TRUE',
         iscarer='TRUE',
         email='test@test.com')
-    newUserInsert.execute()
-    newUserDelete = testDatabase.Client.delete().where(testDatabase.Client.email == 'test@test.com')
-    newUserDelete.execute()
-    self.assertEqual(testDatabase.Client.select().count(),0)
+      newUserInsert.execute()
+      newUserDelete = testDatabase.Client.delete().where(testDatabase.Client.username == 'test')
+      newUserDelete.execute()
+      self.assertEqual(testDatabase.Client.select().count(),0)
+
+
+  def test_1_17_2(self):
+    with testDatabase.database.transaction():
+      newUserInsert = testDatabase.Client.insert (
+          username= 'test',
+          firstname='test',
+          surname='test',
+          dob='01/01/2001',
+          ismale='TRUE',
+          iscarer='TRUE',
+          email='test@test.com')
+      newUserInsert.execute()
+      newUserDelete = testDatabase.Client.delete().where(testDatabase.Client.email == 'test@test.com')
+      newUserDelete.execute()
+      self.assertEqual(testDatabase.Client.select().count(),0)
 
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()
