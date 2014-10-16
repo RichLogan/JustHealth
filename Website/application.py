@@ -188,46 +188,39 @@ def terms():
 def login():
     if request.method == 'POST':
       session.pop('username', None)
-      isAccountLocked = Client.get(username=request.form['username']).accountlocked
-      isAccountVerified = Client.get(username=request.form['username']).verified
-      if isAccountLocked == False:
-        if isAccountVerified == True:
-          # Retrieve and compare saved and entered passwords
-          hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username==request.form['username']) & (uq8LnAWi7D.iscurrent==True)).password.strip()
-          return hashedPassword
-          password = request.form['password']
+      try: 
+        isAccountLocked = Client.get(username=request.form['username']).accountlocked
+        isAccountVerified = Client.get(username=request.form['username']).verified
+        if isAccountLocked == False:
+          if isAccountVerified == True:
+            # Retrieve and compare saved and entered passwords 
+            hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username==request.form['username']) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+            password = request.form['password']
 
-          # If valid, set SESSION on username
-          if sha256_crypt.verify(password, hashedPassword):
-            return password
-            session['username'] = request.form['username']
-            updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
-            updateLoginAttempts.execute()
-            return redirect(url_for('index'))
+            # If valid, set SESSION on username
+            if sha256_crypt.verify(password, hashedPassword):
+              session['username'] = request.form['username']
+              updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts.execute()
+              return redirect(url_for('index'))
+            else:
+            # lock account if 5 attempts
+              getLoginAttempts(request.form['username'])
+              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts.execute()
+              if getLoginAttempts(request.form['username']) >= 5:
+                updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
+                updateAccountLocked.execute()
+                sendUnlockEmail(request.form['username'])
+                return render_template('login.html',locked='true')
+              else:
+                return render_template('login.html',wrongCredentials='true')
           else:
-          # lock account if 5 attempts
-            getLoginAttempts(request.form['username'])
-            updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
-            updateLoginAttempts.execute()
-            if getLoginAttempts(request.form['username']) >= 5:
-              updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
-              updateAccountLocked.execute()
-              sendUnlockEmail(request.form['username'])
-              return render_template('login.html',locked='true')
+            return render_template('login.html',verified='false')
         else:
-          return render_template('login.html',verified='false')
-      else:
-        return render_template('login.html',locked='true')
-      # Retrieve and compare saved and entered passwords
-      hashedPassword = uq8LnAWi7D.get(username=request.form['username']).password.strip()
-      password = request.form['password']
-
-      # If valid, set SESSION on username
-      if sha256_crypt.verify(password, hashedPassword):
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-      else:
-        return render_template('login.html',wrongCredentials='true')
+          return render_template('login.html',locked='true')
+      except Client.DoesNotExist: 
+        return render_template('login.html',wrongCredentials='true') 
     return render_template('login.html')
 
 @app.route('/logout')
