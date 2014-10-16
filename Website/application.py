@@ -71,7 +71,7 @@ def verifyUser(payload):
 
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
-    return redirect(url_for('index'))
+    return redirect(url_for('login', verified = True))
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
