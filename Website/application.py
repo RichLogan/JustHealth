@@ -71,7 +71,7 @@ def verifyUser(payload):
 
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
-    return render_template('login', verified='true'))
+    return render_template('login', verified='true')
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
@@ -279,4 +279,4 @@ def resetPassword():
 app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f\xa1Z'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=9999, debug=True)
