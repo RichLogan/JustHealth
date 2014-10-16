@@ -8,3 +8,5 @@ peewee==2.3.3
 psycopg2==2.5.4
 pycparser==2.10
 wsgiref==0.1.2
+gunicorn==19.1.1
+
