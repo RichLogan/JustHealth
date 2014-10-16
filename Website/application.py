@@ -56,7 +56,7 @@ def sendUnlockEmail(username):
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
     subject = "JustHealth Accounts Locked"
-    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: " + url_for('resetpassword', _external=True) + " to reset your password."
+    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: " + url_for('resetPassword', _external=True) + " to reset your password."
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
     server.sendmail(sender, recipient, m+message)
     server.quit()
