@@ -167,7 +167,7 @@ def registration():
         username = profile['username'],
         password = profile['password'],
         iscurrent = 'TRUE',
-        expirydate = '10/10/2014'
+        expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
       )
 
       # Execute Queries
@@ -192,12 +192,12 @@ def terms():
 def login():
     if request.method == 'POST':
       session.pop('username', None)
-      try: 
+      try:
         isAccountLocked = Client.get(username=request.form['username']).accountlocked
         isAccountVerified = Client.get(username=request.form['username']).verified
         if isAccountLocked == False:
           if isAccountVerified == True:
-            # Retrieve and compare saved and entered passwords 
+            # Retrieve and compare saved and entered passwords
             hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username==request.form['username']) & (uq8LnAWi7D.iscurrent==True)).password.strip()
             password = request.form['password']
 
@@ -223,8 +223,8 @@ def login():
             return render_template('login.html',verified='false')
         else:
           return render_template('login.html',locked='true')
-      except Client.DoesNotExist: 
-        return render_template('login.html',wrongCredentials='true') 
+      except Client.DoesNotExist:
+        return render_template('login.html',wrongCredentials='true')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -254,7 +254,7 @@ def resetPassword():
       #set the old password to iscurrent = false
       notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
       #notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
-      
+
       #encrypt the password
       profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
 
@@ -263,7 +263,7 @@ def resetPassword():
         username = profile['username'],
         password = profile['newpassword'],
         iscurrent = True,
-        expirydate = '10/10/2014'
+        expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
       )
       notCurrent.execute()
       #notVerified.execute()
