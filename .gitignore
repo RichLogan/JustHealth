@@ -11,7 +11,6 @@ Thumbs.db
 venv/
 *.py[cod]
 
-
 # Android
 
 # Built application files
@@ -22,9 +21,7 @@ venv/
 *.dex
 
 # Java class files
-*.class
 .classpath
-.project
 
 # Generated files
 bin/
