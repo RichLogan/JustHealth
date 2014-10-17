@@ -56,7 +56,7 @@ def sendUnlockEmail(username):
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
     subject = "JustHealth Accounts Locked"
-    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk/resetpassword to reset your password."
+    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password."
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
     server.sendmail(sender, recipient, m+message)
     server.quit()
@@ -253,7 +253,7 @@ def resetPassword():
 
       #set the old password to iscurrent = false
       notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
-      #notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
+      notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
 
       #encrypt the password
       profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
@@ -266,11 +266,13 @@ def resetPassword():
         expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
       )
       unlockAccount = Client.update(accountlocked=False).where(str(Client.username).strip() == profile['username'])
+      setLoginCount = Client.update(loginattempts = 0).where(str(Client.username).strip() == profile['username'])
 
       notCurrent.execute()
-      #notVerified.execute()
+      notVerified.execute()
       newCredentials.execute()
       unlockAccount.execute()
+      setLoginCount.execute()
       sendPasswordResetEmail(profile['username'])
       session.pop('username', None)
       return "You will receive a password reset verification email shortly."
