@@ -150,6 +150,8 @@ def registration():
       #Check for existing username
       if Client.select().where(Client.username == profile['username']).count() != 0:
         return render_template('register.html', errorMessage = "Username already taken")
+      if Client.select().where(Client.email == profile['email']).count() != 0:
+        return render_template('register.html', errorMessage = "Email address already taken")
 
       # Build insert user query
       userInsert = Client.insert(

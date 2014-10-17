@@ -50,7 +50,7 @@ $(document).ready(function() {
 <h1>Registration</h1>
   <form name="register" action="/register" id="register" method="POST">
 		{% if errorMessage %}
-			<div id="showErrorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
+			<div id="showErrorMessage" class="alert alert-danger" role="alert"><i class='fa fa-times'></i> {{errorMessage}}</div>
 		{% endif %}
 		<!-- onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" -->
     <div class="form-group">
