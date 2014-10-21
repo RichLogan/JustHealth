@@ -6,17 +6,10 @@
 Welcome to JustHealth's documentation!
 ======================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
+   index
+   arch
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+JustHealth is a healthcare app designed to support care for patients with chronic health conditions and their patients.
