@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>application &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> JustHealth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../docs/arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/arch.html#the-application-code">The Application Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/arch.html#the-orm">The ORM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/users.html">User Functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/users.html#register">Register</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>application</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for application</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">abort</span>
+<span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">URLSafeSerializer</span><span class="p">,</span> <span class="n">BadSignature</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">passlib.hash</span> <span class="kn">import</span> <span class="n">sha256_crypt</span>
+<span class="kn">from</span> <span class="nn">database</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">getSerializer</span><span class="p">(</span><span class="n">secret_key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">secret_key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">secret_key</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">secret_key</span>
+    <span class="k">return</span> <span class="n">URLSafeSerializer</span><span class="p">(</span><span class="n">secret_key</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">sendVerificationEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">verifyLink</span> <span class="o">=</span> <span class="n">url_for</span><span class="p">(</span><span class="s">&#39;verifyUser&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c">#Send Link to users email</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+
+    <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+    <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth Verification&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Thanks for registering! Please verify your account here: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">verifyLink</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">sendPasswordResetEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+  <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+  <span class="n">payload</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+  <span class="n">verifyLink</span> <span class="o">=</span> <span class="n">url_for</span><span class="p">(</span><span class="s">&#39;passwordReset&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+  <span class="c">#Send Link to users email</span>
+  <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+  <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+
+  <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+  <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+  <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth Password Reset Verification&quot;</span>
+  <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Your password has been reset. Please verify this here: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">verifyLink</span><span class="p">)</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+  <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+  <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">sendUnlockEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="c">#Send Link to users email</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+
+    <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+    <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth Accounts Locked&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password.&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/users/activate/&lt;payload&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">verifyUser</span><span class="p">(</span><span class="n">payload</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">retrievedUsername</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">BadSignature</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+
+    <span class="n">verifiedTrue</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">verified</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">retrievedUsername</span><span class="p">)</span>
+    <span class="n">verifiedTrue</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">,</span> <span class="n">verified</span><span class="o">=</span><span class="s">&#39;true&#39;</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/users/activate/&lt;payload&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">passwordReset</span><span class="p">(</span><span class="n">payload</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">retrievedUsername</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">BadSignature</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+
+    <span class="n">verifiedTrue</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">verified</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">retrievedUsername</span><span class="p">)</span>
+    <span class="n">verifiedTrue</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+
+
+<span class="c"># Checks to see if a session is set. If not, kicks to login screen.</span>
+<span class="k">def</span> <span class="nf">needLogin</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+  <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">loginCheck</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">session</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+      <span class="c"># session[&#39;username&#39;] doesn&#39;t exist, kick to login screen</span>
+      <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;login&#39;</span><span class="p">))</span>
+    <span class="c"># User logged in, continue as normal</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">loginCheck</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<span class="nd">@needLogin</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">session</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/register&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="registration"><a class="viewcode-back" href="../docs/users.html#application.registration">[docs]</a><span class="k">def</span> <span class="nf">registration</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;TEST TEST TEST&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+
+      <span class="c"># Build User Registration</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;ismale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;ismale&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;iscarer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;iscarer&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmpassword&#39;</span><span class="p">]</span>
+      <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;All fields must be filled out&quot;</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;terms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;terms&#39;</span><span class="p">]</span>
+      <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Terms and Conditions must be accepted&quot;</span>
+
+      <span class="c"># Validate all input</span>
+      <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">profile</span><span class="p">:</span>
+        <span class="n">profile</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+      <span class="c"># Validate username &gt;25</span>
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">25</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;Username can not be longer then 25 characters&#39;</span>
+
+      <span class="c"># Validate firstname, surname and email &gt;25</span>
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;Firstname, surname and email can not be longer then 100 characters&#39;</span>
+
+      <span class="c"># Validate email correct format</span>
+      <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$&#39;</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="s">&quot;Fail email verification&quot;</span>
+
+      <span class="c"># Encrypt password with SHA 256</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">])</span>
+
+      <span class="c">#Check for existing username</span>
+      <span class="k">if</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;register.html&#39;</span><span class="p">,</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="s">&quot;Username already taken&quot;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;register.html&#39;</span><span class="p">,</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="s">&quot;Email address already taken&quot;</span><span class="p">)</span>
+
+      <span class="c"># Build insert user query</span>
+      <span class="n">userInsert</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+        <span class="n">firstname</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">],</span>
+        <span class="n">surname</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">],</span>
+        <span class="n">dob</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">],</span>
+        <span class="n">ismale</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;ismale&#39;</span><span class="p">],</span>
+        <span class="n">iscarer</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;iscarer&#39;</span><span class="p">],</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span>
+      <span class="p">)</span>
+
+      <span class="c"># Build insert password query</span>
+      <span class="n">userPassword</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">],</span>
+        <span class="n">iscurrent</span> <span class="o">=</span> <span class="s">&#39;TRUE&#39;</span><span class="p">,</span>
+        <span class="n">expirydate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">90</span><span class="p">))</span>
+      <span class="p">)</span>
+
+      <span class="c"># Execute Queries</span>
+      <span class="n">userInsert</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+      <span class="n">userPassword</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+      <span class="n">sendVerificationEmail</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+      <span class="k">return</span> <span class="s">&quot;You will see a verification email shortly!&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;register.html&#39;</span><span class="p">)</span>
+
+<span class="c">#finds the value of the loginattempts field in the database</span></div>
+<span class="k">def</span> <span class="nf">getLoginAttempts</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+  <span class="n">loginAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">loginattempts</span>
+  <span class="k">return</span> <span class="n">loginAttempts</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/termsandconditions&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">terms</span><span class="p">():</span>
+  <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;termsandconditions.html&#39;</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/login&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">login</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+      <span class="n">session</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">isAccountLocked</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">accountlocked</span>
+        <span class="n">isAccountVerified</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">verified</span>
+        <span class="k">if</span> <span class="n">isAccountLocked</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">isAccountVerified</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="c"># Retrieve and compare saved and entered passwords</span>
+            <span class="n">hashedPassword</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">username</span><span class="o">==</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">iscurrent</span><span class="o">==</span><span class="bp">True</span><span class="p">))</span><span class="o">.</span><span class="n">password</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+
+            <span class="c"># If valid, set SESSION on username</span>
+            <span class="k">if</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">hashedPassword</span><span class="p">):</span>
+              <span class="n">session</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+              <span class="n">updateLoginAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+              <span class="n">updateLoginAttempts</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+              <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+            <span class="c"># lock account if 5 attempts</span>
+              <span class="n">getLoginAttempts</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+              <span class="n">updateLoginAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="n">getLoginAttempts</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+              <span class="n">updateLoginAttempts</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+              <span class="k">if</span> <span class="n">getLoginAttempts</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">updateAccountLocked</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">accountlocked</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+                <span class="n">updateAccountLocked</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+                <span class="n">sendUnlockEmail</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+                <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">,</span><span class="n">locked</span><span class="o">=</span><span class="s">&#39;true&#39;</span><span class="p">)</span>
+              <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">,</span><span class="n">wrongCredentials</span><span class="o">=</span><span class="s">&#39;true&#39;</span><span class="p">)</span>
+          <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">,</span><span class="n">verified</span><span class="o">=</span><span class="s">&#39;false&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">,</span><span class="n">locked</span><span class="o">=</span><span class="s">&#39;true&#39;</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">Client</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">,</span><span class="n">wrongCredentials</span><span class="o">=</span><span class="s">&#39;true&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;login.html&#39;</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/logout&#39;</span><span class="p">)</span>
+<span class="nd">@needLogin</span>
+<span class="k">def</span> <span class="nf">logout</span><span class="p">():</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/resetpassword&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">resetPassword</span><span class="p">():</span>
+  <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmemail&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmemail&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmnewpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmnewpassword&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmdob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmdob&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;All fields must be filled out&quot;</span>
+
+    <span class="n">getEmail</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">getDob</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dob</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">getEmail</span><span class="o">==</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmemail&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">getDob</span><span class="o">==</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmdob&#39;</span><span class="p">]:</span>
+
+      <span class="c">#set the old password to iscurrent = false</span>
+      <span class="n">notCurrent</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">iscurrent</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+      <span class="n">notVerified</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">verified</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+
+      <span class="c">#encrypt the password</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">])</span>
+
+      <span class="c"># Build insert password query</span>
+      <span class="n">newCredentials</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">],</span>
+        <span class="n">iscurrent</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">expirydate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">90</span><span class="p">))</span>
+      <span class="p">)</span>
+      <span class="n">unlockAccount</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">accountlocked</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+      <span class="n">setLoginCount</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+
+      <span class="n">notCurrent</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+      <span class="n">notVerified</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+      <span class="n">newCredentials</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+      <span class="n">unlockAccount</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+      <span class="n">setLoginCount</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+      <span class="n">sendPasswordResetEmail</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+      <span class="n">session</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+      <span class="k">return</span> <span class="s">&quot;You will receive a password reset verification email shortly.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;resetpassword.html&#39;</span><span class="p">,</span><span class="n">invalid</span><span class="o">=</span><span class="s">&#39;true&#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;resetpassword.html&#39;</span><span class="p">)</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">secret_key</span> <span class="o">=</span> <span class="s">&#39;^</span><span class="se">\x83</span><span class="s">J</span><span class="se">\xd3</span><span class="s">) </span><span class="se">\x1a\xa4\x05\xea\xd8</span><span class="s">,</span><span class="se">\t</span><span class="s">=</span><span class="se">\x14</span><span class="s">]</span><span class="se">\xfd\x8c</span><span class="s">%</span><span class="se">\x90\xd6\x9f\xa1</span><span class="s">Z&#39;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">9999</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
