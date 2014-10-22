@@ -47,7 +47,7 @@ $(document).ready(function() {
 
 {% block content %}
 
-<h1>Registration</h1>
+<h2>Registration</h2>
   <form name="register" action="/register" id="register" method="POST">
 		{% if errorMessage %}
 			<div class="alert alert-danger alert-dismissible" role="alert">
@@ -108,8 +108,8 @@ $(document).ready(function() {
     </div>
 
     <input type="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
-
-	<input class="form-control" type="submit" value="Register">
+		<br/>
+	<input class="btn btn-default" type="submit" value="Register">
 		<br/>
   </form>
 {% endblock %}

@@ -27,16 +27,22 @@ a:active  {color:#ff0000; background-color:transparent}
   height: 70px;
 }
 
+html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 body {
 	height: 100%;
-	width: 50%;
+	width: 40%;
 	margin: 0 auto;
 	margin-top: 85px;
 	padding: 0;
 	background-color: #FAFAFA;
 }
 
-#main-wrapper {
+#mainwrapper {
 	padding: 0 0 50px;
 	position: relative;
 	box-sizing: border-box;
@@ -101,7 +107,7 @@ margin-top: 1%;
 }
 
 .passwordWeak{
-	color: #A349A4;
+	color: #DF111C;
 }
 
 .passwordGood{
