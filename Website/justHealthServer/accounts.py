@@ -1,13 +1,13 @@
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from justHealthServer import *
+
 from itsdangerous import URLSafeSerializer, BadSignature
-from functools import wraps
 from passlib.hash import sha256_crypt
-from database import *
+
 import re
 import smtplib
 import datetime
 
-app = Flask(__name__)
+from database import *
 
 def getSerializer(secret_key=None):
     if secret_key is None:
@@ -84,25 +84,6 @@ def passwordReset(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return redirect(url_for('index'))
-
-
-# Checks to see if a session is set. If not, kicks to login screen.
-def needLogin(f):
-  @wraps(f)
-  def loginCheck(*args, **kwargs):
-    try:
-      session['username']
-    except KeyError, e:
-      # session['username'] doesn't exist, kick to login screen
-      return redirect(url_for('login'))
-    # User logged in, continue as normal
-    return f(*args, **kwargs)
-  return loginCheck
-
-@app.route('/')
-@needLogin
-def index():
-    return session['username']
 
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
@@ -186,10 +167,6 @@ def getLoginAttempts(username):
   loginAttempts = Client.get(username=request.form['username']).loginattempts
   return loginAttempts
 
-@app.route('/termsandconditions')
-def terms():
-  return render_template('termsandconditions.html')
-
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -228,12 +205,6 @@ def login():
       except Client.DoesNotExist:
         return render_template('login.html',wrongCredentials='true')
     return render_template('login.html')
-
-@app.route('/logout')
-@needLogin
-def logout():
-  session.pop('username', None)
-  return redirect(url_for('index'))
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPassword():
@@ -281,9 +252,3 @@ def resetPassword():
     else:
       return render_template('resetpassword.html',invalid='true')
   return render_template('resetpassword.html')
-
-
-app.secret_key = '^\x83J\xd3) \x1a\xa4\x05\xea\xd8,\t=\x14]\xfd\x8c%\x90\xd6\x9f\xa1Z'
-
-if __name__ == '__main__':
-    app.run(port=9999, debug=True)
