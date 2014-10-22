@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-<h1> Login </h1>
+<h2> Please log in </h2>
 
   <form action="/login" method="POST">
     <div class="form-group">
@@ -32,7 +32,7 @@
     {%elif locked == 'true' %} <p class="wrongInputs">Account locked, an email has been sent to your registered email address.</p> 
     {%elif verified == 'false' %}<p class="wrongInputs">Account is not verified, please clicked on the verification link that you have received in an email from JustHealth</p> 
     {%elif verified == 'true' %}<p class="rightInputs">Thank you, your account is now verified.</p>{% endif %}
-  <input class="form-control" type="submit" value="Login">
-  <a href="/resetpassword">Forgot Password</a>
+  <input class="btn btn-default" type="submit" value="Login">
+  <a href="/resetpassword" class="pull-right">Forgot Password</a>
   </form>
 {% endblock %}

@@ -32,8 +32,8 @@ function checkStrength(password) {
 	//if the password length is less than 6, return message
 	if (password.length < 6) {
 		$('#result').removeClass()
-		$('#result').addClass('passwordShort')
-		return 'Too short'
+		$('#result').addClass('passwordWeak')
+		return 'Weak'
 	}
 
 	//length is okay, continue.

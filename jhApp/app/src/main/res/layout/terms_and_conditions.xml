@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login">
+
+
+    <include android:id="@+id/header" layout="@layout/header" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/scrollView">
+
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Terms and Conditions"
+            android:layout_above="@+id/scrollView"
+            android:textSize="20dip"
+            android:textColor="@color/header"/>
+    </ScrollView>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=
+           "1. Any data that is given to JustHealth may be processed by JustHealth to improve the ease of use, performance and/or functionality of the application.
+
+2.The data stored by JustHealth will not be passed to any third parties without the consent of the data subject.
+
+3. A user’s data may be viewed by their carer, relative, doctor and pharmacist but will not be visible to anyone that isn’t approved to view the data.
+
+4. It is the responsibility of the user to ensure that the information that JustHealth holds about them is accurate and up to date. This is not the responsibility of JustHealth or any of its affiliated parties.
+
+5. JustHealth will keep all data for the time that a data subject’s account is active; all of the data that JustHealth will hold about a user will be viewable within the mobile and web application.
+
+6. When a data subject deactivates their account with JustHealth they will be able to request to have their information removed from the centralised database. This will impact account reactivation.
+
+7. A data subject may request the personal data that JustHealth hold about them but this will only be able to be sent to the user within the UK by the postal service. This will not be sent by any other means.
+
+8. Users that download data from outside the UK will do so at their own risk and this will not be the responsibility of JustHealth. Any information that JustHealth will hold about a data subject will be stored within the UK."
+        android:textSize="10dip"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>
