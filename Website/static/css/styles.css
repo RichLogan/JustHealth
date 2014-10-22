@@ -27,29 +27,43 @@ a:active  {color:#ff0000; background-color:transparent}
   height: 70px;
 }
 
+html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 body {
-  width: 50%;
-  margin: 0 auto;
-  margin-top: 85px;
-  background-color: #FAFAFA;
+	height: 100%;
+	width: 40%;
+	margin: 0 auto;
+	margin-top: 85px;
+	padding: 0;
+	background-color: #FAFAFA;
+}
+
+#mainwrapper {
+	padding: 0 0 50px;
+	position: relative;
+	box-sizing: border-box;
+	min-height: 100%;
 }
 
 footer {
-  height: 50px;
-  background-color: #2272EB;
-  color: #A8A8A8;
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  bottom margin: 100%;
-  overflow: scroll;
+	height: 50px;
+	background-color: #2272EB;
+	color: #A8A8A8;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
 }
 
 #footer1 {
-   float: left;
-  margin-left: 10%;
-  margin-top: 1%;
+	float: left;
+	margin-left: 10%;
+	margin-top: 1%;
 }
 
 #footer2{
@@ -93,7 +107,7 @@ margin-top: 1%;
 }
 
 .passwordWeak{
-	color: #A349A4;
+	color: #DF111C;
 }
 
 .passwordGood{
