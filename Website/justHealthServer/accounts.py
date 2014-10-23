@@ -183,16 +183,16 @@ def login():
             # If valid, set SESSION on username
             if sha256_crypt.verify(password, hashedPassword):
               session['username'] = request.form['username']
-              updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts = Client.update(loginattempts = 0).where(Client.username == request.form['username'])
               updateLoginAttempts.execute()
               return redirect(url_for('index'))
             else:
             # lock account if 5 attempts
               getLoginAttempts(request.form['username'])
-              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(Client.username == request.form['username'])
               updateLoginAttempts.execute()
               if getLoginAttempts(request.form['username']) >= 5:
-                updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
+                updateAccountLocked = Client.update(accountlocked = True).where(Client.username == request.form['username'])
                 updateAccountLocked.execute()
                 sendUnlockEmail(request.form['username'])
                 return render_template('login.html',locked='true')
