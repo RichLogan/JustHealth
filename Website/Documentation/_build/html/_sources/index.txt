@@ -9,7 +9,7 @@ Welcome to JustHealth's documentation!
 .. toctree::
    :maxdepth: 2
 
-   index
-   arch
+   docs/arch
+   docs/users
 
 JustHealth is a healthcare app designed to support care for patients with chronic health conditions and their patients.

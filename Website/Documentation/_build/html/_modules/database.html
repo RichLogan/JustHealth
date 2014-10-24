@@ -57,11 +57,16 @@
         
         
             <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to JustHealth&#8217;s documentation!</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../arch.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/arch.html#the-application-code">The Application Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/arch.html#the-orm">The ORM</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../arch.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/users.html">User Functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/users.html#register">Register</a></li>
+</ul>
+</li>
 </ul>
 
         
@@ -103,15 +108,16 @@
 
 <span class="n">db</span> <span class="o">=</span> <span class="n">PostgresqlDatabase</span><span class="p">(</span><span class="s">&#39;justhealth&#39;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s">&#39;host&#39;</span><span class="p">:</span> <span class="s">&#39;penguin.kent.ac.uk&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">:</span> <span class="s">&#39;dsomoid&#39;</span><span class="p">,</span> <span class="s">&#39;port&#39;</span><span class="p">:</span> <span class="mi">5432</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="s">&#39;justhealth&#39;</span><span class="p">})</span>
 
-<span class="k">class</span> <span class="nc">UnknownField</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="UnknownField"><a class="viewcode-back" href="../docs/users.html#database.UnknownField">[docs]</a><span class="k">class</span> <span class="nc">UnknownField</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">pass</span>
-
-<span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../docs/users.html#database.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base Model&quot;&quot;&quot;</span>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">database</span> <span class="o">=</span> <span class="n">db</span>
-
-<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../index.html#database.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Test&quot;&quot;&quot;</span>
+</div>
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../docs/users.html#database.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a user of the application&quot;&quot;&quot;</span>
     <span class="n">accountlocked</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">()</span>
     <span class="n">dob</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">()</span>
     <span class="n">email</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -127,7 +133,7 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;client&#39;</span>
 </div>
-<span class="k">class</span> <span class="nc">uq8LnAWi7D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="uq8LnAWi7D"><a class="viewcode-back" href="../docs/users.html#database.uq8LnAWi7D">[docs]</a><span class="k">class</span> <span class="nc">uq8LnAWi7D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">expirydate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">iscurrent</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">password</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
@@ -135,7 +141,7 @@
     <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="s">&#39;CASCADE&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;uq8lnawi7d&#39;</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;uq8lnawi7d&#39;</span></div>
 </pre></div>
 
           </div>

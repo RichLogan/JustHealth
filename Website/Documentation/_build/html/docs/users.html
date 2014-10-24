@@ -103,7 +103,7 @@
             
   <div class="section" id="user-functionality">
 <h1>User Functionality<a class="headerlink" href="#user-functionality" title="Permalink to this headline">¶</a></h1>
-<p>JustHealth provides a number of functionalities associated with user management.</p>
+<p>This document will list the key pieces of functionality that control user management. The server side code representing all of the functions can be found in the <tt class="xref py py-mod docutils literal"><span class="pre">accounts</span></tt> module.</p>
 <p>The application has a number of different types of users, including:</p>
 <ol class="arabic simple">
 <li>Patients</li>
@@ -111,10 +111,17 @@
 <li>Relatives</li>
 <li>Medical Professionals</li>
 </ol>
+<p>Each user is represented by a Client record in the PostgreSQL databsae, and represented in our database by the following class:</p>
+<span class="target" id="module-database"></span><dl class="class">
+<dt id="database.Client">
+<em class="property">class </em><tt class="descclassname">database.</tt><tt class="descname">Client</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/database.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#database.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a user of the application</p>
+</dd></dl>
+
 <div class="section" id="register">
 <h2>Register<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h2>
 <p>The registration function is a simple form where a user can input their account information.</p>
-<p>It takes the following fields:</p>
+<p>It takes the following input from either the Web application or the Android application through an HTTP POST request:</p>
 <ol class="arabic simple">
 <li>Username</li>
 <li>First Name</li>
@@ -128,13 +135,7 @@
 <li>Confirm Password</li>
 <li>Terms and Conditions Accept</li>
 </ol>
-<p>These are passed to the <a href="#id1"><span class="problematic" id="id2">:applicaton:func:`registration`</span></a> function</p>
-<span class="target" id="module-application"></span><dl class="function">
-<dt id="application.registration">
-<tt class="descclassname">application.</tt><tt class="descname">registration</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/application.html#registration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.registration" title="Permalink to this definition">¶</a></dt>
-<dd><p>TEST TEST TEST</p>
-</dd></dl>
-
+<p>If this passes through the valiadtion it is used to insert a new Client record:</p>
 </div>
 </div>
 

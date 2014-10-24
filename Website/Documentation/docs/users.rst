@@ -1,7 +1,7 @@
 User Functionality
 ===================
 
-JustHealth provides a number of functionalities associated with user management.
+This document will list the key pieces of functionality that control user management. The server side code representing all of the functions can be found in the :py:mod:`accounts` module.
 
 The application has a number of different types of users, including:
 
@@ -10,12 +10,17 @@ The application has a number of different types of users, including:
 3. Relatives
 4. Medical Professionals
 
+Each user is represented by a Client record in the PostgreSQL databsae, and represented in our database by the following class:
+
+.. automodule:: database
+    :members: Client
+
 Register
 --------
 
 The registration function is a simple form where a user can input their account information.
 
-It takes the following fields:
+It takes the following input from either the Web application or the Android application through an HTTP POST request:
 
 1. Username
 2. First Name
@@ -29,7 +34,8 @@ It takes the following fields:
 10. Confirm Password
 11. Terms and Conditions Accept
 
-These are passed to the :applicaton:func:`registration` function  
+If this passes through the valiadtion it is used to insert a new Client record:
 
-.. automodule:: application
-    :members: registration
+.. automodule:: accounts
+    :members:
+    :undoc-members:
