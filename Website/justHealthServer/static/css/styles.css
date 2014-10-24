@@ -10,6 +10,18 @@ a:active  {color:#ff0000; background-color:transparent}
   color: #FFFFFF;
 }
 
+.largeIcon {
+  font-size: 100px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 150px;
+  padding: 10px;
+  color: #2272EB;
+  height: 200px;
+  width:100%;
+  display:block;
+}
+
 .wrongInputs { 
   color: #DF111C;
 }
@@ -28,12 +40,14 @@ a:active  {color:#ff0000; background-color:transparent}
 }
 
 html {
+	min-height:100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
 }
 
 body {
+	min-height:100%;
 	height: 100%;
 	width: 40%;
 	margin: 0 auto;
@@ -42,22 +56,24 @@ body {
 	background-color: #FAFAFA;
 }
 
-#mainwrapper {
-	padding: 0 0 50px;
-	position: relative;
-	box-sizing: border-box;
-	min-height: 100%;
-}
-
-footer {
+.footer {
 	height: 50px;
 	background-color: #2272EB;
 	color: #A8A8A8;
 	position: absolute;
 	left: 0;
-	right: 0;
 	bottom: 0;
 	width: 100%;
+}
+
+.wrapper {
+	position: relative;
+	box-sizing: border-box;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+	padding: 0 0 50px;
+    margin: 0 auto -50px;
 }
 
 #footer1 {
@@ -116,4 +132,8 @@ margin-top: 1%;
 
 .passwordStrong{
 	color: #30D917;
+}
+
+.tile{
+
 }
