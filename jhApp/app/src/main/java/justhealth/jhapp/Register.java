@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import android.content.Intent;
 
 import java.util.Set;
 import java.util.HashMap;
@@ -35,7 +36,6 @@ import org.apache.http.util.EntityUtils;
 
 public class Register extends ActionBarActivity {
 
-    Button registerButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -45,15 +45,22 @@ public class Register extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        registerButton = (Button)findViewById(R.id.register);
-
+        Button registerButton = (Button)findViewById(R.id.register);
         registerButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-
                         sendRegister();
                     }
                 }
+        );
+
+        TextView termsAndConditions = (TextView)findViewById(R.id.tsandcs);
+        termsAndConditions.setOnClickListener(
+               new View.OnClickListener() {
+                   public void onClick(View view) {
+                       startActivity(new Intent(Register.this, TermsAndConditions.class));
+                   }
+               }
         );
     }
 
@@ -126,7 +133,6 @@ public class Register extends ActionBarActivity {
             //System.out.println(is.toString());
             String responseStr = EntityUtils.toString(response.getEntity());
             System.out.println(responseStr);
-
 
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
