@@ -21,11 +21,12 @@ tools:context=".Register">
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password"
+                android:text="Register"
                 android:layout_above="@+id/scrollView"
                 android:textSize="20dip"
                 android:textColor="@color/header"
-                android:layout_marginBottom="5dip"/>
+                android:layout_marginBottom="5dip"
+                android:id="@+id/link_to_forgot_password"/>
 
             <EditText
                 android:layout_width="match_parent"
