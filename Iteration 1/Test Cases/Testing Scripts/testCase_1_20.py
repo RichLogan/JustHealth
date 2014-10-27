@@ -77,49 +77,6 @@ class testCase_1_20(unittest.TestCase):
           expirydate = '10/10/2014')
         newPassword.execute()
 
-  def test_1_20_4(self):
-    with testDatabase.database.transaction():
-      newUser = testDatabase.Client.insert(
-        username= 'test',
-        firstname='test',
-        surname='test',
-        dob='01/01/2001',
-        ismale='TRUE',
-        iscarer='TRUE',
-        email='test@test.com')
-      newUser.execute()
-      self.assertEqual(testDatabase.Client.select().count(),1)
-
-      # Should raise an Exception...
-      with self.assertRaises(Exception):
-        newPassword = testDatabase.uq8LnAWi7D.insert(
-          username ='test',
-          password ='password',
-          iscurrent = 'test',
-          expirydate = '10/10/2014')
-        newPassword.execute()
-
-  def test_1_20_5(self):
-    with testDatabase.database.transaction():
-      newUser = testDatabase.Client.insert(
-        username= 'test',
-        firstname='test',
-        surname='test',
-        dob='01/01/2001',
-        ismale='TRUE',
-        iscarer='TRUE',
-        email='test@test.com')
-      newUser.execute()
-      self.assertEqual(testDatabase.Client.select().count(),1)
-
-      with self.assertRaises(DataError):
-        newPassword = testDatabase.uq8LnAWi7D.insert(
-          username ='test',
-          password ='password',
-          iscurrent = 'TRUE',
-          expirydate = '19/17/1993')
-        newPassword.execute()
-
   def tearDown(self):
     deleteUsers = testDatabase.Client.delete()
     deletePasswords = testDatabase.uq8LnAWi7D.delete()

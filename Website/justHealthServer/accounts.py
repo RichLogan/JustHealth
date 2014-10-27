@@ -162,6 +162,7 @@ def registration():
     else:
       return render_template('register.html')
 
+
 #finds the value of the loginattempts field in the database
 def getLoginAttempts(username):
   loginAttempts = Client.get(username=request.form['username']).loginattempts
@@ -183,16 +184,20 @@ def login():
             # If valid, set SESSION on username
             if sha256_crypt.verify(password, hashedPassword):
               session['username'] = request.form['username']
-              updateLoginAttempts = Client.update(loginattempts = 0).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts = Client.update(loginattempts = 0).where(Client.username == request.form['username'])
               updateLoginAttempts.execute()
-              return redirect(url_for('index'))
+              accountType = Client.get(username=request.form['username']).iscarer
+              if (accountType == True):
+                return 'carer'
+              elif (accountType == False): 
+                return render_template('patienthome.html')
             else:
             # lock account if 5 attempts
               getLoginAttempts(request.form['username'])
-              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(str(Client.username).strip() == request.form['username'])
+              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(Client.username == request.form['username'])
               updateLoginAttempts.execute()
               if getLoginAttempts(request.form['username']) >= 5:
-                updateAccountLocked = Client.update(accountlocked = True).where(str(Client.username).strip() == request.form['username'])
+                updateAccountLocked = Client.update(accountlocked = True).where(Client.username == request.form['username'])
                 updateAccountLocked.execute()
                 sendUnlockEmail(request.form['username'])
                 return render_template('login.html',locked='true')
