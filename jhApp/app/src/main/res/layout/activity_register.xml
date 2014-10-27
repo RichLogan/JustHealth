@@ -39,6 +39,7 @@ tools:context=".Register">
                 android:autoText="false"
                 android:maxLength="25" />
 
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

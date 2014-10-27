@@ -36,7 +36,6 @@ import org.apache.http.util.EntityUtils;
 public class Register extends ActionBarActivity {
 
     Button registerButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,7 +46,6 @@ public class Register extends ActionBarActivity {
         setContentView(R.layout.activity_register);
 
         registerButton = (Button) findViewById(R.id.register);
-
         registerButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -97,7 +95,8 @@ public class Register extends ActionBarActivity {
             details.put("terms", "on");
 
             post(details);
-        } else {
+        }
+        else {
             //Ts and cs not accepted
         }
     }
