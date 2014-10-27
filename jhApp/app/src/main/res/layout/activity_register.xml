@@ -26,7 +26,8 @@ tools:context=".Register">
                 android:text="Username"
                 android:ems="10"
                 android:id="@+id/username"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:editable="true" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -61,7 +62,8 @@ tools:context=".Register">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:id="@+id/sex">
 
                 <RadioButton
                     android:layout_width="163dp"
