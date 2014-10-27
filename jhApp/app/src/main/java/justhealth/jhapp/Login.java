@@ -17,7 +17,7 @@ public class Login extends ActionBarActivity {
         register.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        startActivity(new Intent(Login.this, Register.class));
+                        startActivity(new Intent(Login.this, ForgotPassword.class));
                     }
                 }
         );
@@ -26,7 +26,7 @@ public class Login extends ActionBarActivity {
         forgotPassword.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        startActivity(new Intent(Login.this, ForgotPassword.class));
+                        startActivity(new Intent(Login.this, Register.class));
                     }
                 }
         );
