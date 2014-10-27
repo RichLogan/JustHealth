@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>justHealthServer.generalViews &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> JustHealth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-application-code">The Application Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-orm">The ORM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../users.html">User Functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../users.html#register">Register</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#module-justHealthServer.accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#module-justHealthServer.database">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#module-justHealthServer.generalViews">General Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#module-justHealthServer.testDatabase">TestDatabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>justHealthServer.generalViews</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for justHealthServer.generalViews</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">justHealthServer</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="c"># Decorator Functions</span>
+<div class="viewcode-block" id="needLogin"><a class="viewcode-back" href="../../api.html#justHealthServer.generalViews.needLogin">[docs]</a><span class="k">def</span> <span class="nf">needLogin</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+  <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">loginCheck</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">session</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+      <span class="c"># session[&#39;username&#39;] doesn&#39;t exist, kick to login screen</span>
+      <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;login&#39;</span><span class="p">))</span>
+    <span class="c"># User logged in, continue as normal</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">loginCheck</span>
+</div>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+<span class="nd">@needLogin</span>
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../api.html#justHealthServer.generalViews.index">[docs]</a><span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">session</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+</div>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/termsandconditions&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="terms"><a class="viewcode-back" href="../../api.html#justHealthServer.generalViews.terms">[docs]</a><span class="k">def</span> <span class="nf">terms</span><span class="p">():</span>
+  <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;termsandconditions.html&#39;</span><span class="p">)</span>
+</div>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/logout&#39;</span><span class="p">)</span>
+<span class="nd">@needLogin</span>
+<div class="viewcode-block" id="logout"><a class="viewcode-back" href="../../api.html#justHealthServer.generalViews.logout">[docs]</a><span class="k">def</span> <span class="nf">logout</span><span class="p">():</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s">&#39;index&#39;</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

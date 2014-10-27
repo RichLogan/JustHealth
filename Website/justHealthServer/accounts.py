@@ -87,6 +87,7 @@ def passwordReset(payload):
 
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
+    """Takes a dictionary of user details and inserts them into a Client object in the database"""
     if request.method == 'POST':
 
       # Build User Registration

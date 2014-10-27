@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Full API Listing &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="prev" title="User Functionality" href="users.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> JustHealth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-application-code">The Application Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">User Functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#register">Register</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.database">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.generalViews">General Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.testDatabase">TestDatabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Full API Listing</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/api.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="full-api-listing">
+<h1>Full API Listing<a class="headerlink" href="#full-api-listing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-justHealthServer.accounts">
+<span id="accounts"></span><h2>Accounts<a class="headerlink" href="#module-justHealthServer.accounts" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.accounts.registration">
+<tt class="descclassname">justHealthServer.accounts.</tt><tt class="descname">registration</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/justHealthServer/accounts.html#registration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.accounts.registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a dictionary of user details and inserts them into a Client object in the database</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-justHealthServer.database">
+<span id="database"></span><h2>Database<a class="headerlink" href="#module-justHealthServer.database" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="justHealthServer.database.BaseModel">
+<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">BaseModel</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#BaseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base Model</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Client">
+<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">Client</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a user of the application</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-justHealthServer.generalViews">
+<span id="general-views"></span><h2>General Views<a class="headerlink" href="#module-justHealthServer.generalViews" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-justHealthServer.testDatabase">
+<span id="testdatabase"></span><h2>TestDatabase<a class="headerlink" href="#module-justHealthServer.testDatabase" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="users.html" class="btn btn-neutral" title="User Functionality"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

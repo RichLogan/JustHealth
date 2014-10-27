@@ -29,7 +29,8 @@
 
   
     <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
-        <link rel="prev" title="Architecture" href=""/> 
+        <link rel="next" title="User Functionality" href="users.html"/>
+        <link rel="prev" title="Welcome to JustHealth’s documentation!" href="index.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -57,11 +58,25 @@
         
         
             <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Welcome to JustHealth&#8217;s documentation!</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-application-code">The Application Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-orm">The ORM</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">User Functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#register">Register</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="justHealthServer.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.database">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.generalViews">General Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.testDatabase">TestDatabase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-contents">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         
@@ -98,7 +113,27 @@
             
   <div class="section" id="architecture">
 <h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
-<p>Architecture</p>
+<p>The JustHealth web application is a simple and lightweight application.</p>
+<p>It consists of three distinct parts:</p>
+<ol class="arabic simple">
+<li>The application code itself</li>
+<li>A PostgreSQL database</li>
+<li>An ORM that connects the application to the database</li>
+</ol>
+<div class="section" id="the-application-code">
+<h2>The Application Code<a class="headerlink" href="#the-application-code" title="Permalink to this headline">¶</a></h2>
+<p>The application is written in <a class="reference external" href="https://www.python.org/">Python</a> using a web framework called <a class="reference external" href="http://flask.pocoo.org/">Flask</a></p>
+<p>We chose to use Python/Flask as one developer (Rich) had previous positive experience with in during his placement year. It was easy to learn and very logical to use, allowing us to build the functionality we wanted quickly.</p>
+</div>
+<div class="section" id="the-database">
+<h2>The Database<a class="headerlink" href="#the-database" title="Permalink to this headline">¶</a></h2>
+<p>Behind the application is a <a class="reference external" href="http://www.postgresql.org/">postgreSQL</a> database hosted on <a class="reference external" href="http://penguin.kent.ac.uk">http://penguin.kent.ac.uk</a>. This is provided by the University.</p>
+</div>
+<div class="section" id="the-orm">
+<h2>The ORM<a class="headerlink" href="#the-orm" title="Permalink to this headline">¶</a></h2>
+<p>The final piece is an Object Relational Mapper known as <a class="reference external" href="https://github.com/coleifer/peewee">peewee</a>. An Object Relational Mapper allows us to interact with our database from our application as though it was an object in Python. This negates the need to write SQL and the weaknesses associated with it, such as SQL injection attacks.</p>
+<p>peewee is very lightweight and, again, highly logical to understand and use. It&#8217;s full documentation can be found here: <a class="reference external" href="http://peewee.readthedocs.org/en/latest/">http://peewee.readthedocs.org/en/latest/</a> and will be referenced throughout.</p>
+</div>
 </div>
 
 
@@ -107,8 +142,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="users.html" class="btn btn-neutral float-right" title="User Functionality"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="" class="btn btn-neutral" title="Architecture"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to JustHealth’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
