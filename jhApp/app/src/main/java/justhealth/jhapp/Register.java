@@ -46,6 +46,7 @@ public class Register extends ActionBarActivity {
         setContentView(R.layout.activity_register);
 
         Button registerButton = (Button)findViewById(R.id.register);
+        registerButton = (Button) findViewById(R.id.register);
         registerButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -62,6 +63,15 @@ public class Register extends ActionBarActivity {
                    }
                }
         );
+
+        TextView forgotPassword = (TextView)findViewById(R.id.link_to_forgot_password);
+        forgotPassword.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(Register.this, ForgotPassword.class));
+                    }
+                }
+        );
     }
 
     private void sendRegister() {
@@ -70,18 +80,17 @@ public class Register extends ActionBarActivity {
 
         //Text Boxes
         details.put("username", ((EditText) findViewById(R.id.username)).getText().toString());
-        details.put("firstname", ((EditText)findViewById(R.id.firstName)).getText().toString());
-        details.put("surname", ((EditText)findViewById(R.id.surname)).getText().toString());
+        details.put("firstname", ((EditText) findViewById(R.id.firstName)).getText().toString());
+        details.put("surname", ((EditText) findViewById(R.id.surname)).getText().toString());
         details.put("dob", ((EditText) findViewById(R.id.dob)).getText().toString());
-        details.put("email", ((EditText)findViewById(R.id.email)).getText().toString());
+        details.put("email", ((EditText) findViewById(R.id.email)).getText().toString());
 
         //Gender
         Boolean ismale = null;
-        int id = ((RadioGroup)findViewById(R.id.sex)).getCheckedRadioButtonId();
+        int id = ((RadioGroup) findViewById(R.id.sex)).getCheckedRadioButtonId();
         if (id == R.id.male) {
             ismale = true;
-        }
-        else if (id == R.id.female) {
+        } else if (id == R.id.female) {
             ismale = false;
         }
         details.put("ismale", ismale.toString());
@@ -91,22 +100,22 @@ public class Register extends ActionBarActivity {
         Boolean accountType = false;
         details.put("iscarer", accountType.toString());
 
-        String password = ((EditText)findViewById(R.id.password)).getText().toString();
-        String confirmPassword = ((EditText)findViewById(R.id.confirmPassword)).getText().toString();
+        String password = ((EditText) findViewById(R.id.password)).getText().toString();
+        String confirmPassword = ((EditText) findViewById(R.id.confirmPassword)).getText().toString();
 
 
-        if (((CheckBox)findViewById(R.id.tsandcs)).isChecked()) {
-                System.out.println("come on");
-                details.put("password", password);
-                details.put("confirmpassword", confirmPassword);
+        if (((CheckBox) findViewById(R.id.tsandcs)).isChecked()) {
+            System.out.println("come on");
+            details.put("password", password);
+            details.put("confirmpassword", confirmPassword);
 
             //TODO: set the terms and conditions properly
-            details.put("terms","on");
+            details.put("terms", "on");
 
-                post(details);
+            post(details);
         }
         else {
-                //Ts and cs not accepted
+            //Ts and cs not accepted
         }
     }
 
@@ -159,4 +168,16 @@ public class Register extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //validation on password and confirm password
+    public boolean isPasswordValid(String password, String confirmPassword) {
+        boolean status = false;
+        if (confirmPassword != null && password != null) {
+            if (password.equals(confirmPassword)) {
+                status = true;
+            }
+        }
+        return status;
+    }
 }
+

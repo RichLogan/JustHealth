@@ -30,28 +30,25 @@
             android:layout_marginBottom="20dip"/>
 
         <!--  Username Label -->
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Username"/>
+
         <EditText android:layout_width="372dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:layout_marginBottom="20dip"
             android:singleLine="true"
-            android:id="@+id/loginUsername" />
+            android:id="@+id/loginUsername"
+            android:maxLength="25"
+            android:hint="Username"/>
 
         <!--  Password Label -->
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Password"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/loginPassword"
-            android:password="true" />
-
+            android:password="true"
+            android:hint="Password"/>
 
 
         <!--login button-->

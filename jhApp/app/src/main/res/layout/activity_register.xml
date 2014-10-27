@@ -19,31 +19,45 @@ tools:context=".Register">
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password"
+                android:layout_above="@+id/scrollView"
+                android:textSize="20dip"
+                android:textColor="@color/header"
+                android:layout_marginBottom="5dip"
+                android:id="@+id/link_to_forgot_password"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Username"
+                android:hint="Username"
+                android:inputType="textAutoComplete"
                 android:ems="10"
                 android:id="@+id/username"
                 android:layout_gravity="center_horizontal"
-                android:editable="true" />
+                android:editable="true"
+                android:autoText="false"
+                android:maxLength="25" />
+
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="First Name"
+                android:hint="First Name"
                 android:ems="10"
-                android:id="@+id/firstName" />
+                android:id="@+id/firstName"
+                android:maxLength="100" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Surname"
+                android:hint="Surname"
                 android:ems="10"
-                android:id="@+id/surname" />
+                android:id="@+id/surname"
+                android:maxLength="100" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -51,7 +65,7 @@ tools:context=".Register">
                 android:inputType="date"
                 android:ems="10"
                 android:id="@+id/dob"
-                android:text="DOB" />
+                android:hint="DOB" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -94,7 +108,8 @@ tools:context=".Register">
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:id="@+id/email"
-                android:text="Email" />
+                android:hint="Email"
+                android:maxLength="100" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -102,7 +117,8 @@ tools:context=".Register">
                 android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/password"
-                android:text="Password" />
+                android:hint="Password"
+                android:maxLength="255" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -110,7 +126,8 @@ tools:context=".Register">
                 android:inputType="textPassword"
                 android:ems="10"
                 android:id="@+id/confirmPassword"
-                android:text="Confirm" />
+                android:hint="Confirm Password"
+                android:maxLength="255" />
 
             <CheckBox
                 android:layout_width="match_parent"
@@ -123,7 +140,8 @@ tools:context=".Register">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Register"
-                android:id="@+id/register" />
+                android:id="@+id/register"
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </ScrollView>
 
