@@ -22,7 +22,7 @@ a:active  {color:#ff0000; background-color:transparent}
   display:block;
 }
 
-.wrongInputs { 
+.wrongInputs {
   color: #DF111C;
 }
 
@@ -39,65 +39,64 @@ a:active  {color:#ff0000; background-color:transparent}
   height: 70px;
 }
 
-html {
-	min-height:100%;
-	height: 100%;
+html, body {
 	margin: 0;
 	padding: 0;
+  height: 100%;
+  background-color: #FAFAFA;
 }
 
-body {
-	min-height:100%;
-	height: 100%;
-	width: 40%;
-	margin: 0 auto;
-	margin-top: 85px;
-	padding: 0;
-	background-color: #FAFAFA;
+#container {
+  min-height: 100%;
+  position: relative;
 }
 
-.footer {
-	height: 50px;
-	background-color: #2272EB;
-	color: #A8A8A8;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
+header {
+  padding: 10px;
 }
 
-.wrapper {
-	position: relative;
-	box-sizing: border-box;
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-	padding: 0 0 50px;
-    margin: 0 auto -50px;
+#content {
+  padding:10px;
+  padding-bottom:60px;   /* Height of the footer */
+  width: 40%;
+  margin: 0 auto;
+  margin-top: 35px;
 }
 
+footer {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:60px;   /* Height of the footer */
+  background:#2272EB;
+}
+
+footer #footerContainer {
+  width: 70%;
+  margin: 0 auto;
+}
 #footer1 {
 	float: left;
 	margin-left: 10%;
 	margin-top: 1%;
 }
 
-#footer2{
-  float:left;
+#footer2 {
+  float: left;
   margin-left: 10%;
   margin-top: 1%;
 }
 
-#footer3{
-float:left;
-margin-left: 10%;
-margin-top: 1%;
+#footer3 {
+  float: left;
+  margin-left: 10%;
+  margin-top: 1%;
 }
 
-#footer4{
-float:left;
-margin-left: 10%;
-margin-top: 1%;
+#footer4 {
+  float: left;
+  margin-left: 10%;
+  margin-top: 1%;
 }
 
 #register {
@@ -132,8 +131,4 @@ margin-top: 1%;
 
 .passwordStrong{
 	color: #30D917;
-}
-
-.tile{
-
 }
