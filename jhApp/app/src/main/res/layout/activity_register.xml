@@ -139,7 +139,7 @@ tools:context=".Register">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Register"
+                android:text="@string/register"
                 android:id="@+id/register"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
