@@ -64,7 +64,6 @@ public class Login extends ActionBarActivity {
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        System.out.println("run");
                         requestLogin();
                     }
                 }
@@ -82,6 +81,7 @@ public class Login extends ActionBarActivity {
 
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
+        System.out.println("run");
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/login");
 
         //assigns the HashMap to list, for post request encoding
