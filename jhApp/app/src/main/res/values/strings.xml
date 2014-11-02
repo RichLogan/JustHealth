@@ -5,6 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="header">HEADER</string>
+    <string name="cancel">Cancel</string>
+    <string name="Confirm">Confirm</string>
+    <string name="register">Register</string>
 
 
     <string-array name="accountType">
@@ -12,5 +15,12 @@
         <item>Carer</item>
         <item>Relative</item>
         <item>Healthcare Professional</item>
+    </string-array>
+
+    <string-array name="deactivate">
+        <item> </item>
+        <item> </item>
+        <item> </item>
+        <item>  </item>
     </string-array>
 </resources>
