@@ -5,12 +5,4 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="header">HEADER</string>
-
-
-    <string-array name="accountType">
-        <item>Patient</item>
-        <item>Carer</item>
-        <item>Relative</item>
-        <item>Healthcare Professional</item>
-    </string-array>
 </resources>

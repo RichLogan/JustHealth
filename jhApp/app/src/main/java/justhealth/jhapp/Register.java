@@ -97,6 +97,9 @@ public class Register extends ActionBarActivity {
 
         //Account Type
         //Needs Spinner working
+
+        //final Spinner spin = (Spinner)findViewById((R.id.accountType));
+        //final String spinVal = String.valueOf(spin.getSelectedItem());
         Boolean accountType = false;
         details.put("iscarer", accountType.toString());
 
