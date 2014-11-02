@@ -116,6 +116,9 @@ def registration():
       if len(profile['username']) > 25:
         return 'Username can not be longer then 25 characters'
 
+      if Client.select().where(Client.username == profile['username']).count() != 0:
+         return "Username already taken"
+
       # Validate firstname, surname and email >25
       if len(profile['firstname']) > 100 or len(profile['surname']) > 100 or len(profile['email']) > 100:
         return 'Firstname, surname and email can not be longer then 100 characters'
@@ -189,7 +192,7 @@ def login():
               accountType = Client.get(username=request.form['username']).iscarer
               if (accountType == True):
                 return 'carer'
-              elif (accountType == False): 
+              elif (accountType == False):
                 return render_template('patienthome.html')
             else:
             # lock account if 5 attempts
