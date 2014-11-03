@@ -5,7 +5,7 @@ from peewee import *
 import unittest
 import imp
 
-testDatabase = imp.load_source('testDatabase', '../../../Website/justHealthServer/testdatabase.py')
+testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testdatabase.py')
 
 class testCase_1_18(unittest.TestCase):
 
