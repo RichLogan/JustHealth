@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:id="@+id/">
+    android:weightSum="1">
     <include android:id="@+id/header" layout="@layout/header" />
 
     <LinearLayout
