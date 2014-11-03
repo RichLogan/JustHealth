@@ -81,7 +81,7 @@ def registerUser():
     userPassword.execute()
 
     sendVerificationEmail(profile['username'])
-    return True
+    return "True"
 
 def sendVerificationEmail(username):
     # Generate Verification Link
