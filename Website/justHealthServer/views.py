@@ -9,7 +9,7 @@ def registration():
         if result == True:
             return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
         else:
-            render_template('register.html', type="danger", errorMessage = result)
+            render_template('register.html', type="danger", message = result)
     return render_template('register.html')
 
 # Decorator Functions
