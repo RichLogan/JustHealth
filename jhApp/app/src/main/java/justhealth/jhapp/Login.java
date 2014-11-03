@@ -2,6 +2,7 @@ package justhealth.jhapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,9 @@ public class Login extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
@@ -64,6 +68,7 @@ public class Login extends ActionBarActivity {
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
+                        System.out.println("Button clicked");
                         requestLogin();
                     }
                 }
