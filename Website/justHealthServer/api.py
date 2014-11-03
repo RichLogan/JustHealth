@@ -7,7 +7,7 @@ import datetime
 import smtplib
 from itsdangerous import URLSafeSerializer, BadSignature
 
-@app.route("/api/registerUser")
+@app.route("/api/registerUser", methods=["POST"])
 def registerUser():
     # Build User Registration
     try:
@@ -81,7 +81,7 @@ def registerUser():
     userPassword.execute()
 
     sendVerificationEmail(profile['username'])
-    return True
+    return "True"
 
 def sendVerificationEmail(username):
     # Generate Verification Link
