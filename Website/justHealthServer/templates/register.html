@@ -49,13 +49,15 @@ $(document).ready(function() {
 
 <h2>Registration</h2>
   <form name="register" action="/register" id="register" method="POST">
-		{% if errorMessage %}
-			<div class="alert alert-danger alert-dismissible" role="alert">
-  			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-  			<strong><i class="fa fa-exclamation-triangle"></i></strong> {{errorMessage}}
+
+		<!-- Display any messages -->
+		{% if message != null %}
+			<div class="alert alert-{{type}} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				{{message}}
 			</div>
 		{% endif %}
-		<!-- onsubmit="return validateForm() && validateEmail() && validateDob() && terms());" -->
+
     <div class="form-group">
         <label for="username">Username</label>
         <input class="form-control" type="text" name="username">
