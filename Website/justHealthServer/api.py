@@ -83,69 +83,100 @@ def registerUser():
     sendVerificationEmail(profile['username'])
     return "True"
 
+@app.route('/api/authenticate', methods=['POST'])
+def authenticate():
+    try:
+        attempted = Client.get(username=request.form['username'])
+    except Client.DoesNotExist:
+        return "Incorrect username/password"
+
+    # Check password
+    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    attemptedPassword = request.form['password']
+    if sha256_crypt.verify(attemptedPassword, hashedPassword):
+        revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
+        revertAttempts.execute()
+        return "Authenticated"
+    else:
+        currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
+        if currentLoginAttempts >= 5:
+            lockAccount(attempted.username)
+            return "Account is locked"
+        incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
+        incrementAttempts.execute()
+        return "Incorrect username/password"
+
+    # Is account locked?
+    if attempted.accountlocked == True:
+        return "Account is locked. Please check your email for instructions"
+    # Is account verified?
+    if attempted.verified == False:
+        return "Account not verified. Please check your email for instructions"
+    return "Something went wrong"
+
+####
+# Account Helper Functions
+####
+
+def lockAccount(username):
+    lockAccount = Client.update(accountlocked = True).where(Client.username == username)
+    lockAccount.execute()
+    sendUnlockEmail(username)
+
+####
+# Email Functions
+####
+def getSerializer(secret_key=None):
+    if secret_key is None:
+        secret_key = app.secret_key
+    return URLSafeSerializer(secret_key)
+
 def sendVerificationEmail(username):
     # Generate Verification Link
     s = getSerializer()
     payload = s.dumps(username)
     verifyLink = url_for('verifyUser', payload=payload, _external=True)
-
     # Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")
-
     # Build message
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
     subject = "JustHealth Verification"
     message = "Thanks for registering! Please verify your account here: " + str(verifyLink)
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
-
     # Send
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
-
-
-
-
-
-
-
-
-
-
-
-def getSerializer(secret_key=None):
-    if secret_key is None:
-        secret_key = app.secret_key
-    return URLSafeSerializer(secret_key)
+def sendUnlockEmail(username):
+    # Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Accounts Locked"
+    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password."
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 def sendPasswordResetEmail(username):
   s = getSerializer()
   payload = s.dumps(username)
   verifyLink = url_for('passwordReset', payload=payload, _external=True)
 
-  #Send Link to users email
+  #Login to mail server
   server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
   server.login('justhealth@richlogan.co.uk', "justhealth")
-
+  # Build Message
   sender = "'JustHealth' <justhealth@richlogan.co.uk>"
   recipient = Client.get(username = username).email
   subject = "JustHealth Password Reset Verification"
   message = "Your password has been reset. Please verify this here: " + str(verifyLink)
   m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+  # Send
   server.sendmail(sender, recipient, m+message)
   server.quit()
-
-def sendUnlockEmail(username):
-    #Send Link to users email
-    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-    server.login('justhealth@richlogan.co.uk', "justhealth")
-
-    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
-    recipient = Client.get(username = username).email
-    subject = "JustHealth Accounts Locked"
-    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password."
-    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
-    server.sendmail(sender, recipient, m+message)
-    server.quit()

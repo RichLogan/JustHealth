@@ -2,16 +2,6 @@ from justHealthServer import *
 from api import *
 from functools import wraps
 
-@app.route('/register', methods=['POST', 'GET'])
-def registration():
-    if request.method == 'POST':
-        result = registerUser()
-        if result == "True":
-            return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
-        else:
-            render_template('register.html', type="danger", message = result)
-    return render_template('register.html')
-
 # Decorator Functions
 def needLogin(f):
   @wraps(f)
@@ -33,6 +23,18 @@ def index():
 @app.route('/termsandconditions')
 def terms():
   return render_template('termsandconditions.html')
+
+
+# Account Pages
+@app.route('/register', methods=['POST', 'GET'])
+def registration():
+    if request.method == 'POST':
+        result = registerUser()
+        if result == "True":
+            return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
+        else:
+            render_template('register.html', type="danger", message = result)
+    return render_template('register.html')
 
 @app.route('/logout')
 @needLogin
@@ -64,52 +66,20 @@ def passwordReset(payload):
     verifiedTrue.execute()
     return redirect(url_for('index'))
 
-#finds the value of the loginattempts field in the database
-def getLoginAttempts(username):
-  loginAttempts = Client.get(username=request.form['username']).loginattempts
-  return loginAttempts
-
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-      session.pop('username', None)
-      try:
-        isAccountLocked = Client.get(username=request.form['username']).accountlocked
-        isAccountVerified = Client.get(username=request.form['username']).verified
-        if isAccountLocked == False:
-          if isAccountVerified == True:
-            # Retrieve and compare saved and entered passwords
-            hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username==request.form['username']) & (uq8LnAWi7D.iscurrent==True)).password.strip()
-            password = request.form['password']
-
-            # If valid, set SESSION on username
-            if sha256_crypt.verify(password, hashedPassword):
-              session['username'] = request.form['username']
-              updateLoginAttempts = Client.update(loginattempts = 0).where(Client.username == request.form['username'])
-              updateLoginAttempts.execute()
-              accountType = Client.get(username=request.form['username']).iscarer
-              if (accountType == True):
-                return 'carer'
-              elif (accountType == False):
-                return render_template('patienthome.html')
+        result = authenticate()
+        if result == "Authenticated":
+            # Valid user, set SESSION and send them where they need to go.
+            session["username"] = request.form['username']
+            accountType = Client.get(Client.username == request.form['username']).iscarer
+            if accountType == True:
+                return "Carer"
             else:
-            # lock account if 5 attempts
-              getLoginAttempts(request.form['username'])
-              updateLoginAttempts = Client.update(loginattempts = getLoginAttempts(request.form['username']) + 1).where(Client.username == request.form['username'])
-              updateLoginAttempts.execute()
-              if getLoginAttempts(request.form['username']) >= 5:
-                updateAccountLocked = Client.update(accountlocked = True).where(Client.username == request.form['username'])
-                updateAccountLocked.execute()
-                sendUnlockEmail(request.form['username'])
-                return render_template('login.html',locked='true')
-              else:
-                return render_template('login.html',wrongCredentials='true')
-          else:
-            return render_template('login.html',verified='false')
+                return "Patient"
         else:
-          return render_template('login.html',locked='true')
-      except Client.DoesNotExist:
-        return render_template('login.html',wrongCredentials='true')
+            return render_template('login.html', type="danger", message = result)
     return render_template('login.html')
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
