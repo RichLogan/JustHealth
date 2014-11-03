@@ -1,15 +1,16 @@
 from justHealthServer import *
-
-from itsdangerous import URLSafeSerializer, BadSignature
-from passlib.hash import sha256_crypt
-
+from api import *
 from functools import wraps
 
-import re
-import smtplib
-import datetime
-
-from database import *
+@app.route('/register', methods=['POST', 'GET'])
+def registration():
+    if request.method == 'POST':
+        result = registerUser()
+        if result == True:
+            return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
+        else:
+            render_template('register.html', type="danger", errorMessage = result)
+    return render_template('register.html')
 
 # Decorator Functions
 def needLogin(f):
@@ -39,42 +40,6 @@ def logout():
   session.pop('username', None)
   return redirect(url_for('index'))
 
-
-def getSerializer(secret_key=None):
-    if secret_key is None:
-        secret_key = app.secret_key
-    return URLSafeSerializer(secret_key)
-
-def sendPasswordResetEmail(username):
-  s = getSerializer()
-  payload = s.dumps(username)
-  verifyLink = url_for('passwordReset', payload=payload, _external=True)
-
-  #Send Link to users email
-  server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-  server.login('justhealth@richlogan.co.uk', "justhealth")
-
-  sender = "'JustHealth' <justhealth@richlogan.co.uk>"
-  recipient = Client.get(username = username).email
-  subject = "JustHealth Password Reset Verification"
-  message = "Your password has been reset. Please verify this here: " + str(verifyLink)
-  m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
-  server.sendmail(sender, recipient, m+message)
-  server.quit()
-
-def sendUnlockEmail(username):
-    #Send Link to users email
-    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-    server.login('justhealth@richlogan.co.uk', "justhealth")
-
-    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
-    recipient = Client.get(username = username).email
-    subject = "JustHealth Accounts Locked"
-    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password."
-    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
-    server.sendmail(sender, recipient, m+message)
-    server.quit()
-
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
     s = getSerializer()
@@ -98,17 +63,6 @@ def passwordReset(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return redirect(url_for('index'))
-
-@app.route('/register', methods=['POST', 'GET'])
-def registration():
-    if request.method == 'POST':
-        result = api.register(request.form)
-        if result == True:
-            return "Success"
-        else:
-            render_template('register.html', errorMessage = result)
-    else:
-      return render_template('register.html')
 
 #finds the value of the loginattempts field in the database
 def getLoginAttempts(username):

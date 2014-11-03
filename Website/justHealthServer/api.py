@@ -1,33 +1,30 @@
-def register(details):
-    """
-        :param details['username']: Username
-        :param details['firstname']: User's first name
-        :param details['surname']: User's last name
-        :param details['dob']: User's date of birth
-        :param details['ismale']: User's gender. Male="true", Female="false"
-        :param details['accounttype']: User's account type. Options=[]
-        :param details['email']: Email
-        :param details['password']: Password
-        :param details['confirmpassword']: Password
+from justHealthServer import app
+from flask import Flask, render_template, request, session, redirect, url_for, abort
+from database import *
+import re
+from passlib.hash import sha256_crypt
+import datetime
+import smtplib
+from itsdangerous import URLSafeSerializer, BadSignature
 
-        :returns: True or error message
-    """
+@app.route("/api/registerUser")
+def registerUser():
     # Build User Registration
     try:
       profile = {}
-      profile['username'] = details['username']
-      profile['firstname'] = details['firstname']
-      profile['surname'] = details['surname']
-      profile['dob'] = details['dob']
-      profile['ismale'] = details['ismale']
-      profile['iscarer'] = details['iscarer']
-      profile['email'] = details['email']
-      profile['password'] = details['password']
-      profile['confirmpassword'] = details['confirmpassword']
+      profile['username'] = request.form['username']
+      profile['firstname'] = request.form['firstname']
+      profile['surname'] = request.form['surname']
+      profile['dob'] = request.form['dob']
+      profile['ismale'] = request.form['ismale']
+      profile['iscarer'] = request.form['iscarer']
+      profile['email'] = request.form['email']
+      profile['password'] = request.form['password']
+      profile['confirmpassword'] = request.form['confirmpassword']
     except KeyError, e:
       return "All fields must be filled out"
     try:
-      profile['terms'] = details['terms']
+      profile['terms'] = request.form['terms']
     except KeyError, e:
       return "Terms and Conditions must be accepted"
 
@@ -37,7 +34,7 @@ def register(details):
 
     # Validate username >25
     if len(profile['username']) > 25:
-      return 'Username can not be longer then 25 characters'
+      return "Username can not be longer then 25 characters"
 
     if Client.select().where(Client.username == profile['username']).count() != 0:
        return "Username already taken"
@@ -85,6 +82,38 @@ def register(details):
 
     sendVerificationEmail(profile['username'])
     return True
+
+def sendVerificationEmail(username):
+    # Generate Verification Link
+    s = getSerializer()
+    payload = s.dumps(username)
+    verifyLink = url_for('verifyUser', payload=payload, _external=True)
+
+    # Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+
+    # Build message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Verification"
+    message = "Thanks for registering! Please verify your account here: " + str(verifyLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
+
+
+
+
+
+
+
+
+
+
+
 
 def getSerializer(secret_key=None):
     if secret_key is None:

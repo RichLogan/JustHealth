@@ -18,6 +18,13 @@
 {% block content %}
 <h2> Please log in </h2>
 
+  {% if message != null %}
+    <div class="alert alert-{{type}} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      {{message}}
+    </div>
+  {% endif %}
+
   <form action="/login" method="POST">
     <div class="form-group">
       <label for="username">Username</label>
@@ -28,13 +35,20 @@
       <label for="password">Password</label>
       <input class="form-control" type="password" name="password">
     </div>
-    {% if wrongCredentials == 'true' %} <p class="wrongInputs">Incorrect username/password.</p>
-    {%elif locked == 'true' %} <p class="wrongInputs">Account locked, an email has been sent to your registered email address.</p>
-    {%elif verified == 'false' %}<p class="wrongInputs">Account is not verified, please clicked on the verification link that you have received in an email from JustHealth</p>
-    {%elif verified == 'true' %}<p class="rightInputs">Thank you, your account is now verified.</p>{% endif %}
-  <input class="btn btn-default" type="submit" value="Login">
-  <a href="/resetpassword" class="pull-right">Forgot Password</a>
-  <br></br>
-  New to JustHealth<a href="/register"> click here</a> to register
+
+    {% if wrongCredentials == 'true' %}
+      <p class="wrongInputs">Incorrect username/password.</p>
+    {%elif locked == 'true' %}
+      <p class="wrongInputs">Account locked, an email has been sent to your registered email address.</p>
+    {%elif verified == 'false' %}
+      <p class="wrongInputs">Account is not verified, please clicked on the verification link that you have received in an email from JustHealth</p>
+    {%elif verified == 'true' %}
+      <p class="rightInputs">Thank you, your account is now verified.</p>
+    {% endif %}
+
+    <input class="btn btn-default" type="submit" value="Login">
+    <a href="/resetpassword" class="pull-right">Forgot Password</a>
+    <br></br>
+    New to JustHealth<a href="/register"> click here</a> to register
   </form>
 {% endblock %}
