@@ -6,7 +6,7 @@ from functools import wraps
 def registration():
     if request.method == 'POST':
         result = registerUser()
-        if result == "True":
+        if result == True:
             return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
         else:
             render_template('register.html', type="danger", message = result)
