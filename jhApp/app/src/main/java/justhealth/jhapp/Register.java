@@ -55,14 +55,14 @@ public class Register extends ActionBarActivity {
                 }
         );
 
-        TextView termsAndConditions = (TextView)findViewById(R.id.tsandcs);
-        termsAndConditions.setOnClickListener(
-               new View.OnClickListener() {
-                   public void onClick(View view) {
-                       startActivity(new Intent(Register.this, TermsAndConditions.class));
-                   }
-               }
-        );
+//        TextView termsAndConditions = (TextView)findViewById(R.id.tsandcs);
+//        termsAndConditions.setOnClickListener(
+//               new View.OnClickListener() {
+//                   public void onClick(View view) {
+//                       startActivity(new Intent(Register.this, TermsAndConditions.class));
+//                   }
+//               }
+//        );
 
         TextView forgotPassword = (TextView)findViewById(R.id.link_to_forgot_password);
         forgotPassword.setOnClickListener(
