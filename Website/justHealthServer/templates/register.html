@@ -112,9 +112,11 @@ $(document).ready(function() {
 		<span id="confirmationMessage"></span>
     </div>
 
-    <input type="checkbox" class="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
+	<div class="form-group checkbox">
+		<input type="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
+		
+		<input class="btn btn-default pull-right" type="submit" value="Register">
 		<br/>
-	<input class="btn btn-default pull-right" type="submit" value="Register">
-		<br/>
+	</div>
   </form>
 {% endblock %}
