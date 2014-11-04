@@ -90,13 +90,18 @@ def authenticate():
     except Client.DoesNotExist:
         return "Incorrect username/password"
 
-    # Check password
+    # Check Password
     hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
-        revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
-        revertAttempts.execute()
-        return "Authenticated"
+        if attempted.verified == False:
+            return "Account not verified. Please check your email for instructions"
+        elif attempted.accountlocked == True:
+            return "Account is locked. Please check your email for instructions"
+        else:
+            revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
+            revertAttempts.execute()
+            return "Authenticated"
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
         if currentLoginAttempts >= 5:
@@ -105,14 +110,50 @@ def authenticate():
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
         incrementAttempts.execute()
         return "Incorrect username/password"
+    return "Something went wrong!"
 
-    # Is account locked?
-    if attempted.accountlocked == True:
-        return "Account is locked. Please check your email for instructions"
-    # Is account verified?
-    if attempted.verified == False:
-        return "Account not verified. Please check your email for instructions"
-    return "Something went wrong"
+@app.route('/api/resetpassword', methods=['POST'])
+def resetPassword():
+    try:
+        profile = {}
+        profile['username'] = request.form['username']
+        profile['confirmemail'] = request.form['confirmemail']
+        profile['newpassword'] = request.form['newpassword']
+        profile['confirmnewpassword'] = request.form['confirmnewpassword']
+        profile['confirmdob'] = request.form['confirmdob']
+    except KeyError, e:
+        return "All fields must be filled out"
+
+    getEmail = Client.get(username=profile['username']).email.strip()
+    getDob = str(Client.get(username=profile['username']).dob)
+
+    if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
+        #set the old password to iscurrent = false
+        notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
+        notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
+
+        #encrypt the password
+        profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
+
+        # Build insert password query
+        newCredentials = uq8LnAWi7D.insert(
+          username = profile['username'],
+          password = profile['newpassword'],
+          iscurrent = True,
+          expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
+        )
+        unlockAccount = Client.update(accountlocked=False).where(str(Client.username).strip() == profile['username'])
+        setLoginCount = Client.update(loginattempts = 0).where(str(Client.username).strip() == profile['username'])
+
+        notCurrent.execute()
+        notVerified.execute()
+        newCredentials.execute()
+        unlockAccount.execute()
+        setLoginCount.execute()
+        sendPasswordResetEmail(profile['username'])
+        return "True"
+    else:
+        return "Invalid details"
 
 ####
 # Account Helper Functions

@@ -24,7 +24,6 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
-
 # Account Pages
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
@@ -80,51 +79,18 @@ def login():
                 return "Patient"
         else:
             return render_template('login.html', type="danger", message = result)
-    return render_template('login.html')
+    try:
+        session['username']
+    except KeyError, e:
+        return render_template('login.html')
+    return redirect(url_for('index'))
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
-def resetPassword():
+def resetPasswordView():
   if request.method == 'POST':
-    try:
-        profile = {}
-        profile['username'] = request.form['username']
-        profile['confirmemail'] = request.form['confirmemail']
-        profile['newpassword'] = request.form['newpassword']
-        profile['confirmnewpassword'] = request.form['confirmnewpassword']
-        profile['confirmdob'] = request.form['confirmdob']
-    except KeyError, e:
-      return "All fields must be filled out"
-
-    getEmail = Client.get(username=profile['username']).email.strip()
-    getDob = str(Client.get(username=profile['username']).dob)
-
-    if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
-
-      #set the old password to iscurrent = false
-      notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
-      notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
-
-      #encrypt the password
-      profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
-
-      # Build insert password query
-      newCredentials = uq8LnAWi7D.insert(
-        username = profile['username'],
-        password = profile['newpassword'],
-        iscurrent = True,
-        expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
-      )
-      unlockAccount = Client.update(accountlocked=False).where(str(Client.username).strip() == profile['username'])
-      setLoginCount = Client.update(loginattempts = 0).where(str(Client.username).strip() == profile['username'])
-
-      notCurrent.execute()
-      notVerified.execute()
-      newCredentials.execute()
-      unlockAccount.execute()
-      setLoginCount.execute()
-      sendPasswordResetEmail(profile['username'])
-      session.pop('username', None)
-      return "You will receive a password reset verification email shortly."
+    result = resetPassword()
+    if result == "True":
+        return render_template('login.html', type="success", message="Your password has been reset, please check your email.")
     else:
-      return render_template('resetpassword.html',invalid='true')
+        return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
