@@ -2,9 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for
 from database import *
 app = Flask(__name__)
 
-@app.route('/query')
+@app.route('/query', methods=['POST', 'GET'])
 def query():
-  return render_template('queryTests.html')
+	if request.method == 'POST':
+		buildQuery = {}
+		buildQuery['iteration'] = request.form['iteration']
+
+		return render_template('queryTests.html', tests = Tests.select().where(Tests.iteration == buildQuery['iteration']))
+		# except Tests.DoesNotExist, e:
+		# 	return "No tests found."
+
+	return render_template('queryTests.html')
 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
@@ -34,6 +42,7 @@ def create():
 			expectedresults = createTest['expectedresults'])
 
 		createATest.execute();
+		return "Test Created"
 	return render_template('createTest.html')
 
 @app.route('/portal')

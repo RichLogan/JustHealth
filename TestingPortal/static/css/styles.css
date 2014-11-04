@@ -57,6 +57,10 @@ header {
   margin-top: 35px;
 }
 
+#queryTable {
+  width: 70%;
+}
+
 footer {
   position:absolute;
   bottom:0;
