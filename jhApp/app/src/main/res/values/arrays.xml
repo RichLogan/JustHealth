@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="reasons_deactivate">
+        <item>I don’t understand how to use JustHealth</item>
+        <item>I’m only leaving temporarily</item>
+        <item>I’m using a different app</item>
+        <item>I receive too many notifications and emails</item>
+        <item>I don’t find JustHealth useful</item>
+        <item>I have privacy concerns</item>
+        <item>Other (Please specify)</item>
+    </string-array>
+
+
+
+
+
+
+</resources>
