@@ -30,6 +30,15 @@ a:active  {color:#ff0000; background-color:transparent}
   color: #30D917;
 }
 
+.placeholder {
+  display: none;
+}
+
+.comments {
+  height: 30%;
+  width: 100%;
+}
+
 #navBar {
   height: 75px;
   background-color:#2272EB;
