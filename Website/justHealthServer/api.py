@@ -17,10 +17,10 @@ def registerUser():
       profile['surname'] = request.form['surname']
       profile['dob'] = request.form['dob']
       profile['ismale'] = request.form['ismale']
-      profile['iscarer'] = request.form['iscarer']
       profile['email'] = request.form['email']
       profile['password'] = request.form['password']
       profile['confirmpassword'] = request.form['confirmpassword']
+      accountType = request.form['accounttype']
     except KeyError, e:
       return "All fields must be filled out"
     try:
@@ -29,8 +29,8 @@ def registerUser():
       return "Terms and Conditions must be accepted"
 
     # Validate all input
-    for key in profile:
-      profile[key] = profile[key].strip()
+    for key, value in profile.iteritems():
+      value = value.strip()
 
     # Validate username >25
     if len(profile['username']) > 25:
@@ -60,12 +60,20 @@ def registerUser():
     # Build insert user query
     userInsert = Client.insert(
       username = profile['username'],
-      firstname = profile['firstname'],
-      surname = profile['surname'],
       dob = profile['dob'],
-      ismale = profile['ismale'],
-      iscarer = profile['iscarer'],
       email = profile['email']
+    )
+
+    if accountType == "patient":
+        accountType = Patient
+    elif accountType == "carer":
+        accountType = Carer
+
+    typeInsert = accountType.insert(
+        username = profile['username'],
+        firstname = profile['firstname'],
+        surname = profile['surname'],
+        ismale = profile['ismale'],
     )
 
     # Build insert password query
@@ -78,6 +86,7 @@ def registerUser():
 
     # Execute Queries
     userInsert.execute()
+    typeInsert.execute()
     userPassword.execute()
 
     sendVerificationEmail(profile['username'])
@@ -104,8 +113,10 @@ def authenticate():
             return "Authenticated"
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
-        if currentLoginAttempts >= 5:
+        if currentLoginAttempts >= 4:
             lockAccount(attempted.username)
+            incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
+            incrementAttempts.execute()
             return "Account is locked"
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
         incrementAttempts.execute()

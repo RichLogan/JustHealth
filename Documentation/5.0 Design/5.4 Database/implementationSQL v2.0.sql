@@ -32,7 +32,6 @@ CREATE TABLE uq8LnAWi7D (
   password CHAR(255) NOT NULL,
   isCurrent BOOLEAN,
   expiryDate DATE,
-  PRIMARY KEY(username),
-  PRIMARY KEY(password),
+  PRIMARY KEY(username, password),
   FOREIGN KEY(username) REFERENCES Client(username) ON DELETE CASCADE
 );

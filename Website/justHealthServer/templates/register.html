@@ -86,9 +86,12 @@ $(document).ready(function() {
 	</div>
 
     <div class="form-group">
-        <label for="isCarer">Account Type</label>
-        <input class="" type="radio" name="iscarer" value="true">Carer&nbsp;
-        <input class="" type="radio" name="iscarer" value="false">Patient&nbsp;
+        <label for="accounttype">Account Type</label>
+        <select name="accounttype" class="form-control">
+        	<option disabled selected> -- Please select an account type -- </option>
+        	<option value="patient">Patient</option>
+        	<option value="carer">Carer</option>
+        </select>
     </div>
 
     <div class="form-group">
