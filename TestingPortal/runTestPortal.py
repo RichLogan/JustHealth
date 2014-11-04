@@ -45,9 +45,21 @@ def create():
 		return "Test Created"
 	return render_template('createTest.html')
 
+
+@app.route('/run', methods=['POST', 'GET'])
+def runTest():
+	if request.method == 'GET':
+		return render_template('runTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
+
+
+
 @app.route('/portal')
 def portalHome():
   return render_template('portalHome.html')
+
+
+
+
 
 if __name__ == "__main__":
   app.run(port=9999, debug=True)
