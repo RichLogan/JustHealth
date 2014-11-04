@@ -48,7 +48,7 @@ $(document).ready(function() {
 {% block content %}
 
 <h2>Registration</h2>
-  <form name="register" action="/register" id="register" method="POST">
+<form name="register" action="/register" id="register" method="POST">
 
 		<!-- Display any messages -->
 		{% if message != null %}
@@ -113,10 +113,47 @@ $(document).ready(function() {
     </div>
 
 	<div class="form-group checkbox">
-		<input type="checkbox" name="terms"> I accept the <a href="/termsandconditions">terms and conditions</a>
-		
+		<input type="checkbox" name="terms"> I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a>
+	</div>
+	
+	<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="termsLabel">JustHealth Terms and Conditions</h4>
+				</div>
+				<div class="modal-body">
+				<ol>
+					<li>Any data that is given to JustHealth may be processed by JustHealth to improve the ease of use, performance and/or functionality of the application.
+					</li> <br/>
+					<li>The data stored by JustHealth will not be passed to any third parties without the consent of the data subject.
+					</li> <br/>
+					<li>A user’s data may be viewed by their carer, relative, doctor and pharmacist but will not be visible to anyone that isn’t approved to view the data.
+					</li> <br/>
+					<li>It is the responsibility of the user to ensure that the information that JustHealth holds about them is accurate and up to date. This is not the responsibility of JustHealth or any of its affiliated parties.
+					</li> <br/>
+					<li>JustHealth will keep all data for the time that a data subject’s account is active; all of the data that JustHealth will hold about a user will be viewable within the mobile and web application.
+					</li> <br/>
+					<li>When a data subject deactivates their account with JustHealth they will be able to request to have their information removed from the centralised database. This will impact account reactivation.
+					</li> <br/>
+					<li>A data subject may request the personal data that JustHealth hold about them but this will only be able to be sent to the user within the UK by the postal service. This will not be sent by any other means.
+					</li> <br/>
+					<li>Users that download data from outside the UK will do so at their own risk and this will not be the responsibility of JustHealth. Any information that JustHealth will hold about a data subject will be stored within the UK.
+					</li>
+				</ol>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+			
+	<div class="form-group">		
 		<input class="btn btn-default pull-right" type="submit" value="Register">
 		<br/>
 	</div>
-  </form>
+</form>
 {% endblock %}
