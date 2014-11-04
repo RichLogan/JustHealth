@@ -27,7 +27,7 @@ class Tests(BaseModel):
     teststeps = CharField(max_length=10000)
 
     class Meta:
-        primary_key = CompositeKey('testid','iteration')
+        primary_key = CompositeKey('iteration','testid')
         db_table = 'tests'
 
 class Run(BaseModel):
