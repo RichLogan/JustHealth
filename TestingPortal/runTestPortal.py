@@ -1,13 +1,40 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
+from database import *
 app = Flask(__name__)
 
 @app.route('/query')
 def query():
   return render_template('queryTests.html')
 
-@app.route('/create')
+@app.route('/create', methods=['POST', 'GET'])
 def create():
-  return render_template('createTest.html')
+	if request.method == 'POST':
+		createTest = {}
+		createTest['iteration'] = request.form['iteration']
+		createTest['author'] = request.form['author']
+		createTest['applicationType'] = request.form['testType']
+		createTest['testname'] = request.form['testname']
+		createTest['prerequisites'] = request.form['prerequisites']
+		createTest['teststeps'] = request.form['testSteps']
+		createTest['expectedresults'] = request.form['expectedOutcome']
+		try :
+			latestTest = Tests.select(Tests.testid).where(Tests.iteration==request.form['iteration']).order_by(Tests.testid.desc()).get()
+			latestTestId = latestTest.testid + 1
+		except Tests.DoesNotExist, e: 
+			latestTestId = 1
+
+		createATest = Tests.insert(
+			iteration = createTest['iteration'],
+			testid = latestTestId,
+			applicationtype = createTest['applicationType'],
+			author = createTest['author'],
+			testname = createTest['testname'],
+			prerequisites = createTest['prerequisites'],
+			teststeps = createTest['teststeps'],
+			expectedresults = createTest['expectedresults'])
+
+		createATest.execute();
+	return render_template('createTest.html')
 
 @app.route('/portal')
 def portalHome():
