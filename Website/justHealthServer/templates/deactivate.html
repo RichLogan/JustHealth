@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block scriptsAndStyles %}{% endblock %}
+
+{% block content %}
+
+<h2>Deactivate account</h2>
+	<form name="deactivate" action="/deactivate" id="deactivate" method="POST">
+		<div class="form-group">
+			<input type="checkbox" name="confirmDeactivate"> Are you sure you want to deactivate this account?
+		</div>
+		
+		<div class="form-group">
+			<select name="reason">
+				<option value="" class="placeholder" disabled selected>(Reason?)</option>
+				<option value="reason1">I don&#39;t understand how to use JustHealth</option>
+				<option value="reason2">I&#39;m only leaving temporarily</option>
+				<option value="reason3">I&#39;m using a different app</option>
+				<option value="reason4">I receive too many notifications and emails</option>
+				<option value="reason5">I don&#39;t find JustHealth useful</option>
+				<option value="reason6">I have privacy concerns</option>
+				<option value="reason7">Other (Please specify)</option>
+			</select>
+		</div>
+				
+		<div class="form-group">
+			<textarea name="comments" id="comments" class="form-control" placeholder="Any comments..."></textarea>
+		</div>
+		
+		<div class="form-group">
+			<i class="fa fa-file"></i> Please check the box if you want us to delete your data <input type="checkbox" name="keepData">
+		</div>
+	</form>
+{% endblock %}
