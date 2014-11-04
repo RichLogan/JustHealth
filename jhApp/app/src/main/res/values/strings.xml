@@ -9,14 +9,6 @@
     <string name="Confirm">Confirm</string>
     <string name="register">Register</string>
 
-
-    <string-array name="accountType">
-        <item>Patient</item>
-        <item>Carer</item>
-        <item>Relative</item>
-        <item>Healthcare Professional</item>
-    </string-array>
-
     <string-array name="deactivate">
         <item> </item>
         <item> </item>

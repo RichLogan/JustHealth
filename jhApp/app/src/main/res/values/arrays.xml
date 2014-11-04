@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="accountType">
+        <item>Patient</item>
+        <item>Carer</item>
+    </string-array>
+
     <string-array name="reasons_deactivate">
         <item>I don’t understand how to use JustHealth</item>
         <item>I’m only leaving temporarily</item>
@@ -9,10 +14,4 @@
         <item>I have privacy concerns</item>
         <item>Other (Please specify)</item>
     </string-array>
-
-
-
-
-
-
 </resources>
