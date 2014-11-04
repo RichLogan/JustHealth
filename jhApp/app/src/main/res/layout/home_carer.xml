@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <include android:id="@+id/header" layout="@layout/header" />
-
+<!-- Home screen tile layout for carer -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"

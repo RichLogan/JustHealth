@@ -38,7 +38,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Are you sure you want to deactivate your account"
+        android:text="Are you sure you want to deactivate your account?"
         android:id="@+id/deactivate"
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true"
@@ -50,10 +50,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
+        android:layout_marginTop="27dp"
         android:layout_below="@+id/deactivate"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="38dp" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -79,10 +79,11 @@
         android:text="Please select if you want JustHealth to delete all your data "
         android:id="@+id/checkBox"
         android:checked="false"
+        android:padding="10dp"
         android:layout_below="@+id/comments"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:padding="10dp" />
+        android:layout_marginTop="29dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -103,7 +104,8 @@
         android:background="#2272EB"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp" />
 
 
 </RelativeLayout>
