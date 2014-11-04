@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-<h2> Please log in </h2>
+<h2> Sign in here </h2>
 
   {% if message != null %}
     <div class="alert alert-{{type}} alert-dismissible" role="alert">
@@ -26,6 +26,9 @@
   {% endif %}
 
   <form action="/login" method="POST">
+	<p class="pull-right">
+	New to JustHealth?<a href="/register"> Click here to register</a>
+	</p>
     <div class="form-group">
       <label for="username">Username</label>
       <input class="form-control" type="text" name="username">
@@ -46,9 +49,8 @@
       <p class="rightInputs">Thank you, your account is now verified.</p>
     {% endif %}
 
-    <input class="btn btn-default" type="submit" value="Login">
-    <a href="/resetpassword" class="pull-right">Forgot Password</a>
+    <input class="btn btn-default pull-right" type="submit" value="Login">
+    <a href="/resetpassword" class="pull-left smallLink">Forgot Password</a>
     <br></br>
-    New to JustHealth<a href="/register"> click here</a> to register
   </form>
 {% endblock %}

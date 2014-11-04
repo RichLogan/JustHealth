@@ -24,6 +24,10 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
+@app.route('/deactivate')
+def deactivate():
+  return render_template('deactivate.html')
+
 # Account Pages
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
