@@ -39,6 +39,11 @@ a:active  {color:#ff0000; background-color:transparent}
   width: 100%;
 }
 
+.smallLink {
+  font-style: italic;
+  font-size: 0.8em;
+}
+
 #navBar {
   height: 75px;
   background-color:#2272EB;
