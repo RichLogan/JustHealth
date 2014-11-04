@@ -14,14 +14,12 @@
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/scrollView"
-        android:outlineProvider="background">
+        android:id="@+id/scrollView">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/">
+            android:orientation="vertical">
 
 
             <TextView android:layout_width="wrap_content"
@@ -66,12 +64,9 @@
         android:layout_alignRight="@+id/deactivate"
         android:layout_alignEnd="@+id/deactivate"
         android:maxLength="500"
-        android:nestedScrollingEnabled="true"
         android:padding="10dp"
         android:height="80dp"
-        android:visibility="visible"
-        android:backgroundTint="#C8C8C8"
-        android:backgroundTintMode="src_atop" />
+        android:visibility="visible" />
 
     <CheckBox
         android:layout_width="wrap_content"

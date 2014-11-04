@@ -6,6 +6,7 @@ package justhealth.jhapp;
 public class deactivateAccount {
 
 
+/** Are you sure you want to delete dialog*/
 
 /**    new AlertDialog.Builder(this)
             .setTitle("Deactivate account")
@@ -27,6 +28,6 @@ public class deactivateAccount {
 
 
 
-
-
 }
+
+
