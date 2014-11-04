@@ -96,16 +96,13 @@ public class Register extends ActionBarActivity {
         details.put("ismale", ismale.toString());
 
         //Account Type
-        //Needs Spinner working
+        final Spinner accountTypeSpinner = (Spinner)findViewById((R.id.accountType));
+        final String accountType = String.valueOf(accountTypeSpinner.getSelectedItem());
+        details.put("accounttype", accountType.toLowerCase());
 
-        //final Spinner spin = (Spinner)findViewById((R.id.accountType));
-        //final String spinVal = String.valueOf(spin.getSelectedItem());
-        Boolean accountType = false;
-        details.put("iscarer", accountType.toString());
-
+        //Password
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
         String confirmPassword = ((EditText) findViewById(R.id.confirmPassword)).getText().toString();
-
 
         if (((CheckBox) findViewById(R.id.tsandcs)).isChecked()) {
             System.out.println("come on");

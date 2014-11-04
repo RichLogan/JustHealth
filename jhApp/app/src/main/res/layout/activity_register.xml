@@ -95,7 +95,6 @@ tools:context=".Register">
                     android:layout_gravity="right" />
             </RadioGroup>
 
-            <!-- Need to populate using the string-array -->
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
