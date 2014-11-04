@@ -90,13 +90,18 @@ def authenticate():
     except Client.DoesNotExist:
         return "Incorrect username/password"
 
-    # Check password
+    # Check Password
     hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
-        revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
-        revertAttempts.execute()
-        return "Authenticated"
+        if attempted.verified == False:
+            return "Account not verified. Please check your email for instructions"
+        elif attempted.accountlocked == True:
+            return "Account is locked. Please check your email for instructions"
+        else:
+            revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
+            revertAttempts.execute()
+            return "Authenticated"
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
         if currentLoginAttempts >= 5:
@@ -105,14 +110,7 @@ def authenticate():
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
         incrementAttempts.execute()
         return "Incorrect username/password"
-
-    # Is account locked?
-    if attempted.accountlocked == True:
-        return "Account is locked. Please check your email for instructions"
-    # Is account verified?
-    if attempted.verified == False:
-        return "Account not verified. Please check your email for instructions"
-    return "Something went wrong"
+    return "Something went wrong!"
 
 @app.route('/api/resetpassword', methods=['POST'])
 def resetPassword():

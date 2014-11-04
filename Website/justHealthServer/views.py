@@ -24,7 +24,6 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
-
 # Account Pages
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
@@ -80,7 +79,11 @@ def login():
                 return "Patient"
         else:
             return render_template('login.html', type="danger", message = result)
-    return render_template('login.html')
+    try:
+        session['username']
+    except KeyError, e:
+        return render_template('login.html')
+    return redirect(url_for('index'))
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordView():
