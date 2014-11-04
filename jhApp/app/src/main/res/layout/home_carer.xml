@@ -4,20 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <include android:id="@+id/header" layout="@layout/header" />
-
+<!-- Home screen tile layout for carer -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1" >
 
-        <Button
+        <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/" />
+            android:src="@drawable/ic_action_user" />
 
-        <Button
+        <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
@@ -29,12 +29,12 @@
         android:orientation="horizontal"
         android:layout_weight="1" >
 
-        <Button
+        <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Button
+        <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
@@ -46,15 +46,17 @@
         android:orientation="horizontal"
         android:layout_weight="1" >
 
-        <Button
+        <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Button
+        <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:src="@drawable/ic_action_settings"
+            />
     </LinearLayout>
 
 </LinearLayout>
