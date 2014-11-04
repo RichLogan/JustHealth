@@ -122,7 +122,7 @@ public class Register extends ActionBarActivity {
     public void post(HashMap<String, String> details) {
         // Create a new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/register");
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/registerUser");
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
