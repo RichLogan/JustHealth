@@ -72,11 +72,7 @@ def login():
         if result == "Authenticated":
             # Valid user, set SESSION and send them where they need to go.
             session["username"] = request.form['username']
-            accountType = Client.get(Client.username == request.form['username']).iscarer
-            if accountType == True:
-                return "Carer"
-            else:
-                return "Patient"
+            return request.form['username']
         else:
             return render_template('login.html', type="danger", message = result)
     try:
