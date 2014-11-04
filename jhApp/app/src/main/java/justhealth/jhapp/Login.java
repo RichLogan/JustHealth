@@ -87,7 +87,7 @@ public class Login extends ActionBarActivity {
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
         System.out.println("run");
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/login");
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/authenticate");
 
         //assigns the HashMap to list, for post request encoding
         try {

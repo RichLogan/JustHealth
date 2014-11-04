@@ -56,7 +56,7 @@ public class ForgotPassword extends ActionBarActivity {
 
     public void post(HashMap<String, String> details) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/resetpassword");
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/resetpassword");
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
