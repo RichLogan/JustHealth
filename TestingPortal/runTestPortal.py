@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from database import *
+from time import ctime
 app = Flask(__name__)
 
 @app.route('/query', methods=['POST', 'GET'])
@@ -51,6 +52,39 @@ def runTest():
 	if request.method == 'GET':
 		return render_template('runTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
 
+@app.route('/submitTest', methods=['POST', 'GET'])
+def submitTest():
+	submitTest = {}
+	submitTest['actualresult'] = request.form['actualresult']
+	submitTest['autoid_test'] = request.args.get('test')
+	submitTest['comments'] = request.form['comments']
+	submitTest['datetime'] = ctime()	
+	submitTest['issue'] = request.form['issue']
+	submitTest['tester'] = request.form['tester']
+
+	if submitTest['issue'] == "" :
+		submitTest['issue'] = None 
+
+	try:
+		findRunNumber = Run.select(Run.runid).where(Run.autoid_test==submitTest['autoid_test']).order_by(Run.runid.desc()).get()
+		runNumber = findRunNumber.runid + 1
+	except Run.DoesNotExist, e:
+		runNumber = 1
+
+	submitTest['runid'] = runNumber
+	
+	createRun = Run.insert(
+		actualresult = submitTest['actualresult'],
+		autoid_test = submitTest['autoid_test'],
+		comments = submitTest['comments'],
+		datetime = submitTest['datetime'],
+		issue = submitTest['issue'],
+		tester = submitTest['tester'],
+		runid = submitTest['runid']
+	)
+	createRun.execute()
+
+	return render_template('portalHome.html')
 
 
 @app.route('/portal')
