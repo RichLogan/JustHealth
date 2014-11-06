@@ -1,10 +1,26 @@
 from flask import Flask, render_template, request, redirect, url_for
 from database import *
+from time import ctime
 app = Flask(__name__)
 
-@app.route('/query')
+@app.route('/query', methods=['POST', 'GET'])
 def query():
-  return render_template('queryTests.html')
+	if request.method == 'POST':
+		#seach tests based on iteration number
+		buildQuery = {}
+		buildQuery['iteration'] = request.form['iteration']
+
+		testsQueried = Tests.select().where(Tests.iteration == buildQuery['iteration'])
+
+		return render_template('queryTests.html', tests = testsQueried)
+
+	elif request.method == "GET":
+		buildQuery = {}
+		buildQuery['iteration'] = request.args.get('iteration')
+
+		return render_template('queryTests.html', tests = Tests.select().where(Tests.iteration == buildQuery['iteration']))
+
+	return render_template('queryTests.html')
 
 @app.route('/create', methods=['POST', 'GET'])
 def create():
@@ -34,11 +50,73 @@ def create():
 			expectedresults = createTest['expectedresults'])
 
 		createATest.execute();
+		return render_template('createTest.html', message="Test case has been created, thank you.")
 	return render_template('createTest.html')
+
+
+@app.route('/run', methods=['POST', 'GET'])
+def runTest():
+	if request.method == 'GET':
+		return render_template('runTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
+
+#when a test run is submitted 
+@app.route('/submitTest', methods=['POST', 'GET'])
+def submitTest():
+	submitTest = {}
+	submitTest['actualresult'] = request.form['actualresult']
+	submitTest['autoid_test'] = request.args.get('test')
+	submitTest['comments'] = request.form['comments']
+	submitTest['datetime'] = ctime()	
+	submitTest['issue'] = request.form['issue']
+	submitTest['tester'] = request.form['tester']
+
+	#checks that the issue isn't blank
+	if submitTest['issue'] == "" :
+		submitTest['issue'] = None 
+
+	#finds which run this should be 
+	try:
+		findRunNumber = Run.select(Run.runid).where(Run.autoid_test==submitTest['autoid_test']).order_by(Run.runid.desc()).get()
+		runNumber = findRunNumber.runid + 1
+	except Run.DoesNotExist, e:
+		runNumber = 1
+
+	submitTest['runid'] = runNumber
+	
+	#inserts the new test run into db
+	createRun = Run.insert(
+		actualresult = submitTest['actualresult'],
+		autoid_test = submitTest['autoid_test'],
+		comments = submitTest['comments'],
+		datetime = submitTest['datetime'],
+		issue = submitTest['issue'],
+		tester = submitTest['tester'],
+		runid = submitTest['runid']
+	)
+
+	#updates the latestresult field in the Tests table 
+	updateLatestResult = Tests.update(
+		latesttestresult = submitTest['actualresult']
+		).where(Tests.autoid_test==submitTest['autoid_test']
+	)
+	
+	createRun.execute()
+	updateLatestResult.execute()
+
+	#attempting to reload query tests on showing the tests that are in the same iteration as the test that has just been run
+	findTest = Tests.select().join(Run).where(Run.autoid_test==submitTest['autoid_test']).get()
+	findIteration = str(findTest.iteration)
+
+	return render_template('queryTests.html', test=findIteration, message="Running of the test has been recorded, thank you.")
+
 
 @app.route('/portal')
 def portalHome():
   return render_template('portalHome.html')
+
+
+
+
 
 if __name__ == "__main__":
   app.run(port=9999, debug=True)

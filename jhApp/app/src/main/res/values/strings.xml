@@ -8,6 +8,10 @@
     <string name="cancel">Cancel</string>
     <string name="Confirm">Confirm</string>
     <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="privacy">Privacy</string>
+    <string name="account">Account</string>
+    <string name="profile">Profile</string>
 
     <string-array name="deactivate">
         <item> </item>

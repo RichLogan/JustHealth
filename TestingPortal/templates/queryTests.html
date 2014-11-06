@@ -7,57 +7,107 @@
 {% endblock %}
 
 {% block content %}
-<h3>Query Tests</h3>
-    <div class="form-group">
-      <form method="POST"> 
-        <div class="form-group">
-          <label for="iteration#">Iteration: </label>
-          <select class="form-control">
-            <option disabled selected> -- select an option -- </option>
-            <option value="one">One</option>
-            <option value="two">Two</option>
-            <option value="three">Three</option>
-            <option value="four">Four</option>
-            <option value="five">Five</option>
-            <option value="six">Six</option>
-            <option value="seven">Seven</option>
-            <option value="eight">Eight</option>
-            <option value="nine">Nine</option>
-            <option value="ten">Ten</option>
-            <option value="eleven">Eleven</option>
-            <option value="twelve">Twelve</option>
-          </select>
-        </div>
+<div id="content">
+  <h3>Query Tests</h3>
 
-        <div class="form-group">
-          <label for="author">Author: </label>
-          <select class="form-control">
-            <option disabled selected> -- select an option -- </option>
-            <option value="stephen">Stephen</option>
-            <option value="rich">Rich</option>
-            <option value="charlotte">Charlotte</option>
-            <option value="ben">Ben</option>
-          </select>
-        </div>
-       
-        <div class="form-group">
-          <label for="testType">Test Type</label>
-          <select class="form-control">
-            <option disabled selected> -- select an option -- </option>
-            <option value="database">Database</option>
-            <option value="orm">ORM</option>
-            <option value="web">Web Application</option>
-            <option value="mobile">Mobile Application</option>
-          </select>
-        </div>
+  {% if message != null %}
+      <div class="alert alert-{{type}} alert-dismissible rightInputs" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        {{message}}
+      </div>
+    {% endif %}
 
-        <div class="form-group">
-          <label for="testID">Test ID</label>
-          <input name ="TestNumber" type="text" class="form-control">
-        </div>
+  <div class="form-group">
+    <form method="POST" action="/query"> 
+      <div class="form-group">
+        <label for="iteration">Iteration: </label>
+        <select name="iteration" class="form-control">
+          <option disabled selected> -- select an option -- </option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+          <option value="4">Four</option>
+          <option value="5">Five</option>
+          <option value="6">Six</option>
+          <option value="7">Seven</option>
+          <option value="8">Eight</option>
+          <option value="9">Nine</option>
+          <option value="10">Ten</option>
+          <option value="11">Eleven</option>
+          <option value="12">Twelve</option>
+        </select>
+      </div>
 
-        <input type="submit" value="Search" class="btn btn-default">
+      <div class="form-group">
+        <label for="author">Author: </label>
+        <select class="form-control">
+          <option disabled selected> -- select an option -- </option>
+          <option value="stephen">Stephen</option>
+          <option value="rich">Rich</option>
+          <option value="charlotte">Charlotte</option>
+          <option value="ben">Ben</option>
+        </select>
+      </div>
+     
+      <div class="form-group">
+        <label for="testtype">Test Type</label>
+        <select name="testtype" class="form-control">
+          <option disabled selected> -- select an option -- </option>
+          <option value="database">Database</option>
+          <option value="orm">ORM</option>
+          <option value="web">Web Application</option>
+          <option value="mobile">Mobile Application</option>
+        </select>
+      </div>
 
-      </form>
-    <div>
+      <div class="form-group">
+        <label for="testnumber">Test ID</label>
+        <input name ="testnumber" type="text" class="form-control">
+      </div>
+
+      <input type="submit" value="Search" class="btn btn-default">
+
+    </form>
+  </div>
+</div>
+<div id="queryTable">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Iteration</th>
+        <th>Test ID</th>
+        <th>Author</th>
+        <th>Application Type</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for test in tests %}
+        <tr>
+          <td>{{test.iteration}}</td>
+          <td>{{test.testid}}</td>
+          <td>{{test.author.name}}</td>
+          <td>{{test.applicationtype}}</td>
+          <td>{{test.testname}}</td>
+          <td>{{test.latesttestresult}}</td>
+
+          <td>
+            <!-- Single button -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Select Action <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Edit Test</a></li>
+                <li><a href="/run?test={{test.autoid_test}}">Run Test</a></li>
+              </ul>
+            </div>
+         </td>
+       </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>  
 {% endblock %}

@@ -19,37 +19,35 @@ class Users(BaseModel):
 class Tests(BaseModel):
     applicationtype = CharField(max_length=50)
     author = ForeignKeyField(db_column='author', rel_model=Users, to_field='name')
+    autoid_test = IntegerField()
     expectedresults = CharField(max_length=10000)
     iteration = IntegerField()
     prerequisites = CharField(max_length=10000, null=True)
     testid = IntegerField()
     testname = CharField(max_length=1000)
     teststeps = CharField(max_length=10000)
+    latesttestresult = CharField(max_length=15)
 
     class Meta:
-        primary_key = CompositeKey('testid','iteration')
         db_table = 'tests'
+        primary_key = CompositeKey('iteration','testid')
 
 class Run(BaseModel):
     actualresult = CharField(max_length=50)
+    autoid_run = PrimaryKeyField()
+    autoid_test = ForeignKeyField(db_column='autoid_test', rel_model=Tests, to_field='autoid_test')
     comments = CharField(max_length=10000, null=True)
     datetime = DateTimeField()
     issue = IntegerField(null=True)
-    iteration = ForeignKeyField(db_column='iteration', rel_model=Tests, to_field='iteration')
     runid = IntegerField()
-    tester = ForeignKeyField(db_column='tester', rel_model=Users, to_field='name', related_name="run.tester")
-    testid = ForeignKeyField(db_column='testid', rel_model=Tests, to_field='testid', related_name="run.testid")
+    tester = ForeignKeyField(db_column='tester', rel_model=Users, to_field='name')
 
     class Meta:
-        primary_key = CompositeKey('iteration','testid', 'runid')
         db_table = 'run'
-        
 
 class Testruns(BaseModel):
-    iteration = ForeignKeyField(db_column='iteration', rel_model=Tests, to_field='iteration')
-    runid = ForeignKeyField(db_column='runid', rel_model=Run, to_field='runid', related_name="Testruns.runid")
-    testid = ForeignKeyField(db_column='testid', rel_model=Tests, to_field='testid', related_name="Testruns.testid")
+    autoid_run = ForeignKeyField(db_column='autoid_run', rel_model=Run, to_field='autoid_run')
+    autoid_test = ForeignKeyField(db_column='autoid_test', rel_model=Tests, to_field='autoid_test')
 
     class Meta:
-        primary_key = CompositeKey('iteration','testid','runid')
         db_table = 'testruns'
