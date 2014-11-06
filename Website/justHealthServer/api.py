@@ -103,7 +103,9 @@ def authenticate():
     hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
-        if attempted.verified == False:
+        if attempted.accountdeactivated == True:
+            return "Account deactivated"
+        elif attempted.verified == False:
             return "Account not verified. Please check your email for instructions"
         elif attempted.accountlocked == True:
             return "Account is locked. Please check your email for instructions"
@@ -122,6 +124,45 @@ def authenticate():
         incrementAttempts.execute()
         return "Incorrect username/password"
     return "Something went wrong!"
+
+@app.route('/api/deactivateaccount', methods=['POST'])
+def deactivateAccount():
+    try:
+        username = request.form['username']
+    except KeyError, e:
+        return "No username supplied"
+
+    try:
+        if request.form['deletecheckbox'] == "on":
+            delete = True
+        else:
+            delete = False
+    except KeyError, e:
+        delete = False
+
+    try:
+        comments = request.form['comments']
+    except KeyError, e:
+        comments = None
+
+    q = Userdeactivatereason.insert(
+        reason = request.form['reason'],
+        comments = comments
+    )
+    q.execute()
+
+    if delete:
+        # Delete User
+        deletedUser = Client.delete().where(Client.username == request.form['username'])
+        deletedUser.execute()
+        return "Deleted"
+    else:
+        # Keep user
+        deactivatedUser = Client.update(accountdeactivated = True).where(Client.username == username)
+        unverifyUser = Client.update(verified = False).where(Client.username == username)
+        deactivatedUser.execute()
+        unverifyUser.execute()
+        return "Kept"
 
 @app.route('/api/resetpassword', methods=['POST'])
 def resetPassword():

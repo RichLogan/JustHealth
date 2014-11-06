@@ -53,3 +53,16 @@ class uq8LnAWi7D(BaseModel):
     class Meta:
         primary_key = CompositeKey('password, username')
         db_table = 'uq8lnawi7d'
+
+class Deactivatereason(BaseModel):
+    reason = CharField(max_length=255, primary_key=True)
+
+    class Meta:
+        db_table = 'deactivatereason'
+
+class Userdeactivatereason(BaseModel):
+    comments = CharField(max_length=1000, null=True)
+    reason = ForeignKeyField(db_column='reason', null=True, rel_model=Deactivatereason, to_field='reason')
+
+    class Meta:
+        db_table = 'userdeactivatereason'

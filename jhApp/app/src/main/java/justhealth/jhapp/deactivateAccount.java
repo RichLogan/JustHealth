@@ -6,9 +6,11 @@ package justhealth.jhapp;
 public class deactivateAccount {
 
 
-/** Are you sure you want to delete dialog*/
+/*
+Are you sure you want to deactivate dialog
+    http://developer.android.com/guide/topics/ui/dialogs.html
 
-/**    new AlertDialog.Builder(this)
+    new AlertDialog.Builder(this)
             .setTitle("Deactivate account")
     .setMessage("Are you sure you want to deactivate your account?")
     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -27,6 +29,8 @@ public class deactivateAccount {
 */
 
 
+
+//need a popup to appear when user clicks on 'why should we keep your data'
 
 }
 

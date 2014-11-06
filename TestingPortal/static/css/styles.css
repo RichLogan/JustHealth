@@ -57,6 +57,14 @@ header {
   margin-top: 35px;
 }
 
+#headingTest{
+  width: 50%;
+}
+
+#queryTable {
+  width: 70%;
+}
+
 footer {
   position:absolute;
   bottom:0;

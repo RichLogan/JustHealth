@@ -1,0 +1,71 @@
+{% extends "template.html" %}
+
+{% block title %}Run Test{% endblock %}
+
+{% block scriptsAndStyles %}
+
+{% endblock %}
+
+{% block content %}
+
+
+<div id="content">
+	<h2><b>Run Test</b></h2>
+	<br />
+
+	<p><b>Iteration: </b> {{test.iteration}}</p> 
+
+	<p><b>Test Number: </b> {{test.testid}}</p>
+	
+	<p><b>Title: </b>{{test.testname}}</p>
+
+	<p><b>Prerequisites: </b>{{test.prerequisites}}</p>
+
+	<p><b>Test Steps: </b>{{test.teststeps}}</p>
+
+	<p><b>Expected Result: </b>{{test.expectedresults}}</p>
+
+	<br />
+	<div class="form-group">
+		<form method="POST" action="/submitTest?test={{test.autoid_test}}"> 
+			
+			<div class="form-group">
+				<label for="tester">Tester: </label>
+				<select name="tester" class="form-control">
+					<option disabled selected> -- select an option -- </option>
+					<option value="Stephen">Stephen</option>
+					<option value="Rich">Rich</option>
+					<option value="Charlotte">Charlotte</option>
+					<option value="Ben">Ben</option>
+				</select>
+			</div>
+			
+			<div class="form-group">
+		    <label for="actualresult">Actual Result: </label>
+		    <select name="actualresult" class="form-control">
+		      <option disabled selected> -- Select a status-- </option>
+		      <option value="Passed">Passed</option>
+		      <option value="Failed">Failed</option>
+		    </select>
+		  </div>
+		  <div>
+
+		  <div class="form-group">
+		  	<label for="issue">Issue Number: </label>
+		  	<input type="number" name="issue" class="form-control"></input>
+		  </div>
+
+		  <div class="form-group">
+		  	<label for="comments">Comments: </label>
+		  	<textarea name="comments" class="form-control"></textarea>
+		  </div>
+
+		  <div class="form-group">
+            <input class="form-control" type="submit" value="Submit Run">
+          </div>
+
+		</form>
+	</div>
+</div>        
+
+{% endblock %}
