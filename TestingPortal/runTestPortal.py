@@ -54,10 +54,17 @@ def create():
 	return render_template('createTest.html')
 
 
+#loads the run test screen
 @app.route('/run', methods=['POST', 'GET'])
 def runTest():
 	if request.method == 'GET':
 		return render_template('runTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
+
+#loads the edit test screen
+@app.route('/edit', methods=['POST', 'GET'])
+def editTest():
+	if request.method == 'GET':
+		return render_template('editTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
 
 #when a test run is submitted 
 @app.route('/submitTest', methods=['POST', 'GET'])

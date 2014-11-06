@@ -1,0 +1,89 @@
+{% extends "template.html" %}
+
+{% block title %}Create Test{% endblock %}
+
+{% block scriptsAndStyles %}
+
+{% endblock %}
+
+{% block content %}
+<div id="content">
+  <h3>Edit Test</h3>
+    {% if message != null %}
+      <div class="alert alert-{{type}} alert-dismissible rightInputs" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        {{message}}
+      </div>
+    {% endif %}
+      <div class="form-group">
+        <form method="POST" action="/create"> 
+          <div class="form-group">
+            <label for="iteration">Iteration: </label>
+            <select name="iteration" class="form-control">
+              <option disabled selected>{{test.iteration}}</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+              <option value="4">Four</option>
+              <option value="5">Five</option>
+              <option value="6">Six</option>
+              <option value="7">Seven</option>
+              <option value="8">Eight</option>
+              <option value="9">Nine</option>
+              <option value="10">Ten</option>
+              <option value="11">Eleven</option>
+              <option value="12">Twelve</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="author">Author: </label>
+            <select name="author" class="form-control">
+              <option disabled selected>{{test.author.name}} </option>
+              <option value="Stephen">Stephen</option>
+              <option value="Rich">Rich</option>
+              <option value="Charlotte">Charlotte</option>
+              <option value="Ben">Ben</option>
+            </select>
+          </div>
+         
+          <div class="form-group">
+            <label for="testType">Test Type</label>
+            <select name="testType" class="form-control">
+              <option disabled selected>{{test.applicationtype}}</option>
+              <option value="database">Database</option>
+              <option value="orm">ORM</option>
+              <option value="web">Web Application</option>
+              <option value="mobile">Mobile Application</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="testname">Test Name: </label>
+            <input type="text" name="testname" class="form-control" value='{{test.testname}}'></input>
+          </div>
+
+          <div class="form-group">
+            <label for="prerequisites">Prerequisites: </label>
+            <textarea name="prerequisites" class="form-control">{{test.prerequisites}}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="testSteps">Test Steps: </label>
+            <textarea name="testSteps" class="form-control">{{test.teststeps}}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="expectedOutcome">Expected Outcome: </label>
+            <textarea name="expectedOutcome" class="form-control">{{test.expectedresults}}</textarea>
+          </div>
+
+          <div class="form-group">
+            <input type="submit" value="Add Test">
+          </div>
+
+        </form>
+
+      </div>
+  </div>
+{% endblock %}
