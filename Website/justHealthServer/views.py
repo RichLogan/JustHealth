@@ -1,6 +1,7 @@
 from justHealthServer import *
 from api import *
 from functools import wraps
+import json
 
 # Decorator Functions
 def needLogin(f):
@@ -83,14 +84,16 @@ def login():
     if request.method == 'POST':
         result = authenticate()
         if result == "Authenticated":
-            # Valid user, set SESSION 
+            # Valid user, set SESSION
             session["username"] = request.form['username']
             # Find the account type, first name, surname of the user and direct them to the relevant portal page
-            result = getAccountInfo()
-            name = result['firstName'] + " " + result['surname']
-            if result['accountType'] == "Patient":
+            jsonResult = getAccountInfo()
+            result = {}
+            result = json.loads(jsonResult)
+            name = result['firstname'] + " " + result['surname']
+            if result['accounttype'] == "Patient":
               return render_template('patienthome.html', printname = name)
-            elif accountType == "Carer":
+            elif result['accounttype'] == "Carer":
               return render_template('carerhome.html', printname = name)
         else:
             return render_template('login.html', type="danger", message = result)
