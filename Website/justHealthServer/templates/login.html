@@ -13,6 +13,20 @@
     });
   });
 </script>-->
+<script>
+//check if email is valid
+//focus out: validation is performed when different field is active
+	$('#validateEmail').focusout(function() {
+		if(validateEmail($('#validateEmail').val())) {
+			//show message if email is valid
+			$('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+		}
+		else {
+			//show message if email is not valid
+			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+		}
+	});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -25,7 +39,7 @@
     </div>
   {% endif %}
 
-  <form action="/login" method="POST">
+	<form action="/login" method="POST">
 	<p class="pull-right">
 	New to JustHealth?<a href="/register"> Click here to register</a>
 	</p>
@@ -39,18 +53,32 @@
       <input class="form-control" type="password" name="password">
     </div>
 
-    {% if wrongCredentials == 'true' %}
-      <p class="wrongInputs">Incorrect username/password.</p>
-    {%elif locked == 'true' %}
-      <p class="wrongInputs">Account locked, an email has been sent to your registered email address.</p>
-    {%elif verified == 'false' %}
-      <p class="wrongInputs">Account is not verified, please clicked on the verification link that you have received in an email from JustHealth</p>
-    {%elif verified == 'true' %}
-      <p class="rightInputs">Thank you, your account is now verified.</p>
-    {% endif %}
-
     <input class="btn btn-default pull-right" type="submit" value="Login">
-    <a href="/resetpassword" class="pull-left smallLink">Forgot Password</a>
+    <a class="smallLink" data-toggle="modal" data-target="#forgotPassword">Forgot Password</a>
+	
+	<div class="modal fade" id="forgotPassword" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="forgotPasswordLabel">Forgotten your password?</h4>
+				</div>
+				<div class="modal-body">
+					<form action="/" method="POST">
+					<p>
+					Enter your <b>email address</b> below, we'll send you an email containing instructions for what to do next:
+					</p>
+					<div class="form-group">
+						<input class="form-control" type="text" id="validateEmail" name="email">
+						<span id="emailValidate"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
     <br></br>
   </form>
 {% endblock %}
