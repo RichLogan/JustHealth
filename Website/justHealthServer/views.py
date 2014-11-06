@@ -24,9 +24,18 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
-@app.route('/deactivate')
+@app.route('/deactivate', methods=['POST', 'GET'])
+@needLogin
 def deactivate():
-  return render_template('deactivate.html')
+    if request.method == 'POST':
+        result = deactivateAccount()
+        if result == "Deleted":
+            session.pop('username', None)
+            return render_template('login.html', type="success", message = "Your account has been deleted")
+        else:
+            session.pop('username', None)
+            return render_template('login.html', type="success", message = "Your account has been deactivated")
+    return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'])
 
 # Account Pages
 @app.route('/register', methods=['POST', 'GET'])
