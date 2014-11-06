@@ -33,9 +33,11 @@ def deactivate():
         if result == "Deleted":
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deleted")
-        else:
+        elif result == "Kept":
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deactivated")
+        else:
+            return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'], type="danger", message = result)
     return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'])
 
 # Account Pages
