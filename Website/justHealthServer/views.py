@@ -83,9 +83,15 @@ def login():
     if request.method == 'POST':
         result = authenticate()
         if result == "Authenticated":
-            # Valid user, set SESSION and send them where they need to go.
+            # Valid user, set SESSION 
             session["username"] = request.form['username']
-            return request.form['username']
+            # Find the account type, first name, surname of the user and direct them to the relevant portal page
+            result = getAccountInfo()
+            name = result['firstName'] + " " + result['surname']
+            if result['accountType'] == "Patient":
+              return render_template('patienthome.html', printname = name)
+            elif accountType == "Carer":
+              return render_template('carerhome.html', printname = name)
         else:
             return render_template('login.html', type="danger", message = result)
     try:
