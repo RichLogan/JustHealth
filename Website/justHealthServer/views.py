@@ -79,7 +79,7 @@ def passwordReset(payload):
     verifiedTrue.execute()
     return redirect(url_for('index'))
 
-@app.route('/users/activate/<payload>')
+@app.route('/api/resetpassword/<payload>')
 def loadPasswordReset(payload):
   s = getSerializer()
   try: 
@@ -123,8 +123,8 @@ def forgotPassword():
         sendForgotPasswordEmail(username)
         return render_template('login.html', message="An email has been sent to you containing a link, which will allow you to reset your password.")
 
-@app.route('/resetpassword', methods=['POST', 'GET'])
-def resetPasswordView():
+@app.route('/resetpasswordredirect', methods=['POST', 'GET'])
+def resetPasswordRedirect():
   if request.method == 'POST':
     result = resetPassword()
     if result == "True":
