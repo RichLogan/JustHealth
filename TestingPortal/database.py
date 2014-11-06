@@ -26,6 +26,7 @@ class Tests(BaseModel):
     testid = IntegerField()
     testname = CharField(max_length=1000)
     teststeps = CharField(max_length=10000)
+    latesttestresult = CharField(max_length=15)
 
     class Meta:
         db_table = 'tests'

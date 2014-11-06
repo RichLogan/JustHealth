@@ -9,6 +9,12 @@
 {% block content %}
 <div id="content">
   <h3>Create Test</h3>
+    {% if message != null %}
+      <div class="alert alert-{{type}} alert-dismissible rightInputs" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        {{message}}
+      </div>
+    {% endif %}
       <div class="form-group">
         <form method="POST" action="/create"> 
           <div class="form-group">
