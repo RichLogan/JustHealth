@@ -167,6 +167,30 @@ def resetPassword():
         return "Invalid details"
 
 ####
+# Get user account type
+####
+@app.route('/api/authenticate', methods=['POST'])
+def getAccountInfo():
+    result = {}
+    thisUser = request.form['username']
+    try:
+      patient = Patient.get(username=thisUser)
+      result['accountType'] = "Patient"
+      firstName = Patient.select(Patient.firstname).where(Patient.username == thisUser).get()
+      surname = Patient.select(Patient.surname).where(Patient.username == thisUser).get()
+      result['firstName'] = str(firstName.firstname)
+      result['surname'] = str(surname.surname)
+      return result
+    except Patient.DoesNotExist: 
+      carer = Carer.get(username=request.form['username'])
+      firstName = Carer.select(Carer.firstname).where(Carer.username == thisUser).get()
+      surname = Carer.select(Carer.surname).where(Carer.username == thisUser).get()
+      result['firstname'] = firstName
+      result['surname'] = surname
+      return result
+
+
+####
 # Account Helper Functions
 ####
 
