@@ -78,6 +78,16 @@ def passwordReset(payload):
     verifiedTrue.execute()
     return redirect(url_for('index'))
 
+@app.route('/users/activate/<payload>')
+def loadPasswordReset(payload):
+  s = getSerializer()
+  try: 
+    user = s.loads(payload)
+  except BadSignature:
+    abort(404)
+
+  return render_template('resetpassword.html', user=user)
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -95,10 +105,20 @@ def login():
         else:
             return render_template('login.html', type="danger", message = result)
     try:
-        session['username']
+      session['username']
     except KeyError, e:
-        return render_template('login.html')
+      return render_template('login.html')
     return redirect(url_for('index'))
+
+@app.route('/forgotPassword', methods=['POST', 'GET'])
+def forgotPassword():
+    if request.method == 'POST':
+      username = getUserFromEmail(request.form['email'])
+      if username == "False":
+        return render_template('login.html', message="An account with this email address does not exist.")
+      else: 
+        sendForgotPasswordEmail(username)
+        return render_template('login.html', message="An email has been sent to you containing a link, which will allow you to reset your password.")
 
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordView():

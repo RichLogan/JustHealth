@@ -266,6 +266,31 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
+def getUserFromEmail(email):
+    try: 
+      username = Client.select(Client.username).where(Client.email == email).get()
+      return username.username 
+    except Client.DoesNotExist:
+      return "False"
+
+def sendForgotPasswordEmail(username):
+    #Generate reset password Link
+    s = getSerializer()
+    payload = s.dumps(username)
+    resetLink = url_for('resetPassword', payload=payload, _external=True)
+    # Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth: Forgot Password"
+    message = "Please reset your JustHealth account password here: " + str(resetLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
+
 def sendUnlockEmail(username):
     # Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
