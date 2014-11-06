@@ -2,7 +2,11 @@
 
 {% block title %}Account{% endblock %}
 
-{% block scriptsAndStyles %}{% endblock %}
+{% block scriptsAndStyles %}
+<script>
+$("#deactivate").click(function(event){deactivateConfirm();});
+</script>
+{% endblock %}
 
 {% block content %}
 
@@ -39,7 +43,7 @@
 		</div>
 
 		<div class="form-group">
-			<input class="btn btn-danger pull-right" type="submit" value="Deactivate">
+			<input class="btn btn-danger pull-right" id="deactivate" type="submit" value="Deactivate">
 		</div>
 	</form>
 
