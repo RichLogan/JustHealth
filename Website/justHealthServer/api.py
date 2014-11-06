@@ -146,8 +146,13 @@ def deactivateAccount():
     except KeyError, e:
         comments = None
 
+    try:
+        reason = request.form['reason']
+    except KeyError, e:
+        return "Please select a reason"
+
     q = Userdeactivatereason.insert(
-        reason = request.form['reason'],
+        reason = reason,
         comments = comments
     )
     q.execute()

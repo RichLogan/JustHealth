@@ -7,6 +7,14 @@
 {% block content %}
 
 <h2>Deactivate account</h2>
+
+	{% if message != null %}
+		<div class="alert alert-{{type}} alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			{{message}}
+		</div>
+	{% endif %}
+
 	<form name="deactivate" action="/deactivate" id="deactivate" method="POST">
 
 		<input type="hidden" name="username" value="{{user}}">
