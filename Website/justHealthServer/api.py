@@ -6,6 +6,7 @@ from passlib.hash import sha256_crypt
 import datetime
 import smtplib
 from itsdangerous import URLSafeSerializer, BadSignature
+import json
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -208,28 +209,26 @@ def resetPassword():
         return "Invalid details"
 
 ####
-# Get user account type
+# Get account type
 ####
-@app.route('/api/authenticate', methods=['POST'])
+@app.route('/api/getAccountInfo', methods=['POST'])
 def getAccountInfo():
     result = {}
     thisUser = request.form['username']
     try:
       patient = Patient.get(username=thisUser)
-      result['accountType'] = "Patient"
-      firstName = Patient.select(Patient.firstname).where(Patient.username == thisUser).get()
-      surname = Patient.select(Patient.surname).where(Patient.username == thisUser).get()
-      result['firstName'] = str(firstName.firstname)
-      result['surname'] = str(surname.surname)
-      return result
-    except Patient.DoesNotExist: 
+      result['accounttype'] = "Patient"
+      patient = Patient.select().where(Patient.username == thisUser).get()
+      result['firstname'] = str(patient.firstname).strip()
+      result['surname'] = str(patient.surname).strip()
+      return json.dumps(result)
+    except Patient.DoesNotExist:
+      result['accounttype'] = "Carer"
       carer = Carer.get(username=request.form['username'])
-      firstName = Carer.select(Carer.firstname).where(Carer.username == thisUser).get()
-      surname = Carer.select(Carer.surname).where(Carer.username == thisUser).get()
-      result['firstname'] = firstName
-      result['surname'] = surname
-      return result
-
+      carer = Carer.select().where(Carer.username == thisUser).get()
+      result['firstname'] = str(carer.firstname).strip()
+      result['surname'] = str(carer.surname).strip()
+      return json.dumps(result)
 
 ####
 # Account Helper Functions
