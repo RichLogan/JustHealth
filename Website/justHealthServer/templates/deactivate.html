@@ -4,10 +4,10 @@
 
 {% block scriptsAndStyles %}
 <script>
-$("#deactivate").click(function(e) {
-    if (confirm('Are you sure you want to deactivate this account?') == false) {
+$("#deactivateConfirm").click(function(e) {
+    if (!confirm('Are you sure you want to deactivate this account?')) {
         e.preventDefault();
-    } 
+    }
 });
 </script>
 {% endblock %}
@@ -47,7 +47,7 @@ $("#deactivate").click(function(e) {
 		</div>
 
 		<div class="form-group">
-			<input class="btn btn-danger pull-right" id="deactivate" type="submit" value="Deactivate">
+			<input class="btn btn-danger pull-right" id="deactivateConfirm" type="submit" value="Deactivate">
 		</div>
 	</form>
 
