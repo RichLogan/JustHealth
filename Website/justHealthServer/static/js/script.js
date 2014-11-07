@@ -117,12 +117,3 @@ function terms()
         message.innerHTML = "<i class='fa fa-times'></i>"
     }
 }
-
-function deactivateConfirm(event) {
-
-	if (confirm('Are you sure you want to deactivate this account?')) {
-	
-	} else {
-		event.preventDefault();
-	}
-}

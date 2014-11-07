@@ -4,7 +4,11 @@
 
 {% block scriptsAndStyles %}
 <script>
-$("#deactivate").click(function(event){deactivateConfirm();});
+$("#deactivate").click(function(e) {
+    if (confirm('Are you sure you want to deactivate this account?') == false) {
+        e.preventDefault();
+    } 
+});
 </script>
 {% endblock %}
 
