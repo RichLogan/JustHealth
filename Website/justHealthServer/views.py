@@ -65,7 +65,7 @@ def verifyUser(payload):
 
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
-    return render_template('login.html', verified='true')
+    return render_template('login.html', type='success', message='Thank you for verifying your account.')
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
@@ -77,7 +77,7 @@ def passwordReset(payload):
 
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
-    return redirect(url_for('index'))
+    return render_template('login.html', type='success', message='Thank you, your password has now been reset and verified.')
 
 @app.route('/api/resetpassword/<payload>')
 def loadPasswordReset(payload):
@@ -119,10 +119,10 @@ def forgotPassword():
     if request.method == 'POST':
       username = getUserFromEmail(request.form['email'])
       if username == "False":
-        return render_template('login.html', message="An account with this email address does not exist.")
+        return render_template('login.html', type='danger', message="An account with this email address does not exist.")
       else: 
         sendForgotPasswordEmail(username)
-        return render_template('login.html', message="An email has been sent to you containing a link, which will allow you to reset your password.")
+        return render_template('login.html', type='success', message="An email has been sent to you containing a link, which will allow you to reset your password.")
 
 # This method is run once the form to reset the password has been submitted 
 @app.route('/resetpassword', methods=['POST', 'GET'])
