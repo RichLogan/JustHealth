@@ -270,15 +270,44 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
-def sendUnlockEmail(username):
+def getUserFromEmail(email):
+    try: 
+      username = Client.select(Client.username).where(Client.email == email).get()
+      return username.username 
+    except Client.DoesNotExist:
+      return "False"
+
+def sendForgotPasswordEmail(username):
+    #Generate reset password Link
+    s = getSerializer()
+    payload = s.dumps(username)
+    resetLink = url_for('loadPasswordReset', payload=payload, _external=True)
     # Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")
     # Build message
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
-    subject = "JustHealth Accounts Locked"
-    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password."
+    subject = "JustHealth: Forgot Password"
+    message = "Please reset your JustHealth account password here: " + str(resetLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
+
+def sendUnlockEmail(username):
+    # Login to mail server
+    s = getSerializer()
+    payload = s.dumps(username)
+    resetLink = url_for('loadPasswordReset', payload=payload, _external=True)
+    # Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth: Account Locked"
+    message = "Due to too many failed login attempts, your JustHealth account has been locked and you will be required to reset your password. Please reset your JustHealth account password here: " + str(resetLink) + ". If it was not you who locked the account please notify JustHealth immediately by replying to this email. Thank you. "
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
     # Send
     server.sendmail(sender, recipient, m+message)
