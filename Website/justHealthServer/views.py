@@ -84,6 +84,7 @@ def loadPasswordReset(payload):
   s = getSerializer()
   try: 
     user = s.loads(payload)
+    user = str(user).strip()
   except BadSignature:
     abort(404)
 
@@ -123,12 +124,13 @@ def forgotPassword():
         sendForgotPasswordEmail(username)
         return render_template('login.html', message="An email has been sent to you containing a link, which will allow you to reset your password.")
 
-@app.route('/resetpasswordredirect', methods=['POST', 'GET'])
+# This method is run once the form to reset the password has been submitted 
+@app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordRedirect():
   if request.method == 'POST':
     result = resetPassword()
     if result == "True":
-        return render_template('login.html', type="success", message="Your password has been reset, please check your email.")
+        return render_template('login.html', type="success", message="Your password has been reset, please check your email and click the link to verify.")
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
