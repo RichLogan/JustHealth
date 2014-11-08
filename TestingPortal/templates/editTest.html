@@ -16,7 +16,9 @@
       </div>
     {% endif %}
       <div class="form-group">
-        <form method="POST" action="/create"> 
+        <form method="POST" action="/edit"> 
+          <div>
+            <input type="text" name="autoid_test" hidden="hidden" value="{{test}}">
           <div class="form-group">
             <label for="iteration">Iteration: </label>
             <select name="iteration" class="form-control">
@@ -60,26 +62,26 @@
 
           <div class="form-group">
             <label for="testname">Test Name: </label>
-            <input type="text" name="testname" class="form-control" value='{{test.testname}}'></input>
+            <input type="text" name="testname" class="form-control" value='{{str(test.testname).strip()}}'></input>
           </div>
 
           <div class="form-group">
             <label for="prerequisites">Prerequisites: </label>
-            <textarea name="prerequisites" class="form-control">{{test.prerequisites}}</textarea>
+            <textarea name="prerequisites" class="form-control">{{str(test.prerequisites).strip()}}</textarea>
           </div>
 
           <div class="form-group">
             <label for="testSteps">Test Steps: </label>
-            <textarea name="testSteps" class="form-control">{{test.teststeps}}</textarea>
+            <textarea name="testSteps" class="form-control">{{str(test.teststeps).strip()}}</textarea>
           </div>
 
           <div class="form-group">
             <label for="expectedOutcome">Expected Outcome: </label>
-            <textarea name="expectedOutcome" class="form-control">{{test.expectedresults}}</textarea>
+            <textarea name="expectedOutcome" class="form-control">{{str(test.expectedresults).strip()}}</textarea>
           </div>
 
           <div class="form-group">
-            <input type="submit" value="Add Test">
+            <input type="submit" value="Update Test">
           </div>
 
         </form>
