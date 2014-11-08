@@ -3,4 +3,10 @@
 
     <color name="header">#2272EB</color>
 
+    <!-- Alerts -->
+    <color name="dangerText">#A94442</color>
+    <color name="dangerBackground">#F2DEDE</color>
+    <color name="successText">#3C763D</color>
+    <color name="successBackground">#DFF0D8</color>
+
 </resources>
