@@ -16,11 +16,13 @@
       </div>
     {% endif %}
       <div class="form-group">
-        <form method="POST" action="/create"> 
+        <form method="POST" action="/updateTest"> 
+          <div>
+            <input type="text" name="autoid_test" hidden="hidden" value="{{test.autoid_test}}">
           <div class="form-group">
             <label for="iteration">Iteration: </label>
             <select name="iteration" class="form-control">
-              <option disabled selected>{{test.iteration}}</option>
+              <option value="{{test.iteration}}" selected>{{test.iteration}}</option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>
@@ -39,7 +41,7 @@
           <div class="form-group">
             <label for="author">Author: </label>
             <select name="author" class="form-control">
-              <option disabled selected>{{test.author.name}} </option>
+              <option value="{{test.author.name}}" selected>{{test.author.name}} </option>
               <option value="Stephen">Stephen</option>
               <option value="Rich">Rich</option>
               <option value="Charlotte">Charlotte</option>
@@ -50,7 +52,7 @@
           <div class="form-group">
             <label for="testType">Test Type</label>
             <select name="testType" class="form-control">
-              <option disabled selected>{{test.applicationtype}}</option>
+              <option value="{{test.applicationtype}}" selected>{{test.applicationtype}}</option>
               <option value="database">Database</option>
               <option value="orm">ORM</option>
               <option value="web">Web Application</option>
@@ -60,7 +62,7 @@
 
           <div class="form-group">
             <label for="testname">Test Name: </label>
-            <input type="text" name="testname" class="form-control" value='{{test.testname}}'></input>
+            <input type="text" name="testname" class="form-control" value="{{test.testname}}"></input>
           </div>
 
           <div class="form-group">
@@ -79,7 +81,7 @@
           </div>
 
           <div class="form-group">
-            <input type="submit" value="Add Test">
+            <input type="submit" value="Update Test">
           </div>
 
         </form>
