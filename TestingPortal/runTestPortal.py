@@ -60,11 +60,8 @@ def runTest():
 	if request.method == 'GET':
 		return render_template('runTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
 
-#loads the edit test screen
-@app.route('/edit', methods=['POST', 'GET'])
-def editTest():
-	if request.method == 'GET':
-		return render_template('editTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
+@app.route('/updateTest',  methods=['POST', 'GET'])
+def updateTest():
 	if request.method == 'POST':
 		updateTest = {}
 		updateTest['autoid_test'] = request.form['autoid_test']
@@ -90,7 +87,15 @@ def editTest():
 
 		update.execute()
 
-		return render_template('queryTests.html', message = 'Test updated.')
+	return render_template('queryTests.html', message = 'Test updated.')
+	
+
+#loads the edit test screen
+@app.route('/edit', methods=['POST', 'GET'])
+def editTest():
+	if request.method == 'GET':
+		return render_template('editTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
+	
 
 
 #when a test run is submitted 
