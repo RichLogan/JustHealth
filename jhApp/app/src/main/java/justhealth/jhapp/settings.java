@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * Created by charlottehutchinson on 06/11/14.
  */
 
-public class settings extends ActionBarActivity{
+public class Settings extends ActionBarActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +20,7 @@ public class settings extends ActionBarActivity{
         deactivate.setOnClickListener(
                 new Button.OnClickListener() {
             public void onClick(View view) {
-                startActivity(new Intent(settings.this, deactivateAccount.class));
+                startActivity(new Intent(Settings.this, DeactivateAccount.class));
             }
         }
         );
