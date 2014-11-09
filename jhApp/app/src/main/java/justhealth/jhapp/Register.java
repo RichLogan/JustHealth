@@ -132,12 +132,24 @@ public class Register extends ActionBarActivity {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             System.out.println(response.getStatusLine());
-
-            //HttpEntity responseEntity = response.getEntity();
-            //InputStream is = responseEntity.getContent();
-            //System.out.println(is.toString());
             String responseStr = EntityUtils.toString(response.getEntity());
             System.out.println(responseStr);
+            if (responseStr.equals("True")) {
+                //Register Done, send to login, insert success message
+            }
+            else {
+                //Check if the Layout already exists
+                LinearLayout alert = (LinearLayout)findViewById(R.id.alertMessage);
+                if(alert == null){
+                    //Insert the alert message
+                    LinearLayout insertAlert = (LinearLayout)findViewById(R.id.insertRegisterAlert);
+                    View insertAlertView = getLayoutInflater().inflate(R.layout.alert_message, insertAlert, false);
+                    insertAlert.addView(insertAlertView);
+                }
+
+                TextView myTextView = (TextView) findViewById(R.id.alertText);
+                myTextView.setText(responseStr);
+            }
 
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
