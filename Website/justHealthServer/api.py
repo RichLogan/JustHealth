@@ -271,9 +271,9 @@ def sendVerificationEmail(username):
     server.quit()
 
 def getUserFromEmail(email):
-    try: 
+    try:
       username = Client.select(Client.username).where(Client.email == email).get()
-      return username.username 
+      return username.username
     except Client.DoesNotExist:
       return "False"
 
@@ -330,3 +330,64 @@ def sendPasswordResetEmail(username):
   # Send
   server.sendmail(sender, recipient, m+message)
   server.quit()
+
+
+####
+# Search Patient Carer
+####
+@app.route('/api/searchPatientCarer', methods=['POST','GET'])
+def searchPatientCarer():
+    #get username, firstname and surname of current user
+    result = {}
+    thisUser = request.form['username, firstname, surname']
+    try:
+      patient = Patient.get(username=thisUser)
+      result['accounttype'] = "Patient"
+      patient = Patient.select().where(Patient.username == thisUser).get()
+      result['firstname'] = str(patient.firstname).strip()
+      result['surname'] = str(patient.surname).strip()
+      return json.dumps(result)
+    except Patient.DoesNotExist:
+      result['accounttype'] = "Carer"
+      carer = Carer.get(username=request.form['username'])
+      carer = Carer.select().where(Carer.username == thisUser).get()
+      result['firstname'] = str(carer.firstname).strip()
+      result['surname'] = str(carer.surname).strip()
+
+      return json.dumps(result)
+
+
+        if request.method == 'POST'
+        #Search tests based on firstname and surname
+        buildQuery = {}
+        buildQuery['firstname'] = str(patient.firstname).strip()
+        buildQuery['surname'] = str(patient.surname).strip()
+
+        patientQueried = patient.select().where(patient.firstname & patient.surname == buildQuery['patient'])
+
+        return.....
+
+    elif request.method == 'GET':
+        buildQuery = {}
+        buildQuery['firstname'] = request.args.get('firstname')
+        buildQuery['surname'] = request.args.get('surname')
+
+        return....
+
+
+        elseif request.method == 'POST'
+        #Search tests based on firstname and surname
+        buildQuery = {}
+        buildQuery['firstname'] = str(carer.firstname).strip()
+        buildQuery['surname'] = str(carer.surname).strip()
+
+        carerQueried = carer.select().where(carer.firstname & patient.surname == buildQuery['carer'])
+
+        return.....
+
+            elif request.method == 'GET':
+                buildQuery = {}
+                buildQuery['firstname'] = request.args.get('firstname')
+                buildQuery['surname'] = request.args.get('surname')
+
+                return....
