@@ -25,6 +25,14 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
+@app.route('/search', methods=['POST', 'GET'])
+@needLogin
+def search():
+    if request.method =='POST':
+        result = searchPatientCarer()
+        return render_template ('search.html',results = result, username= session['username'])
+    return render_template('search.html',username= session['username'])
+
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
 def deactivate():
@@ -136,19 +144,3 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
-
-
-
-#Method to search patient and carer
-@app.route('/searchPatientCarer', methods=['POST', 'GET'])
-def query():
-    if request.method == 'POST':
-        result = searchPatientCarer()
-        if result == 'xxxx'
-            return render_template('search.html', patient = patientQueried)
-
-    elif request.method == "GET":
-
-        return render_template('search.html', patient = patient.select().where(patient.iteration == buildQuery['patient']))
-
-    return render_template('search.html')
