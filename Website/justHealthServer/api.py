@@ -271,9 +271,9 @@ def sendVerificationEmail(username):
     server.quit()
 
 def getUserFromEmail(email):
-    try: 
+    try:
       username = Client.select(Client.username).where(Client.email == email).get()
-      return username.username 
+      return username.username
     except Client.DoesNotExist:
       return "False"
 
@@ -330,3 +330,26 @@ def sendPasswordResetEmail(username):
   # Send
   server.sendmail(sender, recipient, m+message)
   server.quit()
+
+
+####
+# Search Patient Carer
+####
+@app.route('/api/searchPatientCarer', methods=['POST','GET'])
+def searchPatientCarer():
+    #get username, firstname and surname of current user
+    result = {}
+    thisUser = request.form['username']
+    try:
+      patient = Patient.get(username=thisUser)
+      searchTerm = "%" + request.form['searchTerm'] + "%"
+      result = Carer.select().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
+      #return json.dumps(result)
+      return result
+
+    except Patient.DoesNotExist:
+        searchTerm = "%" + request.form['searchTerm'] + "%"
+        result = Patient.select().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
+        #return json.dumps(result)
+        return result
+    return None
