@@ -29,12 +29,13 @@ import android.widget.TextView;
         );
 
         Button search = (Button) findViewById(R.id.search);
-        settings.setOnClickListener(
+        search.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
                         startActivity(new Intent(homePatient.this, Search.class));
                     }
-                });
+                }
+        );
     }
 }
 

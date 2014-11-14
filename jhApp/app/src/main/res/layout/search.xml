@@ -49,7 +49,7 @@
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
                 android:text="Search"
-                android:id="@+id/search"
+                android:id="@+id/searchButton"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
