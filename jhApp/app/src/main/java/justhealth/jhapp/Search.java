@@ -7,6 +7,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -17,9 +20,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,10 +83,56 @@ public class Search extends ActionBarActivity {
             //pass the list to the post request
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
+
+            String responseString = EntityUtils.toString(response.getEntity());
+
+            JSONArray result = null;
+            try {
+                JSONObject queryReturn = new JSONObject(responseString);
+                result = queryReturn.getJSONArray("jsonResult");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            printTable(result);
+
         } catch (ClientProtocolException e) {
             //TODO Auto-generated catch block
         } catch (IOException e) {
             //TODO Auto-generated catch block
         }
     }
+
+    private void printTable(JSONArray result) {
+        for (int i = 0; i < result.length(); i++) {
+            try {
+                JSONObject obj = result.getJSONObject(i);
+                String resultUsername = obj.getString("username");
+                String resultFirstName = obj.getString("firstName");
+                String resultSurname = obj.getString("surname");
+
+                TableLayout searchTable = (TableLayout)findViewById(R.id.searchTable);
+                TableRow row = new TableRow(this);
+                //add username to TextView
+                TextView forUsername = new TextView(this);
+                forUsername.setText(resultUsername);
+                //add first name to TextView
+                TextView forFirstName = new TextView(this);
+                forFirstName.setText(resultFirstName);
+                //add surname to TextView
+                TextView forSurname = new TextView(this);
+                forSurname.setText(resultSurname);
+
+                //add the views to the row
+                row.addView(forUsername);
+                row.addView(forFirstName);
+                row.addView(forSurname);
+
+                searchTable.addView(row,i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
+
