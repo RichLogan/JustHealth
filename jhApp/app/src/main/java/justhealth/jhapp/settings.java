@@ -10,7 +10,7 @@ import android.widget.Button;
  * Created by charlottehutchinson on 06/11/14.
  */
 
-public class Settings extends ActionBarActivity{
+public class settings extends ActionBarActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +20,7 @@ public class Settings extends ActionBarActivity{
         deactivate.setOnClickListener(
                 new Button.OnClickListener() {
             public void onClick(View view) {
-                startActivity(new Intent(Settings.this, DeactivateAccount.class));
+                startActivity(new Intent(settings.this, deactivateAccount.class));
             }
         }
         );
