@@ -235,6 +235,23 @@ def getAccountInfo():
       result['surname'] = str(carer.surname).strip()
       return json.dumps(result)
 
+def getAccountInfo(username):
+    result = {}
+    try:
+      patient = Patient.get(username=username)
+      result['accounttype'] = "Patient"
+      patient = Patient.select().where(Patient.username == username).get()
+      result['firstname'] = str(patient.firstname).strip()
+      result['surname'] = str(patient.surname).strip()
+      return json.dumps(result)
+    except Patient.DoesNotExist:
+      result['accounttype'] = "Carer"
+      carer = Carer.get(username=request.form['username'])
+      carer = Carer.select().where(Carer.username == username).get()
+      result['firstname'] = str(carer.firstname).strip()
+      result['surname'] = str(carer.surname).strip()
+      return json.dumps(result)
+
 ####
 # Account Helper Functions
 ####
