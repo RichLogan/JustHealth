@@ -2,7 +2,6 @@ package justhealth.jhapp;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,9 +27,6 @@ import java.util.Map;
 
 import android.os.StrictMode;
 
-import org.apache.http.HttpEntity;
-import java.io.InputStream;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.util.EntityUtils;
 
@@ -43,7 +39,7 @@ public class Register extends ActionBarActivity {
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.register);
 
         Button registerButton = (Button)findViewById(R.id.register);
         registerButton = (Button) findViewById(R.id.register);

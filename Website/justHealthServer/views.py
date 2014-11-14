@@ -1,6 +1,7 @@
 from justHealthServer import *
 from api import *
 from functools import wraps
+import json
 
 # Decorator Functions
 def needLogin(f):
@@ -24,6 +25,15 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
+@app.route('/search', methods=['POST', 'GET'])
+@needLogin
+def search():
+    if request.method =='POST':
+        result = searchPatientCarer()
+        result = json.loads(result)
+        return render_template ('search.html',results = result, username= session['username'])
+    return render_template('search.html',username= session['username'])
+
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
 def deactivate():
@@ -32,9 +42,11 @@ def deactivate():
         if result == "Deleted":
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deleted")
-        else:
+        elif result == "Kept":
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deactivated")
+        else:
+            return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'], type="danger", message = result)
     return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'])
 
 # Account Pages
@@ -64,7 +76,7 @@ def verifyUser(payload):
 
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
-    return render_template('login.html', verified='true')
+    return render_template('login.html', type='success', message='Thank you for verifying your account.')
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
@@ -76,30 +88,60 @@ def passwordReset(payload):
 
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
-    return redirect(url_for('index'))
+    return render_template('login.html', type='success', message='Thank you, your password has now been reset and verified.')
+
+@app.route('/api/resetpassword/<payload>')
+def loadPasswordReset(payload):
+  s = getSerializer()
+  try:
+    user = s.loads(payload)
+    user = str(user).strip()
+  except BadSignature:
+    abort(404)
+
+  return render_template('resetpassword.html', user=user)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         result = authenticate()
         if result == "Authenticated":
-            # Valid user, set SESSION and send them where they need to go.
+            # Valid user, set SESSION
             session["username"] = request.form['username']
-            return request.form['username']
+            # Find the account type, first name, surname of the user and direct them to the relevant portal page
+            jsonResult = getAccountInfo()
+            result = {}
+            result = json.loads(jsonResult)
+            name = result['firstname'] + " " + result['surname']
+            if result['accounttype'] == "Patient":
+              return render_template('patienthome.html', printname = name)
+            elif result['accounttype'] == "Carer":
+              return render_template('carerhome.html', printname = name)
         else:
             return render_template('login.html', type="danger", message = result)
     try:
-        session['username']
+      session['username']
     except KeyError, e:
-        return render_template('login.html')
+      return render_template('login.html')
     return redirect(url_for('index'))
 
+@app.route('/forgotPassword', methods=['POST', 'GET'])
+def forgotPassword():
+    if request.method == 'POST':
+      username = getUserFromEmail(request.form['email'])
+      if username == "False":
+        return render_template('login.html', type='danger', message="An account with this email address does not exist.")
+      else:
+        sendForgotPasswordEmail(username)
+        return render_template('login.html', type='success', message="An email has been sent to you containing a link, which will allow you to reset your password.")
+
+# This method is run once the form to reset the password has been submitted
 @app.route('/resetpassword', methods=['POST', 'GET'])
-def resetPasswordView():
+def resetPasswordRedirect():
   if request.method == 'POST':
     result = resetPassword()
     if result == "True":
-        return render_template('login.html', type="success", message="Your password has been reset, please check your email.")
+        return render_template('login.html', type="success", message="Your password has been reset, please check your email and click the link to verify.")
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')

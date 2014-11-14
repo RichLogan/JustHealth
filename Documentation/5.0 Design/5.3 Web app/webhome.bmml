@@ -35,7 +35,7 @@
         <value>0</value>
       </controlProperties>
     </control>
-    <control controlID="21" controlTypeID="com.balsamiq.mockups::Label" x="446" y="138" w="-1" h="-1" measuredW="351" measuredH="21" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="21" controlTypeID="com.balsamiq.mockups::Label" x="446" y="138" w="-1" h="-1" measuredW="354" measuredH="21" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Welcome%20%28Name%29...%20Click%20the%20tiles%20to%20navigate%20the%20application.</text>
       </controlProperties>
@@ -53,13 +53,13 @@
         <icon>ContactIcon%7Clarge</icon>
       </controlProperties>
     </control>
-    <control controlID="31" controlTypeID="com.balsamiq.mockups::Label" x="471" y="273" w="-1" h="-1" measuredW="42" measuredH="17" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Label" x="471" y="273" w="-1" h="-1" measuredW="36" measuredH="18" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Profile%29</text>
       </controlProperties>
     </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="769" y="273" w="-1" h="-1" measuredW="59" measuredH="17" zOrder="18" locked="false" isInGroup="-1">
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="769" y="273" w="-1" h="-1" measuredW="56" measuredH="18" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Send%20Alert%29</text>
@@ -91,25 +91,25 @@
         <icon>GearIcon%7Clarge</icon>
       </controlProperties>
     </control>
-    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="618" y="273" w="-1" h="-1" measuredW="60" measuredH="17" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="618" y="273" w="-1" h="-1" measuredW="56" measuredH="18" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Reminders%29</text>
       </controlProperties>
     </control>
-    <control controlID="53" controlTypeID="com.balsamiq.mockups::Label" x="780" y="393" w="-1" h="-1" measuredW="49" measuredH="17" zOrder="25" locked="false" isInGroup="-1">
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::Label" x="780" y="393" w="-1" h="-1" measuredW="47" measuredH="18" zOrder="25" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Settings%29</text>
       </controlProperties>
     </control>
-    <control controlID="54" controlTypeID="com.balsamiq.mockups::Label" x="632" y="393" w="-1" h="-1" measuredW="32" measuredH="17" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::Label" x="632" y="393" w="-1" h="-1" measuredW="28" measuredH="18" zOrder="26" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Help%29</text>
       </controlProperties>
     </control>
-    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="457" y="393" w="-1" h="-1" measuredW="71" measuredH="17" zOrder="27" locked="false" isInGroup="-1">
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="457" y="393" w="-1" h="-1" measuredW="68" measuredH="18" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <size>10</size>
         <text>%28Health%20Check%29</text>

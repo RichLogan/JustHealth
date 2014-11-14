@@ -6,101 +6,99 @@
 
     <include android:id="@+id/header" layout="@layout/header" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/scrollView">
+        android:layout_alignParentStart="true">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:layout_above="@+id/scrollView"
-            android:textSize="20dip"
-            android:textColor="@color/header"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"/>
+            android:orientation="vertical">
 
-        <!--  Username Label -->
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textSize="20dip"
+                android:textColor="@color/header"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="20dip"
+                android:id="@+id/loginTitle"/>
 
-        <EditText android:layout_width="372dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
-            android:singleLine="true"
-            android:id="@+id/loginUsername"
-            android:maxLength="25"
-            android:hint="Username"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/insertAlert"/>
 
-        <!--  Password Label -->
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/loginPassword"
-            android:password="true"
-            android:hint="Password"/>
+            <!--  Username-->
 
+            <EditText android:layout_width="372dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="20dip"
+                android:singleLine="true"
+                android:id="@+id/loginUsername"
+                android:maxLength="25"
+                android:hint="Username"/>
 
-        <!--login button-->
+            <!--  Password -->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/loginPassword"
+                android:password="true"
+                android:hint="Password"/>
+
+            <Button
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:id="@+id/login"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+            <TextView android:id="@+id/link_to_forgot_password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password"
+                android:gravity="center"
+                android:textSize="15dip"
+                android:textColor="@color/header"
+                android:layout_below="@id/login"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView android:id="@+id/link_to_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="New to JustHealth? Register here"
+                android:gravity="center"
+                android:textSize="20dip"
+                android:textColor="@color/header"
+                android:layout_marginTop="53dp"
+                android:layout_below="@+id/link_to_forgot_password"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </LinearLayout>
     </LinearLayout>
-    </ScrollView>
-        <!-- Link to Registration Screen -->
-        <TextView android:id="@+id/link_to_register"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="New to JustHealth? Register here"
-            android:gravity="center"
-            android:textSize="20dip"
-            android:textColor="@color/header"
-            android:layout_marginTop="53dp"
-            android:layout_below="@+id/link_to_forgot_password"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <!-- Login button-->
-        <Button
-           android:layout_width="115dp"
-           android:layout_height="wrap_content"
-           android:text="Login"
-           android:id="@+id/login"
-           android:layout_gravity="center_horizontal"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
 
-        <!--Link to Forgot Password-->
-        <TextView android:id="@+id/link_to_forgot_password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Forgot Password"
-            android:gravity="center"
-            android:textSize="15dip"
-            android:textColor="@color/header"
-            android:layout_below="@+id/login"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <!--Link to Terms and Conditions-->
-        <TextView android:id="@+id/link_to_terms"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Terms and Conditions"
-            android:gravity="center"
-            android:textSize="15dip"
-            android:textColor="#FFFFFF"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/header"/>
-
-
-
+    <!--Link to Terms and Conditions-->
+    <TextView android:id="@+id/link_to_terms"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Terms and Conditions"
+        android:gravity="center"
+        android:textSize="15dip"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/header"/>
 </RelativeLayout>

@@ -6,6 +6,7 @@ from passlib.hash import sha256_crypt
 import datetime
 import smtplib
 from itsdangerous import URLSafeSerializer, BadSignature
+import json
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -145,8 +146,13 @@ def deactivateAccount():
     except KeyError, e:
         comments = None
 
+    try:
+        reason = request.form['reason']
+    except KeyError, e:
+        return "Please select a reason"
+
     q = Userdeactivatereason.insert(
-        reason = request.form['reason'],
+        reason = reason,
         comments = comments
     )
     q.execute()
@@ -208,6 +214,28 @@ def resetPassword():
         return "Invalid details"
 
 ####
+# Get account type
+####
+@app.route('/api/getAccountInfo', methods=['POST'])
+def getAccountInfo():
+    result = {}
+    thisUser = request.form['username']
+    try:
+      patient = Patient.get(username=thisUser)
+      result['accounttype'] = "Patient"
+      patient = Patient.select().where(Patient.username == thisUser).get()
+      result['firstname'] = str(patient.firstname).strip()
+      result['surname'] = str(patient.surname).strip()
+      return json.dumps(result)
+    except Patient.DoesNotExist:
+      result['accounttype'] = "Carer"
+      carer = Carer.get(username=request.form['username'])
+      carer = Carer.select().where(Carer.username == thisUser).get()
+      result['firstname'] = str(carer.firstname).strip()
+      result['surname'] = str(carer.surname).strip()
+      return json.dumps(result)
+
+####
 # Account Helper Functions
 ####
 
@@ -242,15 +270,44 @@ def sendVerificationEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
-def sendUnlockEmail(username):
+def getUserFromEmail(email):
+    try:
+      username = Client.select(Client.username).where(Client.email == email).get()
+      return username.username
+    except Client.DoesNotExist:
+      return "False"
+
+def sendForgotPasswordEmail(username):
+    #Generate reset password Link
+    s = getSerializer()
+    payload = s.dumps(username)
+    resetLink = url_for('loadPasswordReset', payload=payload, _external=True)
     # Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")
     # Build message
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
-    subject = "JustHealth Accounts Locked"
-    message = "Hello, due to a repeated number of incorrect attempts, your password has been locked. Please visit: http://raptor.kent.ac.uk:5000/resetpassword to reset your password."
+    subject = "JustHealth: Forgot Password"
+    message = "Please reset your JustHealth account password here: " + str(resetLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
+
+def sendUnlockEmail(username):
+    # Login to mail server
+    s = getSerializer()
+    payload = s.dumps(username)
+    resetLink = url_for('loadPasswordReset', payload=payload, _external=True)
+    # Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth: Account Locked"
+    message = "Due to too many failed login attempts, your JustHealth account has been locked and you will be required to reset your password. Please reset your JustHealth account password here: " + str(resetLink) + ". If it was not you who locked the account please notify JustHealth immediately by replying to this email. Thank you. "
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
     # Send
     server.sendmail(sender, recipient, m+message)
@@ -273,3 +330,32 @@ def sendPasswordResetEmail(username):
   # Send
   server.sendmail(sender, recipient, m+message)
   server.quit()
+
+
+####
+# Search Patient Carer
+####
+@app.route('/api/searchPatientCarer', methods=['POST','GET'])
+def searchPatientCarer():
+    #get username, firstname and surname of current user
+    result = {}
+    thisUser = request.form['username']
+    try:
+        patient = Patient.get(username=thisUser)
+        searchTerm = "%" + request.form['searchTerm'] + "%"
+        results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
+
+        jsonResult = []
+        for result in results:
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
+
+    except Patient.DoesNotExist:
+        searchTerm = "%" + request.form['searchTerm'] + "%"
+        results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
+
+        jsonResult = []
+        for result in results:
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
+    return None
