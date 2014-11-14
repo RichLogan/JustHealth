@@ -1,0 +1,55 @@
+{% extends "template.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block scriptsAndStyles %}
+
+
+{% endblock %}
+
+{% block content %}
+<h3> Search </h3>
+
+
+  <form action="/search" method="POST">
+    <div class="form-group">
+      <label for="username"></label>
+      <input class="form-control" type="text" name="searchTerm">
+    </div>
+    <input class="form-control" type="hidden" name="username" value='{{username}}'>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+<br />
+<br />
+<br />
+<div id="queryTable">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Firstname</th>
+        <th>Surname</th>
+        <th>Connect</th>
+      </tr>
+    </thead>
+    <tbody>
+<!--results here-->
+  {% for result in results %}
+  <tr>
+    <td>{{result.username}}</td>
+    <td>{{result.firstname}}</td>
+    <td>{{result.surname}}</td>
+    <td>
+      <div class="btn-group">
+        <button type="button"> Connect </button>
+      </div>
+   </td>
+  </tr>
+  {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+   <br />
+
+{% endblock %}

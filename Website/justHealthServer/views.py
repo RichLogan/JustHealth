@@ -25,6 +25,15 @@ def index():
 def terms():
   return render_template('termsandconditions.html')
 
+@app.route('/search', methods=['POST', 'GET'])
+@needLogin
+def search():
+    if request.method =='POST':
+        result = searchPatientCarer()
+        result = json.loads(result)
+        return render_template ('search.html',results = result, username= session['username'])
+    return render_template('search.html',username= session['username'])
+
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
 def deactivate():
@@ -84,7 +93,7 @@ def passwordReset(payload):
 @app.route('/api/resetpassword/<payload>')
 def loadPasswordReset(payload):
   s = getSerializer()
-  try: 
+  try:
     user = s.loads(payload)
     user = str(user).strip()
   except BadSignature:
@@ -122,11 +131,11 @@ def forgotPassword():
       username = getUserFromEmail(request.form['email'])
       if username == "False":
         return render_template('login.html', type='danger', message="An account with this email address does not exist.")
-      else: 
+      else:
         sendForgotPasswordEmail(username)
         return render_template('login.html', type='success', message="An email has been sent to you containing a link, which will allow you to reset your password.")
 
-# This method is run once the form to reset the password has been submitted 
+# This method is run once the form to reset the password has been submitted
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordRedirect():
   if request.method == 'POST':
