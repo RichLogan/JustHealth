@@ -218,8 +218,11 @@ def resetPassword():
 ####
 @app.route('/api/getAccountInfo', methods=['POST'])
 def getAccountInfo():
+    getAccountInfo(request.form['username'])
+
+def getAccountInfo(username):
     result = {}
-    thisUser = request.form['username']
+    thisUser = username
     try:
       patient = Patient.get(username=thisUser)
       result['accounttype'] = "Patient"
@@ -231,23 +234,6 @@ def getAccountInfo():
       result['accounttype'] = "Carer"
       carer = Carer.get(username=request.form['username'])
       carer = Carer.select().where(Carer.username == thisUser).get()
-      result['firstname'] = str(carer.firstname).strip()
-      result['surname'] = str(carer.surname).strip()
-      return json.dumps(result)
-
-def getAccountInfo(username):
-    result = {}
-    try:
-      patient = Patient.get(username=username)
-      result['accounttype'] = "Patient"
-      patient = Patient.select().where(Patient.username == username).get()
-      result['firstname'] = str(patient.firstname).strip()
-      result['surname'] = str(patient.surname).strip()
-      return json.dumps(result)
-    except Patient.DoesNotExist:
-      result['accounttype'] = "Carer"
-      carer = Carer.get(username=request.form['username'])
-      carer = Carer.select().where(Carer.username == username).get()
       result['firstname'] = str(carer.firstname).strip()
       result['surname'] = str(carer.surname).strip()
       return json.dumps(result)
