@@ -30,6 +30,7 @@ def terms():
 def search():
     if request.method =='POST':
         result = searchPatientCarer()
+        result = json.loads(result)
         return render_template ('search.html',results = result, username= session['username'])
     return render_template('search.html',username= session['username'])
 

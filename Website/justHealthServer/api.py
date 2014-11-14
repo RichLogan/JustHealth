@@ -341,15 +341,21 @@ def searchPatientCarer():
     result = {}
     thisUser = request.form['username']
     try:
-      patient = Patient.get(username=thisUser)
-      searchTerm = "%" + request.form['searchTerm'] + "%"
-      result = Carer.select().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
-      #return json.dumps(result)
-      return result
+        patient = Patient.get(username=thisUser)
+        searchTerm = "%" + request.form['searchTerm'] + "%"
+        results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
+
+        jsonResult = []
+        for result in results:
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
 
     except Patient.DoesNotExist:
         searchTerm = "%" + request.form['searchTerm'] + "%"
-        result = Patient.select().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
-        #return json.dumps(result)
-        return result
+        results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
+
+        jsonResult = []
+        for result in results:
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
     return None
