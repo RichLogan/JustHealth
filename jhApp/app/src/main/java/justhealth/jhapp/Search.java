@@ -50,6 +50,7 @@ public class Search extends ActionBarActivity {
         search.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
+                        System.out.println("onclick");
                         searchName();
                     }
                 }
@@ -60,6 +61,7 @@ public class Search extends ActionBarActivity {
     private void searchName() {
         HashMap<String, String> searchInformation = new HashMap<String, String>();
 
+        //this is adding the username as null - INCORRECT
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
 
@@ -70,7 +72,7 @@ public class Search extends ActionBarActivity {
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
-
+        System.out.println(searchInformation);
         //assigns the HashMap to list, for post request encoding
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -85,11 +87,12 @@ public class Search extends ActionBarActivity {
             HttpResponse response = httpclient.execute(httppost);
 
             String responseString = EntityUtils.toString(response.getEntity());
-
+            System.out.print(responseString);
             JSONArray result = null;
             try {
                 JSONObject queryReturn = new JSONObject(responseString);
                 result = queryReturn.getJSONArray("jsonResult");
+                System.out.println(result);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
