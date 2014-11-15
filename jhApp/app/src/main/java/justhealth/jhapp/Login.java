@@ -71,6 +71,7 @@ public class Login extends ActionBarActivity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         requestLogin();
+                        startActivity(new Intent(Login.this, homePatient.class));
                     }
                 }
         );
@@ -110,8 +111,6 @@ public class Login extends ActionBarActivity {
                 edit.putString("username", loginInformation.get("username"));
                 edit.commit();
                 String username = account.getString("username", null);
-                System.out.println(username);
-                //Redirect
             }
             else {
                 System.out.println("Failed:");

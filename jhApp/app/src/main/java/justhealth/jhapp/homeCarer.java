@@ -27,6 +27,14 @@ public class homeCarer extends ActionBarActivity{
                     }
                 }
         );
+
+        Button search = (Button) findViewById(R.id.search);
+        settings.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(homeCarer.this, Search.class));
+                    }
+                });
     }
 }
 
