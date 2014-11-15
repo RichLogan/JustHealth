@@ -229,6 +229,7 @@ def getAccountInfo(username):
       patient = Patient.select().where(Patient.username == thisUser).get()
       result['firstname'] = str(patient.firstname).strip()
       result['surname'] = str(patient.surname).strip()
+      result['username'] = str(patient.username).strip()
       return json.dumps(result)
     except Patient.DoesNotExist:
       result['accounttype'] = "Carer"
@@ -236,6 +237,7 @@ def getAccountInfo(username):
       carer = Carer.select().where(Carer.username == thisUser).get()
       result['firstname'] = str(carer.firstname).strip()
       result['surname'] = str(carer.surname).strip()
+      result['username'] = str(carer.username).strip()
       return json.dumps(result)
 
 ####

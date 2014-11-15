@@ -28,6 +28,24 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
+
+
+
+@app.route('/profile')
+@needLogin
+def profile():
+    jsonResult = getAccountInfo(session['username'])
+    result ={}
+    result = json.loads(jsonResult)
+    username = result ['username']
+    firstname = result ['firstname']
+    surname = result ['surname']
+    accounttype = result ['accounttype']
+    if result['accounttype'] == "Patient":
+      return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname )
+    elif result['accounttype'] == "Carer":
+        return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname )
+
 @app.route('/termsandconditions')
 def terms():
   return render_template('termsandconditions.html')
