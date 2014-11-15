@@ -40,11 +40,10 @@ def profile():
     username = result ['username']
     firstname = result ['firstname']
     surname = result ['surname']
-    accounttype = result ['accounttype']
     if result['accounttype'] == "Patient":
-      return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname )
+      return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Patient' )
     elif result['accounttype'] == "Carer":
-        return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname )
+        return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Carer' )
 
 @app.route('/termsandconditions')
 def terms():
