@@ -19,7 +19,14 @@ def needLogin(f):
 @app.route('/')
 @needLogin
 def index():
-    return session['username']
+    jsonResult = getAccountInfo(session['username'])
+    result = {}
+    result = json.loads(jsonResult)
+    name = result['firstname'] + " " + result['surname']
+    if result['accounttype'] == "Patient":
+      return render_template('patienthome.html', printname = name)
+    elif result['accounttype'] == "Carer":
+      return render_template('carerhome.html', printname = name)
 
 @app.route('/termsandconditions')
 def terms():
@@ -108,15 +115,7 @@ def login():
         if result == "Authenticated":
             # Valid user, set SESSION
             session["username"] = request.form['username']
-            # Find the account type, first name, surname of the user and direct them to the relevant portal page
-            jsonResult = getAccountInfo()
-            result = {}
-            result = json.loads(jsonResult)
-            name = result['firstname'] + " " + result['surname']
-            if result['accounttype'] == "Patient":
-              return render_template('patienthome.html', printname = name)
-            elif result['accounttype'] == "Carer":
-              return render_template('carerhome.html', printname = name)
+            return redirect(url_for('index'))
         else:
             return render_template('login.html', type="danger", message = result)
     try:

@@ -218,8 +218,11 @@ def resetPassword():
 ####
 @app.route('/api/getAccountInfo', methods=['POST'])
 def getAccountInfo():
+    return getAccountInfo(request.form['username'])
+
+def getAccountInfo(username):
     result = {}
-    thisUser = request.form['username']
+    thisUser = username
     try:
       patient = Patient.get(username=thisUser)
       result['accounttype'] = "Patient"
