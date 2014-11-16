@@ -10,7 +10,7 @@ def query():
 		buildQuery = {}
 		buildQuery['iteration'] = request.form['iteration']
 
-		testsQueried = Tests.select().where(Tests.iteration == buildQuery['iteration'])
+		testsQueried = Tests.select().where(Tests.iteration == buildQuery['iteration']).order_by(Tests.testid)
 
 		return render_template('queryTests.html', tests = testsQueried)
 
