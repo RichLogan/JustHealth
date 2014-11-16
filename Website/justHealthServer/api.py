@@ -218,7 +218,7 @@ def resetPassword():
 ####
 @app.route('/api/getAccountInfo', methods=['POST'])
 def getAccountInfo():
-    getAccountInfo(request.form['username'])
+    return getAccountInfo(request.form['username'])
 
 def getAccountInfo(username):
     result = {}
