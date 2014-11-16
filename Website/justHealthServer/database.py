@@ -64,3 +64,14 @@ class Userdeactivatereason(BaseModel):
 
     class Meta:
         db_table = 'userdeactivatereason'
+
+class Connection(BaseModel):
+    code = IntegerField(null=True)
+    connectionid = PrimaryKeyField()
+    requestor = ForeignKeyField(db_column='requestor', null=True, rel_model=Client, to_field='username', related_name = 'requestor')
+    requestortype = CharField(max_length=50, null=True)
+    target = ForeignKeyField(db_column='target', null=True, rel_model=Client, to_field='username', related_name='target')
+    targettype = CharField(max_length=50, null=True)
+
+    class Meta:
+        db_table = 'connection'

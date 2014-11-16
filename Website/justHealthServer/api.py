@@ -1,12 +1,13 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from database import *
-import re
+from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
+import re
 import datetime
 import smtplib
-from itsdangerous import URLSafeSerializer, BadSignature
 import json
+import random
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -222,7 +223,7 @@ def getAccountInfo():
 
 def getAccountInfo(username):
     result = {}
-    thisUser = username
+    thisUser = str(username)
     try:
       patient = Patient.get(username=thisUser)
       result['accounttype'] = "Patient"
@@ -232,11 +233,12 @@ def getAccountInfo(username):
       return json.dumps(result)
     except Patient.DoesNotExist:
       result['accounttype'] = "Carer"
-      carer = Carer.get(username=request.form['username'])
+      carer = Carer.get(username=thisUser)
       carer = Carer.select().where(Carer.username == thisUser).get()
       result['firstname'] = str(carer.firstname).strip()
       result['surname'] = str(carer.surname).strip()
       return json.dumps(result)
+    return None
 
 ####
 # Account Helper Functions
@@ -361,4 +363,56 @@ def searchPatientCarer():
         for result in results:
             jsonResult.append(result)
         return json.dumps(jsonResult)
+    return None
+####
+# Client/Client relationships
+####
+@app.route('/api/createConnection', methods=['POST', 'GET'])
+def createConnection():
+
+    #TODO handle existing entries
+
+    # Get users
+    currentUser = request.form['username']
+    targetUser = request.form['target']
+
+    # Get user types
+    currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
+    targetUser_type = json.loads(getAccountInfo(targetUser))['accounttype']
+
+    # Generate 4 digit code
+    x = ""
+    for n in range(0,4):
+        x += str(random.randrange(1,9))
+    x = int(x)
+
+    # Insert into Connection table
+    newConnection = Connection.insert(
+        code = x,
+        requestor = currentUser,
+        requestortype = currentUser_type,
+        target = targetUser,
+        targettype = targetUser_type
+    )
+    newConnection.execute()
+    return "Connection created"
+
+@app.route('/api/completeConnection', methods=['POST', 'GET'])
+def completeConnection():
+    #Take attempted code, match with a entry where they are target
+    target = request.form['username']
+    requestor = request.form['requestor']
+    attemptedCode = int(request.form['codeattempt'])
+
+    # get record
+    instance = Connection.select().where(Connection.requestor == requestor and Connection.target == target).get()
+    if instance.code == attemptedCode:
+        # Correct attempt, establish relationship in correct table
+        # TODO place into relationship table
+
+        # Delete this Connection instance
+        instance.delete_instance()
+        return "Correct Code"
+    else:
+        return "Incorrect Code"
     return None
