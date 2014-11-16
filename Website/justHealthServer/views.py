@@ -19,11 +19,27 @@ def needLogin(f):
 @app.route('/')
 @needLogin
 def index():
-    return session['username']
+    jsonResult = getAccountInfo(session['username'])
+    result = {}
+    result = json.loads(jsonResult)
+    name = result['firstname'] + " " + result['surname']
+    if result['accounttype'] == "Patient":
+      return render_template('patienthome.html', printname = name)
+    elif result['accounttype'] == "Carer":
+      return render_template('carerhome.html', printname = name)
 
 @app.route('/termsandconditions')
 def terms():
   return render_template('termsandconditions.html')
+
+@app.route('/search', methods=['POST', 'GET'])
+@needLogin
+def search():
+    if request.method =='POST':
+        result = searchPatientCarer()
+        result = json.loads(result)
+        return render_template ('search.html',results = result, username= session['username'])
+    return render_template('search.html',username= session['username'])
 
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
@@ -84,7 +100,7 @@ def passwordReset(payload):
 @app.route('/api/resetpassword/<payload>')
 def loadPasswordReset(payload):
   s = getSerializer()
-  try: 
+  try:
     user = s.loads(payload)
     user = str(user).strip()
   except BadSignature:
@@ -99,15 +115,7 @@ def login():
         if result == "Authenticated":
             # Valid user, set SESSION
             session["username"] = request.form['username']
-            # Find the account type, first name, surname of the user and direct them to the relevant portal page
-            jsonResult = getAccountInfo()
-            result = {}
-            result = json.loads(jsonResult)
-            name = result['firstname'] + " " + result['surname']
-            if result['accounttype'] == "Patient":
-              return render_template('patienthome.html', printname = name)
-            elif result['accounttype'] == "Carer":
-              return render_template('carerhome.html', printname = name)
+            return redirect(url_for('index'))
         else:
             return render_template('login.html', type="danger", message = result)
     try:
@@ -122,11 +130,11 @@ def forgotPassword():
       username = getUserFromEmail(request.form['email'])
       if username == "False":
         return render_template('login.html', type='danger', message="An account with this email address does not exist.")
-      else: 
+      else:
         sendForgotPasswordEmail(username)
         return render_template('login.html', type='success', message="An email has been sent to you containing a link, which will allow you to reset your password.")
 
-# This method is run once the form to reset the password has been submitted 
+# This method is run once the form to reset the password has been submitted
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordRedirect():
   if request.method == 'POST':
