@@ -50,6 +50,7 @@ public class Search extends ActionBarActivity {
         search.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
+                        System.out.println("onclick");
                         searchName();
                     }
                 }
@@ -60,8 +61,11 @@ public class Search extends ActionBarActivity {
     private void searchName() {
         HashMap<String, String> searchInformation = new HashMap<String, String>();
 
+        //this is adding the username as null - INCORRECT
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
+        //todo remove this line
+        System.out.println(username);
 
         //add search to HashMap
         searchInformation.put("username", username);
@@ -70,7 +74,7 @@ public class Search extends ActionBarActivity {
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
-
+        System.out.println(searchInformation);
         //assigns the HashMap to list, for post request encoding
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -85,16 +89,16 @@ public class Search extends ActionBarActivity {
             HttpResponse response = httpclient.execute(httppost);
 
             String responseString = EntityUtils.toString(response.getEntity());
-
-            JSONArray result = null;
+            System.out.print(responseString);
+            JSONArray queryReturn = null;
             try {
-                JSONObject queryReturn = new JSONObject(responseString);
-                result = queryReturn.getJSONArray("jsonResult");
+                queryReturn = new JSONArray(responseString);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            printTable(result);
+            System.out.print(queryReturn);
+            printTable(queryReturn);
 
         } catch (ClientProtocolException e) {
             //TODO Auto-generated catch block
@@ -103,12 +107,13 @@ public class Search extends ActionBarActivity {
         }
     }
 
-    private void printTable(JSONArray result) {
-        for (int i = 0; i < result.length(); i++) {
+    private void printTable(JSONArray array) {
+        for (int i = 0; i < array.length(); i++) {
             try {
-                JSONObject obj = result.getJSONObject(i);
+                JSONObject obj = array.getJSONObject(i);
+                System.out.println(obj);
                 String resultUsername = obj.getString("username");
-                String resultFirstName = obj.getString("firstName");
+                String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 
                 TableLayout searchTable = (TableLayout)findViewById(R.id.searchTable);
@@ -124,9 +129,9 @@ public class Search extends ActionBarActivity {
                 forSurname.setText(resultSurname);
 
                 //add the views to the row
-                row.addView(forUsername);
-                row.addView(forFirstName);
                 row.addView(forSurname);
+                row.addView(forFirstName);
+                row.addView(forUsername);
 
                 searchTable.addView(row,i);
             } catch (JSONException e) {

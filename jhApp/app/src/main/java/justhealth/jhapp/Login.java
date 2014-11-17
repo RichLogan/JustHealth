@@ -111,6 +111,8 @@ public class Login extends ActionBarActivity {
                 edit.putString("username", loginInformation.get("username"));
                 edit.commit();
                 String username = account.getString("username", null);
+                //todo remove this line
+                System.out.println("login, added username to shared preferences: " + username);
             }
             else {
                 System.out.println("Failed:");
