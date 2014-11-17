@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 /**
  * Created by charlottehutchinson on 04/11/14.
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 
 
-    public class homePatient extends ActionBarActivity{
+    public class HomePatient extends ActionBarActivity{
 
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -23,7 +22,7 @@ import android.widget.TextView;
             settings.setOnClickListener(
                     new Button.OnClickListener() {
                         public void onClick(View view) {
-                            startActivity(new Intent(homePatient.this,homePatient.class));
+                            startActivity(new Intent(HomePatient.this,HomePatient.class));
                         }
                     }
             );
