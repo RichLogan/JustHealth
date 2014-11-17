@@ -1,6 +1,8 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
@@ -108,6 +110,40 @@ public class Search extends ActionBarActivity {
     }
 
     private void printTable(JSONArray array) {
+        TableLayout searchTable = (TableLayout)findViewById(R.id.searchTable);
+        //create heading row
+        TableRow head = new TableRow(this);
+        //add properties to the header row
+        head.setBackgroundColor(Color.BLUE);
+        head.setLayoutParams(new ActionBar.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+        ));
+
+        //create the headings of the table
+        TextView headingUsername = new TextView(this);
+        headingUsername.setTextColor(Color.WHITE);
+        headingUsername.setPadding(5, 5, 5, 5);
+
+        TextView headingFirstName = new TextView(this);
+        headingUsername.setTextColor(Color.WHITE);
+        headingUsername.setPadding(5, 5, 5, 5);
+
+        TextView headingSurname = new TextView(this);
+        headingUsername.setTextColor(Color.WHITE);
+        headingUsername.setPadding(5, 5, 5, 5);
+
+        headingUsername.setText("Username");
+        headingFirstName.setText("First Name");
+        headingSurname.setText("Surname");
+
+        //add the headings to the row
+        head.addView(headingUsername);
+        head.addView(headingFirstName);
+        head.addView(headingSurname);
+        searchTable.addView(head, 0);
+
+
         for (int i = 0; i < array.length(); i++) {
             try {
                 JSONObject obj = array.getJSONObject(i);
@@ -116,7 +152,7 @@ public class Search extends ActionBarActivity {
                 String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 
-                TableLayout searchTable = (TableLayout)findViewById(R.id.searchTable);
+
                 TableRow row = new TableRow(this);
                 //add username to TextView
                 TextView forUsername = new TextView(this);
@@ -129,11 +165,11 @@ public class Search extends ActionBarActivity {
                 forSurname.setText(resultSurname);
 
                 //add the views to the row
-                row.addView(forSurname);
-                row.addView(forFirstName);
                 row.addView(forUsername);
+                row.addView(forFirstName);
+                row.addView(forSurname);
 
-                searchTable.addView(row,i);
+                searchTable.addView(row,i+1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

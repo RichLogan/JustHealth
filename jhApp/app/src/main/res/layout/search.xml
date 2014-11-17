@@ -62,24 +62,6 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp">
-                <TableRow>
-                    <TextView
-                        android:text="Username"
-                        android:padding="10dip"
-                        android:layout_gravity="center_horizontal" />
-                    <TextView
-                        android:text="First Name"
-                        android:padding="10dip"
-                        android:layout_gravity="center_horizontal" />
-                    <TextView
-                        android:text="Surname"
-                        android:padding="10dip"
-                        android:layout_gravity="center_horizontal" />
-                    <TextView
-                        android:text="Connect"
-                        android:padding="10dip"
-                        android:layout_gravity="center_horizontal" />
-                </TableRow>
             </TableLayout>
         </LinearLayout>
     </LinearLayout>
