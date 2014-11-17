@@ -30,21 +30,19 @@ def index():
 
 
 
-
+"""Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
     jsonResult = getAccountInfo(session['username'])
     result ={}
     result = json.loads(jsonResult)
-    username = result ['username']
-    firstname = result ['firstname']
-    surname = result ['surname']
     if result['accounttype'] == "Patient":
-      return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Patient' )
+      return render_template('profile.html', result=result, printaccounttype = 'Patient')
     elif result['accounttype'] == "Carer":
         return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Carer' )
 
+"""terms and conditions page link"""
 @app.route('/termsandconditions')
 def terms():
   return render_template('termsandconditions.html')

@@ -15,28 +15,28 @@
         <div class="col-md-6 col-lg-6 ">
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3>{{printusername}}</h3>
+              <h3>{{result.username}}</h3>
             </div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
-                <div class=" col-md-5 col-lg-7 ">
+                <div class=" col-md-10 col-lg-8 ">
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
                         <td>Firstname:</td>
-                        <td>{{printfirstname}}</td>
+                        <td>{{result.firstname}}</td>
                       </tr>
                       <tr>
                         <td>Surname:</td>
-                        <td>{{printsurname}}</td>
+                        <td>{{result.surname}}</td>
                       </tr>
                       <tr>
                         <td>Date of Birth:</td>
-                        <td></td>
+                        <td>{{result.dob}}</td>
                       </tr>
                         <td>Gender:</td>
-                        <td>{{printgender}}</td>
+                        <td>{{result.gender}}</td>
                       </tr>
                         <tr>
                         <td>Account Type:</td>
@@ -44,7 +44,7 @@
                       </tr>
                       <tr>
                         <td>Email:</td>
-                        <td></td>
+                        <td>{{result.email}}</td>
                       </tr>
                         <td></td>
                         <td></td>
