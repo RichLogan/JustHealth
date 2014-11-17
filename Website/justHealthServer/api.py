@@ -369,12 +369,18 @@ def searchPatientCarer():
 ####
 @app.route('/api/createConnection', methods=['POST', 'GET'])
 def createConnection():
-
-    #TODO handle existing entries
-
     # Get users
     currentUser = request.form['username']
     targetUser = request.form['target']
+
+    #Handle existing entries. Need to check all == 0
+    with database.database.transaction():
+        Relationship.select().where(Relationship.requestor == currentUser and Relationship.target == targetUser).count()
+        Relationship.select().where(Relationship.requestor == targetUser and Relationship.target == currentUser).count()
+        Patientcarer.select().where(Patientcarer.patient == currentUser and Patientcarer.carer == targetUser).count()
+        Patientcarer.select().where(Patientcarer.patient == targetUser and Patientcarer.carer == currentUser).count()
+    return "Connection already established"
+
 
     # Get user types
     currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
