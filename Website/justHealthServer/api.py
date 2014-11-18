@@ -217,26 +217,43 @@ def resetPassword():
 ####
 # Get account type
 ####
+
 @app.route('/api/getAccountInfo', methods=['POST'])
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
+"""Get Account information from client and patient/carer table"""
 def getAccountInfo(username):
     result = {}
     thisUser = str(username)
     try:
       patient = Patient.get(username=thisUser)
+      user = Patient.select().join(Client).where(Client.username==thisUser).get()
       result['accounttype'] = "Patient"
-      patient = Patient.select().where(Patient.username == thisUser).get()
-      result['firstname'] = str(patient.firstname).strip()
-      result['surname'] = str(patient.surname).strip()
+      result['firstname'] = str(user.firstname)
+      result['surname'] = str(user.surname)
+      result['username'] = str(user.username.username)
+      result['email'] = str(user.username.email)
+      result['dob'] = str(user.username.dob)
+      if user.ismale:
+        result['gender'] = 'Male'
+      else:
+        result['gender'] ='Female'
+
       return json.dumps(result)
     except Patient.DoesNotExist:
       result['accounttype'] = "Carer"
       carer = Carer.get(username=thisUser)
-      carer = Carer.select().where(Carer.username == thisUser).get()
-      result['firstname'] = str(carer.firstname).strip()
-      result['surname'] = str(carer.surname).strip()
+      user = Carer.select().join(Client).where(Client.username==thisUser).get()
+      result['firstname'] = str(user.firstname)
+      result['surname'] = str(user.surname)
+      result['username'] = str(user.username.username)
+      result['email'] = str(user.username.email)
+      result['dob'] = str(user.username.dob)
+      if user.ismale:
+        result['gender'] = 'Male'
+      else:
+        result['gender'] ='Female'
       return json.dumps(result)
     return None
 
