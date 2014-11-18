@@ -74,7 +74,7 @@ class Relationship(BaseModel):
     targettype = CharField(max_length=50, null=True)
 
     class Meta:
-        db_table = 'connection'
+        db_table = 'relationship'
 
 class Patientcarer(BaseModel):
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carer')
