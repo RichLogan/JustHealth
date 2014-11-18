@@ -40,9 +40,11 @@
     <td>{{result.firstname}}</td>
     <td>{{result.surname}}</td>
     <td>
-      <div class="btn-group">
-        <button type="button"> Connect </button>
-      </div>
+      <form name="connect" action="/api/createConnection" method="POST">
+        <input name="username" type="hidden" value="{{username}}">
+        <input name="target" type="hidden" value="{{result.username}}">
+        <input type="submit" class="btn btn-default" value="Connect">
+      </form>
    </td>
   </tr>
   {% endfor %}
