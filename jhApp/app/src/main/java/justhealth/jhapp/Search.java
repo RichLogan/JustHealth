@@ -203,25 +203,25 @@ public class Search extends ActionBarActivity {
 
 
     private void connectUsers(String targetUser) {
-        HashMap<String, String> searchInformation = new HashMap<String, String>();
+        HashMap<String, String> connectRequest = new HashMap<String, String>();
 
         //this is adding the username as null - INCORRECT
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
 
         //add search to HashMap
-        searchInformation.put("username", username);
-        searchInformation.put("target", targetUser);
+        connectRequest.put("username", username);
+        connectRequest.put("target", targetUser);
 
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/createConnection");
-        System.out.println(searchInformation);
+        System.out.println(connectRequest);
         //assigns the HashMap to list, for post request encoding
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
-            Set<Map.Entry<String, String>> detailsSet = searchInformation.entrySet();
+            Set<Map.Entry<String, String>> detailsSet = connectRequest.entrySet();
             for (Map.Entry<String, String> string : detailsSet) {
                 nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
             }
@@ -230,7 +230,7 @@ public class Search extends ActionBarActivity {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             String responseString = EntityUtils.toString(response.getEntity());
-            System.out.print(responseString);
+            System.out.println(responseString);
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();
