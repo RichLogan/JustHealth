@@ -16,12 +16,14 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username,password):
-    if session['username'] != None:
+    try:
+        session['username']
         return True
-    if Client.select().where(Client.username == username).count() == 0:
-        return False
-    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
-    return sha256_crypt.verify(password, hashedPassword)
+    except:
+        if Client.select().where(Client.username == username).count() == 0:
+            return False
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
+        return sha256_crypt.verify(password, hashedPassword)
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -404,6 +406,7 @@ def searchPatientCarer():
 # Client/Client relationships
 ####
 @app.route('/api/createConnection', methods=['POST', 'GET'])
+@auth.login_required
 def createConnection():
     """Creates an initial connection between two users. POST [username, target]"""
     # Get users
@@ -443,6 +446,7 @@ def createConnection():
     return str(x)
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
+@auth.login_required
 def completeConnection():
     """Verify an inputed code to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
     #Take attempted code, match with a entry where they are target
