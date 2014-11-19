@@ -8,6 +8,20 @@ import smtplib
 from itsdangerous import URLSafeSerializer, BadSignature
 import json
 
+from flask.ext.httpauth import HTTPBasicAuth
+
+# API Authentication
+auth = HTTPBasicAuth()
+
+@auth.verify_password
+def verify_password(username,password):
+    if session['username'] != None:
+        return True
+    if Client.select().where(Client.username == username).count() == 0:
+        return False
+    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
+    return sha256_crypt.verify(password, hashedPassword)
+
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
     # Build User Registration
@@ -127,6 +141,7 @@ def authenticate():
     return "Something went wrong!"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
+@auth.login_required
 def deactivateAccount():
     try:
         username = request.form['username']
@@ -171,6 +186,7 @@ def deactivateAccount():
         return "Kept"
 
 @app.route('/api/resetpassword', methods=['POST'])
+@auth.login_required
 def resetPassword():
     try:
         profile = {}
@@ -217,6 +233,7 @@ def resetPassword():
 # Get account type
 ####
 @app.route('/api/getAccountInfo', methods=['POST'])
+@auth.login_required
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
@@ -339,6 +356,7 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
+@auth.login_required
 def searchPatientCarer():
     #get username, firstname and surname of current user
     result = {}
