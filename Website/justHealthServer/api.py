@@ -1,12 +1,13 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from database import *
-import re
+from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
+import re
 import datetime
 import smtplib
-from itsdangerous import URLSafeSerializer, BadSignature
 import json
+import random
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -216,27 +217,45 @@ def resetPassword():
 ####
 # Get account type
 ####
+
 @app.route('/api/getAccountInfo', methods=['POST'])
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
+"""Get Account information from client and patient/carer table"""
 def getAccountInfo(username):
     result = {}
-    thisUser = username
+    thisUser = str(username)
     try:
       patient = Patient.get(username=thisUser)
+      user = Patient.select().join(Client).where(Client.username==thisUser).get()
       result['accounttype'] = "Patient"
-      patient = Patient.select().where(Patient.username == thisUser).get()
-      result['firstname'] = str(patient.firstname).strip()
-      result['surname'] = str(patient.surname).strip()
+      result['firstname'] = str(user.firstname)
+      result['surname'] = str(user.surname)
+      result['username'] = str(user.username.username)
+      result['email'] = str(user.username.email)
+      result['dob'] = str(user.username.dob)
+      if user.ismale:
+        result['gender'] = 'Male'
+      else:
+        result['gender'] ='Female'
+
       return json.dumps(result)
     except Patient.DoesNotExist:
       result['accounttype'] = "Carer"
-      carer = Carer.get(username=request.form['username'])
-      carer = Carer.select().where(Carer.username == thisUser).get()
-      result['firstname'] = str(carer.firstname).strip()
-      result['surname'] = str(carer.surname).strip()
+      carer = Carer.get(username=thisUser)
+      user = Carer.select().join(Client).where(Client.username==thisUser).get()
+      result['firstname'] = str(user.firstname)
+      result['surname'] = str(user.surname)
+      result['username'] = str(user.username.username)
+      result['email'] = str(user.username.email)
+      result['dob'] = str(user.username.dob)
+      if user.ismale:
+        result['gender'] = 'Male'
+      else:
+        result['gender'] ='Female'
       return json.dumps(result)
+    return None
 
 ####
 # Account Helper Functions
@@ -340,6 +359,7 @@ def sendPasswordResetEmail(username):
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
 def searchPatientCarer():
+    """Searches database for a user that can be connected to. POST [username, searchTerm]"""
     #get username, firstname and surname of current user
     result = {}
     thisUser = request.form['username']
@@ -361,4 +381,81 @@ def searchPatientCarer():
         for result in results:
             jsonResult.append(result)
         return json.dumps(jsonResult)
+    return None
+####
+# Client/Client relationships
+####
+@app.route('/api/createConnection', methods=['POST', 'GET'])
+def createConnection():
+    """Creates an initial connection between two users. POST [username, target]"""
+    # Get users
+    currentUser = request.form['username']
+    targetUser = request.form['target']
+
+    #Handle existing entries. Need to check all == 0
+    with database.transaction():
+        if Relationship.select().where(Relationship.requestor == currentUser and Relationship.target == targetUser).count() != 0:
+            return "Connection already established"
+        if Relationship.select().where(Relationship.requestor == targetUser and Relationship.target == currentUser).count() != 0:
+            return "Connection already established"
+        if Patientcarer.select().where(Patientcarer.patient == currentUser and Patientcarer.carer == targetUser).count() != 0:
+            return "Connection already established"
+        if Patientcarer.select().where(Patientcarer.patient == targetUser and Patientcarer.carer == currentUser).count() != 0:
+            return "Connection already established"
+
+    # Get user types
+    currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
+    targetUser_type = json.loads(getAccountInfo(targetUser))['accounttype']
+
+    # Generate 4 digit code
+    x = ""
+    for n in range(0,4):
+        x += str(random.randrange(1,9))
+    x = int(x)
+
+    # Insert into Connection table
+    newConnection = Relationship.insert(
+        code = x,
+        requestor = currentUser,
+        requestortype = currentUser_type,
+        target = targetUser,
+        targettype = targetUser_type
+    )
+    newConnection.execute()
+    return str(x)
+
+@app.route('/api/completeConnection', methods=['POST', 'GET'])
+def completeConnection():
+    """Verify an inputed code to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
+    #Take attempted code, match with a entry where they are target
+    target = request.form['username']
+    requestor = request.form['requestor']
+    attemptedCode = int(request.form['codeattempt'])
+
+    # get record
+    instance = Relationship.select().where(Relationship.requestor == requestor and Relationship.target == target).get()
+    if instance.code == attemptedCode:
+        # Correct attempt, establish relationship in correct table
+        # TODO place into relationship table
+        requestor_accountType = json.loads(getAccountInfo(requestor))['accounttype']
+        target_accountType = json.loads(getAccountInfo(target))['accounttype']
+
+        if requestor_accountType == "Patient" and target_accountType == "Carer":
+            newRelationship = Patientcarer.insert(
+                patient = requestor,
+                carer = target
+            )
+            newRelationship.execute()
+        elif requestor_accountType == "Carer" and target_accountType == "Patient":
+            newRelationship = Patientcarer.insert(
+                patient = target,
+                carer = requestor
+            )
+            newRelationship.execute()
+
+        # Delete this Relationship instance
+        instance.delete_instance()
+        return "Correct"
+    else:
+        return "Incorrect"
     return None

@@ -28,6 +28,21 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
+
+
+"""Profile page to display all current users details"""
+@app.route('/profile')
+@needLogin
+def profile():
+    jsonResult = getAccountInfo(session['username'])
+    result ={}
+    result = json.loads(jsonResult)
+    if result['accounttype'] == "Patient":
+      return render_template('profile.html', result=result, printaccounttype = 'Patient')
+    elif result['accounttype'] == "Carer":
+        return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Carer' )
+
+"""terms and conditions page link"""
 @app.route('/termsandconditions')
 def terms():
   return render_template('termsandconditions.html')
