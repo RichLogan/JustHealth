@@ -189,7 +189,6 @@ def deactivateAccount():
         return "Kept"
 
 @app.route('/api/resetpassword', methods=['POST'])
-@auth.login_required
 def resetPassword():
     try:
         profile = {}
