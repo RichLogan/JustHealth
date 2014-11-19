@@ -1,14 +1,17 @@
 package justhealth.jhapp;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -110,15 +113,12 @@ public class Search extends ActionBarActivity {
     }
 
     private void printTable(JSONArray array) {
-        TableLayout searchTable = (TableLayout)findViewById(R.id.searchTable);
+        TableLayout searchTable = (TableLayout) findViewById(R.id.searchTable);
+        searchTable.removeAllViews();
         //create heading row
         TableRow head = new TableRow(this);
         //add properties to the header row
-        head.setBackgroundColor(Color.BLUE);
-        head.setLayoutParams(new ActionBar.LayoutParams(
-                TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-        ));
+        head.setBackgroundColor(getResources().getColor(R.color.header));
 
         //create the headings of the table
         TextView headingUsername = new TextView(this);
@@ -126,21 +126,27 @@ public class Search extends ActionBarActivity {
         headingUsername.setPadding(5, 5, 5, 5);
 
         TextView headingFirstName = new TextView(this);
-        headingUsername.setTextColor(Color.WHITE);
-        headingUsername.setPadding(5, 5, 5, 5);
+        headingFirstName.setTextColor(Color.WHITE);
+        headingFirstName.setPadding(5, 5, 5, 5);
 
         TextView headingSurname = new TextView(this);
-        headingUsername.setTextColor(Color.WHITE);
-        headingUsername.setPadding(5, 5, 5, 5);
+        headingSurname.setTextColor(Color.WHITE);
+        headingSurname.setPadding(5, 5, 5, 5);
+
+        TextView headingAction = new TextView(this);
+        headingAction.setTextColor(Color.WHITE);
+        headingAction.setPadding(5, 5, 5, 5);
 
         headingUsername.setText("Username");
         headingFirstName.setText("First Name");
         headingSurname.setText("Surname");
+        headingAction.setText("Action");
 
         //add the headings to the row
         head.addView(headingUsername);
         head.addView(headingFirstName);
         head.addView(headingSurname);
+        head.addView(headingAction);
         searchTable.addView(head, 0);
 
 
@@ -148,7 +154,7 @@ public class Search extends ActionBarActivity {
             try {
                 JSONObject obj = array.getJSONObject(i);
                 System.out.println(obj);
-                String resultUsername = obj.getString("username");
+                final String resultUsername = obj.getString("username");
                 String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 
@@ -163,16 +169,75 @@ public class Search extends ActionBarActivity {
                 //add surname to TextView
                 TextView forSurname = new TextView(this);
                 forSurname.setText(resultSurname);
+                //add connect button
+                Button connect = new Button(this);
+                connect.setText("Connect");
+                connect.setTextColor(Color.WHITE);
+                connect.setBackgroundColor(getResources().getColor(R.color.header));
+                connect.setPadding(5, 5, 5, 5);
+                connect.setOnClickListener(connectOnClick(connect, resultUsername));
 
                 //add the views to the row
                 row.addView(forUsername);
                 row.addView(forFirstName);
                 row.addView(forSurname);
+                row.addView(connect);
 
-                searchTable.addView(row,i+1);
+                searchTable.addView(row, i + 1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    View.OnClickListener connectOnClick(final Button button, final String targetUsername) {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                connectUsers(targetUsername);
+                button.setText("Connection Requested");
+                button.setTextSize(11);
+                button.setClickable(false);
+            }
+        };
+    }
+
+
+    private void connectUsers(String targetUser) {
+        HashMap<String, String> searchInformation = new HashMap<String, String>();
+
+        //this is adding the username as null - INCORRECT
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+
+        //add search to HashMap
+        searchInformation.put("username", username);
+        searchInformation.put("target", targetUser);
+
+        //Create new HttpClient and Post Header
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/createConnection");
+        System.out.println(searchInformation);
+        //assigns the HashMap to list, for post request encoding
+        try {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+            Set<Map.Entry<String, String>> detailsSet = searchInformation.entrySet();
+            for (Map.Entry<String, String> string : detailsSet) {
+                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
+            }
+
+            //pass the list to the post request
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            String responseString = EntityUtils.toString(response.getEntity());
+            System.out.print(responseString);
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
