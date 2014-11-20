@@ -230,10 +230,10 @@ def getAccountInfo(username):
       patient = Patient.get(username=thisUser)
       user = Patient.select().join(Client).where(Client.username==thisUser).get()
       result['accounttype'] = "Patient"
-      result['firstname'] = str(user.firstname)
-      result['surname'] = str(user.surname)
-      result['username'] = str(user.username.username)
-      result['email'] = str(user.username.email)
+      result['firstname'] = user.firstname
+      result['surname'] = user.surname
+      result['username'] = user.username.username
+      result['email'] = user.username.email
       result['dob'] = str(user.username.dob)
       if user.ismale:
         result['gender'] = 'Male'
@@ -245,10 +245,10 @@ def getAccountInfo(username):
       result['accounttype'] = "Carer"
       carer = Carer.get(username=thisUser)
       user = Carer.select().join(Client).where(Client.username==thisUser).get()
-      result['firstname'] = str(user.firstname)
-      result['surname'] = str(user.surname)
-      result['username'] = str(user.username.username)
-      result['email'] = str(user.username.email)
+      result['firstname'] = user.firstname
+      result['surname'] = user.surname
+      result['username'] = user.username.username
+      result['email'] = user.username.email
       result['dob'] = str(user.username.dob)
       if user.ismale:
         result['gender'] = 'Male'
@@ -459,3 +459,71 @@ def completeConnection():
     else:
         return "Incorrect"
     return None
+
+@app.route('/api/getConnections', methods=['POST'])
+def getConnections():
+    return getConnections(request.form['username'])
+
+def getConnections(username):
+    accountType = json.loads(getAccountInfo(username))['accounttype']
+    user = Client.select().where(Client.username==username).get()
+
+    outgoingConnections = Relationship.select().where(Relationship.requestor == user)
+    incomingConnections = Relationship.select().where(Relationship.target == user)
+
+    completedConnections = {}
+    if accountType == "Patient":
+        completedConnections = Patientcarer.select().where(Patientcarer.patient == user)
+    elif accountType == "Carer":
+        completedConnections = Patientcarer.select().where(Patientcarer.carer == user)
+    else:
+        completedConnections = None
+
+    #username, firstname, surname, accountype
+    outgoingConnectionsDetails = []
+    for connection in outgoingConnections:
+        person = {}
+        details = json.loads(getAccountInfo(connection.target.username))
+        person['username'] = details['username']
+        person['firstname'] = details['firstname']
+        person['surname'] = details['surname']
+        person['accounttype'] = details['accounttype']
+        outgoingConnectionsDetails.append(person)
+    outgoingFinal = json.dumps(outgoingConnectionsDetails)
+
+    incomingConnectionsDetails = []
+    for connection in incomingConnections:
+        person = {}
+        details = json.loads(getAccountInfo(connection.requestor.username))
+        person['username'] = details['username']
+        person['firstname'] = details['firstname']
+        person['surname'] = details['surname']
+        person['accounttype'] = details['accounttype']
+        incomingConnectionsDetails.append(person)
+    incomingFinal = json.dumps(incomingConnectionsDetails)
+
+    completedConnectionsDetails = []
+    for connection in completedConnectionsDetails:
+        person = {}
+        details = {}
+
+        if accountType == "Patient":
+            details = json.loads(getAccountInfo(connection.carer.username))
+        elif accountType == "Carer":
+            details = json.loads(getAccountInfo(connection.patient.username))
+        else:
+            details = None
+
+        person['username'] = details['username']
+        person['firstname'] = details['firstname']
+        person['surname'] = details['surname']
+        person['accounttype'] = details['accounttype']
+        completedConnectionsDetails.append(person)
+    completedFinal = json.dumps(completedConnectionsDetails)
+
+    result = {}
+    result['outgoing'] = outgoingFinal
+    result['incoming'] = incomingFinal
+    result['completed'] = completedFinal
+
+    return json.dumps(result)
