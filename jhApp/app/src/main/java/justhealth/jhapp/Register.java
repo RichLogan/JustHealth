@@ -22,6 +22,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.HttpResponse;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class Register extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
-        Button registerButton = (Button)findViewById(R.id.register);
+        Button registerButton = (Button) findViewById(R.id.register);
         registerButton = (Button) findViewById(R.id.register);
         registerButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -60,7 +61,7 @@ public class Register extends ActionBarActivity {
 //               }
 //        );
 
-        TextView forgotPassword = (TextView)findViewById(R.id.link_to_forgot_password);
+        TextView forgotPassword = (TextView) findViewById(R.id.link_to_forgot_password);
         forgotPassword.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -92,7 +93,7 @@ public class Register extends ActionBarActivity {
         details.put("ismale", ismale.toString());
 
         //Account Type
-        final Spinner accountTypeSpinner = (Spinner)findViewById((R.id.accountType));
+        final Spinner accountTypeSpinner = (Spinner) findViewById((R.id.accountType));
         final String accountType = String.valueOf(accountTypeSpinner.getSelectedItem());
         details.put("accounttype", accountType.toLowerCase());
 
@@ -109,8 +110,7 @@ public class Register extends ActionBarActivity {
             details.put("terms", "on");
 
             post(details);
-        }
-        else {
+        } else {
             //Ts and cs not accepted
         }
     }

@@ -27,7 +27,6 @@ Are you sure you want to deactivate dialog
 */
 
 
-
 //need a popup to appear when user clicks on 'why should we keep your data'
 
 }

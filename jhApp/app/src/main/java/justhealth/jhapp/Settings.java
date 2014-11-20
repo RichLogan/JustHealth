@@ -16,7 +16,7 @@ public class Settings extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
-        Button deactivate = (Button)findViewById(R.id.deactivate);
+        Button deactivate = (Button) findViewById(R.id.deactivate);
         deactivate.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {

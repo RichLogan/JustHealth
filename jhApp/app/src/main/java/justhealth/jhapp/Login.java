@@ -38,7 +38,7 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        TextView register = (TextView)findViewById(R.id.link_to_forgot_password);
+        TextView register = (TextView) findViewById(R.id.link_to_forgot_password);
         register.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -47,7 +47,7 @@ public class Login extends ActionBarActivity {
                 }
         );
 
-        TextView forgotPassword = (TextView)findViewById(R.id.link_to_register);
+        TextView forgotPassword = (TextView) findViewById(R.id.link_to_register);
         forgotPassword.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -56,7 +56,7 @@ public class Login extends ActionBarActivity {
                 }
         );
 
-        TextView terms = (TextView)findViewById(R.id.link_to_terms);
+        TextView terms = (TextView) findViewById(R.id.link_to_terms);
         terms.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -65,7 +65,7 @@ public class Login extends ActionBarActivity {
                 }
         );
 
-        Button loginButton = (Button)findViewById(R.id.login);
+        Button loginButton = (Button) findViewById(R.id.login);
         loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class Login extends ActionBarActivity {
         );
     }
 
-    private void requestLogin(){
+    private void requestLogin() {
         HashMap<String, String> loginInformation = new HashMap<String, String>();
 
         //add username to HashMap
@@ -94,7 +94,7 @@ public class Login extends ActionBarActivity {
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
-            Set<Map.Entry<String,String>> detailsSet = loginInformation.entrySet();
+            Set<Map.Entry<String, String>> detailsSet = loginInformation.entrySet();
             for (Map.Entry<String, String> string : detailsSet) {
                 nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
             }
@@ -115,16 +115,15 @@ public class Login extends ActionBarActivity {
                 String username = account.getString("username", null);
                 //todo remove this line
                 System.out.println("login, added username to shared preferences: " + username);
-            }
-            else {
+            } else {
                 System.out.println("Failed:");
                 System.out.println(responseStr);
 
                 //Check if the Layout already exists
-                LinearLayout alert = (LinearLayout)findViewById(R.id.alertMessage);
-                if(alert == null){
+                LinearLayout alert = (LinearLayout) findViewById(R.id.alertMessage);
+                if (alert == null) {
                     //Insert the alert message
-                    LinearLayout insertAlert = (LinearLayout)findViewById(R.id.insertAlert);
+                    LinearLayout insertAlert = (LinearLayout) findViewById(R.id.insertAlert);
                     View insertAlertView = getLayoutInflater().inflate(R.layout.alert_message, insertAlert, false);
                     insertAlert.addView(insertAlertView);
                 }
@@ -132,11 +131,9 @@ public class Login extends ActionBarActivity {
                 TextView myTextView = (TextView) findViewById(R.id.alertText);
                 myTextView.setText(responseStr);
             }
-        }
-        catch (ClientProtocolException e) {
+        } catch (ClientProtocolException e) {
             //TODO Auto-generated catch block
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //TODO Auto-generated catch block
         }
 

@@ -80,7 +80,7 @@ public class Search extends ActionBarActivity {
 
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username+":"+password;
+        String authentication = username + ":" + password;
         byte[] encodedAuthentication = Base64.encode(authentication.getBytes(), Base64.NO_WRAP);
 
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
