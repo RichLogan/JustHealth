@@ -71,7 +71,6 @@ public class Login extends ActionBarActivity {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         requestLogin();
-                        startActivity(new Intent(Login.this, HomePatient.class));
                     }
                 }
         );
@@ -109,12 +108,10 @@ public class Login extends ActionBarActivity {
                 SharedPreferences account = getSharedPreferences("account", 0);
                 SharedPreferences.Editor edit = account.edit();
                 edit.putString("username", loginInformation.get("username"));
+                //change here
                 edit.putString("password", loginInformation.get("password"));
                 edit.commit();
-
-                String username = account.getString("username", null);
-                //todo remove this line
-                System.out.println("login, added username to shared preferences: " + username);
+                startActivity(new Intent(Login.this, HomePatient.class));
             } else {
                 System.out.println("Failed:");
                 System.out.println(responseStr);

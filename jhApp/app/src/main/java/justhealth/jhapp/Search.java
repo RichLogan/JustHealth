@@ -81,11 +81,11 @@ public class Search extends ActionBarActivity {
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
         String authentication = username + ":" + password;
-        byte[] encodedAuthentication = Base64.encode(authentication.getBytes(), Base64.NO_WRAP);
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
 
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
         httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        System.out.println(searchInformation);
+        System.out.println(encodedAuthentication);
         //assigns the HashMap to list, for post request encoding
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -114,6 +114,8 @@ public class Search extends ActionBarActivity {
         } catch (ClientProtocolException e) {
             //TODO Auto-generated catch block
         } catch (IOException e) {
+            //TODO Auto-generated catch block
+        } catch (NullPointerException e) {
             //TODO Auto-generated catch block
         }
     }
