@@ -28,8 +28,6 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-
-
 """Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
@@ -40,7 +38,7 @@ def profile():
     if result['accounttype'] == "Patient":
       return render_template('profile.html', result=result, printaccounttype = 'Patient')
     elif result['accounttype'] == "Carer":
-        return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Carer' )
+        return render_template('profile.html', result=result,  printaccounttype = 'Carer' )
 
 """terms and conditions page link"""
 @app.route('/termsandconditions')
