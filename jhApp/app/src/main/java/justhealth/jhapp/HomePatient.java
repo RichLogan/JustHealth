@@ -10,8 +10,6 @@ import android.widget.ImageButton;
  * Created by charlottehutchinson on 04/11/14.
  */
 
-
-
     public class HomePatient extends ActionBarActivity{
 
         protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +22,16 @@ import android.widget.ImageButton;
                         public void onClick(View view) {
                             startActivity(new Intent(HomePatient.this,HomePatient.class));
                         }
+                }
+        );
+
+        Button search = (Button) findViewById(R.id.search);
+        search.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomePatient.this, Search.class));
                     }
-            );
-        }
+                }
+        );
     }
-
-
+}

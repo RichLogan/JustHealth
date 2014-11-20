@@ -10,8 +10,6 @@ import android.widget.ImageButton;
  * Created by charlottehutchinson on 04/11/14.
  */
 
-
-
 public class HomeCarer extends ActionBarActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +24,13 @@ public class HomeCarer extends ActionBarActivity{
                     }
                 }
         );
+
+        Button search = (Button) findViewById(R.id.search);
+        settings.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomeCarer.this, Search.class));
+                    }
+                });
     }
 }
-
-
