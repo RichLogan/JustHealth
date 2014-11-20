@@ -20,7 +20,7 @@ public class Settings extends ActionBarActivity {
         deactivate.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
-                        startActivity(new Intent(Settings.this, deactivateAccount.class));
+                        startActivity(new Intent(Settings.this, DeactivateAccount.class));
                     }
                 }
         );

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Base64;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
@@ -69,6 +70,7 @@ public class Search extends ActionBarActivity {
         //this is adding the username as null - INCORRECT
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
+        String password = account.getString("password", null);
         //todo remove this line
         System.out.println(username);
 
@@ -78,7 +80,11 @@ public class Search extends ActionBarActivity {
 
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
+        String authentication = username+":"+password;
+        byte[] encodedAuthentication = Base64.encode(authentication.getBytes(), Base64.NO_WRAP);
+
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
         System.out.println(searchInformation);
         //assigns the HashMap to list, for post request encoding
         try {
