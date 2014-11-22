@@ -1,21 +1,37 @@
 {% extends "template.html" %}
-
-{% block title %}Login{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block scriptsAndStyles %}
-
-
+  <script>
+    $(document).ready(function(){
+      $('.makeDataTable').DataTable({
+        paging:false,
+        info:false,
+        searching:false,
+      });
+    });
+  </script>
 {% endblock %}
 
 {% block content %}
-<h3> &nbsp; User Profile </h3>
+<h3>User Profile</h3>
 <br />
-<div class="container">
+<div role="tabpanel">
+
+  <ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+    <li role="presentation"><a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a></li>
+  </ul>
+
+  <br />
+
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active container" id="profile">
       <div class="row" align ="center">
         <div class="col-md-6 col-lg-6 ">
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3>{{result.username}}</h3>
+              <h3>{{profileDetails.username}}</h3>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -25,18 +41,18 @@
                     <tbody>
                       <tr>
                         <td>Firstname:</td>
-                        <td>{{result.firstname}}</td>
+                        <td>{{profileDetails.firstname}}</td>
                       </tr>
                       <tr>
                         <td>Surname:</td>
-                        <td>{{result.surname}}</td>
+                        <td>{{profileDetails.surname}}</td>
                       </tr>
                       <tr>
                         <td>Date of Birth:</td>
-                        <td>{{result.dob}}</td>
+                        <td>{{profileDetails.dob}}</td>
                       </tr>
                         <td>Gender:</td>
-                        <td>{{result.gender}}</td>
+                        <td>{{profileDetails.gender}}</td>
                       </tr>
                         <tr>
                         <td>Account Type:</td>
@@ -44,22 +60,86 @@
                       </tr>
                       <tr>
                         <td>Email:</td>
-                        <td>{{result.email}}</td>
+                        <td>{{profileDetails.email}}</td>
                       </tr>
                         <td></td>
                         <td></td>
                       </tr>
-
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
-                 <div class="panel-footer"> <a href="edit.html" >Edit Profile</a></div>
-
+            <div class="panel-footer"> <a href="edit.html" >Edit Profile</a></div>
           </div>
         </div>
       </div>
     </div>
 
+    <div role="tabpanel" class="tab-pane fade" id="connections">
+      <h4>Outgoing</h4>
+      <table class="table table-condensed table-hover makeDataTable">
+        <thead>
+          <th>Username</th>
+          <th>First Name</th>
+          <th>Second Name
+          <th>Account Type</th>
+          <th>Code</th>
+        </thead>
+        <tbody>
+          {% for connection in outgoing %}
+            <tr>
+              <td>{{connection.username}}</td>
+              <td>{{connection.firstname}}</td>
+              <td>{{connection.surname}}</td>
+              <td>{{connection.accounttype}}</td>
+              <td>{{connection.code}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h4>Incoming</h4>
+      <table class="table table-condensed table-hover makeDataTable">
+        <thead>
+          <th>Username</th>
+          <th>First Name</th>
+          <th>Surname</th>
+          <th>Account Type</th>
+        </thead>
+        <tbody>
+          {% for connection in incoming %}
+            <tr>
+              <td>{{connection.username}}</td>
+              <td>{{connection.firstname}}</td>
+              <td>{{connection.surname}}</td>
+              <td>{{connection.accounttype}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h4>Completed</h4>
+      <table class="table table-condensed table-hover makeDataTable">
+        <thead>
+          <th>Username</th>
+          <th>First Name</th>
+          <th>Surname</th>
+          <th>Account Type</th>
+        </thead>
+        <tbody>
+          {% for connection in completed %}
+            <tr>
+              <td>{{connection.username}}</td>
+              <td>{{connection.firstname}}</td>
+              <td>{{connection.surname}}</td>
+              <td>{{connection.accounttype}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
 {% endblock %}
