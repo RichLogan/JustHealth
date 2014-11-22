@@ -2,19 +2,26 @@
 <html>
   <head>
     <title>{% block title %}{% endblock %} | JustHealth</title>
-	  <link rel="icon" type="image/png" href="/static/images/icon.png"/>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
-	  <!--<link rel="stylesheet" href="/static/metroUI/css/metro-bootstrap.css">
-
-	  <script src="/static/metroUI/js/jquery/jquery.min.js"></script>
-	  <script src="/static/metroUI/js/jquery/jquery.widget.min.js"></script>
-	  <script src="/static/metroUI/js/metro/metro.min.js"></script>-->
+    <!-- jQuery -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://malsup.github.io/min/jquery.cycle2.min.js"></script>
+
+    <!-- Boostrap -->
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- DataTables plugin -->
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.css">
+    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+    <!-- Our resources -->
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
     <script type="text/javascript" src="/static/js/script.js"></script>
+    <link rel="icon" type="image/png" href="/static/images/icon.png"/>
     {% block scriptsAndStyles %}{% endblock %}
   </head>
 

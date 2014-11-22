@@ -488,6 +488,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['code'] = str(connection.code)
         outgoingConnectionsDetails.append(person)
     outgoingFinal = json.dumps(outgoingConnectionsDetails)
 
