@@ -105,5 +105,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="330dp" />
 
-
+    <Button
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:id="@+id/editProfile"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="450dp" />
 </RelativeLayout>
