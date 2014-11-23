@@ -1,5 +1,6 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask.ext.httpauth import HTTPBasicAuth
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
@@ -9,23 +10,20 @@ import smtplib
 import json
 import random
 
-from flask.ext.httpauth import HTTPBasicAuth
-
-# API Authentication
 auth = HTTPBasicAuth()
-
-# @auth.login_required
 
 @auth.verify_password
 def verify_password(username,password):
     try:
-        session['username']
-        return True
+        if session['username'] == username:
+            return True
     except:
-        if Client.select().where(Client.username == username).count() == 0:
+        try:
+            hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
+            return sha256_crypt.verify(password, hashedPassword)
+        except:
             return False
-        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
-        return sha256_crypt.verify(password, hashedPassword)
+    return False
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -376,14 +374,18 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
+@auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchTerm]"""
+    searchPatientCarer(request.form['username'], request.form['searchTerm'])
+
+def searchPatientCarer(username, searchTerm):
     #get username, firstname and surname of current user
     result = {}
-    thisUser = request.form['username']
+    thisUser = username
     try:
         patient = Patient.get(username=thisUser)
-        searchTerm = "%" + request.form['searchTerm'] + "%"
+        searchTerm = "%" + searchTerm + "%"
         results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
 
         jsonResult = []
@@ -392,7 +394,7 @@ def searchPatientCarer():
         return json.dumps(jsonResult)
 
     except Patient.DoesNotExist:
-        searchTerm = "%" + request.form['searchTerm'] + "%"
+        searchTerm = "%" + searchTerm + "%"
         results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
 
         jsonResult = []
@@ -400,6 +402,7 @@ def searchPatientCarer():
             jsonResult.append(result)
         return json.dumps(jsonResult)
     return None
+
 ####
 # Client/Client relationships
 ####
