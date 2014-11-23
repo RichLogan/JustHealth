@@ -85,6 +85,7 @@
           <th>Second Name
           <th>Account Type</th>
           <th>Code</th>
+          <th></th>
         </thead>
         <tbody>
           {% for connection in outgoing %}
@@ -94,6 +95,7 @@
               <td>{{connection.surname}}</td>
               <td>{{connection.accounttype}}</td>
               <td>{{connection.code}}</td>
+              <td><a href=""><button class="btn btn-danger">Cancel</button></a></td>
             </tr>
           {% endfor %}
         </tbody>
@@ -106,6 +108,7 @@
           <th>First Name</th>
           <th>Surname</th>
           <th>Account Type</th>
+          <th></th>
         </thead>
         <tbody>
           {% for connection in incoming %}
@@ -114,6 +117,29 @@
               <td>{{connection.firstname}}</td>
               <td>{{connection.surname}}</td>
               <td>{{connection.accounttype}}</td>
+              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Connect</button></td>
+
+              <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
+                    </div>
+                    <div class="modal-body">
+                      <h4>Please enter the verification code given by the requestor</h1>
+                      <form role="form" action="/api/completeConnection" method="POST">
+                        <div style="width: 70%;margin: 0 auto;">
+                          <input name="requestor" type="hidden" value="{{connection.username}}">
+                          <input name="username" type="hidden" value="{{session.username}}">
+                          <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                          <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </tr>
           {% endfor %}
         </tbody>
@@ -126,6 +152,7 @@
           <th>First Name</th>
           <th>Surname</th>
           <th>Account Type</th>
+          <th></th>
         </thead>
         <tbody>
           {% for connection in completed %}
@@ -134,6 +161,7 @@
               <td>{{connection.firstname}}</td>
               <td>{{connection.surname}}</td>
               <td>{{connection.accounttype}}</td>
+              <td><a href=""><button class="btn btn-danger">Delete</button></a></td>
             </tr>
           {% endfor %}
         </tbody>
@@ -142,4 +170,8 @@
 
   </div>
 </div>
+
+<!-- Modal -->
+
+
 {% endblock %}

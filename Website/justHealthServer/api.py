@@ -516,14 +516,13 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['connectionid'] = str(connection.connectionid)
         incomingConnectionsDetails.append(person)
     incomingFinal = json.dumps(incomingConnectionsDetails)
 
     completedConnectionsDetails = []
-    for connection in completedConnectionsDetails:
+    for connection in completedConnections:
         person = {}
-        details = {}
-
         if accountType == "Patient":
             details = json.loads(getAccountInfo(connection.carer.username))
         elif accountType == "Carer":
