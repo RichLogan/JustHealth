@@ -15,15 +15,10 @@ auth = HTTPBasicAuth()
 @auth.verify_password
 def verify_password(username,password):
     try:
-        if session['username'] == username:
-            return True
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
+        return sha256_crypt.verify(password, hashedPassword)
     except:
-        try:
-            hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
-            return sha256_crypt.verify(password, hashedPassword)
-        except:
-            return False
-    return False
+        return False
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
