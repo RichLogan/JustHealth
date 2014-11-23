@@ -14,6 +14,8 @@ from flask.ext.httpauth import HTTPBasicAuth
 # API Authentication
 auth = HTTPBasicAuth()
 
+# @auth.login_required
+
 @auth.verify_password
 def verify_password(username,password):
     try:
@@ -144,7 +146,6 @@ def authenticate():
     return "Something went wrong!"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
-@auth.login_required
 def deactivateAccount():
     try:
         username = request.form['username']
@@ -236,7 +237,6 @@ def resetPassword():
 ####
 
 @app.route('/api/getAccountInfo', methods=['POST'])
-@auth.login_required
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
@@ -376,7 +376,6 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
-@auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchTerm]"""
     #get username, firstname and surname of current user
@@ -405,7 +404,6 @@ def searchPatientCarer():
 # Client/Client relationships
 ####
 @app.route('/api/createConnection', methods=['POST', 'GET'])
-@auth.login_required
 def createConnection():
     """Creates an initial connection between two users. POST [username, target]"""
     # Get users
@@ -445,7 +443,6 @@ def createConnection():
     return str(x)
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
-@auth.login_required
 def completeConnection():
     """Verify an inputed code to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
     #Take attempted code, match with a entry where they are target
