@@ -95,7 +95,11 @@
               <td>{{connection.surname}}</td>
               <td>{{connection.accounttype}}</td>
               <td>{{connection.code}}</td>
-              <td><a href=""><button class="btn btn-danger">Cancel</button></a></td>
+              <form action="/api/cancelConnection" method="POST">
+                <input type="hidden" name="user" value="{{session.username}}">
+                <input type="hidden" name="connection" value="{{connection.username}}">
+                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
+              </form>
             </tr>
           {% endfor %}
         </tbody>
@@ -109,6 +113,7 @@
           <th>Surname</th>
           <th>Account Type</th>
           <th></th>
+          <th></th>
         </thead>
         <tbody>
           {% for connection in incoming %}
@@ -118,6 +123,11 @@
               <td>{{connection.surname}}</td>
               <td>{{connection.accounttype}}</td>
               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Connect</button></td>
+              <form action="/api/cancelConnection" method="POST">
+                <input type="hidden" name="user" value="{{session.username}}">
+                <input type="hidden" name="connection" value="{{connection.username}}">
+                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
+              </form>
 
               <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">

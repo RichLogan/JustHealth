@@ -488,6 +488,24 @@ def deleteConnection(user,connection):
         instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
         instance.delete_instance()
         return "True"
+    elif (userType == "Carer" and connectionType == "Patient"):
+        instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
+        instance.delete_instance()
+        return "True"
+    else:
+        return "False"
+
+@app.route('/api/cancelConnection', methods=['POST'])
+def cancelRequest():
+    cancelRequest(request.form['user'], request.form['connection'])
+
+def cancelRequest(user, connection):
+    try:
+        instance = Relationship.select().where(Relationship.requestor == user).get()
+        instance.delete_instance()
+    except RelationshipDoesNotExist:
+        instance = Relationship.select().where(Relationship.target == connection).get()
+        instance.delete_instance()
 
 @app.route('/api/getConnections', methods=['POST'])
 def getConnections():
