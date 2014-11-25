@@ -476,6 +476,37 @@ def completeConnection():
         return "Incorrect"
     return None
 
+@app.route('/api/deleteConnection', methods=['POST'])
+def deleteConnection():
+    deleteConnection(request.form['user'], request.form['connection'])
+
+def deleteConnection(user,connection):
+    userType = json.loads(getAccountInfo(user))['accounttype']
+    connectionType = json.loads(getAccountInfo(connection))['accounttype']
+
+    if (userType == "Patient" and connectionType == "Carer"):
+        instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
+        instance.delete_instance()
+        return "True"
+    elif (userType == "Carer" and connectionType == "Patient"):
+        instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
+        instance.delete_instance()
+        return "True"
+    else:
+        return "False"
+
+@app.route('/api/cancelConnection', methods=['POST'])
+def cancelRequest():
+    cancelRequest(request.form['user'], request.form['connection'])
+
+def cancelRequest(user, connection):
+    try:
+        instance = Relationship.select().where(Relationship.requestor == user).get()
+        instance.delete_instance()
+    except RelationshipDoesNotExist:
+        instance = Relationship.select().where(Relationship.target == connection).get()
+        instance.delete_instance()
+
 @app.route('/api/getConnections', methods=['POST'])
 def getConnections():
     return getConnections(request.form['username'])
@@ -516,14 +547,13 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['connectionid'] = str(connection.connectionid)
         incomingConnectionsDetails.append(person)
     incomingFinal = json.dumps(incomingConnectionsDetails)
 
     completedConnectionsDetails = []
-    for connection in completedConnectionsDetails:
+    for connection in completedConnections:
         person = {}
-        details = {}
-
         if accountType == "Patient":
             details = json.loads(getAccountInfo(connection.carer.username))
         elif accountType == "Carer":
