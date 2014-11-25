@@ -34,5 +34,14 @@ public class HomePatient extends ActionBarActivity {
                     }
                 }
         );
+
+        Button connections = (Button) findViewById(R.id.connections);
+        connections.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomePatient.this, Connections.class));
+                    }
+                }
+        );
     }
 }

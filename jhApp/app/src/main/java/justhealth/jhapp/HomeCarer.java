@@ -32,6 +32,16 @@ public class HomeCarer extends ActionBarActivity {
                     public void onClick(View view) {
                         startActivity(new Intent(HomeCarer.this, Search.class));
                     }
-                });
+                }
+        );
+
+        Button connections = (Button) findViewById(R.id.connections);
+        connections.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomeCarer.this, Connections.class));
+                    }
+                }
+        );
     }
 }
