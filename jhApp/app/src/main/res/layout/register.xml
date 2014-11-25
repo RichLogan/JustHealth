@@ -28,6 +28,13 @@ tools:context=".Register">
                 android:layout_marginBottom="5dip"
                 android:id="@+id/link_to_forgot_password"/>
 
+            <!-- Placeholder for alert message -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/insertRegisterAlert"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,9 +89,9 @@ tools:context=".Register">
                 <RadioButton
                     android:layout_width="163dp"
                     android:layout_height="wrap_content"
-                    android:checked="false"
+                    android:checked="true"
                     android:id="@+id/male"
-                    android:text="Male" />
+                    android:text="Male"/>
 
                 <RadioButton
                     android:layout_width="182dp"

@@ -1,6 +1,7 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
-from database import *
+from flask.ext.httpauth import HTTPBasicAuth
+from testDatabase import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 import re
@@ -8,6 +9,16 @@ import datetime
 import smtplib
 import json
 import random
+
+auth = HTTPBasicAuth()
+
+@auth.verify_password
+def verify_password(username,password):
+    try:
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
+        return sha256_crypt.verify(password, hashedPassword)
+    except:
+        return False
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -63,7 +74,11 @@ def registerUser():
     userInsert = Client.insert(
       username = profile['username'],
       dob = profile['dob'],
-      email = profile['email']
+      email = profile['email'],
+      accountdeactivated = False,
+      accountlocked = False,
+      loginattempts = 0,
+      verified  = False
     )
 
     if accountType == "patient":
@@ -230,10 +245,10 @@ def getAccountInfo(username):
       patient = Patient.get(username=thisUser)
       user = Patient.select().join(Client).where(Client.username==thisUser).get()
       result['accounttype'] = "Patient"
-      result['firstname'] = str(user.firstname)
-      result['surname'] = str(user.surname)
-      result['username'] = str(user.username.username)
-      result['email'] = str(user.username.email)
+      result['firstname'] = user.firstname
+      result['surname'] = user.surname
+      result['username'] = user.username.username
+      result['email'] = user.username.email
       result['dob'] = str(user.username.dob)
       if user.ismale:
         result['gender'] = 'Male'
@@ -245,10 +260,10 @@ def getAccountInfo(username):
       result['accounttype'] = "Carer"
       carer = Carer.get(username=thisUser)
       user = Carer.select().join(Client).where(Client.username==thisUser).get()
-      result['firstname'] = str(user.firstname)
-      result['surname'] = str(user.surname)
-      result['username'] = str(user.username.username)
-      result['email'] = str(user.username.email)
+      result['firstname'] = user.firstname
+      result['surname'] = user.surname
+      result['username'] = user.username.username
+      result['email'] = user.username.email
       result['dob'] = str(user.username.dob)
       if user.ismale:
         result['gender'] = 'Male'
@@ -358,14 +373,18 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
+@auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchTerm]"""
+    searchPatientCarer(request.form['username'], request.form['searchTerm'])
+
+def searchPatientCarer(username, searchTerm):
     #get username, firstname and surname of current user
     result = {}
-    thisUser = request.form['username']
+    thisUser = username
     try:
         patient = Patient.get(username=thisUser)
-        searchTerm = "%" + request.form['searchTerm'] + "%"
+        searchTerm = "%" + searchTerm + "%"
         results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
 
         jsonResult = []
@@ -374,7 +393,7 @@ def searchPatientCarer():
         return json.dumps(jsonResult)
 
     except Patient.DoesNotExist:
-        searchTerm = "%" + request.form['searchTerm'] + "%"
+        searchTerm = "%" + searchTerm + "%"
         results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
 
         jsonResult = []
@@ -382,6 +401,7 @@ def searchPatientCarer():
             jsonResult.append(result)
         return json.dumps(jsonResult)
     return None
+
 ####
 # Client/Client relationships
 ####
@@ -459,3 +479,102 @@ def completeConnection():
     else:
         return "Incorrect"
     return None
+
+@app.route('/api/deleteConnection', methods=['POST'])
+def deleteConnection():
+    deleteConnection(request.form['user'], request.form['connection'])
+
+def deleteConnection(user,connection):
+    userType = json.loads(getAccountInfo(user))['accounttype']
+    connectionType = json.loads(getAccountInfo(connection))['accounttype']
+
+    if (userType == "Patient" and connectionType == "Carer"):
+        instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
+        instance.delete_instance()
+        return "True"
+    elif (userType == "Carer" and connectionType == "Patient"):
+        instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
+        instance.delete_instance()
+        return "True"
+    else:
+        return "False"
+
+@app.route('/api/cancelConnection', methods=['POST'])
+def cancelRequest():
+    cancelRequest(request.form['user'], request.form['connection'])
+
+def cancelRequest(user, connection):
+    try:
+        instance = Relationship.select().where(Relationship.requestor == user).get()
+        instance.delete_instance()
+    except RelationshipDoesNotExist:
+        instance = Relationship.select().where(Relationship.target == connection).get()
+        instance.delete_instance()
+
+@app.route('/api/getConnections', methods=['POST'])
+def getConnections():
+    return getConnections(request.form['username'])
+
+def getConnections(username):
+    accountType = json.loads(getAccountInfo(username))['accounttype']
+    user = Client.select().where(Client.username==username).get()
+
+    outgoingConnections = Relationship.select().where(Relationship.requestor == user)
+    incomingConnections = Relationship.select().where(Relationship.target == user)
+
+    completedConnections = {}
+    if accountType == "Patient":
+        completedConnections = Patientcarer.select().where(Patientcarer.patient == user)
+    elif accountType == "Carer":
+        completedConnections = Patientcarer.select().where(Patientcarer.carer == user)
+    else:
+        completedConnections = None
+
+    #username, firstname, surname, accountype
+    outgoingConnectionsDetails = []
+    for connection in outgoingConnections:
+        person = {}
+        details = json.loads(getAccountInfo(connection.target.username))
+        person['username'] = details['username']
+        person['firstname'] = details['firstname']
+        person['surname'] = details['surname']
+        person['accounttype'] = details['accounttype']
+        person['code'] = str(connection.code)
+        outgoingConnectionsDetails.append(person)
+    outgoingFinal = json.dumps(outgoingConnectionsDetails)
+
+    incomingConnectionsDetails = []
+    for connection in incomingConnections:
+        person = {}
+        details = json.loads(getAccountInfo(connection.requestor.username))
+        person['username'] = details['username']
+        person['firstname'] = details['firstname']
+        person['surname'] = details['surname']
+        person['accounttype'] = details['accounttype']
+        person['connectionid'] = str(connection.connectionid)
+        incomingConnectionsDetails.append(person)
+    incomingFinal = json.dumps(incomingConnectionsDetails)
+
+    completedConnectionsDetails = []
+    for connection in completedConnections:
+        person = {}
+        if accountType == "Patient":
+            details = json.loads(getAccountInfo(connection.carer.username))
+        elif accountType == "Carer":
+            details = json.loads(getAccountInfo(connection.patient.username))
+        else:
+            details = None
+
+        person['username'] = details['username']
+        person['firstname'] = details['firstname']
+        person['surname'] = details['surname']
+        person['accounttype'] = details['accounttype']
+        completedConnectionsDetails.append(person)
+    completedFinal = json.dumps(completedConnectionsDetails)
+
+    result = {}
+    result['outgoing'] = outgoingFinal
+    result['incoming'] = incomingFinal
+    result['completed'] = completedFinal
+
+    return json.dumps(result)

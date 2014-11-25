@@ -22,6 +22,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.HttpResponse;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class Register extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
-        Button registerButton = (Button)findViewById(R.id.register);
+        Button registerButton = (Button) findViewById(R.id.register);
         registerButton = (Button) findViewById(R.id.register);
         registerButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -60,7 +61,7 @@ public class Register extends ActionBarActivity {
 //               }
 //        );
 
-        TextView forgotPassword = (TextView)findViewById(R.id.link_to_forgot_password);
+        TextView forgotPassword = (TextView) findViewById(R.id.link_to_forgot_password);
         forgotPassword.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -92,7 +93,7 @@ public class Register extends ActionBarActivity {
         details.put("ismale", ismale.toString());
 
         //Account Type
-        final Spinner accountTypeSpinner = (Spinner)findViewById((R.id.accountType));
+        final Spinner accountTypeSpinner = (Spinner) findViewById((R.id.accountType));
         final String accountType = String.valueOf(accountTypeSpinner.getSelectedItem());
         details.put("accounttype", accountType.toLowerCase());
 
@@ -109,8 +110,7 @@ public class Register extends ActionBarActivity {
             details.put("terms", "on");
 
             post(details);
-        }
-        else {
+        } else {
             //Ts and cs not accepted
         }
     }
@@ -132,12 +132,24 @@ public class Register extends ActionBarActivity {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             System.out.println(response.getStatusLine());
-
-            //HttpEntity responseEntity = response.getEntity();
-            //InputStream is = responseEntity.getContent();
-            //System.out.println(is.toString());
             String responseStr = EntityUtils.toString(response.getEntity());
             System.out.println(responseStr);
+            if (responseStr.equals("True")) {
+                //Register Done, send to login, insert success message
+            }
+            else {
+                //Check if the Layout already exists
+                LinearLayout alert = (LinearLayout)findViewById(R.id.alertMessage);
+                if(alert == null){
+                    //Insert the alert message
+                    LinearLayout insertAlert = (LinearLayout)findViewById(R.id.insertRegisterAlert);
+                    View insertAlertView = getLayoutInflater().inflate(R.layout.alert_message, insertAlert, false);
+                    insertAlert.addView(insertAlertView);
+                }
+
+                TextView myTextView = (TextView) findViewById(R.id.alertText);
+                myTextView.setText(responseStr);
+            }
 
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block

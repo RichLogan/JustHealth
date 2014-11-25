@@ -28,19 +28,21 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-
-
 """Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
-    jsonResult = getAccountInfo(session['username'])
-    result ={}
-    result = json.loads(jsonResult)
-    if result['accounttype'] == "Patient":
-      return render_template('profile.html', result=result, printaccounttype = 'Patient')
-    elif result['accounttype'] == "Carer":
-        return render_template('profile.html', printusername = username, printfirstname = firstname, printsurname = surname, printaccounttype = 'Carer' )
+    profileDetails = json.loads(getAccountInfo(session['username']))
+
+    connections = json.loads(getConnections(session['username']))
+    outgoingConnections = json.loads(connections['outgoing'])
+    incomingConnections = json.loads(connections['incoming'])
+    completedConnections = json.loads(connections['completed'])
+
+    if profileDetails['accounttype'] == "Patient":
+      return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Patient')
+    elif profileDetails['accounttype'] == "Carer":
+        return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
 """terms and conditions page link"""
 @app.route('/termsandconditions')
@@ -51,7 +53,7 @@ def terms():
 @needLogin
 def search():
     if request.method =='POST':
-        result = searchPatientCarer()
+        result = searchPatientCarer(request.form['username'], request.form['searchTerm'])
         result = json.loads(result)
         return render_template ('search.html',results = result, username= session['username'])
     return render_template('search.html',username= session['username'])
