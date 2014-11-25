@@ -1,7 +1,7 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from flask.ext.httpauth import HTTPBasicAuth
-from database import *
+from testDatabase import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 import re
@@ -74,7 +74,11 @@ def registerUser():
     userInsert = Client.insert(
       username = profile['username'],
       dob = profile['dob'],
-      email = profile['email']
+      email = profile['email'],
+      accountdeactivated = False,
+      accountlocked = False,
+      loginattempts = 0,
+      verified  = False
     )
 
     if accountType == "patient":
