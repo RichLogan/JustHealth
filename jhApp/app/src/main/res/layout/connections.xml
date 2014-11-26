@@ -18,7 +18,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text= "Connections"
+                android:textSize="20dp"
+                android:textColor="@color/header"
+                android:layout_marginTop="50dip"
+                android:layout_marginBottom="10dip"
+                android:id="@+id/titleConnections"/>
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text= "Outgoing Connections"
+                android:textSize="15dp"
+                android:textColor="@color/header"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="20dip"
+                android:id="@+id/titleOutgoingConnections"/>
+
+            <TableLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/connectionsTable"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp">
+            </TableLayout>
         </LinearLayout>
+
 
     </LinearLayout>
 
