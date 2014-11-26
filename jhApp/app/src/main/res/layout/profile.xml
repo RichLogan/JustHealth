@@ -22,25 +22,18 @@
         <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User Profile"
-            android:layout_above="@+id/scrollView"
+            android:layout_above="@+id/title"
             android:textSize="20dip"
             android:textColor="@color/header"/>
     </ScrollView>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Username"
-        android:id="@+id/textView"
+        android:id="@+id/profileUsername"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp" />
