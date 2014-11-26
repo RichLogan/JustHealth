@@ -108,6 +108,7 @@ public class Connections extends ActionBarActivity {
             printTableHeader();
             printOutgoingConnections(outgoing);
             printIncomingConnections(incoming);
+            printCompletedConnections(completed);
 
         } catch (ClientProtocolException e) {
             //TODO Auto-generated catch block
@@ -165,32 +166,54 @@ public class Connections extends ActionBarActivity {
 
     private void printOutgoingConnections(JSONArray outgoing){
         TableLayout searchTable = (TableLayout) findViewById(R.id.connectionsTable);
-        for (int i = 0; i < outgoing.length(); i++) {
-            try {
-                JSONObject obj = outgoing.getJSONObject(i);
-                System.out.println(obj);
-                String outgoingUsername = obj.getString("username");
-                String outgoingFirstName = obj.getString("firstname");
-                String outgoingSurname = obj.getString("surname");
-                String outgoingCode = obj.getString("code");
+
+        TableRow outgoingHeadRow = new TableRow(this);
+        outgoingHeadRow.setBackgroundColor(getResources().getColor(R.color.header));
+        TextView incomingConnections = new TextView(this);
+        incomingConnections.setText("Outgoing Connections");
+        incomingConnections.setTextColor(Color.WHITE);
+
+        outgoingHeadRow.addView(incomingConnections);
+        searchTable.addView(outgoingHeadRow, 1);
+        //update row of table
+        rowOfTable += 2;
+
+        if (outgoing.length() == 0) {
+            TableRow row = new TableRow(this);
+            TextView noRecords = new TextView(this);
+            noRecords.setText("No Outgoing Connections");
+            row.addView(noRecords);
+            searchTable.addView(row, rowOfTable + 1);
+            rowOfTable += 1;
+        }
+        else {
+
+            for (int i = 0; i < outgoing.length(); i++) {
+                try {
+                    JSONObject obj = outgoing.getJSONObject(i);
+                    System.out.println(obj);
+                    String outgoingUsername = obj.getString("username");
+                    String outgoingFirstName = obj.getString("firstname");
+                    String outgoingSurname = obj.getString("surname");
+                    String outgoingCode = obj.getString("code");
 
 
-                TableRow row = new TableRow(this);
-                //add username to TextView
-                TextView forUsername = new TextView(this);
-                forUsername.setText(outgoingUsername);
-                //add first name to TextView
-                TextView forFirstName = new TextView(this);
-                forFirstName.setText(outgoingFirstName);
-                //add surname to TextView
-                TextView forSurname = new TextView(this);
-                forSurname.setText(outgoingSurname);
-                //add verification code to TextView
-                TextView forCode = new TextView(this);
-                forCode.setText(outgoingCode);
-                //TextView to tell user awaiting response
-                TextView forAction = new TextView(this);
-                forAction.setText("Awaiting " + outgoingUsername + "'s Response");
+                    TableRow row = new TableRow(this);
+                    //add username to TextView
+                    TextView forUsername = new TextView(this);
+                    forUsername.setText(outgoingUsername);
+                    //add first name to TextView
+                    TextView forFirstName = new TextView(this);
+                    forFirstName.setText(outgoingFirstName);
+                    //add surname to TextView
+                    TextView forSurname = new TextView(this);
+                    forSurname.setText(outgoingSurname);
+                    //add verification code to TextView
+                    TextView forCode = new TextView(this);
+                    forCode.setText(outgoingCode);
+                    //TextView to tell user awaiting response
+                    TextView forAction = new TextView(this);
+                    forAction.setText("Awaiting " + outgoingUsername + "'s Response");
                 /*//add connect button
                 Button connect = new Button(this);
                 connect.setText("Connect");
@@ -199,19 +222,20 @@ public class Connections extends ActionBarActivity {
                 connect.setPadding(5, 5, 5, 5);
                 connect.setOnClickListener(connectOnClick(connect, resultUsername));*/
 
-                //add the views to the row
-                row.addView(forUsername);
-                row.addView(forFirstName);
-                row.addView(forSurname);
-                row.addView(forCode);
-                row.addView(forAction);
+                    //add the views to the row
+                    row.addView(forUsername);
+                    row.addView(forFirstName);
+                    row.addView(forSurname);
+                    row.addView(forCode);
+                    row.addView(forAction);
 
-                searchTable.addView(row, i + 1);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    searchTable.addView(row, rowOfTable + i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+            rowOfTable = outgoing.length();
         }
-        rowOfTable = outgoing.length();
     }
 
     private void printIncomingConnections(JSONArray incoming){
@@ -228,46 +252,123 @@ public class Connections extends ActionBarActivity {
         //update row of table
         rowOfTable += 1;
 
+        if (incoming.length() == 0) {
+            TableRow row = new TableRow(this);
+            TextView noRecords = new TextView(this);
+            noRecords.setText("No Incoming Connections");
+            row.addView(noRecords);
+            searchTable.addView(row, rowOfTable + 1);
+            rowOfTable += 1;
+        }
+        else {
 
-        for (int i = 0; i < incoming.length(); i++) {
-            try {
-                JSONObject obj = incoming.getJSONObject(i);
-                System.out.println(obj);
-                String incomingUsername = obj.getString("username");
-                String incomingFirstName = obj.getString("firstname");
-                String incomingSurname = obj.getString("surname");
-                //add button
+            for (int i = 0; i < incoming.length(); i++) {
+                try {
+                    JSONObject obj = incoming.getJSONObject(i);
+                    System.out.println(obj);
+                    String incomingUsername = obj.getString("username");
+                    String incomingFirstName = obj.getString("firstname");
+                    String incomingSurname = obj.getString("surname");
+                    //add button
 
 
-                TableRow row = new TableRow(this);
-                //add username to TextView
-                TextView forUsername = new TextView(this);
-                forUsername.setText(incomingUsername);
-                //add first name to TextView
-                TextView forFirstName = new TextView(this);
-                forFirstName.setText(incomingFirstName);
-                //add surname to TextView
-                TextView forSurname = new TextView(this);
-                forSurname.setText(incomingSurname);
-                //add connect button
-                Button connect = new Button(this);
-                connect.setText("Connect");
-                connect.setTextColor(Color.WHITE);
-                connect.setBackgroundColor(getResources().getColor(R.color.header));
-                connect.setPadding(5, 5, 5, 5);
-                //add what to do on click
+                    TableRow row = new TableRow(this);
+                    //add username to TextView
+                    TextView forUsername = new TextView(this);
+                    forUsername.setText(incomingUsername);
+                    //add first name to TextView
+                    TextView forFirstName = new TextView(this);
+                    forFirstName.setText(incomingFirstName);
+                    //add surname to TextView
+                    TextView forSurname = new TextView(this);
+                    forSurname.setText(incomingSurname);
+                    //add connect button
+                    Button connect = new Button(this);
+                    connect.setText("Connect");
+                    connect.setTextColor(Color.WHITE);
+                    connect.setBackgroundColor(getResources().getColor(R.color.header));
+                    connect.setPadding(5, 5, 5, 5);
+                    //add what to do on click
 
-                //add the views to the row
-                row.addView(forUsername);
-                row.addView(forFirstName);
-                row.addView(forSurname);
-                row.addView(connect);
+                    //add the views to the row
+                    row.addView(forUsername);
+                    row.addView(forFirstName);
+                    row.addView(forSurname);
+                    row.addView(connect);
 
-                searchTable.addView(row, rowOfTable + i + 1);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    searchTable.addView(row, rowOfTable + i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            rowOfTable += incoming.length();
+        }
+    }
+
+    private void printCompletedConnections(JSONArray completed){
+        TableLayout searchTable = (TableLayout) findViewById(R.id.connectionsTable);
+
+        TableRow incomingHeadRow = new TableRow(this);
+        incomingHeadRow.setBackgroundColor(getResources().getColor(R.color.header));
+        TextView incomingConnections = new TextView(this);
+        incomingConnections.setText("Completed Connections");
+        incomingConnections.setTextColor(Color.WHITE);
+
+        incomingHeadRow.addView(incomingConnections);
+        searchTable.addView(incomingHeadRow, rowOfTable + 1);
+        //update row of table
+        rowOfTable += 1;
+
+        if (completed.length() == 0) {
+            TableRow row = new TableRow(this);
+            TextView noRecords = new TextView(this);
+            noRecords.setText("No Completed Connections");
+            row.addView(noRecords);
+            searchTable.addView(row, rowOfTable + 1);
+            rowOfTable += 1;
+        }
+        else {
+
+
+            for (int i = 0; i < completed.length(); i++) {
+                try {
+                    JSONObject obj = completed.getJSONObject(i);
+                    System.out.println(obj);
+                    String completedUsername = obj.getString("username");
+                    String completedFirstName = obj.getString("firstname");
+                    String completedSurname = obj.getString("surname");
+
+
+                    TableRow row = new TableRow(this);
+                    //add username to TextView
+                    TextView forUsername = new TextView(this);
+                    forUsername.setText(completedUsername);
+                    //add first name to TextView
+                    TextView forFirstName = new TextView(this);
+                    forFirstName.setText(completedFirstName);
+                    //add surname to TextView
+                    TextView forSurname = new TextView(this);
+                    forSurname.setText(completedSurname);
+                    //add connect button
+                    Button remove = new Button(this);
+                    remove.setText("Remove");
+                    remove.setTextSize(10);
+                    remove.setTextColor(Color.WHITE);
+                    remove.setBackgroundColor(getResources().getColor(R.color.header));
+                    remove.setPadding(5, 5, 5, 5);
+                    //add what to do on click
+
+                    //add the views to the row
+                    row.addView(forUsername);
+                    row.addView(forFirstName);
+                    row.addView(forSurname);
+                    row.addView(remove);
+
+                    searchTable.addView(row, rowOfTable + i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        rowOfTable += incoming.length();
     }
 }
