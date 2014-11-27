@@ -165,4 +165,5 @@ def resetPasswordRedirect():
 
 @app.route('/prescriptions')
 def  prescriptions():
-  return render_template('prescriptions.html')
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)

@@ -648,29 +648,3 @@ def getPrescriptions(username):
         return json.dumps(jsonResult)
     else:
         return "Must have Patient account type"
-
-    # prescribedPrescriptionsDetails = []
-    # for prescription in prescribedPrescriptions:
-    #     person = {}
-    #     if accountType == "Patient":
-    #         details = json.loads(getAccountInfo(connection.carer.username))
-    #     else:
-    #         details = None
-    #
-    #     prescription['medication'] = details['medication']
-    #     prescription['dosage'] = details['dosage']
-    #     prescription['frequency'] = details['frequency']
-    #     prescription['quantity'] = details['quantity']
-    #     prescription['dosageUnit'] = details['dosageUnit']
-    #     prescription['frequencyUnit'] = details['frequencyUnit']
-    #     prescription['startDate'] = details['startDate']
-    #     prescription['endDate'] = details['endDate']
-    #     prescription['repeat'] = details['repeat']
-    #     prescription['stockLeft'] = details['stockLeft']
-    #     prescribedPrescriptionsDetails.append(prescription)
-    # prescribedPrescriptions = json.dumps(prescribedPrescriptionsDetails)
-    #
-    # result = {}
-    # result['completed'] = prescribedPrescriptions
-    #
-    # return json.dumps(result)

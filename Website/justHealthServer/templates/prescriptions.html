@@ -8,9 +8,43 @@
 {% endblock %}
 
 {% block content %}
-<h3> Prescriptions </h3>
+<h3> Medication </h3>
 
+<div id="queryTable">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Dosage</th>
+        <th>Frequency</th>
+        <th>Frequency unit</th>
+        <th>Quantity</th>
 
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Repeat</th>
+        <th>Stock left</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {%for prescription in prescriptions%}
+    <tr> <td> {{prescription.medication}} </td>
+      <td> {{prescription.dosage}} </td>
+      <td> {{prescription.frequency}} </td>
+      <td> {{prescription.frequencyunit}} </td>
+      <td> {{prescription.quantity}} </td>
+
+      <td> {{prescription.startdate}} </td>
+      <td> {{prescription.enddate}} </td>
+      <td> {{prescription.repeat}} </td>
+      <td> {{prescription.stockleft}} </td>
+
+{%endfor%}
+    </tr>
+    </tbody>
+  </table>
+</div>
 
 
 {% endblock %}
