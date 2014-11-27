@@ -1,0 +1,101 @@
+{% extends "template.html" %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block scriptsAndStyles %}
+<script>
+  $(document).ready(function(){
+    $('.makeDataTable').DataTable({
+      paging:false,
+      info:false,
+      searching:false,
+    });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+	<h3>Your Appointments</h3>
+	<br />
+</div>
+<div role="tabpanel">
+
+  <ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#upcoming" aria-controls="upcoming" role="tab" data-toggle="tab">Upcoming Appointments</a></li>
+    <li role="presentation"><a href="#newAppointment" aria-controls="newAppointment" role="tab" data-toggle="tab">Create Appointment</a></li>
+  </ul>
+
+  <br />
+  <!--This shows the tab for the upcoming appointments-->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active container" id="upcoming">
+      <div class="row" align ="center">
+        <div class="col-md-6 col-lg-6 ">
+          <div class="panel panel-info">
+            <div class="panel-body">
+              
+            </div>
+      		</div>
+    		</div>
+    	</div>
+    </div>
+
+		<!--This shows the tab for the new appointments-->
+		<div role="tabpanel" class="tab-pane fade" id="newAppointment">
+			<div class="row">
+        <div class="panel panel-info">
+          <div class="panel-body">
+            <form name="createAppointment" method="POST">
+            	<div class="form-group">
+      					<label for="name">Name</label>
+      					<input class="form-control" type="text" name="name">
+  						</div>
+  						<div class="form-group">
+					      <label for="type">Appointment Type</label>
+					      <select name="type" class="form-control">
+					      	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
+					      </select>
+					  	</div>
+  						<div class="form-group">
+  							<label for="nameNumber">Building Name/Number</label>
+  							<input class="form-control" type="text" name="nameNumber">
+  						</div>
+  						<div class="form-group">
+  							<label for="postcode">Postcode</label>
+  							<input class="form-control" type="text" name="postcode">
+  						</div>
+  						<div class="form-group">
+  							<label for="dateFrom">Start Date</label>
+  							<input class="form-control" type="date" name="dateFrom" id="dateFrom">
+  						</div>
+  						<div class="form-group">
+  							<label for="startTime">Start Time</label>
+  							<input class="form-control" type="time" name="startTime" id="startTime">
+  						</div>
+  						<div class="form-group">
+  							<label for="dateTo">End Date</label>
+  							<input class="form-control" type="date" name="dateTo" id="dateTo">
+  						</div>
+  						<div class="form-group">
+  							<label for="endTime">End Time</label>
+  							<input class="form-control" type="time" name="endTime" id="endTime">
+  						</div>
+  						<div class="form-group">
+  							<label for="other">Details</label>
+  							<textarea class="form-control" name="other" id="other"></textarea>
+  						</div>
+            </form>
+          </div>
+    		</div>
+    	</div>
+    </div>
+
+	</div>
+</div>
+
+<!--Upcoming Appointments-->
+
+
+
+{% endblock %}
