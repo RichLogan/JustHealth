@@ -1,7 +1,7 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from flask.ext.httpauth import HTTPBasicAuth
-from testDatabase import *
+from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 import re
