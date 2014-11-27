@@ -161,3 +161,8 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+
+@app.route('/prescriptions')
+def  prescriptions():
+  return render_template('prescriptions.html')

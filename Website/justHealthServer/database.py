@@ -87,14 +87,14 @@ class Medication(BaseModel):
 
 class Prescription(BaseModel):
     prescriptionid = PrimaryKeyField()
-    username = ForeignKeyField(db_column='username', unique=True, rel_model=Client, to_field='username')
-    medication = ForeignKeyField(db_column='name', unique=True, rel_model=Medication, to_field='name')
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
+    medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
     dosage = IntegerField(null=True)
     frequency = CharField(max_length=25, null=True)
     quantity = IntegerField(null=True)
-    frequencyUnit = CharField(max_length=10, null=True)
-    startDate = DateField(null=True)
-    endDate = DateField(null=True)
+    frequencyunit = CharField(max_length=10, null=True)
+    startdate = DateField(null=True)
+    enddate = DateField(null=True)
     repeat = CharField(max_length=25, null=True)
     stockleft = IntegerField(null=True)
 
@@ -115,7 +115,7 @@ def createAll():
     Prescription.create_table()
 
 
-#def dropAll():
+# def dropAll():
     # if Client.table_exists():
     #     Client.drop_table(cascade=True)
     #
