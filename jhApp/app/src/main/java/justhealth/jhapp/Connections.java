@@ -183,7 +183,7 @@ public class Connections extends ActionBarActivity {
             TextView noRecords = new TextView(this);
             noRecords.setText("No Outgoing Connections");
             row.addView(noRecords);
-            searchTable.addView(row, rowOfTable + 1);
+            searchTable.addView(row, rowOfTable);
             rowOfTable += 1;
         }
         else {
@@ -211,30 +211,27 @@ public class Connections extends ActionBarActivity {
                     //add verification code to TextView
                     TextView forCode = new TextView(this);
                     forCode.setText(outgoingCode);
-                    //TextView to tell user awaiting response
-                    TextView forAction = new TextView(this);
-                    forAction.setText("Awaiting " + outgoingUsername + "'s Response");
-                /*//add connect button
-                Button connect = new Button(this);
-                connect.setText("Connect");
-                connect.setTextColor(Color.WHITE);
-                connect.setBackgroundColor(getResources().getColor(R.color.header));
-                connect.setPadding(5, 5, 5, 5);
-                connect.setOnClickListener(connectOnClick(connect, resultUsername));*/
+                    //cancel request button
+                    Button cancel = new Button(this);
+                    cancel.setText("Cancel Request");
+                    cancel.setTextColor(Color.WHITE);
+                    cancel.setBackgroundColor(getResources().getColor(R.color.header));
+                    cancel.setPadding(5, 5, 5, 5);
+                    cancel.setOnClickListener(cancelOnClick(cancel, outgoingUsername));
 
                     //add the views to the row
                     row.addView(forUsername);
                     row.addView(forFirstName);
                     row.addView(forSurname);
                     row.addView(forCode);
-                    row.addView(forAction);
+                    row.addView(cancel);
 
-                    searchTable.addView(row, rowOfTable + i);
+                    searchTable.addView(row, rowOfTable);
+                    rowOfTable += 1;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            rowOfTable = outgoing.length();
         }
     }
 
@@ -248,7 +245,7 @@ public class Connections extends ActionBarActivity {
         incomingConnections.setTextColor(Color.WHITE);
 
         incomingHeadRow.addView(incomingConnections);
-        searchTable.addView(incomingHeadRow, rowOfTable + 1);
+        searchTable.addView(incomingHeadRow, rowOfTable);
         //update row of table
         rowOfTable += 1;
 
@@ -257,7 +254,7 @@ public class Connections extends ActionBarActivity {
             TextView noRecords = new TextView(this);
             noRecords.setText("No Incoming Connections");
             row.addView(noRecords);
-            searchTable.addView(row, rowOfTable + 1);
+            searchTable.addView(row, rowOfTable);
             rowOfTable += 1;
         }
         else {
@@ -296,12 +293,12 @@ public class Connections extends ActionBarActivity {
                     row.addView(forSurname);
                     row.addView(connect);
 
-                    searchTable.addView(row, rowOfTable + i);
+                    searchTable.addView(row, rowOfTable);
+                    rowOfTable += 1;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            rowOfTable += incoming.length();
         }
     }
 
@@ -315,7 +312,7 @@ public class Connections extends ActionBarActivity {
         incomingConnections.setTextColor(Color.WHITE);
 
         incomingHeadRow.addView(incomingConnections);
-        searchTable.addView(incomingHeadRow, rowOfTable + 1);
+        searchTable.addView(incomingHeadRow, rowOfTable);
         //update row of table
         rowOfTable += 1;
 
@@ -324,7 +321,7 @@ public class Connections extends ActionBarActivity {
             TextView noRecords = new TextView(this);
             noRecords.setText("No Completed Connections");
             row.addView(noRecords);
-            searchTable.addView(row, rowOfTable + 1);
+            searchTable.addView(row, rowOfTable);
             rowOfTable += 1;
         }
         else {
@@ -356,6 +353,7 @@ public class Connections extends ActionBarActivity {
                     remove.setTextColor(Color.WHITE);
                     remove.setBackgroundColor(getResources().getColor(R.color.header));
                     remove.setPadding(5, 5, 5, 5);
+                    remove.setOnClickListener(removeOnClick(remove, completedUsername));
                     //add what to do on click
 
                     //add the views to the row
@@ -364,11 +362,162 @@ public class Connections extends ActionBarActivity {
                     row.addView(forSurname);
                     row.addView(remove);
 
-                    searchTable.addView(row, rowOfTable + i);
+                    searchTable.addView(row, rowOfTable);
+                    rowOfTable += 1;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
+
+    /**
+     * This method is the action listener that is applied to the remove button for all of the completed connections.
+     * It run the removeConnection method, changes the text on the button and stops the button being clicked again.
+     * @param button the button that the onclick listener is applied too
+     * @param username the username of the person that they want to remove as a connection
+     */
+    View.OnClickListener removeOnClick(final Button button, final String username) {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                if (removeConnection(username) == true) {
+                    button.setText("Connection Removed");
+                    button.setTextSize(11);
+                    button.setClickable(false);
+                } else {
+                    System.out.println("Failed");
+                    //add alert unable to be removed
+                }
+            }
+        };
+    }
+
+    /**
+     * This method is the action listener that is applied to the Cancel button for all of the outgoing connections.
+     * It run the cancelOutgoingConnection method, changes the text on the button and stops the button being clicked again.
+     * @param button the button that the onclick listener is applied too
+     * @param username the username of the person that they want to remove as a connection
+     */
+    View.OnClickListener cancelOnClick(final Button button, final String username) {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                if (cancelOutgoingConnection(username) == true) {
+                    button.setText("Request Cancelled");
+                    button.setTextSize(11);
+                    button.setClickable(false);
+                } else {
+                    System.out.println("Failed");
+                    //add alert unable to be removed
+                }
+            }
+        };
+    }
+
+    private boolean cancelOutgoingConnection(String connection) {
+        HashMap<String, String> deleteConnection = new HashMap<String, String>();
+
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+
+        //add search to HashMap
+        deleteConnection.put("user", username);
+        deleteConnection.put("connection", connection);
+
+        //Create new HttpClient and Post Header
+        HttpClient httpclient = new DefaultHttpClient();
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/cancelConnection");
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+        //assigns the HashMap to list, for post request encoding
+        try {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+            Set<Map.Entry<String, String>> detailsSet = deleteConnection.entrySet();
+            for (Map.Entry<String, String> string : detailsSet) {
+                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
+            }
+
+            //pass the list to the post request
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+
+            String responseString = EntityUtils.toString(response.getEntity());
+            System.out.print(responseString);
+
+            if (responseString == "True") {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+
+
+        } catch (ClientProtocolException e) {
+            //TODO Auto-generated catch block
+        } catch (IOException e) {
+            //TODO Auto-generated catch block
+        } catch (NullPointerException e) {
+            //TODO Auto-generated catch block
+        }
+        return false;
+    }
+
+
+    private boolean removeConnection(String connection) {
+        HashMap<String, String> deleteConnection = new HashMap<String, String>();
+
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+
+        //add search to HashMap
+        deleteConnection.put("user", username);
+        deleteConnection.put("connection", connection);
+
+        //Create new HttpClient and Post Header
+        HttpClient httpclient = new DefaultHttpClient();
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/deleteConnection");
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+        //assigns the HashMap to list, for post request encoding
+        try {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+            Set<Map.Entry<String, String>> detailsSet = deleteConnection.entrySet();
+            for (Map.Entry<String, String> string : detailsSet) {
+                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
+            }
+
+            //pass the list to the post request
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+
+            String responseString = EntityUtils.toString(response.getEntity());
+            System.out.print(responseString);
+
+            if (responseString == "True") {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+
+
+        } catch (ClientProtocolException e) {
+            //TODO Auto-generated catch block
+        } catch (IOException e) {
+            //TODO Auto-generated catch block
+        } catch (NullPointerException e) {
+            //TODO Auto-generated catch block
+        }
+        return false;
+    }
+
 }
