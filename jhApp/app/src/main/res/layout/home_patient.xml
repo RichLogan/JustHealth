@@ -15,6 +15,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/profile"
             android:src="@drawable/ic_action_user" />
 
         <Button

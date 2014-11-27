@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,6 +20,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ public class Profile extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+        viewProfile();
 
     }
 
@@ -47,13 +52,18 @@ public class Profile extends ActionBarActivity {
         //retrieve username
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username",null);
+        String password = account.getString("password", null);
 
         //add username to HashMap
         profileInfo.put("username", username);
 
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getAccountInfo");
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
 
         //assigns the HashMap to list, for post request encoding
         try {
@@ -67,13 +77,35 @@ public class Profile extends ActionBarActivity {
             //pass the list to the post request
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
-            System.out.println(response);
+            String responseString = EntityUtils.toString(response.getEntity());
+            System.out.println(responseString);
+            JSONObject queryReturn = null;
+            try {
+                queryReturn = new JSONObject(responseString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            print(queryReturn);
+
         } catch (ClientProtocolException e) {
             //TODO Auto-generated catch block
         } catch (IOException e) {
             //TODO Auto-generated catch block
         }
 
+    }
+
+    private void print(JSONObject response) {
+        TextView username = (TextView) findViewById(R.id.profileUsername);
+
+        //find rest of views
+        try {
+            username.setText(response.getString("username"));
+            //assign object to view
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
 

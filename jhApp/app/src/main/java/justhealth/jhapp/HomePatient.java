@@ -43,5 +43,14 @@ public class HomePatient extends ActionBarActivity {
                     }
                 }
         );
+
+        ImageButton profile = (ImageButton) findViewById(R.id.profile);
+        profile.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomePatient.this, Profile.class));
+                    }
+                }
+        );
     }
 }
