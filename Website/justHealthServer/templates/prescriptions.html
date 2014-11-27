@@ -9,6 +9,7 @@
 
 {% block content %}
 <h3> Medication </h3>
+<div class="panel-body">
 
 <div id="queryTable">
   <table class="table">
@@ -39,11 +40,12 @@
       <td> {{prescription.enddate}} </td>
       <td> {{prescription.repeat}} </td>
       <td> {{prescription.stockleft}} </td>
-
-{%endfor%}
     </tr>
+{%endfor%}
+
     </tbody>
   </table>
+</div>
 </div>
 
 
