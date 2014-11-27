@@ -164,6 +164,7 @@ def resetPasswordRedirect():
 
 @app.route('/myPatients')
 def myPatients():
+    # Get Patients
     if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
         # Get all patients connected to this user
         connections = json.loads(getConnections(session['username']))
@@ -173,7 +174,12 @@ def myPatients():
             if connection['accounttype'] == "Patient":
                 patients.append(connection)
 
-        return render_template('myPatients.html', patients = patients)
+    # Get all prescriptions
+    prescriptionMapping = {}
+    for patient in patients:
+        prescriptionMapping[patient['username']] = getPrescriptions(patient['username'])
+
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
     return redirect(url_for('index'))
 
 @app.route('/prescriptions')
