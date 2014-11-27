@@ -83,3 +83,39 @@ class Patientcarer(BaseModel):
     class Meta:
         primary_key = CompositeKey('carer', 'patient')
         db_table = 'patientcarer'
+
+def createAll():
+    dropAll()
+    Client.create_table()
+    Patient.create_table()
+    Carer.create_table()
+    uq8LnAWi7D.create_table()
+    Deactivatereason.create_table()
+    Userdeactivatereason.create_table()
+    Relationship.create_table()
+    Patientcarer.create_table()
+
+def dropAll():
+    if Client.table_exists():
+        Client.drop_table(cascade=True)
+
+    if Patient.table_exists():
+        Patient.drop_table(cascade=True)
+
+    if Carer.table_exists():
+        Carer.drop_table(cascade=True)
+
+    if uq8LnAWi7D.table_exists():
+        uq8LnAWi7D.drop_table(cascade=True)
+
+    if Deactivatereason.table_exists():
+        Deactivatereason.drop_table(cascade=True)
+
+    if Userdeactivatereason.table_exists():
+        Userdeactivatereason.drop_table(cascade=True)
+
+    if Relationship.table_exists():
+        Relationship.drop_table(cascade=True)
+
+    if Patientcarer.table_exists():
+        Patientcarer.drop_table(cascade=True)
