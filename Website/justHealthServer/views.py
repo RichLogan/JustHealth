@@ -161,3 +161,17 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+@app.route('/myPatients')
+def myPatients():
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+
+        return render_template('myPatients.html', patients = patients)
+    return redirect(url_for('index'))
