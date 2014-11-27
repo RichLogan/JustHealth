@@ -12,13 +12,13 @@ class BaseModel(Model):
         database = database
 
 class Client(BaseModel):
-    accountdeactivated = BooleanField(default=False)
-    accountlocked = BooleanField(default=False)
+    accountdeactivated = BooleanField()
+    accountlocked = BooleanField()
     dob = DateField()
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    verified = BooleanField(default=False)
+    verified = BooleanField()
 
     class Meta:
         db_table = 'client'
@@ -80,42 +80,68 @@ class Patientcarer(BaseModel):
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carer')
     patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patient')
 
+class Medication(BaseModel):
+    name = CharField(primary_key=True)
     class Meta:
-        primary_key = CompositeKey('carer', 'patient')
-        db_table = 'patientcarer'
+        db_table = 'medication'
+
+class Prescription(BaseModel):
+    prescriptionid = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', unique=True, rel_model=Client, to_field='username')
+    medication = ForeignKeyField(db_column='name', unique=True, rel_model=Medication, to_field='name')
+    dosage = IntegerField(null=True)
+    frequency = CharField(max_length=25, null=True)
+    quantity = IntegerField(null=True)
+    frequencyUnit = CharField(max_length=10, null=True)
+    startDate = DateField(null=True)
+    endDate = DateField(null=True)
+    repeat = CharField(max_length=25, null=True)
+    stockleft = IntegerField(null=True)
+
+    class Meta:
+        db_table = 'prescription'
 
 def createAll():
-    dropAll()
-    Client.create_table()
-    Patient.create_table()
-    Carer.create_table()
-    uq8LnAWi7D.create_table()
-    Deactivatereason.create_table()
-    Userdeactivatereason.create_table()
-    Relationship.create_table()
-    Patientcarer.create_table()
+    # dropAll()
+    # Client.create_table()
+    # Patient.create_table()
+    # Carer.create_table()
+    # uq8LnAWi7D.create_table()
+    # Deactivatereason.create_table()
+    # Userdeactivatereason.create_table()
+    # Relationship.create_table()
+    # Patientcarer.create_table()
+    Medication.create_table()
+    Prescription.create_table()
 
-def dropAll():
-    if Client.table_exists():
-        Client.drop_table(cascade=True)
 
-    if Patient.table_exists():
-        Patient.drop_table(cascade=True)
-
-    if Carer.table_exists():
-        Carer.drop_table(cascade=True)
-
-    if uq8LnAWi7D.table_exists():
-        uq8LnAWi7D.drop_table(cascade=True)
-
-    if Deactivatereason.table_exists():
-        Deactivatereason.drop_table(cascade=True)
-
-    if Userdeactivatereason.table_exists():
-        Userdeactivatereason.drop_table(cascade=True)
-
-    if Relationship.table_exists():
-        Relationship.drop_table(cascade=True)
-
-    if Patientcarer.table_exists():
-        Patientcarer.drop_table(cascade=True)
+#def dropAll():
+    # if Client.table_exists():
+    #     Client.drop_table(cascade=True)
+    #
+    # if Patient.table_exists():
+    #     Patient.drop_table(cascade=True)
+    #
+    # if Carer.table_exists():
+    #     Carer.drop_table(cascade=True)
+    #
+    # if uq8LnAWi7D.table_exists():
+    #     uq8LnAWi7D.drop_table(cascade=True)
+    #
+    # if Deactivatereason.table_exists():
+    #     Deactivatereason.drop_table(cascade=True)
+    #
+    # if Userdeactivatereason.table_exists():
+    #     Userdeactivatereason.drop_table(cascade=True)
+    #
+    # if Relationship.table_exists():
+    #     Relationship.drop_table(cascade=True)
+    #
+    # if Patientcarer.table_exists():
+    #     Patientcarer.drop_table(cascade=True)
+    #
+    # if Medication.table_exists():
+    #     Medication.drop_table(cascade=True)
+    #
+    # if Prescription.table_exists():
+    #     Medication.drop_table(cascade=True)
