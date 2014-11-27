@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/header"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
@@ -21,72 +21,48 @@
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
-                android:textSize="20dip"
+                android:text="Search To Connect"
+                android:textSize="20dp"
                 android:textColor="@color/header"
-                android:layout_marginTop="5dip"
+                android:layout_marginTop="50dip"
                 android:layout_marginBottom="20dip"
                 android:id="@+id/loginTitle"/>
 
-            <!-- Placeholder for alert message -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/insertAlert"/>
 
-            <!--  Username-->
+            <!--  Search Field-->
 
             <EditText android:layout_width="372dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
                 android:singleLine="true"
-                android:id="@+id/loginUsername"
+                android:id="@+id/searchField"
                 android:maxLength="25"
-                android:hint="Username"/>
-
-            <!--  Password -->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/loginPassword"
-                android:password="true"
-                android:hint="Password"/>
+                android:hint="Search By: First Name, Surname, Username"/>
 
             <Button
                 android:layout_width="115dp"
                 android:layout_height="wrap_content"
-                android:text="Login"
-                android:id="@+id/login"
+                android:text="Search"
+                android:id="@+id/searchButton"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
 
-            <TextView android:id="@+id/link_to_forgot_password"
-                android:layout_width="fill_parent"
+            <TableLayout
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password"
-                android:gravity="center"
-                android:textSize="15dip"
-                android:textColor="@color/header"
-                android:layout_below="@id/login"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <TextView android:id="@+id/link_to_register"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="New to JustHealth? Register here"
-                android:gravity="center"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginTop="53dp"
-                android:layout_below="@+id/link_to_forgot_password"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:id="@+id/searchTable"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp">
+            </TableLayout>
         </LinearLayout>
     </LinearLayout>
 

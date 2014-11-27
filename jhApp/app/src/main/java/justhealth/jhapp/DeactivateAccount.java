@@ -4,8 +4,6 @@ package justhealth.jhapp;
  * Created by charlottehutchinson on 04/11/14.
  */
 public class DeactivateAccount {
-
-
 /*
 Are you sure you want to deactivate dialog
     http://developer.android.com/guide/topics/ui/dialogs.html
@@ -29,9 +27,6 @@ Are you sure you want to deactivate dialog
 */
 
 
-
 //need a popup to appear when user clicks on 'why should we keep your data'
 
 }
-
-
