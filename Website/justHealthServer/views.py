@@ -175,3 +175,8 @@ def myPatients():
 
         return render_template('myPatients.html', patients = patients)
     return redirect(url_for('index'))
+
+@app.route('/prescriptions')
+def  prescriptions():
+  return render_template('prescriptions.html')
+>>>>>>> e1bf4486865156b0a2f8856e36790264f692265d

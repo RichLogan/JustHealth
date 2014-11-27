@@ -578,3 +578,99 @@ def getConnections(username):
     result['completed'] = completedFinal
 
     return json.dumps(result)
+
+@app.route('/api/addMedication', methods=['POST'])
+def addMedication():
+    return addMedication (request.form['medicationname'])
+
+def addMedication(medicationName):
+    insertMedication = Medication.insert(name = medicationName)
+    insertMedication.execute()
+
+# @app.route('/api/', methods=['POST'])
+# def deleteMedication():
+#     deleteRequest(request.form['medicationame'])
+#
+# def deleteRequest(user, connection):
+#     userType = json.loads(getAccountInfo(user))['accounttype']
+#     connectionType = json.loads(getAccountInfo(connection))['accounttype']
+#
+#     if (userType == "Pharmasist"and connectionType == "Patient"):
+#         instance = PatientPharmasist.select().where().get()
+#         instance.delete_instance()
+#         return "True"
+#     elif (userType == "Doctor" and connectionType == "Patient"):
+#         instance = PatientDoctor.select().where().get()
+#         instance.delete_instance()
+#         return "True"
+#     else:
+#         return "False"
+
+@app.route('/api/addPrescription', methods=['POST'])
+def addPrescription():
+    insertPrescitpion = Prescription.insert(
+        username = request.form['username'],
+        medication = request.form['medication'],
+        dosage =  request.form['medication'],
+        frequency =  request.form['medication'],
+        quantity =  request.form['medication'],
+        dosageunit =  request.form['medication'],
+        frequecnyunit =  request.form['medication'],
+        startdate =  request.form['medication'],
+        enddate =  request.form['medication'],
+        repeat =  request.form['medication'],
+        stockleft =  request.form['medication'])
+    insertMedication.execute()
+
+@app.route('/api/deletePrescription', methods=['POST'])
+def deletePrescription():
+    deletePrescription(request.form['prescription'])
+
+def deletePrescription(user,prescription):
+    instance = prescriptionid (id).get()
+    instance.delete_instance()
+
+@app.route('/api/getPrescriptions', methods=['POST'])
+def getPrescriptions():
+    return getPrescriptions(request.form['username'])
+
+def getPrescriptions(username):
+    accountType = json.loads(getAccountInfo(username))['accounttype']
+    user = Client.select().where(Client.username == username).get()
+
+    if accountType == "Patient":
+        jsonResult = []
+        results = Prescription.select().dicts().where(Prescription.username == user)
+        for result in results:
+            result['startdate'] = str(result['startdate'])
+            result['enddate'] = str(result['enddate'])
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
+    else:
+        return "Must have Patient account type"
+
+    # prescribedPrescriptionsDetails = []
+    # for prescription in prescribedPrescriptions:
+    #     person = {}
+    #     if accountType == "Patient":
+    #         details = json.loads(getAccountInfo(connection.carer.username))
+    #     else:
+    #         details = None
+    #
+    #     prescription['medication'] = details['medication']
+    #     prescription['dosage'] = details['dosage']
+    #     prescription['frequency'] = details['frequency']
+    #     prescription['quantity'] = details['quantity']
+    #     prescription['dosageUnit'] = details['dosageUnit']
+    #     prescription['frequencyUnit'] = details['frequencyUnit']
+    #     prescription['startDate'] = details['startDate']
+    #     prescription['endDate'] = details['endDate']
+    #     prescription['repeat'] = details['repeat']
+    #     prescription['stockLeft'] = details['stockLeft']
+    #     prescribedPrescriptionsDetails.append(prescription)
+    # prescribedPrescriptions = json.dumps(prescribedPrescriptionsDetails)
+    #
+    # result = {}
+    # result['completed'] = prescribedPrescriptions
+    #
+    # return json.dumps(result)
