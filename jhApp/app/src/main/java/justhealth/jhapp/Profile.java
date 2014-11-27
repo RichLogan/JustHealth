@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by Ben on 21/11/2014.
+ * Created by Ben McGregor on 21/11/2014.
  */
 public class Profile extends ActionBarActivity {
     @Override
@@ -98,10 +98,20 @@ public class Profile extends ActionBarActivity {
 
     private void print(JSONObject response) {
         TextView username = (TextView) findViewById(R.id.profileUsername);
-
-        //find rest of views
+        TextView firstName = (TextView) findViewById(R.id.profileFirstName);
+        TextView surname = (TextView) findViewById(R.id.profileSurname);
+        TextView dob = (TextView) findViewById(R.id.profileDOB);
+        TextView gender = (TextView) findViewById(R.id.profileGender);
+        TextView accountType = (TextView) findViewById(R.id.profileAccount);
+        TextView email = (TextView) findViewById(R.id.profileEmail);
         try {
             username.setText(response.getString("username"));
+            firstName.setText(response.getString("firstname"));
+            surname.setText(response.getString("surname"));
+            dob.setText(response.getString("dob"));
+            gender.setText(response.getString("gender"));
+            accountType.setText(response.getString("accounttype"));
+            email.setText(response.getString("email"));
             //assign object to view
         } catch (JSONException e) {
             e.printStackTrace();

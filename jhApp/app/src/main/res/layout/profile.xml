@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="First Name"
-        android:id="@+id/textView"
+        android:id="@+id/profileFirstName"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="180dp" />
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Surname"
-        android:id="@+id/textView"
+        android:id="@+id/profileSurname"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="210dp" />
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="D.O.B"
-        android:id="@+id/textView"
+        android:id="@+id/profileDOB"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="240dp" />
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Gender"
-        android:id="@+id/textView"
+        android:id="@+id/profileGender"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="270dp" />
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Account Type"
-        android:id="@+id/textView"
+        android:id="@+id/profileAccount"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="300dp" />
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Email"
-        android:id="@+id/textView"
+        android:id="@+id/profileEmail"
         android:layout_alignTop="@+id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="330dp" />
