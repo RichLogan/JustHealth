@@ -47,14 +47,14 @@ def registerUser():
 
     # Validate username >25
     if len(profile['username']) > 25:
-      return "Username can not be longer then 25 characters"
+      return "Username can not be longer than 25 characters"
 
     if Client.select().where(Client.username == profile['username']).count() != 0:
        return "Username already taken"
 
     # Validate firstname, surname and email >25
     if len(profile['firstname']) > 100 or len(profile['surname']) > 100 or len(profile['email']) > 100:
-      return 'Firstname, surname and email can not be longer then 100 characters'
+      return 'Firstname, surname and email can not be longer than 100 characters'
 
     # Validate email correct format
     pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
