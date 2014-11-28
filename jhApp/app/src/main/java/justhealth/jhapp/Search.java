@@ -84,7 +84,7 @@ public class Search extends ActionBarActivity {
         String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
 
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+        //httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
         System.out.println(encodedAuthentication);
         //assigns the HashMap to list, for post request encoding
         try {
@@ -97,6 +97,7 @@ public class Search extends ActionBarActivity {
 
             //pass the list to the post request
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            System.out.println("Post Request: " + searchInformation);
             HttpResponse response = httpclient.execute(httppost);
 
             String responseString = EntityUtils.toString(response.getEntity());
@@ -162,7 +163,7 @@ public class Search extends ActionBarActivity {
             try {
                 JSONObject obj = array.getJSONObject(i);
                 System.out.println(obj);
-                final String resultUsername = obj.getString("username");
+                String resultUsername = obj.getString("username");
                 String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 
