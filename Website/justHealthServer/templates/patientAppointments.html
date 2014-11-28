@@ -34,7 +34,9 @@
         <div class="col-md-6 col-lg-6 ">
           <div class="panel panel-info">
             <div class="panel-body">
-              
+              {% for appointment in appointments %}
+                <p>{{appointment.name}}</p>
+              {% endfor %}}
             </div>
       		</div>
     		</div>
@@ -55,6 +57,9 @@
 					      <label for="type">Appointment Type</label>
 					      <select name="type" class="form-control">
 					      	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
+                  {% for type in appType %}
+                    <option>{{type.type}}</option>
+                  {% endfor %}
 					      </select>
 					  	</div>
   						<div class="form-group">
@@ -85,6 +90,9 @@
   							<label for="other">Details</label>
   							<textarea class="form-control" name="other" id="other"></textarea>
   						</div>
+              <div class="form-group"> 
+                <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+              </div>
             </form>
           </div>
     		</div>

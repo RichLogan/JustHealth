@@ -162,6 +162,8 @@ def resetPasswordRedirect():
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
-  result = json.loads(getAccountInfo(session['username']))
-  if result['accounttype'] == "Patient":
-    return render_template('patientAppointments.html')
+  if request.method == 'POST':
+    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
+    return added
+  upcoming = json.loads(getUpcomingAppointments(session['username']))
+  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming)
