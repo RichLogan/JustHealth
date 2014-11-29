@@ -1,6 +1,7 @@
 package justhealth.jhapp;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -212,19 +213,19 @@ public class Connections extends ActionBarActivity {
                     TextView forCode = new TextView(this);
                     forCode.setText(outgoingCode);
                     //cancel request button
-                    Button cancel = new Button(this);
-                    cancel.setText("Cancel Request");
-                    cancel.setTextColor(Color.WHITE);
-                    cancel.setBackgroundColor(getResources().getColor(R.color.header));
-                    cancel.setPadding(5, 5, 5, 5);
-                    cancel.setOnClickListener(cancelOnClick(cancel, outgoingUsername));
+                    Button outgoingCancel = new Button(this);
+                    outgoingCancel.setText("Cancel Request");
+                    outgoingCancel.setTextColor(Color.WHITE);
+                    outgoingCancel.setBackgroundColor(getResources().getColor(R.color.header));
+                    outgoingCancel.setPadding(5, 5, 5, 5);
+                    outgoingCancel.setOnClickListener(cancelOnClick(outgoingCancel, outgoingUsername));
 
                     //add the views to the row
                     row.addView(forUsername);
                     row.addView(forFirstName);
                     row.addView(forSurname);
                     row.addView(forCode);
-                    row.addView(cancel);
+                    row.addView(outgoingCancel);
 
                     searchTable.addView(row, rowOfTable);
                     rowOfTable += 1;
@@ -280,18 +281,19 @@ public class Connections extends ActionBarActivity {
                     TextView forSurname = new TextView(this);
                     forSurname.setText(incomingSurname);
                     //add connect button
-                    Button connect = new Button(this);
-                    connect.setText("Connect");
-                    connect.setTextColor(Color.WHITE);
-                    connect.setBackgroundColor(getResources().getColor(R.color.header));
-                    connect.setPadding(5, 5, 5, 5);
+                    Button incomingConnect = new Button(this);
+                    incomingConnect.setText("Connect");
+                    incomingConnect.setTextColor(Color.WHITE);
+                    incomingConnect.setBackgroundColor(getResources().getColor(R.color.header));
+                    incomingConnect.setPadding(5, 5, 5, 5);
+                    incomingConnect.setOnClickListener(connectOnClick(incomingConnect, incomingUsername));
                     //add what to do on click
 
                     //add the views to the row
                     row.addView(forUsername);
                     row.addView(forFirstName);
                     row.addView(forSurname);
-                    row.addView(connect);
+                    row.addView(incomingConnect);
 
                     searchTable.addView(row, rowOfTable);
                     rowOfTable += 1;
@@ -347,20 +349,20 @@ public class Connections extends ActionBarActivity {
                     TextView forSurname = new TextView(this);
                     forSurname.setText(completedSurname);
                     //add connect button
-                    Button remove = new Button(this);
-                    remove.setText("Remove");
-                    remove.setTextSize(10);
-                    remove.setTextColor(Color.WHITE);
-                    remove.setBackgroundColor(getResources().getColor(R.color.header));
-                    remove.setPadding(5, 5, 5, 5);
-                    remove.setOnClickListener(removeOnClick(remove, completedUsername));
+                    Button completedRemove = new Button(this);
+                    completedRemove.setText("Remove");
+                    completedRemove.setTextSize(10);
+                    completedRemove.setTextColor(Color.WHITE);
+                    completedRemove.setBackgroundColor(getResources().getColor(R.color.header));
+                    completedRemove.setPadding(5, 5, 5, 5);
+                    completedRemove.setOnClickListener(removeOnClick(completedRemove, completedUsername));
                     //add what to do on click
 
                     //add the views to the row
                     row.addView(forUsername);
                     row.addView(forFirstName);
                     row.addView(forSurname);
-                    row.addView(remove);
+                    row.addView(completedRemove);
 
                     searchTable.addView(row, rowOfTable);
                     rowOfTable += 1;
@@ -409,6 +411,20 @@ public class Connections extends ActionBarActivity {
                     System.out.println("Failed");
                     //add alert unable to be removed
                 }
+            }
+        };
+    }
+
+    /**
+     * This method is the action listener that is applied to the Cancel button for all of the outgoing connections.
+     * It runs the connect method, changes the text on the button and stops the button being clicked again.
+     * @param button the button that the onclick listener is applied too
+     * @param incomingusername the username of the person that they want to remove as a connection
+     */
+    View.OnClickListener connectOnClick(final Button button, final String incomingusername) {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                connectIncomingConnection(incomingusername);
             }
         };
     }
@@ -518,6 +534,18 @@ public class Connections extends ActionBarActivity {
             //TODO Auto-generated catch block
         }
         return false;
+    }
+
+
+    private void connectIncomingConnection(String incomingUser) {
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+
+        Intent connect = new Intent(Connections.this, Popup.class);
+        connect.putExtra("calledFrom", "Connections");
+        connect.putExtra("loggedInUser", username);
+        connect.putExtra("connectToUser", incomingUser);
+        startActivity(connect);
     }
 
 }
