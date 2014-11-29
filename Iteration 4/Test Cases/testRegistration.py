@@ -1,6 +1,3 @@
-# ORM Testing Script
-# Test Case 4_4 Registration API
-
 from peewee import *
 import requests
 import unittest
@@ -8,14 +5,14 @@ import imp
 
 testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
 
-class testCase_4_4(unittest.TestCase):
-    """Testing Registration"""
+class testRegistration(unittest.TestCase):
+    """Testing Registration API"""
 
     def setUp(self):
         """Create needed tables"""
         testDatabase.createAll()
 
-    def test_4_4_1(self):
+    def testLegitimate(self):
         """Inserting legitimate data"""
 
         payload = {
@@ -35,7 +32,7 @@ class testCase_4_4(unittest.TestCase):
         self.assertEqual(registration.text, "True")
         self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "testUsername").count(), 1)
 
-    def test_4_4_2(self):
+    def testNulls(self):
         """Inserting NULL values"""
         payload = {
             "username" : "testUsername",
@@ -71,7 +68,7 @@ class testCase_4_4(unittest.TestCase):
                 self.assertEqual(registration.text, "Terms and Conditions must be accepted")
         self.assertEqual(testDatabase.Client.select().count(), 0)
 
-    def test_4_4_3(self):
+    def testLongData(self):
         """Inserting data too long"""
 
         # Legitimate
@@ -117,7 +114,7 @@ class testCase_4_4(unittest.TestCase):
         # payload['email'] = "justhealth@richlogan.co.uk"
 
 
-    def test_4_4_4(self):
+    def testDataTypes(self):
         """Inserting incorrect data types"""
 
         payload = {
