@@ -98,24 +98,17 @@ def createAll():
 def dropAll():
     if Client.table_exists():
         Client.drop_table(cascade=True)
-
     if Patient.table_exists():
         Patient.drop_table(cascade=True)
-
     if Carer.table_exists():
         Carer.drop_table(cascade=True)
-
     if uq8LnAWi7D.table_exists():
         uq8LnAWi7D.drop_table(cascade=True)
-
     if Deactivatereason.table_exists():
         Deactivatereason.drop_table(cascade=True)
-
     if Userdeactivatereason.table_exists():
         Userdeactivatereason.drop_table(cascade=True)
-
     if Relationship.table_exists():
         Relationship.drop_table(cascade=True)
-
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
