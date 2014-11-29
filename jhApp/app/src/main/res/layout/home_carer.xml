@@ -17,10 +17,13 @@
             android:layout_weight="1"
             android:src="@drawable/ic_action_user" />
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:id="@+id/search"
+            android:text="Search" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -29,10 +32,12 @@
         android:orientation="horizontal"
         android:layout_weight="1" >
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:id="@+id/connections"
+            android:text="Connections"/>
 
         <ImageButton
             android:layout_width="0dip"

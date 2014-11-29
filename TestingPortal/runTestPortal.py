@@ -9,8 +9,14 @@ def query():
 		#seach tests based on iteration number
 		buildQuery = {}
 		buildQuery['iteration'] = request.form['iteration']
-
-		testsQueried = Tests.select().where(Tests.iteration == buildQuery['iteration']).order_by(Tests.testid)
+		try:
+			if request.form['status'] == "pass":
+				buildQuery['status'] = "Passed"
+			elif request.form['status'] == "fail":
+				buildQuery['status'] = "Failed" 
+			testsQueried = Tests.select().where(Tests.iteration == buildQuery['iteration'], Tests.latesttestresult == buildQuery['status']).order_by(Tests.testid)
+		except:
+			testsQueried = Tests.select().where(Tests.iteration == buildQuery['iteration']).order_by(Tests.testid)
 
 		return render_template('queryTests.html', tests = testsQueried)
 
@@ -95,8 +101,7 @@ def updateTest():
 def editTest():
 	if request.method == 'GET':
 		return render_template('editTest.html', test = Tests.select().where(Tests.autoid_test == request.args.get('test')).get())
-	
-
+		
 
 #when a test run is submitted 
 @app.route('/submitTest', methods=['POST', 'GET'])
