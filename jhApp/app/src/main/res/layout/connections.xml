@@ -1,8 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    android:orientation="vertical" >
 
     <include android:id="@+id/header" layout="@layout/header" />
 
@@ -15,11 +15,11 @@
         android:layout_alignParentStart="true">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView android:layout_width="wrap_content"
+            <TextView android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text= "Connections"
                 android:textSize="20dp"
@@ -38,7 +38,7 @@
                 android:id="@+id/titleOutgoingConnections"/>
 
             <TableLayout
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/connectionsTable"
                 android:layout_gravity="center_horizontal"
@@ -53,7 +53,7 @@
 
     <!--Link to Terms and Conditions-->
     <TextView android:id="@+id/link_to_terms"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Terms and Conditions"
         android:gravity="center"
@@ -63,4 +63,4 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@color/header"/>
-</RelativeLayout>
+</LinearLayout>

@@ -495,7 +495,7 @@ def completeConnection():
 
 @app.route('/api/deleteConnection', methods=['POST'])
 def deleteConnection():
-    deleteConnection(request.form['user'], request.form['connection'])
+    return deleteConnection(request.form['user'], request.form['connection'])
 
 def deleteConnection(user,connection):
     userType = json.loads(getAccountInfo(user))['accounttype']
