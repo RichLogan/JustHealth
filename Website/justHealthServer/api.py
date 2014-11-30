@@ -393,8 +393,8 @@ def searchPatientCarer(username, searchterm):
     thisUser = username
     try:
         patient = Patient.get(username=thisUser)
-        searchTerm = "%" + searchTerm + "%"
-        results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
+        searchterm = "%" + searchterm + "%"
+        results = Carer.select().dicts().where((Carer.username % searchterm) | (Carer.firstname % searchterm) |(Carer.surname % searchterm))
 
         jsonResult = []
         for result in results:
@@ -402,8 +402,8 @@ def searchPatientCarer(username, searchterm):
         return json.dumps(jsonResult)
 
     except Patient.DoesNotExist:
-        searchTerm = "%" + searchTerm + "%"
-        results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
+        searchterm = "%" + searchterm + "%"
+        results = Patient.select().dicts().where((Patient.username % searchterm) | (Patient.firstname % searchterm) |(Patient.surname % searchterm))
 
         jsonResult = []
         for result in results:
