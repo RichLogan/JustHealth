@@ -3,7 +3,7 @@ import requests
 import unittest
 import imp
 
-testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
+testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
 class testRegistration(unittest.TestCase):
     """Testing Registration API"""
