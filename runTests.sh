@@ -19,36 +19,38 @@ function getImport {
 
 importStatement=`getImport`;
 
+echo -e "-------------------------Setup-------------------------"
+
 if [[ $importStatement == "from database import *" ]];  then
   sed -i "" -e "5s/.*/from testDatabase import */" Website/justHealthServer/api.py;
-  echo "Set test database"
+  echo "Application now pointing to TEST database"
 
   echo "Allowing server to restart..."
   sleep 1
-  echo "1"
+  echo -ne "..1.."\\r
   sleep 1
-  echo "2"
+  echo -ne "..1..2"\\r
   sleep 1
-  echo "3"
+  echo -ne "..1..2..3"\\r
   sleep 1
-  echo "4"
+  echo -ne "..1..2..3..4"\\r
   sleep 1
-  echo "5"
-  echo -e "\n"
-  echo "Running..."
+  echo -e "..1..2..3..4..5"\\r
+  echo "Done!"
   runTests
 elif [[ $importStatement == "from testDatabase import *" ]]; then
-  echo "Test database is already set. Running...";
+  echo "Application already pointing to TEST database";
   runTests
 else
   echo "Something went wrong. Check DB import statement of Website/justHealthServer/api.py";
 fi
 
-echo "Resetting database import"
+echo "Reverting application to PRODUCTION database"
 sed -i "" -e "5s/.*/from database import */" Website/justHealthServer/api.py;
 
 function runTests {
-  # Actual Testing Function
+  echo -e "---------------Just Health Testing Suite---------------"
+
   echo "Iteration 1"
   # python -m unittest discover Iteration\ 1/Test\ Cases/Testing\ Scripts/
   echo -e "\n"
