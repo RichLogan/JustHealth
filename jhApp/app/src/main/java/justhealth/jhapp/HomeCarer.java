@@ -21,7 +21,7 @@ public class HomeCarer extends ActionBarActivity {
         settings.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
-                        startActivity(new Intent(HomeCarer.this, HomeCarer.class));
+                        startActivity(new Intent(HomeCarer.this, Settings.class));
                     }
                 }
         );
