@@ -595,3 +595,13 @@ def getConnections(username):
     result['completed'] = completedFinal
 
     return json.dumps(result)
+
+@app.route('/api/getDeactivateReasons', methods=['POST'])
+def getDeactivateReasons():
+    """Returns a JSON list of possible reasons a user can deactivate"""
+    reasons = Deactivatereason.select()
+    reasonList = []
+    for reason in reasons:
+        reasonList.append(reason.reason)
+    reasonList = json.dumps(reasonList)
+    return reasonList
