@@ -385,7 +385,7 @@ def sendPasswordResetEmail(username):
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchterm]"""
-    searchPatientCarer(request.form['username'], request.form['searchterm'])
+    return searchPatientCarer(request.form['username'], request.form['searchterm'])
 
 def searchPatientCarer(username, searchterm):
     #get username, firstname and surname of current user
