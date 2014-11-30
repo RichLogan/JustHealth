@@ -1,0 +1,87 @@
+{% extends "template.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block scriptsAndStyles %}{% endblock %}
+
+{% block content %}
+  <h1>My Patients</h1>
+
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    {% for patient in patients %}
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading{{patient.username}}">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{patient.username}}" aria-expanded="true" aria-controls="collapse{{patient.username}}">
+              {{patient.firstname}} {{patient.surname}} ({{patient.username}})
+            </a>
+          </h4>
+        </div>
+        <div id="collapse{{patient.username}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{patient.username}}">
+          <div class="panel-body">
+            <div class="row">
+
+              <div class="col-md-6">
+
+                <!-- View Prescriptions -->
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#prescription{{patient.username}}">
+                  View Prescriptions
+                </button>
+                <div class="modal fade" id="prescription{{patient.username}}" tabindex="-1" role="dialog" aria-labelledby="prescription{{patient.username}}Label" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="prescription{{patient.username}}Label">View Prescriptions</h4>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table">
+                          <thead>
+                            <th>Medication</th>
+                            <th>Dosage</th>
+                            <th>Frequency</th>
+                            <th>Frequency Unit</th>
+                            <th>Quantity</th>
+                            <th>startdate</th>
+                            <th>enddate</th>
+                            <th>repeat</th>
+                            <th>stockleft</th>
+                          </thead>
+                          <tbody>
+                            {% for x in prescriptionMapping %}
+                              {% if x == patient.username %}
+                                {% for prescription in prescriptionMapping.x %}
+                                  <tr>
+                                    <th>{{x}}</th>
+                                    <th>Dosage</th>
+                                    <th>Frequency</th>
+                                    <th>Frequency Unit</th>
+                                    <th>Quantity</th>
+                                    <th>startdate</th>
+                                    <th>enddate</th>
+                                    <th>repeat</th>
+                                    <th>stockleft</th>
+                                  </tr>
+                                  {% endfor %}
+                              {% endif %}
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-md-6">
+                Right Column
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

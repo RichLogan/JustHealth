@@ -80,6 +80,10 @@ class Patientcarer(BaseModel):
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carer')
     patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patient')
 
+    class Meta:
+        primary_key = CompositeKey('carer', 'patient')
+        db_table = 'patientcarer'
+
 class Medication(BaseModel):
     name = CharField(primary_key=True)
     class Meta:
