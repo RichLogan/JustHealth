@@ -1,6 +1,7 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from flask.ext.httpauth import HTTPBasicAuth
+# Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
@@ -102,9 +103,10 @@ def registerUser():
     )
 
     # Execute Queries
-    userInsert.execute()
-    typeInsert.execute()
-    userPassword.execute()
+    with database.transaction():
+        userInsert.execute()
+        typeInsert.execute()
+        userPassword.execute()
 
     sendVerificationEmail(profile['username'])
     return "True"
@@ -128,7 +130,8 @@ def authenticate():
             return "Account is locked. Please check your email for instructions"
         else:
             revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
-            revertAttempts.execute()
+            with database.transaction():
+                revertAttempts.execute()
             return "Authenticated"
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
@@ -138,7 +141,8 @@ def authenticate():
             incrementAttempts.execute()
             return "Account is locked"
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
-        incrementAttempts.execute()
+        with database.transaction():
+            incrementAttempts.execute()
         return "Incorrect username/password"
     return "Something went wrong!"
 
@@ -171,19 +175,22 @@ def deactivateAccount():
         reason = reason,
         comments = comments
     )
-    q.execute()
+    with database.transaction():
+        q.execute()
 
     if delete:
         # Delete User
         deletedUser = Client.delete().where(Client.username == request.form['username'])
-        deletedUser.execute()
+        with database.transaction():
+            deletedUser.execute()
         return "Deleted"
     else:
         # Keep user
         deactivatedUser = Client.update(accountdeactivated = True).where(Client.username == username)
         unverifyUser = Client.update(verified = False).where(Client.username == username)
-        deactivatedUser.execute()
-        unverifyUser.execute()
+        with database.transaction():
+            deactivatedUser.execute()
+            unverifyUser.execute()
         return "Kept"
 
 @app.route('/api/resetpassword', methods=['POST'])
@@ -219,11 +226,13 @@ def resetPassword():
         unlockAccount = Client.update(accountlocked=False).where(str(Client.username).strip() == profile['username'])
         setLoginCount = Client.update(loginattempts = 0).where(str(Client.username).strip() == profile['username'])
 
-        notCurrent.execute()
-        notVerified.execute()
-        newCredentials.execute()
-        unlockAccount.execute()
-        setLoginCount.execute()
+        with database.transaction():
+            notCurrent.execute()
+            notVerified.execute()
+            newCredentials.execute()
+            unlockAccount.execute()
+            setLoginCount.execute()
+
         sendPasswordResetEmail(profile['username'])
         return "True"
     else:
@@ -278,7 +287,8 @@ def getAccountInfo(username):
 
 def lockAccount(username):
     lockAccount = Client.update(accountlocked = True).where(Client.username == username)
-    lockAccount.execute()
+    with database.transaction():
+        lockAccount.execute()
     sendUnlockEmail(username)
 
 ####
@@ -441,7 +451,8 @@ def createConnection():
         target = targetUser,
         targettype = targetUser_type
     )
-    newConnection.execute()
+    with database.transaction():
+        newConnection.execute()
     return str(x)
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
@@ -465,16 +476,19 @@ def completeConnection():
                 patient = requestor,
                 carer = target
             )
-            newRelationship.execute()
+            with database.transaction():
+                newRelationship.execute()
         elif requestor_accountType == "Carer" and target_accountType == "Patient":
             newRelationship = Patientcarer.insert(
                 patient = target,
                 carer = requestor
             )
-            newRelationship.execute()
+            with database.transaction():
+                newRelationship.execute()
 
         # Delete this Relationship instance
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "Correct"
     else:
         return "Incorrect"
@@ -490,11 +504,13 @@ def deleteConnection(user,connection):
 
     if (userType == "Patient" and connectionType == "Carer"):
         instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
         instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "True"
     else:
         return "False"
@@ -506,10 +522,12 @@ def cancelRequest():
 def cancelRequest(user, connection):
     try:
         instance = Relationship.select().where(Relationship.requestor == user).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
     except RelationshipDoesNotExist:
         instance = Relationship.select().where(Relationship.target == connection).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
 
 @app.route('/api/getConnections', methods=['POST'])
 def getConnections():
