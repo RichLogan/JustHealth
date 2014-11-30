@@ -5,7 +5,7 @@
 {% block scriptsAndStyles %}{% endblock %}
 
 {% block content %}
-<h1>Prescriptions</h1>
+<h2>Prescriptions</h2>
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   {%for prescription in prescriptions%}
@@ -18,8 +18,9 @@
       </h3>
       <div id="collapse{{prescription.medication}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{prescription.medication}}">
         <div class="panel-body">
-          <div class="row">
-            Take {{prescription.quantity}}  {{prescription.dosage}} {{prescription.dosageunit}} tablets {{prescription.frequency}} {{prescription.frequencyunit}}
+          <div class="row"> <h5>
+            Take {{prescription.quantity}} {{prescription.dosage}} {{prescription.dosageunit}} tablets {{prescription.frequency}} {{prescription.frequencyunit}}
+        </h5>
         </div>
       </div>
     </div>
