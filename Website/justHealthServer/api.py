@@ -383,7 +383,6 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
-@auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchTerm]"""
     searchPatientCarer(request.form['username'], request.form['searchTerm'])
