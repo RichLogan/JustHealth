@@ -94,6 +94,7 @@ class Prescription(BaseModel):
     username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
     medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
     dosage = IntegerField(null=True)
+    dosageunit = CharField(null=True)
     frequency = CharField(max_length=25, null=True)
     quantity = IntegerField(null=True)
     frequencyunit = CharField(max_length=10, null=True)
