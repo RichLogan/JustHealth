@@ -10,10 +10,27 @@
       info:false,
       searching:false,
     });
+    
+    /*var allDates = $(document.getElementsByClassName('dateForJS'));
+    var now = moment().format();
+    //for loops through allDates
+    // each allDates.value() needs to equal 
+    for (var i = 0, len = allDates.length; i<len; i++){
+      var formatting = allDates.html(i);
+      var momentFormatting = moment(formatting);
+      format = momentFormatting.calendar();
+      alert(format);
+      allDates.html(format);
+    }*/
+
+    $('time').each(function(i, e) {
+      var time = moment($(e).attr('datetime'));
+      $(e).html('<span>' + time.calendar() + '</span>');
+    });
   });
 </script>
 {% endblock %}
-
+s
 {% block content %}
 <div id="content">
 	<h3>Your Appointments</h3>
@@ -29,19 +46,23 @@
   <br />
   <!--This shows the tab for the upcoming appointments-->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active container" id="upcoming">
-      <div class="row" align ="center">
-        <div class="col-md-6 col-lg-6 ">
-          <div class="panel panel-info">
-            <div class="panel-body">
-              {% for appointment in appointments %}
-                <p>{{appointment.name}}</p>
-              {% endfor %}}
+    <div role="tabpanel" class="tab-pane fade in active container" id="upcoming" style="width: 100%">
+      <div class="panel panel-info">
+        <div class="panel-body">
+          {% for appointment in appointments %}
+            <div class="row">
+              <div class="col-md-6">
+                <p><b>{{appointment.name}}</b></p>
+              </div>
+              <div class="col-md-6">
+                <time class="pull-right" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+              </div>
             </div>
-      		</div>
-    		</div>
-    	</div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
+
 
 		<!--This shows the tab for the new appointments-->
 		<div role="tabpanel" class="tab-pane fade" id="newAppointment">
