@@ -1,6 +1,7 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from flask.ext.httpauth import HTTPBasicAuth
+# Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
@@ -14,6 +15,7 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username,password):
+    """Checks if the password entered is the current password for that account"""
     try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
         return sha256_crypt.verify(password, hashedPassword)
@@ -22,6 +24,7 @@ def verify_password(username,password):
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
+    """Builds the user profile using the information input in the form"""
     # Build User Registration
     try:
       profile = {}
@@ -102,15 +105,17 @@ def registerUser():
     )
 
     # Execute Queries
-    userInsert.execute()
-    typeInsert.execute()
-    userPassword.execute()
+    with database.transaction():
+        userInsert.execute()
+        typeInsert.execute()
+        userPassword.execute()
 
     sendVerificationEmail(profile['username'])
     return "True"
 
 @app.route('/api/authenticate', methods=['POST'])
 def authenticate():
+    """Checks the account validity on log in. Includes: Password, verification and account status checks"""
     try:
         attempted = Client.get(username=request.form['username'])
     except Client.DoesNotExist:
@@ -128,7 +133,8 @@ def authenticate():
             return "Account is locked. Please check your email for instructions"
         else:
             revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
-            revertAttempts.execute()
+            with database.transaction():
+                revertAttempts.execute()
             return "Authenticated"
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
@@ -138,12 +144,14 @@ def authenticate():
             incrementAttempts.execute()
             return "Account is locked"
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
-        incrementAttempts.execute()
+        with database.transaction():
+            incrementAttempts.execute()
         return "Incorrect username/password"
     return "Something went wrong!"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
 def deactivateAccount():
+    """Form validation for account deactivation"""
     try:
         username = request.form['username']
     except KeyError, e:
@@ -171,23 +179,27 @@ def deactivateAccount():
         reason = reason,
         comments = comments
     )
-    q.execute()
+    with database.transaction():
+        q.execute()
 
     if delete:
         # Delete User
         deletedUser = Client.delete().where(Client.username == request.form['username'])
-        deletedUser.execute()
+        with database.transaction():
+            deletedUser.execute()
         return "Deleted"
     else:
         # Keep user
         deactivatedUser = Client.update(accountdeactivated = True).where(Client.username == username)
         unverifyUser = Client.update(verified = False).where(Client.username == username)
-        deactivatedUser.execute()
-        unverifyUser.execute()
+        with database.transaction():
+            deactivatedUser.execute()
+            unverifyUser.execute()
         return "Kept"
 
 @app.route('/api/resetpassword', methods=['POST'])
 def resetPassword():
+    """Form validation and database checks for user when they forget a password (overrides the old password)"""
     try:
         profile = {}
         profile['username'] = request.form['username']
@@ -219,11 +231,13 @@ def resetPassword():
         unlockAccount = Client.update(accountlocked=False).where(str(Client.username).strip() == profile['username'])
         setLoginCount = Client.update(loginattempts = 0).where(str(Client.username).strip() == profile['username'])
 
-        notCurrent.execute()
-        notVerified.execute()
-        newCredentials.execute()
-        unlockAccount.execute()
-        setLoginCount.execute()
+        with database.transaction():
+            notCurrent.execute()
+            notVerified.execute()
+            newCredentials.execute()
+            unlockAccount.execute()
+            setLoginCount.execute()
+
         sendPasswordResetEmail(profile['username'])
         return "True"
     else:
@@ -237,8 +251,8 @@ def resetPassword():
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
-"""Get Account information from client and patient/carer table"""
 def getAccountInfo(username):
+    """Get Account information from client and patient/carer table"""
     result = {}
     thisUser = str(username)
     try:
@@ -277,19 +291,23 @@ def getAccountInfo(username):
 ####
 
 def lockAccount(username):
+    """Emails the user if their account gets locked"""
     lockAccount = Client.update(accountlocked = True).where(Client.username == username)
-    lockAccount.execute()
+    with database.transaction():
+        lockAccount.execute()
     sendUnlockEmail(username)
 
 ####
 # Email Functions
 ####
 def getSerializer(secret_key=None):
+    """Converts a username into a random key, in order to create a unique link"""
     if secret_key is None:
         secret_key = app.secret_key
     return URLSafeSerializer(secret_key)
 
 def sendVerificationEmail(username):
+    """Sends email to the user after registration asking for account verification"""
     # Generate Verification Link
     s = getSerializer()
     payload = s.dumps(username)
@@ -308,6 +326,7 @@ def sendVerificationEmail(username):
     server.quit()
 
 def getUserFromEmail(email):
+    """Get username from the database for a valid email address"""
     try:
       username = Client.select(Client.username).where(Client.email == email).get()
       return username.username
@@ -315,6 +334,7 @@ def getUserFromEmail(email):
       return "False"
 
 def sendForgotPasswordEmail(username):
+    """Sends email to the user on completion of reset password form"""
     #Generate reset password Link
     s = getSerializer()
     payload = s.dumps(username)
@@ -333,6 +353,7 @@ def sendForgotPasswordEmail(username):
     server.quit()
 
 def sendUnlockEmail(username):
+    """Sends email to a user when account is locked due to too many unsuccessful attempts"""
     # Login to mail server
     s = getSerializer()
     payload = s.dumps(username)
@@ -351,41 +372,41 @@ def sendUnlockEmail(username):
     server.quit()
 
 def sendPasswordResetEmail(username):
-  s = getSerializer()
-  payload = s.dumps(username)
-  verifyLink = url_for('passwordReset', payload=payload, _external=True)
-
-  #Login to mail server
-  server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-  server.login('justhealth@richlogan.co.uk', "justhealth")
-  # Build Message
-  sender = "'JustHealth' <justhealth@richlogan.co.uk>"
-  recipient = Client.get(username = username).email
-  subject = "JustHealth Password Reset Verification"
-  message = "Your password has been reset. Please verify this here: " + str(verifyLink)
-  m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
-  # Send
-  server.sendmail(sender, recipient, m+message)
-  server.quit()
+    """Sends user email confirming password reset"""
+    s = getSerializer()
+    payload = s.dumps(username)
+    verifyLink = url_for('passwordReset', payload=payload, _external=True)
+    
+    #Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build Message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Password Reset Verification"
+    message = "Your password has been reset. Please verify this here: " + str(verifyLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 
 ####
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
-@auth.login_required
 def searchPatientCarer():
-    """Searches database for a user that can be connected to. POST [username, searchTerm]"""
-    searchPatientCarer(request.form['username'], request.form['searchTerm'])
+    """Searches database for a user that can be connected to. POST [username, searchterm]"""
+    return searchPatientCarer(request.form['username'], request.form['searchterm'])
 
-def searchPatientCarer(username, searchTerm):
+def searchPatientCarer(username, searchterm):
     #get username, firstname and surname of current user
     result = {}
     thisUser = username
     try:
         patient = Patient.get(username=thisUser)
-        searchTerm = "%" + searchTerm + "%"
-        results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
+        searchterm = "%" + searchterm + "%"
+        results = Carer.select().dicts().where((Carer.username % searchterm) | (Carer.firstname % searchterm) |(Carer.surname % searchterm))
 
         jsonResult = []
         for result in results:
@@ -393,8 +414,8 @@ def searchPatientCarer(username, searchTerm):
         return json.dumps(jsonResult)
 
     except Patient.DoesNotExist:
-        searchTerm = "%" + searchTerm + "%"
-        results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
+        searchterm = "%" + searchterm + "%"
+        results = Patient.select().dicts().where((Patient.username % searchterm) | (Patient.firstname % searchterm) |(Patient.surname % searchterm))
 
         jsonResult = []
         for result in results:
@@ -441,12 +462,13 @@ def createConnection():
         target = targetUser,
         targettype = targetUser_type
     )
-    newConnection.execute()
+    with database.transaction():
+        newConnection.execute()
     return str(x)
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 def completeConnection():
-    """Verify an inputed code to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
+    """Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
     #Take attempted code, match with a entry where they are target
     target = request.form['username']
     requestor = request.form['requestor']
@@ -465,16 +487,19 @@ def completeConnection():
                 patient = requestor,
                 carer = target
             )
-            newRelationship.execute()
+            with database.transaction():
+                newRelationship.execute()
         elif requestor_accountType == "Carer" and target_accountType == "Patient":
             newRelationship = Patientcarer.insert(
                 patient = target,
                 carer = requestor
             )
-            newRelationship.execute()
+            with database.transaction():
+                newRelationship.execute()
 
         # Delete this Relationship instance
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "Correct"
     else:
         return "Incorrect"
@@ -482,7 +507,8 @@ def completeConnection():
 
 @app.route('/api/deleteConnection', methods=['POST'])
 def deleteConnection():
-    deleteConnection(request.form['user'], request.form['connection'])
+    """Deletes connection between a patient and carer POST[user, connection]"""
+    return deleteConnection(request.form['user'], request.form['connection'])
 
 def deleteConnection(user,connection):
     userType = json.loads(getAccountInfo(user))['accounttype']
@@ -490,11 +516,13 @@ def deleteConnection(user,connection):
 
     if (userType == "Patient" and connectionType == "Carer"):
         instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
         instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "True"
     else:
         return "False"
@@ -504,18 +532,22 @@ def cancelRequest():
     cancelRequest(request.form['user'], request.form['connection'])
 
 def cancelRequest(user, connection):
+    """Cancels the user request to connect before completion"""
     try:
         instance = Relationship.select().where(Relationship.requestor == user).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
     except RelationshipDoesNotExist:
         instance = Relationship.select().where(Relationship.target == connection).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
 
 @app.route('/api/getConnections', methods=['POST'])
 def getConnections():
     return getConnections(request.form['username'])
 
 def getConnections(username):
+    """Gets the valid connections between two users"""
     accountType = json.loads(getAccountInfo(username))['accounttype']
     user = Client.select().where(Client.username==username).get()
 
@@ -578,3 +610,13 @@ def getConnections(username):
     result['completed'] = completedFinal
 
     return json.dumps(result)
+
+@app.route('/api/getDeactivateReasons', methods=['POST'])
+def getDeactivateReasons():
+    """Returns a JSON list of possible reasons a user can deactivate"""
+    reasons = Deactivatereason.select()
+    reasonList = []
+    for reason in reasons:
+        reasonList.append(reason.reason)
+    reasonList = json.dumps(reasonList)
+    return reasonList
