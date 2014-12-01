@@ -32,10 +32,9 @@
 {% endblock %}
 s
 {% block content %}
-<div id="content">
 	<h3>Your Appointments</h3>
 	<br />
-</div>
+
 <div role="tabpanel">
 
   <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -44,83 +43,141 @@ s
   </ul>
 
   <br />
+</div>
   <!--This shows the tab for the upcoming appointments-->
-  <div class="tab-content">
+  <!--<div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active container" id="upcoming" style="width: 100%">
-      <div class="panel panel-info">
-        <div class="panel-body">
-          {% for appointment in appointments %}
-            <div class="row">
-              <div class="col-md-6">
-                <p><b>{{appointment.name}}</b></p>
+      {% for appointment in appointments %}
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading{{appointment.name}}">
+            <h3 class="panel-title">
+              <div class="row">
+                <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{appointment.name}}" aria-expanded="false" aria-controls="collapse{{appointment.name}}">
+                  <div class="col-md-6">
+                    <p><b>{{appointment.name}}</b></p>
+                  </div>
+                  <div class="col-md-6">
+                    <time class="pull-right" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                  </div>
+                </a>
               </div>
-              <div class="col-md-6">
-                <time class="pull-right" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+            </h3> 
+            <div id="collapse{{appointment.name}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{appointment.name}}">
+              <div class="panel-body">
+                <div class="row"> 
+                  <h5>
+                    <ul>
+                      <li>Appointment Type: {{appointment.apptype}}</li>
+                      <li>Where: {{appointment.addressnamenumber}}, {{appointment.postcode}}</li>
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </h5>
+                </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>-->
+
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active container" id="upcoming" style="width: 100%">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="upcoming">
+
+      {% for appointment in appointments %}
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p>{{appointment.name}}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                  </div>
+                </div>
+              </a>
+            </h3>
+            <div id="collapse{{appointment.appid}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><b>Type:</b> {{appointment.apptype.apptype}}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                  </div>
+                  <div class="col-md-12">
+                    <p><b>End Date/Time:</b> {{appointment.enddate}} {{appointment.endtime}}</p>
+                    <p><b>Description:</b> {{appointment.description}}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
-
-		<!--This shows the tab for the new appointments-->
-		<div role="tabpanel" class="tab-pane fade" id="newAppointment">
-			<div class="row">
-        <div class="panel panel-info">
-          <div class="panel-body">
-            <form name="createAppointment" method="POST">
-            	<div class="form-group">
-      					<label for="name">Name</label>
-      					<input class="form-control" type="text" name="name">
-  						</div>
-  						<div class="form-group">
-					      <label for="type">Appointment Type</label>
-					      <select name="type" class="form-control">
-					      	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
-                  {% for type in appType %}
-                    <option>{{type.type}}</option>
-                  {% endfor %}
-					      </select>
-					  	</div>
-  						<div class="form-group">
-  							<label for="nameNumber">Building Name/Number</label>
-  							<input class="form-control" type="text" name="nameNumber">
-  						</div>
-  						<div class="form-group">
-  							<label for="postcode">Postcode</label>
-  							<input class="form-control" type="text" name="postcode">
-  						</div>
-  						<div class="form-group">
-  							<label for="dateFrom">Start Date</label>
-  							<input class="form-control" type="date" name="dateFrom" id="dateFrom">
-  						</div>
-  						<div class="form-group">
-  							<label for="startTime">Start Time</label>
-  							<input class="form-control" type="time" name="startTime" id="startTime">
-  						</div>
-  						<div class="form-group">
-  							<label for="dateTo">End Date</label>
-  							<input class="form-control" type="date" name="dateTo" id="dateTo">
-  						</div>
-  						<div class="form-group">
-  							<label for="endTime">End Time</label>
-  							<input class="form-control" type="time" name="endTime" id="endTime">
-  						</div>
-  						<div class="form-group">
-  							<label for="other">Details</label>
-  							<textarea class="form-control" name="other" id="other"></textarea>
-  						</div>
-              <div class="form-group"> 
-                <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
-              </div>
-            </form>
           </div>
-    		</div>
-    	</div>
+        </div>
+      {% endfor %}
     </div>
+  </div>
 
-	</div>
+	<!--This shows the tab for the new appointments-->
+	<div role="tabpanel" class="tab-pane fade" id="newAppointment">
+		<div class="row">
+      <div class="panel panel-info">
+        <div class="panel-body">
+          <form name="createAppointment" method="POST">
+          	<div class="form-group">
+    					<label for="name">Name</label>
+    					<input class="form-control" type="text" name="name">
+						</div>
+						<div class="form-group">
+				      <label for="type">Appointment Type</label>
+				      <select name="type" class="form-control">
+				      	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
+                {% for type in appType %}
+                  <option>{{type.type}}</option>
+                {% endfor %}
+				      </select>
+				  	</div>
+						<div class="form-group">
+							<label for="nameNumber">Building Name/Number</label>
+							<input class="form-control" type="text" name="nameNumber">
+						</div>
+						<div class="form-group">
+							<label for="postcode">Postcode</label>
+							<input class="form-control" type="text" name="postcode">
+						</div>
+						<div class="form-group">
+							<label for="dateFrom">Start Date</label>
+							<input class="form-control" type="date" name="dateFrom" id="dateFrom">
+						</div>
+						<div class="form-group">
+							<label for="startTime">Start Time</label>
+							<input class="form-control" type="time" name="startTime" id="startTime">
+						</div>
+						<div class="form-group">
+							<label for="dateTo">End Date</label>
+							<input class="form-control" type="date" name="dateTo" id="dateTo">
+						</div>
+						<div class="form-group">
+							<label for="endTime">End Time</label>
+							<input class="form-control" type="time" name="endTime" id="endTime">
+						</div>
+						<div class="form-group">
+							<label for="other">Details</label>
+							<textarea class="form-control" name="other" id="other"></textarea>
+						</div>
+            <div class="form-group"> 
+              <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+            </div>
+          </form>
+        </div>
+  		</div>
+  	</div>
+  </div>
 </div>
 
 <!--Upcoming Appointments-->

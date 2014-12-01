@@ -635,6 +635,7 @@ def getUpcomingAppointments(user):
   jsonResult = []
   for app in upcomingApps:
     appointment = {}
+    appointment['appid'] = app.appid
     appointment['creator'] = app.creator.username
     appointment['name'] = app.name
     appointment['apptype'] = str(app.apptype)
