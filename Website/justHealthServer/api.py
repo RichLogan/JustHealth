@@ -595,3 +595,34 @@ def getConnections(username):
     result['completed'] = completedFinal
 
     return json.dumps(result)
+
+@app.route('/api/addPatientAppointment', methods=['POST'])
+def addPatientAppointment():
+  return addPatientAppointment(request.form['username'], request.form['title'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'])
+
+def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, startDate, startTime, endDate, endTime, description):
+# Build insert user query
+  appointmentInsert = Appointments.insert(
+    creator = creator,
+    name = name,
+    apptype = apptype,
+    addressnamenumber = addressNameNumber,
+    postcode = postcode, 
+    startdate = startDate,
+    starttime = startTime,
+    enddate = endDate, 
+    endtime = endTime, 
+    description = description
+  )
+
+  appointmentInsert.execute()
+
+  return "Appointment Added"
+
+@app.route('/api/getUpcomingAppointments', methods=['POST'])
+def getUpcomingAppointments():
+  return getUpcomingAppointments(request.form['username'])
+  
+def getUpcomingAppointments(user): 
+  upcomingApps = Appointments.select().where(Appointments.creator == user | Appointments.invitee == user).order_by(Appointments.startdate.asc(), Appointments.starttime.asc()).get()
+  return json.dumps(upcomingApps)

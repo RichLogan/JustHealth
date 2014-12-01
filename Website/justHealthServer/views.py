@@ -19,9 +19,7 @@ def needLogin(f):
 @app.route('/')
 @needLogin
 def index():
-    jsonResult = getAccountInfo(session['username'])
-    result = {}
-    result = json.loads(jsonResult)
+    result = json.loads(getAccountInfo(session['username']))
     name = result['firstname'] + " " + result['surname']
     if result['accounttype'] == "Patient":
       return render_template('patienthome.html', printname = name)
@@ -161,3 +159,11 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+@app.route('/appointments', methods=['POST', 'GET'])
+def appointments():
+  if request.method == 'POST':
+    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
+    return added
+  upcoming = json.loads(getUpcomingAppointments(session['username']))
+  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming)

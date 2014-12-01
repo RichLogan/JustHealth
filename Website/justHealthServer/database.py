@@ -84,6 +84,30 @@ class Patientcarer(BaseModel):
         primary_key = CompositeKey('carer', 'patient')
         db_table = 'patientcarer'
 
+class Appointmenttype(BaseModel):
+    type = CharField(max_length=25, primary_key=True)
+
+    class Meta:
+        db_table = 'appointmenttype'
+
+
+class Appointments(BaseModel):
+    appid = PrimaryKeyField()
+    creator = ForeignKeyField(db_column='creator', rel_model=Client, to_field='username', related_name='creator')
+    invitee = ForeignKeyField(db_column='invitee', rel_model=Client, to_field='username', null=True, related_name='invitee')
+    name = CharField(max_length=1000)
+    apptype = ForeignKeyField(db_column='apptype', rel_model=Appointmenttype, to_field='type', null=True, related_name='apptype')
+    addressnamenumber = CharField(max_length=50, null=True)
+    postcode = CharField(max_length=8, null=True)
+    startdate = DateField()
+    starttime = TimeField(formats='%H:%M')
+    enddate = DateField()
+    endtime = TimeField(formats='%H:%M')
+    description = CharField(max_length=5000, null=True)
+
+    class Meta:
+        db_table = 'appointments'
+
 def createAll():
     dropAll()
     Client.create_table()
@@ -94,6 +118,7 @@ def createAll():
     Userdeactivatereason.create_table()
     Relationship.create_table()
     Patientcarer.create_table()
+    Appointments.create_table()
 
 def dropAll():
     if Client.table_exists():
@@ -119,3 +144,6 @@ def dropAll():
 
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
+
+    if Appointments.table_exists():
+        Appointments.drop_table(cascade=True)
