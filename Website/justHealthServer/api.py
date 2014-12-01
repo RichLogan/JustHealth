@@ -598,35 +598,28 @@ def getConnections(username):
 
 @app.route('/api/addMedication', methods=['POST'])
 def addMedication():
-    return addMedication (request.form['medicationname'])
+    return addMedication(request.form['medicationname'])
 
 def addMedication(medicationName):
     insertMedication = Medication.insert(name = medicationName)
     with database.transaction:
         insertMedication.execute()
+    return "Added " + medicationName
 
-# @app.route('/api/', methods=['POST'])
-# def deleteMedication():
-#     deleteRequest(request.form['medicationame'])
-#
-# def deleteRequest(user, connection):
-#     userType = json.loads(getAccountInfo(user))['accounttype']
-#     connectionType = json.loads(getAccountInfo(connection))['accounttype']
-#
-#     if (userType == "Pharmasist"and connectionType == "Patient"):
-#         instance = PatientPharmasist.select().where().get()
-#         instance.delete_instance()
-#         return "True"
-#     elif (userType == "Doctor" and connectionType == "Patient"):
-#         instance = PatientDoctor.select().where().get()
-#         instance.delete_instance()
-#         return "True"
-#     else:
-#         return "False"
+@app.route('/api/deleteMedication', methods=['POST'])
+def deleteMedication():
+    return deleteRequest(request.form['medicationame'])
+
+def deleteMedication(medicationName):
+    instance = Medication.select(Medication.name == medicationName).get()
+    with database.transaction:
+        instance.delete_instance()
+
+    return "Deleted " + medicationName
 
 @app.route('/api/addPrescription', methods=['POST'])
 def addPrescription():
-    insertPrescitpion = Prescription.insert(
+    insertPrescription = Prescription.insert(
         username = request.form['username'],
         medication = request.form['medication'],
         dosage =  request.form['medication'],
@@ -641,16 +634,17 @@ def addPrescription():
         prerequisite = request.form['medication'],
         dosageform = request.form['medication'])
 
-
-    insertMedication.execute()
+    with database.transaction:
+        insertPrescription.execute()
 
 @app.route('/api/deletePrescription', methods=['POST'])
 def deletePrescription():
-    deletePrescription(request.form['prescription'])
+    return deletePrescription(request.form['prescriptionid'])
 
-def deletePrescription(user,prescription):
-    instance = prescriptionid (id).get()
-    instance.delete_instance()
+def deletePrescription(prescriptionid):
+    instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+    with database.transaction:
+        instance.delete_instance()
 
 @app.route('/api/getPrescriptions', methods=['POST'])
 def getPrescriptions():
