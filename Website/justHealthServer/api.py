@@ -1,6 +1,7 @@
 from justHealthServer import app
 from flask import Flask, render_template, request, session, redirect, url_for, abort
 from flask.ext.httpauth import HTTPBasicAuth
+# Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
@@ -47,14 +48,14 @@ def registerUser():
 
     # Validate username >25
     if len(profile['username']) > 25:
-      return "Username can not be longer then 25 characters"
+      return "Username can not be longer than 25 characters"
 
     if Client.select().where(Client.username == profile['username']).count() != 0:
        return "Username already taken"
 
     # Validate firstname, surname and email >25
     if len(profile['firstname']) > 100 or len(profile['surname']) > 100 or len(profile['email']) > 100:
-      return 'Firstname, surname and email can not be longer then 100 characters'
+      return 'Firstname, surname and email can not be longer than 100 characters'
 
     # Validate email correct format
     pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
@@ -102,9 +103,10 @@ def registerUser():
     )
 
     # Execute Queries
-    userInsert.execute()
-    typeInsert.execute()
-    userPassword.execute()
+    with database.transaction():
+        userInsert.execute()
+        typeInsert.execute()
+        userPassword.execute()
 
     sendVerificationEmail(profile['username'])
     return "True"
@@ -128,7 +130,8 @@ def authenticate():
             return "Account is locked. Please check your email for instructions"
         else:
             revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
-            revertAttempts.execute()
+            with database.transaction():
+                revertAttempts.execute()
             return "Authenticated"
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
@@ -138,7 +141,8 @@ def authenticate():
             incrementAttempts.execute()
             return "Account is locked"
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
-        incrementAttempts.execute()
+        with database.transaction():
+            incrementAttempts.execute()
         return "Incorrect username/password"
     return "Something went wrong!"
 
@@ -171,19 +175,22 @@ def deactivateAccount():
         reason = reason,
         comments = comments
     )
-    q.execute()
+    with database.transaction():
+        q.execute()
 
     if delete:
         # Delete User
         deletedUser = Client.delete().where(Client.username == request.form['username'])
-        deletedUser.execute()
+        with database.transaction():
+            deletedUser.execute()
         return "Deleted"
     else:
         # Keep user
         deactivatedUser = Client.update(accountdeactivated = True).where(Client.username == username)
         unverifyUser = Client.update(verified = False).where(Client.username == username)
-        deactivatedUser.execute()
-        unverifyUser.execute()
+        with database.transaction():
+            deactivatedUser.execute()
+            unverifyUser.execute()
         return "Kept"
 
 @app.route('/api/resetpassword', methods=['POST'])
@@ -219,11 +226,13 @@ def resetPassword():
         unlockAccount = Client.update(accountlocked=False).where(str(Client.username).strip() == profile['username'])
         setLoginCount = Client.update(loginattempts = 0).where(str(Client.username).strip() == profile['username'])
 
-        notCurrent.execute()
-        notVerified.execute()
-        newCredentials.execute()
-        unlockAccount.execute()
-        setLoginCount.execute()
+        with database.transaction():
+            notCurrent.execute()
+            notVerified.execute()
+            newCredentials.execute()
+            unlockAccount.execute()
+            setLoginCount.execute()
+
         sendPasswordResetEmail(profile['username'])
         return "True"
     else:
@@ -278,7 +287,8 @@ def getAccountInfo(username):
 
 def lockAccount(username):
     lockAccount = Client.update(accountlocked = True).where(Client.username == username)
-    lockAccount.execute()
+    with database.transaction():
+        lockAccount.execute()
     sendUnlockEmail(username)
 
 ####
@@ -373,19 +383,18 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
-@auth.login_required
 def searchPatientCarer():
-    """Searches database for a user that can be connected to. POST [username, searchTerm]"""
-    searchPatientCarer(request.form['username'], request.form['searchTerm'])
+    """Searches database for a user that can be connected to. POST [username, searchterm]"""
+    return searchPatientCarer(request.form['username'], request.form['searchterm'])
 
-def searchPatientCarer(username, searchTerm):
+def searchPatientCarer(username, searchterm):
     #get username, firstname and surname of current user
     result = {}
     thisUser = username
     try:
         patient = Patient.get(username=thisUser)
-        searchTerm = "%" + searchTerm + "%"
-        results = Carer.select().dicts().where((Carer.username % searchTerm) | (Carer.firstname % searchTerm) |(Carer.surname % searchTerm))
+        searchterm = "%" + searchterm + "%"
+        results = Carer.select().dicts().where((Carer.username % searchterm) | (Carer.firstname % searchterm) |(Carer.surname % searchterm))
 
         jsonResult = []
         for result in results:
@@ -393,8 +402,8 @@ def searchPatientCarer(username, searchTerm):
         return json.dumps(jsonResult)
 
     except Patient.DoesNotExist:
-        searchTerm = "%" + searchTerm + "%"
-        results = Patient.select().dicts().where((Patient.username % searchTerm) | (Patient.firstname % searchTerm) |(Patient.surname % searchTerm))
+        searchterm = "%" + searchterm + "%"
+        results = Patient.select().dicts().where((Patient.username % searchterm) | (Patient.firstname % searchterm) |(Patient.surname % searchterm))
 
         jsonResult = []
         for result in results:
@@ -441,7 +450,8 @@ def createConnection():
         target = targetUser,
         targettype = targetUser_type
     )
-    newConnection.execute()
+    with database.transaction():
+        newConnection.execute()
     return str(x)
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
@@ -465,16 +475,19 @@ def completeConnection():
                 patient = requestor,
                 carer = target
             )
-            newRelationship.execute()
+            with database.transaction():
+                newRelationship.execute()
         elif requestor_accountType == "Carer" and target_accountType == "Patient":
             newRelationship = Patientcarer.insert(
                 patient = target,
                 carer = requestor
             )
-            newRelationship.execute()
+            with database.transaction():
+                newRelationship.execute()
 
         # Delete this Relationship instance
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "Correct"
     else:
         return "Incorrect"
@@ -482,7 +495,7 @@ def completeConnection():
 
 @app.route('/api/deleteConnection', methods=['POST'])
 def deleteConnection():
-    deleteConnection(request.form['user'], request.form['connection'])
+    return deleteConnection(request.form['user'], request.form['connection'])
 
 def deleteConnection(user,connection):
     userType = json.loads(getAccountInfo(user))['accounttype']
@@ -490,11 +503,13 @@ def deleteConnection(user,connection):
 
     if (userType == "Patient" and connectionType == "Carer"):
         instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
         instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
         return "True"
     else:
         return "False"
@@ -506,10 +521,12 @@ def cancelRequest():
 def cancelRequest(user, connection):
     try:
         instance = Relationship.select().where(Relationship.requestor == user).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
     except RelationshipDoesNotExist:
         instance = Relationship.select().where(Relationship.target == connection).get()
-        instance.delete_instance()
+        with database.transaction():
+            instance.delete_instance()
 
 @app.route('/api/getConnections', methods=['POST'])
 def getConnections():
@@ -579,6 +596,7 @@ def getConnections(username):
 
     return json.dumps(result)
 
+<<<<<<< HEAD
 @app.route('/api/addMedication', methods=['POST'])
 def addMedication():
     return addMedication (request.form['medicationname'])
@@ -652,3 +670,13 @@ def getPrescriptions(username):
         return json.dumps(jsonResult)
     else:
         return "Must have Patient account type"
+
+@app.route('/api/getDeactivateReasons', methods=['POST'])
+def getDeactivateReasons():
+    """Returns a JSON list of possible reasons a user can deactivate"""
+    reasons = Deactivatereason.select()
+    reasonList = []
+    for reason in reasons:
+        reasonList.append(reason.reason)
+    reasonList = json.dumps(reasonList)
+    return reasonList

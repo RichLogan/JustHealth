@@ -122,11 +122,11 @@
               <td>{{connection.firstname}}</td>
               <td>{{connection.surname}}</td>
               <td>{{connection.accounttype}}</td>
-              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Connect</button></td>
+              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
               <form action="/api/cancelConnection" method="POST">
                 <input type="hidden" name="user" value="{{session.username}}">
                 <input type="hidden" name="connection" value="{{connection.username}}">
-                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
+                <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
               </form>
 
               <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">

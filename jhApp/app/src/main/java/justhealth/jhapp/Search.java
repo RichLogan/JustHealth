@@ -64,6 +64,7 @@ public class Search extends ActionBarActivity {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void searchName() {
         HashMap<String, String> searchInformation = new HashMap<String, String>();
 
@@ -76,7 +77,7 @@ public class Search extends ActionBarActivity {
 
         //add search to HashMap
         searchInformation.put("username", username);
-        searchInformation.put("searchTerm", ((EditText) findViewById(R.id.searchField)).getText().toString());
+        searchInformation.put("searchterm", ((EditText) findViewById(R.id.searchField)).getText().toString());
 
         //Create new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
@@ -85,7 +86,7 @@ public class Search extends ActionBarActivity {
 
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
         httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        System.out.println(encodedAuthentication);
+
         //assigns the HashMap to list, for post request encoding
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -97,10 +98,12 @@ public class Search extends ActionBarActivity {
 
             //pass the list to the post request
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            System.out.println("Post Request: " + searchInformation);
             HttpResponse response = httpclient.execute(httppost);
+            System.out.println(response);
 
             String responseString = EntityUtils.toString(response.getEntity());
-            System.out.print(responseString);
+            System.out.println("this is the array: " + responseString);
             JSONArray queryReturn = null;
             try {
                 queryReturn = new JSONArray(responseString);
@@ -162,7 +165,7 @@ public class Search extends ActionBarActivity {
             try {
                 JSONObject obj = array.getJSONObject(i);
                 System.out.println(obj);
-                final String resultUsername = obj.getString("username");
+                String resultUsername = obj.getString("username");
                 String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 

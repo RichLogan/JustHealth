@@ -1,18 +1,22 @@
 package justhealth.jhapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+
 /**
  * Created by charlottehutchinson on 04/11/14.
  */
 public class DeactivateAccount {
 /*
-Are you sure you want to deactivate dialog
-    http://developer.android.com/guide/topics/ui/dialogs.html
+//Are you sure you want to deactivate dialog
+    //http://developer.android.com/guide/topics/ui/dialogs.html
 
     new AlertDialog.Builder(this)
             .setTitle("Deactivate account")
     .setMessage("Are you sure you want to deactivate your account?")
     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
+        public void onClick(DialogInterface dialog;
+        dialog, int which) {
             // continue with delete
         }
     })
