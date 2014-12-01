@@ -102,12 +102,14 @@ class Prescription(BaseModel):
     enddate = DateField(null=True)
     repeat = CharField(max_length=25, null=True)
     stockleft = IntegerField(null=True)
+    prerequisite = CharField(null=True)
+    dosageform = CharField(null=True) 
 
     class Meta:
         db_table = 'prescription'
 
-def createAll():
-    # dropAll()
+# def createAll():
+#     dropAll()
     # Client.create_table()
     # Patient.create_table()
     # Carer.create_table()
@@ -116,8 +118,8 @@ def createAll():
     # Userdeactivatereason.create_table()
     # Relationship.create_table()
     # Patientcarer.create_table()
-    Medication.create_table()
-    Prescription.create_table()
+    # Medication.create_table()
+    # Prescription.create_table()
 
 
 # def dropAll():
@@ -142,11 +144,11 @@ def createAll():
     # if Relationship.table_exists():
     #     Relationship.drop_table(cascade=True)
     #
-    # if Patientcarer.table_exists():
-    #     Patientcarer.drop_table(cascade=True)
-    #
+    # # if Patientcarer.table_exists():
+    # #     Patientcarer.drop_table(cascade=True)
+    # #
     # if Medication.table_exists():
     #     Medication.drop_table(cascade=True)
     #
     # if Prescription.table_exists():
-    #     Medication.drop_table(cascade=True)
+    #     Prescription.drop_table(cascade=True)

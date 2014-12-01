@@ -619,7 +619,11 @@ def addPrescription():
         startdate =  request.form['medication'],
         enddate =  request.form['medication'],
         repeat =  request.form['medication'],
-        stockleft =  request.form['medication'])
+        stockleft =  request.form['medication'],
+        prerequisite = request.form['medication'],
+        dosageform = request.form['medication'])
+
+
     insertMedication.execute()
 
 @app.route('/api/deletePrescription', methods=['POST'])
