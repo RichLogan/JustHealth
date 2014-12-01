@@ -596,14 +596,14 @@ def getConnections(username):
 
     return json.dumps(result)
 
-<<<<<<< HEAD
 @app.route('/api/addMedication', methods=['POST'])
 def addMedication():
     return addMedication (request.form['medicationname'])
 
 def addMedication(medicationName):
     insertMedication = Medication.insert(name = medicationName)
-    insertMedication.execute()
+    with database.transaction:
+        insertMedication.execute()
 
 # @app.route('/api/', methods=['POST'])
 # def deleteMedication():
