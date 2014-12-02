@@ -104,6 +104,7 @@ class Appointments(BaseModel):
     enddate = DateField()
     endtime = TimeField(formats='%H:%M')
     description = CharField(max_length=5000, null=True)
+    private = BooleanField()
 
     class Meta:
         db_table = 'appointments'

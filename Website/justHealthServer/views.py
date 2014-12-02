@@ -163,10 +163,17 @@ def resetPasswordRedirect():
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
-  if request.method == 'POST':
-    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
-    return added
   upcoming = json.loads(getUpcomingAppointments(session['username']))
+  if request.method == 'POST':
+    #The tick box is not sent if it isn't ticked, so we have to catch it here.
+    try:
+      private = request.form['private']
+    except KeyError, e:
+      private = False
+
+    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
+    flash(added, 'success')
+    return redirect(url_for('appointments'))
   return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
 
 
@@ -175,14 +182,14 @@ def deleteAppointment_view():
   if request.method == 'GET':
     appid = request.args.get("appid")
     deleted = deleteAppointment(session['username'], appid)
-    upcoming = json.loads(getUpcomingAppointments(session['username']))
-    return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=deleted)
+    flash(deleted, 'success')
+    return redirect(url_for('appointments'))
 
 @app.route('/updateAppointment', methods=['POST', 'GET'])
 def getUpdateAppointment_view():
   if request.method == 'GET':
-    appid = request.args.get("appid")
-    getUpdate = json.loads(getUpdateAppointment(session['username'], appid)) 
+    appid = request.args.get('appid')
+    getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
     return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate)
 
 @app.route('/patientUpdateAppointment', methods=['POST'])

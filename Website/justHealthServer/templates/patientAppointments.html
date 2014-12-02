@@ -86,9 +86,9 @@ s
               <div class="panel-body">
                 <div class="row">
                   <div class="col-md-6">
-                    <p><b>Type:</b> </br> {{appointment.apptype}}</p>
-                    <p><b>End Date/Time:</b> </br> {{appointment.enddate}} {{appointment.endtime}}</p>
-                    <p><b>Description:</b> </br> {{appointment.description}}</p>
+                    <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
+                    <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
+                    <p><b>Description:</b> <br /> {{appointment.description}}</p>
                   </div>
                   <div class="col-md-6">
                     <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
@@ -96,17 +96,20 @@ s
                       src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
                     </iframe>
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-md-2">
                     <a href="/updateAppointment?appid={{appointment.appid}}">
                       <button class="btn btn-default">Update</button>
-                    </a>
                     </a>
                   </div>
                   <div class="col-md-2">
                     <a href="/deleteAppointment?appid={{appointment.appid}}">
                       <button class="btn btn-default">Delete</button>
+                    </a>
                   </div>
                   <div class="col-md-8">
+                    <p></p>
                   </div>
                 </div>
               </div>
@@ -164,6 +167,9 @@ s
 							<label for="other">Details</label>
 							<textarea class="form-control" name="other" id="other"></textarea>
 						</div>
+            <div  class="form-group">
+              <input type="checkbox" name="private" value="True"> Tick to make the appointment private
+            </div> 
             <div class="form-group"> 
               <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
             </div>

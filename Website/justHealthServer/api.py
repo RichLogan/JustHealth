@@ -599,10 +599,10 @@ def getConnections(username):
 #receives the request from android allows a patient to add an appointment
 @app.route('/api/addPatientAppointment', methods=['POST'])
 def addPatientAppointment():
-  return addPatientAppointment(request.form['username'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'])
+  return addPatientAppointment(request.form['username'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'], request.form['private'])
 
 #allows a patient to add an appointment
-def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, startDate, startTime, endDate, endTime, description):
+def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, startDate, startTime, endDate, endTime, description, private):
 # Build insert user query
   appointmentInsert = Appointments.insert(
     creator = creator,
@@ -614,7 +614,8 @@ def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, s
     starttime = startTime,
     enddate = endDate,
     endtime = endTime,
-    description = description
+    description = description,
+    private = private
   )
 
   appointmentInsert.execute()
@@ -686,6 +687,7 @@ def getUpdateAppointment(user, appid):
     appointment['enddate'] = str(isCreator.enddate)
     appointment['endtime'] = str(isCreator.endtime)
     appointment['description'] = isCreator.description
+    appointment['private'] = isCreator.private
     
     jsonResult.append(appointment)
     return json.dumps(jsonResult)
