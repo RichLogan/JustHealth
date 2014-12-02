@@ -160,6 +160,7 @@ def resetPasswordRedirect():
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
 
+<<<<<<< HEAD
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
   if request.method == 'POST':
@@ -167,3 +168,29 @@ def appointments():
     return added
   upcoming = json.loads(getUpcomingAppointments(session['username']))
   return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming)
+=======
+@app.route('/myPatients')
+def myPatients():
+    # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+
+    # Get all prescriptions
+    prescriptionMapping = {}
+    for patient in patients:
+        prescriptionMapping[patient['username']] = getPrescriptions(patient['username'])
+
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
+    return redirect(url_for('index'))
+
+@app.route('/prescriptions')
+def  prescriptions():
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)
+>>>>>>> 1fe53c6d2bc1d74dd64378aff03594c7bc416cd9
