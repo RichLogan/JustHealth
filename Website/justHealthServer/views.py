@@ -195,7 +195,13 @@ def getUpdateAppointment_view():
 @app.route('/patientUpdateAppointment', methods=['POST'])
 def updateAppointment_view():
   if request.method == 'POST':
-    updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
+    #The tick box is not sent if it isn't ticked, so we have to catch it here.
+    try:
+      private = request.form['private']
+    except KeyError, e:
+      private = False
+
+    updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
     flash(updated, 'success')
     return redirect(url_for('appointments'))
 

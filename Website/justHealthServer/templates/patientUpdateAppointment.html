@@ -2,7 +2,7 @@
 
 {% block title %}Update Appointment{% endblock %}
 
-{% block scriptsAndStyles %}
+{% block scriptsAndStyles %}s
 {% endblock %}
 
 {% block content %}
@@ -56,6 +56,9 @@
 			<label for="other">Details</label>
 			<textarea class="form-control" name="other" id="other">{{app.description}}</textarea>
 		</div>
+		<div  class="form-group">
+      <input type="checkbox" name="private" value="True" checked="{{app.private}}"> Tick to make the appointment private
+    </div> 
 	  <div class="form-group"> 
 	    <input class="btn btn-default pull-right" type="submit" value="Update Appointment">
 	  </div>

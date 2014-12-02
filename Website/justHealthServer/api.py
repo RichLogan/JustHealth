@@ -695,9 +695,9 @@ def getUpdateAppointment(user, appid):
 #update an appointment
 @app.route('/api/updateAppointment', methods=['POST']) 
 def updateAppointment():
-  return addPatientAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'])
+  return addPatientAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
-def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description):
+def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
   updateAppointment = Appointments.update(
     name = name, 
     apptype = apptype,
@@ -707,7 +707,8 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
     starttime = startTime,
     enddate = endDate,
     endtime = endTime,
-    description = description).where(Appointments.appid == appid)
+    description = description,
+    private = private).where(Appointments.appid == appid)
 
   with database.transaction():
     updateAppointment.execute()
