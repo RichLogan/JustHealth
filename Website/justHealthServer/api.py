@@ -601,21 +601,28 @@ def addMedication():
     return addMedication(request.form['medicationname'])
 
 def addMedication(medicationName):
-    insertMedication = Medication.insert(name = medicationName)
-    with database.transaction:
-        insertMedication.execute()
+    insertMedication = Medication.insert(
+        name = medicationName
+    )
+    with database.transaction():
+        try:
+            insertMedication.execute()
+        except IntegrityError:
+            return medicationName + " already exists"
     return "Added " + medicationName
 
 @app.route('/api/deleteMedication', methods=['POST'])
 def deleteMedication():
-    return deleteRequest(request.form['medicationame'])
+    return deleteMedication(request.form['medicationname'])
 
 def deleteMedication(medicationName):
-    instance = Medication.select(Medication.name == medicationName).get()
-    with database.transaction:
-        instance.delete_instance()
-
-    return "Deleted " + medicationName
+    try:
+        instance = Medication.select().where(Medication.name == medicationName).get()
+        with database.transaction():
+            instance.delete_instance()
+        return "Deleted " + medicationName
+    except:
+        return medicationName + "not found"
 
 @app.route('/api/addPrescription', methods=['POST'])
 def addPrescription():
@@ -634,7 +641,7 @@ def addPrescription():
         prerequisite = request.form['medication'],
         dosageform = request.form['medication'])
 
-    with database.transaction:
+    with database.transaction():
         insertPrescription.execute()
 
 @app.route('/api/deletePrescription', methods=['POST'])
@@ -643,7 +650,7 @@ def deletePrescription():
 
 def deletePrescription(prescriptionid):
     instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
-    with database.transaction:
+    with database.transaction():
         instance.delete_instance()
 
 @app.route('/api/getPrescriptions', methods=['POST'])

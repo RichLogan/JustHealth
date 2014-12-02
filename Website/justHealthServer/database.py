@@ -86,6 +86,7 @@ class Patientcarer(BaseModel):
 
 class Medication(BaseModel):
     name = CharField(primary_key=True)
+
     class Meta:
         db_table = 'medication'
 
@@ -103,7 +104,7 @@ class Prescription(BaseModel):
     repeat = CharField(max_length=25, null=True)
     stockleft = IntegerField(null=True)
     prerequisite = CharField(null=True)
-    dosageform = CharField(null=True) 
+    dosageform = CharField(null=True)
 
     class Meta:
         db_table = 'prescription'
