@@ -2,7 +2,28 @@
 
 {% block title %}Home{% endblock %}
 
-{% block scriptsAndStyles %}{% endblock %}
+{% block scriptsAndStyles %}
+  <script>
+  $(document).ready(function() {
+    {% with returnType = get_flashed_messages(category_filter=["type"]) %}
+      {% if returnType %}
+        {% for msg in returnType %}
+          var returnType = "{{msg}}";
+          if (returnType == "prescription") {
+            {% with username = get_flashed_messages(category_filter=["user"]) %}
+              {% if username %}
+                {% for msg in username %}
+                  $('#prescription{{msg}}').modal('toggle');
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          }
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  });
+  </script>
+{% endblock %}
 
 {% block content %}
   <h1>My Patients</h1>
@@ -43,6 +64,31 @@
                         <button class="btn btn-success">Add new Prescription</button>
                         <br /><br />
 
+                        {% with returnType = get_flashed_messages(category_filter=["type"]) %}
+                          {% if returnType %}
+                            {% for msg in returnType %}
+                              {% if msg == "prescription" %}
+                                {% with displayClass = get_flashed_messages(category_filter=["class"]) %}
+                                  {% if displayClass %}
+                                    {% for msg in displayClass %}
+                                      <div class="alert alert-{{msg}} alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                        {% with result = get_flashed_messages(category_filter=["result"]) %}
+                                          {% if result %}
+                                            {% for msg in result %}
+                                              {{msg}}
+                                            {% endfor %}
+                                          {% endif %}
+                                        {% endwith %}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                {% endwith %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endwith %}
+
                         <table class="table">
                           <thead>
                             <th>Medication</th>
@@ -55,6 +101,7 @@
                             <th>Repeat?</th>
                             <th>Stock Left</th>
                             <th>Observations</th>
+                            <th style="color: red">Delete?</th>
 
                           </thead>
                           <tbody>
@@ -70,6 +117,9 @@
                                 <td>{{prescription.repeat}}</td>
                                 <td>{{prescription.stockleft}}</td>
                                 <td>{{prescription.prerequisite}}</td>
+                                <td style="text-align: right;">
+                                  <a href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}"><button class="btn btn-danger"><i class="fa fa-times"></i></button></a>
+                                </td>
                               </tr>
                             {% endfor %}
                           </tbody>

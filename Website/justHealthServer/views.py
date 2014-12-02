@@ -180,9 +180,28 @@ def myPatients():
     for patient in patients:
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
 
-
         return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
     return redirect(url_for('index'))
+
+@app.route('/deletePrescription')
+def deletePrescription_view():
+    prescriptionid = request.args.get('id', '')
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+    username = request.args.get('username', '')
+    result = deletePrescription(prescriptionid)
+    if result != "Failed":
+        result = "Deleted " + prescription.medication.name + " (" + str(prescription.quantity) + "x" + str(prescription.dosage) + ") " + prescription.dosageunit + " for " + username
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
 
 @app.route('/prescriptions')
 def  prescriptions():

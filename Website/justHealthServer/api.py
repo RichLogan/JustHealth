@@ -660,9 +660,9 @@ def deletePrescription(prescriptionid):
         instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
         with database.transaction():
             instance.delete_instance()
-            "Deleted prescription " + prescriptionid
+            return "Deleted"
     except:
-        return prescriptionid + " not found"
+        return "Failed"
 
 @app.route('/api/getPrescriptions', methods=['POST'])
 def getPrescriptions():
