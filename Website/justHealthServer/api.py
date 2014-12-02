@@ -649,18 +649,18 @@ def getUpcomingAppointments(user):
 
   return json.dumps(jsonResult)
 
-@app.route('/api/deleteAppointment', methods=['POST'])
-def deleteAppointment():
-    return deleteAppointment(request.form['appid'])
-
-def deleteAppointment(appid):
-    try:
-        instance = Appointment.select().where(Appointment.appid == appid).get()
-        with database.transaction():
-            instance.delete_instance()
-        return "Deleted " + appid
-    except:
-        return appid + "not found"
+# @app.route('/api/deleteCarerAppointment', methods=['POST'])
+# def deleteCarerAppointment():
+#     return deleteAppointment(request.form['appid'])
+#
+# def deleteCarerAppointment(appid):
+#     try:
+#         instance = Appointment.select().where(Appointment.appid == appid).get()
+#         with database.transaction():
+#             instance.delete_instance()
+#         return "Deleted " + appid
+#     except:
+#         return appid + "not found"
 
 @app.route('/api/addMedication', methods=['POST'])
 def addMedication():
