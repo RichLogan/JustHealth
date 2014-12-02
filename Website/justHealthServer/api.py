@@ -651,7 +651,7 @@ def getUpcomingAppointments(user):
 
 @app.route('/api/deleteAppointment', methods=['POST'])
 def deleteAppointment():
-    return appointmentMedication(request.form['appid'])
+    return deleteAppointment(request.form['appid'])
 
 def deleteAppointment(appid):
     try:
