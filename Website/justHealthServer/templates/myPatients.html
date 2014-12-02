@@ -25,9 +25,9 @@
 
                 <!-- View Prescriptions -->
                 <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
-                  <div style="height:100px;">
-                    <p style="line-height: 100px;font-size: 30px;">
-                      <i class="fa fa-flask"></i>Prescriptions
+                  <div style="height:25px;">
+                    <p style="line-height: 25px;font-size: 25px;">
+                      <i class="fa fa-flask"></i> Prescriptions
                     </p>
                   </div>
                 </a>
@@ -48,30 +48,29 @@
                             <th>Medication</th>
                             <th>Dosage</th>
                             <th>Frequency</th>
-                            <th>Frequency Unit</th>
                             <th>Quantity</th>
-                            <th>startdate</th>
-                            <th>enddate</th>
-                            <th>repeat</th>
-                            <th>stockleft</th>
+                            <th>Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Repeat?</th>
+                            <th>Stock Left</th>
+                            <th>Observations</th>
+
                           </thead>
                           <tbody>
-                            {% for x in prescriptionMapping %}
-                              {% if x == patient.username %}
-                                {% for prescription in prescriptionMapping.x %}
-                                  <tr>
-                                    <th>{{x}}</th>
-                                    <th>Dosage</th>
-                                    <th>Frequency</th>
-                                    <th>Frequency Unit</th>
-                                    <th>Quantity</th>
-                                    <th>startdate</th>
-                                    <th>enddate</th>
-                                    <th>repeat</th>
-                                    <th>stockleft</th>
-                                  </tr>
-                                  {% endfor %}
-                              {% endif %}
+                            {% for prescription in prescriptionMapping[patient.username] %}
+                              <tr>
+                                <td>{{prescription.medication}}</td>
+                                <td>{{prescription.dosage}} {{prescription.dosageunit}}</td>
+                                <td>{{prescription.frequency}} / {{prescription.frequencyunit}}</td>
+                                <td>{{prescription.quantity}}</td>
+                                <td>{{prescription.dosageform}}</td>
+                                <td>{{prescription.startdate}}</td>
+                                <td>{{prescription.enddate}}</td>
+                                <td>{{prescription.repeat}}</td>
+                                <td>{{prescription.stockleft}}</td>
+                                <td>{{prescription.prerequisite}}</td>
+                              </tr>
                             {% endfor %}
                           </tbody>
                         </table>

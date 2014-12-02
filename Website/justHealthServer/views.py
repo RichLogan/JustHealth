@@ -28,10 +28,10 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-"""Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
+    """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
     connections = json.loads(getConnections(session['username']))
@@ -44,10 +44,11 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-"""terms and conditions page link"""
+
 @app.route('/termsandconditions')
 def terms():
-  return render_template('termsandconditions.html')
+    """terms and conditions page link"""
+    return render_template('termsandconditions.html')
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
@@ -177,7 +178,8 @@ def myPatients():
     # Get all prescriptions
     prescriptionMapping = {}
     for patient in patients:
-        prescriptionMapping[patient['username']] = getPrescriptions(patient['username'])
+        prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
+
 
         return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
     return redirect(url_for('index'))
