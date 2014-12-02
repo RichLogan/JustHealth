@@ -85,7 +85,7 @@
                   <a onclick='$("#appoitments{{patient.username}}").modal("toggle")'>
                     <div style="height:25px;">
                       <p style="line-height: 25px;font-size: 25px;">
-                        <i class="fa fa-calendar"></i> Appoitments
+                        <i class="fa fa-calendar"></i> Appointments
                       </p>
                     </a>
                     </div>
@@ -97,7 +97,13 @@
                               <h4 class="modal-title" id="appoitments{{patient.username}}Label">View Appoitments</h4>
                             </div>
                             <div class="modal-body">
-                              <button class="btn btn-success">Add new Appotiment</button>
+
+                              <script>
+                              function showform(newAppointment){
+                                $('#newAppointment').removeClass('hidden');
+                              }
+                              </script>
+                              <a class="btn btn-success" href="javascript:showform();">Add New Appointment</a>
                               <br /><br />
                               <table class="table">
                                 <thead>
@@ -106,6 +112,7 @@
                                   <th>Where</th>
                                   <th>End Date/Time</th>
                                   <th>Description</th>
+                                  <th style= "color: green"> Update </th>
                                   <th style="color: red">Delete?</th>
 
                                 </thead>
@@ -117,12 +124,62 @@
                                     <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
+                                    <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
                                     <td> <button class="btn btn-danger"><i class="fa fa-times"></i></button> </td>
                                   <tr>
                                   {% endfor %}
                                 </tbody>
-
                               </table>
+                              <!--This shows the form for to add a new appointments-->
+                              <div role="tabpanel" class="hidden" id="newAppointment">
+                                <div class="row">
+                                  <div class="panel panel-info">
+                                    <div class="panel-body">
+                                      <form name="createAppointment" method="POST">
+                                        <div class="form-group">
+                                          <label for="name">Name</label>
+                                          <input class="form-control" type="text" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="type">Appointment Type</label>
+                                          <select name="type" class="form-control"> </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="nameNumber">Building Name/Number</label>
+                                          <input class="form-control" type="text" name="nameNumber">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="postcode">Postcode</label>
+                                          <input class="form-control" type="text" name="postcode">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="dateFrom">Start Date</label>
+                                          <input class="form-control" type="date" name="dateFrom" id="dateFrom">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="startTime">Start Time</label>
+                                          <input class="form-control" type="time" name="startTime" id="startTime">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="dateTo">End Date</label>
+                                          <input class="form-control" type="date" name="dateTo" id="dateTo">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="endTime">End Time</label>
+                                          <input class="form-control" type="time" name="endTime" id="endTime">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="other">Details</label>
+                                          <textarea class="form-control" name="other" id="other"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+                                        </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
