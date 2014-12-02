@@ -24,9 +24,13 @@
               <div class="col-md-6">
 
                 <!-- View Prescriptions -->
-                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#prescription{{patient.username}}">
-                  View Prescriptions
-                </button>
+                <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
+                  <div style="height:100px;">
+                    <p style="line-height: 100px;font-size: 30px;">
+                      <i class="fa fa-flask"></i>Prescriptions
+                    </p>
+                  </div>
+                </a>
                 <div class="modal fade" id="prescription{{patient.username}}" tabindex="-1" role="dialog" aria-labelledby="prescription{{patient.username}}Label" aria-hidden="true">
                   <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -35,6 +39,10 @@
                         <h4 class="modal-title" id="prescription{{patient.username}}Label">View Prescriptions</h4>
                       </div>
                       <div class="modal-body">
+
+                        <button class="btn btn-success">Add new Prescription</button>
+                        <br /><br />
+
                         <table class="table">
                           <thead>
                             <th>Medication</th>
