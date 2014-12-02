@@ -596,9 +596,7 @@ def getConnections(username):
 
     return json.dumps(result)
 
-<<<<<<< HEAD
-
-#receives the request from android allows a patient to add an appointment 
+#receives the request from android allows a patient to add an appointment
 @app.route('/api/addPatientAppointment', methods=['POST'])
 def addPatientAppointment():
   return addPatientAppointment(request.form['username'], request.form['title'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'])
@@ -611,11 +609,11 @@ def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, s
     name = name,
     apptype = apptype,
     addressnamenumber = addressNameNumber,
-    postcode = postcode, 
+    postcode = postcode,
     startdate = startDate,
     starttime = startTime,
-    enddate = endDate, 
-    endtime = endTime, 
+    enddate = endDate,
+    endtime = endTime,
     description = description
   )
 
@@ -627,9 +625,9 @@ def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, s
 @app.route('/api/getUpcomingAppointments', methods=['POST'])
 def getUpcomingAppointments():
   return getUpcomingAppointments(request.form['username'])
-  
+
 #gets the appointments from the database
-def getUpcomingAppointments(user): 
+def getUpcomingAppointments(user):
   upcomingApps = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
   upcomingApps.execute()
 
@@ -648,15 +646,10 @@ def getUpcomingAppointments(user):
     appointment['endtime'] = str(app.endtime)
     appointment['description'] = app.description
     jsonResult.append(appointment)
-  
+
   return json.dumps(jsonResult)
 
-  #.
 
-
-
-
-=======
 @app.route('/api/addMedication', methods=['POST'])
 def addMedication():
     return addMedication(request.form['medicationname'])
@@ -744,6 +737,23 @@ def getPrescriptions(username):
     else:
         return "Must have Patient account type"
 
+@app.route('/api/getAppoitments', methods=['POST'])
+def getAppoitments():
+    return getAppoitments(request.form['username'])
+
+def getAppoitments(username):
+    accountType = json.loads(getAccountInfo(username))['accounttype']
+    user = Client.select().where(Client.username == username).get()
+
+    if accountType == "Patient":
+        jsonResult = []
+        results = appoitment.select().dicts().where(appoitment.username == user)
+        for result in results:
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
+    else:
+        return "Must have Patient account type"
+
 @app.route('/api/getDeactivateReasons', methods=['POST'])
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""
@@ -753,4 +763,3 @@ def getDeactivateReasons():
         reasonList.append(reason.reason)
     reasonList = json.dumps(reasonList)
     return reasonList
->>>>>>> 1fe53c6d2bc1d74dd64378aff03594c7bc416cd9

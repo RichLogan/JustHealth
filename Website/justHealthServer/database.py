@@ -84,7 +84,6 @@ class Patientcarer(BaseModel):
         primary_key = CompositeKey('carer', 'patient')
         db_table = 'patientcarer'
 
-<<<<<<< HEAD
 class Appointmenttype(BaseModel):
     type = CharField(max_length=25, primary_key=True)
 
@@ -120,10 +119,9 @@ def createAll():
     Relationship.create_table()
     Patientcarer.create_table()
     Appointments.create_table()
-=======
+
 class Medication(BaseModel):
     name = CharField(primary_key=True)
->>>>>>> 1fe53c6d2bc1d74dd64378aff03594c7bc416cd9
 
     class Meta:
         db_table = 'medication'
@@ -144,13 +142,6 @@ class Prescription(BaseModel):
     prerequisite = CharField(null=True)
     dosageform = CharField(null=True)
 
-<<<<<<< HEAD
-    if Patientcarer.table_exists():
-        Patientcarer.drop_table(cascade=True)
-
-    if Appointments.table_exists():
-        Appointments.drop_table(cascade=True)
-=======
     class Meta:
         db_table = 'prescription'
 
@@ -198,4 +189,3 @@ class Prescription(BaseModel):
     #
     # if Prescription.table_exists():
     #     Prescription.drop_table(cascade=True)
->>>>>>> 1fe53c6d2bc1d74dd64378aff03594c7bc416cd9

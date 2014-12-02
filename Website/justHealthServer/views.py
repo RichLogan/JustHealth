@@ -26,10 +26,11 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-"""Profile page to display all current users details"""
+
 @app.route('/profile')
 @needLogin
 def profile():
+    """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
     connections = json.loads(getConnections(session['username']))
@@ -42,10 +43,11 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-"""terms and conditions page link"""
+
 @app.route('/termsandconditions')
 def terms():
-  return render_template('termsandconditions.html')
+    """terms and conditions page link"""
+    return render_template('termsandconditions.html')
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
@@ -160,7 +162,6 @@ def resetPasswordRedirect():
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
 
-<<<<<<< HEAD
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
   if request.method == 'POST':
@@ -168,7 +169,7 @@ def appointments():
     return added
   upcoming = json.loads(getUpcomingAppointments(session['username']))
   return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming)
-=======
+
 @app.route('/myPatients')
 def myPatients():
     # Get Patients
@@ -193,4 +194,3 @@ def myPatients():
 def  prescriptions():
     prescriptions = json.loads(getPrescriptions(session['username']))
     return render_template('prescriptions.html', prescriptions = prescriptions)
->>>>>>> 1fe53c6d2bc1d74dd64378aff03594c7bc416cd9

@@ -81,15 +81,35 @@
                 </div>
 
               </div>
+                <div class="col-md-6">
+                  <!-- View Appoitments -->
+                  <a onclick='$("#appoitments{{patient.username}}").modal("toggle")'>
+                    <div style="height:100px;">
+                      <p style="line-height: 100px;font-size: 30px;">
+                        <i class="fa fa-calendar"></i>Appoitments
+                      </p>
+                    </a>
+                    </div>
+                      <div class="modal fade" id="appoitments{{patient.username}}" tabindex="-1" role="dialog" aria-labelledby="appoitments{{patient.username}}Label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              <h4 class="modal-title" id="appoitments{{patient.username}}Label">View Appoitments</h4>
+                            </div>
+                            <div class="modal-body">
+                              <button class="btn btn-success">Add new Appotiment</button>
+                              <br /><br />
 
-              <div class="col-md-6">
-                Right Column
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
             </div>
-          </div>
-        </div>
-      </div>
     {% endfor %}
   </div>
 {% endblock %}
