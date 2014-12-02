@@ -1,0 +1,200 @@
+{% extends "template.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block scriptsAndStyles %}{% endblock %}
+
+{% block content %}
+  <h1>My Patients</h1>
+
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    {% for patient in patients %}
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading{{patient.username}}">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{patient.username}}" aria-expanded="true" aria-controls="collapse{{patient.username}}">
+              {{patient.firstname}} {{patient.surname}} ({{patient.username}})
+            </a>
+          </h4>
+        </div>
+        <div id="collapse{{patient.username}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{patient.username}}">
+          <div class="panel-body">
+            <div class="row">
+
+              <div class="col-md-6">
+
+                <!-- View Prescriptions -->
+                <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
+                  <div style="height:25px;">
+                    <p style="line-height: 25px;font-size: 25px;">
+                      <i class="fa fa-flask"></i> Prescriptions
+                    </p>
+                  </div>
+                </a>
+                <div class="modal fade" id="prescription{{patient.username}}" tabindex="-1" role="dialog" aria-labelledby="prescription{{patient.username}}Label" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="prescription{{patient.username}}Label">View Prescriptions</h4>
+                      </div>
+                      <div class="modal-body">
+
+                        <button class="btn btn-success">Add new Prescription</button>
+                        <br /><br />
+
+                        <table class="table">
+                          <thead>
+                            <th>Medication</th>
+                            <th>Dosage</th>
+                            <th>Frequency</th>
+                            <th>Quantity</th>
+                            <th>Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Repeat?</th>
+                            <th>Stock Left</th>
+                            <th>Observations</th>
+
+                          </thead>
+                          <tbody>
+                            {% for prescription in prescriptionMapping[patient.username] %}
+                              <tr>
+                                <td>{{prescription.medication}}</td>
+                                <td>{{prescription.dosage}} {{prescription.dosageunit}}</td>
+                                <td>{{prescription.frequency}} / {{prescription.frequencyunit}}</td>
+                                <td>{{prescription.quantity}}</td>
+                                <td>{{prescription.dosageform}}</td>
+                                <td>{{prescription.startdate}}</td>
+                                <td>{{prescription.enddate}}</td>
+                                <td>{{prescription.repeat}}</td>
+                                <td>{{prescription.stockleft}}</td>
+                                <td>{{prescription.prerequisite}}</td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+                <div class="col-md-6">
+                  <!-- View Appoitments -->
+                  <a onclick='$("#appoitments{{patient.username}}").modal("toggle")'>
+                    <div style="height:25px;">
+                      <p style="line-height: 25px;font-size: 25px;">
+                        <i class="fa fa-calendar"></i> Appointments
+                      </p>
+                    </a>
+                    </div>
+                      <div class="modal fade" id="appoitments{{patient.username}}" tabindex="-1" role="dialog" aria-labelledby="appoitments{{patient.username}}Label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              <h4 class="modal-title" id="appoitments{{patient.username}}Label">View Appoitments</h4>
+                            </div>
+                            <div class="modal-body">
+
+                              <script>
+                              function showform(newAppointment){
+                                $('#newAppointment').removeClass('hidden');
+                              }
+                              </script>
+                              <a class="btn btn-success" href="javascript:showform();">Add New Appointment</a>
+                              <br /><br />
+                              <table class="table">
+                                <thead>
+                                  <th>Name</th>
+                                  <th>Type</th>
+                                  <th>Where</th>
+                                  <th>End Date/Time</th>
+                                  <th>Description</th>
+                                  <th style= "color: green"> Update </th>
+                                  <th style="color: red">Delete</th>
+
+                                </thead>
+                                <tbody>
+                                  {% for appointment in appointmentsMapping[patient.username] %}
+                                  <tr>
+                                    <td>{{appointment.name}}</td>
+                                    <td>{{appointment.apptype.apptype}}</td>
+                                    <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
+                                    <td>{{appointment.enddate}} {{appointment.endtime}} </td>
+                                    <td>{{appointment.description}}</td>
+                                    <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
+                                    <td> <button class="btn btn-danger"><i class="fa fa-times"></i></button> </td>
+                                  <tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                              <!--This shows the form for to add a new appointments-->
+                              <div role="tabpanel" class="hidden" id="newAppointment">
+                                <div class="row">
+                                  <div class="panel panel-info">
+                                    <div class="panel-body">
+                                      <form name="createAppointment" method="POST">
+                                        <div class="form-group">
+                                          <label for="name">Name</label>
+                                          <input class="form-control" type="text" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="type">Appointment Type</label>
+                                          <select name="type" class="form-control">
+                                          <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
+                                          {% for type in appType %}
+                                          <option>{{type.type}}</option>
+                                          {% endfor %}
+                                        </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="nameNumber">Building Name/Number</label>
+                                          <input class="form-control" type="text" name="nameNumber">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="postcode">Postcode</label>
+                                          <input class="form-control" type="text" name="postcode">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="dateFrom">Start Date</label>
+                                          <input class="form-control" type="date" name="dateFrom" id="dateFrom">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="startTime">Start Time</label>
+                                          <input class="form-control" type="time" name="startTime" id="startTime">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="dateTo">End Date</label>
+                                          <input class="form-control" type="date" name="dateTo" id="dateTo">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="endTime">End Time</label>
+                                          <input class="form-control" type="time" name="endTime" id="endTime">
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="other">Details</label>
+                                          <textarea class="form-control" name="other" id="other"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+                                        </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    {% endfor %}
+  </div>
+{% endblock %}

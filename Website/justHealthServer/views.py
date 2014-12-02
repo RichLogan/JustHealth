@@ -26,10 +26,10 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-"""Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
+    """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
     connections = json.loads(getConnections(session['username']))
@@ -42,10 +42,11 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-"""terms and conditions page link"""
+
 @app.route('/termsandconditions')
 def terms():
-  return render_template('termsandconditions.html')
+    """terms and conditions page link"""
+    return render_template('termsandconditions.html')
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
@@ -190,3 +191,31 @@ def updateAppointment_view():
     updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
     flash(updated, 'success')
     return redirect(url_for('appointments'))
+
+@app.route('/myPatients')
+def myPatients():
+    # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+
+    # Get all prescriptions
+    prescriptionMapping = {}
+    appointmentsMapping = {}
+    for patient in patients:
+        prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
+        appointmentsMapping[patient['username']] = json.loads(getUpcomingAppointments(patient['username']))
+
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
+    return redirect(url_for('index'))
+
+
+@app.route('/prescriptions')
+def  prescriptions():
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)

@@ -1,0 +1,129 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1128" measuredH="516" mockupW="781" mockupH="516">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::iPhone" x="570" y="6" w="-1" h="-1" measuredW="282" measuredH="510" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Button" x="615" y="454" w="57" h="33" measuredW="46" measuredH="27" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>JumpBackIcon%7Csmall</icon>
+        <menuIcon>false</menuIcon>
+        <state>up</state>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Button" x="749" y="454" w="57" h="33" measuredW="46" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <icon>PagesIcon%7Csmall</icon>
+        <menuIcon>false</menuIcon>
+        <state>up</state>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::Image" x="597" y="105" w="84" h="38" measuredW="77" measuredH="79" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logo</text>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Icon" x="789" y="112" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>HomeIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="542" y="99" w="-1" h="317" measuredW="16" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <value>9</value>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::VCurly" x="347" y="99" w="180" h="321" measuredW="180" measuredH="140" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>right</direction>
+        <text>User%20can%20scroll%20to%20view%20additional%20connections</text>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::TabBar" x="599" y="147" w="224" h="284" measuredW="268" measuredH="100" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>1</selectedIndex>
+        <size>10</size>
+        <text>Your%20connections%2C%20Pending%20connections</text>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::TitleWindow" x="607" y="181" w="206" h="69" measuredW="450" measuredH="400" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::IconLabel" x="613" y="183" w="154" h="-1" measuredW="133" measuredH="19" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <size>11</size>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::TitleWindow" x="607" y="261" w="206" h="23" measuredW="450" measuredH="400" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="51" controlTypeID="com.balsamiq.mockups::IconLabel" x="613" y="263" w="154" h="-1" measuredW="133" measuredH="19" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <size>11</size>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::TitleWindow" x="607" y="295" w="206" h="23" measuredW="450" measuredH="400" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::IconLabel" x="613" y="297" w="154" h="-1" measuredW="133" measuredH="19" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <size>11</size>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Icon" x="786" y="210" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>XIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::TextInput" x="613" y="210" w="129" h="-1" measuredW="106" measuredH="25" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>11</size>
+        <state>disabled</state>
+        <text>Enter%204-digit%20code</text>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::VCurly" x="867" y="181" w="180" h="231" measuredW="180" measuredH="140" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Each%20name%20can%20be%20clicked%20to%20access%20input%20box%20for%20code%0A%20%0ACode%20will%20be%20one%20time%20use%20and%20time%20limited</text>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Arrow" x="813" y="136" w="315" h="66" measuredW="150" measuredH="100" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>1</curvature>
+        <direction>bottom</direction>
+        <rightArrow>false</rightArrow>
+        <stroke>solid</stroke>
+        <text>Allows%20user%20to%20decline%20the%20pending%20request%2C%20alert%20will%20show%20first</text>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::Alert" x="863" y="0" w="-1" h="-1" measuredW="200" measuredH="133" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Alert%0AAre%20you%20sure%20you%20want%20to%20decline%3F%0AYes%2C%20No</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
