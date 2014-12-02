@@ -19,6 +19,7 @@
 //import android.view.ViewGroup;
 //import android.widget.Button;
 //import android.widget.EditText;
+//import android.widget.ImageButton;
 //import android.widget.LinearLayout;
 //import android.widget.PopupWindow;
 //import android.widget.TableLayout;
@@ -45,7 +46,6 @@
 //import java.util.Map;
 //import java.util.Set;
 //
-//
 ///**
 //* Created by charlottehutchinson on 01/12/14.
 //*/
@@ -61,28 +61,112 @@
 //
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.patient_medication);
-//        getPatientMedication();
+//        getPrescriptions();
 //    }
 //
 //
-//    private void getPatientMedication(JSONArray outgoing) {
-//        TableLayout searchTable = (TableLayout) findViewById(R.id.patient_medication);
+//    @TargetApi(Build.VERSION_CODES.KITKAT)
+//    private void getConnections() {
+//        HashMap<String, String> getPrescriptionsInfo = new HashMap<String, String>();
 //
-//        TableRow outgoingHeadRow = new TableRow(this);
-//        outgoingHeadRow.setBackgroundColor(getResources().getColor(R.color.header));
-//        TextView incomingConnections = new TextView(this);
-//        incomingConnections.setText("Medication");
-//        incomingConnections.setTextColor(Color.WHITE);
+//        //this is adding the username as null - INCORRECT
+//        SharedPreferences account = getSharedPreferences("account", 0);
+//        String username = account.getString("username", null);
+//        String password = account.getString("password", null);
 //
-//        outgoingHeadRow.addView(incomingConnections);
-//        searchTable.addView(outgoingHeadRow, 1);
-//        //update row of table
-//        rowOfTable += 2;
+//        //add search to HashMap
+//        getPrescriptionsInfo.put("username", username);
 //
+//        //Create new HttpClient and Post Header
+//        HttpClient httpclient = new DefaultHttpClient();
+//        String authentication = username + ":" + password;
+//        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+//
+//        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getPrescriptions");
+//        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+//        System.out.println(encodedAuthentication);
+//        //assigns the HashMap to list, for post request encoding
+//        try {
+//            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+//
+//            Set<Map.Entry<String, String>> detailsSet = getPrescriptionsInfo.entrySet();
+//            for (Map.Entry<String, String> string : detailsSet) {
+//                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
+//            }
+//
+//            //pass the list to the post request
+//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//            HttpResponse response = httpclient.execute(httppost);
+//
+//            String responseString = EntityUtils.toString(response.getEntity());
+//            System.out.print(responseString);
+//            JSONArray prescriptions = null;
+//
+//            try {
+//                queryReturn = new JSONObject(responseString);
+//                System.out.println(queryReturn);
+//                String outgoingString = queryReturn.getString("Prescriptions");
+//                prescriptions = new JSONArray(outgoingString);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            System.out.print(queryReturn);
+//            printprescriptions(prescriptions);
+//
+//        } catch (ClientProtocolException e) {
+//            //TODO Auto-generated catch block
+//        } catch (IOException e) {
+//            //TODO Auto-generated catch block
+//        } catch (NullPointerException e) {
+//            //TODO Auto-generated catch block
+//        }
 //    }
+//
+//// button to list medication per patient
+//
+//
+//
+//
+//
+//
+//
+////        protected void onCreate(Bundle savedInstanceState) {
+////            super.onCreate(savedInstanceState);
+////            setContentView(R.layout. patient_medication);
+////
+////            Button connections = (Button) findViewById();
+////            connections.setOnClickListener(
+////                    new Button.OnClickListener() {
+////                        public void onClick(View view) {
+////                            startActivity(new Intent(AlertDialog.this));
+////                        }
+////                    }
+////            );
+////        }
+////    }
+//
+////onlick on medication, alert box to show more details
+////private void medicationdeatils() {
+////
+////    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+////
+////    alert.setTitle("Your Medication");
+////    alert.setMessage(message);
+////
+////
+////    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+////        public void onClick(DialogInterface dialog, int whichButton) {
+////            // Cancelled.
+////        }
+////    });
+////
+////    alert.show();
+////}
+//
 //
 //}
-//
 //
 //
 //
