@@ -77,7 +77,7 @@ def registration():
     if request.method == 'POST':
         result = registerUser()
         if result == "True":
-            return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
+            return render_template('login.html', type="success",  message="Thanks for registering! Please check your email for a verification link")
         else:
             render_template('register.html', type="danger", message = result)
     return render_template('register.html')
@@ -166,4 +166,27 @@ def appointments():
     added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
     return added
   upcoming = json.loads(getUpcomingAppointments(session['username']))
-  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming)
+  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
+
+
+@app.route('/deleteAppointment', methods=['POST', 'GET'])
+def deleteAppointment_view():
+  if request.method == 'GET':
+    appid = request.args.get("appid")
+    deleted = deleteAppointment(session['username'], appid)
+    upcoming = json.loads(getUpcomingAppointments(session['username']))
+    return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=deleted)
+
+@app.route('/updateAppointment', methods=['POST', 'GET'])
+def getUpdateAppointment_view():
+  if request.method == 'GET':
+    appid = request.args.get("appid")
+    getUpdate = json.loads(getUpdateAppointment(session['username'], appid)) 
+    return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate)
+
+@app.route('/patientUpdateAppointment', methods=['POST'])
+def updateAppointment_view():
+  if request.method == 'POST':
+    updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
+    flash(updated, 'success')
+    return redirect(url_for('appointments'))

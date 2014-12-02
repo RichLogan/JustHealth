@@ -600,7 +600,7 @@ def getConnections(username):
 #receives the request from android allows a patient to add an appointment 
 @app.route('/api/addPatientAppointment', methods=['POST'])
 def addPatientAppointment():
-  return addPatientAppointment(request.form['username'], request.form['title'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'])
+  return addPatientAppointment(request.form['username'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'])
 
 #allows a patient to add an appointment
 def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, startDate, startTime, endDate, endTime, description):
@@ -638,7 +638,7 @@ def getUpcomingAppointments(user):
     appointment['appid'] = app.appid
     appointment['creator'] = app.creator.username
     appointment['name'] = app.name
-    appointment['apptype'] = str(app.apptype)
+    appointment['apptype'] = str(app.apptype.type)
     appointment['addressnamenumber'] = app.addressnamenumber
     appointment['postcode'] = app.postcode
     appointment['startdate'] = str(app.startdate)
@@ -650,8 +650,67 @@ def getUpcomingAppointments(user):
   
   return json.dumps(jsonResult)
 
-  #.
+#deletes an appointment
+@app.route('/api/deleteAppointment', methods=['POST'])
+def deleteAppointment():
+  return deleteAppointment(request.form['username'], request.form['appid'])
 
+def deleteAppointment(user, appid):
+  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+
+  if isCreator.creator.username == user:
+    with database.transaction():
+      isCreator.delete_instance()
+    return "Appointment Deleted"
+
+#gets the appointment that is to be updated
+@app.route('/api/getUpdateAppointment', methods=['POST'])
+def getUpdateAppointment():
+  return updateAppointment(request.form['username'], request.form['appid'])
+
+def getUpdateAppointment(user, appid):
+  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+
+  if isCreator.creator.username == user:
+    jsonResult = []
+      
+    appointment = {}
+    appointment['appid'] = isCreator.appid
+    appointment['creator'] = isCreator.creator.username
+    appointment['name'] = isCreator.name
+    appointment['apptype'] = str(isCreator.apptype.type)
+    appointment['addressnamenumber'] = isCreator.addressnamenumber
+    appointment['postcode'] = isCreator.postcode
+    appointment['startdate'] = str(isCreator.startdate)
+    appointment['starttime'] = str(isCreator.starttime)
+    appointment['enddate'] = str(isCreator.enddate)
+    appointment['endtime'] = str(isCreator.endtime)
+    appointment['description'] = isCreator.description
+    
+    jsonResult.append(appointment)
+    return json.dumps(jsonResult)
+
+#update an appointment
+@app.route('/api/updateAppointment', methods=['POST']) 
+def updateAppointment():
+  return addPatientAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'])
+
+def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description):
+  updateAppointment = Appointments.update(
+    name = name, 
+    apptype = apptype,
+    addressnamenumber = addressnamenumber,
+    postcode = postcode,
+    startdate = startDate,
+    starttime = startTime,
+    enddate = endDate,
+    endtime = endTime,
+    description = description).where(Appointments.appid == appid)
+
+  with database.transaction():
+    updateAppointment.execute()
+
+  return "Appointment Updated"
 
 
 
