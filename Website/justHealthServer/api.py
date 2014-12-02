@@ -626,32 +626,43 @@ def deleteMedication(medicationName):
 
 @app.route('/api/addPrescription', methods=['POST'])
 def addPrescription():
-    insertPrescription = Prescription.insert(
-        username = request.form['username'],
-        medication = request.form['medication'],
-        dosage =  request.form['medication'],
-        frequency =  request.form['medication'],
-        quantity =  request.form['medication'],
-        dosageunit =  request.form['medication'],
-        frequecnyunit =  request.form['medication'],
-        startdate =  request.form['medication'],
-        enddate =  request.form['medication'],
-        repeat =  request.form['medication'],
-        stockleft =  request.form['medication'],
-        prerequisite = request.form['medication'],
-        dosageform = request.form['medication'])
+    return addPrescription(request.form['username'],request.form['medication'],request.form['dosage'],request.form['frequency'],request.form['quantity'],request.form['dosageunit'],request.form['frequencyunit'],request.form['startdate'],request.form['enddate'],request.form['repeat'],request.form['stockleft'],request.form['prerequisite'],request.form['dosageform'])
 
-    with database.transaction():
-        insertPrescription.execute()
+def addPrescription(username,medication,dosage,frequency,quantity,dosageunit,frequencyunit,startdate,enddate,repeat,stockleft,prerequisite,dosageform):
+    insertPrescription = Prescription.insert(
+        username = username,
+        medication = medication,
+        dosage = dosage,
+        frequency = frequency,
+        quantity = quantity,
+        dosageunit = dosageunit,
+        frequencyunit = frequencyunit,
+        startdate = startdate,
+        enddate = enddate,
+        repeat = repeat,
+        stockleft = stockleft,
+        prerequisite = prerequisite,
+        dosageform = dosageform)
+
+    try:
+        with database.transaction():
+            insertPrescription.execute()
+            return "Prescripton added for " + username
+    except:
+        return "Could not add prescription"
 
 @app.route('/api/deletePrescription', methods=['POST'])
 def deletePrescription():
     return deletePrescription(request.form['prescriptionid'])
 
 def deletePrescription(prescriptionid):
-    instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
-    with database.transaction():
-        instance.delete_instance()
+    try:
+        instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+        with database.transaction():
+            instance.delete_instance()
+            "Deleted prescription " + prescriptionid
+    except:
+        return prescriptionid + " not found"
 
 @app.route('/api/getPrescriptions', methods=['POST'])
 def getPrescriptions():
