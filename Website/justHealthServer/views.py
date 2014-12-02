@@ -182,7 +182,7 @@ def deleteAppointment_view():
 def getUpdateAppointment_view():
   if request.method == 'GET':
     appid = request.args.get("appid")
-    getUpdate = json.loads(getUpdateAppointment(session['username'], appid)) 
+    getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
     return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate)
 
 @app.route('/patientUpdateAppointment', methods=['POST'])
@@ -219,3 +219,12 @@ def myPatients():
 def  prescriptions():
     prescriptions = json.loads(getPrescriptions(session['username']))
     return render_template('prescriptions.html', prescriptions = prescriptions)
+
+
+@app.route('/carerAppointments', methods=['POST', 'GET'])
+def carerappointments():
+  if request.method == 'POST':
+    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
+    return added
+  upcoming = json.loads(getUpcomingAppointments(session['username']))
+  return render_template('carerAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
