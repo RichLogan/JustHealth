@@ -35,7 +35,8 @@
                 android:id="@+id/insertAlert"/>
 
         </LinearLayout>
-</LinearLayout>
+
+    </LinearLayout>
 
 
     <!--Link to Terms and Conditions-->
