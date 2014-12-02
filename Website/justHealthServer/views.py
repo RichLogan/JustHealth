@@ -26,7 +26,6 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-
 @app.route('/profile')
 @needLogin
 def profile():
@@ -185,7 +184,8 @@ def myPatients():
     # Get all prescriptions
     prescriptionMapping = {}
     for patient in patients:
-        prescriptionMapping[patient['username']] = getPrescriptions(patient['username'])
+        prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
+
 
         return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
     return redirect(url_for('index'))
