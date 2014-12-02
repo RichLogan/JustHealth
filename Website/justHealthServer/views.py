@@ -183,12 +183,14 @@ def myPatients():
 
     # Get all prescriptions
     prescriptionMapping = {}
+    appointmentsMapping = {}
     for patient in patients:
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
+        appointmentsMapping[patient['username']] = json.loads(getUpcomingAppointments(patient['username']))
 
-
-        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
     return redirect(url_for('index'))
+
 
 @app.route('/prescriptions')
 def  prescriptions():

@@ -737,23 +737,6 @@ def getPrescriptions(username):
     else:
         return "Must have Patient account type"
 
-@app.route('/api/getAppoitments', methods=['POST'])
-def getAppoitments():
-    return getAppoitments(request.form['username'])
-
-def getAppoitments(username):
-    accountType = json.loads(getAccountInfo(username))['accounttype']
-    user = Client.select().where(Client.username == username).get()
-
-    if accountType == "Patient":
-        jsonResult = []
-        results = appoitment.select().dicts().where(appoitment.username == user)
-        for result in results:
-            jsonResult.append(result)
-        return json.dumps(jsonResult)
-    else:
-        return "Must have Patient account type"
-
 @app.route('/api/getDeactivateReasons', methods=['POST'])
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""

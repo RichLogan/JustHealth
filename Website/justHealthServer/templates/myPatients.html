@@ -83,9 +83,9 @@
                 <div class="col-md-6">
                   <!-- View Appoitments -->
                   <a onclick='$("#appoitments{{patient.username}}").modal("toggle")'>
-                    <div style="height:100px;">
-                      <p style="line-height: 100px;font-size: 30px;">
-                        <i class="fa fa-calendar"></i>Appoitments
+                    <div style="height:25px;">
+                      <p style="line-height: 25px;font-size: 25px;">
+                        <i class="fa fa-calendar"></i> Appoitments
                       </p>
                     </a>
                     </div>
@@ -99,7 +99,30 @@
                             <div class="modal-body">
                               <button class="btn btn-success">Add new Appotiment</button>
                               <br /><br />
+                              <table class="table">
+                                <thead>
+                                  <th>Name</th>
+                                  <th>Type</th>
+                                  <th>Where</th>
+                                  <th>End Date/Time</th>
+                                  <th>Description</th>
+                                  <th style="color: red">Delete?</th>
 
+                                </thead>
+                                <tbody>
+                                  {% for appointment in appointmentsMapping[patient.username] %}
+                                  <tr>
+                                    <td>{{appointment.name}}</td>
+                                    <td>{{appointment.apptype.apptype}}</td>
+                                    <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
+                                    <td>{{appointment.enddate}} {{appointment.endtime}} </td>
+                                    <td>{{appointment.description}}</td>
+                                    <td> <button class="btn btn-danger"><i class="fa fa-times"></i></button> </td>
+                                  <tr>
+                                  {% endfor %}
+                                </tbody>
+
+                              </table>
                             </div>
                           </div>
                         </div>
