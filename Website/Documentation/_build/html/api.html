@@ -29,6 +29,7 @@
 
   
     <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="next" title="Database" href="database.html"/>
         <link rel="prev" title="User Functionality" href="users.html"/> 
 
   
@@ -68,12 +69,11 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Full API Listing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.accounts">Accounts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.database">Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.generalViews">General Views</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.testDatabase">TestDatabase</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#login-functions">Login Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#client">Client</a></li>
 </ul>
 </li>
 </ul>
@@ -112,41 +112,74 @@
             
   <div class="section" id="full-api-listing">
 <h1>Full API Listing<a class="headerlink" href="#full-api-listing" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-justHealthServer.accounts">
-<span id="accounts"></span><h2>Accounts<a class="headerlink" href="#module-justHealthServer.accounts" title="Permalink to this headline">¶</a></h2>
+<p>Listed below is the complete list of possible API calls to JustHealth, broken down by their general function.</p>
+<p>Each method will show its:</p>
+<ul class="simple">
+<li>URL</li>
+<li>Method type (POST or GET)</li>
+<li>POST / GET parameters</li>
+<li>Possible return values</li>
+</ul>
+<div class="section" id="login-functions">
+<h2>Login Functions<a class="headerlink" href="#login-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="justHealthServer.accounts.registration">
-<tt class="descclassname">justHealthServer.accounts.</tt><tt class="descname">registration</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/justHealthServer/accounts.html#registration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.accounts.registration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a dictionary of user details and inserts them into a Client object in the database</p>
+<dt id="justHealthServer.api.authenticate">
+<tt class="descclassname">justHealthServer.api.</tt><tt class="descname">authenticate</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/justHealthServer/api.html#authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticates a username and password and returns the result of the authentication check</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body"><p class="first">/api/authenticate</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">URL:</th><td class="field-body"><p class="first">/api/authenticate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">HTTP_METHOD:</th><td class="field-body"><p class="first">POST</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> &#8211; The username to authenticate</li>
+<li><strong>password</strong> &#8211; The attempted password to check</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-</div>
-<div class="section" id="module-justHealthServer.database">
-<span id="database"></span><h2>Database<a class="headerlink" href="#module-justHealthServer.database" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="justHealthServer.database.BaseModel">
-<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">BaseModel</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#BaseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.BaseModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base Model</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="justHealthServer.database.Client">
-<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">Client</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Client" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents a user of the application</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-justHealthServer.generalViews">
-<span id="general-views"></span><h2>General Views<a class="headerlink" href="#module-justHealthServer.generalViews" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-justHealthServer.testDatabase">
-<span id="testdatabase"></span><h2>TestDatabase<a class="headerlink" href="#module-justHealthServer.testDatabase" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;Authenticated&#8221;</dt>
+<dd><ul class="first last simple">
+<li>If both the username and password are correct and the account is not locked or deactivated.</li>
+</ul>
+</dd>
+<dt>&#8220;Incorrect Username/Password&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Either the username or password is incorrect or the user does not exist.</li>
+</ul>
+</dd>
+<dt>&#8220;Account deactivated&#8221;</dt>
+<dd><ul class="first last simple">
+<li>The account has <tt class="docutils literal"><span class="pre">acco</span>&nbsp; <span class="pre">untdeactivated</span> <span class="pre">=</span> <span class="pre">True</span></tt></li>
+</ul>
+</dd>
+<dt>&#8220;Account not verified. Please check your email for instructions&#8221;</dt>
+<dd><ul class="first last simple">
+<li>The account has <tt class="docutils literal"><span class="pre">verified</span> <span class="pre">=</span> <span class="pre">False</span></tt></li>
+</ul>
+</dd>
+<dt>&#8220;Account is locked. Please check your email for instructions&#8221;</dt>
+<dd><ul class="first last simple">
+<li>The account has <tt class="docutils literal"><span class="pre">accountlocked</span> <span class="pre">=</span> <span class="pre">True</span></tt></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -155,6 +188,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="database.html" class="btn btn-neutral float-right" title="Database"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="users.html" class="btn btn-neutral" title="User Functionality"><span class="fa fa-arrow-circle-left"></span> Previous</a>

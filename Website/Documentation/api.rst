@@ -1,35 +1,37 @@
+========================
 Full API Listing
 ========================
 
-Submodules
-----------
+Listed below is the complete list of possible API calls to JustHealth, broken down by their general function.
 
-Accounts
---------------------------------
+Each method will show its:
 
-.. automodule:: justHealthServer.accounts
-    :members:
+- URL
+- Method type (POST or GET)
+- POST / GET parameters
+- Possible return values
 
-Database
---------------------------------
+------------------------
+Login Functions
+------------------------
 
-.. automodule:: justHealthServer.database
-    :members:
+.. autofunction:: justHealthServer.api.authenticate
 
-General Views
-------------------------------------
+  :URL: /api/authenticate
+  :URL: /api/authenticate
+  :HTTP_METHOD: POST
 
-.. automodule:: justHealthServer.generalViews
-    :members:
+  :param username: The username to authenticate
+  :param password: The attempted password to check
 
-TestDatabase
-------------------------------------
-
-.. automodule:: justHealthServer.testDatabase
-    :members:
-
-Module contents
----------------
-
-.. automodule:: justHealthServer.justHealthServer
-    :members:
+Return values:
+  "Authenticated"
+    - If both the username and password are correct and the account is not locked or deactivated.
+  "Incorrect Username/Password"
+    - Either the username or password is incorrect or the user does not exist.
+  "Account deactivated"
+    - The account has ``acco  untdeactivated = True``
+  "Account not verified. Please check your email for instructions"
+    - The account has ``verified = False``
+  "Account is locked. Please check your email for instructions"
+    - The account has ``accountlocked = True``

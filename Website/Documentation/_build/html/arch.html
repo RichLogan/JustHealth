@@ -29,7 +29,7 @@
 
   
     <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
-        <link rel="next" title="User Functionality" href="users.html"/>
+        <link rel="next" title="Full API Listing" href="api.html"/>
         <link rel="prev" title="Welcome to JustHealth’s documentation!" href="index.html"/> 
 
   
@@ -59,22 +59,21 @@
         
             <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-application-code">The Application Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-api-server-and-web-application">The API server and Web Application</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-android-application">The Android application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="users.html">User Functionality</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="users.html#register">Register</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#login-functions">Login Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="justHealthServer.html">Full API Listing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.accounts">Accounts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.database">Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.generalViews">General Views</a></li>
-<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-justHealthServer.testDatabase">TestDatabase</a></li>
-<li class="toctree-l2"><a class="reference internal" href="justHealthServer.html#module-contents">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">User Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Client</a></li>
 </ul>
 </li>
 </ul>
@@ -113,26 +112,40 @@
             
   <div class="section" id="architecture">
 <h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
-<p>The JustHealth web application is a simple and lightweight application.</p>
-<p>It consists of three distinct parts:</p>
+<p>The JustHealth application is a simple and lightweight application.</p>
+<p>It consists of 6 distinct parts:</p>
 <ol class="arabic simple">
-<li>The application code itself</li>
+<li>The core application server and API</li>
+<li>An object-relational mapper to interact with the database</li>
 <li>A PostgreSQL database</li>
-<li>An ORM that connects the application to the database</li>
+<li>A Web application for desktop users</li>
+<li>An Android application for mobile users</li>
+<li>This documentation</li>
 </ol>
-<div class="section" id="the-application-code">
-<h2>The Application Code<a class="headerlink" href="#the-application-code" title="Permalink to this headline">¶</a></h2>
-<p>The application is written in <a class="reference external" href="https://www.python.org/">Python</a> using a web framework called <a class="reference external" href="http://flask.pocoo.org/">Flask</a></p>
-<p>We chose to use Python/Flask as one developer (Rich) had previous positive experience with in during his placement year. It was easy to learn and very logical to use, allowing us to build the functionality we wanted quickly.</p>
-</div>
-<div class="section" id="the-database">
-<h2>The Database<a class="headerlink" href="#the-database" title="Permalink to this headline">¶</a></h2>
-<p>Behind the application is a <a class="reference external" href="http://www.postgresql.org/">postgreSQL</a> database hosted on <a class="reference external" href="http://penguin.kent.ac.uk">http://penguin.kent.ac.uk</a>. This is provided by the University.</p>
+<div class="section" id="the-api-server-and-web-application">
+<h2>The API server and Web Application<a class="headerlink" href="#the-api-server-and-web-application" title="Permalink to this headline">¶</a></h2>
+<p>JustHealth&#8217;s API server and web application is written in <a class="reference external" href="https://www.python.org/">Python</a> using a web framework called <a class="reference external" href="http://flask.pocoo.org/">Flask</a>.</p>
+<p>We chose to use Python/Flask as one developer (Rich) had previous positive experience with in during his placement year.</p>
+<p>It is very easy to learn and very logical to use, allowing us to build the functionality we wanted quickly and easily, most probably more so than if we had used the language we already had in common, <a class="reference external" href="http://php.net">PHP</a>. Besides it being simple, it was also great exposure to an entire new language and different way of thinking.</p>
 </div>
 <div class="section" id="the-orm">
 <h2>The ORM<a class="headerlink" href="#the-orm" title="Permalink to this headline">¶</a></h2>
-<p>The final piece is an Object Relational Mapper known as <a class="reference external" href="https://github.com/coleifer/peewee">peewee</a>. An Object Relational Mapper allows us to interact with our database from our application as though it was an object in Python. This negates the need to write SQL and the weaknesses associated with it, such as SQL injection attacks.</p>
-<p>peewee is very lightweight and, again, highly logical to understand and use. It&#8217;s full documentation can be found here: <a class="reference external" href="http://peewee.readthedocs.org/en/latest/">http://peewee.readthedocs.org/en/latest/</a> and will be referenced throughout.</p>
+<p>An Object Relational Mapper allows us to interact with our database from our application as though tables were classes and records are objects in Python. This negates the need to write SQL and effectively somewhat abstracts the database layer, acting no different to any other part of the application. Models (tables) can be easily interacted with once defined, and the lack of SQL being written anywhere has the added benefit of eliminating the possibility of SQL injection attacks.</p>
+<p>We used the Object Relational Mapper known as <a class="reference external" href="https://github.com/coleifer/peewee">peewee</a>. Peewee is very lightweight and, again, highly logical to understand and use. It&#8217;s full documentation can be found here: <a class="reference external" href="http://peewee.readthedocs.org/en/latest/">http://peewee.readthedocs.org/en/latest/</a>. Incidentally, the peewee documentation, which is extremely helpful, served as the inspiration for JustHealth&#8217;s documentation.</p>
+</div>
+<div class="section" id="the-database">
+<h2>The Database<a class="headerlink" href="#the-database" title="Permalink to this headline">¶</a></h2>
+<p>Behind the application is a <a class="reference external" href="http://www.postgresql.org/">PostgreSQL</a> database hosted on <a class="reference external" href="http://penguin.kent.ac.uk">http://penguin.kent.ac.uk</a>. This is provided by the University.</p>
+<p>There is also a mirror of this database which is used for testing.</p>
+</div>
+<div class="section" id="the-web-application">
+<h2>The Web application<a class="headerlink" href="#the-web-application" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="the-android-application">
+<h2>The Android application<a class="headerlink" href="#the-android-application" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -142,7 +155,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="users.html" class="btn btn-neutral float-right" title="User Functionality"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Full API Listing"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Welcome to JustHealth’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>

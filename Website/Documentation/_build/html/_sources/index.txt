@@ -10,7 +10,8 @@ Welcome to JustHealth's documentation!
    :maxdepth: 4
 
    arch
-   users
    api
+   users
+   database
 
 JustHealth is a healthcare app designed to support care for patients with chronic health conditions and their patients.

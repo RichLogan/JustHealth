@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>User Functionality &mdash; JustHealth 1 documentation</title>
+  <title>Database &mdash; JustHealth 1 documentation</title>
   
 
   
@@ -29,7 +29,6 @@
 
   
     <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
-        <link rel="next" title="Database" href="database.html"/>
         <link rel="prev" title="Full API Listing" href="api.html"/> 
 
   
@@ -68,9 +67,8 @@
 <li class="toctree-l2"><a class="reference internal" href="api.html#login-functions">Login Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">User Functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Client</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.database">Client</a></li>
 </ul>
 </li>
 </ul>
@@ -96,10 +94,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>User Functionality</li>
+    <li>Database</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="_sources/users.txt" rel="nofollow"> View page source</a>
+          <a href="_sources/database.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -107,23 +105,17 @@
 </div>
           <div role="main">
             
-  <div class="section" id="user-functionality">
-<h1>User Functionality<a class="headerlink" href="#user-functionality" title="Permalink to this headline">¶</a></h1>
-<p>This document will list the key pieces of functionality that control user management.</p>
-<p>The application has a number of different types of users, including:</p>
-<ol class="arabic simple">
-<li>Patients</li>
-<li>Carers</li>
-<li>Relatives</li>
-<li>Medical Professionals</li>
-</ol>
-<p>Each user is represented by a Client record in the PostgreSQL databsae, and represented in our database by the following class:</p>
+  <div class="section" id="database">
+<h1>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-justHealthServer.database">
+<span id="client"></span><h2>Client<a class="headerlink" href="#module-justHealthServer.database" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt>
-<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">Client</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#Client"><span class="viewcode-link">[source]</span></a></dt>
+<dt id="justHealthServer.database.Client">
+<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">Client</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Client" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a user of the application</p>
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -131,8 +123,6 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="database.html" class="btn btn-neutral float-right" title="Database"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="api.html" class="btn btn-neutral" title="Full API Listing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
