@@ -46,7 +46,7 @@ class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
     password = CharField(max_length=255)
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', related_name="username")
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
 
     class Meta:
         primary_key = CompositeKey('password', 'username')
