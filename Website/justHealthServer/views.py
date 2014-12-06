@@ -49,11 +49,16 @@ def profile():
 def terms():
   return render_template('termsandconditions.html')
 
+@app.route('/corpusindex')
+def corpus():
+  return render_template('indexCorpus.html')
+
+
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
     if request.method =='POST':
-        result = searchPatientCarer(request.form['username'], request.form['searchTerm'])
+        result = searchPatientCarer(request.form['username'], request.form['searchterm'])
         result = json.loads(result)
         return render_template ('search.html',results = result, username= session['username'])
     return render_template('search.html',username= session['username'])

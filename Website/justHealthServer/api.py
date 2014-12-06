@@ -376,7 +376,7 @@ def sendPasswordResetEmail(username):
     s = getSerializer()
     payload = s.dumps(username)
     verifyLink = url_for('passwordReset', payload=payload, _external=True)
-    
+
     #Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")

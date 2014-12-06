@@ -1,0 +1,94 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1214" measuredH="519" mockupW="936" mockupH="492">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="278" y="27" w="741" h="492" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14540253</color>
+        <text>JustHealth%0Ahttp%3A//www.justhealth.uk/</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Image" x="285" y="106" w="153" h="66" measuredW="77" measuredH="79" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logo</text>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::HRule" x="438" y="162" w="575" h="-1" measuredW="100" measuredH="10" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Canvas" x="358" y="181" w="141" h="115" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1001" y="100" w="-1" h="392" measuredW="16" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <value>0</value>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::Label" x="389" y="257" w="-1" h="-1" measuredW="70" measuredH="18" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>%28Appointments%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Icon" x="847" y="115" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>HomeIcon%7Clarge</icon>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Button" x="901" y="126" w="-1" h="-1" measuredW="68" measuredH="27" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Log%20out</text>
+      </controlProperties>
+    </control>
+    <control controlID="91" controlTypeID="com.balsamiq.mockups::VCurly" x="1034" y="225" w="180" h="231" measuredW="180" measuredH="140" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>None%20of%20these%20fields%20will%20be%20mandatory%2C%20but%20default%20values%20will%20be%20set%20and%20entered%20for%20the%20user%20in%20the%20case%20of%20it%20not%20being%20utilised</text>
+      </controlProperties>
+    </control>
+    <control controlID="96" controlTypeID="com.balsamiq.mockups::Icon" x="400" y="198" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>CalendarIcon%7Clarge</icon>
+      </controlProperties>
+    </control>
+    <control controlID="115" controlTypeID="com.balsamiq.mockups::TabBar" x="505" y="181" w="441" h="311" measuredW="311" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>1</selectedIndex>
+        <text>Your%20Appointments%2C%20New%20Appointment</text>
+      </controlProperties>
+    </control>
+    <control controlID="119" controlTypeID="com.balsamiq.mockups::DateChooser" x="518" y="265" w="-1" h="-1" measuredW="113" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>0</color>
+        <text>01/01/2015</text>
+      </controlProperties>
+    </control>
+    <control controlID="120" controlTypeID="com.balsamiq.mockups::TextInput" x="518" y="231" w="396" h="-1" measuredW="40" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Title</text>
+      </controlProperties>
+    </control>
+    <control controlID="121" controlTypeID="com.balsamiq.mockups::TextInput" x="518" y="298" w="121" h="-1" measuredW="116" measuredH="27" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Start%20Time%3A%2012%3A00</text>
+      </controlProperties>
+    </control>
+    <control controlID="122" controlTypeID="com.balsamiq.mockups::TextInput" x="646" y="298" w="121" h="-1" measuredW="108" measuredH="27" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>End%20Time%3A%2013%3A00</text>
+      </controlProperties>
+    </control>
+    <control controlID="123" controlTypeID="com.balsamiq.mockups::TextArea" x="516" y="332" w="398" h="75" measuredW="200" measuredH="140" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Description</text>
+      </controlProperties>
+    </control>
+    <control controlID="124" controlTypeID="com.balsamiq.mockups::TextInput" x="516" y="415" w="398" h="-1" measuredW="64" measuredH="27" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Location</text>
+      </controlProperties>
+    </control>
+    <control controlID="125" controlTypeID="com.balsamiq.mockups::Button" x="799" y="454" w="-1" h="-1" measuredW="141" measuredH="27" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Create%20Appointment</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
