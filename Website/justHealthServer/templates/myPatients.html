@@ -64,6 +64,7 @@
                         <button class="btn btn-success">Add new Prescription</button>
                         <br /><br />
 
+                        <!-- Display flashed return message -->
                         {% with returnType = get_flashed_messages(category_filter=["type"]) %}
                           {% if returnType %}
                             {% for msg in returnType %}
@@ -88,6 +89,61 @@
                             {% endfor %}
                           {% endif %}
                         {% endwith %}
+                        <!-- End flashed message -->
+
+                        <form action="/addPrescription" method="POST" class="form-horizontal" role="form">
+                          <div style="width: 90%;margin: 0 auto;">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="" for="{{patient.username}}_medication">Medication</label>
+                                  <select class="form-control" id="{{patient.username}}_medication">
+                                    <!-- Options for medication -->
+                                  </select>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="" for="{{patient.username}}_dosage">Dosage</label>
+                                  <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)">
+                                </div>
+
+
+
+                                <div class="form-group">
+                                  <label class="" for="{{patient.username}}_frequency">Frequency</label>
+                                  <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)">
+                                </div>
+
+                                <p>
+                                Type
+                                Start Date
+                                End Date
+                                Repeat?
+                                Stock Left
+                                Observations
+                                </p>
+
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="" for="{{patient.username}}_quantity">Quantity</label>
+                                  <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="Quantity (To take at once)">
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="" for="{{patient.username}}_dosageUnit">Dosage Unit</label>
+                                  <input name="dosageunit" type="text" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Unit (e.g mg)">
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="" for="{{patient.username}}_frequencyUnit">Frequency Unit</label>
+                                  <input name="frequencyunit" type="text" class="form-control" id="{{patient.username}}_frequencyUnit" placeholder="Frequency Unit (e.g Daily)">
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </form>
 
                         <table class="table">
                           <thead>
@@ -102,7 +158,6 @@
                             <th>Stock Left</th>
                             <th>Observations</th>
                             <th style="color: red">Delete?</th>
-
                           </thead>
                           <tbody>
                             {% for prescription in prescriptionMapping[patient.username] %}
