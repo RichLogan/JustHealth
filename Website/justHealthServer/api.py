@@ -626,30 +626,30 @@ def deleteMedication(medicationName):
 
 @app.route('/api/addPrescription', methods=['POST'])
 def addPrescription():
-    return addPrescription(request.form['username'],request.form['medication'],request.form['dosage'],request.form['frequency'],request.form['quantity'],request.form['dosageunit'],request.form['frequencyunit'],request.form['startdate'],request.form['enddate'],request.form['repeat'],request.form['stockleft'],request.form['prerequisite'],request.form['dosageform'])
+    return addPrescription(request.form)
 
-def addPrescription(username,medication,dosage,frequency,quantity,dosageunit,frequencyunit,startdate,enddate,repeat,stockleft,prerequisite,dosageform):
+def addPrescription(details):
     insertPrescription = Prescription.insert(
-        username = username,
-        medication = medication,
-        dosage = dosage,
-        frequency = frequency,
-        quantity = quantity,
-        dosageunit = dosageunit,
-        frequencyunit = frequencyunit,
-        startdate = startdate,
-        enddate = enddate,
-        repeat = repeat,
-        stockleft = stockleft,
-        prerequisite = prerequisite,
-        dosageform = dosageform)
+        username = details['username'],
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        frequencyunit = details['frequencyunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        repeat = details['repeat'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform'])
 
     try:
         with database.transaction():
             insertPrescription.execute()
-            return "Prescripton added for " + username
+            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
-        return "Could not add prescription"
+        return "Failed"
 
 @app.route('/api/deletePrescription', methods=['POST'])
 def deletePrescription():
