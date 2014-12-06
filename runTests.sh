@@ -65,5 +65,5 @@ function runTests {
 
   echo "Iteration 4"
   python -m unittest discover Iteration\ 4/Test\ Cases/
-  echo -e "\n"
+  echo -e "\n"  
 }
