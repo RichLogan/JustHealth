@@ -48,6 +48,11 @@ def terms():
     """terms and conditions page link"""
     return render_template('termsandconditions.html')
 
+@app.route('/corpusindex')
+def corpus():
+  return render_template('indexCorpus.html')
+
+
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
