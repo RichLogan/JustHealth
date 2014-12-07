@@ -632,8 +632,11 @@ def getUpcomingAppointments(user):
   upcomingApps = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
   upcomingApps.execute()
 
-  jsonResult = []
+  jsonUpcomingResult = []
+  jsonArchivedResult = []
   for app in upcomingApps:
+    currentDate = datetime.datetime.now().date()
+    currentTime = datetime.datetime.now().time()
     appointment = {}
     appointment['appid'] = app.appid
     appointment['creator'] = app.creator.username
@@ -646,9 +649,18 @@ def getUpcomingAppointments(user):
     appointment['enddate'] = str(app.enddate)
     appointment['endtime'] = str(app.endtime)
     appointment['description'] = app.description
-    jsonResult.append(appointment)
+    
+    if (app.startdate >= currentDate and app.starttime >= currentTime):
+      jsonUpcomingResult.append(appointment)
+    else:
+      jsonArchivedResult.append(appointment)
 
-  return json.dumps(jsonResult)
+  upcoming = json.dumps(jsonUpcomingResult)
+  archived = json.dumps(jsonArchivedResult)
+  result = {}
+  result['upcoming'] = upcoming
+  result['archived'] = archived
+  return json.dumps(result)
 
 
 #deletes an appointment

@@ -4,7 +4,7 @@ from peewee import *
 
 database = PostgresqlDatabase('justhealth', **{'host': 'penguin.kent.ac.uk', 'password': 'dsomoid', 'port': 5432, 'user': 'justhealth'})
 
-class UnknownField(object):
+cclass UnknownField(object):
     pass
 
 class BaseModel(Model):
@@ -12,13 +12,13 @@ class BaseModel(Model):
         database = database
 
 class Client(BaseModel):
-    accountdeactivated = BooleanField()
-    accountlocked = BooleanField()
+    accountdeactivated = BooleanField(default=False)
+    accountlocked = BooleanField(default=False)
     dob = DateField()
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    verified = BooleanField()
+    verified = BooleanField(default=False)
 
     class Meta:
         db_table = 'client'

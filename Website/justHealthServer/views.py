@@ -48,6 +48,11 @@ def terms():
     """terms and conditions page link"""
     return render_template('termsandconditions.html')
 
+@app.route('/corpusindex')
+def corpus():
+  return render_template('indexCorpus.html')
+
+
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
@@ -164,6 +169,7 @@ def resetPasswordRedirect():
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
   upcoming = json.loads(getUpcomingAppointments(session['username']))
+  return str(upcoming)
   if request.method == 'POST':
     #The tick box is not sent if it isn't ticked, so we have to catch it here.
     try:
