@@ -169,6 +169,7 @@ def resetPasswordRedirect():
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
   upcoming = json.loads(getUpcomingAppointments(session['username']))
+  return str(upcoming)
   if request.method == 'POST':
     #The tick box is not sent if it isn't ticked, so we have to catch it here.
     try:

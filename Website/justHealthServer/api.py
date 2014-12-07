@@ -654,7 +654,13 @@ def getUpcomingAppointments(user):
       jsonUpcomingResult.append(appointment)
     else:
       jsonArchivedResult.append(appointment)
-  return json.dumps(jsonUpcomingResult)
+
+  upcoming = json.dumps(jsonUpcomingResult)
+  archived = json.dumps(jsonArchivedResult)
+  result = {}
+  result['upcoming'] = upcoming
+  result['archived'] = archived
+  return json.dumps(result)
 
 
 #deletes an appointment
