@@ -168,8 +168,8 @@ def resetPasswordRedirect():
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
-  upcoming = json.loads(getUpcomingAppointments(session['username']))
-  return str(upcoming)
+  appointments = json.loads(getAllAppointments(session['username']))
+
   if request.method == 'POST':
     #The tick box is not sent if it isn't ticked, so we have to catch it here.
     try:
@@ -180,7 +180,7 @@ def appointments():
     added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
     flash(added, 'success')
     return redirect(url_for('appointments'))
-  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
+  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
 
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])

@@ -623,20 +623,20 @@ def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, s
   return "Appointment Added"
 
 #receives the request from android to allow a user to view their upcoming appointments
-@app.route('/api/getUpcomingAppointments', methods=['POST'])
-def getUpcomingAppointments():
-  return getUpcomingAppointments(request.form['username'])
+@app.route('/api/getAllAppointments', methods=['POST'])
+def getAllAppointments():
+  return getAllAppointments(request.form['username'])
 
 #gets the appointments from the database
-def getUpcomingAppointments(user):
-  upcomingApps = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
-  upcomingApps.execute()
+def getAllAppointments(user):
+  appointments = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  appointments.execute()
 
-  jsonUpcomingResult = []
-  jsonArchivedResult = []
-  for app in upcomingApps:
-    currentDate = datetime.datetime.now().date()
-    currentTime = datetime.datetime.now().time()
+  currentDate = datetime.datetime.now().date()
+  currentTime = datetime.datetime.now().time()
+
+  allAppointments = []
+  for app in appointments:
     appointment = {}
     appointment['appid'] = app.appid
     appointment['creator'] = app.creator.username
@@ -651,16 +651,13 @@ def getUpcomingAppointments(user):
     appointment['description'] = app.description
     
     if (app.startdate >= currentDate and app.starttime >= currentTime):
-      jsonUpcomingResult.append(appointment)
+      appointment['upcoming'] = True
     else:
-      jsonArchivedResult.append(appointment)
+      appointment['upcoming'] = False
 
-  upcoming = json.dumps(jsonUpcomingResult)
-  archived = json.dumps(jsonArchivedResult)
-  result = {}
-  result['upcoming'] = upcoming
-  result['archived'] = archived
-  return json.dumps(result)
+    allAppointments.append(appointment)
+
+  return json.dumps(allAppointments)
 
 
 #deletes an appointment

@@ -69,54 +69,56 @@ s
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="upcoming">
 
       {% for appointment in appointments %}
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
-            <h3 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
-                <div class="row">
-                  <div class="col-md-6">
-                    <p>{{appointment.name}}</p>
+        {% if appointments.upcoming == True %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
+              <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p>{{appointment.name}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                </a>
+              </h3>
+              <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
+                      <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
+                      <p><b>Description:</b> <br /> {{appointment.description}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                      <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+                      </iframe>
+                    </div>
                   </div>
-                </div>
-              </a>
-            </h3>
-            <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
-                    <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                    <p><b>Description:</b> <br /> {{appointment.description}}</p>
-                  </div>
-                  <div class="col-md-6">
-                    <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                    <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
-                      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
-                    </iframe>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-2">
-                    <a href="/updateAppointment?appid={{appointment.appid}}">
-                      <button class="btn btn-default">Update</button>
-                    </a>
-                  </div>
-                  <div class="col-md-2">
-                    <a href="/deleteAppointment?appid={{appointment.appid}}">
-                      <button class="btn btn-default">Delete</button>
-                    </a>
-                  </div>
-                  <div class="col-md-8">
-                    <p></p>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <a href="/updateAppointment?appid={{appointment.appid}}">
+                        <button class="btn btn-default">Update</button>
+                      </a>
+                    </div>
+                    <div class="col-md-2">
+                      <a href="/deleteAppointment?appid={{appointment.appid}}">
+                        <button class="btn btn-default">Delete</button>
+                      </a>
+                    </div>
+                    <div class="col-md-8">
+                      <p></p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
@@ -183,54 +185,56 @@ s
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="archived">
 
       {% for appointment in appointments %}
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
-            <h3 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
-                <div class="row">
-                  <div class="col-md-6">
-                    <p>{{appointment.name}}</p>
+        {% if appointment.upcoming == False %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
+              <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p>{{appointment.name}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                </a>
+              </h3>
+              <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
+                      <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
+                      <p><b>Description:</b> <br /> {{appointment.description}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                      <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+                      </iframe>
+                    </div>
                   </div>
-                </div>
-              </a>
-            </h3>
-            <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
-                    <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                    <p><b>Description:</b> <br /> {{appointment.description}}</p>
-                  </div>
-                  <div class="col-md-6">
-                    <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                    <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
-                      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
-                    </iframe>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-2">
-                    <a href="/updateAppointment?appid={{appointment.appid}}">
-                      <button class="btn btn-default">Update</button>
-                    </a>
-                  </div>
-                  <div class="col-md-2">
-                    <a href="/deleteAppointment?appid={{appointment.appid}}">
-                      <button class="btn btn-default">Delete</button>
-                    </a>
-                  </div>
-                  <div class="col-md-8">
-                    <p></p>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <a href="/updateAppointment?appid={{appointment.appid}}">
+                        <button class="btn btn-default">Update</button>
+                      </a>
+                    </div>
+                    <div class="col-md-2">
+                      <a href="/deleteAppointment?appid={{appointment.appid}}">
+                        <button class="btn btn-default">Delete</button>
+                      </a>
+                    </div>
+                    <div class="col-md-8">
+                      <p></p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
