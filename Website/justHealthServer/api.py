@@ -115,7 +115,7 @@ def registerUser():
 
 @app.route('/api/authenticate', methods=['POST'])
 def authenticate():
-    """Checks the account validity on log in. Includes: Password, verification and account status checks"""
+    """Authenticates a username and password and returns the result of the authentication check"""
     try:
         attempted = Client.get(username=request.form['username'])
     except Client.DoesNotExist:
@@ -142,12 +142,11 @@ def authenticate():
             lockAccount(attempted.username)
             incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
             incrementAttempts.execute()
-            return "Account is locked"
+            return "Account is locked. Please check your email for instructions"
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
         with database.transaction():
             incrementAttempts.execute()
         return "Incorrect username/password"
-    return "Something went wrong!"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
 def deactivateAccount():
