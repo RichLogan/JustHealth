@@ -90,7 +90,10 @@ s
                       <div class="col-md-6">
                         <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                         <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                        <p><b>Description:</b> <br /> {{appointment.description}}</p>
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
+                        {% if appointment.private == True %}
+                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this, by updating your appointment.</em></p> <br /> 
+                        {% endif %}
                       </div>
                       <div class="col-md-6">
                         <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>

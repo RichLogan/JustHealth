@@ -169,7 +169,7 @@ def resetPasswordRedirect():
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
   appointments = json.loads(getAllAppointments(session['username']))
-  
+
   if request.method == 'POST':
     #The tick box is not sent if it isn't ticked, so we have to catch it here.
     try:
@@ -228,7 +228,7 @@ def myPatients():
     appointmentsMapping = {}
     for patient in patients:
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
-        appointmentsMapping[patient['username']] = json.loads(getUpcomingAppointments(patient['username']))
+        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(patient['username']))
 
         return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
     return redirect(url_for('index'))

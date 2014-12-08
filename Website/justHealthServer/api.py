@@ -629,7 +629,14 @@ def getAllAppointments():
 
 #gets the appointments from the database
 def getAllAppointments(user):
-  appointments = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  #get user account type 
+  currentUser_type = json.loads(getAccountInfo(session['username']))['accounttype']
+
+  if currentUser_type == "Carer": 
+    appointments = Appointments.select().where((Appointments.creator == user) & Appointments.private == False | (Appointments.invitee == user) & Appointments.private == False).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  elif currentUser_type == "Patient":
+    appointments = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  
   appointments.execute()
 
   currentDateTime = datetime.datetime.now()
@@ -648,6 +655,7 @@ def getAllAppointments(user):
     appointment['enddate'] = str(app.enddate)
     appointment['endtime'] = str(app.endtime)
     appointment['description'] = app.description
+    appointment['private'] = app.private
     
     dateTime = str(app.startdate) + " " + str(app.starttime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
