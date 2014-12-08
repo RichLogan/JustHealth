@@ -157,3 +157,9 @@ footer #footerContainer {
 .passwordStrong{
 	color: #30D917;
 }
+
+.vertical-center {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}

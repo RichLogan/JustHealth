@@ -19,19 +19,17 @@ def needLogin(f):
 @app.route('/')
 @needLogin
 def index():
-    jsonResult = getAccountInfo(session['username'])
-    result = {}
-    result = json.loads(jsonResult)
+    result = json.loads(getAccountInfo(session['username']))
     name = result['firstname'] + " " + result['surname']
     if result['accounttype'] == "Patient":
       return render_template('patienthome.html', printname = name)
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-"""Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
+    """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
     connections = json.loads(getConnections(session['username']))
@@ -44,10 +42,11 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-"""terms and conditions page link"""
+
 @app.route('/termsandconditions')
 def terms():
-  return render_template('termsandconditions.html')
+    """terms and conditions page link"""
+    return render_template('termsandconditions.html')
 
 @app.route('/corpusindex')
 def corpus():
@@ -84,7 +83,7 @@ def registration():
     if request.method == 'POST':
         result = registerUser()
         if result == "True":
-            return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
+            return render_template('login.html', type="success",  message="Thanks for registering! Please check your email for a verification link")
         else:
             render_template('register.html', type="danger", message = result)
     return render_template('register.html')
@@ -166,3 +165,76 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+@app.route('/appointments', methods=['POST', 'GET'])
+def appointments():
+  upcoming = json.loads(getUpcomingAppointments(session['username']))
+  return str(upcoming)
+  if request.method == 'POST':
+    #The tick box is not sent if it isn't ticked, so we have to catch it here.
+    try:
+      private = request.form['private']
+    except KeyError, e:
+      private = False
+
+    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
+    flash(added, 'success')
+    return redirect(url_for('appointments'))
+  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
+
+
+@app.route('/deleteAppointment', methods=['POST', 'GET'])
+def deleteAppointment_view():
+  if request.method == 'GET':
+    appid = request.args.get("appid")
+    deleted = deleteAppointment(session['username'], appid)
+    flash(deleted, 'success')
+    return redirect(url_for('appointments'))
+
+@app.route('/updateAppointment', methods=['POST', 'GET'])
+def getUpdateAppointment_view():
+  if request.method == 'GET':
+    appid = request.args.get('appid')
+    getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
+    return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate)
+
+@app.route('/patientUpdateAppointment', methods=['POST'])
+def updateAppointment_view():
+  if request.method == 'POST':
+    #The tick box is not sent if it isn't ticked, so we have to catch it here.
+    try:
+      private = request.form['private']
+    except KeyError, e:
+      private = False
+
+    updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
+    flash(updated, 'success')
+    return redirect(url_for('appointments'))
+
+@app.route('/myPatients')
+def myPatients():
+    # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+
+    # Get all prescriptions
+    prescriptionMapping = {}
+    appointmentsMapping = {}
+    for patient in patients:
+        prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
+        appointmentsMapping[patient['username']] = json.loads(getUpcomingAppointments(patient['username']))
+
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
+    return redirect(url_for('index'))
+
+
+@app.route('/prescriptions')
+def  prescriptions():
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)
