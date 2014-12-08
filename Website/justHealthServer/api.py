@@ -632,8 +632,7 @@ def getAllAppointments(user):
   appointments = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
   appointments.execute()
 
-  currentDate = datetime.datetime.now().date()
-  currentTime = datetime.datetime.now().time()
+  currentDateTime = datetime.datetime.now()
 
   allAppointments = []
   for app in appointments:
@@ -650,7 +649,10 @@ def getAllAppointments(user):
     appointment['endtime'] = str(app.endtime)
     appointment['description'] = app.description
     
-    if (app.startdate >= currentDate and app.starttime >= currentTime):
+    dateTime = str(app.startdate) + " " + str(app.starttime)
+    dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
+
+    if (dateTime >= currentDateTime):
       appointment['upcoming'] = True
     else:
       appointment['upcoming'] = False
