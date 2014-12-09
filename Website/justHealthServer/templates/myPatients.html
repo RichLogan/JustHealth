@@ -22,6 +22,17 @@
       {% endif %}
     {% endwith %}
   });
+
+
+  function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
   </script>
 {% endblock %}
 
@@ -106,12 +117,12 @@
 
                                 <div class="form-group">
                                   <label for="{{patient.username}}_dosage">Dosage</label>
-                                  <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)">
+                                  <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)" onkeypress="return isNumber(event)">
                                 </div>
 
                                 <div class="form-group">
                                   <label for="{{patient.username}}_frequency">Frequency</label>
-                                  <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)">
+                                  <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)" onkeypress="return isNumber(event)" >
                                 </div>
 
                               </div>
@@ -123,7 +134,11 @@
 
                                 <div class="form-group">
                                   <label for="{{patient.username}}_dosageUnit">Dosage Unit</label>
-                                  <input name="dosageunit" type="text" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Unit (e.g mg)">
+                                  <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
+                                    <option>mg</option>
+                                    <option>ml</option>
+                                    <option>puffs </option>
+                                  </select>
                                 </div>
 
                                 <div class="form-group">
@@ -143,13 +158,13 @@
                               <div class="col-md-6" style="margin: 0 auto;">
                                 <div class="form-group">
                                   <label for="{{patient.username}}_startDate">Start Date</label>
-                                  <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy">
+                                  <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy" onkeypress="return isNumber(event)">
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="{{patient.username}}_endDate">End Date</label>
-                                  <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy">
+                                  <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
                                 </div>
                               </div>
 
