@@ -841,6 +841,6 @@ def getAppointmentTypes():
     types = Appointmenttype.select()
     typeList = []
     for appType in types:
-      typeList.append(reason.reason)
+      typeList.append(appType.type)
     typeList = json.dumps(typeList)
     return typeList
