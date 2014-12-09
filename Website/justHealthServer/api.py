@@ -625,17 +625,20 @@ def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, s
 #receives the request from android to allow a user to view their upcoming appointments
 @app.route('/api/getAllAppointments', methods=['POST'])
 def getAllAppointments():
-  return getAllAppointments(request.form['username'])
+  return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
 
 #gets the appointments from the database
-def getAllAppointments(user):
+def getAllAppointments(loggedInUser, targetUser):
   #get user account type 
-  currentUser_type = json.loads(getAccountInfo(session['username']))['accounttype']
+  currentUser_type = json.loads(getAccountInfo(loggedInUser))['accounttype']
 
-  if currentUser_type == "Carer": 
-    appointments = Appointments.select().where((Appointments.creator == user) & Appointments.private == False | (Appointments.invitee == user) & Appointments.private == False).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  if currentUser_type == "Carer":
+    if loggedInUser == targetUser:
+       appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+    else:
+      appointments = Appointments.select().where(((Appointments.creator == targetUser) & (Appointments.private == False)) | ((Appointments.invitee == targetUser) & (Appointments.private == False))).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
   elif currentUser_type == "Patient":
-    appointments = Appointments.select().where((Appointments.creator == user) | (Appointments.invitee == user)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+    appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
   
   appointments.execute()
 

@@ -168,7 +168,7 @@ def resetPasswordRedirect():
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
-  appointments = json.loads(getAllAppointments(session['username']))
+  appointments = json.loads(getAllAppointments(session['username'], session['username']))
 
   if request.method == 'POST':
     #The tick box is not sent if it isn't ticked, so we have to catch it here.
@@ -228,7 +228,7 @@ def myPatients():
     appointmentsMapping = {}
     for patient in patients:
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
-        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(patient['username']))
+        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
 
         return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
     return redirect(url_for('index'))
@@ -245,5 +245,5 @@ def carerappointments():
   if request.method == 'POST':
     added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
     return added
-  upcoming = json.loads(getUpcomingAppointments(session['username']))
+  upcoming = json.loads(getAllAppointments(session['username'], session['username']))
   return render_template('carerAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
