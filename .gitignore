@@ -38,3 +38,10 @@ jhApp/proguard/
 
 # Log Files
 *.log
+
+jhApp/.idea/gradle.xml
+jhApp/app/app.iml
+jhApp/app/build.gradle
+jhApp/build.gradle
+jhApp/gradle/wrapper/gradle-wrapper.properties
+jhApp/jhApp.iml
