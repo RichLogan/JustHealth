@@ -1,15 +1,15 @@
 package justhealth.jhapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Login extends ActionBarActivity {
+public class Login extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

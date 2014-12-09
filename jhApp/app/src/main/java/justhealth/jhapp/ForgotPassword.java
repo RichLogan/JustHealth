@@ -1,8 +1,8 @@
 package justhealth.jhapp;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ForgotPassword extends ActionBarActivity {
+public class ForgotPassword extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
