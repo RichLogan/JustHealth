@@ -834,3 +834,13 @@ def getDeactivateReasons():
         reasonList.append(reason.reason)
     reasonList = json.dumps(reasonList)
     return reasonList
+
+@app.route('/api/getAppointmentTypes', methods=['POST'])
+def getAppointmentTypes():
+    """Returns a JSON list of possible appointment types"""
+    types = Appointmenttype.select()
+    typeList = []
+    for appType in types:
+      typeList.append(reason.reason)
+    typeList = json.dumps(typeList)
+    return typeList
