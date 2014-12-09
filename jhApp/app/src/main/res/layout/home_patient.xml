@@ -51,10 +51,12 @@
         android:orientation="horizontal"
         android:layout_weight="1" >
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:id="@+id/appointments"
+            android:text="Appointments" />
 
         <ImageButton
             android:layout_width="0dip"
