@@ -35,13 +35,12 @@ jhApp/.idea/workspace.xml
 jhApp/.idea/libraries
 jhApp/build
 jhApp/proguard/
-
-# Log Files
-*.log
-
-jhApp/.idea/gradle.xml
 jhApp/app/app.iml
+jhApp/.idea/gradle.xml
 jhApp/app/build.gradle
 jhApp/build.gradle
 jhApp/gradle/wrapper/gradle-wrapper.properties
 jhApp/jhApp.iml
+
+# Log Files
+*.log
