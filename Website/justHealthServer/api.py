@@ -693,7 +693,7 @@ def getUpdateAppointment(user, appid):
 
   if isCreator.creator.username == user:
     jsonResult = []
-      
+
     appointment = {}
     appointment['appid'] = isCreator.appid
     appointment['creator'] = isCreator.creator.username
@@ -707,18 +707,18 @@ def getUpdateAppointment(user, appid):
     appointment['endtime'] = str(isCreator.endtime)
     appointment['description'] = isCreator.description
     appointment['private'] = isCreator.private
-    
+
     jsonResult.append(appointment)
     return json.dumps(jsonResult)
 
 #update an appointment
-@app.route('/api/updateAppointment', methods=['POST']) 
+@app.route('/api/updateAppointment', methods=['POST'])
 def updateAppointment():
   return addPatientAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
   updateAppointment = Appointments.update(
-    name = name, 
+    name = name,
     apptype = apptype,
     addressnamenumber = addressnamenumber,
     postcode = postcode,
