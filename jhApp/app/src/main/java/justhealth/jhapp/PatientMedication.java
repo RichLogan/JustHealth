@@ -53,8 +53,6 @@ public class PatientMedication extends Activity {
         String username = account.getString("username", null);
         String password = account.getString("password", null);
 
-        System.out.println("Username is: " + username);
-
         HashMap<String, String> getPrescriptionsInfo = new HashMap<String, String>();
         getPrescriptionsInfo.put("username", username);
 

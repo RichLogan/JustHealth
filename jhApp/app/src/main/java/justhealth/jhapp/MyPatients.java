@@ -1,31 +1,17 @@
 package justhealth.jhapp;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Base64;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class MyPatients extends Activity {
 
@@ -35,54 +21,69 @@ public class MyPatients extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_patients);
-        getPatients();
+
+        String username = getSharedPreferences("account", 0).getString("username", null);
+        displayPatients(getPatients(username));
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private JSONArray getPatients() {
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
+    private JSONArray getPatients(String username) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("username", username);
 
-        HashMap<String, String> getPatients = new HashMap<String, String>();
-        getPatients.put("username", username);
-
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getConnections");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-
+        String response = PostRequest.post("getConnections", parameters);
         try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = getPatients.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-
-            try {
-                JSONArray patients = new JSONArray(responseString);
-                System.out.println(patients);
-                return patients;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+            JSONObject allConnections = new JSONObject(response);
+            String completed = allConnections.getString("completed");
+            JSONArray completedConnections = new JSONArray(completed);
+            return completedConnections;
+        }
+        catch (JSONException e) {
+            System.out.println(e.getStackTrace());
         }
         return null;
+    }
+
+    private void displayPatients(JSONArray patients) {
+        for(int x=0;x<patients.length();x++) {
+            try {
+                JSONObject patient = patients.getJSONObject(x);
+                final String username = patient.getString("username");
+                final String firstname = patient.getString("firstname");
+                final String surname = patient.getString("surname");
+                final String accounttype = patient.getString("accounttype");
+
+                if (accounttype.equals("Patient")) {
+                    //Create a button
+                    Button patientButton = new Button(this);
+                    String patientString = username + "\n" + firstname + " " + surname;
+                    patientButton.setText(patientString);
+
+                    //Add button to view
+                    LinearLayout ll = (LinearLayout) findViewById(R.id.patientButtons);
+                    ll.addView(patientButton, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+                    LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) patientButton.getLayoutParams();
+                    center.gravity = Gravity.CENTER;
+                    patientButton.setLayoutParams(center);
+
+//                    patientButton.setOnClickListener(new View.OnClickListener() {
+//                        public void onClick(View v) {
+//                            AlertDialog.Builder alert = new AlertDialog.Builder(PatientMedication.this);
+//                            alert.setTitle(medication + " (" + dosage + dosageunit + ")");
+//                            alert.setMessage("Start Date: " + startdate + "\nEnd Date: " + enddate + "\nExtra Info: " + prerequisite + "\nRepeat: " + repeat);
+//                            alert.setNegativeButton("Got it!", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int whichButton) {
+//                                    // Cancelled.
+//                                }
+//                            });
+//                            alert.show();
+//                        }
+//                    });
+                }
+            }
+            catch (JSONException e) {
+                System.out.print(e.getStackTrace());
+            }
+        }
     }
 }

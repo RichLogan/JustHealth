@@ -43,5 +43,14 @@ public class HomeCarer extends Activity {
                     }
                 }
         );
+
+        Button mypatients = (Button) findViewById(R.id.mypatients);
+        mypatients.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomeCarer.this, MyPatients.class));
+                    }
+                }
+        );
     }
 }
