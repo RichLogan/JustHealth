@@ -599,25 +599,24 @@ def getConnections(username):
 #receives the request from android allows a patient to add an appointment
 @app.route('/api/addPatientAppointment', methods=['POST'])
 def addPatientAppointment():
-  return addPatientAppointment(request.form['username'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'], request.form['private'])
+  return addPatientAppointment(request.form)
 
 #allows a patient to add an appointment
-def addPatientAppointment(creator, name, apptype, addressNameNumber, postcode, startDate, startTime, endDate, endTime, description, private):
+def addPatientAppointment(details):
 # Build insert user query
   appointmentInsert = Appointments.insert(
-    creator = creator,
-    name = name,
-    apptype = apptype,
-    addressnamenumber = addressNameNumber,
-    postcode = postcode,
-    startdate = startDate,
-    starttime = startTime,
-    enddate = endDate,
-    endtime = endTime,
-    description = description,
-    private = private
+    creator = details['creator'],
+    name = details['name'],
+    apptype = details['apptype'],
+    addressnamenumber = details['addressnamenumber'],
+    postcode = details['postcode'],
+    startdate = details['startdate'],
+    starttime = details['starttime'],
+    enddate = details['enddate'],
+    endtime = details['endtime'],
+    description = details['description'],
+    private = details['private']
   )
-
   appointmentInsert.execute()
 
   return "Appointment Added"
@@ -858,3 +857,13 @@ def getDeactivateReasons():
         reasonList.append(reason.reason)
     reasonList = json.dumps(reasonList)
     return reasonList
+
+@app.route('/api/getAppointmentTypes', methods=['POST'])
+def getAppointmentTypes():
+    """Returns a JSON list of possible appointment types"""
+    types = Appointmenttype.select()
+    typeList = []
+    for appType in types:
+      typeList.append(appType.type)
+    typeList = json.dumps(typeList)
+    return typeList

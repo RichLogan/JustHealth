@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
                 android:textColor="@color/header"
                 android:layout_marginTop="50dip"
                 android:layout_marginBottom="20dip"
-                android:id="@+id/loginTitle"/>
+                android:id="@+id/appointmentsTitle"/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -58,19 +58,125 @@
                     android:layout_height="fill_parent">
 
                     <LinearLayout
-                        android:id="@+id/Appointments"
+                        android:id="@+id/upcomingAppointmentView"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:orientation="vertical"></LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/New"
+                    <ScrollView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="vertical"></LinearLayout>
+                        android:layout_height="fill_parent">
+                        <LinearLayout
+                            android:id="@+id/createAppointmentView"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:orientation="vertical">
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Appointment Title"
+                                android:layout_above="@+id/scrollView"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/name"/>
+
+                            <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/type"
+                                android:layout_marginTop="70dp"
+                                android:layout_below="@+id/name"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true" />
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Building Name Number"
+                                android:layout_below="@+id/type"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/buildingNameNumber"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Postcode"
+                                android:layout_below="@+id/buildingNameNumber"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/postcode"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Start Time"
+                                android:inputType="date"
+                                android:layout_below="@+id/postcode"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/startDate"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Start Time"
+                                android:inputType="time"
+                                android:layout_below="@+id/startDate"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/startTime"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="End Date"
+                                android:inputType="date"
+                                android:layout_below="@+id/startTime"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/endDate"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="End Time"
+                                android:inputType="time"
+                                android:layout_below="@+id/endDate"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/endTime"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Details"
+                                android:layout_below="@+id/endTime"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/details"/>
+
+                            <CheckBox
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Tick to make the appointment private"
+                                android:id="@+id/appPrivate"
+                                android:checked="false" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Create"
+                                android:id="@+id/buttonAppointment"
+                                android:layout_above="@+id/scrollView"
+                                android:layout_gravity="center_horizontal" />
+                        </LinearLayout>
+                    </ScrollView>
 
                     <LinearLayout
-                        android:id="@+id/Archive"
+                        android:id="@+id/archiveAppointmentView"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:orientation="vertical"></LinearLayout>

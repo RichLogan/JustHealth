@@ -44,6 +44,15 @@ public class HomePatient extends ActionBarActivity {
                 }
         );
 
+        Button appointments = (Button) findViewById(R.id.appointments);
+        appointments.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomePatient.this, PatientAppointments.class));
+                    }
+                }
+        );
+
         ImageButton profile = (ImageButton) findViewById(R.id.profile);
         profile.setOnClickListener(
                 new Button.OnClickListener() {
