@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login">
+
+    <include android:id="@+id/header" layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Patients Prescriptions"
+                android:textSize="20dp"
+                android:textColor="@color/header"
+                android:layout_marginTop="50dip"
+                android:layout_marginBottom="20dip"
+                android:id="@+id/loginTitle"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/patientButtons"
+                    android:orientation="vertical">
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/insertAlert"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--Link to Terms and Conditions-->
+    <TextView android:id="@+id/link_to_terms"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Terms and Conditions"
+        android:gravity="center"
+        android:textSize="15dip"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/header"/>
+</RelativeLayout>
