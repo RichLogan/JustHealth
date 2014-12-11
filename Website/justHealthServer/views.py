@@ -175,9 +175,22 @@ def appointments():
     try:
       private = request.form['private']
     except KeyError, e:
-      private = False
+      private = "False"
 
-    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
+    details = {}
+    details['creator'] = session['username']
+    details['name'] = request.form['name']
+    details['apptype'] = request.form['apptype']
+    details['addressnamenumber'] = request.form['addressnamenumber']
+    details['postcode'] = request.form['postcode']
+    details['startdate'] = request.form['startdate']
+    details['starttime'] = request.form['starttime']
+    details['enddate'] = request.form['enddate']
+    details['endtime'] = request.form['endtime']
+    details['description'] = request.form['description']
+    details['private'] = private 
+
+    added = addPatientAppointment(details)
     flash(added, 'success')
     return redirect(url_for('appointments'))
   return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
