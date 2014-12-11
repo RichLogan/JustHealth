@@ -205,7 +205,9 @@
                             <th>Repeat?</th>
                             <th>Stock Left</th>
                             <th>Observations</th>
+                            <th style="color: green">Edit</th>
                             <th style="color: red">Delete?</th>
+
                           </thead>
                           <tbody>
                             {% for prescription in prescriptionMapping[patient.username] %}
@@ -220,7 +222,8 @@
                                 <td>{{prescription.repeat}}</td>
                                 <td>{{prescription.stockleft}}</td>
                                 <td>{{prescription.prerequisite}}</td>
-                                <td style="text-align: right;">
+                                  <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
+                                  <td>
                                   <a href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}"><button class="btn btn-danger"><i class="fa fa-times"></i></button></a>
                                 </td>
                               </tr>

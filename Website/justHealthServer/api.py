@@ -651,6 +651,34 @@ def addPrescription(details):
     except:
         return "Failed"
 
+
+@app.route('/api/editPrescription', methods=['POST'])
+def editPrescription():
+    return editPrescription(request.form)
+
+def editPrescription(details):
+    insertPrescription = Prescription.update(
+        username = details['username'],
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        frequencyunit = details['frequencyunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        repeat = details['repeat'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform'])
+
+    try:
+        with database.transaction():
+            insertPrescription.execute()
+            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
+    except:
+        return "Failed"
+
 @app.route('/api/deletePrescription', methods=['POST'])
 def deletePrescription():
     return deletePrescription(request.form['prescriptionid'])
