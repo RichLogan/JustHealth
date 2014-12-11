@@ -1,6 +1,213 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login">
 
-</LinearLayout>
+    <include android:id="@+id/header" layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Patient Medication"
+                android:textSize="20dp"
+                android:textColor="@color/header"
+                android:layout_marginTop="50dip"
+                android:layout_marginBottom="20dip"
+                android:id="@+id/appointmentsTitle"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/insertAlert"/>
+
+        </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+
+
+                    <ScrollView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+                        <LinearLayout
+                            android:id="@+id/addmedication"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:orientation="vertical">
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Medication Name"
+                                android:layout_above="@+id/scrollView"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/name"/>
+
+                            <!--<Spinner-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:id="@+id/type"-->
+                                <!--android:layout_marginTop="70dp"-->
+                                <!--android:layout_below="@+id/name"-->
+                                <!--android:layout_alignParentLeft="true"-->
+                                <!--android:layout_alignParentStart="true" />-->
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Quantity (To Take at once)"
+                                android:layout_below="@+id/name"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/quantity"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Dosage Value (e.g. 100)"
+                                android:layout_below="@+id/quantity"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/dosageValue"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Dosage Unit (e.g. Mg)"
+                                android:inputType="date"
+                                android:layout_below="@+id/dosageValue"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/DosageUnit"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Frequency (e.g. 1)"
+                                android:inputType="time"
+                                android:layout_below="@+id/DosageUnit"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/frequency"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Frequency Unit (e.g. Daily)"
+                                android:inputType="date"
+                                android:layout_below="@+id/frequency"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/frequencyUnit"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Dosage Form (e.g. Tablet)"
+                                android:inputType="date"
+                                android:layout_below="@+id/frequencyUnit"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/Type"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Start Time"
+                                android:inputType="date"
+                                android:layout_below="@+id/frequency"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/startDate"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="End Time"
+                                android:inputType="time"
+                                android:layout_below="@+id/endDate"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/endTime"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Patient's Current Stock"
+                                android:layout_below="@+id/endTime"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/StockLeft"/>
+
+                            <EditText android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="Observations"
+                                android:layout_below="@+id/StockLeft"
+                                android:textSize="20dip"
+                                android:textColor="@color/header"
+                                android:layout_marginBottom="5dip"
+                                android:id="@+id/Observations"/>
+
+
+                            <CheckBox
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Repeat Prescription"
+                                android:id="@+id/appPrivate"
+                                android:checked="false" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Add"
+                                android:id="@+id/buttonAppointment"
+                                android:layout_above="@+id/scrollView"
+                                android:layout_gravity="center_horizontal" />
+                        </LinearLayout>
+                    </ScrollView>
+
+                </FrameLayout>
+            </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--Link to Terms and Conditions-->
+    <TextView android:id="@+id/link_to_terms"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Terms and Conditions"
+        android:gravity="center"
+        android:textSize="15dip"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/header"/>
+</RelativeLayout>
