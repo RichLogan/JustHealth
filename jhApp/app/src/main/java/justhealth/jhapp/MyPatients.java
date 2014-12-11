@@ -1,9 +1,13 @@
 package justhealth.jhapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -36,15 +40,14 @@ public class MyPatients extends Activity {
             String completed = allConnections.getString("completed");
             JSONArray completedConnections = new JSONArray(completed);
             return completedConnections;
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             System.out.println(e.getStackTrace());
         }
         return null;
     }
 
     private void displayPatients(JSONArray patients) {
-        for(int x=0;x<patients.length();x++) {
+        for (int x = 0; x < patients.length(); x++) {
             try {
                 JSONObject patient = patients.getJSONObject(x);
                 final String username = patient.getString("username");
@@ -66,22 +69,25 @@ public class MyPatients extends Activity {
                     center.gravity = Gravity.CENTER;
                     patientButton.setLayoutParams(center);
 
-//                    patientButton.setOnClickListener(new View.OnClickListener() {
-//                        public void onClick(View v) {
-//                            AlertDialog.Builder alert = new AlertDialog.Builder(PatientMedication.this);
-//                            alert.setTitle(medication + " (" + dosage + dosageunit + ")");
-//                            alert.setMessage("Start Date: " + startdate + "\nEnd Date: " + enddate + "\nExtra Info: " + prerequisite + "\nRepeat: " + repeat);
-//                            alert.setNegativeButton("Got it!", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int whichButton) {
-//                                    // Cancelled.
-//                                }
-//                            });
-//                            alert.show();
-//                        }
-//                    });
+                    patientButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(MyPatients.this);
+                            alert.setTitle("Patient Options")
+                                    .setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (which == 0) {
+                                                startActivity(new Intent(MyPatients.this, CarerPrescriptions.class));
+                                            }
+                                            else if (which == 1) {
+                                                startActivity(new Intent(MyPatients.this, CarerAppointments.class));
+                                            }
+                                        }
+                                    });
+                            alert.show();
+                        }
+                    });
                 }
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 System.out.print(e.getStackTrace());
             }
         }

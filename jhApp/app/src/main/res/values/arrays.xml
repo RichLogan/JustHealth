@@ -14,4 +14,9 @@
         <item>I have privacy concerns</item>
         <item>Other (Please specify)</item>
     </string-array>
+
+    <string-array name="patient_options">
+        <item>Prescriptions</item>
+        <item>Appointments</item>
+    </string-array>
 </resources>
