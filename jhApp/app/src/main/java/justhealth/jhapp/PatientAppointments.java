@@ -149,9 +149,9 @@ public class PatientAppointments extends ActionBarActivity {
         details.put("apptype", appType);
 
         if (((CheckBox) findViewById(R.id.appPrivate)).isChecked()) {
-            details.put("private", "True");
+            details.put("private", "TRUE");
         } else {
-            details.put("private", "False");
+            details.put("private", "FALSE");
         }
 
         HttpClient httpclient = new DefaultHttpClient();
