@@ -208,6 +208,10 @@ def deletePrescription_view():
         flash(username, 'user')
         return redirect(url_for('myPatients'))
 
+@app.route('/editPrescription')
+def editPrescriptionpage():
+    return render_template('editPrescription.html')
+
 @app.route('/addPrescription', methods=['POST'])
 def addPrescription_view():
     result = addPrescription(request.form)
