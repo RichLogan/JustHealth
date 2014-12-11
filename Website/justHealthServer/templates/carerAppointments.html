@@ -94,26 +94,29 @@ s
                   <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
                   <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
                   src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
-                </iframe>
+                  </iframe>
+                </div>
               </div>
-              <div class="col-md-2">
-                <a href="/updateAppointment?appid={{appointment.appid}}">
-                  <button class="btn btn-default">Update</button>
-                </a>
-              </a>
-            </div>
-            <div class="col-md-2">
-              <a href="/deleteAppointment?appid={{appointment.appid}}">
-                <button class="btn btn-default">Delete</button>
-              </div>
-              <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-2">
+                  <a href="/updateAppointment?appid={{appointment.appid}}">
+                    <button class="btn btn-default">Update</button>
+                  </a>              
+                </div>
+                <div class="col-md-2">
+                  <a href="/deleteAppointment?appid={{appointment.appid}}">
+                    <button class="btn btn-default">Delete</button>
+                  </a>
+                </div>
+                <div class="col-md-8">
+                </div>              
               </div>
             </div>
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>
 
@@ -171,7 +174,6 @@ s
       </div>
     </div>
   </div>
-</div>
 </div>
 
 <!--Upcoming Appointments-->
