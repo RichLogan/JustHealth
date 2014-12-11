@@ -85,31 +85,31 @@ public class AddPrescriptions extends Activity {
 
 
 
-// delete prescription
+// delete prescription- to carry on working!!
 
-    private boolean deleteConnect(String connection) {
-        HashMap<String, String> deleteConnection = new HashMap<String, String>();
+    private boolean deletePrescriptions(String connection) {
+        HashMap<String, String> deletePrescriptions = new HashMap<String, String>();
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
         String password = account.getString("password", null);
 
         //add search to HashMap
-        deleteConnection.put("user", username);
-        deleteConnection.put("connection", connection);
+        deletePrescriptions.put("user", username);
+        deletePrescriptions.put("connection", connection);
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+                   //Create new HttpClient and Post Header
+            HttpClient httpclient = new DefaultHttpClient();
+            String authentication = username + ":" + password;
+            String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
 
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/deleteConnection");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        //assigns the HashMap to list, for post request encoding
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/deletePrescription");
+            httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+            //assigns the HashMap to list, for post request encoding
+            try {
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
-            Set<Map.Entry<String, String>> detailsSet = deleteConnection.entrySet();
+            Set<Map.Entry<String, String>> detailsSet = deletePrescriptions.entrySet();
             for (Map.Entry<String, String> string : detailsSet) {
                 nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
             }
