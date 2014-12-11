@@ -49,7 +49,7 @@
             </a>
           </h4>
         </div>
-        <div id="collapse{{patient.username}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{patient.username}}">
+        <div id="collapse{{patient.username}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{patient.username}}">
           <div class="panel-body">
             <div class="row">
 
@@ -222,7 +222,7 @@
                                 <td>{{prescription.repeat}}</td>
                                 <td>{{prescription.stockleft}}</td>
                                 <td>{{prescription.prerequisite}}</td>
-                                  <td style= "color: green" ><a class="fa fa-pencil fa-2x" href= "/editPrescription"></a> </td>
+                                  <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
                                   <td>
                                   <a href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}"><button class="btn btn-danger"><i class="fa fa-times"></i></button></a>
                                 </td>
