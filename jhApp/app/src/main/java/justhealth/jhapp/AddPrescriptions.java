@@ -85,7 +85,58 @@ public class AddPrescriptions extends Activity {
 
 
 
+// delete prescription
 
+    private boolean deleteConnect(String connection) {
+        HashMap<String, String> deleteConnection = new HashMap<String, String>();
+
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+
+        //add search to HashMap
+        deleteConnection.put("user", username);
+        deleteConnection.put("connection", connection);
+
+        //Create new HttpClient and Post Header
+        HttpClient httpclient = new DefaultHttpClient();
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/deleteConnection");
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+        //assigns the HashMap to list, for post request encoding
+        try {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
+            Set<Map.Entry<String, String>> detailsSet = deleteConnection.entrySet();
+            for (Map.Entry<String, String> string : detailsSet) {
+                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
+            }
+
+            //pass the list to the post request
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+
+            String responseString = EntityUtils.toString(response.getEntity());
+            System.out.print(responseString);
+
+            if (responseString == "True") {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } catch (ClientProtocolException e) {
+            //TODO Auto-generated catch block
+        } catch (IOException e) {
+            //TODO Auto-generated catch block
+        } catch (NullPointerException e) {
+            //TODO Auto-generated catch block
+        }
+        return false;
+    }
 
 
 
