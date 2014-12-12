@@ -39,10 +39,12 @@
             android:id="@+id/connections"
             android:text="Connections" />
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:id="@+id/medication"
+            android:text="Medication" />
     </LinearLayout>
 
     <LinearLayout

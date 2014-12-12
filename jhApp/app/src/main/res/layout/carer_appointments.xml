@@ -21,7 +21,7 @@
 
             <TextView android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Medication Details"
+                android:text="Patients Appointments"
                 android:textSize="20dp"
                 android:textColor="@color/header"
                 android:layout_marginTop="50dip"
@@ -34,7 +34,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/prescriptionButtons"
+                    android:id="@+id/patientButtons"
                     android:orientation="vertical">
                 </LinearLayout>
             </ScrollView>
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/insertAlert"
-            />
+                />
         </LinearLayout>
     </LinearLayout>
 

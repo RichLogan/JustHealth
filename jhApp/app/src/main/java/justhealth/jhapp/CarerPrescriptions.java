@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,31 +16,42 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-
-public class PatientMedication extends Activity {
-
+public class CarerPrescriptions extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.patient_medication);
-        displayPrescriptions(getPrescriptions());
+        setContentView(R.layout.carer_prescriptions);
+
+        //Get data passed from MyPatients
+        String username = "";
+        String firstname = "";
+        String surname= "";
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            username = extras.getString("targetUsername");
+            firstname = extras.getString("firstName");
+            surname = extras.getString("surname");
+        }
+
+        //Set text of patientName to username
+        TextView title=(TextView)findViewById(R.id.patientName);
+        title.setText("Prescriptions: " + firstname + " " + surname + " (" + username + ")");
+
+        //Display Prescriptions
+        displayPrescriptions(getPrescriptions(username));
     }
 
-    private JSONArray getPrescriptions() {
+    private JSONArray getPrescriptions(String username) {
         HashMap<String, String> parameters = new HashMap<String, String>();
-        String username = getSharedPreferences("account", 0).getString("username", null);
         parameters.put("username", username);
 
         String response = PostRequest.post("getPrescriptions", parameters);
-            try {
-                JSONArray result = new JSONArray(response);
-                return result;
+        try {
+            JSONArray result = new JSONArray(response);
+            return result;
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -70,7 +80,7 @@ public class PatientMedication extends Activity {
 
                 //Add button to view
                 LinearLayout ll = (LinearLayout)findViewById(R.id.prescriptionButtons);
-                ll.addView(prescriptionButton,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+                ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                 LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();
                 center.gravity = Gravity.CENTER;
@@ -78,7 +88,7 @@ public class PatientMedication extends Activity {
 
                 prescriptionButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(PatientMedication.this);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(CarerPrescriptions.this);
                         alert.setTitle(medication + " (" + dosage + dosageunit + ")");
                         alert.setMessage("Start Date: " + startdate + "\nEnd Date: " + enddate + "\nExtra Info: " + prerequisite + "\nRepeat: " + repeat);
                         alert.setNegativeButton("Got it!", new DialogInterface.OnClickListener() {
@@ -86,7 +96,7 @@ public class PatientMedication extends Activity {
                                 // Cancelled.
                             }
                         });
-                    alert.show();
+                        alert.show();
                     }
                 });
             }

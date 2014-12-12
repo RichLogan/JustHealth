@@ -4,7 +4,7 @@ from peewee import *
 
 database = PostgresqlDatabase('justhealth', **{'host': 'penguin.kent.ac.uk', 'password': 'dsomoid', 'port': 5432, 'user': 'justhealth'})
 
-cclass UnknownField(object):
+class UnknownField(object):
     pass
 
 class BaseModel(Model):
@@ -12,13 +12,13 @@ class BaseModel(Model):
         database = database
 
 class Client(BaseModel):
-    accountdeactivated = BooleanField(default=False)
-    accountlocked = BooleanField(default=False)
+    accountdeactivated = BooleanField()
+    accountlocked = BooleanField()
     dob = DateField()
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    verified = BooleanField(default=False)
+    verified = BooleanField()
 
     class Meta:
         db_table = 'client'
@@ -84,6 +84,7 @@ class Patientcarer(BaseModel):
         primary_key = CompositeKey('carer', 'patient')
         db_table = 'patientcarer'
 
+
 class Appointmenttype(BaseModel):
     type = CharField(max_length=25, primary_key=True)
 
@@ -120,6 +121,7 @@ def createAll():
     Relationship.create_table()
     Patientcarer.create_table()
     Appointments.create_table()
+
 
 class Medication(BaseModel):
     name = CharField(primary_key=True)
@@ -194,3 +196,4 @@ def dropAll():
 
     if Appointments.table_exists():
         Appointments.drop_table(cascade=True)
+

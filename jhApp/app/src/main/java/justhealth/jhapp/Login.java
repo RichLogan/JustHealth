@@ -1,15 +1,15 @@
 package justhealth.jhapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -20,6 +20,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Login extends ActionBarActivity {
+public class Login extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +110,16 @@ public class Login extends ActionBarActivity {
                 SharedPreferences account = getSharedPreferences("account", 0);
                 SharedPreferences.Editor edit = account.edit();
                 edit.putString("username", loginInformation.get("username"));
-                //change here
                 edit.putString("password", loginInformation.get("password"));
                 edit.commit();
-                startActivity(new Intent(Login.this, HomePatient.class));
-            } else {
-                System.out.println("Failed:");
-                System.out.println(responseStr);
-
+                if (getAccountType(loginInformation.get("username")).equals("Patient")) {
+                    startActivity(new Intent(Login.this, HomePatient.class));
+                } else if (getAccountType(loginInformation.get("username")).equals("Carer")) {
+                    startActivity(new Intent(Login.this, HomeCarer.class));
+                } else {
+                }
+            }
+            else {
                 //Check if the Layout already exists
                 LinearLayout alert = (LinearLayout) findViewById(R.id.alertMessage);
                 if (alert == null) {
@@ -124,7 +128,6 @@ public class Login extends ActionBarActivity {
                     View insertAlertView = getLayoutInflater().inflate(R.layout.alert_message, insertAlert, false);
                     insertAlert.addView(insertAlertView);
                 }
-
                 TextView myTextView = (TextView) findViewById(R.id.alertText);
                 myTextView.setText(responseStr);
             }
@@ -133,6 +136,21 @@ public class Login extends ActionBarActivity {
         } catch (IOException e) {
             //TODO Auto-generated catch block
         }
+    }
 
+    private String getAccountType(String username) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("username", username);
+
+        String response = PostRequest.post("getAccountInfo", parameters);
+        try {
+            JSONObject accountDetails = new JSONObject(response);
+            String accountType  = accountDetails.getString("accounttype");
+            return accountType;
+        }
+        catch (JSONException e) {
+            System.out.println(e.getStackTrace());
+        }
+        return null;
     }
 }

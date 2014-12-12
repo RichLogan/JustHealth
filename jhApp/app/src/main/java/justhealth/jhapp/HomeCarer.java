@@ -1,8 +1,8 @@
 package justhealth.jhapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -11,7 +11,7 @@ import android.widget.ImageButton;
  * Created by charlottehutchinson on 04/11/14.
  */
 
-public class HomeCarer extends ActionBarActivity {
+public class HomeCarer extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +40,15 @@ public class HomeCarer extends ActionBarActivity {
                 new Button.OnClickListener() {
                     public void onClick(View view) {
                         startActivity(new Intent(HomeCarer.this, Connections.class));
+                    }
+                }
+        );
+
+        Button mypatients = (Button) findViewById(R.id.mypatients);
+        mypatients.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomeCarer.this, MyPatients.class));
                     }
                 }
         );

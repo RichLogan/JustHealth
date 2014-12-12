@@ -1,8 +1,40 @@
 {% extends "template.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}My Patients{% endblock %}
 
-{% block scriptsAndStyles %}{% endblock %}
+{% block scriptsAndStyles %}
+  <script>
+  $(document).ready(function() {
+    {% with returnType = get_flashed_messages(category_filter=["type"]) %}
+      {% if returnType %}
+        {% for msg in returnType %}
+          var returnType = "{{msg}}";
+          if (returnType == "prescription") {
+            {% with username = get_flashed_messages(category_filter=["user"]) %}
+              {% if username %}
+                {% for msg in username %}
+                  $('#prescription{{msg}}').modal('toggle');
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          }
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  });
+
+
+  function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  </script>
+{% endblock %}
 
 {% block content %}
   <h1>My Patients</h1>
@@ -17,7 +49,7 @@
             </a>
           </h4>
         </div>
-        <div id="collapse{{patient.username}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{patient.username}}">
+        <div id="collapse{{patient.username}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{patient.username}}">
           <div class="panel-body">
             <div class="row">
 
@@ -40,8 +72,126 @@
                       </div>
                       <div class="modal-body">
 
-                        <button class="btn btn-success">Add new Prescription</button>
+                        <button class="btn btn-success" onclick='$("#{{patient.username}}_addPrescription").toggle("slow")'>Add new Prescription</button>
                         <br /><br />
+
+                        <!-- Display flashed return message -->
+                        {% with returnType = get_flashed_messages(category_filter=["type"]) %}
+                          {% if returnType %}
+                            {% for msg in returnType %}
+                              {% if msg == "prescription" %}
+                                {% with displayClass = get_flashed_messages(category_filter=["class"]) %}
+                                  {% if displayClass %}
+                                    {% for msg in displayClass %}
+                                      <div class="alert alert-{{msg}} alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                        {% with result = get_flashed_messages(category_filter=["result"]) %}
+                                          {% if result %}
+                                            {% for msg in result %}
+                                              {{msg}}
+                                            {% endfor %}
+                                          {% endif %}
+                                        {% endwith %}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                {% endwith %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endwith %}
+                        <!-- End flashed message -->
+
+                        <form action="/addPrescription" method="POST" class="form-horizontal" role="form">
+                          <input name="username" type="hidden" value="{{patient.username}}">
+                          <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_medication">Medication</label>
+                                  <select name="medication" class="form-control" id="{{patient.username}}_medication">
+                                    <option>Morphine</option>
+                                    <option>Ibuprofen</option>
+                                  </select>
+                                </div>
+
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_dosage">Dosage</label>
+                                  <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)" onkeypress="return isNumber(event)">
+                                </div>
+
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_frequency">Frequency</label>
+                                  <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)" onkeypress="return isNumber(event)" >
+                                </div>
+
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_quantity">Quantity</label>
+                                  <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="Quantity (To take at once)">
+                                </div>
+
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_dosageUnit">Dosage Unit</label>
+                                  <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
+                                    <option>mg</option>
+                                    <option>ml</option>
+                                    <option>puffs </option>
+                                  </select>
+                                </div>
+
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_frequencyUnit">Frequency Unit</label>
+                                  <input name="frequencyunit" type="text" class="form-control" id="{{patient.username}}_frequencyUnit" placeholder="Frequency Unit (e.g Daily)">
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div class="row" style="margin: 0 auto;">
+                              <div class="form-group">
+                                <label for="{{patient.username}}_dosageform">Type</label>
+                                <input name="dosageform" type="text" class="form-control" id="{{patient.username}}_dosageform" placeholder="Dosage Form (e.g Tablet)">
+                              </div>
+
+                              <div class="col-md-6" style="margin: 0 auto;">
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_startDate">Start Date</label>
+                                  <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy" onkeypress="return isNumber(event)">
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="{{patient.username}}_endDate">End Date</label>
+                                  <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="{{patient.username}}_repeat">Repeat</label>
+                                <select name="repeat" class="form-control" id="{{patient.username}}_repeat">
+                                  <option>Yes</option>
+                                  <option>No</option>
+                                </select>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="{{patient.username}}_stockleft">Stock</label>
+                                <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_sotckleft" placeholder="Patient's current stock">
+                              </div>
+
+                              <div class="form-group">
+                                <label for="{{patient.username}}_prerequisite">Observations</label>
+                                <textarea class="form-control" name="prerequisite" id="{{patient.username}}_prerequisite"></textarea>
+                              </div>
+                            </div>
+
+                            <div style="margin-left:auto;margin-right: auto;width: 150px;">
+                              <input class="btn btn-success" type="submit" value="Add Medication" style="width:150px;">
+                            </div>
+                          </div>
+                        </form>
 
                         <table class="table">
                           <thead>
@@ -55,6 +205,8 @@
                             <th>Repeat?</th>
                             <th>Stock Left</th>
                             <th>Observations</th>
+                            <th style="color: green">Edit</th>
+                            <th style="color: red">Delete?</th>
 
                           </thead>
                           <tbody>
@@ -70,6 +222,10 @@
                                 <td>{{prescription.repeat}}</td>
                                 <td>{{prescription.stockleft}}</td>
                                 <td>{{prescription.prerequisite}}</td>
+                                  <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
+                                  <td>
+                                  <a href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}"><button class="btn btn-danger"><i class="fa fa-times"></i></button></a>
+                                </td>
                               </tr>
                             {% endfor %}
                           </tbody>

@@ -1,8 +1,5 @@
 package justhealth.jhapp;
 
-import android.content.SharedPreferences;
-import android.util.Base64;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -23,18 +20,16 @@ import java.util.Set;
 public class PostRequest {
 
     public static String post(String url, HashMap<String, String> parameters) {
-
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
 
         //Authentication
-        //SharedPreferences account = getSharedPreferences("account", 0);
-        //String username = account.getString("username", null);
-        //String password = account.getString("password", null);
-
-        //String authentication = username + ":" + password;
-        //String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-        //httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+//        SharedPreferences account = getSharedPreferences("account", 0);
+//        String username = account.getString("username", null);
+//        String password = account.getString("password", null);
+//        String authentication = username + ":" + password;
+//        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+//        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -45,9 +40,7 @@ public class PostRequest {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpClient.execute(httppost);
 
-            String responseString = EntityUtils.toString(response.getEntity());
-
-            return responseString;
+            return EntityUtils.toString(response.getEntity());
         }
         catch (ClientProtocolException e) {
             //TODO Auto-generated catch block

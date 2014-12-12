@@ -243,9 +243,51 @@ def myPatients():
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
         appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
 
+<<<<<<< HEAD
         return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
     return redirect(url_for('index'))
 
+=======
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
+    return redirect(url_for('index'))
+
+@app.route('/deletePrescription')
+def deletePrescription_view():
+    prescriptionid = request.args.get('id', '')
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+    username = request.args.get('username', '')
+    result = deletePrescription(prescriptionid)
+    if result != "Failed":
+        result = "Deleted " + prescription.medication.name + " (" + str(prescription.quantity) + "x" + str(prescription.dosage) + ") " + prescription.dosageunit + " for " + username
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/addPrescription', methods=['POST'])
+def addPrescription_view():
+    result = addPrescription(request.form)
+    username = request.form['username']
+    if result != "Could not add prescription":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+>>>>>>> 198f28f733068909cc6f08357c4ca087135aec34
 
 @app.route('/prescriptions')
 def  prescriptions():
