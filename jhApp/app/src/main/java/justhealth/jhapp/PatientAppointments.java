@@ -1,9 +1,13 @@
 package justhealth.jhapp;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 import android.view.View;
@@ -31,6 +35,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +81,8 @@ public class PatientAppointments extends ActionBarActivity {
         tabHost.addTab(tabSpec);
 
         populateSpinner();
-
+        //new CalendarAppointments().addEvent(/*"title", "11", "SS17 9AY", "a description of this event", "20-12-2014", "09:00", "20-12-2014", "10:00"*/);
+        calendar();
     }
 
 
@@ -149,9 +155,9 @@ public class PatientAppointments extends ActionBarActivity {
         details.put("apptype", appType);
 
         if (((CheckBox) findViewById(R.id.appPrivate)).isChecked()) {
-            details.put("private", "True");
+            details.put("private", "TRUE");
         } else {
-            details.put("private", "False");
+            details.put("private", "FALSE");
         }
 
         HttpClient httpclient = new DefaultHttpClient();
@@ -186,4 +192,25 @@ public class PatientAppointments extends ActionBarActivity {
         }
 
     }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void calendar() {
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(2014, 12, 25, 9, 50);
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(2014, 12, 25, 17, 30);
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, "Christmas Day Shananigans")
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, "SS17 9AY");
+        startActivity(intent);
+
+        System.out.println("Event ID: " + CalendarContract.Events.CONTENT_URI);
+    }
+
+
+
 }
