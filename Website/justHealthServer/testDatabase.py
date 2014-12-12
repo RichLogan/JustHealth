@@ -4,7 +4,7 @@ from peewee import *
 
 database = PostgresqlDatabase('justhealthtest', **{'host': 'penguin.kent.ac.uk', 'password': 'rded$or', 'port': 5432, 'user': 'justhealthtest'})
 
-cclass UnknownField(object):
+class UnknownField(object):
     pass
 
 class BaseModel(Model):
