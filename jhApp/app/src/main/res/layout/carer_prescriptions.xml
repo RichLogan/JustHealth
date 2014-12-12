@@ -21,12 +21,11 @@
 
             <TextView android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Patients Prescriptions"
                 android:textSize="20dp"
                 android:textColor="@color/header"
                 android:layout_marginTop="50dip"
                 android:layout_marginBottom="20dip"
-                android:id="@+id/loginTitle"/>
+                android:id="@+id/patientName"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -34,7 +33,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/patientButtons"
+                    android:id="@+id/prescriptionButtons"
                     android:orientation="vertical">
                 </LinearLayout>
             </ScrollView>

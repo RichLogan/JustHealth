@@ -76,10 +76,18 @@ public class MyPatients extends Activity {
                                     .setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (which == 0) {
-                                                startActivity(new Intent(MyPatients.this, CarerPrescriptions.class));
+                                                Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
+                                                intent.putExtra("targetUsername", username);
+                                                intent.putExtra("firstName", firstname);
+                                                intent.putExtra("surname", surname);
+                                                startActivity(intent);
                                             }
                                             else if (which == 1) {
-                                                startActivity(new Intent(MyPatients.this, CarerAppointments.class));
+                                                Intent intent = new Intent(getBaseContext(), CarerAppointments.class);
+                                                intent.putExtra("targetUsername", username);
+                                                intent.putExtra("firstName", firstname);
+                                                intent.putExtra("surname", surname);
+                                                startActivity(intent);
                                             }
                                         }
                                     });
