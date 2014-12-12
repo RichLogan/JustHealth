@@ -243,12 +243,8 @@ def myPatients():
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
         appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
 
-<<<<<<< HEAD
-        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
-    return redirect(url_for('index'))
 
-=======
-        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
+        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
     return redirect(url_for('index'))
 
 @app.route('/deletePrescription')
@@ -287,7 +283,6 @@ def addPrescription_view():
         flash(result, 'result')
         flash(username, 'user')
         return redirect(url_for('myPatients'))
->>>>>>> 198f28f733068909cc6f08357c4ca087135aec34
 
 @app.route('/prescriptions')
 def  prescriptions():
