@@ -256,7 +256,28 @@ def  prescriptions():
 @app.route('/carerAppointments', methods=['POST', 'GET'])
 def carerappointments():
   if request.method == 'POST':
+
     added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
     return added
   upcoming = json.loads(getAllAppointments(session['username'], session['username']))
   return render_template('carerAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
+
+@app.route('/inviteeappointments', methods=['POST', 'GET'])
+def inviteeappointments():
+  if request.method == 'POST':
+
+    details = {}
+    details['creator'] = session['username']
+    details['username'] = request.form['username']
+    details['name'] = request.form['name']
+    details['apptype'] = request.form['apptype']
+    details['addressnamenumber'] = request.form['addressnamenumber']
+    details['postcode'] = request.form['postcode']
+    details['startdate'] = request.form['startdate']
+    details['starttime'] = request.form['starttime']
+    details['enddate'] = request.form['enddate']
+    details['endtime'] = request.form['endtime']
+    details['description'] = request.form['description']
+
+    added = addInviteeAppointment(details)
+    return redirect(url_for("myPatients"))
