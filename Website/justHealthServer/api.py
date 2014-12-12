@@ -621,15 +621,15 @@ def addPatientAppointment(details):
 
   return "Appointment Added"
 
-@app.route('/api/addCarerAppointment', methods=['POST'])
-def addCarerAppointment():
-  return addCarerAppointment(request.form['username'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['description'], request.form['private'])
+@app.route('/api/addInviteeAppointment', methods=['POST'])
+def addInviteeAppointment():
+  return addInviteeAppointment(request.form)
 
-def addCarerAppointment(creator, patientInvitee, name, apptype, addressNameNumber, postcode, startDate, startTime, endDate, endTime, description, private):
+def addInviteeAppointment(details):
   #Build insert user query
   appointmentInsert = Appointments.insert(
     creator = details['creator'],
-    invitee = details['patientinvitee'],
+    invitee = details['username'],
     name = details['name'],
     apptype = details['apptype'],
     addressnamenumber = details['addressnamenumber'],
@@ -642,7 +642,6 @@ def addCarerAppointment(creator, patientInvitee, name, apptype, addressNameNumbe
     )
 
   appointmentInsert.execute()
-
   return "Appointment Added"
 
 #receives the request from android to allow a user to view their upcoming appointments
