@@ -16,8 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -81,8 +83,11 @@ public class PatientAppointments extends ActionBarActivity {
         tabHost.addTab(tabSpec);
 
         populateSpinner();
+        getUpcomingAppointments();
+
+        //Trial and error with the calendar
         //new CalendarAppointments().addEvent(/*"title", "11", "SS17 9AY", "a description of this event", "20-12-2014", "09:00", "20-12-2014", "10:00"*/);
-        calendar();
+        //calendar();
     }
 
 
@@ -183,6 +188,18 @@ public class PatientAppointments extends ActionBarActivity {
 
             System.out.println(responseString);
 
+            //Check if the Layout already exists
+            LinearLayout alert = (LinearLayout) findViewById(R.id.successMessage);
+            if (alert == null) {
+                //Insert the alert message
+                LinearLayout insertAlert = (LinearLayout) findViewById(R.id.insertAlert);
+                View insertAlertView = getLayoutInflater().inflate(R.layout.success_message, insertAlert, false);
+                insertAlert.addView(insertAlertView);
+            }
+
+            TextView myTextView = (TextView) findViewById(R.id.successText);
+            myTextView.setText(responseString);
+
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -192,6 +209,49 @@ public class PatientAppointments extends ActionBarActivity {
         }
 
     }
+
+    private void getUpcomingAppointments() {
+        //this will not work when API authentication is put in place
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+
+        HashMap<String, String> details = new HashMap<String, String>();
+
+        //Text Boxes
+        details.put("loggedInUser", username);
+        details.put("targetUser", username);
+        String postRequest = PostRequest.post("getAllAppointments", details);
+
+        JSONArray getApps = null;
+        try {
+            getApps = new JSONArray(postRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        assert getApps != null;
+        for (int i = 0; i < 5; i++) {
+            try {
+                JSONObject obj = getApps.getJSONObject(i);
+                String name = obj.getString("name");
+                String startDate = obj.getString("startdate");
+                String startTime = obj.getString("starttime");
+
+                Button app = new Button(this);
+                app.setText(name + " " + startDate + " " + startTime);
+                LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+                layout.addView(app);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /* Calendar example
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void calendar() {
@@ -209,7 +269,7 @@ public class PatientAppointments extends ActionBarActivity {
         startActivity(intent);
 
         System.out.println("Event ID: " + CalendarContract.Events.CONTENT_URI);
-    }
+    }*/
 
 
 

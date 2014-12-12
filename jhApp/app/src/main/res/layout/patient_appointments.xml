@@ -57,11 +57,20 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <LinearLayout
-                        android:id="@+id/upcomingAppointmentView"
+                    <ScrollView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"></LinearLayout>
+                        android:id="@+id/upcomingAppointmentScroll">
+                        <LinearLayout
+                            android:id="@+id/upcomingAppointmentView"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:orientation="vertical">
+
+
+                        </LinearLayout>
+                    </ScrollView>
 
                     <ScrollView
                         xmlns:android="http://schemas.android.com/apk/res/android"
