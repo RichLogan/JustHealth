@@ -27,6 +27,12 @@
                 android:layout_marginBottom="20dip"
                 android:id="@+id/patientName"/>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Add New Prescription"
+                android:id="@+id/addNewPrescription"/>
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

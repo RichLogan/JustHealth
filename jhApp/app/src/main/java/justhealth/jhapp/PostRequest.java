@@ -5,12 +5,14 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,5 +52,29 @@ public class PostRequest {
             //TODO Auto-generated catch block
         }
         return null;
+    }
+
+    public static String get(String url) {
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet("http://raptor.kent.ac.uk:9999/api/" + url);
+        try {
+            URI website = new URI("http://raptor.kent.ac.uk:5000/api/" + url);
+            httpget.setURI(website);
+        } catch (Exception e) {
+            System.out.println("Failed");
+        }
+
+        try {
+            HttpResponse response = httpClient.execute(httpget);
+            return EntityUtils.toString(response.getEntity());
+        }
+        catch (ClientProtocolException e) {
+            //TODO Auto-generated catch block
+        } catch (IOException e) {
+            //TODO Auto-generated catch block
+        } catch (NullPointerException e) {
+            //TODO Auto-generated catch block
+        }
+        return "Failed";
     }
 }

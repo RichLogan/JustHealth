@@ -3,6 +3,7 @@ package justhealth.jhapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -25,12 +26,24 @@ public class CarerPrescriptions extends Activity{
         String username = "";
         String firstname = "";
         String surname= "";
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("targetUsername");
             firstname = extras.getString("firstName");
             surname = extras.getString("surname");
         }
+
+        Button addNewPrescription = (Button)findViewById(R.id.addNewPrescription);
+        addNewPrescription.setOnClickListener(
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), AddPrescriptions.class);
+                    String username =  extras.getString("targetUsername");
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+            }
+        );
 
         //Set text of patientName to username
         TextView title=(TextView)findViewById(R.id.patientName);

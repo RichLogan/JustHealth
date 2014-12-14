@@ -91,6 +91,8 @@
                 android:value=".Login" />
         </activity>
 
+        <activity android:name=".AddPrescriptions" />
+
         <activity
         android:name=".Search"
         android:label="@string/app_name"
