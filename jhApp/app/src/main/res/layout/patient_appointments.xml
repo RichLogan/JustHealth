@@ -102,7 +102,7 @@
 
                             <EditText android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Building Name Number"
+                                android:hint="Building Name Number"
                                 android:layout_below="@+id/type"
                                 android:textSize="20dip"
                                 android:textColor="@color/header"
