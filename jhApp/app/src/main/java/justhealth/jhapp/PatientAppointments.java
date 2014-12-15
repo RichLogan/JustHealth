@@ -4,9 +4,11 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
@@ -155,26 +157,43 @@ public class PatientAppointments extends Activity {
             e.printStackTrace();
         }
 
-        int forUntil;
+        //variable which checks for 5 or less
+        int forUntil = 0;
 
-        if (getApps.length() < 5) {
-            forUntil = getApps.length();
+        try {
+            if (getApps.length() < 5) {
+                forUntil = getApps.length();
+            } else {
+                forUntil = 5;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-        else {
-            forUntil = 5;
-        }
-        assert getApps != null;
+
+
         for (int i = 0; i < forUntil; i++) {
             try {
                 JSONObject obj = getApps.getJSONObject(i);
-                String name = obj.getString("name");
-                String startDate = obj.getString("startdate");
-                String startTime = obj.getString("starttime");
+                //final String appid = obj.getString("appid");
+                final String name = obj.getString("name");
+                final String startDate = obj.getString("startdate");
+                final String startTime = obj.getString("starttime");
 
                 Button app = new Button(this);
                 app.setText(name + " " + startDate + " " + startTime);
                 LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
-                layout.addView(app);
+                layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+                LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
+                center.gravity = Gravity.CENTER;
+                app.setLayoutParams(center);
+
+                System.out.println("onclick listener applied");
+                app.setOnClickListener(new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(PatientAppointments.this, Search.class));
+                    }
+                });
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -182,6 +201,39 @@ public class PatientAppointments extends Activity {
         }
     }
 
+    private void print() {
+        System.out.println("print running");
+    }
+
+    private void appointmentAction(final String appid, final String startDate) {
+        System.out.println("method running");
+        AlertDialog.Builder alert = new AlertDialog.Builder(PatientAppointments.this);
+        alert.setTitle("Appointment Options")
+                .setItems(R.array.patient_appointments_options, new DialogInterface.OnClickListener() {
+                    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            HashMap<String, Integer> appStart = getDateTimeFormat(startDate, "00:00");
+                            Calendar start = Calendar.getInstance();
+                            start.set(appStart.get("year"), appStart.get("month"), appStart.get("day"), appStart.get("hour"), appStart.get("minute"));
+                            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                            builder.appendPath("time");
+                            ContentUris.appendId(builder, start.getTimeInMillis());
+                            Intent intent = new Intent(Intent.ACTION_VIEW)
+                                    .setData(builder.build());
+                            startActivity(intent);
+                        }
+                        else if (which == 1) {
+                            System.out.println(appid);
+                                   /*Intent intent = new Intent(getBaseContext(), UpdateAppointment.class);
+                                   intent.putExtra("appid", appid);
+                                   startActivity(intent);*/
+                        }
+                        //others to be added here
+                    }
+                });
+        alert.show();
+    }
 
     private void createApp() {
 

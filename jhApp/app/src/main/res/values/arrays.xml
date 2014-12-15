@@ -19,4 +19,9 @@
         <item>Prescriptions</item>
         <item>Appointments</item>
     </string-array>
+
+    <string-array name="patient_appointments_options">
+        <item>View In Calendar</item>
+        <item>Edit Appointment</item>
+    </string-array>
 </resources>
