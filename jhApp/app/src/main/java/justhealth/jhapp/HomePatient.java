@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-/**
- * Created by charlottehutchinson on 04/11/14.
- */
-
 public class HomePatient extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {

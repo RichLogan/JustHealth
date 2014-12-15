@@ -56,7 +56,7 @@ public class PostRequest {
 
     public static String get(String url) {
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet("http://raptor.kent.ac.uk:9999/api/" + url);
+        HttpGet httpget = new HttpGet();
         try {
             URI website = new URI("http://raptor.kent.ac.uk:5000/api/" + url);
             httpget.setURI(website);

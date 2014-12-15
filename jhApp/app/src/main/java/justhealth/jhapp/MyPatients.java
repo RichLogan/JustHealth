@@ -73,25 +73,25 @@ public class MyPatients extends Activity {
                         public void onClick(View v) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(MyPatients.this);
                             alert.setTitle("Patient Options")
-                                    .setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (which == 0) {
-                                                Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
-                                                intent.putExtra("targetUsername", username);
-                                                intent.putExtra("firstName", firstname);
-                                                intent.putExtra("surname", surname);
-                                                startActivity(intent);
-                                            }
-                                            else if (which == 1) {
-                                                Intent intent = new Intent(getBaseContext(), CarerAppointments.class);
-                                                intent.putExtra("targetUsername", username);
-                                                intent.putExtra("firstName", firstname);
-                                                intent.putExtra("surname", surname);
-                                                startActivity(intent);
-                                            }
+                                .setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (which == 0) {
+                                            Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
+                                            intent.putExtra("targetUsername", username);
+                                            intent.putExtra("firstName", firstname);
+                                            intent.putExtra("surname", surname);
+                                            startActivity(intent);
                                         }
-                                    });
-                            alert.show();
+                                        else if (which == 1) {
+                                            Intent intent = new Intent(getBaseContext(), CarerAppointments.class);
+                                            intent.putExtra("targetUsername", username);
+                                            intent.putExtra("firstName", firstname);
+                                            intent.putExtra("surname", surname);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                });
+                                alert.show();
                         }
                     });
                 }
