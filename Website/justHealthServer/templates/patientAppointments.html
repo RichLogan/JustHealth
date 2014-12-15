@@ -10,6 +10,7 @@
       info:false,
       searching:false,
     });
+
     
     /*var allDates = $(document.getElementsByClassName('dateForJS'));
     var now = moment().format();
@@ -27,10 +28,17 @@
       var time = moment($(e).attr('datetime'));
       $(e).html('<span>' + time.calendar() + '</span>');
     });
+
+    //Shows confirm box on delete appointment
+    $("#deleteapp").click(function(e) {
+      if (!confirm('Are you sure you want to delete this appointment?')) {
+        e.preventDefault();
+      }
+    });
   });
 </script>
 {% endblock %}
-s
+
 {% block content %}
 	<h3>Your Appointments</h3>
 	<br />
@@ -92,7 +100,7 @@ s
                         <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
                         <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
                         {% if appointment.private == True %}
-                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this, by updating your appointment.</em></p> <br /> 
+                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br /> 
                         {% endif %}
                       </div>
                       <div class="col-md-6">
@@ -109,9 +117,10 @@ s
                         </a>
                       </div>
                       <div class="col-md-2">
-                        <a href="/deleteAppointment?appid={{appointment.appid}}">
-                          <button class="btn btn-default">Delete</button>
-                        </a>
+                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment');">
+                          <input type="hidden" name="appid" value="{{appointment.appid}}">
+                          <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
                       </div>
                       <div class="col-md-8">
                         <p></p>
@@ -132,7 +141,7 @@ s
 		<div class="row">
       <div class="panel panel-info">
         <div class="panel-body">
-          <form name="createAppointment" method="POST">
+          <form name="createAppointment" method="POST" onsubmit="return !!validateFormAddAppointment();" >
           	<div class="form-group">
     					<label for="name">Appointment Title</label>
     					<input class="form-control" type="text" name="name">
@@ -156,7 +165,8 @@ s
 						</div>
 						<div class="form-group">
 							<label for="startdate">Start Date</label>
-							<input class="form-control" type="date" name="startdate" id="startdate">
+							<input onfocusout="checkPastDate()" class="form-control" type="date" name="startdate" id="startdate">
+              <span id="validDate"></span>
 						</div>
 						<div class="form-group">
 							<label for="starttime">Start Time</label>
@@ -165,6 +175,7 @@ s
 						<div class="form-group">
 							<label for="enddate">End Date</label>
 							<input class="form-control" type="date" name="enddate" id="enddate">
+              <span id=""></span>
 						</div>
 						<div class="form-group">
 							<label for="endtime">End Time</label>
@@ -227,9 +238,10 @@ s
                         </a>
                       </div>
                       <div class="col-md-2">
-                        <a href="/deleteAppointment?appid={{appointment.appid}}">
-                          <button class="btn btn-default">Delete</button>
-                        </a>
+                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment');">
+                          <input type="hidden" name="appid" value="{{appointment.appid}}">
+                          <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>                       
                       </div>
                       <div class="col-md-8">
                         <p></p>
