@@ -2,16 +2,20 @@ package justhealth.jhapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,33 +24,28 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Stephen on 09/12/14.
  */
 public class PatientAppointments extends Activity {
+    private String string;
+
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -214,7 +213,7 @@ public class PatientAppointments extends Activity {
         }
 
         String responseString = PostRequest.post("addPatientAppointment", details);
-
+        int id = Integer.parseInt(responseString);
         System.out.println(responseString);
 
         //Check if the Layout already exists
@@ -226,9 +225,9 @@ public class PatientAppointments extends Activity {
             insertAlert.addView(insertAlertView);
             TextView myTextView = (TextView) findViewById(R.id.successText);
 
-            if (responseString.equals("Appointment Added")) {
+            if (id > 0) {
                 myTextView.setText(responseString);
-                addToCalendar(details);
+                addToCalendarQuestion(details, id);
             }
             else {
                 myTextView.setText("Oops something went wrong, try again.");
@@ -236,16 +235,38 @@ public class PatientAppointments extends Activity {
         }
     }
 
+
+    private void addToCalendarQuestion(final HashMap<String, String> details, final int id) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Add To Calendar");
+        alert.setMessage("Do you want to add this appointment to your phones calendar?");
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                addToCalendar(details, id);
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Cancelled.
+            }
+        });
+
+        alert.show();
+    }
+
     //Calendar example
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private void addToCalendar(HashMap<String, String> details) {
+    private void addToCalendar(HashMap<String, String> details, int id) {
         String appName = details.get("name");
         String location = details.get("addressnamenumber") + ", " + details.get("postcode");
         String startDate = details.get("startdate");
         String startTime = details.get("starttime");
         String endDate = details.get("enddate");
         String endTime = details.get("endtime");
-        //String description = details.get("description");
+        String description = details.get("description");
 
         //get the correct format of the start date/time of the calendar appointment
         HashMap<String, Integer> appStart = getDateTimeFormat(startDate, startTime);
@@ -260,13 +281,51 @@ public class PatientAppointments extends Activity {
         Calendar end = Calendar.getInstance();
         end.set(appEnd.get("year"), appEnd.get("month"), appEnd.get("day"), appEnd.get("hour"), appEnd.get("minute"));
 
-        Intent intent = new Intent(Intent.ACTION_INSERT)
+        /*Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.getTimeInMillis())
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end.getTimeInMillis())
                 .putExtra(CalendarContract.Events.TITLE, appName)
-                .putExtra(CalendarContract.Events.EVENT_LOCATION,location);
+                .putExtra(CalendarContract.Events.EVENT_LOCATION,location)
+                .putExtra(CalendarContract.Events._ID, "JustHealth001");
         startActivity(intent);
+
+        Intent intent1 = getIntent();
+        System.out.println(intent1.getStringExtra(CalendarContract.Events.CONTENT_URI.toString()));*/
+
+        ContentResolver cr = getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, start.getTimeInMillis());
+        values.put(CalendarContract.Events.DTEND, end.getTimeInMillis());
+        values.put(CalendarContract.Events.TITLE, appName);
+        values.put(CalendarContract.Events.DESCRIPTION, description);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, location);
+        values.put(CalendarContract.Events.CALENDAR_ID, 1);
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+        // get the event ID that is the last element in the Uri
+        int eventID = Integer.parseInt(uri.getLastPathSegment());
+        System.out.println(eventID);
+
+        //show the alert to say it is successful
+        Context context = getApplicationContext();
+        CharSequence text = "This appointment has been added to your phone's calendar";
+        //Length
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, text, duration);
+        //Position
+        toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+        toast.show();
+
+
+        //add the android event ID to the database
+        HashMap<String, String> infoToUpdate = new HashMap<String, String>();
+        infoToUpdate.put("dbid", Integer.toString(id));
+        infoToUpdate.put("androidid", Integer.toString(eventID));
+        System.out.println(infoToUpdate);
+        String responseString = PostRequest.post("addAndroidEventId", infoToUpdate);
+        System.out.println(responseString);
+
     }
 
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
