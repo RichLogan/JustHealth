@@ -680,9 +680,8 @@ def editPrescription(details):
         dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
 
     try:
-        with database.transaction():
-            updatePrescription.execute()
-            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
+        updatePrescription.execute()
+        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
     except:
         return "Failed"
 
