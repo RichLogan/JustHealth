@@ -624,7 +624,7 @@ def deleteMedication(medicationName):
     except:
         return medicationName + "not found"
 
-@app.route('/api/getMedications', methods=['POST'])
+@app.route('/api/getMedications')
 def getMedications():
     medicationList = []
     result = Medication.select()
