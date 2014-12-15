@@ -665,8 +665,7 @@ def editPrescription():
     return editPrescription(request.form)
 
 def editPrescription(details):
-    insertPrescription = Prescription.update(
-        username = details['username'],
+    updatePrescription = Prescription.update(
         medication = details['medication'],
         dosage = details['dosage'],
         frequency = details['frequency'],
@@ -678,12 +677,12 @@ def editPrescription(details):
         repeat = details['repeat'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
-        dosageform = details['dosageform'])
+        dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
 
     try:
         with database.transaction():
-            insertPrescription.execute()
-            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
+            updatePrescription.execute()
+            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
     except:
         return "Failed"
 
