@@ -185,8 +185,7 @@ def myPatients():
     for patient in patients:
         prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
 
-        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
-    return redirect(url_for('index'))
+    return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
 
 @app.route('/deletePrescription')
 def deletePrescription_view():
