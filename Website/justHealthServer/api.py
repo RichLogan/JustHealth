@@ -617,9 +617,12 @@ def addPatientAppointment(details):
     description = details['description'],
     private = details['private']
   )
-  appointmentInsert.execute()
 
-  return "Appointment Added"
+  appId = int(appointmentInsert.execute())
+  
+  return appId
+
+  
 
 @app.route('/api/addInviteeAppointment', methods=['POST'])
 def addInviteeAppointment():
@@ -894,3 +897,11 @@ def getAppointmentTypes():
       typeList.append(appType.type)
     typeList = json.dumps(typeList)
     return typeList
+
+@app.route('/api/addAndroidEventId', methods=['POST'])
+def addAndroidEventId():
+  dbId = request.form['dbid']
+  androidId = request.form['androidid']
+  addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
+
+  return "Android ID added to database"
