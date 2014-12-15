@@ -142,7 +142,7 @@ $('time').each(function(i, e) {
           </div>
           <div class="form-group">
             <label for="type">Appointment Type</label>
-            <select name="type" class="form-control">
+            <select name="apptype" class="form-control">
               <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
               {% for type in appType %}
               <option>{{type.type}}</option>
@@ -151,7 +151,7 @@ $('time').each(function(i, e) {
           </div>
           <div class="form-group">
             <label for="nameNumber">Building Name/Number</label>
-            <input class="form-control" type="text" name="nameNumber">
+            <input class="form-control" type="text" name="addressnamenumber">
           </div>
           <div class="form-group">
             <label for="postcode">Postcode</label>
@@ -159,23 +159,23 @@ $('time').each(function(i, e) {
           </div>
           <div class="form-group">
             <label for="dateFrom">Start Date</label>
-            <input class="form-control" type="date" name="dateFrom" id="dateFrom">
+            <input class="form-control" type="date" name="startdate" id="dateFrom">
           </div>
           <div class="form-group">
             <label for="startTime">Start Time</label>
-            <input class="form-control" type="time" name="startTime" id="startTime">
+            <input class="form-control" type="time" name="starttime" id="startTime">
           </div>
           <div class="form-group">
             <label for="dateTo">End Date</label>
-            <input class="form-control" type="date" name="dateTo" id="dateTo">
+            <input class="form-control" type="date" name="enddate" id="dateTo">
           </div>
           <div class="form-group">
             <label for="endTime">End Time</label>
-            <input class="form-control" type="time" name="endTime" id="endTime">
+            <input class="form-control" type="time" name="endtime" id="endTime">
           </div>
           <div class="form-group">
-            <label for="other">Details</label>
-            <textarea class="form-control" name="other" id="other"></textarea>
+            <label for="description">Details</label>
+            <textarea class="form-control" name="description" id="description"></textarea>
           </div>
           <div class="form-group">
             <input class="btn btn-default pull-right" type="submit" value="Add Appointment">

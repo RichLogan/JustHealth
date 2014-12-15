@@ -618,7 +618,7 @@ def addPatientAppointment(details):
     private = details['private']
   )
 
-  appId = int(appointmentInsert.execute())
+  appId = str(appointmentInsert.execute())
   
   return appId
 
@@ -684,6 +684,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment['endtime'] = str(app.endtime)
     appointment['description'] = app.description
     appointment['private'] = app.private
+    appointment['androideventid'] = app.androideventid
     
     dateTime = str(app.startdate) + " " + str(app.starttime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
