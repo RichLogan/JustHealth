@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Patients Appointments"
-                android:textSize="20dp"
-                android:textColor="@color/header"
-                android:layout_marginTop="50dip"
-                android:layout_marginBottom="20dip"
-                android:id="@+id/loginTitle"/>
+
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20dp"
+                    android:textColor="@color/header"
+                    android:layout_marginTop="50dip"
+                    android:layout_marginBottom="20dip"
+                    android:id="@+id/patientName"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/patientButtons"
+                    android:id="@+id/appointmentButtons"
                     android:orientation="vertical">
                 </LinearLayout>
             </ScrollView>
@@ -61,3 +61,7 @@
         android:layout_alignParentStart="true"
         android:background="@color/header"/>
 </RelativeLayout>
+
+
+
+
