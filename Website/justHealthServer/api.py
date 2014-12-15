@@ -618,7 +618,7 @@ def addPatientAppointment(details):
     private = details['private']
   )
 
-  appId = int(appointmentInsert.execute())
+  appId = str(appointmentInsert.execute())
   
   return appId
 

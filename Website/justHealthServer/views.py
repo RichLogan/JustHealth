@@ -190,7 +190,8 @@ def appointments():
     details['description'] = request.form['description']
     details['private'] = private 
 
-    added = addPatientAppointment(details) 
+    added = int(addPatientAppointment(details))
+
     #checks that an id is returned
     if added > 0: 
       flash("Appointment Added", 'success')
@@ -296,7 +297,7 @@ def  prescriptions():
 def carerappointments():
   if request.method == 'POST':
 
-    added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
+    added = int(addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other']))
     if added > 0: 
       return "Appointment Added"
   upcoming = json.loads(getAllAppointments(session['username'], session['username']))
