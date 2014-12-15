@@ -719,6 +719,17 @@ def getPrescriptions(username):
     else:
         return "Must have Patient account type"
 
+@app.route('/api/getPrescription', methods=['POST'])
+def getPrescription():
+    return getPrescription(request.form)
+
+def getPrescription(details):
+    prescriptionid = details['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    prescription['startdate'] = str(prescription['startdate'])
+    prescription['enddate'] = str(prescription['enddate'])
+    return json.dumps(prescription)
+
 @app.route('/api/getDeactivateReasons', methods=['POST'])
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""
