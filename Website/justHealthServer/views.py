@@ -190,9 +190,11 @@ def appointments():
     details['description'] = request.form['description']
     details['private'] = private 
 
-    added = addPatientAppointment(details)
-    flash(added, 'success')
-    return redirect(url_for('appointments'))
+    added = addPatientAppointment(details) 
+    #checks that an id is returned
+    if added > 0: 
+      flash("Appointment Added", 'success')
+      return redirect(url_for('appointments'))
   return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
 
 
@@ -295,7 +297,8 @@ def carerappointments():
   if request.method == 'POST':
 
     added = addPatientAppointment(session['username'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'])
-    return added
+    if added > 0: 
+      return "Appointment Added"
   upcoming = json.loads(getAllAppointments(session['username'], session['username']))
   return render_template('carerAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
 
