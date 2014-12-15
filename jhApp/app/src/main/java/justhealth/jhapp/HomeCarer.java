@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-/**
- * Created by charlottehutchinson on 04/11/14.
- */
-
 public class HomeCarer extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,38 +15,38 @@ public class HomeCarer extends Activity {
 
         ImageButton settings = (ImageButton) findViewById(R.id.settings);
         settings.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View view) {
-                        startActivity(new Intent(HomeCarer.this, Settings.class));
-                    }
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    startActivity(new Intent(HomeCarer.this, Settings.class));
                 }
+            }
         );
 
         Button search = (Button) findViewById(R.id.search);
-        settings.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View view) {
-                        startActivity(new Intent(HomeCarer.this, Search.class));
-                    }
+        search.setOnClickListener(
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    startActivity(new Intent(HomeCarer.this, Search.class));
                 }
+            }
         );
 
         Button connections = (Button) findViewById(R.id.connections);
         connections.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View view) {
-                        startActivity(new Intent(HomeCarer.this, Connections.class));
-                    }
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    startActivity(new Intent(HomeCarer.this, Connections.class));
                 }
+            }
         );
 
         Button mypatients = (Button) findViewById(R.id.mypatients);
         mypatients.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View view) {
-                        startActivity(new Intent(HomeCarer.this, MyPatients.class));
-                    }
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    startActivity(new Intent(HomeCarer.this, MyPatients.class));
                 }
+            }
         );
     }
 }
