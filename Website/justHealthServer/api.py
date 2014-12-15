@@ -678,8 +678,12 @@ def editPrescription(details):
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
         dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
-    updatePrescription.execute()
-    return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
+
+    try:
+        updatePrescription.execute()
+        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
+    except:
+        return "Failed"
 
 @app.route('/api/deletePrescription', methods=['POST'])
 def deletePrescription():
