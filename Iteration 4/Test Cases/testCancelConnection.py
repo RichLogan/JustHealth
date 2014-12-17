@@ -7,7 +7,7 @@ import json
 
 testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
 
-class testDeleteConnection(unittest.TestCase):
+class testCancelConnection(unittest.TestCase):
 
     def setUp(self):
         testDatabase.createAll()
@@ -41,21 +41,21 @@ class testDeleteConnection(unittest.TestCase):
             patient = "test1")
         testPatientCarer.execute()
 
-    def deleteWorks(self):
+    def cancelWorks(self):
         payload = {
             "carer" : "test"
         }
 
-        PatientCarer = requests.post("http://127.0.0.1:9999/api/testdeleteConnection", data=payload)
-        self.assertEqual(PatientCarer.text, "Deleted")
+        PatientCarer = requests.post("http://127.0.0.1:9999/api/testcancelConnection", data=payload)
+        self.assertEqual(PatientCarer.text, "Canceled")
 
-    def deleteFailed(self):
+    def cancelFailed(self):
         payload = {
             "carer" : None
         }
 
-        prescription = requests.post("http://127.0.0.1:9999/api/testdeleteConnection", data=payload)
-        self.assertEqual(prescription.text, "Failed")
+        prescription = requests.post("http://127.0.0.1:9999/api/testcancelConnection", data=payload)
+        self.assertEqual(prescription.text, "Cancel Failed")
 
     def tearDown(self):
         testDatabase.dropAll()
