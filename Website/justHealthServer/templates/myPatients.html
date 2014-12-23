@@ -23,7 +23,6 @@
     {% endwith %}
   });
 
-
   function isNumber(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -32,7 +31,6 @@
     }
     return true;
   }
-
   </script>
 {% endblock %}
 
@@ -221,8 +219,8 @@
                                 <td>{{prescription.repeat}}</td>
                                 <td>{{prescription.stockleft}}</td>
                                 <td>{{prescription.prerequisite}}</td>
-                                <td style= "color: green"><button class="fa fa-pencil fa-2x"></button></td>
-                                <td><a href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}"><button class="btn btn-danger"><i class="fa fa-times"></i></button></a></td>
+                                <td><button class="btn btn-success" onclick='editPrescriptionForm({{prescription}});'><i class="fa fa-pencil"></i></button></td>
+                                <td><form method='GET' action='/deletePrescription' onsubmit='return confirm(&quot;Do you really want to delete this prescription?&quot;);'><input type='hidden' name='id' value='{{prescription.prescriptionid}}'><input type='hidden' name='username' value='{{patient.username}}'><input type='submit' value='Delete' class='btn btn-danger'></form></td>
                               </tr>
                             {% endfor %}
                           </tbody>
