@@ -1,22 +1,17 @@
-========================
-Full API Listing
-========================
+# Sphinx Readme
 
-Listed below is the complete list of possible API calls to JustHealth, broken down by their general function.
+ ###1. Create RST document
+  Pretty straightforward, you make a document call whatever.rst and start writing. Heading are shown by ----- or ========. Lists are done through 1. blah blah
 
-Each method will show its:
+To talk about code you do something like this:
 
-- URL
-- Method type (POST or GET)
-- POST / GET parameters
-- Possible return values
-
-------------------------
-Login Functions
-------------------------
-
+```rst
 .. autofunction:: justHealthServer.api.authenticate
+```
 
+Automatically links the source code of the file.
+
+```
   :URL: /api/authenticate
   :URL: /api/authenticate
   :HTTP_METHOD: POST
@@ -24,6 +19,10 @@ Login Functions
   :param username: The username to authenticate
   :param password: The attempted password to check
 
+```
+Automatically will list these properly.
+
+```
 Return values:
   "Authenticated"
     - If both the username and password are correct and the account is not locked or deactivated.
@@ -35,3 +34,11 @@ Return values:
     - The account has ``verified = False``
   "Account is locked. Please check your email for instructions"
     - The account has ``accountlocked = True``
+```
+Do this to list all the return values.
+
+ ###2. Link new file in index.rst
+
+Just write the filename in the place you want it to go.
+
+ggwp
