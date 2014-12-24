@@ -49,7 +49,7 @@ public class EditPrescription extends Activity {
 
     private void populateSpinner(String target) {
         ArrayList<String> populateSpinner = new ArrayList<String>();
-        String getMedications = PostRequest.get("getMedications");
+        String getMedications = Request.get("getMedications", getApplicationContext());
 
         try {
             JSONArray medications = new JSONArray(getMedications);
@@ -74,7 +74,7 @@ public class EditPrescription extends Activity {
     private JSONArray displayPrescription() {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("prescriptionid", prescriptionid);
-        String response = PostRequest.post("getPrescription", parameters);
+        String response = Request.post("getPrescription", parameters, getApplicationContext());
         try {
             JSONObject prescription = new JSONObject(response);
 
@@ -127,7 +127,7 @@ public class EditPrescription extends Activity {
         }
 
         //Post
-        String response = PostRequest.post("editPrescription", parameters);
+        String response = Request.post("editPrescription", parameters, getApplicationContext());
 
         //Back to view all with response
         Intent i = getIntent();

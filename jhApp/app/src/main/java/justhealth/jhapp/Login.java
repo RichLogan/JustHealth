@@ -68,7 +68,7 @@ public class Login extends Activity {
         loginInformation.put("username", ((EditText) findViewById(R.id.loginUsername)).getText().toString());
         loginInformation.put("password", ((EditText) findViewById(R.id.loginPassword)).getText().toString());
 
-        String response = PostRequest.post("authenticate", loginInformation);
+        String response = Request.post("authenticate", loginInformation, getApplicationContext());
         if (response.equals("Authenticated")) {
             SharedPreferences account = getSharedPreferences("account", 0);
             SharedPreferences.Editor edit = account.edit();
@@ -92,7 +92,7 @@ public class Login extends Activity {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = PostRequest.post("getAccountInfo", parameters);
+        String response = Request.post("getAccountInfo", parameters, getApplicationContext());
         try {
             JSONObject accountDetails = new JSONObject(response);
             String accountType  = accountDetails.getString("accounttype");

@@ -57,7 +57,7 @@ public class CarerPrescriptions extends Activity{
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = PostRequest.post("getPrescriptions", parameters);
+        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
         try {
             JSONArray result = new JSONArray(response);
             return result;

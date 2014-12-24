@@ -32,7 +32,7 @@ public class AddPrescription extends Activity {
         //Populate Spinner
         ArrayList<String> populateSpinner = new ArrayList<String>();
 
-        String getMedications = PostRequest.get("getMedications");
+        String getMedications = Request.get("getMedications", getApplicationContext());
 
         try {
             JSONArray medications = new JSONArray(getMedications);
@@ -89,7 +89,7 @@ public class AddPrescription extends Activity {
             details.put("repeat", "No");
         }
 
-        String response = PostRequest.post("addPrescription", details);
+        String response = Request.post("addPrescription", details, getApplicationContext());
         System.out.println(response);
     }
 

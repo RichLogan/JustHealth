@@ -40,7 +40,7 @@ public class ForgotPassword extends Activity {
     }
 
     public void post(HashMap<String, String> details) {
-        String response = PostRequest.post("resetPassword", details);
+        String response = Request.post("resetPassword", details, getApplicationContext());
 
         if (!response.equals("True")) {
             Feedback.toast(response, false, getApplicationContext());

@@ -1,5 +1,9 @@
 package justhealth.jhapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -19,19 +23,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PostRequest {
+public class Request {
 
-    public static String post(String url, HashMap<String, String> parameters) {
+    public static String post(String url, HashMap<String, String> parameters, Context context) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
 
         //Authentication
-//        SharedPreferences account = getSharedPreferences("account", 0);
-//        String username = account.getString("username", null);
-//        String password = account.getString("password", null);
-//        String authentication = username + ":" + password;
-//        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-//        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+        SharedPreferences account = context.getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -51,12 +55,22 @@ public class PostRequest {
         } catch (NullPointerException e) {
             //TODO Auto-generated catch block
         }
+        Feedback.toast("Cannot connect to Server", false, context);
         return null;
     }
 
-    public static String get(String url) {
+    public static String get(String url, Context context) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet();
+
+        //Authentication
+        SharedPreferences account = context.getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+        httpget.setHeader("Authorization", "Basic " + encodedAuthentication);
+
         try {
             URI website = new URI("http://raptor.kent.ac.uk:5000/api/" + url);
             httpget.setURI(website);

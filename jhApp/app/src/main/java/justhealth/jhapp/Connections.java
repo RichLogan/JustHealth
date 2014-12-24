@@ -47,7 +47,7 @@ public class Connections extends Activity {
 
         getConnectionsInfo.put("username", username);
 
-        String response = PostRequest.post("getConnections", getConnectionsInfo);
+        String response = Request.post("getConnections", getConnectionsInfo, getApplicationContext());
 
         JSONObject queryReturn = null;
         JSONArray outgoing = null;
@@ -391,7 +391,7 @@ public class Connections extends Activity {
         deleteConnection.put("user", username);
         deleteConnection.put("connection", connection);
 
-        String responseString = PostRequest.post("cancelConnection", deleteConnection);
+        String responseString = Request.post("cancelConnection", deleteConnection, getApplicationContext());
 
         if (responseString == "True") {
             return true;
@@ -408,7 +408,7 @@ public class Connections extends Activity {
         deleteConnection.put("user", username);
         deleteConnection.put("connection", connection);
 
-        String response = PostRequest.post("deleteConnection", deleteConnection);
+        String response = Request.post("deleteConnection", deleteConnection, getApplicationContext());
         if (response == "True") {
             return true;
         }
@@ -470,7 +470,7 @@ public class Connections extends Activity {
         attemptParameters.put("requestor", requestor);
         attemptParameters.put("codeattempt", codeAttempt);
 
-        String response = PostRequest.post("completeConnection", attemptParameters);
+        String response = Request.post("completeConnection", attemptParameters, getApplicationContext());
 
         if(response.equals("Incorrect")) {
             enterCode(requestor, "An incorrect code was entered. Please try again.");

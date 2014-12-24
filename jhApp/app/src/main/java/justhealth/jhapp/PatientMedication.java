@@ -34,7 +34,7 @@ public class PatientMedication extends Activity {
         String username = getSharedPreferences("account", 0).getString("username", null);
         parameters.put("username", username);
 
-        String response = PostRequest.post("getPrescriptions", parameters);
+        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
             try {
                 JSONArray result = new JSONArray(response);
                 return result;
