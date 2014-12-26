@@ -15,6 +15,7 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username,password):
+    """Checks if the password entered is the current password for that account"""
     try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
         return sha256_crypt.verify(password, hashedPassword)
@@ -23,6 +24,7 @@ def verify_password(username,password):
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
+    """Builds the user profile using the information input in the form"""
     # Build User Registration
     try:
       profile = {}
@@ -113,6 +115,7 @@ def registerUser():
 
 @app.route('/api/authenticate', methods=['POST'])
 def authenticate():
+    """Authenticates a username and password and returns the result of the authentication check"""
     try:
         attempted = Client.get(username=request.form['username'])
     except Client.DoesNotExist:
@@ -139,15 +142,15 @@ def authenticate():
             lockAccount(attempted.username)
             incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
             incrementAttempts.execute()
-            return "Account is locked"
+            return "Account is locked. Please check your email for instructions"
         incrementAttempts = Client.update(loginattempts = (currentLoginAttempts + 1)).where(Client.username == attempted.username)
         with database.transaction():
             incrementAttempts.execute()
         return "Incorrect username/password"
-    return "Something went wrong!"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
 def deactivateAccount():
+    """Form validation for account deactivation"""
     try:
         username = request.form['username']
     except KeyError, e:
@@ -195,6 +198,7 @@ def deactivateAccount():
 
 @app.route('/api/resetpassword', methods=['POST'])
 def resetPassword():
+    """Form validation and database checks for user when they forget a password (overrides the old password)"""
     try:
         profile = {}
         profile['username'] = request.form['username']
@@ -246,8 +250,8 @@ def resetPassword():
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
-"""Get Account information from client and patient/carer table"""
 def getAccountInfo(username):
+    """Get Account information from client and patient/carer table"""
     result = {}
     thisUser = str(username)
     try:
@@ -286,6 +290,7 @@ def getAccountInfo(username):
 ####
 
 def lockAccount(username):
+    """Emails the user if their account gets locked"""
     lockAccount = Client.update(accountlocked = True).where(Client.username == username)
     with database.transaction():
         lockAccount.execute()
@@ -295,11 +300,13 @@ def lockAccount(username):
 # Email Functions
 ####
 def getSerializer(secret_key=None):
+    """Converts a username into a random key, in order to create a unique link"""
     if secret_key is None:
         secret_key = app.secret_key
     return URLSafeSerializer(secret_key)
 
 def sendVerificationEmail(username):
+    """Sends email to the user after registration asking for account verification"""
     # Generate Verification Link
     s = getSerializer()
     payload = s.dumps(username)
@@ -318,6 +325,7 @@ def sendVerificationEmail(username):
     server.quit()
 
 def getUserFromEmail(email):
+    """Get username from the database for a valid email address"""
     try:
       username = Client.select(Client.username).where(Client.email == email).get()
       return username.username
@@ -325,6 +333,7 @@ def getUserFromEmail(email):
       return "False"
 
 def sendForgotPasswordEmail(username):
+    """Sends email to the user on completion of reset password form"""
     #Generate reset password Link
     s = getSerializer()
     payload = s.dumps(username)
@@ -343,6 +352,7 @@ def sendForgotPasswordEmail(username):
     server.quit()
 
 def sendUnlockEmail(username):
+    """Sends email to a user when account is locked due to too many unsuccessful attempts"""
     # Login to mail server
     s = getSerializer()
     payload = s.dumps(username)
@@ -361,22 +371,23 @@ def sendUnlockEmail(username):
     server.quit()
 
 def sendPasswordResetEmail(username):
-  s = getSerializer()
-  payload = s.dumps(username)
-  verifyLink = url_for('passwordReset', payload=payload, _external=True)
+    """Sends user email confirming password reset"""
+    s = getSerializer()
+    payload = s.dumps(username)
+    verifyLink = url_for('passwordReset', payload=payload, _external=True)
 
-  #Login to mail server
-  server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-  server.login('justhealth@richlogan.co.uk', "justhealth")
-  # Build Message
-  sender = "'JustHealth' <justhealth@richlogan.co.uk>"
-  recipient = Client.get(username = username).email
-  subject = "JustHealth Password Reset Verification"
-  message = "Your password has been reset. Please verify this here: " + str(verifyLink)
-  m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
-  # Send
-  server.sendmail(sender, recipient, m+message)
-  server.quit()
+    #Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build Message
+    sender = "'JustHealth' <justhealth@richlogan.co.uk>"
+    recipient = Client.get(username = username).email
+    subject = "JustHealth Password Reset Verification"
+    message = "Your password has been reset. Please verify this here: " + str(verifyLink)
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 
 ####
@@ -456,7 +467,7 @@ def createConnection():
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 def completeConnection():
-    """Verify an inputed code to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
+    """Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
     #Take attempted code, match with a entry where they are target
     target = request.form['username']
     requestor = request.form['requestor']
@@ -495,6 +506,7 @@ def completeConnection():
 
 @app.route('/api/deleteConnection', methods=['POST'])
 def deleteConnection():
+    """Deletes connection between a patient and carer POST[user, connection]"""
     return deleteConnection(request.form['user'], request.form['connection'])
 
 def deleteConnection(user,connection):
@@ -519,6 +531,7 @@ def cancelRequest():
     cancelRequest(request.form['user'], request.form['connection'])
 
 def cancelRequest(user, connection):
+    """Cancels the user request to connect before completion"""
     try:
         instance = Relationship.select().where(Relationship.requestor == user).get()
         with database.transaction():
@@ -533,6 +546,7 @@ def getConnections():
     return getConnections(request.form['username'])
 
 def getConnections(username):
+    """Gets the valid connections between two users"""
     accountType = json.loads(getAccountInfo(username))['accounttype']
     user = Client.select().where(Client.username==username).get()
 
