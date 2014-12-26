@@ -1,7 +1,0 @@
-justHealthServer
-================
-
-.. toctree::
-   :maxdepth: 4
-
-   justHealthServer
