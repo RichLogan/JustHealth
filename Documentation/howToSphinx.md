@@ -1,6 +1,6 @@
 # Sphinx Readme
 
- ### Create RST document
+### 1. Create RST document
  
  Pretty straightforward, you make a document call whatever.rst and start writing. Heading are shown by ----- or ========.
  Lists are done through 1. blah blah
@@ -39,7 +39,7 @@ Return values:
 ```
 Do this to list all the return values.
 
- ### Link new file in index.rst
+### 2. Link new file in index.rst
 
 Just write the filename in the place you want it to go.
 
