@@ -1,0 +1,48 @@
+body{
+  background-color: #2272EB;
+  color: #FFFFFF;
+  width: 100% !important;
+}
+
+video#background {
+  position: relative;
+  width: 100% !important;
+  z-index: 1;
+}
+
+#mainTitle {
+  position: absolute;
+  z-index: 2;
+}
+
+#mainTitle h1 {
+
+  color: #FFFFFF;
+  font-size: 10em;
+  text-align: center;
+}
+
+#about {
+  margin: 0 auto;
+  text-align: center;
+  height: 100vh;
+  background-color: #2272EB;
+  color: #000000;
+}
+
+#menuButton {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1px solid white;
+  position: fixed;
+  margin-left: 93%;
+  margin-top: 1%;
+  z-index: 2;
+}
+
+.menuButtons {
+  width: 100%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  background-color: #000000;
+}

@@ -17,6 +17,14 @@ def needLogin(f):
   return loginCheck
 
 @app.route('/')
+def frontPage():
+    try:
+        session['username']
+        return redirect(url_for('index'))
+    except KeyError, e:
+        return render_template('frontPage.html')
+
+@app.route('/home')
 @needLogin
 def index():
     jsonResult = getAccountInfo(session['username'])
@@ -93,7 +101,7 @@ def registration():
 @needLogin
 def logout():
   session.pop('username', None)
-  return redirect(url_for('index'))
+  return redirect(url_for('frontPage'))
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
