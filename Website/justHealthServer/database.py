@@ -8,12 +8,14 @@ class UnknownField(object):
     pass
 
 class BaseModel(Model):
+    """Base Model"""
     class Meta:
         database = database
 
 class Client(BaseModel):
-    accountdeactivated = BooleanField()
-    accountlocked = BooleanField()
+    """Represents a user of the application"""
+    accountdeactivated = BooleanField(default=False)
+    accountlocked = BooleanField(default=False)
     dob = DateField()
     email = CharField(max_length=100)
     loginattempts = IntegerField()
