@@ -181,11 +181,14 @@ def myPatients():
                 patients.append(connection)
 
     # Get all prescriptions
-    prescriptionMapping = {}
+    activePrescriptions = {}
+    upcomingPrescriptions = {}
+    expiredPrescriptions = {}
     for patient in patients:
-        prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
-
-    return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping)
+        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+    return render_template('myPatients.html', patients = patients, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/deletePrescription')
 def deletePrescription_view():

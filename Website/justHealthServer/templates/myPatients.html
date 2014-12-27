@@ -69,10 +69,6 @@
                         <h4 class="modal-title" id="prescription{{patient.username}}Label">{{patient.firstname}} {{patient.surname}} ({{patient.username}})'s Prescriptions</h4>
                       </div>
                       <div class="modal-body">
-
-                        <button class="btn btn-success" onclick='$("#{{patient.username}}_addPrescription").toggle("slow")'>Add new Prescription</button>
-                        <br /><br />
-
                         <!-- Display flashed return message -->
                         {% with returnType = get_flashed_messages(category_filter=["type"]) %}
                           {% if returnType %}
@@ -185,46 +181,60 @@
                               </div>
                             </div>
 
+                            <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");$("#{{patient.username}}_addPrescriptionButton").toggle("slow");'>Cancel</button>
+
                             <div style="margin-left:auto;margin-right: auto;width: 150px;">
                               <input class="btn btn-success" type="submit" value="Add Medication" style="width:150px;">
                             </div>
+                            <hr />
                           </div>
                         </form>
 
-                        <table class="table">
-                          <thead>
-                            <th>Medication</th>
-                            <th>Dosage</th>
-                            <th>Frequency</th>
-                            <th>Quantity</th>
-                            <th>Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Repeat?</th>
-                            <th>Stock Left</th>
-                            <th>Observations</th>
-                            <th style="color: green">Edit</th>
-                            <th style="color: red">Delete?</th>
-                          </thead>
-                          <tbody>
-                            {% for prescription in prescriptionMapping[patient.username] %}
-                              <tr>
-                                <td>{{prescription.medication}}</td>
-                                <td>{{prescription.dosage}} {{prescription.dosageunit}}</td>
-                                <td>{{prescription.frequency}} / {{prescription.frequencyunit}}</td>
-                                <td>{{prescription.quantity}}</td>
-                                <td>{{prescription.dosageform}}</td>
-                                <td>{{prescription.startdate}}</td>
-                                <td>{{prescription.enddate}}</td>
-                                <td>{{prescription.repeat}}</td>
-                                <td>{{prescription.stockleft}}</td>
-                                <td>{{prescription.prerequisite}}</td>
-                                <td><button class="btn btn-success" onclick='editPrescriptionForm({{prescription}});'><i class="fa fa-pencil"></i></button></td>
-                                <td><form method='GET' action='/deletePrescription' onsubmit='return confirm(&quot;Do you really want to delete this prescription?&quot;);'><input type='hidden' name='id' value='{{prescription.prescriptionid}}'><input type='hidden' name='username' value='{{patient.username}}'><input type='submit' value='Delete' class='btn btn-danger'></form></td>
-                              </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
+                        <div role="tabpanel">
+                          <!-- Nav tabs -->
+                          <ul class="nav nav-tabs nav-justified" role="tablist">
+                            <li role="presentation" class="active"><a href="#active" aria-controls="active" role="tab" data-toggle="tab">Active</a></li>
+                            <li role="presentation"><a href="#futureExpired" aria-controls="futureExpired" role="tab" data-toggle="tab">Upcoming &amp; Expired</a></li>
+                          </ul>
+
+                          <br />
+
+                          <!-- Tab panes -->
+                          <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade in active" id="active">
+                              <!-- Active Medicines go here -->
+                              {% for prescription in activePrescriptions[patient.username] %}
+                                <button type="button" class="btn btn-success" style="height: 100px; width: 250px;">
+                                  {{prescription.medication}} <br />
+                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}}/{{prescription.frequencyunit}})
+                                </button>
+                              {% endfor %}
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="futureExpired">
+                              <h5>Upcoming</h5>
+                              {% for prescription in upcomingPrescriptions[patient.username] %}
+                                <button type="button" class="btn btn-primary" style="height: 100px; width: 250px;">
+                                  {{prescription.medication}} <br />
+                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}}/{{prescription.frequencyunit}})<br />
+                                  Starts on: {{prescription.startdate}}
+                                </button>
+                              {% endfor %}
+                              <h5>Expired</h5>
+                              {% for prescription in expiredPrescriptions[patient.username] %}
+                                <button type="button" class="btn btn-danger" style="height: 100px; width: 250px;">
+                                  {{prescription.medication}} <br />
+                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}}/{{prescription.frequencyunit}})<br />
+                                  Ended on: {{prescription.enddate}}
+                                </button>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr />
+
+                        <button class="btn btn-success pull-right" id="{{patient.username}}_addPrescriptionButton" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");$("#{{patient.username}}_addPrescriptionButton").toggle("slow");'>Add new Prescription</button>
+                        <br /><br />
                       </div>
                     </div>
                   </div>

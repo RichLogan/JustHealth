@@ -731,6 +731,30 @@ def getPrescriptions(username):
     else:
         return "Must have Patient account type"
 
+@app.route('/api/getActivePrescriptions', methods=['POST'])
+def getActivePrescriptions():
+    return getActivePrescriptions(request.form['username'])
+
+def getActivePrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
+
+@app.route('/api/getUpcomingPrescriptions', methods=['POST'])
+def getUpcomingPrescriptions():
+    return getUpcomingPrescriptions(request.form['username'])
+
+def getUpcomingPrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
+
+@app.route('/api/getExpiredPrescriptions', methods=['POST'])
+def getExpiredPrescriptions():
+    return getExpiredPrescriptions(request.form['username'])
+
+def getExpiredPrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
+
 @app.route('/api/getPrescription', methods=['POST'])
 def getPrescription():
     return getPrescription(request.form)
