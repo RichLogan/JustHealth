@@ -227,6 +227,23 @@ def addPrescription_view():
         flash(username, 'user')
         return redirect(url_for('myPatients'))
 
+@app.route('/updatePrescription', methods=['POST'])
+def updatePrescription_view():
+    result = editPrescription(request.form)
+    username = request.form['username']
+    if result != "Failed":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
 @app.route('/prescriptions')
 def  prescriptions():
     prescriptions = json.loads(getPrescriptions(session['username']))

@@ -157,3 +157,16 @@ footer #footerContainer {
 .passwordStrong{
 	color: #30D917;
 }
+
+#myPatientsTab {
+  background-color: #2272EB;
+  color: #FFFFFF;
+}
+
+#myPatientsPatientName {
+  color: #FFFFFF;
+}
+
+#myPatientsPatientName:hover {
+  color: #FFFFFF;
+}
