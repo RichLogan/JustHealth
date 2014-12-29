@@ -53,6 +53,22 @@ def terms():
 def corpus():
   return render_template('indexCorpus.html')
 
+@app.route('/legal')
+def legal():
+  return render_template('legal.html')
+
+@app.route('/privacypolicy')
+def privacy():
+  return render_template('privacypolicy.html')
+
+@app.route('/references')
+def references():
+  return render_template('references.html')
+
+@app.route('/sitemap')
+def sitemap():
+  return render_template('sitemap.html')
+
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
