@@ -188,7 +188,4 @@ def internal_error(error):
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 401
 
-@app.route('/internalError', methods=['POST', 'GET'])
-def test():
-  return render_template('401Unauthorised.html')
 
