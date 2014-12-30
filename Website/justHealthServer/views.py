@@ -176,6 +176,10 @@ def internal_error(error):
 def internal_error(error):
   return render_template('internalError.html'), 408
 
+@app.errorhandler(404)
+def internal_error(error):
+  return render_template('404Error.html'), 404
+
 @app.route('/internalError', methods=['POST', 'GET'])
 def test():
   return render_template('internalError.html')
