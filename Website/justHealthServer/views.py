@@ -182,3 +182,26 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('internalError.html'), 500
+
+@app.errorhandler(408)
+def internal_error(error):
+  return render_template('internalError.html'), 408
+
+@app.errorhandler(404)
+def internal_error(error):
+  return render_template('404Error.html'), 404
+
+@app.errorhandler(400)
+def internal_error(error):
+  return render_template('400RequestMalformed.html'), 400
+
+@app.errorhandler(401)
+def internal_error(error):
+  return render_template('400RequestMalformed.html'), 401
+
+
