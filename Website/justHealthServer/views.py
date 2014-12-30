@@ -166,3 +166,13 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('internalError.html'), 500
+
+@app.route('/internalError', methods=['POST', 'GET'])
+def test():
+  return render_template('internalError.html')
+
