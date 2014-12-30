@@ -48,6 +48,7 @@ $(document).ready(function() {
 {% block content %}
 
 <h2>Registration</h2>
+<!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
 <form name="register" action="/register" id="register" method="POST">
 	<!-- Display any messages -->
 	{% if message != null %}
@@ -120,7 +121,7 @@ $(document).ready(function() {
 		<br />
 	</div>
 </form>
-
+	<!--A modal which shows the terms and conditions a user is agreeing to when they register -->
 	<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

@@ -7,11 +7,12 @@ Welcome to JustHealth's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    arch
    api
    users
    database
+   html
 
 JustHealth is a healthcare app designed to support care for patients with chronic health conditions and their patients.
