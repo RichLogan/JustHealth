@@ -184,7 +184,11 @@ def internal_error(error):
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 400
 
+@app.errorhandler(401)
+def internal_error(error):
+  return render_template('400RequestMalformed.html'), 401
+
 @app.route('/internalError', methods=['POST', 'GET'])
 def test():
-  return render_template('400RequestMalformed.html')
+  return render_template('401Unauthorised.html')
 
