@@ -180,7 +180,11 @@ def internal_error(error):
 def internal_error(error):
   return render_template('404Error.html'), 404
 
+@app.errorhandler(400)
+def internal_error(error):
+  return render_template('400RequestMalformed.html'), 400
+
 @app.route('/internalError', methods=['POST', 'GET'])
 def test():
-  return render_template('internalError.html')
+  return render_template('400RequestMalformed.html')
 
