@@ -172,6 +172,10 @@ def resetPasswordRedirect():
 def internal_error(error):
     return render_template('internalError.html'), 500
 
+@app.errorhandler(408)
+def internal_error(error):
+  return render_template('internalError.html'), 408
+
 @app.route('/internalError', methods=['POST', 'GET'])
 def test():
   return render_template('internalError.html')
