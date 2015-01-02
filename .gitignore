@@ -38,3 +38,12 @@ jhApp/proguard/
 
 # Log Files
 *.log
+
+# Sphinx Build Files
+Documentation/Technical\ Documentation/_build
+Documentation/Technical\ Documentation/_static
+Documentation/Technical\ Documentation/_templates
+
+Documentation/User\ Documentation/_build
+Documentation/User\ Documentation/_static
+Documentation/User\ Documentation/_templates
