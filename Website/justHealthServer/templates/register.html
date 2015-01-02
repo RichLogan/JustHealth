@@ -41,6 +41,20 @@ $(document).ready(function() {
 			alert("Date not valid");
 		}
 	});
+
+	$('#usernameInput').keyup(function() {
+		content = $('#usernameInput').val();
+		$.post("http://raptor.kent.ac.uk/api/usernameCheck", {username: content}).done(function( data ) {
+			if (data == "True") {
+				$('#usernameError').addClass("has-error");
+				$('#usernameErrorLabel').text("Username (Username already taken)");
+			}
+			else {
+				$('#usernameError').addClass("has-success");
+				$('#usernameErrorLabel').text("Username (Username available)");
+			}
+		});
+	});
 });
 </script>
 {% endblock %}
@@ -57,9 +71,9 @@ $(document).ready(function() {
 		</div>
 	{% endif %}
 
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input class="form-control" type="text" name="username">
+  <div class="form-group" id="usernameError">
+    <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
+    <input id="usernameInput" class="form-control" type="text" name="username">
   </div>
 
   <div class="form-group">
