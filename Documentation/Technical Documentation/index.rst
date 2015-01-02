@@ -10,6 +10,7 @@ Welcome to JustHealth's documentation!
    :maxdepth: 4
 
    arch
+   development
    api
    users
    database
