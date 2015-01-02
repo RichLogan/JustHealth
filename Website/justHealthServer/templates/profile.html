@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block title %}Profile{% endblock %}
-
+<!--java Script to load the tab format -->
 {% block scriptsAndStyles %}
   <script>
     $(document).ready(function(){
@@ -16,15 +16,16 @@
 {% block content %}
 <h3>User Profile</h3>
 <br />
+<!--Tab layout -->
 <div role="tabpanel">
-
+<!--Tab Headers -->
   <ul class="nav nav-tabs nav-justified" role="tablist">
     <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
     <li role="presentation"><a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a></li>
   </ul>
 
   <br />
-
+<!--Tab for users profile -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active container" id="profile">
       <div class="row" align ="center">
@@ -70,13 +71,15 @@
                 </div>
               </div>
             </div>
+            <!--Link to be able to edit your profile -->
             <div class="panel-footer"> <a href="edit.html" >Edit Profile</a></div>
           </div>
         </div>
       </div>
     </div>
-
+    <!--Second tab connections, showing all outgoing, incoming and completed connections -->
     <div role="tabpanel" class="tab-pane fade" id="connections">
+      <!--Table for outgoing connections -->
       <h4>Outgoing</h4>
       <table class="table table-condensed table-hover makeDataTable">
         <thead>
@@ -104,7 +107,7 @@
           {% endfor %}
         </tbody>
       </table>
-
+      <!--Table for incomming connections -->
       <h4>Incoming</h4>
       <table class="table table-condensed table-hover makeDataTable">
         <thead>
@@ -128,7 +131,7 @@
                 <input type="hidden" name="connection" value="{{connection.username}}">
                 <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
               </form>
-
+              <!--model which asks the user to enter in a verification code to complete the incomming connection -->
               <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -154,7 +157,7 @@
           {% endfor %}
         </tbody>
       </table>
-
+      <!--Table for completed connections -->
       <h4>Completed</h4>
       <table class="table table-condensed table-hover makeDataTable">
         <thead>

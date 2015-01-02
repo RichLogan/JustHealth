@@ -3,6 +3,7 @@
 {% block title %}Account{% endblock %}
 
 {% block scriptsAndStyles %}
+<!--javaScript to confirm a users deactivation -->
 <script>
 $(document).ready(function() {
 	$("#deactivate").submit(function(e) {
@@ -24,11 +25,11 @@ $(document).ready(function() {
 			{{message}}
 		</div>
 	{% endif %}
-
+	<!--Form for users to fill in details why they are deactivating -->
 	<form name="deactivate" action="/deactivate" id="deactivate" method="POST">
 
 		<input type="hidden" name="username" value="{{user}}">
-
+		<!--Drop down list populated from the database of reasons why you may deactivate -->
 		<div class="form-group">
 			<select name="reason" class="form-control">
 				<option class="placeholder" disabled selected>Please select a reason</option>
