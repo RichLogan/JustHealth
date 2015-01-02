@@ -44,7 +44,7 @@ $(document).ready(function() {
 
 	$('#usernameInput').keyup(function() {
 		content = $('#usernameInput').val();
-		$.post("http://raptor.kent.ac.uk/api/usernameCheck", {username: content}).done(function( data ) {
+		$.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
 			if (data == "True") {
 				$('#usernameError').addClass("has-error");
 				$('#usernameErrorLabel').text("Username (Username already taken)");
