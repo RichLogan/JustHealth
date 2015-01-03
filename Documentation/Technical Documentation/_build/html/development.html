@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Database &mdash; JustHealth 1 documentation</title>
+  <title>Development &mdash; JustHealth 1 documentation</title>
   
 
   
@@ -28,9 +28,7 @@
   
 
   
-    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
-        <link rel="next" title="Full HTML Listing" href="html.html"/>
-        <link rel="prev" title="User Functionality" href="users.html"/> 
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -57,7 +55,7 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
         
-            <ul class="current">
+            <ul>
 <li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="arch.html#the-api-server-and-web-application">The API server and Web Application</a></li>
 <li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
@@ -72,14 +70,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="users.html">User Functionality</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Database</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.database">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Client</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="html.html">Full HTML Listing</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="html.html">HTML Listing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="html.html#login-html">login.html</a></li>
 <li class="toctree-l2"><a class="reference internal" href="html.html#register-html">register.html</a></li>
 <li class="toctree-l2"><a class="reference internal" href="html.html#patienthome-html">patienthome.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#carerhome-html">carerhome.html</a></li>
 <li class="toctree-l2"><a class="reference internal" href="html.html#profile-html">profile.html</a></li>
 <li class="toctree-l2"><a class="reference internal" href="html.html#deactivate-html">deactivate.html</a></li>
 <li class="toctree-l2"><a class="reference internal" href="html.html#search-html">search.html</a></li>
@@ -116,10 +115,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>Database</li>
+    <li>Development</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="_sources/database.txt" rel="nofollow"> View page source</a>
+          <a href="_sources/development.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -127,31 +126,32 @@
 </div>
           <div role="main">
             
-  <div class="section" id="database">
-<h1>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-justHealthServer.database">
-<span id="client"></span><h2>Client<a class="headerlink" href="#module-justHealthServer.database" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="justHealthServer.database.Client">
-<em class="property">class </em><tt class="descclassname">justHealthServer.database.</tt><tt class="descname">Client</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/justHealthServer/database.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Client" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents a user of the application</p>
-</dd></dl>
-
+  <div class="section" id="development">
+<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
+<p>The JustHealth application was developed using an iterative approach with a strong focus on being as fast and lightweight as possible.</p>
+<p>One of the ways we achieved this was through the use of various tools, below is an outline of general development process and how these tools were used in order to improve the way we worked.</p>
+<div class="section" id="git-and-github">
+<h2>Git and GitHub<a class="headerlink" href="#git-and-github" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="general-development-process">
+<h2>General Development Process<a class="headerlink" href="#general-development-process" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Identify a piece of functionality to work on</li>
+<li>Create a git branch from either master, or an existing parent branch for a wider piece of functionality</li>
+<li>Write general test cases for this test. Here we would select the inputs and outputs we would expect from a piece of functionality</li>
+<li>Write a card on Trello to document this feature, who is assigned, when it is due and what needs to be done</li>
+<li>A developer, or pair, would work on this feature, committing work to the git repository</li>
+<li>Once completed a pull request would be created</li>
+<li>All tests would be run and the team would review the request</li>
+<li>On completion of all tests, the pull request would be merged to the parent branch</li>
+</ol>
+<p>Our goal with this development process is to ensure that anything on the master branch is deployable at any time. Through the running of tests and review on any pull request, we could attempt to ensure that master was kept clean of any bugs or issues. If an issue was found, it would be logged on the GitHub issues page.</p>
 </div>
 </div>
 
 
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="html.html" class="btn btn-neutral float-right" title="Full HTML Listing"/>Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="users.html" class="btn btn-neutral" title="User Functionality"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
