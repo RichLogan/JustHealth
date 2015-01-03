@@ -7,9 +7,10 @@ Welcome to JustHealth's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 4
 
    arch
+   development
    api
    users
    database
