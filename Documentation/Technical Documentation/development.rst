@@ -23,4 +23,5 @@ General Development Process
 7. All tests would be run and the team would review the request
 8. On completion of all tests, the pull request would be merged to the parent branch
 
+
 Our goal with this development process is to ensure that anything on the master branch is deployable at any time. Through the running of tests and review on any pull request, we could attempt to ensure that master was kept clean of any bugs or issues. If an issue was found, it would be logged on the GitHub issues page.
