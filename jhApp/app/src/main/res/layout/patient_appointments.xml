@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".login">
 
-    <include android:id="@+id/header" layout="@layout/header" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
@@ -14,188 +12,40 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" >
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Appointments"
+            android:textSize="20dp"
+            android:textColor="@color/header"
+            android:layout_marginTop="50dip"
+            android:layout_marginBottom="20dip"
+            android:id="@+id/appointmentsTitle"/>
+
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Appointments"
-                android:textSize="20dp"
-                android:textColor="@color/header"
-                android:layout_marginTop="50dip"
-                android:layout_marginBottom="20dip"
-                android:id="@+id/appointmentsTitle"/>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/insertAlert"/>
-
-        </LinearLayout>
-
-        <TabHost
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tabHost"
-            android:layout_gravity="center_horizontal">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical">
-
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"></TabWidget>
-
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <ScrollView
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/upcomingAppointmentScroll">
-                        <LinearLayout
-                            android:id="@+id/upcomingAppointmentView"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:orientation="vertical">
-                        </LinearLayout>
-                    </ScrollView>
-
-                    <ScrollView
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/createAppointmentScroll">
-                        <LinearLayout
-                            android:id="@+id/createAppointmentView"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:orientation="vertical">
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Appointment Title"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/name"/>
-
-                            <Spinner
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/type"
-                                android:layout_marginTop="70dp"
-                                android:layout_below="@+id/name"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true" />
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Building Name Number"
-                                android:layout_below="@+id/type"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/buildingNameNumber"/>
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Postcode"
-                                android:layout_below="@+id/buildingNameNumber"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/postcode"/>
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Start Date"
-                                android:inputType="date"
-                                android:layout_below="@+id/postcode"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/startDate"/>
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Start Time"
-                                android:inputType="time"
-                                android:layout_below="@+id/startDate"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/startTime"/>
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="End Date"
-                                android:inputType="date"
-                                android:layout_below="@+id/startTime"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/endDate"/>
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="End Time"
-                                android:inputType="time"
-                                android:layout_below="@+id/endDate"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/endTime"/>
-
-                            <EditText android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="Details"
-                                android:layout_below="@+id/endTime"
-                                android:textSize="20dip"
-                                android:textColor="@color/header"
-                                android:layout_marginBottom="5dip"
-                                android:id="@+id/details"/>
-
-                            <CheckBox
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Tick to make the appointment private"
-                                android:id="@+id/appPrivate"
-                                android:checked="false" />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Create"
-                                android:id="@+id/buttonAppointment"
-                                android:layout_above="@+id/scrollView"
-                                android:layout_gravity="center_horizontal" />
-
-                        </LinearLayout>
-                    </ScrollView>
-
-                    <LinearLayout
-                        android:id="@+id/archiveAppointmentView"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
-        </TabHost>
+            android:id="@+id/insertAlert"/>
 
     </LinearLayout>
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/upcomingAppointmentScroll">
+        <LinearLayout
+            android:id="@+id/upcomingAppointmentView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+        </LinearLayout>
+    </ScrollView>
 
     <!--Link to Terms and Conditions-->
     <TextView android:id="@+id/link_to_terms"
@@ -209,4 +59,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@color/header"/>
+    </LinearLayout>
 </RelativeLayout>
