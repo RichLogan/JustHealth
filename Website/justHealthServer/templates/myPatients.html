@@ -201,47 +201,6 @@
                           </div>
                         </form>
 
-<<<<<<< HEAD
-                        <table class="table">
-                          <thead>
-                            <th>Medication</th>
-                            <th>Dosage</th>
-                            <th>Frequency</th>
-                            <th>Quantity</th>
-                            <th>Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Repeat?</th>
-                            <th>Stock Left</th>
-                            <th>Observations</th>
-                            <th style="color: green">Edit</th>
-                            <th style="color: red">Delete?</th>
-
-                          </thead>
-                          <tbody>
-                            {% for prescription in prescriptionMapping[patient.username] %}
-                              <tr>
-                                <td>{{prescription.medication}}</td>
-                                <td>{{prescription.dosage}} {{prescription.dosageunit}}</td>
-                                <td>{{prescription.frequency}} / {{prescription.frequencyunit}}</td>
-                                <td>{{prescription.quantity}}</td>
-                                <td>{{prescription.dosageform}}</td>
-                                <td>{{prescription.startdate}}</td>
-                                <td>{{prescription.enddate}}</td>
-                                <td>{{prescription.repeat}}</td>
-                                <td>{{prescription.stockleft}}</td>
-                                <td>{{prescription.prerequisite}}</td>
-                                <td style= "color: green">
-                                  <button class="fa fa-pencil fa-2x"></button>
-                                </td>
-                                <td>
-                                  <a href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}"><button class="btn btn-danger"><i class="fa fa-times"></i></button></a>
-                                </td>
-                              </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-=======
                         <div role="tabpanel">
                           <!-- Nav tabs -->
                           <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -618,7 +577,6 @@
                       <div class="modal-footer">
                         <button class="btn btn-default" id="{{patient.username}}_donePrescriptions" onclick="$('#prescription{{patient.username}}').modal('toggle');">Close</button>
                         <button class="btn btn-success" id="{{patient.username}}_addPrescriptionButton" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");$("#{{patient.username}}_addPrescriptionButton").toggle("slow");'>Add new Prescription</button>
->>>>>>> 6d448d05e2840a7575c9e1003f78bf6266872bd2
                       </div>
                     </div>
                   </div>
@@ -664,7 +622,7 @@
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
                                     <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
-                                    <td> 
+                                    <td>
                                       <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
                                         <input type="hidden" name="appid" value="{{appointment.appid}}">
                                         <input type="submit" class="btn btn-danger" value="Delete">
@@ -689,7 +647,7 @@
                                         <div class="form-group">
                                           <label for="apptype">Appointment Type</label>
                                           <select name="apptype" class="form-control">
-                                            <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>                      
+                                            <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
                                             {% for type in appType %}
                                               <option>{{type.type}}</option>
                                             {% endfor %}
