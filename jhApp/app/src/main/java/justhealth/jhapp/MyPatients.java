@@ -82,13 +82,13 @@ public class MyPatients extends Activity {
                                                 intent.putExtra("surname", surname);
                                                 startActivity(intent);
                                             }
-                                            else if (which == 1) {
+                                            /*else if (which == 1) {
                                                 Intent intent = new Intent(getBaseContext(), CarerAppointments.class);
                                                 intent.putExtra("targetUsername", username);
                                                 intent.putExtra("firstName", firstname);
                                                 intent.putExtra("surname", surname);
                                                 startActivity(intent);
-                                            }
+                                            }*/
                                         }
                                     });
                             alert.show();

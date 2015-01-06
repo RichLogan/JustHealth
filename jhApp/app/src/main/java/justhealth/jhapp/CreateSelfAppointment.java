@@ -149,24 +149,31 @@ public class CreateSelfAppointment extends Activity {
         int id = Integer.parseInt(responseString);
         System.out.println(responseString);
 
-        //Check if the Layout already exists
-        LinearLayout alert = (LinearLayout) findViewById(R.id.successMessage);
-        if (alert == null) {
-            //Insert the alert message
-            LinearLayout insertAlert = (LinearLayout) findViewById(R.id.insertAlert);
-            View insertAlertView = getLayoutInflater().inflate(R.layout.success_message, insertAlert, false);
-            insertAlert.addView(insertAlertView);
-            TextView myTextView = (TextView) findViewById(R.id.successText);
-
-            if (id > 0) {
-                myTextView.setText("Success! Appointment Added");
-                addToCalendarQuestion(details, id);
-            }
-            else {
-                myTextView.setText("Oops something went wrong, try again.");
-            }
+        if (id > 0) {
+            //show the alert to say it is successful
+            Context context = getApplicationContext();
+            CharSequence text = "Appointment Added.";
+            //Length
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            //Position
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+            toast.show();
+            addToCalendarQuestion(details, id);
+        }
+        else {
+            Context context = getApplicationContext();
+            CharSequence text = "Oops, something went wrong. Please try again.";
+            //Length
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            //Position
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+            toast.show();
+            addToCalendarQuestion(details, id);
         }
     }
+
 
 
     private void addToCalendarQuestion(final HashMap<String, String> details, final int id) {
@@ -183,7 +190,8 @@ public class CreateSelfAppointment extends Activity {
 
         alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                // Cancelled.
+                finish();
+                getIntent();
             }
         });
 
@@ -259,6 +267,7 @@ public class CreateSelfAppointment extends Activity {
         String responseString = PostRequest.post("addAndroidEventId", infoToUpdate);
         System.out.println(responseString);
         finish();
+        getIntent();
 
     }
 

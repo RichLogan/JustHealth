@@ -23,5 +23,6 @@
     <string-array name="patient_appointments_options">
         <item>View In Calendar</item>
         <item>Edit Appointment</item>
+        <item>Delete Appointment</item>
     </string-array>
 </resources>

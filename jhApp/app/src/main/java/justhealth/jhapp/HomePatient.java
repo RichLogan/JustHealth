@@ -48,7 +48,7 @@ public class HomePatient extends Activity {
         appointments.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
-                        startActivity(new Intent(HomePatient.this, PatientAppointments.class));
+                        startActivity(new Intent(HomePatient.this, SelfAppointments.class));
                     }
                 }
         );

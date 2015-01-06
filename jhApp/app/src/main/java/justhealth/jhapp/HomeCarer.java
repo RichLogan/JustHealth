@@ -52,5 +52,14 @@ public class HomeCarer extends Activity {
                     }
                 }
         );
+
+        Button appointments = (Button) findViewById(R.id.myAppointments);
+        appointments.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomeCarer.this, SelfAppointments.class));
+                    }
+                }
+        );
     }
 }
