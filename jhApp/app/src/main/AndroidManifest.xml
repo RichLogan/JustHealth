@@ -84,6 +84,11 @@
                 android:value=".Login" />
         </activity>
 
+        <activity android:name=".AddPrescription" />
+        <activity android:name=".EditPrescription" />
+
+        <activity android:name=".Connections" />
+
         <activity
         android:name=".Search"
         android:label="@string/app_name"
@@ -91,15 +96,6 @@
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".Login" />
-    </activity>
-
-        <activity
-            android:name=".Connections"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
         </activity>
 
         <activity
@@ -121,12 +117,12 @@
         </activity>
 
         <activity
-        android:name=".Settings"
-        android:label="@string/app_name"
-        android:parentActivityName=".Login" >
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".Login" />
+            android:name=".Settings"
+            android:label="@string/app_name"
+            android:parentActivityName=".Login" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
         </activity>
 
         <activity
@@ -171,7 +167,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
-
 
     </application>
 

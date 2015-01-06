@@ -34,7 +34,7 @@ public class MyPatients extends Activity {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = PostRequest.post("getConnections", parameters);
+        String response = Request.post("getConnections", parameters, getApplicationContext());
         try {
             JSONObject allConnections = new JSONObject(response);
             String completed = allConnections.getString("completed");
@@ -89,9 +89,10 @@ public class MyPatients extends Activity {
                                                 intent.putExtra("surname", surname);
                                                 startActivity(intent);
                                             }*/
-                                        }
-                                    });
-                            alert.show();
+
+                                    }
+                                });
+                                alert.show();
                         }
                     });
                 }

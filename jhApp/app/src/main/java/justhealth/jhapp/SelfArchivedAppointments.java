@@ -217,7 +217,7 @@ public class SelfArchivedAppointments extends Activity {
         details.put("username", username);
         details.put("appid", appointmentDetails.get("appid"));
         //should return "Appointment Deleted"
-        String postRequest = PostRequest.post("deleteAppointment", details);
+        String postRequest = Request.post("deleteAppointment", details, this);
         System.out.println(appointmentDetails.get("androidId"));
         if (appointmentDetails.get("androidId") != "null") {
             long eventID = Long.parseLong(appointmentDetails.get("androidId"));

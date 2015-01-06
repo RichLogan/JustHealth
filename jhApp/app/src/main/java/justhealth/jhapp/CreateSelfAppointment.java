@@ -145,7 +145,7 @@ public class CreateSelfAppointment extends Activity {
             details.put("private", "False");
         }
 
-        String responseString = PostRequest.post("addPatientAppointment", details);
+        String responseString = Request.post("addPatientAppointment", details, this);
         int id = Integer.parseInt(responseString);
         System.out.println(responseString);
 
@@ -264,7 +264,7 @@ public class CreateSelfAppointment extends Activity {
         infoToUpdate.put("dbid", Integer.toString(id));
         infoToUpdate.put("androidid", Integer.toString(eventID));
         System.out.println(infoToUpdate);
-        String responseString = PostRequest.post("addAndroidEventId", infoToUpdate);
+        String responseString = Request.post("addAndroidEventId", infoToUpdate, this);
         System.out.println(responseString);
         finish();
         getIntent();

@@ -104,7 +104,7 @@ public class SelfAppointments extends Activity {
         //Text Boxes
         details.put("loggedInUser", username);
         details.put("targetUser", username);
-        String postRequest = PostRequest.post("getAllAppointments", details);
+        String postRequest = Request.post("getAllAppointments", details, this);
 
         try {
             getApps = new JSONArray(postRequest);
@@ -235,7 +235,7 @@ public class SelfAppointments extends Activity {
         details.put("username", username);
         details.put("appid", appointmentDetails.get("appid"));
         //should return "Appointment Deleted"
-        String postRequest = PostRequest.post("deleteAppointment", details);
+        String postRequest = Request.post("deleteAppointment", details, this);
         System.out.println(appointmentDetails.get("androidId"));
         if (appointmentDetails.get("androidId") != "null") {
             long eventID = Long.parseLong(appointmentDetails.get("androidId"));

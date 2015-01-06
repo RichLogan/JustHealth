@@ -3,6 +3,7 @@ package justhealth.jhapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -25,12 +26,24 @@ public class CarerPrescriptions extends Activity{
         String username = "";
         String firstname = "";
         String surname= "";
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("targetUsername");
             firstname = extras.getString("firstName");
             surname = extras.getString("surname");
         }
+
+        Button addNewPrescription = (Button)findViewById(R.id.addNewPrescription);
+        addNewPrescription.setOnClickListener(
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), AddPrescription.class);
+                    String username =  extras.getString("targetUsername");
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                }
+            }
+        );
 
         //Set text of patientName to username
         TextView title=(TextView)findViewById(R.id.patientName);
@@ -44,7 +57,7 @@ public class CarerPrescriptions extends Activity{
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = PostRequest.post("getPrescriptions", parameters);
+        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
         try {
             JSONArray result = new JSONArray(response);
             return result;
@@ -58,7 +71,8 @@ public class CarerPrescriptions extends Activity{
     private void displayPrescriptions(JSONArray prescriptionList) {
         for(int x=0;x<prescriptionList.length();x++) {
             try {
-                JSONObject prescription = prescriptionList.getJSONObject(x);
+                final JSONObject prescription = prescriptionList.getJSONObject(x);
+                final String prescriptionid = prescription.getString("prescriptionid");
                 final String username = prescription.getString("username");
                 final String medication = prescription.getString("medication");
                 final String dosage = prescription.getString("dosage");
@@ -91,18 +105,39 @@ public class CarerPrescriptions extends Activity{
                         AlertDialog.Builder alert = new AlertDialog.Builder(CarerPrescriptions.this);
                         alert.setTitle(medication + " (" + dosage + dosageunit + ")");
                         alert.setMessage("Start Date: " + startdate + "\nEnd Date: " + enddate + "\nExtra Info: " + prerequisite + "\nRepeat: " + repeat);
-                        alert.setNegativeButton("Got it!", new DialogInterface.OnClickListener() {
+                        alert.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                // Cancelled.
+                                Intent intent = new Intent(getBaseContext(), EditPrescription.class);
+                                intent.putExtra("prescriptionid", prescriptionid);
+                                intent.putExtra("targetUsername", username);
+                                startActivityForResult(intent, 1);
+                            }
+                        });
+                        alert.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            //Cancelled
                             }
                         });
                         alert.show();
                     }
                 });
+
             }
             catch (JSONException e) {
                 System.out.print(e.getStackTrace());
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data.getExtras().containsKey("response")){
+            Boolean success = (resultCode == 1);
+            Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
+            finish();
+            startActivity(getIntent());
         }
     }
 }

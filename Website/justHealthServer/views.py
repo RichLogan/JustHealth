@@ -238,17 +238,15 @@ def myPatients():
         for connection in completedConnections:
             if connection['accounttype'] == "Patient":
                 patients.append(connection)
-
     # Get all prescriptions
-    prescriptionMapping = {}
-    appointmentsMapping = {}
+    activePrescriptions = {}
+    upcomingPrescriptions = {}
+    expiredPrescriptions = {}
     for patient in patients:
-        prescriptionMapping[patient['username']] = json.loads(getPrescriptions(patient['username']))
-        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
-
-
-        return render_template('myPatients.html', patients = patients, prescriptionMapping = prescriptionMapping, appointmentsMapping = appointmentsMapping)
-    return redirect(url_for('index'))
+        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+    return render_template('myPatients.html', patients = patients, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/deletePrescription')
 def deletePrescription_view():
@@ -275,6 +273,23 @@ def addPrescription_view():
     result = addPrescription(request.form)
     username = request.form['username']
     if result != "Could not add prescription":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/updatePrescription', methods=['POST'])
+def updatePrescription_view():
+    result = editPrescription(request.form)
+    username = request.form['username']
+    if result != "Failed":
         flash(result, 'result')
         flash('success', 'class')
         flash(username, 'user')

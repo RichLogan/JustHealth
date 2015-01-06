@@ -215,7 +215,7 @@ public class EditSelfAppointment extends Activity {
             details.put("private", "False");
         }
 
-        String responseString = PostRequest.post("updateAppointment", details);
+        String responseString = Request.post("updateAppointment", details, this);
         System.out.println(responseString);
 
         //Check if the Layout already exists

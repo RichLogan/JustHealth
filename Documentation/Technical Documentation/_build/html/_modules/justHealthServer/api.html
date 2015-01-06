@@ -1,0 +1,791 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>justHealthServer.api &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> JustHealth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-api-server-and-web-application">The API server and Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-android-application">The Android application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#login-functions">Login Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../users.html">User Functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database.html#module-justHealthServer.database">Client</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>justHealthServer.api</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for justHealthServer.api</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">justHealthServer</span> <span class="kn">import</span> <span class="n">app</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">abort</span>
+<span class="kn">from</span> <span class="nn">flask.ext.httpauth</span> <span class="kn">import</span> <span class="n">HTTPBasicAuth</span>
+<span class="c"># Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh</span>
+<span class="kn">from</span> <span class="nn">database</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">URLSafeSerializer</span><span class="p">,</span> <span class="n">BadSignature</span>
+<span class="kn">from</span> <span class="nn">passlib.hash</span> <span class="kn">import</span> <span class="n">sha256_crypt</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">HTTPBasicAuth</span><span class="p">()</span>
+
+<span class="nd">@auth.verify_password</span>
+<span class="k">def</span> <span class="nf">verify_password</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if the password entered is the current password for that account&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">hashedPassword</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">iscurrent</span><span class="o">==</span><span class="bp">True</span><span class="p">))</span><span class="o">.</span><span class="n">password</span>
+        <span class="k">return</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">hashedPassword</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/api/registerUser&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">registerUser</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Builds the user profile using the information input in the form&quot;&quot;&quot;</span>
+    <span class="c"># Build User Registration</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">profile</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;ismale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;ismale&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmpassword&#39;</span><span class="p">]</span>
+      <span class="n">accountType</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;All fields must be filled out&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">profile</span><span class="p">[</span><span class="s">&#39;terms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;terms&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;Terms and Conditions must be accepted&quot;</span>
+
+    <span class="c"># Validate all input</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">profile</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c"># Validate username &gt;25</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">25</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;Username can not be longer than 25 characters&quot;</span>
+
+    <span class="k">if</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+       <span class="k">return</span> <span class="s">&quot;Username already taken&quot;</span>
+
+    <span class="c"># Validate firstname, surname and email &gt;25</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&#39;Firstname, surname and email can not be longer than 100 characters&#39;</span>
+
+    <span class="c"># Validate email correct format</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]):</span>
+      <span class="k">return</span> <span class="s">&quot;Fail email verification&quot;</span>
+
+    <span class="c"># Encrypt password with SHA 256</span>
+    <span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">])</span>
+
+    <span class="c">#Check for existing username</span>
+    <span class="k">if</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;Username already taken&quot;</span>
+    <span class="k">if</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;Email address already taken&quot;</span>
+
+    <span class="c"># Build insert user query</span>
+    <span class="n">userInsert</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+      <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+      <span class="n">dob</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">],</span>
+      <span class="n">email</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">],</span>
+      <span class="n">accountdeactivated</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+      <span class="n">accountlocked</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+      <span class="n">loginattempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="n">verified</span>  <span class="o">=</span> <span class="bp">False</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">accountType</span> <span class="o">==</span> <span class="s">&quot;patient&quot;</span><span class="p">:</span>
+        <span class="n">accountType</span> <span class="o">=</span> <span class="n">Patient</span>
+    <span class="k">elif</span> <span class="n">accountType</span> <span class="o">==</span> <span class="s">&quot;carer&quot;</span><span class="p">:</span>
+        <span class="n">accountType</span> <span class="o">=</span> <span class="n">Carer</span>
+
+    <span class="n">typeInsert</span> <span class="o">=</span> <span class="n">accountType</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+        <span class="n">firstname</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">],</span>
+        <span class="n">surname</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">],</span>
+        <span class="n">ismale</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;ismale&#39;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="c"># Build insert password query</span>
+    <span class="n">userPassword</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+      <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+      <span class="n">password</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">],</span>
+      <span class="n">iscurrent</span> <span class="o">=</span> <span class="s">&#39;TRUE&#39;</span><span class="p">,</span>
+      <span class="n">expirydate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">90</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="c"># Execute Queries</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+        <span class="n">userInsert</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="n">typeInsert</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="n">userPassword</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+    <span class="n">sendVerificationEmail</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="s">&quot;True&quot;</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/authenticate&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="authenticate"><a class="viewcode-back" href="../../api.html#justHealthServer.api.authenticate">[docs]</a><span class="k">def</span> <span class="nf">authenticate</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Authenticates a username and password and returns the result of the authentication check&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">attempted</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">Client</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Incorrect username/password&quot;</span>
+
+    <span class="c"># Check Password</span>
+    <span class="n">hashedPassword</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">attempted</span><span class="o">.</span><span class="n">username</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">iscurrent</span><span class="o">==</span><span class="bp">True</span><span class="p">))</span><span class="o">.</span><span class="n">password</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">attemptedPassword</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">attemptedPassword</span><span class="p">,</span> <span class="n">hashedPassword</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">attempted</span><span class="o">.</span><span class="n">accountdeactivated</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Account deactivated&quot;</span>
+        <span class="k">elif</span> <span class="n">attempted</span><span class="o">.</span><span class="n">verified</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Account not verified. Please check your email for instructions&quot;</span>
+        <span class="k">elif</span> <span class="n">attempted</span><span class="o">.</span><span class="n">accountlocked</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Account is locked. Please check your email for instructions&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">revertAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">attempted</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+                <span class="n">revertAttempts</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="k">return</span> <span class="s">&quot;Authenticated&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">currentLoginAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">attempted</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">loginattempts</span>
+        <span class="k">if</span> <span class="n">currentLoginAttempts</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">lockAccount</span><span class="p">(</span><span class="n">attempted</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+            <span class="n">incrementAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="p">(</span><span class="n">currentLoginAttempts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">attempted</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+            <span class="n">incrementAttempts</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="k">return</span> <span class="s">&quot;Account is locked. Please check your email for instructions&quot;</span>
+        <span class="n">incrementAttempts</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="p">(</span><span class="n">currentLoginAttempts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">attempted</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">incrementAttempts</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;Incorrect username/password&quot;</span>
+</div>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/deactivateaccount&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">deactivateAccount</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Form validation for account deactivation&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;No username supplied&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;deletecheckbox&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;on&quot;</span><span class="p">:</span>
+            <span class="n">delete</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">delete</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">delete</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">comments</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;comments&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">comments</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;reason&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Please select a reason&quot;</span>
+
+    <span class="n">q</span> <span class="o">=</span> <span class="n">Userdeactivatereason</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="n">reason</span><span class="p">,</span>
+        <span class="n">comments</span> <span class="o">=</span> <span class="n">comments</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">delete</span><span class="p">:</span>
+        <span class="c"># Delete User</span>
+        <span class="n">deletedUser</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">deletedUser</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;Deleted&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># Keep user</span>
+        <span class="n">deactivatedUser</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">accountdeactivated</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">)</span>
+        <span class="n">unverifyUser</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">verified</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">deactivatedUser</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="n">unverifyUser</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;Kept&quot;</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/resetpassword&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">resetPassword</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Form validation and database checks for user when they forget a password (overrides the old password)&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmemail&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmemail&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmnewpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmnewpassword&#39;</span><span class="p">]</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmdob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;confirmdob&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;All fields must be filled out&quot;</span>
+
+    <span class="n">getEmail</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">getDob</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dob</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">getEmail</span><span class="o">==</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmemail&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">getDob</span><span class="o">==</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;confirmdob&#39;</span><span class="p">]:</span>
+        <span class="c">#set the old password to iscurrent = false</span>
+        <span class="n">notCurrent</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">iscurrent</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+        <span class="n">notVerified</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">verified</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+
+        <span class="c">#encrypt the password</span>
+        <span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">])</span>
+
+        <span class="c"># Build insert password query</span>
+        <span class="n">newCredentials</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+          <span class="n">username</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>
+          <span class="n">password</span> <span class="o">=</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;newpassword&#39;</span><span class="p">],</span>
+          <span class="n">iscurrent</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+          <span class="n">expirydate</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">90</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="n">unlockAccount</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">accountlocked</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+        <span class="n">setLoginCount</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loginattempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">notCurrent</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="n">notVerified</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="n">newCredentials</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="n">unlockAccount</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="n">setLoginCount</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+        <span class="n">sendPasswordResetEmail</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="s">&quot;True&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Invalid details&quot;</span>
+
+<span class="c">####</span>
+<span class="c"># Get account type</span>
+<span class="c">####</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/getAccountInfo&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">getAccountInfo</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">getAccountInfo</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">getAccountInfo</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get Account information from client and patient/carer table&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">thisUser</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">patient</span> <span class="o">=</span> <span class="n">Patient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">thisUser</span><span class="p">)</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="n">Patient</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Client</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="o">==</span><span class="n">thisUser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Patient&quot;</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">firstname</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">surname</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">username</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">email</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">dob</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">ismale</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">[</span><span class="s">&#39;gender&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Male&#39;</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">[</span><span class="s">&#39;gender&#39;</span><span class="p">]</span> <span class="o">=</span><span class="s">&#39;Female&#39;</span>
+
+      <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Patient</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Carer&quot;</span>
+      <span class="n">carer</span> <span class="o">=</span> <span class="n">Carer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">thisUser</span><span class="p">)</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="n">Carer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Client</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="o">==</span><span class="n">thisUser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">firstname</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">surname</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">username</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">email</span>
+      <span class="n">result</span><span class="p">[</span><span class="s">&#39;dob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">dob</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">ismale</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">[</span><span class="s">&#39;gender&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Male&#39;</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">[</span><span class="s">&#39;gender&#39;</span><span class="p">]</span> <span class="o">=</span><span class="s">&#39;Female&#39;</span>
+      <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="c">####</span>
+<span class="c"># Account Helper Functions</span>
+<span class="c">####</span>
+
+<span class="k">def</span> <span class="nf">lockAccount</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Emails the user if their account gets locked&quot;&quot;&quot;</span>
+    <span class="n">lockAccount</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">accountlocked</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+        <span class="n">lockAccount</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+    <span class="n">sendUnlockEmail</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+
+<span class="c">####</span>
+<span class="c"># Email Functions</span>
+<span class="c">####</span>
+<span class="k">def</span> <span class="nf">getSerializer</span><span class="p">(</span><span class="n">secret_key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts a username into a random key, in order to create a unique link&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">secret_key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">secret_key</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">secret_key</span>
+    <span class="k">return</span> <span class="n">URLSafeSerializer</span><span class="p">(</span><span class="n">secret_key</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">sendVerificationEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sends email to the user after registration asking for account verification&quot;&quot;&quot;</span>
+    <span class="c"># Generate Verification Link</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">verifyLink</span> <span class="o">=</span> <span class="n">url_for</span><span class="p">(</span><span class="s">&#39;verifyUser&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># Login to mail server</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+    <span class="c"># Build message</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+    <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth Verification&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Thanks for registering! Please verify your account here: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">verifyLink</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+    <span class="c"># Send</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">getUserFromEmail</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get username from the database for a valid email address&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">username</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+      <span class="k">return</span> <span class="n">username</span><span class="o">.</span><span class="n">username</span>
+    <span class="k">except</span> <span class="n">Client</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s">&quot;False&quot;</span>
+
+<span class="k">def</span> <span class="nf">sendForgotPasswordEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sends email to the user on completion of reset password form&quot;&quot;&quot;</span>
+    <span class="c">#Generate reset password Link</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">resetLink</span> <span class="o">=</span> <span class="n">url_for</span><span class="p">(</span><span class="s">&#39;loadPasswordReset&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># Login to mail server</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+    <span class="c"># Build message</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+    <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth: Forgot Password&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Please reset your JustHealth account password here: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">resetLink</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+    <span class="c"># Send</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">sendUnlockEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sends email to a user when account is locked due to too many unsuccessful attempts&quot;&quot;&quot;</span>
+    <span class="c"># Login to mail server</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">resetLink</span> <span class="o">=</span> <span class="n">url_for</span><span class="p">(</span><span class="s">&#39;loadPasswordReset&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># Login to mail server</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+    <span class="c"># Build message</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+    <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth: Account Locked&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Due to too many failed login attempts, your JustHealth account has been locked and you will be required to reset your password. Please reset your JustHealth account password here: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">resetLink</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;. If it was not you who locked the account please notify JustHealth immediately by replying to this email. Thank you. &quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+    <span class="c"># Send</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">sendPasswordResetEmail</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sends user email confirming password reset&quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">getSerializer</span><span class="p">()</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">verifyLink</span> <span class="o">=</span> <span class="n">url_for</span><span class="p">(</span><span class="s">&#39;passwordReset&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c">#Login to mail server</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s">&#39;smtp.zoho.com&#39;</span><span class="p">,</span> <span class="mi">465</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;justhealth@richlogan.co.uk&#39;</span><span class="p">,</span> <span class="s">&quot;justhealth&quot;</span><span class="p">)</span>
+    <span class="c"># Build Message</span>
+    <span class="n">sender</span> <span class="o">=</span> <span class="s">&quot;&#39;JustHealth&#39; &lt;justhealth@richlogan.co.uk&gt;&quot;</span>
+    <span class="n">recipient</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">email</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">&quot;JustHealth Password Reset Verification&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Your password has been reset. Please verify this here: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">verifyLink</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">Subject: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+    <span class="c"># Send</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+
+<span class="c">####</span>
+<span class="c"># Search Patient Carer</span>
+<span class="c">####</span>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/searchPatientCarer&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span><span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">searchPatientCarer</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Searches database for a user that can be connected to. POST [username, searchterm]&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">searchPatientCarer</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;searchterm&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">searchPatientCarer</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">searchterm</span><span class="p">):</span>
+    <span class="c">#get username, firstname and surname of current user</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">thisUser</span> <span class="o">=</span> <span class="n">username</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">patient</span> <span class="o">=</span> <span class="n">Patient</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">thisUser</span><span class="p">)</span>
+        <span class="n">searchterm</span> <span class="o">=</span> <span class="s">&quot;%&quot;</span> <span class="o">+</span> <span class="n">searchterm</span> <span class="o">+</span> <span class="s">&quot;%&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">Carer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">dicts</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">Carer</span><span class="o">.</span><span class="n">username</span> <span class="o">%</span> <span class="n">searchterm</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">Carer</span><span class="o">.</span><span class="n">firstname</span> <span class="o">%</span> <span class="n">searchterm</span><span class="p">)</span> <span class="o">|</span><span class="p">(</span><span class="n">Carer</span><span class="o">.</span><span class="n">surname</span> <span class="o">%</span> <span class="n">searchterm</span><span class="p">))</span>
+
+        <span class="n">jsonResult</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">jsonResult</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">jsonResult</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">Patient</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="n">searchterm</span> <span class="o">=</span> <span class="s">&quot;%&quot;</span> <span class="o">+</span> <span class="n">searchterm</span> <span class="o">+</span> <span class="s">&quot;%&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">Patient</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">dicts</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">Patient</span><span class="o">.</span><span class="n">username</span> <span class="o">%</span> <span class="n">searchterm</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">Patient</span><span class="o">.</span><span class="n">firstname</span> <span class="o">%</span> <span class="n">searchterm</span><span class="p">)</span> <span class="o">|</span><span class="p">(</span><span class="n">Patient</span><span class="o">.</span><span class="n">surname</span> <span class="o">%</span> <span class="n">searchterm</span><span class="p">))</span>
+
+        <span class="n">jsonResult</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">jsonResult</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">jsonResult</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="c">####</span>
+<span class="c"># Client/Client relationships</span>
+<span class="c">####</span>
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/createConnection&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">createConnection</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Creates an initial connection between two users. POST [username, target]&quot;&quot;&quot;</span>
+    <span class="c"># Get users</span>
+    <span class="n">currentUser</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="n">targetUser</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;target&#39;</span><span class="p">]</span>
+
+    <span class="c">#Handle existing entries. Need to check all == 0</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">requestor</span> <span class="o">==</span> <span class="n">currentUser</span> <span class="ow">and</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">targetUser</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Connection already established&quot;</span>
+        <span class="k">if</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">requestor</span> <span class="o">==</span> <span class="n">targetUser</span> <span class="ow">and</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">currentUser</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Connection already established&quot;</span>
+        <span class="k">if</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Patientcarer</span><span class="o">.</span><span class="n">patient</span> <span class="o">==</span> <span class="n">currentUser</span> <span class="ow">and</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">carer</span> <span class="o">==</span> <span class="n">targetUser</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Connection already established&quot;</span>
+        <span class="k">if</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Patientcarer</span><span class="o">.</span><span class="n">patient</span> <span class="o">==</span> <span class="n">targetUser</span> <span class="ow">and</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">carer</span> <span class="o">==</span> <span class="n">currentUser</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Connection already established&quot;</span>
+
+    <span class="c"># Get user types</span>
+    <span class="n">currentUser_type</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">currentUser</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+    <span class="n">targetUser_type</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">targetUser</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+
+    <span class="c"># Generate 4 digit code</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="c"># Insert into Connection table</span>
+    <span class="n">newConnection</span> <span class="o">=</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span>
+        <span class="n">requestor</span> <span class="o">=</span> <span class="n">currentUser</span><span class="p">,</span>
+        <span class="n">requestortype</span> <span class="o">=</span> <span class="n">currentUser_type</span><span class="p">,</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">targetUser</span><span class="p">,</span>
+        <span class="n">targettype</span> <span class="o">=</span> <span class="n">targetUser_type</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+        <span class="n">newConnection</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/completeConnection&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">completeConnection</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] &quot;&quot;&quot;</span>
+    <span class="c">#Take attempted code, match with a entry where they are target</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+    <span class="n">requestor</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;requestor&#39;</span><span class="p">]</span>
+    <span class="n">attemptedCode</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;codeattempt&#39;</span><span class="p">])</span>
+
+    <span class="c"># get record</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">requestor</span> <span class="o">==</span> <span class="n">requestor</span> <span class="ow">and</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="n">attemptedCode</span><span class="p">:</span>
+        <span class="c"># Correct attempt, establish relationship in correct table</span>
+        <span class="c"># TODO place into relationship table</span>
+        <span class="n">requestor_accountType</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">requestor</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+        <span class="n">target_accountType</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">target</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">requestor_accountType</span> <span class="o">==</span> <span class="s">&quot;Patient&quot;</span> <span class="ow">and</span> <span class="n">target_accountType</span> <span class="o">==</span> <span class="s">&quot;Carer&quot;</span><span class="p">:</span>
+            <span class="n">newRelationship</span> <span class="o">=</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="n">patient</span> <span class="o">=</span> <span class="n">requestor</span><span class="p">,</span>
+                <span class="n">carer</span> <span class="o">=</span> <span class="n">target</span>
+            <span class="p">)</span>
+            <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+                <span class="n">newRelationship</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">requestor_accountType</span> <span class="o">==</span> <span class="s">&quot;Carer&quot;</span> <span class="ow">and</span> <span class="n">target_accountType</span> <span class="o">==</span> <span class="s">&quot;Patient&quot;</span><span class="p">:</span>
+            <span class="n">newRelationship</span> <span class="o">=</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="n">patient</span> <span class="o">=</span> <span class="n">target</span><span class="p">,</span>
+                <span class="n">carer</span> <span class="o">=</span> <span class="n">requestor</span>
+            <span class="p">)</span>
+            <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+                <span class="n">newRelationship</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+        <span class="c"># Delete this Relationship instance</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">delete_instance</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;Correct&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Incorrect&quot;</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/deleteConnection&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">deleteConnection</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Deletes connection between a patient and carer POST[user, connection]&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">deleteConnection</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;connection&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">deleteConnection</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">connection</span><span class="p">):</span>
+    <span class="n">userType</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">user</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+    <span class="n">connectionType</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">connection</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">userType</span> <span class="o">==</span> <span class="s">&quot;Patient&quot;</span> <span class="ow">and</span> <span class="n">connectionType</span> <span class="o">==</span> <span class="s">&quot;Carer&quot;</span><span class="p">):</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Patientcarer</span><span class="o">.</span><span class="n">patient</span> <span class="o">==</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">carer</span> <span class="o">==</span> <span class="n">connection</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">delete_instance</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;True&quot;</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">userType</span> <span class="o">==</span> <span class="s">&quot;Carer&quot;</span> <span class="ow">and</span> <span class="n">connectionType</span> <span class="o">==</span> <span class="s">&quot;Patient&quot;</span><span class="p">):</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Patientcarer</span><span class="o">.</span><span class="n">patient</span> <span class="o">==</span> <span class="n">connection</span> <span class="ow">and</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">carer</span> <span class="o">==</span> <span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">delete_instance</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s">&quot;True&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;False&quot;</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/cancelConnection&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">cancelRequest</span><span class="p">():</span>
+    <span class="n">cancelRequest</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;connection&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">cancelRequest</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cancels the user request to connect before completion&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">requestor</span> <span class="o">==</span> <span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">delete_instance</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">RelationshipDoesNotExist</span><span class="p">:</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">connection</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">delete_instance</span><span class="p">()</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/getConnections&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">getConnections</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">getConnections</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">getConnections</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Gets the valid connections between two users&quot;&quot;&quot;</span>
+    <span class="n">accountType</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">username</span><span class="p">))[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">Client</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Client</span><span class="o">.</span><span class="n">username</span><span class="o">==</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+    <span class="n">outgoingConnections</span> <span class="o">=</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">requestor</span> <span class="o">==</span> <span class="n">user</span><span class="p">)</span>
+    <span class="n">incomingConnections</span> <span class="o">=</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Relationship</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="n">user</span><span class="p">)</span>
+
+    <span class="n">completedConnections</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">accountType</span> <span class="o">==</span> <span class="s">&quot;Patient&quot;</span><span class="p">:</span>
+        <span class="n">completedConnections</span> <span class="o">=</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Patientcarer</span><span class="o">.</span><span class="n">patient</span> <span class="o">==</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">accountType</span> <span class="o">==</span> <span class="s">&quot;Carer&quot;</span><span class="p">:</span>
+        <span class="n">completedConnections</span> <span class="o">=</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Patientcarer</span><span class="o">.</span><span class="n">carer</span> <span class="o">==</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">completedConnections</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="c">#username, firstname, surname, accountype</span>
+    <span class="n">outgoingConnectionsDetails</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">outgoingConnections</span><span class="p">:</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;code&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+        <span class="n">outgoingConnectionsDetails</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="n">outgoingFinal</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">outgoingConnectionsDetails</span><span class="p">)</span>
+
+    <span class="n">incomingConnectionsDetails</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">incomingConnections</span><span class="p">:</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">requestor</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;connectionid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">connectionid</span><span class="p">)</span>
+        <span class="n">incomingConnectionsDetails</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="n">incomingFinal</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">incomingConnectionsDetails</span><span class="p">)</span>
+
+    <span class="n">completedConnectionsDetails</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">completedConnections</span><span class="p">:</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">accountType</span> <span class="o">==</span> <span class="s">&quot;Patient&quot;</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">carer</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">accountType</span> <span class="o">==</span> <span class="s">&quot;Carer&quot;</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">getAccountInfo</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">patient</span><span class="o">.</span><span class="n">username</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;firstname&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;surname&#39;</span><span class="p">]</span>
+        <span class="n">person</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s">&#39;accounttype&#39;</span><span class="p">]</span>
+        <span class="n">completedConnectionsDetails</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="n">completedFinal</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">completedConnectionsDetails</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="p">[</span><span class="s">&#39;outgoing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">outgoingFinal</span>
+    <span class="n">result</span><span class="p">[</span><span class="s">&#39;incoming&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">incomingFinal</span>
+    <span class="n">result</span><span class="p">[</span><span class="s">&#39;completed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">completedFinal</span>
+
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/getDeactivateReasons&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">getDeactivateReasons</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns a JSON list of possible reasons a user can deactivate&quot;&quot;&quot;</span>
+    <span class="n">reasons</span> <span class="o">=</span> <span class="n">Deactivatereason</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+    <span class="n">reasonList</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">reason</span> <span class="ow">in</span> <span class="n">reasons</span><span class="p">:</span>
+        <span class="n">reasonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reason</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+    <span class="n">reasonList</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">reasonList</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reasonList</span>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
