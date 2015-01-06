@@ -658,8 +658,9 @@ def addInviteeAppointment(details):
     description = details['description']
     )
 
-  appointmentInsert.execute()
-  return "Appointment Added"
+  appId = str(appointmentInsert.execute())
+  
+  return appId
 
 #receives the request from android to allow a user to view their upcoming appointments
 @app.route('/api/getAllAppointments', methods=['POST'])
