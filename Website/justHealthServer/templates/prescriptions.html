@@ -1,0 +1,37 @@
+{% extends "template.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block scriptsAndStyles %}{% endblock %}
+
+{% block content %}
+<h2>Prescriptions</h2>
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  {%for prescription in prescriptions%}
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="heading{{prescription.medication}}">
+      <h3 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.medication}}" aria-expanded="true" aria-controls="collapse{{prescription.medication}}">
+          <h4>{{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
+        </a>
+      </h3>
+      <div id="collapse{{prescription.medication}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{prescription.medication}}">
+        <div class="panel-body">
+          <div class="row"> <h5>
+            <ul>
+              <li>Start Date: {{prescription.startdate}}</li>
+              <li>End Date: {{prescription.enddate}}</li>
+              <li>Extra Info: {{prescription.prerequisite}}</li>
+              <li>Repeat: {{prescription.repeat}} </li>
+            </ul>
+        </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  {% endfor %}
+</div>
+</div>
+{% endblock %}

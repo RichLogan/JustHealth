@@ -3,11 +3,9 @@ package justhealth.jhapp;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class TermsAndConditions extends Activity {
-
-    @Override
+public class CarerAppointments extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.terms_and_conditions);
+        setContentView(R.layout.carer_appointments);
     }
 }

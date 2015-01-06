@@ -39,9 +39,11 @@
             android:id="@+id/connections"
             android:text="Connections"/>
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
+            android:id="@+id/mypatients"
+            android:text="My Patients"
             android:layout_weight="1"/>
     </LinearLayout>
 
@@ -60,6 +62,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/settings"
             android:src="@drawable/ic_action_settings"
             />
     </LinearLayout>

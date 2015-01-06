@@ -610,6 +610,162 @@ def getConnections(username):
 
     return json.dumps(result)
 
+@app.route('/api/addMedication', methods=['POST'])
+def addMedication():
+    return addMedication(request.form['medicationname'])
+
+def addMedication(medicationName):
+    insertMedication = Medication.insert(
+        name = medicationName
+    )
+    with database.transaction():
+        try:
+            insertMedication.execute()
+        except IntegrityError:
+            return medicationName + " already exists"
+    return "Added " + medicationName
+
+@app.route('/api/deleteMedication', methods=['POST'])
+def deleteMedication():
+    return deleteMedication(request.form['medicationname'])
+
+def deleteMedication(medicationName):
+    try:
+        instance = Medication.select().where(Medication.name == medicationName).get()
+        with database.transaction():
+            instance.delete_instance()
+        return "Deleted " + medicationName
+    except:
+        return medicationName + "not found"
+
+@app.route('/api/getMedications')
+def getMedications():
+    medicationList = []
+    result = Medication.select()
+    for x in result:
+        medicationList.append(x.name)
+    return json.dumps(medicationList)
+
+@app.route('/api/addPrescription', methods=['POST'])
+def addPrescription():
+    return addPrescription(request.form)
+
+def addPrescription(details):
+    insertPrescription = Prescription.insert(
+        username = details['username'],
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        frequencyunit = details['frequencyunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        repeat = details['repeat'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform'])
+
+    try:
+        with database.transaction():
+            insertPrescription.execute()
+            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
+    except:
+        return "Failed"
+
+
+@app.route('/api/editPrescription', methods=['POST'])
+def editPrescription():
+    return editPrescription(request.form)
+
+def editPrescription(details):
+    updatePrescription = Prescription.update(
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        frequencyunit = details['frequencyunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        repeat = details['repeat'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
+
+    try:
+        updatePrescription.execute()
+        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
+    except:
+        return "Failed"
+
+@app.route('/api/deletePrescription', methods=['POST'])
+def deletePrescription():
+    return deletePrescription(request.form['prescriptionid'])
+
+def deletePrescription(prescriptionid):
+    try:
+        instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "Deleted"
+    except:
+        return "Failed"
+
+@app.route('/api/getPrescriptions', methods=['POST'])
+def getPrescriptions():
+    return getPrescriptions(request.form['username'])
+
+def getPrescriptions(username):
+    accountType = json.loads(getAccountInfo(username))['accounttype']
+    user = Client.select().where(Client.username == username).get()
+
+    if accountType == "Patient":
+        jsonResult = []
+        results = Prescription.select().dicts().where(Prescription.username == user)
+        for result in results:
+            result['startdate'] = str(result['startdate'])
+            result['enddate'] = str(result['enddate'])
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
+    else:
+        return "Must have Patient account type"
+
+@app.route('/api/getActivePrescriptions', methods=['POST'])
+def getActivePrescriptions():
+    return getActivePrescriptions(request.form['username'])
+
+def getActivePrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
+
+@app.route('/api/getUpcomingPrescriptions', methods=['POST'])
+def getUpcomingPrescriptions():
+    return getUpcomingPrescriptions(request.form['username'])
+
+def getUpcomingPrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
+
+@app.route('/api/getExpiredPrescriptions', methods=['POST'])
+def getExpiredPrescriptions():
+    return getExpiredPrescriptions(request.form['username'])
+
+def getExpiredPrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
+
+@app.route('/api/getPrescription', methods=['POST'])
+def getPrescription():
+    return getPrescription(request.form)
+
+def getPrescription(details):
+    prescriptionid = details['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    prescription['startdate'] = str(prescription['startdate'])
+    prescription['enddate'] = str(prescription['enddate'])
+    return json.dumps(prescription)
+
 @app.route('/api/getDeactivateReasons', methods=['POST'])
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""

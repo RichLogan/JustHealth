@@ -36,10 +36,10 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-"""Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
+    """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
     connections = json.loads(getConnections(session['username']))
@@ -52,10 +52,11 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-"""terms and conditions page link"""
+
 @app.route('/termsandconditions')
 def terms():
-  return render_template('termsandconditions.html')
+    """terms and conditions page link"""
+    return render_template('termsandconditions.html')
 
 @app.route('/corpusindex')
 def corpus():
@@ -174,3 +175,84 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
+
+@app.route('/myPatients')
+def myPatients():
+    # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+
+    # Get all prescriptions
+    activePrescriptions = {}
+    upcomingPrescriptions = {}
+    expiredPrescriptions = {}
+    for patient in patients:
+        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+    return render_template('myPatients.html', patients = patients, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
+
+@app.route('/deletePrescription')
+def deletePrescription_view():
+    prescriptionid = request.args.get('id', '')
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+    username = request.args.get('username', '')
+    result = deletePrescription(prescriptionid)
+    if result != "Failed":
+        result = "Deleted " + prescription.medication.name + " (" + str(prescription.quantity) + "x" + str(prescription.dosage) + ") " + prescription.dosageunit + " for " + username
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/addPrescription', methods=['POST'])
+def addPrescription_view():
+    result = addPrescription(request.form)
+    username = request.form['username']
+    if result != "Could not add prescription":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/updatePrescription', methods=['POST'])
+def updatePrescription_view():
+    result = editPrescription(request.form)
+    username = request.form['username']
+    if result != "Failed":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/prescriptions')
+def  prescriptions():
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)
