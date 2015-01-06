@@ -655,7 +655,7 @@ def addInviteeAppointment(details):
     starttime = details['starttime'],
     enddate = details['enddate'],
     endtime = details['endtime'],
-    description = details['description']
+    description = details['description'],
     private = False;
     )
 
