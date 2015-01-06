@@ -656,6 +656,7 @@ def addInviteeAppointment(details):
     enddate = details['enddate'],
     endtime = details['endtime'],
     description = details['description']
+    private = False;
     )
 
   appId = str(appointmentInsert.execute())
