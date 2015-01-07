@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,16 +41,18 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 /**
- * Created by Stephen on 05/01/15.
+ * Created by Stephen on 06/01/15.
  */
-public class CreateSelfAppointment extends Activity {
+public class CreateCarerPatientAppointment extends Activity {
+
+    private String patient;
 
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_self_appointment);
+        setContentView(R.layout.create_carer_patient_appointment);
         // Set up your ActionBar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
@@ -68,53 +70,18 @@ public class CreateSelfAppointment extends Activity {
                 }
         );
 
+        //add the patient name
+        Intent create = getIntent();
+        patient = create.getStringExtra("patient");
+        String firstName = create.getStringExtra("firstName");
+        String surname = create.getStringExtra("surname");
 
-        populateSpinner();
+        //setting the title of the page
+        TextView appointmentWith = (TextView) findViewById(R.id.appointmentWith);
+        appointmentWith.setText("Create appointment with " + firstName + " " + surname);
+
     }
 
-    private void populateSpinner() {
-        System.out.println("populateSpinner");
-        ArrayList populateSpinner = new ArrayList<String>();
-
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
-
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getAppointmentTypes");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        try {
-            //pass the list to the post request
-            HttpResponse response = httpclient.execute(httppost);
-            System.out.println("post request executed");
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println("this is the array: " + responseString);
-
-            JSONArray appointmentTypes = null;
-
-
-            try {
-                appointmentTypes = new JSONArray(responseString);
-                for (int i = 0; i < appointmentTypes.length(); i++) {
-                    String app = appointmentTypes.getString(i);
-                    populateSpinner.add(app);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Spinner appointmentType = (Spinner) findViewById(R.id.type);
-        appointmentType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
-    }
 
     private void createApp() {
 
@@ -126,6 +93,7 @@ public class CreateSelfAppointment extends Activity {
 
         //Text Boxes
         details.put("creator", username);
+        details.put("username", patient);
         details.put("name", ((EditText) findViewById(R.id.name)).getText().toString());
         details.put("addressnamenumber", ((EditText) findViewById(R.id.buildingNameNumber)).getText().toString());
         details.put("postcode", ((EditText) findViewById(R.id.postcode)).getText().toString());
@@ -134,18 +102,9 @@ public class CreateSelfAppointment extends Activity {
         details.put("enddate", ((EditText) findViewById(R.id.endDate)).getText().toString());
         details.put("endtime", ((EditText) findViewById(R.id.endTime)).getText().toString());
         details.put("description", ((EditText) findViewById(R.id.details)).getText().toString());
+        details.put("apptype", "Carer Visit");
 
-        final Spinner appTypeSpinner = (Spinner) findViewById((R.id.type));
-        final String appType = String.valueOf(appTypeSpinner.getSelectedItem());
-        details.put("apptype", appType);
-
-        if (((CheckBox) findViewById(R.id.appPrivate)).isChecked() == true) {
-            details.put("private", "True");
-        } else {
-            details.put("private", "False");
-        }
-
-        String responseString = Request.post("addPatientAppointment", details, this);
+        String responseString = Request.post("addInviteeAppointment", details, this);
         int id = Integer.parseInt(responseString);
         System.out.println(responseString);
 
@@ -289,4 +248,5 @@ public class CreateSelfAppointment extends Activity {
         formattedDateTime.put("minute", minute);
         return formattedDateTime;
     }
+
 }

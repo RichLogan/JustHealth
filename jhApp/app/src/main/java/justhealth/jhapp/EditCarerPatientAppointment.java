@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -44,10 +43,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 /**
- * Created by Stephen on 05/01/15.
+ * Created by Stephen on 07/01/15.
  */
-public class EditSelfAppointment extends Activity {
-
+public class EditCarerPatientAppointment extends Activity {
     //id of the appointment being edited
     private String appId;
     private String androidAppId;
@@ -59,7 +57,7 @@ public class EditSelfAppointment extends Activity {
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_self_appointment);
+        setContentView(R.layout.create_carer_patient_appointment);
         // Set up your ActionBar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
@@ -80,66 +78,18 @@ public class EditSelfAppointment extends Activity {
 
 
         setCurrentDetails(getIntent());
-        populateSpinner();
-    }
-
-    private void populateSpinner() {
-        System.out.println("populateSpinner");
-        ArrayList populateSpinner = new ArrayList<String>();
-
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
-
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getAppointmentTypes");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        try {
-            //pass the list to the post request
-            HttpResponse response = httpclient.execute(httppost);
-            System.out.println("post request executed");
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println("this is the array: " + responseString);
-
-            JSONArray appointmentTypes = null;
-
-
-            try {
-                appointmentTypes = new JSONArray(responseString);
-                for (int i = 0; i < appointmentTypes.length(); i++) {
-                    String app = appointmentTypes.getString(i);
-                    populateSpinner.add(app);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Spinner appointmentType = (Spinner) findViewById(R.id.type);
-        appointmentType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
-        //This isn't great, had to hard code it and if the options change then this will need to change.
-        //Not sure about another way to do it
-        for (int i = 0; i < populateSpinner.size(); i++) {
-            if(populateSpinner.get(i).equals(appType)) {
-                appointmentType.setSelection(i);
-                return;
-            }
-        }
+        Intent intent = getIntent();
+        String firstName = intent.getStringExtra("firstName");
+        String surname = intent.getStringExtra("surname");
+        //setting the title of the page
+        TextView appointmentWith = (TextView) findViewById(R.id.appointmentWith);
+        appointmentWith.setText("Edit appointment with " + firstName + " " + surname);
     }
 
     private void setCurrentDetails(Intent intent) {
         HashMap<String, String> appointment = (HashMap<String, String>) intent.getSerializableExtra("appointmentDetails");
         appId = appointment.get("appid");
         String name = appointment.get("name");
-        appType = appointment.get("appType");
         String startDate = appointment.get("startDate");
         String startTime = appointment.get("startTime");
         String endDate = appointment.get("endDate");
@@ -147,7 +97,6 @@ public class EditSelfAppointment extends Activity {
         String address = appointment.get("addressNameNumber");
         String postcode = appointment.get("postcode");
         String details = appointment.get("details");
-        String isPrivate = appointment.get("private");
         androidAppId = appointment.get("androidId");
 
         EditText appName = (EditText) findViewById(R.id.name);
@@ -173,16 +122,6 @@ public class EditSelfAppointment extends Activity {
 
         EditText appDetails = (EditText) findViewById(R.id.details);
         appDetails.setText(details);
-
-        CheckBox appPrivate = (CheckBox) findViewById(R.id.appPrivate);
-        System.out.println(isPrivate);
-        if(isPrivate.equals("true")) {
-            appPrivate.setChecked(true);
-        }
-        else {
-            appPrivate.setChecked(false);
-        }
-
     }
 
     private void updateAppointment() {
@@ -195,7 +134,6 @@ public class EditSelfAppointment extends Activity {
 
         //Text Boxes
         details.put("appid", appId);
-        details.put("creator", username);
         details.put("name", ((EditText) findViewById(R.id.name)).getText().toString());
         details.put("addressnamenumber", ((EditText) findViewById(R.id.buildingNameNumber)).getText().toString());
         details.put("postcode", ((EditText) findViewById(R.id.postcode)).getText().toString());
@@ -204,16 +142,8 @@ public class EditSelfAppointment extends Activity {
         details.put("enddate", ((EditText) findViewById(R.id.endDate)).getText().toString());
         details.put("endtime", ((EditText) findViewById(R.id.endTime)).getText().toString());
         details.put("other", ((EditText) findViewById(R.id.details)).getText().toString());
-
-        final Spinner appTypeSpinner = (Spinner) findViewById((R.id.type));
-        final String appType = String.valueOf(appTypeSpinner.getSelectedItem());
-        details.put("apptype", appType);
-
-        if (((CheckBox) findViewById(R.id.appPrivate)).isChecked() == true) {
-            details.put("private", "True");
-        } else {
-            details.put("private", "False");
-        }
+        details.put("apptype", "Carer Visit");
+        details.put("private", "False");
 
         String responseString = Request.post("updateAppointment", details, this);
         System.out.println(responseString);
@@ -234,11 +164,11 @@ public class EditSelfAppointment extends Activity {
     }
 
     private void updateNativeCalendarQuestion(final HashMap<String, String> details) {
-        System.out.println(androidAppId);
         if (androidAppId.equals("null")) {
             finish();
         }
         else {
+
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Update Native Calendar");

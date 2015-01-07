@@ -168,6 +168,42 @@
                 android:value=".Login" />
         </activity>
 
+        <activity
+            android:name=".CarerPatientAppointments"
+            android:label="Just Health"
+            android:parentActivityName=".MyPatients">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
+        <activity
+            android:name=".CreateCarerPatientAppointment"
+            android:label="Just Health"
+            android:parentActivityName=".CarerPatientAppointments">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
+        <activity
+            android:name=".CarerPatientArchivedAppointments"
+            android:label="Just Health"
+            android:parentActivityName=".MyPatients">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
+        <activity
+            android:name=".EditCarerPatientAppointment"
+            android:label="Just Health"
+            android:parentActivityName=".MyPatients">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
     </application>
 
 </manifest>
