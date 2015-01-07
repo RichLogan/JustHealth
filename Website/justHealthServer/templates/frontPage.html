@@ -39,7 +39,7 @@
         });
 
         $('#menuButton').click(function() {
-          $('#menuOptions').modal('toggle');
+          $('#loginForm').toggle();
         })
       });
 
@@ -49,8 +49,21 @@
     </script>
   </head>
 
-  <body>
-    <button id="menuButton" class="btn">Menu</button>
+  <body class="clear">
+    <div id="loginForm">
+      <form class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="username">Username</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <label class="sr-only" for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-trans"><i class="fa fa-sign-in" style="font-size: 2em;"></i></button>
+      </form>
+    </div>
+
     <div id="landing">
       <div id="mainTitle">
         <h1>JustHealth</h1>
@@ -64,22 +77,26 @@
       </video>
     </div>
 
-    <div id="about">
-      <h1>JustHealth strives to control chronic health issues through technology</h1>
-    </div>
-
-    <!-- Menu Modal -->
-    <div class="modal fade" id="menuOptions">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button class="btn menuButtons">Login</button>
-            <button class="btn menuButtons">About</button>
-            <button class="btn menuButtons">Legal</button>
-          </div>
+    <div class="segment" id="about">
+      <div class="row" class="clear" style="margin: 0;">
+          <div class="col-md-6 segmentImage" style="font-size: 30em;">
+          <i class="fa fa-mobile"></i>
+        </div>
+        <div class="col-md-6 segmentText">
+          <p>JustHealth helps you track your medication <strong>anytime</strong>, <strong>anywhere</strong></p>
         </div>
       </div>
     </div>
 
+    <div class="segment" style="background-color: #2272EB;">
+      <div class="row" class="clear" style="margin: 0;">
+        <div class="col-md-6 segmentText">
+          Patients can connect with <strong>Carers</strong>, <strong>Doctors</strong> and <strong>Friends / Family</strong>
+        </div>
+        <div class="col-md-6 segmentImage" style="font-size: 15em;margin-top: 0.5em;">
+          <i class="fa fa-users"></i>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

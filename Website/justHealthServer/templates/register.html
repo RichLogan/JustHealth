@@ -41,6 +41,20 @@ $(document).ready(function() {
 			alert("Date not valid");
 		}
 	});
+
+	$('#usernameInput').keyup(function() {
+		content = $('#usernameInput').val();
+		$.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
+			if (data == "True") {
+				$('#usernameError').addClass("has-error");
+				$('#usernameErrorLabel').text("Username (Username already taken)");
+			}
+			else {
+				$('#usernameError').addClass("has-success");
+				$('#usernameErrorLabel').text("Username (Username available)");
+			}
+		});
+	});
 });
 </script>
 {% endblock %}
@@ -48,6 +62,7 @@ $(document).ready(function() {
 {% block content %}
 
 <h2>Registration</h2>
+<!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
 <form name="register" action="/register" id="register" method="POST">
 	<!-- Display any messages -->
 	{% if message != null %}
@@ -57,9 +72,9 @@ $(document).ready(function() {
 		</div>
 	{% endif %}
 
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input class="form-control" type="text" name="username">
+  <div class="form-group" id="usernameError">
+    <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
+    <input id="usernameInput" class="form-control" type="text" name="username">
   </div>
 
   <div class="form-group">
@@ -120,7 +135,7 @@ $(document).ready(function() {
 		<br />
 	</div>
 </form>
-
+	<!--A modal which shows the terms and conditions a user is agreeing to when they register -->
 	<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

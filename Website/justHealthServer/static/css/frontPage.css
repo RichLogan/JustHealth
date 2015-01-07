@@ -1,5 +1,6 @@
 body{
-  background-color: #2272EB;
+
+  background-color: #19BB9B;
   color: #FFFFFF;
   width: 100% !important;
 }
@@ -22,27 +23,65 @@ video#background {
   text-align: center;
 }
 
-#about {
-  margin: 0 auto;
-  text-align: center;
-  height: 100vh;
-  background-color: #2272EB;
-  color: #000000;
+.btn-trans {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 0.1em solid white;
+  font-size: 1em;
 }
 
 #menuButton {
-  background-color: transparent;
-  color: #FFFFFF;
-  border: 1px solid white;
   position: fixed;
-  margin-left: 93%;
+  margin-left: 96%;
   margin-top: 1%;
   z-index: 2;
+}
+
+#loginForm {
+  position: fixed;
+  margin-left: 87em;
+  margin-top: 0.9%;
+  z-index: 2;
+}
+
+#loginForm input {
+  height: 3em;
+}
+
+#closeButton {
+  background-color: transparent;
+  color: #FF0000;
+  border: 0.1em solid red;
 }
 
 .menuButtons {
   width: 100%;
   margin-top: 1%;
   margin-bottom: 1%;
-  background-color: #000000;
+  /*background-color: #000000;*/
+  border: 0.2em solid #2272EB;
+}
+
+.menuButtons:link {
+  color: #FFF;
+}
+
+.segment {
+  height: 30em;
+  background-color: #19BB9B;
+  text-align: center;
+}
+
+.segmentText {
+  font-size: 3em;
+  margin-top: 3em;"
+}
+
+.segmentImage {
+  color: #FFFFFF;
+}
+
+.clear {
+  padding: 0px;
+  margin: 0;
 }

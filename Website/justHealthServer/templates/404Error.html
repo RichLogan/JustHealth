@@ -1,0 +1,19 @@
+{% extends "template.html" %}
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block scriptsAndStyles %}
+<script>
+  $(document).ready(function() {
+    $('#content').css('width', '100%');
+    $('#content').css('padding', '0');
+    $('#content').css('margin', '0');
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="errorDiv">
+	<img src="/static/images/404ErrorPage.png" class="errorImage">
+</div>
+{% endblock %}

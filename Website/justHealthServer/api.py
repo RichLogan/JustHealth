@@ -113,6 +113,11 @@ def registerUser():
     sendVerificationEmail(profile['username'])
     return "True"
 
+@app.route('/api/usernameCheck', methods=['POST'])
+def usernameCheck():
+    """Returns True if a username has already been taken"""
+    return str(Client.select().where(Client.username == request.form['username']).count() != 0)
+
 @app.route('/api/authenticate', methods=['POST'])
 def authenticate():
     """Authenticates a username and password and returns the result of the authentication check"""
