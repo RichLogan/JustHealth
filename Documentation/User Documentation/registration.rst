@@ -2,6 +2,8 @@
 Registration
 ============
 
+*All users*
+
 ---------------
 Web Application
 ---------------

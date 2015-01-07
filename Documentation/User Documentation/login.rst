@@ -2,6 +2,8 @@
 Logging In
 ============
 
+*All users*
+
 ---------------
 Web Application
 ---------------

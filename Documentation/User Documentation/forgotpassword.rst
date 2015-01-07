@@ -2,6 +2,8 @@
 Forgotten Password
 ============
 
+*All users*
+
 ---------------
 Web Application
 ---------------

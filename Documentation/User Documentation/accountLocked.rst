@@ -2,6 +2,8 @@
 Account Locked
 ============
 
+*All users*
+
 After 5 failed login attempts a users account will be locked. This means you will be unable to login until you unlock your account.
 
 This can be done by following the steps below, it is the same process for both the Android and the Web application.

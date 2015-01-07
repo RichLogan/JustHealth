@@ -6,16 +6,6 @@
 Welcome to JustHealth's User Documentation!
 ======================================
 
-.. toctree::
-   :maxdepth: 6
-
-   registration
-   login
-   forgotpassword
-   accountLocked
-
-
-
 JustHealth is a healthcare app designed to support care for patients with chronic health conditions and their patients.
 
 *This document will list all the functionality the Android app and the Web app hold.
@@ -28,3 +18,14 @@ JustHealth is a healthcare app designed to support care for patients with chroni
 4. Medical Professionals
 
 *Under each functionality heading I will list the features for the respective user.
+
+
+
+.. toctree::
+   :maxdepth: 6
+
+   registration
+   login
+   forgotpassword
+   accountLocked
+   deactivate
