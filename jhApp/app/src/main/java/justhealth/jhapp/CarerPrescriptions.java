@@ -138,15 +138,24 @@ public class CarerPrescriptions extends Activity{
                                 startActivityForResult(intent, 1);
                             }
                         });
-                        alert.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                        alert.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                            //Cancelled
+                                AlertDialog.Builder confirmDelete = new AlertDialog.Builder(CarerPrescriptions.this);
+                                confirmDelete.setTitle(medication + " (" + dosage + dosageunit + ")");
+                                confirmDelete.setMessage("Are you sure you want to delete this prescription?");
+                                confirmDelete.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        deletePrescription(prescriptionid);
+                                    }
+                                });
+                                confirmDelete.setNegativeButton("No", null);
+                                confirmDelete.show();
                             }
                         });
+                        alert.setPositiveButton("Got It!", null);
                         alert.show();
                     }
                 });
-
             }
             catch (JSONException e) {
                 System.out.print(e.getStackTrace());
@@ -164,5 +173,19 @@ public class CarerPrescriptions extends Activity{
             finish();
             startActivity(getIntent());
         }
+    }
+
+    private void deletePrescription(String prescriptionid) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("prescriptionid", prescriptionid);
+        String response = Request.post("deletePrescription", parameters, getApplicationContext());
+        if (response.equals("Deleted")) {
+            Feedback.toast("Prescription Deleted", true, getApplicationContext());
+        }
+        else {
+            Feedback.toast("Deletion failed, please try again.", false, getApplicationContext());
+        }
+        finish();
+        startActivity(getIntent());
     }
 }
