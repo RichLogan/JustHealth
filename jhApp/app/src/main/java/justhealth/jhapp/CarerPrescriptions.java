@@ -50,14 +50,27 @@ public class CarerPrescriptions extends Activity{
         title.setText("Prescriptions: " + firstname + " " + surname + " (" + username + ")");
 
         //Display Prescriptions
-        displayPrescriptions(getPrescriptions(username));
+        displayPrescriptions(getPrescriptions(username, "active"), "active");
+        displayPrescriptions(getPrescriptions(username, "upcoming"), "upcoming");
+        displayPrescriptions(getPrescriptions(username, "expired"), "expired");
     }
 
-    private JSONArray getPrescriptions(String username) {
+    private JSONArray getPrescriptions(String username, String type) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
+        String url = "getPrescriptions";
+        if (type.equals("active")) {
+            url = "getActivePrescriptions";
+        }
+        else if (type.equals("upcoming")) {
+            url = "getUpcomingPrescriptions";
+        }
+        else if (type.equals("expired")) {
+            url = "getExpiredPrescriptions";
+        }
+
+        String response = Request.post(url, parameters, getApplicationContext());
         try {
             JSONArray result = new JSONArray(response);
             return result;
@@ -68,7 +81,7 @@ public class CarerPrescriptions extends Activity{
         return null;
     }
 
-    private void displayPrescriptions(JSONArray prescriptionList) {
+    private void displayPrescriptions(JSONArray prescriptionList, String type) {
         for(int x=0;x<prescriptionList.length();x++) {
             try {
                 final JSONObject prescription = prescriptionList.getJSONObject(x);
@@ -93,7 +106,19 @@ public class CarerPrescriptions extends Activity{
                 prescriptionButton.setText(prescriptionString);
 
                 //Add button to view
-                LinearLayout ll = (LinearLayout)findViewById(R.id.prescriptionButtons);
+
+                int layout = R.id.prescriptionButtons;
+                if (type.equals("active")) {
+                    layout = R.id.activePrescriptionButtons;
+                }
+                else if (type.equals("upcoming")) {
+                    layout = R.id.upcomingPrescriptionButtons;
+                }
+                else if (type.equals("expired")) {
+                    layout = R.id.expiredPrescriptionButtons;
+                }
+
+                LinearLayout ll = (LinearLayout)findViewById(layout);
                 ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                 LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();

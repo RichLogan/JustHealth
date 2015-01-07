@@ -39,8 +39,47 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/prescriptionButtons"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/prescriptionButtons">
+
+                    <TextView android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="20dip"
+                        android:layout_marginTop="20dip"
+                        android:textColor="@color/header"
+                        android:text="Active Prescriptions"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/activePrescriptionButtons"
+                        android:orientation="vertical">
+                    </LinearLayout>
+
+                    <TextView android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="20dip"
+                        android:layout_marginTop="20dip"
+                        android:textColor="@color/header"
+                        android:text="Upcoming Prescriptions"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/upcomingPrescriptionButtons"
+                        android:orientation="vertical">
+                    </LinearLayout>
+
+                    <TextView android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="20dip"
+                        android:layout_marginTop="20dip"
+                        android:textColor="@color/header"
+                        android:text="Expired Prescriptions"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/expiredPrescriptionButtons"
+                        android:orientation="vertical">
+                    </LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
