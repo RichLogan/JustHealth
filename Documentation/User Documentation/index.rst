@@ -12,6 +12,7 @@ Welcome to JustHealth's User Documentation!
    registration
    login
    forgotpassword
+   accountLocked
 
 
 
