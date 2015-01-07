@@ -221,7 +221,7 @@
                                       <div class="modal-body" style="height: 650px;">
                                         <!-- Details of Medication -->
                                         <form class="form-horizontal" action="/updatePrescription" method="POST">
-                                          <fieldset disabled>
+                                          <fieldset id="fieldset{{prescription.prescriptionid}}" disabled>
                                             <input type="hidden" value="{{prescription.prescriptionid}}" name="prescriptionid">
                                             <input type="hidden" value="{{patient.username}}" name="username">
                                             <div class="form-group">
@@ -309,12 +309,13 @@
                                             </div>
 
                                             <input class="btn btn-success" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
+                                            <a class="btn btn-danger" style="display:none;" id="{{prescription.prescriptionid}}delete" href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}&username={{patient.username}}" onclick="return confirm('Are you sure you want to delete this prescription?')">Delete</a>
                                           </fieldset>
                                         </form>
                                       </div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-default" onclick="$('#activeModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                        <button type="button" class="btn btn-warning" onclick="$('fieldset').attr('disabled', false);$('#{{prescription.prescriptionid}}update').toggle();">Edit</button>
+                                        <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
                                       </div>
                                     </div>
                                   </div>
@@ -342,7 +343,7 @@
                                       <div class="modal-body" style="height: 650px;">
                                         <!-- Details of Medication -->
                                         <form class="form-horizontal" action="/updatePrescription" method="POST">
-                                          <fieldset disabled>
+                                          <fieldset id="fieldset{{prescription.prescriptionid}}" disabled>
                                             <input type="hidden" value="{{prescription.prescriptionid}}" name="prescriptionid">
                                             <input type="hidden" value="{{patient.username}}" name="username">
                                             <div class="form-group">
@@ -430,12 +431,13 @@
                                             </div>
 
                                             <input class="btn btn-success" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
+                                            <a class="btn btn-danger" style="display:none;" id="{{prescription.prescriptionid}}delete" href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}" onclick="return confirm('Are you sure you want to delete this prescription?')">Delete</a>
                                           </fieldset>
                                         </form>
                                       </div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-default" onclick="$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                        <button type="button" class="btn btn-warning" onclick="$('fieldset').attr('disabled', false);$('#{{prescription.prescriptionid}}update').toggle();">Edit</button>
+                                        <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
                                       </div>
                                     </div>
                                   </div>
@@ -461,7 +463,7 @@
                                       <div class="modal-body" style="height: 650px;">
                                         <!-- Details of Medication -->
                                         <form class="form-horizontal" action="/updatePrescription" method="POST">
-                                          <fieldset disabled>
+                                          <fieldset id="fieldset{{prescription.prescriptionid}}" disabled>
                                             <input type="hidden" value="{{prescription.prescriptionid}}" name="prescriptionid">
                                             <input type="hidden" value="{{patient.username}}" name="username">
                                             <div class="form-group">
@@ -549,12 +551,13 @@
                                             </div>
 
                                             <input class="btn btn-success" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
+                                            <a class="btn btn-danger" style="display:none;" id="{{prescription.prescriptionid}}delete" href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}" onclick="return confirm('Are you sure you want to delete this prescription?')">Delete</a>
                                           </fieldset>
                                         </form>
                                       </div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-default" onclick="$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                        <button type="button" class="btn btn-warning" onclick="$('fieldset').attr('disabled', false);$('#{{prescription.prescriptionid}}update').toggle();">Edit</button>
+                                        <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
                                       </div>
                                     </div>
                                   </div>
