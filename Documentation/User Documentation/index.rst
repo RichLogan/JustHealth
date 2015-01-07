@@ -7,9 +7,11 @@ Welcome to JustHealth's User Documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 6
 
    registration
+   login
+   forgotpassword
 
 
 
