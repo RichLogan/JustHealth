@@ -29,3 +29,4 @@ JustHealth is a healthcare app designed to support care for patients with chroni
    forgotpassword
    accountLocked
    deactivate
+   searchandconnect
