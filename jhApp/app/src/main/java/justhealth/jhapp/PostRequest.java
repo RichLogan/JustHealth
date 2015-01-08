@@ -27,14 +27,14 @@ public class PostRequest {
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
 
-        //Authentication
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
-
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+//        //Authentication
+//        SharedPreferences account = getSharedPreferences("account", 0);
+//        String username = account.getString("username", null);
+//        String password = account.getString("password", null);
+//
+//        String authentication = username + ":" + password;
+//        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+//        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
