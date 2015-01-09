@@ -12,13 +12,13 @@ class BaseModel(Model):
         database = database
 
 class Client(BaseModel):
-    accountdeactivated = BooleanField()
-    accountlocked = BooleanField()
+    accountdeactivated = BooleanField(default=False)
+    accountlocked = BooleanField(default=False)
     dob = DateField()
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    verified = BooleanField()
+    verified = BooleanField(default=False)
 
     class Meta:
         db_table = 'client'
@@ -45,8 +45,8 @@ class Patient(BaseModel):
 class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
-    password = CharField(max_length=255, unique=True)
-    username = ForeignKeyField(db_column='username', unique=True, rel_model=Client, to_field='username', related_name='user')
+    password = CharField(max_length=255)
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
 
     class Meta:
         primary_key = CompositeKey('password', 'username')
@@ -98,17 +98,24 @@ def createAll():
 def dropAll():
     if Client.table_exists():
         Client.drop_table(cascade=True)
+
     if Patient.table_exists():
         Patient.drop_table(cascade=True)
+
     if Carer.table_exists():
         Carer.drop_table(cascade=True)
+
     if uq8LnAWi7D.table_exists():
         uq8LnAWi7D.drop_table(cascade=True)
+
     if Deactivatereason.table_exists():
         Deactivatereason.drop_table(cascade=True)
+
     if Userdeactivatereason.table_exists():
         Userdeactivatereason.drop_table(cascade=True)
+
     if Relationship.table_exists():
         Relationship.drop_table(cascade=True)
+
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)

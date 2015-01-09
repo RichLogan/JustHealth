@@ -16,6 +16,22 @@ a:active  {color:#ff0000; background-color:transparent}
   color: #FFFFFF;
 }
 
+.errorDiv { 
+  width: 100% !important;
+  height: 100%;
+  margin-left: 0;
+  float: left;
+  display: block;
+  background-color: #FFFFFF;
+}
+
+.errorImage {
+  width: 100%;
+  height: 100%;
+  float: left;
+  position: fixed;
+}
+
 .largeIcon {
   font-size: 100px;
   text-align: center;
@@ -85,7 +101,7 @@ header {
 #content {
   padding:10px;
   padding-bottom:40px;   /* Height of the footer */
-  width: 40%;
+  width: 65%;
   margin: 0 auto;
   margin-top: 35px;
 }

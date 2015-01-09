@@ -8,10 +8,12 @@ class UnknownField(object):
     pass
 
 class BaseModel(Model):
+    """Base Model"""
     class Meta:
         database = database
 
 class Client(BaseModel):
+    """Represents a user of the application"""
     accountdeactivated = BooleanField(default=False)
     accountlocked = BooleanField(default=False)
     dob = DateField()
@@ -45,11 +47,11 @@ class Patient(BaseModel):
 class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
-    password = CharField(max_length=255, unique=True)
-    username = ForeignKeyField(db_column='username', unique=True, rel_model=Client, to_field='username')
+    password = CharField(max_length=255)
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
 
     class Meta:
-        primary_key = CompositeKey('password, username')
+        primary_key = CompositeKey('password', 'username')
         db_table = 'uq8lnawi7d'
 
 class Deactivatereason(BaseModel):
