@@ -414,6 +414,21 @@ def searchPatientCarer(username, searchterm):
 
         jsonResult = []
         for result in results:
+            # Check if result is already a connection
+            currentConnections = getConnections(username)
+
+            for connection in currentConnections['outgoing']:
+                if connection['username'] == result['username']:
+                    result['message'] = "Already Requested"
+            
+            for connection in currentConnections['incoming']:
+                if connection['username'] == result['username']:
+                    result['message'] = "Request waiting"
+
+            for connection in currentConnections['outgoing']:
+                if connection['username'] == result['username']:
+                    result['message'] = "Already Connected"
+
             jsonResult.append(result)
         return json.dumps(jsonResult)
 
