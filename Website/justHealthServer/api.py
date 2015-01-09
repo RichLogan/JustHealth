@@ -615,9 +615,15 @@ def getConnections(username):
 def addPatientAppointment():
   return addPatientAppointment(request.form)
 
-#allows a patient to add an appointment
+#allows a all self appointments to be added 
+#Note originally there was going to be a seperate method for carers, however this is no longer the case. 
 def addPatientAppointment(details):
 # Build insert user query
+  if details['private'] == "True":
+    isPrivate = True
+  else: 
+    isPrivate = False
+
   appointmentInsert = Appointments.insert(
     creator = details['creator'],
     name = details['name'],
@@ -629,7 +635,7 @@ def addPatientAppointment(details):
     enddate = details['enddate'],
     endtime = details['endtime'],
     description = details['description'],
-    private = details['private']
+    private = isPrivate
   )
 
   appId = str(appointmentInsert.execute())
@@ -762,6 +768,11 @@ def updateAppointment():
   return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
+  if private == "True": 
+    isPrivate = True
+  else: 
+    isPrivate = False
+
   updateAppointment = Appointments.update(
     name = name,
     apptype = apptype,
@@ -772,7 +783,7 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
     enddate = endDate,
     endtime = endTime,
     description = description,
-    private = private).where(Appointments.appid == appid)
+    private = isPrivate).where(Appointments.appid == appid)
 
   with database.transaction():
     updateAppointment.execute()

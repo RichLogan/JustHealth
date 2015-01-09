@@ -221,7 +221,7 @@ def updateAppointment_view():
     try:
       private = request.form['private']
     except KeyError, e:
-      private = False
+      private = "False"
 
     updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
     flash(updated, 'success')
