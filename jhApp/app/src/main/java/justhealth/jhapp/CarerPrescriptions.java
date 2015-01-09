@@ -50,14 +50,27 @@ public class CarerPrescriptions extends Activity{
         title.setText("Prescriptions: " + firstname + " " + surname + " (" + username + ")");
 
         //Display Prescriptions
-        displayPrescriptions(getPrescriptions(username));
+        displayPrescriptions(getPrescriptions(username, "active"), "active");
+        displayPrescriptions(getPrescriptions(username, "upcoming"), "upcoming");
+        displayPrescriptions(getPrescriptions(username, "expired"), "expired");
     }
 
-    private JSONArray getPrescriptions(String username) {
+    private JSONArray getPrescriptions(String username, String type) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
+        String url = "getPrescriptions";
+        if (type.equals("active")) {
+            url = "getActivePrescriptions";
+        }
+        else if (type.equals("upcoming")) {
+            url = "getUpcomingPrescriptions";
+        }
+        else if (type.equals("expired")) {
+            url = "getExpiredPrescriptions";
+        }
+
+        String response = Request.post(url, parameters, getApplicationContext());
         try {
             JSONArray result = new JSONArray(response);
             return result;
@@ -68,7 +81,7 @@ public class CarerPrescriptions extends Activity{
         return null;
     }
 
-    private void displayPrescriptions(JSONArray prescriptionList) {
+    private void displayPrescriptions(JSONArray prescriptionList, String type) {
         for(int x=0;x<prescriptionList.length();x++) {
             try {
                 final JSONObject prescription = prescriptionList.getJSONObject(x);
@@ -93,7 +106,19 @@ public class CarerPrescriptions extends Activity{
                 prescriptionButton.setText(prescriptionString);
 
                 //Add button to view
-                LinearLayout ll = (LinearLayout)findViewById(R.id.prescriptionButtons);
+
+                int layout = R.id.prescriptionButtons;
+                if (type.equals("active")) {
+                    layout = R.id.activePrescriptionButtons;
+                }
+                else if (type.equals("upcoming")) {
+                    layout = R.id.upcomingPrescriptionButtons;
+                }
+                else if (type.equals("expired")) {
+                    layout = R.id.expiredPrescriptionButtons;
+                }
+
+                LinearLayout ll = (LinearLayout)findViewById(layout);
                 ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                 LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();
@@ -113,15 +138,24 @@ public class CarerPrescriptions extends Activity{
                                 startActivityForResult(intent, 1);
                             }
                         });
-                        alert.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                        alert.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                            //Cancelled
+                                AlertDialog.Builder confirmDelete = new AlertDialog.Builder(CarerPrescriptions.this);
+                                confirmDelete.setTitle(medication + " (" + dosage + dosageunit + ")");
+                                confirmDelete.setMessage("Are you sure you want to delete this prescription?");
+                                confirmDelete.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        deletePrescription(prescriptionid);
+                                    }
+                                });
+                                confirmDelete.setNegativeButton("No", null);
+                                confirmDelete.show();
                             }
                         });
+                        alert.setPositiveButton("Got It!", null);
                         alert.show();
                     }
                 });
-
             }
             catch (JSONException e) {
                 System.out.print(e.getStackTrace());
@@ -139,5 +173,19 @@ public class CarerPrescriptions extends Activity{
             finish();
             startActivity(getIntent());
         }
+    }
+
+    private void deletePrescription(String prescriptionid) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("prescriptionid", prescriptionid);
+        String response = Request.post("deletePrescription", parameters, getApplicationContext());
+        if (response.equals("Deleted")) {
+            Feedback.toast("Prescription Deleted", true, getApplicationContext());
+        }
+        else {
+            Feedback.toast("Deletion failed, please try again.", false, getApplicationContext());
+        }
+        finish();
+        startActivity(getIntent());
     }
 }
