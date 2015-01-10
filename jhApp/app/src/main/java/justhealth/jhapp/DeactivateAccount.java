@@ -2,17 +2,22 @@ package justhealth.jhapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -126,8 +131,40 @@ public class DeactivateAccount extends Activity {
         final String reason = String.valueOf(spinnerReason.getSelectedItem());
         reasons.put("reason", reason);
 
-        PostRequest.post("deactivateaccount", reasons);
+        String response = PostRequest.post("deactivateaccount", reasons);
+        if(response.equals("Deleted")) {
+            getSharedPreferences("account", 0).edit().clear().commit();
 
+            //show the alert to say it is successful
+            Context context = getApplicationContext();
+            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated and all associated information with it has been deleted.";
+            //Length
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            //Position
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+            toast.show();
+            finish();
+
+            Intent goToStart = new Intent(this, Login.class);
+            startActivity(goToStart);
+        }
+        else if(response.equals("Kept")) {
+            //show the alert to say it is successful
+            Context context = getApplicationContext();
+            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated. However, if you want to come back we have kept all of your details on file; it'll be quick and easy to reactivate.";
+            //Length
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            //Position
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+            toast.show();
+
+            finish();
+            Intent goToStart = new Intent(this, Login.class);
+            startActivity(goToStart);
+        }
     }
+
 
 }
