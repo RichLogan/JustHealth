@@ -188,9 +188,9 @@ def deactivateAccount():
 
     if delete:
         # Delete User
-        deletedUser = Client.delete().where(Client.username == request.form['username'])
+        deletedUser = Client.get(Client.username == request.form['username'])
         with database.transaction():
-            deletedUser.execute()
+            deletedUser.delete_instance(recursive=True)
         return "Deleted"
     else:
         # Keep user
