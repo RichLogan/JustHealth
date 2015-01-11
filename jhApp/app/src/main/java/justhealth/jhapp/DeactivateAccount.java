@@ -2,14 +2,22 @@ package justhealth.jhapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -40,9 +48,19 @@ public class DeactivateAccount extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deactivate_account);
         populateSpinner();
+
+        Button submit = (Button) findViewById(R.id.deactivateButton);
+        submit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                popUpDeactivate();
+            }
+        });
     }
 
     private void populateSpinner() {
+
+        System.out.println("populateSpinner");
+        ArrayList populateSpinner = new ArrayList<String>();
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
@@ -58,25 +76,95 @@ public class DeactivateAccount extends Activity {
         try {
             //pass the list to the post request
             HttpResponse response = httpclient.execute(httppost);
-            System.out.println(response);
+            System.out.println("post request executed");
 
             String responseString = EntityUtils.toString(response.getEntity());
             System.out.println("this is the array: " + responseString);
 
-            JSONArray deactivateReasons = null;
-            try {
-                deactivateReasons = new JSONArray(responseString);
-                //ArrayAdapter<String> reasons = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, (List<String>) deactivateReasons);
-                //reasons.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                //Spinner deactivateSpinner = (Spinner) findViewById((R.id.reasonsDeactivate));
-                //deactivateSpinner.setAdapter(reasons);
+            JSONArray appointmentTypes = null;
 
+
+            try {
+                appointmentTypes = new JSONArray(responseString);
+                for (int i = 0; i < appointmentTypes.length(); i++) {
+                    String app = appointmentTypes.getString(i);
+                    populateSpinner.add(app);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        Spinner appointmentType = (Spinner) findViewById(R.id.reasonsDeactivate);
+        appointmentType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
     }
+
+    private void popUpDeactivate() {
+        HashMap<String, String> reasons = new HashMap<>();
+
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+        //user account to be deleted
+        reasons.put("username", username);
+
+        //checkbox whether all data should be deleted
+        CheckBox deleteAll = (CheckBox) findViewById(R.id.checkBox);
+        String delete;
+        if (deleteAll.isChecked()) {
+            delete = "on";
+        }
+        else {
+            delete = "off";
+        }
+        reasons.put("deletecheckbox", delete);
+
+        //additional comments field
+        String comments = ((EditText) findViewById(R.id.comments)).getText().toString();
+        reasons.put("comments", comments);
+
+        //reason selected in the spinner
+        final Spinner spinnerReason = (Spinner) findViewById((R.id.reasonsDeactivate));
+        final String reason = String.valueOf(spinnerReason.getSelectedItem());
+        reasons.put("reason", reason);
+
+        String response = Request.post("deactivateaccount", reasons, this);
+        if(response.equals("Deleted")) {
+            getSharedPreferences("account", 0).edit().clear().commit();
+
+            //show the alert to say it is successful
+            Context context = getApplicationContext();
+            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated and all associated information with it has been deleted.";
+            //Length
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            //Position
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+            toast.show();
+            finish();
+
+            Intent goToStart = new Intent(this, Login.class);
+            startActivity(goToStart);
+        }
+        else if(response.equals("Kept")) {
+            //show the alert to say it is successful
+            Context context = getApplicationContext();
+            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated. However, if you want to come back we have kept all of your details on file; it'll be quick and easy to reactivate.";
+            //Length
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            //Position
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+            toast.show();
+
+            finish();
+            Intent goToStart = new Intent(this, Login.class);
+            startActivity(goToStart);
+        }
+    }
+
+
 }

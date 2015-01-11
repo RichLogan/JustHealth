@@ -3,7 +3,6 @@ package justhealth.jhapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
