@@ -1,14 +1,10 @@
 package justhealth.jhapp;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
@@ -20,7 +16,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +29,7 @@ import java.util.Set;
 /**
  * Created by Ben McGregor on 21/11/2014.
  */
-public class Profile extends ActionBarActivity {
+public class Profile extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

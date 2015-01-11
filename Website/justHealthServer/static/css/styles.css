@@ -173,3 +173,22 @@ footer #footerContainer {
 .passwordStrong{
 	color: #30D917;
 }
+
+.vertical-center {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+#myPatientsTab {
+  background-color: #2272EB;
+  color: #FFFFFF;
+}
+
+#myPatientsPatientName {
+  color: #FFFFFF;
+}
+
+#myPatientsPatientName:hover {
+  color: #FFFFFF;
+}

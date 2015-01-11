@@ -1,0 +1,269 @@
+{% extends "template.html" %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block scriptsAndStyles %}
+<script>
+  $(document).ready(function(){
+    $('.makeDataTable').DataTable({
+      paging:false,
+      info:false,
+      searching:false,
+    });
+
+    
+    /*var allDates = $(document.getElementsByClassName('dateForJS'));
+    var now = moment().format();
+    //for loops through allDates
+    // each allDates.value() needs to equal 
+    for (var i = 0, len = allDates.length; i<len; i++){
+      var formatting = allDates.html(i);
+      var momentFormatting = moment(formatting);
+      format = momentFormatting.calendar();
+      alert(format);
+      allDates.html(format);
+    }*/
+
+    $('time').each(function(i, e) {
+      var time = moment($(e).attr('datetime'));
+      $(e).html('<span>' + time.calendar() + '</span>');
+    });
+
+    //Shows confirm box on delete appointment
+    $("#deleteapp").click(function(e) {
+      if (!confirm('Are you sure you want to delete this appointment?')) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+	<h3>Your Appointments</h3>
+	<br />
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class=flashes>
+      {% for category, message in messages %}
+        <div class="alert alert-{{category}} alert-dismissible" role="alert">
+        <button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        {{message}}
+        </div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  <!--{% if request != None %}
+    <div class="alert alert-{{type}} alert-dismissible" role="alert">
+      <button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      {{request}}
+    </div>
+  {% endif %}-->
+
+<div role="tabpanel">
+
+  <ul class="nav nav-tabs nav-justified" role="tablist">
+    <li role="presentation" class="active"><a href="#upcoming" aria-controls="upcoming" role="tab" data-toggle="tab">Upcoming</a></li>
+    <li role="presentation"><a href="#newAppointment" aria-controls="newAppointment" role="tab" data-toggle="tab">Create</a></li>
+    <li role="presentation"><a href="#archived" aria-controls="archived" role="tab" data-toggle="tab">Past</a></li>
+  </ul>
+
+  <br />
+</div>
+
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active container" id="upcoming" style="width: 100%">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="upcoming">
+      {% block upcoming %}
+        {% for appointment in appointments %}
+          {% if appointment.upcoming == True %}
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
+                <h3 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p>{{appointment.name}}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                      </div>
+                    </div>
+                  </a>
+                </h3>
+                <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
+                        <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
+                        {% if appointment.private == True %}
+                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br /> 
+                        {% endif %}
+                      </div>
+                      <div class="col-md-6">
+                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+                        </iframe>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <a href="/updateAppointment?appid={{appointment.appid}}">
+                          <button class="btn btn-default">Update</button>
+                        </a>
+                      </div>
+                      <div class="col-md-2">
+                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                          <input type="hidden" name="appid" value="{{appointment.appid}}">
+                          <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
+                      </div>
+                      <div class="col-md-8">
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endblock %}
+    </div>
+  </div>
+
+	<!--This shows the tab for the new appointments-->
+	<div role="tabpanel" class="tab-pane fade" id="newAppointment">
+		<div class="row">
+      <div class="panel panel-info">
+        <div class="panel-body">
+          <form name="createAppointment" method="POST" onsubmit="return !!validateFormAddAppointment();" >
+          	<div class="form-group">
+    					<label for="name">Appointment Title</label>
+    					<input class="form-control" type="text" name="name">
+						</div>
+						<div class="form-group">
+				      <label for="apptype">Appointment Type</label>
+				      <select name="apptype" class="form-control">
+				      	<option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
+                {% for type in appType %}
+                  <option>{{type.type}}</option>
+                {% endfor %}
+				      </select>
+				  	</div>
+						<div class="form-group">
+							<label for="addressnamenumber">Building Name/Number</label>
+							<input class="form-control" type="text" name="addressnamenumber">
+						</div>
+						<div class="form-group">
+							<label for="postcode">Postcode</label>
+							<input class="form-control" type="text" name="postcode">
+						</div>
+						<div class="form-group">
+							<label for="startdate">Start Date</label>
+							<input onfocusout="checkPastDate()" class="form-control" type="date" name="startdate" id="startdate">
+              <span id="validDate"></span>
+						</div>
+						<div class="form-group">
+							<label for="starttime">Start Time</label>
+							<input class="form-control" type="time" name="starttime" id="starttime">
+						</div>
+						<div class="form-group">
+							<label for="enddate">End Date</label>
+							<input class="form-control" type="date" name="enddate" id="enddate">
+              <span id=""></span>
+						</div>
+						<div class="form-group">
+							<label for="endtime">End Time</label>
+							<input class="form-control" type="time" name="endtime" id="endtime">
+						</div>
+						<div class="form-group">
+							<label for="description">Details</label>
+							<textarea class="form-control" name="description" id="description"></textarea>
+						</div>
+            <div  class="form-group">
+              <input type="checkbox" name="private" value="True"> Tick to make the appointment private
+            </div> 
+            <div class="form-group"> 
+              <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+            </div>
+          </form>
+        </div>
+  		</div>
+  	</div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane fade in active container" id="archived" style="width: 100%">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="archived">
+      {% block archived %}
+        {% for appointment in appointments %}
+          {% if appointment.upcoming == False %}
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
+                <h3 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p>{{appointment.name}}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                      </div>
+                    </div>
+                  </a>
+                </h3>
+                <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
+                        <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+                        </iframe>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <a href="/updateAppointment?appid={{appointment.appid}}">
+                          <button class="btn btn-default">Update</button>
+                        </a>
+                      </div>
+                      <div class="col-md-2">
+                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment');">
+                          <input type="hidden" name="appid" value="{{appointment.appid}}">
+                          <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>                       
+                      </div>
+                      <div class="col-md-8">
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endblock %}
+    </div>
+  </div>
+
+
+
+
+</div>
+
+<!--Upcoming Appointments-->
+
+
+
+{% endblock %}

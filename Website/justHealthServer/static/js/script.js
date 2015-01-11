@@ -117,3 +117,19 @@ function terms()
         message.innerHTML = "<i class='fa fa-times'></i>"
     }
 }
+
+function validateFormAddAppointment() {
+    var x = document.forms["createappointment"]["name","apptype", "postcode", "startdate", "starttime", "enddate", "endtime"].value;
+    if (x==null || x=="") {
+        alert("All fields be filled out");
+    }
+}
+
+function checkPastDate() {
+    var selectedDate = $('#startdate').startdate('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+        // selected date is in the past
+        $('#validDate').html('<i class="fa fa-times"></i> Date is in the past').addClass('wrongInputs');
+    } 
+}

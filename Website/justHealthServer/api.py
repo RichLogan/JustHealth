@@ -610,6 +610,343 @@ def getConnections(username):
 
     return json.dumps(result)
 
+#receives the request from android allows a patient to add an appointment
+@app.route('/api/addPatientAppointment', methods=['POST'])
+def addPatientAppointment():
+  return addPatientAppointment(request.form)
+
+#allows a all self appointments to be added 
+#Note originally there was going to be a seperate method for carers, however this is no longer the case. 
+def addPatientAppointment(details):
+# Build insert user query
+  if details['private'] == "True":
+    isPrivate = True
+  else: 
+    isPrivate = False
+
+  appointmentInsert = Appointments.insert(
+    creator = details['creator'],
+    name = details['name'],
+    apptype = details['apptype'],
+    addressnamenumber = details['addressnamenumber'],
+    postcode = details['postcode'],
+    startdate = details['startdate'],
+    starttime = details['starttime'],
+    enddate = details['enddate'],
+    endtime = details['endtime'],
+    description = details['description'],
+    private = isPrivate
+  )
+
+  appId = str(appointmentInsert.execute())
+  
+  return appId
+
+  
+
+@app.route('/api/addInviteeAppointment', methods=['POST'])
+def addInviteeAppointment():
+  return addInviteeAppointment(request.form)
+
+def addInviteeAppointment(details):
+  #Build insert user query
+  appointmentInsert = Appointments.insert(
+    creator = details['creator'],
+    invitee = details['username'],
+    name = details['name'],
+    apptype = details['apptype'],
+    addressnamenumber = details['addressnamenumber'],
+    postcode = details['postcode'],
+    startdate = details['startdate'],
+    starttime = details['starttime'],
+    enddate = details['enddate'],
+    endtime = details['endtime'],
+    description = details['description'],
+    private = False
+    )
+
+  appId = str(appointmentInsert.execute())
+  
+  return appId
+
+#receives the request from android to allow a user to view their upcoming appointments
+@app.route('/api/getAllAppointments', methods=['POST'])
+def getAllAppointments():
+  return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
+
+#gets the appointments from the database
+def getAllAppointments(loggedInUser, targetUser):
+  #get user account type 
+  currentUser_type = json.loads(getAccountInfo(loggedInUser))['accounttype']
+
+  if currentUser_type == "Carer":
+    if loggedInUser == targetUser:
+       appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+    else:
+      appointments = Appointments.select().where(((Appointments.creator == targetUser) & (Appointments.private == False)) | ((Appointments.invitee == targetUser) & (Appointments.private == False))).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  elif currentUser_type == "Patient":
+    appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  
+  appointments.execute()
+
+  currentDateTime = datetime.datetime.now()
+
+  allAppointments = []
+  for app in appointments:
+    appointment = {}
+    appointment['appid'] = app.appid
+    appointment['creator'] = app.creator.username
+    appointment['name'] = app.name
+    appointment['apptype'] = str(app.apptype.type)
+    appointment['addressnamenumber'] = app.addressnamenumber
+    appointment['postcode'] = app.postcode
+    appointment['startdate'] = str(app.startdate)
+    appointment['starttime'] = str(app.starttime)
+    appointment['enddate'] = str(app.enddate)
+    appointment['endtime'] = str(app.endtime)
+    appointment['description'] = app.description
+    appointment['private'] = app.private
+    appointment['androideventid'] = app.androideventid
+    
+    dateTime = str(app.startdate) + " " + str(app.starttime)
+    dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
+
+    if (dateTime >= currentDateTime):
+      appointment['upcoming'] = True
+    else:
+      appointment['upcoming'] = False
+
+    allAppointments.append(appointment)
+
+  return json.dumps(allAppointments)
+
+
+#deletes an appointment
+@app.route('/api/deleteAppointment', methods=['POST'])
+def deleteAppointment():
+  return deleteAppointment(request.form['username'], request.form['appid'])
+
+def deleteAppointment(user, appid):
+  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+
+  if isCreator.creator.username == user:
+    with database.transaction():
+      isCreator.delete_instance()
+    return "Appointment Deleted"
+
+#gets the appointment that is to be updated
+@app.route('/api/getUpdateAppointment', methods=['POST'])
+def getUpdateAppointment():
+  return updateAppointment(request.form['username'], request.form['appid'])
+
+def getUpdateAppointment(user, appid):
+  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+
+  if isCreator.creator.username == user:
+    jsonResult = []
+
+    appointment = {}
+    appointment['appid'] = isCreator.appid
+    appointment['creator'] = isCreator.creator.username
+    appointment['name'] = isCreator.name
+    appointment['apptype'] = str(isCreator.apptype.type)
+    appointment['addressnamenumber'] = isCreator.addressnamenumber
+    appointment['postcode'] = isCreator.postcode
+    appointment['startdate'] = str(isCreator.startdate)
+    appointment['starttime'] = str(isCreator.starttime)
+    appointment['enddate'] = str(isCreator.enddate)
+    appointment['endtime'] = str(isCreator.endtime)
+    appointment['description'] = isCreator.description
+    appointment['private'] = isCreator.private
+
+    jsonResult.append(appointment)
+    return json.dumps(jsonResult)
+
+#update an appointment
+@app.route('/api/updateAppointment', methods=['POST'])
+def updateAppointment():
+  return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
+
+def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
+  if private == "True": 
+    isPrivate = True
+  else: 
+    isPrivate = False
+
+  updateAppointment = Appointments.update(
+    name = name,
+    apptype = apptype,
+    addressnamenumber = addressnamenumber,
+    postcode = postcode,
+    startdate = startDate,
+    starttime = startTime,
+    enddate = endDate,
+    endtime = endTime,
+    description = description,
+    private = isPrivate).where(Appointments.appid == appid)
+
+  with database.transaction():
+    updateAppointment.execute()
+
+  return "Appointment Updated"
+
+
+@app.route('/api/addMedication', methods=['POST'])
+def addMedication():
+    return addMedication(request.form['medicationname'])
+
+def addMedication(medicationName):
+    insertMedication = Medication.insert(
+        name = medicationName
+    )
+    with database.transaction():
+        try:
+            insertMedication.execute()
+        except IntegrityError:
+            return medicationName + " already exists"
+    return "Added " + medicationName
+
+@app.route('/api/deleteMedication', methods=['POST'])
+def deleteMedication():
+    return deleteMedication(request.form['medicationname'])
+
+def deleteMedication(medicationName):
+    try:
+        instance = Medication.select().where(Medication.name == medicationName).get()
+        with database.transaction():
+            instance.delete_instance()
+        return "Deleted " + medicationName
+    except:
+        return medicationName + "not found"
+
+@app.route('/api/getMedications')
+def getMedications():
+    medicationList = []
+    result = Medication.select()
+    for x in result:
+        medicationList.append(x.name)
+    return json.dumps(medicationList)
+
+@app.route('/api/addPrescription', methods=['POST'])
+def addPrescription():
+    return addPrescription(request.form)
+
+def addPrescription(details):
+    insertPrescription = Prescription.insert(
+        username = details['username'],
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        frequencyunit = details['frequencyunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        repeat = details['repeat'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform'])
+
+    try:
+        with database.transaction():
+            insertPrescription.execute()
+            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
+    except:
+        return "Failed"
+
+
+@app.route('/api/editPrescription', methods=['POST'])
+def editPrescription():
+    return editPrescription(request.form)
+
+def editPrescription(details):
+    updatePrescription = Prescription.update(
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        frequencyunit = details['frequencyunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        repeat = details['repeat'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
+
+    try:
+        updatePrescription.execute()
+        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
+    except:
+        return "Failed"
+
+@app.route('/api/deletePrescription', methods=['POST'])
+def deletePrescription():
+    return deletePrescription(request.form['prescriptionid'])
+
+def deletePrescription(prescriptionid):
+    try:
+        instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "Deleted"
+    except:
+        return "Failed"
+
+@app.route('/api/getPrescriptions', methods=['POST'])
+def getPrescriptions():
+    return getPrescriptions(request.form['username'])
+
+def getPrescriptions(username):
+    accountType = json.loads(getAccountInfo(username))['accounttype']
+    user = Client.select().where(Client.username == username).get()
+
+    if accountType == "Patient":
+        jsonResult = []
+        results = Prescription.select().dicts().where(Prescription.username == user)
+        for result in results:
+            result['startdate'] = str(result['startdate'])
+            result['enddate'] = str(result['enddate'])
+            jsonResult.append(result)
+        return json.dumps(jsonResult)
+    else:
+        return "Must have Patient account type"
+
+@app.route('/api/getActivePrescriptions', methods=['POST'])
+def getActivePrescriptions():
+    return getActivePrescriptions(request.form['username'])
+
+def getActivePrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
+
+@app.route('/api/getUpcomingPrescriptions', methods=['POST'])
+def getUpcomingPrescriptions():
+    return getUpcomingPrescriptions(request.form['username'])
+
+def getUpcomingPrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
+
+@app.route('/api/getExpiredPrescriptions', methods=['POST'])
+def getExpiredPrescriptions():
+    return getExpiredPrescriptions(request.form['username'])
+
+def getExpiredPrescriptions(username):
+    allPrescriptions = json.loads(getPrescriptions(username))
+    return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
+
+@app.route('/api/getPrescription', methods=['POST'])
+def getPrescription():
+    return getPrescription(request.form)
+
+def getPrescription(details):
+    prescriptionid = details['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    prescription['startdate'] = str(prescription['startdate'])
+    prescription['enddate'] = str(prescription['enddate'])
+    return json.dumps(prescription)
+
 @app.route('/api/getDeactivateReasons', methods=['POST'])
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""
@@ -619,3 +956,21 @@ def getDeactivateReasons():
         reasonList.append(reason.reason)
     reasonList = json.dumps(reasonList)
     return reasonList
+
+@app.route('/api/getAppointmentTypes', methods=['POST'])
+def getAppointmentTypes():
+    """Returns a JSON list of possible appointment types"""
+    types = Appointmenttype.select()
+    typeList = []
+    for appType in types:
+      typeList.append(appType.type)
+    typeList = json.dumps(typeList)
+    return typeList
+
+@app.route('/api/addAndroidEventId', methods=['POST'])
+def addAndroidEventId():
+  dbId = request.form['dbid']
+  androidId = request.form['androidid']
+  addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
+
+  return "Android ID added to database"
