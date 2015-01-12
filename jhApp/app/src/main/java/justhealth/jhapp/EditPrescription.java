@@ -1,6 +1,8 @@
 package justhealth.jhapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -41,7 +43,16 @@ public class EditPrescription extends Activity {
         update.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
-                    editPrescription();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(EditPrescription.this);
+                    alert.setTitle("Confirm Update");
+                    alert.setMessage("Are you sure you want to update this prescription?");
+                    alert.setNegativeButton("Cancel", null);
+                    alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            editPrescription();
+                        }
+                    });
+                    alert.show();
                 }
             }
         );

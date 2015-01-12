@@ -109,6 +109,8 @@
                 android:value=".Login" />
         </activity>
 
+        <activity android:name=".EditProfile" />
+
         <activity
             android:name=".DeactivateAccount"
             android:label="@string/app_name"

@@ -1,8 +1,11 @@
 package justhealth.jhapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -15,7 +18,23 @@ public class Profile extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        final String profileInfo = getProfile();
+        print(profileInfo);
+
         print(getProfile());
+
+        //Edit Profile Link
+        Button editProfile = (Button) findViewById(R.id.editProfile);
+        editProfile.setOnClickListener(
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), EditProfile.class);
+                    intent.putExtra("profileInfo", profileInfo);
+                    startActivityForResult(intent, 1);
+                }
+            }
+        );
     }
 
     private String getProfile() {
@@ -52,6 +71,20 @@ public class Profile extends Activity {
             email.setText(profileInfo.getString("email"));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data.getExtras().containsKey("response")){
+            Boolean success = false;
+            if (resultCode == 1) { success = true;}
+            Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
+            System.out.println(data.getStringExtra("response"));
+            finish();
+            startActivity(getIntent());
         }
     }
 }
