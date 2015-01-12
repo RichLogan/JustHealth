@@ -57,5 +57,14 @@ public class HomeCarer extends Activity {
                     }
                 }
         );
+
+        ImageButton profile = (ImageButton) findViewById(R.id.profile);
+        profile.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(HomeCarer.this, Profile.class));
+                    }
+                }
+        );
     }
 }
