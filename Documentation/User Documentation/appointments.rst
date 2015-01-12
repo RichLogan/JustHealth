@@ -104,9 +104,7 @@ Web Application
 
 4. Click 'Add Appointment'
 
-5. Pop  up about native calendar?
-
-6. Your appointment is now created
+5. Your appointment is now created
 
 
 
@@ -116,17 +114,17 @@ Web Application
 **Carer:**
 *A carer can edit their own appointments and only patient appointments they created*
 
-Edit a personal appointment
+*Edit a personal appointment*
 
 1. Click on the calendar icon on the home screen.
 
-2. Find the appointment you wish to delete
+2. Find the appointment you wish to edit and click on it.
 
-3. Click edit and fill in the details you wish to change
+3. Click update and fill in the details you wish to change
 
 4. Click update
 
- Edit a patients appointment you created
+*Edit a patients appointment you created*
 
 1. Click on mypatients page
 
@@ -134,13 +132,22 @@ Edit a personal appointment
 
 3. Click on appointments
 
-4. Click edit and fill in the details you wish to change
+4. Click edit (the green pencil) and fill in the details you wish to change
 
 5. Click update
 
 
 **Patient:**
 *A patient can only edit their own appointments*
+
+1. Click on the calendar icon on the home screen.
+
+2. Find the appointment you wish to edit and click on it.
+
+3. Click update and fill in the details you wish to change
+
+4. Click update
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3.0 Deleting an appointment
@@ -156,6 +163,9 @@ To delete a personal appointment
 
 3. Click the delete icon
 
+4. Click 'Ok' to the pop up confirming the delete
+
+
 To delete a patients appointment you created
 
 1. Click on mypatients page
@@ -165,6 +175,8 @@ To delete a patients appointment you created
 3. Click on appointments
 
 4. Click delete
+
+5. Click 'Ok' to the pop up confirming the delete
 
 
 **Patient:**
@@ -176,6 +188,8 @@ To delete a patients appointment you created
 
 3. Click delete
 
+4. Click 'Ok' to the pop up confirming the delete
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4.0 View personal appointments
@@ -186,7 +200,7 @@ To delete a patients appointment you created
 
 2. On the tab layout to view upcoming appointment click the upcoming tab
 
-3. To view past appointments click the archive tab
+3. To view past appointments click the past tab
 
 **Patient:**
 
@@ -194,7 +208,7 @@ To delete a patients appointment you created
 
 2. On the tab layout to view upcoming appointment click the upcoming tab
 
-3. To view past appointments click the archive tab
+3. To view past appointments click the past tab
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 5.0 View a patients appointment
@@ -208,8 +222,6 @@ To delete a patients appointment you created
 3. Next click on appointments
 
 4. Here lists all non private appointments from the patient
-
-
 
 
 --------------------
