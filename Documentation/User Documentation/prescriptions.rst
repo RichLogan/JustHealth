@@ -111,24 +111,89 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Patient:**
 
+1. Click on the medicine flask on the home page
+
+2. This page then lists all the prescriptions you are currently taking
+
+3. To find out more click on the name of the drug
+
+4. This shows further details about your prescription
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2.0 Adding a prescription
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
+1. On the home screen click on the my patients tile
+
+2. Click on the patient you wish to add a prescription for
+
+3. Click 'Prescriptions'
+
+4. Click the button saying 'Add new Prescription'
+
+5. Enter in the form details this requires:
+
+    - Medication- the name of the Drug (Select from the drop down list)
+
+    - Dosage- The amount of the drug beint taken (e.g. 100)
+
+    - Frequency- How many the patient should take (e.g. 1)
+
+    - Quantity- The amount the patient will take at once (e.g. 2)
+
+    - Dosage Unit- The measurement of the dosage (e.g. mg)
+
+    - Frequency Unit- How often the patient should take the prescription (e.g. Daily)
+
+    - Type- The dosage form (e.g. Tablet)
+
+    - Start Date- The date the patient should start taking the medication
+
+    - End Date- The date the patient should stop taking the medication
+
+    - Repeat- Yes or No if it is a repeat prescription
+
+    - Stock- The patients current stock
+
+    - Observations- Any extra details the patient should know about taking the medication
+
+6. The click 'Add Medication'
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3.0 Editing a prescription
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-**Patient:**
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4.0 Deleting a prescription
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
+1. On the home screen click on the my patients tile
+
+2. Click on the patient you wish to add a prescription for
+
+3. Click 'Prescriptions'
+
+4. Make sure you are viewing the active prescriptions
+
+5. Click on the prescription you would like to edit
+
+6. Click edit and change the fields you wish
+
+7. Click to confirm the update
+
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5.0 View a patients prescriptions
+4.0 View a patients prescriptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
+
+1. On the home screen click on the my patients tile
+
+2. Click on the patient you wish to add a prescription for
+
+3. Click 'Prescriptions'
+
+4. Here there are two sections 'Active' and 'Upcoming & Expired'
+
+5. The Active tab lists all the patients current prescriptions
+
+6. Upcoming & Expired lists the upcoming prescriptions which are due to start soon and the expired prescriptions
