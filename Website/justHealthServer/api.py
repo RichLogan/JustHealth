@@ -248,7 +248,7 @@ def resetPassword():
         return "Invalid details"
 
 ####
-# Get account type
+# Account Information
 ####
 
 @app.route('/api/getAccountInfo', methods=['POST'])
@@ -258,37 +258,56 @@ def getAccountInfo():
 def getAccountInfo(username):
     """Get Account information from client and patient/carer table"""
     result = {}
-    thisUser = str(username)
     try:
-      patient = Patient.get(username=thisUser)
-      user = Patient.select().join(Client).where(Client.username==thisUser).get()
+      user = Patient.select().join(Client).where(Client.username==str(username)).get()
       result['accounttype'] = "Patient"
-      result['firstname'] = user.firstname
-      result['surname'] = user.surname
-      result['username'] = user.username.username
-      result['email'] = user.username.email
-      result['dob'] = str(user.username.dob)
-      if user.ismale:
-        result['gender'] = 'Male'
-      else:
-        result['gender'] ='Female'
-
-      return json.dumps(result)
     except Patient.DoesNotExist:
-      result['accounttype'] = "Carer"
-      carer = Carer.get(username=thisUser)
-      user = Carer.select().join(Client).where(Client.username==thisUser).get()
-      result['firstname'] = user.firstname
-      result['surname'] = user.surname
-      result['username'] = user.username.username
-      result['email'] = user.username.email
-      result['dob'] = str(user.username.dob)
-      if user.ismale:
+        user = Carer.select().join(Client).where(Client.username==str(username)).get()
+        result['accounttype'] = "Carer"
+
+    result['firstname'] = user.firstname
+    result['surname'] = user.surname
+    result['username'] = user.username.username
+    result['email'] = user.username.email
+    result['dob'] = str(user.username.dob)
+    if user.ismale:
         result['gender'] = 'Male'
-      else:
+    else:
         result['gender'] ='Female'
-      return json.dumps(result)
-    return None
+    return json.dumps(result)
+
+@app.route('/api/editProfile', methods=['POST'])
+def editProfile():
+    return editProfile(request.form)
+
+def editProfile(details):
+    user = None
+    # What type of user are we dealing with?
+    try:
+        user = Patient.select().join(Client).where(Client.username==details['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==details['username']).get()
+
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
+
+    gender = False
+    if details['ismale'] == "on":
+        gender = True
+
+    # Update
+    user.firstname = details['firstname']
+    user.surname = details['surname']
+    user.ismale = gender
+    clientObject.dob = details['dob']
+    clientObject.email = details['email']
+    
+    # Execute Updated
+    with database.transaction():
+        user.save()
+        clientObject.save()
+        return "Edit Successful"
+    return "Failed"
 
 ####
 # Account Helper Functions
