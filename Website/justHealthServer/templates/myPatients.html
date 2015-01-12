@@ -106,7 +106,7 @@
                           {% endif %}
                         {% endwith %}
                         <!-- End flashed message -->
-
+                        <!--Add prescription form -->
                         <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
                           <input name="username" type="hidden" value="{{patient.username}}">
                           <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
@@ -200,6 +200,7 @@
                             <hr />
                           </div>
                         </form>
+                        <!--End form -->
 
                         <div role="tabpanel">
                           <!-- Nav tabs -->

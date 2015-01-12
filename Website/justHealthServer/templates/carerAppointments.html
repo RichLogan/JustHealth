@@ -69,9 +69,9 @@ $('time').each(function(i, e) {
     <li role="presentation"><a href="#newAppointment" aria-controls="newAppointment" role="tab" data-toggle="tab">Create Appointment</a> </li>
   </ul>
 
-  <br /> 
+  <br />
 </div>
-
+  <!--Tab for upcoming appointments -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active container" id="upcoming" style="width: 100%">
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="upcoming">
@@ -133,7 +133,7 @@ $('time').each(function(i, e) {
       </div>
     </div>
 
-      <!--This shows the tab for the new appointments-->
+      <!--This shows the tab to create a new appointments-->
     <div role="tabpanel" class="tab-pane fade" id="newAppointment">
       <div class="row">
         <div class="panel panel-info">
@@ -182,7 +182,7 @@ $('time').each(function(i, e) {
                 <label for="description">Details</label>
                 <textarea class="form-control" name="description" id="description"></textarea>
               </div>
-              <div class="form-group"> 
+              <div class="form-group">
                 <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
               </div>
             </form>
@@ -191,10 +191,4 @@ $('time').each(function(i, e) {
       </div>
     </div>
   </div>
-
-
-<!--Upcoming Appointments-->
-
-
-
 {% endblock %}
