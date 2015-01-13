@@ -131,5 +131,5 @@ function checkPastDate() {
     if (selectedDate < now) {
         // selected date is in the past
         $('#validDate').html('<i class="fa fa-times"></i> Date is in the past').addClass('wrongInputs');
-    } 
+    }
 }

@@ -4,7 +4,6 @@
    contain the root `toctree` directive.
 
 Welcome to JustHealth's User Documentation!
-=================================================
 
 JustHealth is a healthcare app designed to support carers for patients with chronic health conditions and their patients.
 

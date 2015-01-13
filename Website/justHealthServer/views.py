@@ -68,6 +68,15 @@ def references():
 def sitemap():
   return render_template('sitemap.html')
 
+@app.route('/settings')
+@needLogin
+def settings():
+    profileDetails = json.loads(getAccountInfo(session['username']))
+    if profileDetails['accounttype'] == "Patient":
+        return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Patient')
+    elif profileDetails['accounttype'] == "Carer":
+        return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Carer' )
+
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin

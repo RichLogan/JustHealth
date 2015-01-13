@@ -1,3 +1,4 @@
+
 ==================
 Connect to a user
 ==================
@@ -61,7 +62,6 @@ Web Application
 #. To reject the connection click the red 'Reject'button.
 
 
-
 ---------------------
 Mobile Application
 ---------------------
@@ -82,7 +82,6 @@ Mobile Application
 #. After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.
 
 #. You have now made the connection request, the final step is for the person you have requested to accept the request.
-
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
