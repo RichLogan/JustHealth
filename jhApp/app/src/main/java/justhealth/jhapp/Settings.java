@@ -24,5 +24,24 @@ public class Settings extends Activity {
                     }
                 }
         );
+
+        Button privacy = (Button) findViewById(R.id.privacy);
+        privacy.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(Settings.this, Privacy.class));
+                    }
+                }
+        );
+
+        Button profile = (Button) findViewById(R.id.profile);
+        profile.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        startActivity(new Intent(Settings.this, Profile.class));
+                    }
+                }
+        );
     }
+
 }

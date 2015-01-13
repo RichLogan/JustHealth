@@ -208,6 +208,15 @@
                 android:value=".Login" />
         </activity>
 
+        <activity
+            android:name=".Privacy"
+            android:label="Just Health"
+            android:parentActivityName=".MyPatients">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
     </application>
 
 </manifest>

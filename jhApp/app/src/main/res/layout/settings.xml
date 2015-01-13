@@ -15,6 +15,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/profile"
             android:text="@string/profile"/>
     </LinearLayout>
 
@@ -29,7 +30,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/deactivate"
-            android:text="@string/account"/>
+            android:text="Deactivate Account"/>
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +43,8 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/privacy"/>
+            android:id="@+id/privacy"
+            android:text="privacy and FAQ's"/>
     </LinearLayout>
 
     <LinearLayout
