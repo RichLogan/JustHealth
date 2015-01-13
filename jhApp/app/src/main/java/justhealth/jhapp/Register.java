@@ -1,77 +1,37 @@
 package justhealth.jhapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-// Post Requests
 
 public class Register extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
         Button registerButton = (Button) findViewById(R.id.register);
-        registerButton = (Button) findViewById(R.id.register);
         registerButton.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-                        sendRegister();
-                    }
+            new View.OnClickListener() {
+                public void onClick(View view) {
+                    sendRegister();
                 }
+            }
         );
 
-//        TextView termsAndConditions = (TextView)findViewById(R.id.tsandcs);
-//        termsAndConditions.setOnClickListener(
-//               new View.OnClickListener() {
-//                   public void onClick(View view) {
-//                       startActivity(new Intent(Register.this, TermsAndConditions.class));
-//                   }
-//               }
-//        );
-
-        TextView forgotPassword = (TextView) findViewById(R.id.link_to_forgot_password);
-        forgotPassword.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-                        startActivity(new Intent(Register.this, ForgotPassword.class));
-                    }
-                }
-        );
+        //TODO: Link to Terms and Conditions
     }
 
     private void sendRegister() {
@@ -84,6 +44,14 @@ public class Register extends Activity {
         details.put("surname", ((EditText) findViewById(R.id.surname)).getText().toString());
         details.put("dob", ((EditText) findViewById(R.id.dob)).getText().toString());
         details.put("email", ((EditText) findViewById(R.id.email)).getText().toString());
+
+        // Check empty
+        for (String value : details.values()) {
+            if (value == null || value.equals("")) {
+                Feedback.toast("All fields must be filled out", false, getApplicationContext());
+                return;
+            }
+        }
 
         //Gender
         Boolean ismale = null;
@@ -105,79 +73,45 @@ public class Register extends Activity {
         String confirmPassword = ((EditText) findViewById(R.id.confirmPassword)).getText().toString();
 
         if (((CheckBox) findViewById(R.id.tsandcs)).isChecked()) {
-            System.out.println("come on");
             details.put("password", password);
             details.put("confirmpassword", confirmPassword);
-
-            //TODO: set the terms and conditions properly
             details.put("terms", "on");
-
             post(details);
         } else {
-            //Ts and cs not accepted
+            Feedback.toast("Terms and Conditions must be accepted", false, getApplicationContext());
         }
     }
 
     public void post(HashMap<String, String> details) {
-        // Create a new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/registerUser");
+        String response  = Request.post("registerUser", details, getApplicationContext());
 
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+        // Registration Failed
+        if (!response.equals("True")) {
+            Feedback.toast(response, false, getApplicationContext());
+            return;
+        }
 
-            Set<Map.Entry<String, String>> detailsSet = details.entrySet();
-            for (Map.Entry<String, String> s : detailsSet) {
-                System.out.println(s);
-                nameValuePairs.add(new BasicNameValuePair(s.getKey(), s.getValue()));
-            }
-
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-            System.out.println(response.getStatusLine());
-            String responseStr = EntityUtils.toString(response.getEntity());
-            System.out.println(responseStr);
-            if (responseStr.equals("True")) {
-                //Register Done, send to login, insert success message
-            }
-            else {
-                //Check if the Layout already exists
-                LinearLayout alert = (LinearLayout)findViewById(R.id.alertMessage);
-                if(alert == null){
-                    //Insert the alert message
-                    LinearLayout insertAlert = (LinearLayout)findViewById(R.id.insertRegisterAlert);
-                    View insertAlertView = getLayoutInflater().inflate(R.layout.alert_message, insertAlert, false);
-                    insertAlert.addView(insertAlertView);
+        // Registration Successful
+        AlertDialog.Builder alert = new AlertDialog.Builder(Register.this);
+        alert.setTitle("Registration Successful!");
+        alert.setMessage("Please check your email for a verification link. ");
+        alert.setNegativeButton("Go to email", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Intent emailLauncher = new Intent(Intent.ACTION_VIEW);
+                emailLauncher.setType("message/rfc822");
+                try{
+                    startActivity(Intent.createChooser(emailLauncher, ""));
+                } catch(ActivityNotFoundException e){
+                    Feedback.toast("No email client found", false, getApplicationContext());
                 }
-
-                TextView myTextView = (TextView) findViewById(R.id.alertText);
-                myTextView.setText(responseStr);
             }
-
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.register, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        });
+        alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                startActivity(new Intent(Register.this, Login.class));
+            }
+        });
+        alert.show();
     }
 
     //validation on password and confirm password
