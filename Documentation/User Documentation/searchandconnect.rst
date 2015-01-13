@@ -1,11 +1,18 @@
+<<<<<<< HEAD
 ============
 Connect to a user
 ============
+=======
+==================
+Connect to a user
+==================
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 *All users*
 
 *We recommend all connections are established when the two users are together to avoid any confusing with remembering the four digit passcode*
 
+<<<<<<< HEAD
 ---------------
 Web Application
 ---------------
@@ -13,6 +20,15 @@ Web Application
 ^^^^^^^^
 Creating the Connection
 ^^^^^^^^
+=======
+---------------------
+Web Application
+---------------------
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1.0 Creating the Connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. First click on the tile with a magnifying glass on (3,3).
 
@@ -28,9 +44,15 @@ Creating the Connection
 
 #. You have now made the connection request, the final step is for the person you have requested to accept the request.
 
+<<<<<<< HEAD
 ^^^^^^^^^
 Accepting a connection
 ^^^^^^^^^
+=======
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2.0 Accepting a connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. To accept a connection you need to navigate to the profile page (1,1) and click on the 'connections' tab.
 
@@ -42,17 +64,29 @@ Accepting a connection
 
 #. On clicking complete the conenction will be established.
 
+<<<<<<< HEAD
 ^^^^^^^^
 Cancelling a connection
 ^^^^^^^^
+=======
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3.0 Cancelling a connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. If you wish to cancel a request, please navigate to the profile page (1,1), the click on the connections tab.
 
 #. Under the heading outgoing you will see the connection pending, to cancle simply click the cancel button at the end of the row.
 
+<<<<<<< HEAD
 ^^^^^^^^
 Rejecting a connection
 ^^^^^^^^
+=======
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4.0 Rejecting a connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. To reject a connection you need to navigate to the profile page (1,1) and click on the 'connections' tab.
 
@@ -62,6 +96,7 @@ Rejecting a connection
 
 
 
+<<<<<<< HEAD
 ---------------
 Mobile Application
 ---------------
@@ -69,6 +104,15 @@ Mobile Application
 ^^^^^^^^
 Creating the Connection
 ^^^^^^^^
+=======
+---------------------
+Mobile Application
+---------------------
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1.0 Creating the Connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 1. First click on the tile with a magnifying glass on.
 
 #. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
@@ -85,9 +129,15 @@ Creating the Connection
 
 
 
+<<<<<<< HEAD
 ^^^^^^^^^
 Accepting a connection
 ^^^^^^^^^
+=======
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2.0 Accepting a connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. To accept a connection you need to navigate to the profile page and click on the 'connections' tab.
 
@@ -100,17 +150,29 @@ Accepting a connection
 #. On clicking complete the conenction will be established.
 
 
+<<<<<<< HEAD
 ^^^^^^^^
 Cancelling a connection
 ^^^^^^^^
+=======
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3.0 Cancelling a connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. If you wish to cancel a request, please navigate to the profile page (1,1), the click on the connections tab.
 
 #. Under the heading outgoing you will see the connection pending, to cancle simply click the cancel button at the end of the row.
 
+<<<<<<< HEAD
 ^^^^^^^^
 Rejecting a connection
 ^^^^^^^^
+=======
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4.0 Rejecting a connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
 
 1. To reject a connection you need to navigate to the profile page (1,1) and click on the 'connections' tab.
 

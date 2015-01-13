@@ -1,8 +1,8 @@
 # Generated From:
-# $ pwiz.py -e postgresql -u justhealthtest -H penguin.kent.ac.uk -p 5432 justhealthtest -P rded$or
+# $ pwiz.py -e postgresql -u justhealth -H penguin.kent.ac.uk -p 5432 justhealth -P dsomoid
 from peewee import *
 
-database = PostgresqlDatabase('justhealthtest', **{'host': 'penguin.kent.ac.uk', 'password': 'rded$or', 'port': 5432, 'user': 'justhealthtest'})
+database = PostgresqlDatabase('justhealth', **{'host': 'penguin.kent.ac.uk', 'password': 'dsomoid', 'port': 5432, 'user': 'justhealth'})
 
 class UnknownField(object):
     pass
@@ -12,13 +12,13 @@ class BaseModel(Model):
         database = database
 
 class Client(BaseModel):
-    accountdeactivated = BooleanField(default=False)
-    accountlocked = BooleanField(default=False)
+    accountdeactivated = BooleanField()
+    accountlocked = BooleanField()
     dob = DateField()
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    verified = BooleanField(default=False)
+    verified = BooleanField()
 
     class Meta:
         db_table = 'client'
@@ -45,8 +45,8 @@ class Patient(BaseModel):
 class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
-    password = CharField(max_length=255)
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
+    password = CharField(max_length=255, unique=True)
+    username = ForeignKeyField(db_column='username', unique=True, rel_model=Client, to_field='username')
 
     class Meta:
         primary_key = CompositeKey('password', 'username')
@@ -84,6 +84,32 @@ class Patientcarer(BaseModel):
         primary_key = CompositeKey('carer', 'patient')
         db_table = 'patientcarer'
 
+
+class Appointmenttype(BaseModel):
+    type = CharField(max_length=25, primary_key=True)
+
+    class Meta:
+        db_table = 'appointmenttype'
+
+
+class Appointments(BaseModel):
+    appid = PrimaryKeyField()
+    creator = ForeignKeyField(db_column='creator', rel_model=Client, to_field='username', related_name='creator')
+    invitee = ForeignKeyField(db_column='invitee', rel_model=Client, to_field='username', null=True, related_name='invitee')
+    name = CharField(max_length=1000)
+    apptype = ForeignKeyField(db_column='apptype', rel_model=Appointmenttype, to_field='type', null=True, related_name='apptype')
+    addressnamenumber = CharField(max_length=50, null=True)
+    postcode = CharField(max_length=8, null=True)
+    startdate = DateField()
+    starttime = TimeField(formats='%H:%M')
+    enddate = DateField()
+    endtime = TimeField(formats='%H:%M')
+    description = CharField(max_length=5000, null=True)
+    private = BooleanField()
+
+    class Meta:
+        db_table = 'appointments'
+
 def createAll():
     dropAll()
     Client.create_table()
@@ -94,28 +120,80 @@ def createAll():
     Userdeactivatereason.create_table()
     Relationship.create_table()
     Patientcarer.create_table()
+    Appointments.create_table()
+
+
+class Medication(BaseModel):
+    name = CharField(primary_key=True)
+
+    class Meta:
+        db_table = 'medication'
+
+class Prescription(BaseModel):
+    prescriptionid = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
+    medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
+    dosage = IntegerField(null=True)
+    dosageunit = CharField(null=True)
+    frequency = CharField(max_length=25, null=True)
+    quantity = IntegerField(null=True)
+    frequencyunit = CharField(max_length=10, null=True)
+    startdate = DateField(null=True)
+    enddate = DateField(null=True)
+    repeat = CharField(max_length=25, null=True)
+    stockleft = IntegerField(null=True)
+    prerequisite = CharField(null=True)
+    dosageform = CharField(null=True)
+
+    class Meta:
+        db_table = 'prescription'
+
+def createAll():
+    dropAll()
+    Client.create_table()
+    Patient.create_table()
+    Carer.create_table()
+    uq8LnAWi7D.create_table()
+    Deactivatereason.create_table()
+    Userdeactivatereason.create_table()
+    Relationship.create_table()
+    Patientcarer.create_table()
+    Medication.create_table()
+    Prescription.create_table()
+    Appointments.create_table()
+
 
 def dropAll():
     if Client.table_exists():
         Client.drop_table(cascade=True)
-
+    
     if Patient.table_exists():
         Patient.drop_table(cascade=True)
-
+    
     if Carer.table_exists():
         Carer.drop_table(cascade=True)
-
+    
     if uq8LnAWi7D.table_exists():
         uq8LnAWi7D.drop_table(cascade=True)
-
+    
     if Deactivatereason.table_exists():
         Deactivatereason.drop_table(cascade=True)
-
+    
     if Userdeactivatereason.table_exists():
         Userdeactivatereason.drop_table(cascade=True)
-
+    
     if Relationship.table_exists():
         Relationship.drop_table(cascade=True)
-
+    
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
+    
+    if Medication.table_exists():
+        Medication.drop_table(cascade=True)
+    
+    if Prescription.table_exists():
+        Prescription.drop_table(cascade=True)
+
+    if Appointments.table_exists():
+        Appointments.drop_table(cascade=True)
+

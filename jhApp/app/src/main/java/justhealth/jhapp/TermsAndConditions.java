@@ -1,9 +1,9 @@
 package justhealth.jhapp;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 
-public class TermsAndConditions extends ActionBarActivity {
+public class TermsAndConditions extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

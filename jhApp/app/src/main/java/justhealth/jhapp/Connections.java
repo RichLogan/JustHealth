@@ -1,54 +1,32 @@
 package justhealth.jhapp;
 
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Base64;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Stephen on 25/11/2014.
  */
-public class Connections extends ActionBarActivity {
+public class Connections extends Activity {
 
     private int rowOfTable = 0;
 
@@ -61,72 +39,38 @@ public class Connections extends ActionBarActivity {
         getConnections();
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void getConnections() {
         HashMap<String, String> getConnectionsInfo = new HashMap<String, String>();
 
-        //this is adding the username as null - INCORRECT
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
-        //add search to HashMap
         getConnectionsInfo.put("username", username);
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+        String response = Request.post("getConnections", getConnectionsInfo, getApplicationContext());
 
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getConnections");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        System.out.println(encodedAuthentication);
-        //assigns the HashMap to list, for post request encoding
+        JSONObject queryReturn = null;
+        JSONArray outgoing = null;
+        JSONArray incoming = null;
+        JSONArray completed = null;
         try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = getConnectionsInfo.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.print(responseString);
-            JSONObject queryReturn = null;
-            JSONArray outgoing = null;
-            JSONArray incoming = null;
-            JSONArray completed = null;
-            try {
-                queryReturn = new JSONObject(responseString);
-                System.out.println(queryReturn);
-                String outgoingString = queryReturn.getString("outgoing");
-                outgoing = new JSONArray(outgoingString);
-                String incomingString = queryReturn.getString("incoming");
-                incoming = new JSONArray(incomingString);
-                String completedString = queryReturn.getString("completed");
-                completed = new JSONArray(completedString);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            System.out.print(queryReturn);
-            printTableHeader();
-            printOutgoingConnections(outgoing);
-            printIncomingConnections(incoming);
-            printCompletedConnections(completed);
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+            queryReturn = new JSONObject(response);
+            System.out.println(queryReturn);
+            String outgoingString = queryReturn.getString("outgoing");
+            outgoing = new JSONArray(outgoingString);
+            String incomingString = queryReturn.getString("incoming");
+            incoming = new JSONArray(incomingString);
+            String completedString = queryReturn.getString("completed");
+            completed = new JSONArray(completedString);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        System.out.print(queryReturn);
+        printTableHeader();
+        printOutgoingConnections(outgoing);
+        printIncomingConnections(incoming);
+        printCompletedConnections(completed);
     }
 
     private void printTableHeader() {
@@ -443,100 +387,30 @@ public class Connections extends ActionBarActivity {
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
-        //add search to HashMap
         deleteConnection.put("user", username);
         deleteConnection.put("connection", connection);
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+        String responseString = Request.post("cancelConnection", deleteConnection, getApplicationContext());
 
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/cancelConnection");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        //assigns the HashMap to list, for post request encoding
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = deleteConnection.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.print(responseString);
-
-            if (responseString == "True") {
-                return true;
-            } else {
-                return false;
-            }
-
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+        if (responseString == "True") {
+            return true;
         }
         return false;
     }
-
 
     private boolean removeConnection(String connection) {
         HashMap<String, String> deleteConnection = new HashMap<String, String>();
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
-        //add search to HashMap
         deleteConnection.put("user", username);
         deleteConnection.put("connection", connection);
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/deleteConnection");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        //assigns the HashMap to list, for post request encoding
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = deleteConnection.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.print(responseString);
-
-            if (responseString == "True") {
-                return true;
-            } else {
-                return false;
-            }
-
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+        String response = Request.post("deleteConnection", deleteConnection, getApplicationContext());
+        if (response == "True") {
+            return true;
         }
         return false;
     }
@@ -586,10 +460,8 @@ public class Connections extends ActionBarActivity {
      * @param codeAttempt the code that has been entered by the current user.
      */
     private void submitCode(String requestor, String codeAttempt) {
-        System.out.println("running submitCode");
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
         HashMap<String, String> attemptParameters = new HashMap<String, String>();
 
@@ -598,43 +470,14 @@ public class Connections extends ActionBarActivity {
         attemptParameters.put("requestor", requestor);
         attemptParameters.put("codeattempt", codeAttempt);
 
+        String response = Request.post("completeConnection", attemptParameters, getApplicationContext());
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/completeConnection");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-        //assigns the HashMap to list, for post request encoding
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = attemptParameters.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            if(responseString.equals("Incorrect")) {
-                enterCode(requestor, "An incorrect code was entered. Please try again.");
-            }
-            else if(responseString.equals("Correct")) {
-                finish();
-                startActivity(getIntent());
-            }
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+        if(response.equals("Incorrect")) {
+            enterCode(requestor, "An incorrect code was entered. Please try again.");
+        }
+        else if(response.equals("Correct")) {
+            finish();
+            startActivity(getIntent());
         }
     }
 }
-

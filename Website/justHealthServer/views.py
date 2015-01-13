@@ -19,19 +19,17 @@ def needLogin(f):
 @app.route('/')
 @needLogin
 def index():
-    jsonResult = getAccountInfo(session['username'])
-    result = {}
-    result = json.loads(jsonResult)
+    result = json.loads(getAccountInfo(session['username']))
     name = result['firstname'] + " " + result['surname']
     if result['accounttype'] == "Patient":
       return render_template('patienthome.html', printname = name)
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
-"""Profile page to display all current users details"""
 @app.route('/profile')
 @needLogin
 def profile():
+    """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
     connections = json.loads(getConnections(session['username']))
@@ -44,10 +42,11 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-"""terms and conditions page link"""
+
 @app.route('/termsandconditions')
 def terms():
-  return render_template('termsandconditions.html')
+    """terms and conditions page link"""
+    return render_template('termsandconditions.html')
 
 @app.route('/corpusindex')
 def corpus():
@@ -109,7 +108,7 @@ def registration():
     if request.method == 'POST':
         result = registerUser()
         if result == "True":
-            return render_template('login.html', type="success", message="Thanks for registering! Please check your email for a verification link")
+            return render_template('login.html', type="success",  message="Thanks for registering! Please check your email for a verification link")
         else:
             render_template('register.html', type="danger", message = result)
     return render_template('register.html')
@@ -192,6 +191,198 @@ def resetPasswordRedirect():
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
 
+@app.route('/appointments', methods=['POST', 'GET'])
+def appointments():
+  appointments = json.loads(getAllAppointments(session['username'], session['username']))
+
+  if request.method == 'POST':
+    #The tick box is not sent if it isn't ticked, so we have to catch it here.
+    try:
+      private = request.form['private']
+    except KeyError, e:
+      private = "False"
+
+    details = {}
+    details['creator'] = session['username']
+    details['name'] = request.form['name']
+    details['apptype'] = request.form['apptype']
+    details['addressnamenumber'] = request.form['addressnamenumber']
+    details['postcode'] = request.form['postcode']
+    details['startdate'] = request.form['startdate']
+    details['starttime'] = request.form['starttime']
+    details['enddate'] = request.form['enddate']
+    details['endtime'] = request.form['endtime']
+    details['description'] = request.form['description']
+    details['private'] = private 
+
+    added = int(addPatientAppointment(details))
+
+    #checks that an id is returned
+    if added > 0: 
+      flash("Appointment Added", 'success')
+      return redirect(url_for('appointments'))
+  return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
+
+
+@app.route('/deleteAppointment', methods=['POST', 'GET'])
+def deleteAppointment_view():
+  if request.method == 'GET':
+    appid = request.args.get("appid")
+    deleted = deleteAppointment(session['username'], appid)
+    flash(deleted, 'success')
+    return redirect(url_for('appointments'))
+
+@app.route('/updateAppointment', methods=['POST', 'GET'])
+def getUpdateAppointment_view():
+  if request.method == 'GET':
+    appid = request.args.get('appid')
+    getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
+    return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate)
+
+@app.route('/patientUpdateAppointment', methods=['POST'])
+def updateAppointment_view():
+  if request.method == 'POST':
+    #The tick box is not sent if it isn't ticked, so we have to catch it here.
+    try:
+      private = request.form['private']
+    except KeyError, e:
+      private = "False"
+
+    updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
+    flash(updated, 'success')
+    return redirect(url_for('appointments'))
+
+@app.route('/myPatients')
+def myPatients():
+    # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+    # Get all appointments
+    appointmentsMapping = {}
+    # Get all prescriptions
+    activePrescriptions = {}
+    upcomingPrescriptions = {}
+    expiredPrescriptions = {}
+    for patient in patients:
+        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
+
+        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+    return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
+
+@app.route('/deletePrescription')
+def deletePrescription_view():
+    prescriptionid = request.args.get('id', '')
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
+    username = request.args.get('username', '')
+    result = deletePrescription(prescriptionid)
+    if result != "Failed":
+        result = "Deleted " + prescription.medication.name + " (" + str(prescription.quantity) + "x" + str(prescription.dosage) + ") " + prescription.dosageunit + " for " + username
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/addPrescription', methods=['POST'])
+def addPrescription_view():
+    result = addPrescription(request.form)
+    username = request.form['username']
+    if result != "Could not add prescription":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/updatePrescription', methods=['POST'])
+def updatePrescription_view():
+    result = editPrescription(request.form)
+    username = request.form['username']
+    if result != "Failed":
+        flash(result, 'result')
+        flash('success', 'class')
+        flash(username, 'user')
+        flash('prescription', 'type')
+        return redirect(url_for('myPatients'))
+    else:
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
+
+@app.route('/prescriptions')
+def  prescriptions():
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)
+
+
+@app.route('/carerAppointments', methods=['POST', 'GET'])
+def carerappointments():
+  if request.method == 'POST':
+
+    private = "True"
+
+    details = {}
+    details['creator'] = session['username']
+    details['name'] = request.form['name']
+    details['apptype'] = request.form['apptype']
+    details['addressnamenumber'] = request.form['addressnamenumber']
+    details['postcode'] = request.form['postcode']
+    details['startdate'] = request.form['startdate']
+    details['starttime'] = request.form['starttime']
+    details['enddate'] = request.form['enddate']
+    details['endtime'] = request.form['endtime']
+    details['description'] = request.form['description']
+    details['private'] = private 
+
+    added = int(addPatientAppointment(details))
+
+    #checks that an id is returned
+    if added > 0: 
+      flash("Appointment Added", 'success')
+  upcoming = json.loads(getAllAppointments(session['username'], session['username']))
+  return render_template('carerAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
+
+@app.route('/inviteeappointments', methods=['POST', 'GET'])
+def inviteeappointments():
+  if request.method == 'POST':
+
+    details = {}
+    details['creator'] = session['username']
+    details['username'] = request.form['username']
+    details['name'] = request.form['name']
+    details['apptype'] = request.form['apptype']
+    details['addressnamenumber'] = request.form['addressnamenumber']
+    details['postcode'] = request.form['postcode']
+    details['startdate'] = request.form['startdate']
+    details['starttime'] = request.form['starttime']
+    details['enddate'] = request.form['enddate']
+    details['endtime'] = request.form['endtime']
+    details['description'] = request.form['description']
+
+    added = addInviteeAppointment(details)
+    return redirect(url_for("myPatients"))
 
 @app.errorhandler(500)
 def internal_error(error):

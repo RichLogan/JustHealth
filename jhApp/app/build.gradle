@@ -1,12 +1,27 @@
 apply plugin: 'com.android.application'
-
 android {
+<<<<<<< HEAD
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "justhealth.jhapp"
         minSdkVersion 10
+=======
+    signingConfigs {
+        JustHealth {
+            keyAlias 'JustHealthKey'
+            keyPassword 'mbMr3Rbofsi8AU'
+            storeFile file('/Users/Stephen/Documents/University/Co600/JustHealth/jhApp/AndroidKey/JustHealth.jks')
+            storePassword 'mbMr3Rbofsi8AU'
+        }
+    }
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+    defaultConfig {
+        applicationId "justhealth.jhapp"
+        minSdkVersion 11
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -14,12 +29,21 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+<<<<<<< HEAD
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+=======
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.JustHealth
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3
         }
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> 79a5e471f4adfd2314d02776b28da3e0db4d39e3

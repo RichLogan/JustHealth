@@ -15,7 +15,8 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_action_user" />
+            android:src="@drawable/ic_action_user"
+            android:id = "@+id/profile" />
 
         <Button
             android:layout_width="0dip"
@@ -39,9 +40,11 @@
             android:id="@+id/connections"
             android:text="Connections"/>
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
+            android:id="@+id/mypatients"
+            android:text="My Patients"
             android:layout_weight="1"/>
     </LinearLayout>
 
@@ -51,16 +54,19 @@
         android:orientation="horizontal"
         android:layout_weight="1" >
 
-        <ImageButton
+        <Button
             android:layout_width="0dip"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:id="@+id/myAppointments"
+            android:text="Appointments" />
 
         <ImageButton
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/ic_action_settings"
+            android:id="@+id/settings"
             />
     </LinearLayout>
 

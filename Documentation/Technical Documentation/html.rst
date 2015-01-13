@@ -4,7 +4,7 @@ HTML Listing
 
 Listed below is the complete list of all HTML pages in JustHealth.
 
-Each HTML page is broken down by its general functionality. 
+Each HTML page is broken down by its general functionality describing the features of each page.
 
 
 ------------------------
@@ -26,13 +26,19 @@ Linked to the terms and conditions is a modal which shows the terms and conditio
 ------------------------
 patienthome.html
 ------------------------
+*This page is only for patients.*
+
 Our website has two home pages, one for patients and one for carers. They are both follow the same style tile 3 by 3 format.
 
-Each tile has an image on it from font awesome, which a user can click to take them to the respective page.
+Each tile has an image on it from `font awesome <http://fortawesome.github.io/Font-Awesome/>`_,
+which a user can click to take them to the respective page.
+
 
 ------------------------
 carerhome.html
 ------------------------
+*This page is only for carers.*
+
 As mentioned above, same format 3 by 3 as patienthome.html with each tile having an image from font awesome which takes them to the respective page. The difference between the two pages is the images on the tiles, as different users have a different functionality.
 
 ------------------------
@@ -63,6 +69,71 @@ resetpassword.html
 Reset password can only be accessed via the email sent to the user to change their password. This page automatically fills in the username and asks for the user to enter in other details in order to change their password.
 
 Once this is completed the user clicks submit to complete the password change
+
+------------------------
+myPatients.html
+------------------------
+*This page is only for carers.*
+
+My Patients is a page that only carers can view. It shows every patient they are connect to in a list.
+
+If you click on each patient a model drops down to list two options: Prescription and Appointments.
+Click on the Prescriptions link and it will open up another model showing two tabs: 'Active' prescriptions for the respective patient and 'Upcoming & Expired' prescriptions for the patient.
+Active prescriptions will show green, upcoming blue and expired red.
+
+If you click on either of tab boxes showing the appointment details, it will open up another model giving you the option to edit the details.
+
+If you click on the 'Appointments' tab this will open up another model listing all that patients non private appointments.
+There are options here to update and delete current appointments.
+On the top left had side there is also the option to add new appointments for that patient.
+
+------------------------
+carerAppointments.html
+------------------------
+*This page is only for carers.*
+
+This page can be found from a carers home page by click on the calendar. This page list all the carers personal appointments.
+It is broken into two tabs: Upcoming and Create Appointment.
+Clicking on an appointment within the Upcoming tab will allow you to see all the details, delete or edit them if needed.
+Clicking on Create Appointment will open a new tab listing a form with the respective fields to fill in to create a new appointment.
+
+
+------------------------
+patientAppointments.html
+------------------------
+*This page is only for patients.*
+
+This page consists of 3 tabs: Upcoming, Create and Past.
+
+Upcoming shows all the appointment which are in the future. They are listed in order of the closest appointment. By clicking on an appointment it will open up showing more details and a google maps image of where the appointment is.
+There are also two buttons update, which allows you to edit the appointment details and delete which deletes the appointment.
+
+Create tab allows a patient to add a new appointment. This tab displays a form with all the respective fields to create a new appointment.
+If the patient clicks to mark the appointment private then their carer would not be able to view it.
+
+Past tab displays all appointments that have already happened. They are here to allow the user to recap on past appointments if needed.
+They are in a list format and like upcoming if you click on an appointment you will be able to see more details.
+
+
+------------------------------
+patientUpdateAppointment.html
+------------------------------
+*This page is only for patients.*
+
+This page is accessed through a patient clicking update on an appointment.
+It will allow a patient to edit and update an appointment.
+The page has place holders in all the fields of the current data from the appointment.
+To edit it, a user needs to click in a field and change the text and click update at the confirm the update.
+
+
+------------------------
+prescriptions.html
+------------------------
+*This page is only for patients.*
+
+It can be access by clicking on the flask on the home page.
+This page displays the patients current prescriptions in a list format.
+Clicking on the name of the prescription will show the full details of the patients prescriptions.
 
 ------------------------
 template.html
