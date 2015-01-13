@@ -62,7 +62,7 @@ def registerUser():
     # Validate email correct format
     pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
     if not re.match(pattern, profile['email']):
-      return "Fail email verification"
+      return "Email failed validation"
 
     # Encrypt password with SHA 256
     profile['password'] = sha256_crypt.encrypt(profile['password'])
