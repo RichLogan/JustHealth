@@ -14,6 +14,7 @@ import java.util.TimeZone;
 
 /**
  * Created by Stephen on 11/12/14.
+ * Class for testing not in use.
  */
 public class CalendarAppointments extends Activity {
 
