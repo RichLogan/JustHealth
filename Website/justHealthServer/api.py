@@ -981,7 +981,11 @@ def getDeactivateReasons():
     reasonList = json.dumps(reasonList)
     return reasonList
 
+@auth.verify_password
 @app.route('/api/getAppointmentTypes', methods=['POST'])
+def getAppointmentTypes():
+    return getAppointmentTypes()
+
 def getAppointmentTypes():
     """Returns a JSON list of possible appointment types"""
     types = Appointmenttype.select()
