@@ -490,12 +490,16 @@ def createConnection():
     return str(x)
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
+@auth.login_required
 def completeConnection():
+    return completeConnection(request.form)
+
+def completeConnection(details):
     """Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
     #Take attempted code, match with a entry where they are target
-    target = request.form['username']
-    requestor = request.form['requestor']
-    attemptedCode = int(request.form['codeattempt'])
+    target = details['username']
+    requestor = details['requestor']
+    attemptedCode = int(details['codeattempt'])
 
     # get record
     instance = Relationship.select().where(Relationship.requestor == requestor and Relationship.target == target).get()
@@ -529,6 +533,7 @@ def completeConnection():
     return None
 
 @app.route('/api/deleteConnection', methods=['POST'])
+@auth.login_required
 def deleteConnection():
     """Deletes connection between a patient and carer POST[user, connection]"""
     return deleteConnection(request.form['user'], request.form['connection'])
@@ -551,6 +556,7 @@ def deleteConnection(user,connection):
         return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
+@auth.login_required
 def cancelRequest():
     cancelRequest(request.form['user'], request.form['connection'])
 
@@ -566,6 +572,7 @@ def cancelRequest(user, connection):
             instance.delete_instance()
 
 @app.route('/api/getConnections', methods=['POST'])
+@auth.login_required
 def getConnections():
     return getConnections(request.form['username'])
 
@@ -636,6 +643,7 @@ def getConnections(username):
 
 #receives the request from android allows a patient to add an appointment
 @app.route('/api/addPatientAppointment', methods=['POST'])
+@auth.login_required
 def addPatientAppointment():
   return addPatientAppointment(request.form)
 
@@ -669,6 +677,7 @@ def addPatientAppointment(details):
   
 
 @app.route('/api/addInviteeAppointment', methods=['POST'])
+@auth.login_required
 def addInviteeAppointment():
   return addInviteeAppointment(request.form)
 
@@ -695,6 +704,7 @@ def addInviteeAppointment(details):
 
 #receives the request from android to allow a user to view their upcoming appointments
 @app.route('/api/getAllAppointments', methods=['POST'])
+@auth.login_required
 def getAllAppointments():
   return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
 
@@ -747,6 +757,7 @@ def getAllAppointments(loggedInUser, targetUser):
 
 #deletes an appointment
 @app.route('/api/deleteAppointment', methods=['POST'])
+@auth.login_required
 def deleteAppointment():
   return deleteAppointment(request.form['username'], request.form['appid'])
 
@@ -760,6 +771,7 @@ def deleteAppointment(user, appid):
 
 #gets the appointment that is to be updated
 @app.route('/api/getUpdateAppointment', methods=['POST'])
+@auth.login_required
 def getUpdateAppointment():
   return updateAppointment(request.form['username'], request.form['appid'])
 
@@ -788,6 +800,7 @@ def getUpdateAppointment(user, appid):
 
 #update an appointment
 @app.route('/api/updateAppointment', methods=['POST'])
+@auth.login_required
 def updateAppointment():
   return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
@@ -816,6 +829,7 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
 
 
 @app.route('/api/addMedication', methods=['POST'])
+@auth.login_required
 def addMedication():
     return addMedication(request.form['medicationname'])
 
@@ -831,6 +845,7 @@ def addMedication(medicationName):
     return "Added " + medicationName
 
 @app.route('/api/deleteMedication', methods=['POST'])
+@auth.login_required
 def deleteMedication():
     return deleteMedication(request.form['medicationname'])
 
@@ -844,6 +859,10 @@ def deleteMedication(medicationName):
         return medicationName + "not found"
 
 @app.route('/api/getMedications')
+@auth.login_required
+def getMedications():
+    return getMedications()
+
 def getMedications():
     medicationList = []
     result = Medication.select()
@@ -852,6 +871,7 @@ def getMedications():
     return json.dumps(medicationList)
 
 @app.route('/api/addPrescription', methods=['POST'])
+@auth.login_required
 def addPrescription():
     return addPrescription(request.form)
 
@@ -880,6 +900,7 @@ def addPrescription(details):
 
 
 @app.route('/api/editPrescription', methods=['POST'])
+@auth.login_required
 def editPrescription():
     return editPrescription(request.form)
 
@@ -905,6 +926,7 @@ def editPrescription(details):
         return "Failed"
 
 @app.route('/api/deletePrescription', methods=['POST'])
+@auth.login_required
 def deletePrescription():
     return deletePrescription(request.form['prescriptionid'])
 
@@ -918,6 +940,7 @@ def deletePrescription(prescriptionid):
         return "Failed"
 
 @app.route('/api/getPrescriptions', methods=['POST'])
+@auth.login_required
 def getPrescriptions():
     return getPrescriptions(request.form['username'])
 
@@ -937,6 +960,7 @@ def getPrescriptions(username):
         return "Must have Patient account type"
 
 @app.route('/api/getActivePrescriptions', methods=['POST'])
+@auth.login_required
 def getActivePrescriptions():
     return getActivePrescriptions(request.form['username'])
 
@@ -945,6 +969,7 @@ def getActivePrescriptions(username):
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
 
 @app.route('/api/getUpcomingPrescriptions', methods=['POST'])
+@auth.login_required
 def getUpcomingPrescriptions():
     return getUpcomingPrescriptions(request.form['username'])
 
@@ -953,6 +978,7 @@ def getUpcomingPrescriptions(username):
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
 
 @app.route('/api/getExpiredPrescriptions', methods=['POST'])
+@auth.login_required
 def getExpiredPrescriptions():
     return getExpiredPrescriptions(request.form['username'])
 
@@ -961,6 +987,7 @@ def getExpiredPrescriptions(username):
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
 
 @app.route('/api/getPrescription', methods=['POST'])
+@auth.login_required
 def getPrescription():
     return getPrescription(request.form)
 
@@ -972,6 +999,10 @@ def getPrescription(details):
     return json.dumps(prescription)
 
 @app.route('/api/getDeactivateReasons', methods=['POST'])
+@auth.login_required
+def getDeactivateReasons():
+    return getDeactivateReasons
+
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""
     reasons = Deactivatereason.select()
@@ -996,6 +1027,7 @@ def getAppointmentTypes():
     return typeList
 
 @app.route('/api/addAndroidEventId', methods=['POST'])
+@auth.login_required
 def addAndroidEventId():
   dbId = request.form['dbid']
   androidId = request.form['androidid']

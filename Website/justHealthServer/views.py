@@ -191,6 +191,11 @@ def resetPasswordRedirect():
         return render_template('resetpassword.html', type="danger", message=result)
   return render_template('resetpassword.html')
 
+
+@app.route('/completeConnection', methods=['POST', 'GET'])
+def completeConnection():
+    return completeConnection(request.form)
+
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
   appointments = json.loads(getAllAppointments(session['username'], session['username']))
