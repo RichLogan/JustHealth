@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Search{% endblock %}
 
 {% block scriptsAndStyles %}
 
@@ -41,11 +41,18 @@
     <td>{{result.firstname}}</td>
     <td>{{result.surname}}</td>
     <td>
-      <form name="connect" action="/api/createConnection" method="POST">
-        <input name="username" type="hidden" value="{{username}}">
-        <input name="target" type="hidden" value="{{result.username}}">
-        <input type="submit" class="btn btn-default" value="Connect">
-      </form>
+      {% if result.message %}
+        <form action="/profile" method="GET">
+          <input type="hidden" name="go" value="connections">
+          <input type="submit" class="btn btn-primary" value="{{result.message}}">
+        </form>
+      {% else %}
+        <form name="connect" action="/api/createConnection" method="POST">
+          <input name="username" type="hidden" value="{{username}}">
+          <input name="target" type="hidden" value="{{result.username}}">
+          <input type="submit" class="btn btn-success" value="Connect">
+        </form>
+      {% endif %}
    </td>
   </tr>
   {% endfor %}
