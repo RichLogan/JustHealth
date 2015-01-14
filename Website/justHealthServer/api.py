@@ -982,7 +982,7 @@ def getDeactivateReasons():
     return reasonList
 
 @app.route('/api/getAppointmentTypes', methods=['POST'])
-@requires.auth
+@requires_auth
 def getAppointmentTypes():
     return getAppointmentTypes()
 
