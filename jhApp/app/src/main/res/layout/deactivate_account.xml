@@ -33,23 +33,12 @@
         </LinearLayout>
        </ScrollView>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Are you sure you want to deactivate your account?"
-        android:id="@+id/deactivate"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="58dp"
-        android:checked="false" />
-
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@array/reasons_deactivate"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/deactivate"
+        android:id="@+id/reasonsDeactivate"
+        android:layout_marginTop="70dp"
+        android:layout_below="@+id/header"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -58,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/comments"
-        android:hint="Any Comments....."
+        android:hint="Additional Comments."
         android:maxLength="500"
         android:padding="10dp"
         android:height="80dp"
@@ -76,7 +65,7 @@
         android:id="@+id/checkBox"
         android:checked="false"
         android:padding="10dp"
-        android:layout_above="@+id/textView4"
+        android:layout_above="@+id/linkKeepYourData"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -85,9 +74,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Why should we keep your data?"
-        android:id="@+id/textView4"
+        android:id="@+id/linkKeepYourData"
         android:padding="10dp"
-        android:layout_above="@+id/button"
+        android:layout_above="@+id/deactivateButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="33dp" />
@@ -96,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Deactivate"
-        android:id="@+id/button"
+        android:id="@+id/deactivateButton"
         android:background="#2272EB"
         android:padding="10dp"
         android:layout_alignParentBottom="true"

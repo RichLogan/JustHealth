@@ -8,5 +8,10 @@
     <color name="dangerBackground">#F2DEDE</color>
     <color name="successText">#3C763D</color>
     <color name="successBackground">#DFF0D8</color>
+    <color name="background">#3cdafcff</color>
+    <color name="action_bar">#ff2272eb</color>
+    <color name="white">#ffffffff</color>
+    <color name="off_white">#99ffffff</color>
+    <color name="button">#3271a7ff</color>
 
 </resources>

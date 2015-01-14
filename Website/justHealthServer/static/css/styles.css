@@ -16,7 +16,7 @@ a:active  {color:#ff0000; background-color:transparent}
   color: #FFFFFF;
 }
 
-.errorDiv { 
+.errorDiv {
   width: 100% !important;
   height: 100%;
   margin-left: 0;
@@ -172,4 +172,23 @@ footer #footerContainer {
 
 .passwordStrong{
 	color: #30D917;
+}
+
+.vertical-center {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+#myPatientsTab {
+  background-color: #2272EB;
+  color: #FFFFFF;
+}
+
+#myPatientsPatientName {
+  color: #FFFFFF;
+}
+
+#myPatientsPatientName:hover {
+  color: #FFFFFF;
 }

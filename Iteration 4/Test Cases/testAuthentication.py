@@ -4,7 +4,7 @@ import requests
 import unittest
 import imp
 
-testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
+testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
 
 class testAuthentication(unittest.TestCase):
     """Testing Authentication API"""

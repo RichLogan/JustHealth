@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login">
+
+
+    <include android:id="@+id/header" layout="@layout/header" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/scrollView">
+
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Privacy and FAQ's"
+            android:layout_above="@+id/scrollView"
+            android:textSize="20dip"
+            android:textColor="@color/header"/>
+    </ScrollView>
+
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text= "
+
+
+1. Who can connect with me?
+As a Patient only carers can search for you, as a carer only patients can search for you
+2. Who view my data?
+As a patient only you and your carer can view your data As a carer patients can only see your username, firstname and surname
+3. Where is my data stored?
+All data is stored on JustHealth's database which protected by many security settings
+4. How can I delete data about myself?
+To delete appointments and prescriptions this can be done within the respective pages. To delete all data about you, you need to deactivate your account and check the box to remove all your data.
+5. How can I leave JustHealth?
+To remove your account, this is done via the deactivation tab."
+        android:textSize="10dip"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView3" />
+
+
+
+
+</RelativeLayout>

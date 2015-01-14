@@ -1,18 +1,16 @@
 package justhealth.jhapp;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,7 +30,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +39,7 @@ import java.util.Set;
 /**
  * Created by Stephen Tate on 14/11/2014.
  */
-public class Search extends ActionBarActivity {
+public class Search extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

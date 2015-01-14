@@ -14,4 +14,21 @@
         <item>I have privacy concerns</item>
         <item>Other (Please specify)</item>
     </string-array>
+
+    <string-array name="patient_options">
+        <item>Prescriptions</item>
+        <item>Appointments</item>
+    </string-array>
+
+    <string-array name="patient_appointments_options">
+        <item>View In Calendar</item>
+        <item>Edit Appointment</item>
+        <item>Delete Appointment</item>
+    </string-array>
+
+    <string-array name="my_patient_filter_appointments">
+        <item>All Appointments</item>
+        <item>Patient Appointments</item>
+        <item>Your appointments with this patient</item>
+    </string-array>
 </resources>
