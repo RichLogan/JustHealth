@@ -161,7 +161,7 @@ def deactivateAccount():
 def deactivateAccount(details):
     """Form validation for account deactivation"""
     try:
-        username = details'username']
+        username = details['username']
     except KeyError, e:
         return "No username supplied"
 
