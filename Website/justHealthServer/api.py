@@ -154,15 +154,19 @@ def authenticate():
         return "Incorrect username/password"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
+@auth.login_required
 def deactivateAccount():
+    return deactivateAccount(request.form)
+
+def deactivateAccount(details):
     """Form validation for account deactivation"""
     try:
-        username = request.form['username']
+        username = details'username']
     except KeyError, e:
         return "No username supplied"
 
     try:
-        if request.form['deletecheckbox'] == "on":
+        if details['deletecheckbox'] == "on":
             delete = True
         else:
             delete = False
@@ -170,12 +174,12 @@ def deactivateAccount():
         delete = False
 
     try:
-        comments = request.form['comments']
+        comments = details['comments']
     except KeyError, e:
         comments = None
 
     try:
-        reason = request.form['reason']
+        reason = details['reason']
     except KeyError, e:
         return "Please select a reason"
 
@@ -252,6 +256,7 @@ def resetPassword():
 ####
 
 @app.route('/api/getAccountInfo', methods=['POST'])
+@auth.login_required
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
@@ -277,6 +282,7 @@ def getAccountInfo(username):
     return json.dumps(result)
 
 @app.route('/api/editProfile', methods=['POST'])
+@auth.login_required
 def editProfile():
     return editProfile(request.form)
 
@@ -418,6 +424,7 @@ def sendPasswordResetEmail(username):
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
+@auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchterm]"""
     return searchPatientCarer(request.form['username'], request.form['searchterm'])
@@ -450,11 +457,15 @@ def searchPatientCarer(username, searchterm):
 # Client/Client relationships
 ####
 @app.route('/api/createConnection', methods=['POST', 'GET'])
+@auth.login_required
 def createConnection():
+    return createConnection(request.form)
+
+def createConnection(details):
     """Creates an initial connection between two users. POST [username, target]"""
     # Get users
-    currentUser = request.form['username']
-    targetUser = request.form['target']
+    currentUser = details['username']
+    targetUser = details['target']
 
     #Handle existing entries. Need to check all == 0
     with database.transaction():

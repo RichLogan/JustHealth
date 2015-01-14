@@ -41,7 +41,7 @@
     <td>{{result.firstname}}</td>
     <td>{{result.surname}}</td>
     <td>
-      <form name="connect" action="/api/createConnection" method="POST">
+      <form name="connect" action="/createConnectionWeb" method="POST">
         <input name="username" type="hidden" value="{{username}}">
         <input name="target" type="hidden" value="{{result.username}}">
         <input type="submit" class="btn btn-default" value="Connect">
