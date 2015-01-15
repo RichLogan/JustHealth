@@ -42,6 +42,9 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
+@app.route('/editProfile')
+def editDetails():
+    return render_template('editProfile.html')
 
 @app.route('/termsandconditions')
 def terms():

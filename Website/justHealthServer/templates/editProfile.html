@@ -1,0 +1,55 @@
+{% extends "template.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block scriptsAndStyles %}s
+{% endblock %}
+
+{% block content %}
+<div>
+<h3>Edit your profile</h3>
+
+    <br />
+    <!--Form to update profile details -->
+    <form name="editDetails" method="POST" action="/editProfile">
+        <div class="form-group">
+            <input class="hidden" type="text" name="username" value="{{profileDetails.username}}" readonly="true">
+        </div>
+        <div class="form-group">
+            <label for="name">First Name</label>
+            <input class="form-control" type="text" name="firstname"  value="{{profileDetails.firstname}}">
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input class="form-control" type="text" name="surname"  value="{{profileDetails.surname}}">
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input class="form-control" type="date" name="dob" id="dob" value="{{profileDetails.dob}}">
+        </div>
+        <div class="form-group">
+            
+            <!--Find how to get the current gender from db-->
+
+            <label for="isMale">Gender </label>
+            <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+            <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+        </div>
+        <div class="form-group">
+            <label for="accounttype">Account Type</label>
+            <input class="form-control" type="text" name="accounttype" value="{{printaccounttype}}" readonly="true">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" type="text" name="email" id="validateEmail" value="{{profileDetails.email}}">
+            <span id="emailValidate"></span>
+        </div>
+      <div class="form-group">
+        <input class="btn btn-default pull-right" type="submit" value="Update Appointment">
+      </div>
+    </form>
+    <br />
+    <br />
+</div>
+
+{% endblock %}
