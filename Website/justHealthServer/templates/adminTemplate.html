@@ -35,26 +35,23 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navBar">
           <a href="/" class="pull-left"><img src="/static/images/logo.png" id="mainLogo"></img></a>
           <h2 class="pull-left"> {{session.username}}</h2>
-          <a href="/logout" class="pull-right logoutbtn"><input class="btn btn-default" type="submit" value="Log out"></a>
-          <a href="/" class="pull-right"><i class="fa fa-home smallIcon"></i></a>
+
+          <a href="/logout" class="pull-right btn-margin"><input class="btn btn-default" type="submit" value="Log out"></a>
+          <a href="/adminPortal" class="pull-right"><i class="fa fa-home smallIcon"></i></a>          
+          <ul class="nav nav-pills btn-margin pull-right">
+            <!--To have tabs with all users/active users -->
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role= "button" aria-expanded="false" href="/adminUsers"> Users <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/allUsers">Users</a></li>
+                <li class="divider"></li>
+                <li><a href="/activeUsers">Active Sessions</a></li>
+              </ul>
+            </li>
+            <li role="presentation"><a href="/adminMedication">Medication</a></li>
+          </ul>
         </nav>
       </header>
-
-      <div id="adminNav">
-        <ul class="nav nav-pills nav-stacked">
-          <li role="presentation" class="active"><a href="/adminPortal">Home</a></li>
-          <!--To have tabs with all users/active users -->
-          <li role="presentation" class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" href="/adminUsers">Users <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="/allUsers">Users</a></li>
-              <li class="divider"></li>
-              <li><a href="/activeUsers">Active Sessions</a></li>
-            </ul>
-          </li>
-          <li role="presentation"><a href="/adminMedication">Medication</a></li>
-        </ul>
-      </div>
 
       <div id="content">
         {% block content %}{% endblock %}
