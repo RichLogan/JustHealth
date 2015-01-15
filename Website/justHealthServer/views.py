@@ -403,3 +403,7 @@ def internal_error(error):
 @app.errorhandler(401)
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 401
+
+@app.route('/adminportal')
+def adminportal():
+  return render_template('adminHome.html')
