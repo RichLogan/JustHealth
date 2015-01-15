@@ -1009,7 +1009,7 @@ def getPrescription(details):
     prescription['enddate'] = str(prescription['enddate'])
     return json.dumps(prescription)
 
-@app.route('/api/getDeactivateReasons', methods=['POST'])
+@app.route('/api/getDeactivateReasons', methods=['POST','GET'])
 @auth.login_required
 def getDeactivateReasons():
     return getDeactivateReasons
@@ -1023,7 +1023,7 @@ def getDeactivateReasons():
     reasonList = json.dumps(reasonList)
     return reasonList
 
-@app.route('/api/getAppointmentTypes', methods=['POST'])
+@app.route('/api/getAppointmentTypes', methods=['POST','GET'])
 @auth.login_required
 def getAppointmentTypes():
     return getAppointmentTypes()
