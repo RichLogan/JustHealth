@@ -192,3 +192,9 @@ footer #footerContainer {
 #myPatientsPatientName:hover {
   color: #FFFFFF;
 }
+
+/**Admin Portal Styles**/
+#adminNav {
+  float: left;
+
+}

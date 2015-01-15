@@ -408,9 +408,13 @@ def internal_error(error):
 def adminPortal():
   return render_template('adminHome.html')
 
-@app.route('/adminUsers')
+@app.route('/allUsers')
+def allUsers():
+  return render_template('adminAllUsers.html')
+
+@app.route('/activeUsers')
 def adminUsers():
-  return render_template('adminUsers.html')
+  return render_template('adminActiveUsers.html')
 
 @app.route('/adminMedication')
 def adminMedication():

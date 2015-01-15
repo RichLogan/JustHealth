@@ -40,16 +40,21 @@
         </nav>
       </header>
 
-      <nav id="adminNav">
-        {% block nav %}
-          <ul id="nav">
-              <li><a href="/adminPortal">Home</a></li>
-              <!--To have tabs with all users/active users -->
-              <li><a href="/adminUsers">Users</a></li>
-              <li><a href="/adminMedication">Medication</a></li>
-          </ul>
-        {% endblock %}
-      </nav>
+      <div id="adminNav">
+        <ul class="nav nav-pills nav-stacked">
+          <li role="presentation" class="active"><a href="/adminPortal">Home</a></li>
+          <!--To have tabs with all users/active users -->
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" href="/adminUsers">Users <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/allUsers">Users</a></li>
+              <li class="divider"></li>
+              <li><a href="/activeUsers">Active Sessions</a></li>
+            </ul>
+          </li>
+          <li role="presentation"><a href="/adminMedication">Medication</a></li>
+        </ul>
+      </div>
 
       <div id="content">
         {% block content %}{% endblock %}
