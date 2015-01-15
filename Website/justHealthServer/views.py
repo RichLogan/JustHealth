@@ -404,6 +404,14 @@ def internal_error(error):
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 401
 
-@app.route('/adminportal')
-def adminportal():
+@app.route('/adminPortal')
+def adminPortal():
   return render_template('adminHome.html')
+
+@app.route('/adminUsers')
+def adminUsers():
+  return render_template('adminUsers.html')
+
+@app.route('/adminMedication')
+def adminMedication():
+  return render_template('adminMedication.html')

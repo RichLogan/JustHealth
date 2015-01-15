@@ -33,12 +33,23 @@
       <!--Header -->
       <header>
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navBar">
-            <a href="/" class="pull-left"><img src="/static/images/logo.png" id="mainLogo"></img></a>
-            <h2 class="pull-left"> {{session.username}}</h2>
-            <a href="/logout" class="pull-right logoutbtn"><input class="btn btn-default" type="submit" value="Log out"></a>
-            <a href="/" class="pull-right"><i class="fa fa-home smallIcon"></i></a>
+          <a href="/" class="pull-left"><img src="/static/images/logo.png" id="mainLogo"></img></a>
+          <h2 class="pull-left"> {{session.username}}</h2>
+          <a href="/logout" class="pull-right logoutbtn"><input class="btn btn-default" type="submit" value="Log out"></a>
+          <a href="/" class="pull-right"><i class="fa fa-home smallIcon"></i></a>
         </nav>
       </header>
+
+      <nav id="adminNav">
+        {% block nav %}
+          <ul id="nav">
+              <li><a href="/adminPortal">Home</a></li>
+              <!--To have tabs with all users/active users -->
+              <li><a href="/adminUsers">Users</a></li>
+              <li><a href="/adminMedication">Medication</a></li>
+          </ul>
+        {% endblock %}
+      </nav>
 
       <div id="content">
         {% block content %}{% endblock %}
@@ -51,8 +62,7 @@
           <span id='footer1'> Contact us: JustHealth@justhealth.co.uk </span>
           <span id='footer2'> <a href="/termsandconditions">Terms</a></span>
           <span id='footer3'> <a href="/legal">Privacy and Legal</a></span>
-          <span id='footer4'> Copy Right JustHealth Ltd </span>
-
+          <span id='footer4'> Copyright JustHealth Ltd </span>
         </div>
       </footer>
     </div>
