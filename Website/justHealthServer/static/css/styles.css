@@ -49,6 +49,10 @@ a:active  {color:#ff0000; background-color:transparent}
   color: #30D917;
 }
 
+.headerFooterText {
+  color: #FFF;
+}
+
 .placeholder {
   display: none;
 }
