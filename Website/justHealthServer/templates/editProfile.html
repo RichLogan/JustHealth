@@ -2,7 +2,21 @@
 
 {% block title %}Edit Profile{% endblock %}
 
-{% block scriptsAndStyles %}s
+{% block scriptsAndStyles %}
+<script>
+    //check if email is valid
+    //focus out: validation is performed when different field is active
+    $('#validateEmail').focusout(function() {
+        if(validateEmail($('#validateEmail').val())) {
+            //show message if email is valid
+            $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+        }
+        else {
+            //show message if email is not valid
+            $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+        }
+    });
+</script>
 {% endblock %}
 
 {% block content %}
