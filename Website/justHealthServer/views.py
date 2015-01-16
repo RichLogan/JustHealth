@@ -42,6 +42,18 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
+@app.route('/editProfile', methods=['POST', 'GET'])
+def getEditDetails_view():
+  if request.method == 'GET':
+    username = request.args.get('username')
+    getUpdate = json.loads(getAccountInfo(session['username']))
+    return render_template('editProfile.html', request=getUpdate)
+   
+@app.route('/updateProfile', methods=['POST'])
+def editDetails_view():
+    updated = updateProfile(request.form['editDetails'])
+    flash(updated, 'success')
+    return redirect(url_for('profile'))
 
 @app.route('/termsandconditions')
 def terms():
@@ -403,3 +415,19 @@ def internal_error(error):
 @app.errorhandler(401)
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 401
+
+@app.route('/adminPortal')
+def adminPortal():
+  return render_template('adminHome.html')
+
+@app.route('/allUsers')
+def allUsers():
+  return render_template('adminAllUsers.html')
+
+@app.route('/activeUsers')
+def adminUsers():
+  return render_template('adminActiveUsers.html')
+
+@app.route('/adminMedication')
+def adminMedication():
+  return render_template('adminMedication.html')
