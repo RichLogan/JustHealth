@@ -292,7 +292,7 @@ def editProfile(details):
     clientObject = Client.select().where(Client.username == user.username).get()
 
     gender = False
-    if details['ismale'] == "on":
+    if details['ismale'] == "true":
         gender = True
 
     # Update

@@ -26,43 +26,43 @@
     <br />
     <!--Form to update profile details -->
     <form name="editDetails" method="POST" action="/updateProfile">
-        {% for username in request %}
         <div class="form-group">
-            <input class="hidden" type="text" name="username" value="{{profileDetails.username}}" readonly="true">
+            <input class="hidden" type="text" name="username" value="{{request.username}}" readonly="true">
         </div>
         <div class="form-group">
             <label for="name">First Name</label>
-            <input class="form-control" type="text" name="firstname"  value="{{profileDetails.firstname}}">
+            <input class="form-control" type="text" name="firstname"  value="{{request.firstname}}">
         </div>
         <div class="form-group">
             <label for="surname">Surname</label>
-            <input class="form-control" type="text" name="surname"  value="{{profileDetails.surname}}">
+            <input class="form-control" type="text" name="surname"  value="{{request.surname}}">
         </div>
         <div class="form-group">
             <label for="dob">Date of Birth</label>
-            <input class="form-control" type="date" name="dob" id="dob" value="{{profileDetails.dob}}">
+            <input class="form-control" type="date" name="dob" id="dob" value="{{request.dob}}">
         </div>
         <div class="form-group">
             
             <!--Find how to get the current gender from db-->
 
-            <label for="isMale">Gender </label>
-            <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+            <label for="ismale">Gender </label>
+            {% if request.gender == "Male" %}
+            <input class="" type="radio" name="ismale" value="true" checked="true"> Male&nbsp;
             <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
-        </div>
-        <div class="form-group">
-            <label for="accounttype">Account Type</label>
-            <input class="form-control" type="text" name="accounttype" value="{{printaccounttype}}" readonly="true">
+            {% else %}
+            <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+            <input class="" type="radio" name="ismale" value="false" checked="true"> Female&nbsp;
+            {% endif %}
+
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input class="form-control" type="text" name="email" id="validateEmail" value="{{profileDetails.email}}">
+            <input class="form-control" type="text" name="email" id="validateEmail" value="{{request.email}}">
             <span id="emailValidate"></span>
         </div>
       <div class="form-group">
         <input class="btn btn-default pull-right" type="submit" value="Update Profile">
       </div>
-      {% endfor %}
     </form>
     <br />
     <br />

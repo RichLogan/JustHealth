@@ -51,7 +51,7 @@ def getEditDetails_view():
    
 @app.route('/updateProfile', methods=['POST'])
 def editDetails_view():
-    updated = updateProfile(request.form['editDetails'])
+    updated = editProfile(request.form)
     flash(updated, 'success')
     return redirect(url_for('profile'))
 
