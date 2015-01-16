@@ -25,7 +25,8 @@
 
     <br />
     <!--Form to update profile details -->
-    <form name="editDetails" method="POST" action="/editProfile">
+    <form name="editDetails" method="POST" action="/updateProfile">
+        {% for username in request %}
         <div class="form-group">
             <input class="hidden" type="text" name="username" value="{{profileDetails.username}}" readonly="true">
         </div>
@@ -59,8 +60,9 @@
             <span id="emailValidate"></span>
         </div>
       <div class="form-group">
-        <input class="btn btn-default pull-right" type="submit" value="Update Appointment">
+        <input class="btn btn-default pull-right" type="submit" value="Update Profile">
       </div>
+      {% endfor %}
     </form>
     <br />
     <br />

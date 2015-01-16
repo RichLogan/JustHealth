@@ -42,9 +42,18 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
-@app.route('/editProfile')
-def editDetails():
-    return render_template('editProfile.html')
+@app.route('/editProfile', methods=['POST', 'GET'])
+def getEditDetails_view():
+  if request.method == 'GET':
+    username = request.args.get('username')
+    getUpdate = json.loads(getAccountInfo(session['username']))
+    return render_template('editProfile.html', request=getUpdate)
+   
+@app.route('/updateProfile', methods=['POST'])
+def editDetails_view():
+    updated = updateProfile(request.form['editDetails'])
+    flash(updated, 'success')
+    return redirect(url_for('profile'))
 
 @app.route('/termsandconditions')
 def terms():
