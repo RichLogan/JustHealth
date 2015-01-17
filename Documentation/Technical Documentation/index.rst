@@ -12,6 +12,7 @@ Welcome to JustHealth's documentation!
    arch
    development
    api
+   views
    users
    database
    html
