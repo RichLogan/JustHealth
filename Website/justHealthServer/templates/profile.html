@@ -1,6 +1,5 @@
 {% extends "template.html" %}
 {% block title %}Profile{% endblock %}
-<!--java Script to load the tab format -->
 {% block scriptsAndStyles %}
   <script>
     $(document).ready(function(){
@@ -9,6 +8,10 @@
         info:false,
         searching:false,
       });
+      // If coming directly to connections
+      if (getUrlParameter('go') == "connections") {
+        $('#profileTab a[href="#connections"]').tab('show');
+      }
     });
   </script>
 {% endblock %}
@@ -19,7 +22,7 @@
 <!--Tab layout -->
 <div role="tabpanel">
 <!--Tab Headers -->
-  <ul class="nav nav-tabs nav-justified" role="tablist">
+  <ul class="nav nav-tabs nav-justified" role="tablist" id="profileTab">
     <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
     <li role="presentation"><a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a></li>
   </ul>

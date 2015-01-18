@@ -1,13 +1,13 @@
 package justhealth.jhapp;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,30 +15,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-/**
- * Created by Stephen Tate on 14/11/2014.
- */
 public class Search extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +35,6 @@ public class Search extends Activity {
         search.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-                        System.out.println("onclick");
                         searchName();
                     }
                 }
@@ -61,62 +42,24 @@ public class Search extends Activity {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void searchName() {
         HashMap<String, String> searchInformation = new HashMap<String, String>();
 
-        //this is adding the username as null - INCORRECT
+        // Get Username
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
-        //todo remove this line
-        System.out.println(username);
 
-        //add search to HashMap
+        // Add search to HashMap
         searchInformation.put("username", username);
         searchInformation.put("searchterm", ((EditText) findViewById(R.id.searchField)).getText().toString());
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-
-        //assigns the HashMap to list, for post request encoding
+        String response = Request.post("searchPatientCarer", searchInformation, getApplicationContext());
         try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = searchInformation.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            System.out.println("Post Request: " + searchInformation);
-            HttpResponse response = httpclient.execute(httppost);
-            System.out.println(response);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println("this is the array: " + responseString);
-            JSONArray queryReturn = null;
-            try {
-                queryReturn = new JSONArray(responseString);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            System.out.print(queryReturn);
+            JSONArray queryReturn = new JSONArray(response);
             printTable(queryReturn);
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+        }
+        catch (JSONException e) {
+            System.out.println(e.getStackTrace());
         }
     }
 
@@ -166,7 +109,6 @@ public class Search extends Activity {
                 String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 
-
                 TableRow row = new TableRow(this);
                 //add username to TextView
                 TextView forUsername = new TextView(this);
@@ -179,11 +121,36 @@ public class Search extends Activity {
                 forSurname.setText(resultSurname);
                 //add connect button
                 Button connect = new Button(this);
-                connect.setText("Connect");
+
+                // Check if connection is already established
+                String resultMessage = null;
+                try {
+                    resultMessage = obj.getString("message");
+                    connect.setText(resultMessage);
+                    connect.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View view) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                                alert.setTitle("View Connections");
+                                alert.setMessage("Would you like to view this connection?");
+                                alert.setNegativeButton("Cancel", null);
+                                alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        startActivity(new Intent(Search.this, Connections.class));
+                                    }
+                                });
+                                alert.show();
+                            }
+                        }
+                    );
+                }
+                catch (JSONException e) {
+                    connect.setText("Connect");
+                    connect.setOnClickListener(connectOnClick(connect, resultUsername));
+                }
                 connect.setTextColor(Color.WHITE);
                 connect.setBackgroundColor(getResources().getColor(R.color.header));
                 connect.setPadding(5, 5, 5, 5);
-                connect.setOnClickListener(connectOnClick(connect, resultUsername));
 
                 //add the views to the row
                 row.addView(forUsername);
@@ -221,32 +188,7 @@ public class Search extends Activity {
         connectRequest.put("username", username);
         connectRequest.put("target", targetUser);
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/createConnection");
-        System.out.println(connectRequest);
-        //assigns the HashMap to list, for post request encoding
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = connectRequest.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println(responseString);
-
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Request.post("createConnection", connectRequest, getApplicationContext());
     }
 }
 
