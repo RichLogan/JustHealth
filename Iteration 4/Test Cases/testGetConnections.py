@@ -58,7 +58,7 @@ class testGetConnections(unittest.TestCase):
 
 
         def testInvalid(self):
-        """Testing invalid username"""
+            """Testing invalid username"""
         payload = {
             "username" : "test"
         }
@@ -69,17 +69,17 @@ class testGetConnections(unittest.TestCase):
 
 
         def testNullValues(self):
-        payload = {
-            "username" : None
-        }
+            payload = {
+                "username" : None
+                }
 
         prescription = requests.post("http://127.0.0.1:9999/api/getConnections", data=payload)
         self.assertEqual(getConnections.text, "User does not exist")
 
 
         def tearDown(self):
-        """Delete all tables"""
-        testDatabase.dropAll()
+            """Delete all tables"""
+            testDatabase.dropAll()
 
 if __name__ == '__main__':
     unittest.main()

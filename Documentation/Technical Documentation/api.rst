@@ -18,7 +18,6 @@ Login Functions
 .. autofunction:: justHealthServer.api.authenticate
 
   :URL: /api/authenticate
-  :URL: /api/authenticate
   :HTTP_METHOD: POST
 
   :param username: The username to authenticate

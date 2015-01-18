@@ -19,6 +19,7 @@ def needLogin(f):
 @app.route('/')
 @needLogin
 def index():
+    """Sends user to home page according to account type if session is active"""
     result = json.loads(getAccountInfo(session['username']))
     name = result['firstname'] + " " + result['surname']
     if result['accounttype'] == "Patient":
@@ -38,35 +39,37 @@ def profile():
     completedConnections = json.loads(connections['completed'])
 
     if profileDetails['accounttype'] == "Patient":
-      return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Patient')
+        return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Patient')
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
 
 @app.route('/termsandconditions')
 def terms():
-    """terms and conditions page link"""
+    """JustHealth terms and conditions reference page for all users"""
     return render_template('termsandconditions.html')
 
 @app.route('/corpusindex')
 def corpus():
-  return render_template('indexCorpus.html')
+    return render_template('indexCorpus.html')
 
 @app.route('/legal')
 def legal():
-  return render_template('legal.html')
+    """This page hold 4 tiles each a link onto the respective legal page"""
+    return render_template('legal.html')
 
 @app.route('/privacypolicy')
 def privacy():
-  return render_template('privacypolicy.html')
+    """JustHealth privacy policy and data protection reference page"""
+    return render_template('privacypolicy.html')
 
 @app.route('/references')
 def references():
-  return render_template('references.html')
+    return render_template('references.html')
 
 @app.route('/sitemap')
 def sitemap():
-  return render_template('sitemap.html')
+    return render_template('sitemap.html')
 
 @app.route('/settings')
 @needLogin
@@ -81,6 +84,7 @@ def settings():
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
+    """Search to find a different user's profile"""
     if request.method =='POST':
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
         result = json.loads(result)
@@ -90,6 +94,7 @@ def search():
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
 def deactivate():
+    """Handles account deactivation form"""
     if request.method == 'POST':
         result = deactivateAccount()
         if result == "Deleted":
@@ -105,6 +110,7 @@ def deactivate():
 # Account Pages
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
+    """Handles user registration form"""
     if request.method == 'POST':
         result = registerUser()
         if result == "True":
@@ -116,11 +122,13 @@ def registration():
 @app.route('/logout')
 @needLogin
 def logout():
-  session.pop('username', None)
-  return redirect(url_for('index'))
+    """Terminates user session"""
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
+    """User confirmation of account verification"""
     s = getSerializer()
     try:
         retrievedUsername = s.loads(payload)
@@ -156,6 +164,7 @@ def loadPasswordReset(payload):
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    """Gets username from login in order to authenticate session"""
     if request.method == 'POST':
         result = authenticate()
         if result == "Authenticated":
@@ -172,6 +181,7 @@ def login():
 
 @app.route('/forgotPassword', methods=['POST', 'GET'])
 def forgotPassword():
+    """Finds the user's account from the email address it was registered with"""
     if request.method == 'POST':
       username = getUserFromEmail(request.form['email'])
       if username == "False":
@@ -183,16 +193,18 @@ def forgotPassword():
 # This method is run once the form to reset the password has been submitted
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordRedirect():
-  if request.method == 'POST':
-    result = resetPassword()
+    """Follows unique link in email to allow user to reset password, only after forgotPassword form is submitted."""
+    if request.method == 'POST':
+        result = resetPassword()
     if result == "True":
         return render_template('login.html', type="success", message="Your password has been reset, please check your email and click the link to verify.")
     else:
         return render_template('resetpassword.html', type="danger", message=result)
-  return render_template('resetpassword.html')
+    return render_template('resetpassword.html')
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
+  """Form for patient to add an appointment, they choose privacy level for their carer."""
   appointments = json.loads(getAllAppointments(session['username'], session['username']))
 
   if request.method == 'POST':
@@ -226,6 +238,7 @@ def appointments():
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
 def deleteAppointment_view():
+  """Shows message to inform the user that the appointment has been deleted"""
   if request.method == 'GET':
     appid = request.args.get("appid")
     deleted = deleteAppointment(session['username'], appid)
@@ -234,6 +247,7 @@ def deleteAppointment_view():
 
 @app.route('/updateAppointment', methods=['POST', 'GET'])
 def getUpdateAppointment_view():
+  """Takes the appointment ID to put the existing appointment information in the form, ready to be updated"""
   if request.method == 'GET':
     appid = request.args.get('appid')
     getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
@@ -254,6 +268,7 @@ def updateAppointment_view():
 
 @app.route('/myPatients')
 def myPatients():
+    """Shows carer page listing their connected patients, they can edit each patient's prescriptions and appointments from here"""
     # Get Patients
     if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
         # Get all patients connected to this user
@@ -277,8 +292,15 @@ def myPatients():
         expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
     return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
+@app.route('/prescriptions')
+def prescriptions():
+    """Shows all the active prescriptions for the patient selected"""
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)
+
 @app.route('/deletePrescription')
 def deletePrescription_view():
+    """Informs Carer that the prescription has been deleted from the selected patient"""
     prescriptionid = request.args.get('id', '')
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
     username = request.args.get('username', '')
@@ -299,6 +321,7 @@ def deletePrescription_view():
 
 @app.route('/addPrescription', methods=['POST'])
 def addPrescription_view():
+    """Informs Carer that the prescription has been added to the selected patient"""
     result = addPrescription(request.form)
     username = request.form['username']
     if result != "Could not add prescription":
@@ -316,6 +339,7 @@ def addPrescription_view():
 
 @app.route('/updatePrescription', methods=['POST'])
 def updatePrescription_view():
+    """Informs Carer that the prescription has been updated for the selected patient"""
     result = editPrescription(request.form)
     username = request.form['username']
     if result != "Failed":
@@ -331,14 +355,9 @@ def updatePrescription_view():
         flash(username, 'user')
         return redirect(url_for('myPatients'))
 
-@app.route('/prescriptions')
-def  prescriptions():
-    prescriptions = json.loads(getPrescriptions(session['username']))
-    return render_template('prescriptions.html', prescriptions = prescriptions)
-
-
 @app.route('/carerAppointments', methods=['POST', 'GET'])
 def carerappointments():
+  """Form for carer to add a personal appointment, this is not shown to patients."""
   if request.method == 'POST':
 
     private = "True"
@@ -366,6 +385,7 @@ def carerappointments():
 
 @app.route('/inviteeappointments', methods=['POST', 'GET'])
 def inviteeappointments():
+  """Form for carer to add an appointment with a specific patient they are connected with, this will show on the patient's calendar."""
   if request.method == 'POST':
 
     details = {}
