@@ -96,7 +96,7 @@ def search():
 def deactivate():
     """Handles account deactivation form"""
     if request.method == 'POST':
-        result = deactivateAccount()
+        result = deactivateAccount(request.form)
         if result == "Deleted":
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deleted")
@@ -201,6 +201,15 @@ def resetPasswordRedirect():
     else:
         return render_template('resetpassword.html', type="danger", message=result)
     return render_template('resetpassword.html')
+
+
+@app.route('/createConnectionWeb', methods=['POST', 'GET'])
+def createConnectionWeb():
+    return createConnection(request.form)
+
+@app.route('/completeConnectionWeb', methods=['POST', 'GET'])
+def completeConnectionWeb():
+    return completeConnection(request.form)
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():

@@ -144,7 +144,7 @@
                     </div>
                     <div class="modal-body">
                       <h4>Please enter the verification code given by the requestor</h1>
-                      <form role="form" action="/api/completeConnection" method="POST">
+                      <form role="form" action="/completeConnectionWeb" method="POST">
                         <div style="width: 70%;margin: 0 auto;">
                           <input name="requestor" type="hidden" value="{{connection.username}}">
                           <input name="username" type="hidden" value="{{session.username}}">
