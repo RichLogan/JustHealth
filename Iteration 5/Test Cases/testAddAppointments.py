@@ -5,13 +5,13 @@ import unittest
 import imp
 import json
 
-testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
+testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
 class testAddAppointment(unittest.TestCase):
 
     def setUp(self):
         testDatabase.createAll()
-        #Create a Client entry, a Patient entry, a prescription  and a password.
+        #Create a Client entry, a Patient entry, an appointment  and a password.
         testClient = testDatabase.Client.insert(
             username = "test",
             email = "justhealth@richlogan.co.uk",

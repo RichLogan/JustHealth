@@ -5,7 +5,7 @@ import unittest
 import imp
 import json
 
-testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
+testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
 class testDeleteMedication(unittest.TestCase):
 

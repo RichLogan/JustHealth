@@ -107,7 +107,7 @@ class Appointments(BaseModel):
     endtime = TimeField(formats='%H:%M')
     description = CharField(max_length=5000, null=True)
     private = BooleanField()
-    androideventid = IntegerField()
+    androideventid = IntegerField(null=True)
 
     class Meta:
         db_table = 'appointments'
@@ -161,6 +161,7 @@ class Prescription(BaseModel):
     # Patientcarer.create_table()
     # Medication.create_table()
     # Prescription.create_table()
+    # Appointments.create_table()
 
 
 # def dropAll():
