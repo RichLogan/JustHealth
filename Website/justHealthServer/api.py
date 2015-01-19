@@ -424,27 +424,33 @@ def searchPatientCarer():
 
 def searchPatientCarer(username, searchterm):
     #get username, firstname and surname of current user
-    result = {}
-    thisUser = username
+    results = {}
+    searchterm = "%" + searchterm + "%"
     try:
-        patient = Patient.get(username=thisUser)
-        searchterm = "%" + searchterm + "%"
+        patient = Patient.get(username=username)
         results = Carer.select().dicts().where((Carer.username % searchterm) | (Carer.firstname % searchterm) |(Carer.surname % searchterm))
-
-        jsonResult = []
-        for result in results:
-            jsonResult.append(result)
-        return json.dumps(jsonResult)
-
     except Patient.DoesNotExist:
-        searchterm = "%" + searchterm + "%"
         results = Patient.select().dicts().where((Patient.username % searchterm) | (Patient.firstname % searchterm) |(Patient.surname % searchterm))
 
-        jsonResult = []
-        for result in results:
-            jsonResult.append(result)
-        return json.dumps(jsonResult)
-    return None
+    jsonResult = []
+    for result in results:
+        # Check if result is already a connection
+        currentConnections = json.loads(getConnections(username))
+
+        for connection in json.loads(currentConnections['outgoing']):
+            if connection['username'] == result['username']:
+                result['message'] = "Already Requested"
+        
+        for connection in json.loads(currentConnections['incoming']):
+            if connection['username'] == result['username']:
+                result['message'] = "Request Waiting"
+
+        for connection in json.loads(currentConnections['completed']):
+            if connection['username'] == result['username']:
+                result['message'] = "Already Connected"
+
+        jsonResult.append(result)
+    return json.dumps(jsonResult)
 
 ####
 # Client/Client relationships
