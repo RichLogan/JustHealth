@@ -63,7 +63,7 @@ public class DeactivateAccount extends Activity {
         System.out.println("populateSpinner");
         ArrayList populateSpinner = new ArrayList<String>();
 
-        String response = Request.postNoParams("getDeactivateReasons", this);
+        String response = Request.get("getDeactivateReasons", getApplicationContext());
         System.out.println(response);
         JSONArray appointmentTypes = null;
 
