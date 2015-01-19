@@ -1012,7 +1012,7 @@ def getPrescription(details):
 @app.route('/api/getDeactivateReasons', methods=['POST','GET'])
 @auth.login_required
 def getDeactivateReasons():
-    return getDeactivateReasons
+    return getDeactivateReasons()
 
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""
