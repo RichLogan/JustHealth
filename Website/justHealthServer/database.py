@@ -161,6 +161,7 @@ class Prescription(BaseModel):
     # Patientcarer.create_table()
     # Medication.create_table()
     # Prescription.create_table()
+    # Appointments.create_table()
 
 
 # def dropAll():
