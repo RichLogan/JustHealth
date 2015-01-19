@@ -177,3 +177,8 @@ All the error pages below have the same style just different text indicating wha
 404- Not found error page
 
 internal error page
+
+-------------------------
+Admin Pages
+-------------------------
+(Add admin pages to html)
