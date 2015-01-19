@@ -25,7 +25,7 @@ import java.util.Set;
 public class Request {
 
     public static String post(String url, HashMap<String, String> parameters, Context context) {
-        HttpClient httpClient = new DefaultHttpClient();
+         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
 
         //Authentication
@@ -43,6 +43,34 @@ public class Request {
                 nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
             }
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpClient.execute(httppost);
+
+            return EntityUtils.toString(response.getEntity());
+        }
+        catch (ClientProtocolException e) {
+            //TODO Auto-generated catch block
+        } catch (IOException e) {
+            //TODO Auto-generated catch block
+        } catch (NullPointerException e) {
+            //TODO Auto-generated catch block
+        }
+        Feedback.toast("Cannot connect to Server", false, context);
+        return null;
+    }
+
+    public static String postNoParams(String url, Context context) {
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
+
+        //Authentication
+        SharedPreferences account = context.getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+        String password = account.getString("password", null);
+        String authentication = username + ":" + password;
+        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
+
+        try {
             HttpResponse response = httpClient.execute(httppost);
 
             return EntityUtils.toString(response.getEntity());

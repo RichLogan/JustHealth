@@ -63,14 +63,13 @@ public class DeactivateAccount extends Activity {
         System.out.println("populateSpinner");
         ArrayList populateSpinner = new ArrayList<String>();
 
-        String response = Request.get("getDeactivateReasons", this);
-        JSONObject temp = null;
+        String response = Request.postNoParams("getDeactivateReasons", this);
+        System.out.println(response);
         JSONArray appointmentTypes = null;
 
 
         try {
-            temp = new JSONObject(response);
-            appointmentTypes = new JSONArray(temp);
+            appointmentTypes = new JSONArray(response);
             for (int i = 0; i < appointmentTypes.length(); i++) {
                 String app = appointmentTypes.getString(i);
                 populateSpinner.add(app);
