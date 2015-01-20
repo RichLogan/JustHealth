@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".login">
 
-    <include android:id="@+id/header" layout="@layout/header" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
@@ -18,15 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip"
-                android:id="@+id/loginTitle"/>
 
             <!-- Placeholder for alert message -->
             <LinearLayout

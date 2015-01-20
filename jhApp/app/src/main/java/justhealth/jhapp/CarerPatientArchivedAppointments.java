@@ -65,11 +65,6 @@ public class CarerPatientArchivedAppointments extends Activity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(actionBarLayout);
 
-        // You customization
-        final int actionBarColor = getResources().getColor(R.color.action_bar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(actionBarColor));
-
-
         final Button addAppointment = (Button) findViewById(R.id.addAppointment);
         addAppointment.setText("Add");
         addAppointment.setOnClickListener(new Button.OnClickListener() {

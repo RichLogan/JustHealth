@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -28,8 +29,11 @@ public class Login extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
         ActionBar actionBar = getActionBar();
-        actionBar.hide();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setTitle("Login");
+
 
         TextView register = (TextView) findViewById(R.id.link_to_forgot_password);
         register.setOnClickListener(

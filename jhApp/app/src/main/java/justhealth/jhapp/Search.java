@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -29,6 +30,11 @@ public class Search extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Search");
+
 
         //check for the search button being pressed
         Button search = (Button) findViewById(R.id.searchButton);

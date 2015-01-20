@@ -1,5 +1,28 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+    <resources xmlns:android="http://schemas.android.com/apk/res/android">
+        <style name="JustHealthTheme" parent="@android:style/Theme.Holo.Light">
+            <item name="android:actionBarStyle">
+                @style/defaultActionBar
+            </item>
+        </style>
 
+    <style name="defaultActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:titleTextStyle">
+            @style/defaultActionBarText
+        </item>
+        <item name="android:background">
+            @color/action_bar
+        </item>
+    </style>
+
+    <style name="defaultActionBarText" parent="@style/android:TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textSize">
+            20sp
+        </item>
+        <item name="android:textColor">
+            @color/white
+        </item>
+    </style>
 
     <style name="ActionBarButton">
         <item name="android:layout_width">wrap_content</item>
