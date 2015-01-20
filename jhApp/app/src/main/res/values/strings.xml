@@ -13,10 +13,7 @@
     <string name="account">Account</string>
     <string name="profile">Profile</string>
 
-    <string-array name="deactivate">
-        <item> </item>
-        <item> </item>
-        <item> </item>
-        <item>  </item>
-    </string-array>
+    <!-- Spinner Prompts -->
+    <string name="genderPopup">Gender</string>
+    <string name="accountTypePopup">Account Type</string>
 </resources>
