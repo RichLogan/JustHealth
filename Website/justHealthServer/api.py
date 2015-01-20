@@ -70,7 +70,7 @@ def registerUser():
     profile['password'] = sha256_crypt.encrypt(profile['password'])
 
     isMale = False
-    if profile['ismale']:
+    if profile['ismale'] == "true":
         isMale = True
 
     #Check for existing username
