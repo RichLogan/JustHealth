@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/button"
+    android:background="@color/background"
     tools:context=".login">
 
     <LinearLayout
@@ -23,7 +23,7 @@
 
         <LinearLayout
             style="@style/defaultLinearForm"
-            android:layout_marginTop="100sp">
+            android:layout_marginTop="70sp">
 
             <!--  Username-->
 
@@ -56,42 +56,41 @@
                 android:layout_marginTop="20sp"
                 android:layout_marginRight="20sp"
                 android:layout_marginLeft="20sp"
-                style="@style/primaryButton"/>
+                style="@style/successButton"/>
 
-            <TextView
+    </LinearLayout>
+        <LinearLayout
+            android:layout_marginRight="0sp"
+            android:layout_marginLeft="0sp"
+            android:layout_marginTop="70sp"
+            android:layout_marginBottom="0sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="bottom"
+            android:weightSum="2"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:layout_gravity="center_horizontal"
+                style="@style/dangerButton"
                 android:id="@+id/link_to_forgot_password"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="20sp"
-                android:text="Forgot Password"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textColor="@color/header" />
+                android:layout_weight="1" />
 
-            <TextView
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:layout_gravity="center_horizontal"
+                style="@style/primaryButton"
                 android:id="@+id/link_to_register"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="New to JustHealth? Register here"
-                android:gravity="center"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginTop="53dp"
-                android:layout_below="@+id/link_to_forgot_password"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </LinearLayout>
+                android:layout_weight="1"/>
 
-    <!--Link to Terms and Conditions-->
-    <TextView android:id="@+id/link_to_terms"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Terms and Conditions"
-        android:gravity="center"
-        android:textSize="15dip"
-        android:textColor="#FFFFFF"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/header"/>
+
+            </LinearLayout>
+
+
 </RelativeLayout>

@@ -13,6 +13,9 @@
         <item name="android:background">
             @color/action_bar
         </item>
+        <item name="android:actionOverflowButtonStyle">
+            @color/white
+        </item>
     </style>
 
     <style name="defaultActionBarText" parent="@style/android:TextAppearance.Holo.Widget.ActionBar.Title">
