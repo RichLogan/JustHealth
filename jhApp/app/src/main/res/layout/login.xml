@@ -26,7 +26,8 @@
 
             <!--  Username-->
 
-            <EditText android:layout_width="372dp"
+            <EditText
+                android:layout_width="372dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
@@ -51,21 +52,20 @@
                 android:text="Login"
                 android:id="@+id/login"
                 android:layout_gravity="center_horizontal"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                style="@style/primaryButton"/>
 
-            <TextView android:id="@+id/link_to_forgot_password"
+            <TextView
+                android:id="@+id/link_to_forgot_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="20sp"
                 android:text="Forgot Password"
                 android:gravity="center"
-                android:textSize="15dip"
-                android:textColor="@color/header"
-                android:layout_below="@id/login"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:textSize="15sp"
+                android:textColor="@color/header" />
 
-            <TextView android:id="@+id/link_to_register"
+            <TextView
+                android:id="@+id/link_to_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="New to JustHealth? Register here"
