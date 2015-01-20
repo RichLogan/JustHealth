@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/button"
     tools:context=".login">
 
     <LinearLayout
@@ -12,25 +13,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+        <!-- Placeholder for alert message -->
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/insertAlert"/>
 
-            <!-- Placeholder for alert message -->
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/insertAlert"/>
+
+        <LinearLayout
+            style="@style/defaultLinearForm"
+            android:layout_marginTop="100sp">
 
             <!--  Username-->
 
-            <EditText
-                android:layout_width="372dp"
+            <EditText android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip"
                 android:singleLine="true"
                 android:id="@+id/loginUsername"
                 android:maxLength="25"
@@ -40,18 +38,24 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
                 android:inputType="textPassword"
-                android:ems="10"
                 android:id="@+id/loginPassword"
                 android:password="true"
                 android:hint="Password"/>
+        </LinearLayout>
 
             <Button
-                android:layout_width="115dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Login"
                 android:id="@+id/login"
                 android:layout_gravity="center_horizontal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginLeft="20sp"
                 style="@style/primaryButton"/>
 
             <TextView
@@ -77,7 +81,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
         </LinearLayout>
-    </LinearLayout>
 
     <!--Link to Terms and Conditions-->
     <TextView android:id="@+id/link_to_terms"
