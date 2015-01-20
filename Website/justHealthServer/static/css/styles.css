@@ -203,3 +203,10 @@ footer #footerContainer {
   float: left;
   position: absolute;
 }
+
+fieldset {
+  width: 75%;
+  margin: auto;
+  border: 1px solid silver;
+  padding: 8px;    
+  border-radius: 4px;
