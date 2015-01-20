@@ -69,6 +69,10 @@ def registerUser():
     # Encrypt password with SHA 256
     profile['password'] = sha256_crypt.encrypt(profile['password'])
 
+    isMale = False
+    if profile['ismale']:
+        isMale = True
+
     #Check for existing username
     if Client.select().where(Client.username == profile['username']).count() != 0:
       return "Username already taken"
@@ -95,7 +99,7 @@ def registerUser():
         username = profile['username'],
         firstname = profile['firstname'],
         surname = profile['surname'],
-        ismale = profile['ismale'],
+        ismale = isMale,
     )
 
     # Build insert password query
