@@ -1,7 +1,7 @@
 a:link    {color:#A8A8A8; background-color:transparent}
 a:visited {color:#A8A8A8; background-color:transparent}
-a:hover   {color:#ff0000; background-color:transparent}
-a:active  {color:#ff0000; background-color:transparent}
+a:hover   {color:#A8A8A8; background-color:transparent}
+a:active  {color:#A8A8A8; background-color:transparent}
 
 .codeInput {
   width: 300px;
@@ -119,6 +119,7 @@ footer #footerContainer {
   margin: 0 auto;
   color: #FFFFFF;
 }
+
 #footer1 {
 	float: left;
 	margin-left: 10%;
@@ -142,6 +143,13 @@ footer #footerContainer {
   margin-left: 10%;
   margin-top: 1%;
 }
+
+#footer5 {
+  float: left;
+  margin-left: 10%;
+  margin-top: 1%;
+}
+
 
 #register label{
 	margin-right:5px;
