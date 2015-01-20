@@ -55,6 +55,14 @@
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">@color/white</item>
     </style>
+    <style name="successButton" parent="@android:style/Widget.Holo.Button">
+        <item name="android:background">@color/success</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="dangerButton" parent="@android:style/Widget.Holo.Button">
+        <item name="android:background">@color/danger</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
 
     <!-- Text sizes -->
