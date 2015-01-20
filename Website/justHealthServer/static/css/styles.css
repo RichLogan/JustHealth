@@ -119,27 +119,28 @@ footer #footerContainer {
   margin: 0 auto;
   color: #FFFFFF;
 }
+
 #footer1 {
 	float: left;
-	margin-left: 5%;
+	margin-left: 10%;
 	margin-top: 1%;
 }
 
 #footer2 {
   float: left;
-  margin-left: 5%;
+  margin-left: 10%;
   margin-top: 1%;
 }
 
 #footer3 {
   float: left;
-  margin-left: 5%;
+  margin-left: 10%;
   margin-top: 1%;
 }
 
 #footer4 {
   float: left;
-  margin-left: 5%;
+  margin-left: 10%;
   margin-top: 1%;
 }
 
