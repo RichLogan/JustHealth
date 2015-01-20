@@ -1,38 +1,23 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".Register">
-
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Register"
-                android:layout_above="@+id/scrollView"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/link_to_forgot_password"/>
-
-            <!-- Placeholder for alert message -->
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/insertRegisterAlert"/>
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
 
             <EditText
                 android:layout_width="match_parent"
@@ -42,10 +27,7 @@ tools:context=".Register">
                 android:ems="10"
                 android:id="@+id/username"
                 android:layout_gravity="center_horizontal"
-                android:editable="true"
-                android:autoText="false"
                 android:maxLength="25" />
-
 
             <EditText
                 android:layout_width="match_parent"
@@ -78,35 +60,26 @@ tools:context=".Register">
                 android:layout_height="wrap_content"
                 android:text="Gender"/>
 
-            <RadioGroup
-                android:layout_width="wrap_content"
+            <Spinner
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false"
-                android:id="@+id/sex">
+                android:id="@+id/gender"
+                android:entries="@array/gender"
+                android:prompt="@string/genderPopup"
+                android:spinnerMode="dialog" />
 
-                <RadioButton
-                    android:layout_width="163dp"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:id="@+id/male"
-                    android:text="Male"/>
-
-                <RadioButton
-                    android:layout_width="182dp"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:id="@+id/female"
-                    android:text="Female"
-                    android:layout_gravity="right" />
-            </RadioGroup>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Account Type"/>
 
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/accountType"
                 android:entries="@array/accountType"
-                android:spinnerMode="dropdown" />
+                android:prompt="@string/accountTypePopup"
+                android:spinnerMode="dialog" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -142,13 +115,13 @@ tools:context=".Register">
                 android:id="@+id/tsandcs"
                 android:checked="false" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/register"
-                android:id="@+id/register"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
+           <Button
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="@string/register"
+               android:id="@+id/register"
+               android:layout_gravity="center_horizontal"
+               style="@style/successButton" />
+       </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>

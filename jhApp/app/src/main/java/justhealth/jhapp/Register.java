@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.util.HashMap;
@@ -58,15 +57,13 @@ public class Register extends Activity {
             }
         }
 
-        //Gender
-        Boolean ismale = null;
-        int id = ((RadioGroup) findViewById(R.id.sex)).getCheckedRadioButtonId();
-        if (id == R.id.male) {
-            ismale = true;
-        } else if (id == R.id.female) {
-            ismale = false;
+        String ismale = "false";
+        Spinner gender = (Spinner)findViewById(R.id.gender);
+        String genderValue = gender.getSelectedItem().toString();
+        if (genderValue.equals("Male")) {
+            ismale = "true";
         }
-        details.put("ismale", ismale.toString());
+        details.put("ismale", ismale);
 
         //Account Type
         final Spinner accountTypeSpinner = (Spinner) findViewById((R.id.accountType));
@@ -81,6 +78,7 @@ public class Register extends Activity {
             details.put("password", password);
             details.put("confirmpassword", confirmPassword);
             details.put("terms", "on");
+            System.out.println(details);
             post(details);
         } else {
             Feedback.toast("Terms and Conditions must be accepted", false, getApplicationContext());
