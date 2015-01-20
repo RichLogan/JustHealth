@@ -1,4 +1,4 @@
- {% extends "template.html" %}
+{% extends "template.html" %}
 
 {% block title %}Update Appointment{% endblock %}
 
@@ -16,8 +16,8 @@
 			<input class="hidden" type="text" name="appid" value="{{app.appid}}" readonly="true">
 		</div>
    	<div class="form-group">
-			<label for="name">Name</label>
-    		<input class="form-control" type="text" name="name" value="{{app.name}}">
+	        <label for="name">Name</label>
+    		<input class="form-control" type="text" name="name"	 value="{{app.name}}">
     </div>
 		<div class="form-group">
 			<label for="type">Appointment Type</label>

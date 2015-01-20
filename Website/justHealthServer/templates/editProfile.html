@@ -1,0 +1,75 @@
+{% extends "template.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block scriptsAndStyles %}
+<script>
+    //check if email is valid
+    //focus out: validation is performed when different field is active
+    $('#validateEmail').focusout(function() {
+        if(validateEmail($('#validateEmail').val())) {
+            //show message if email is valid
+            $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+        }
+        else {
+            //show message if email is not valid
+            $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div>
+<h3>Edit your profile</h3>
+
+    <br />
+    <!--Form to update profile details -->
+    <form name="editDetails" method="POST" action="/updateProfile">
+        <div class="form-group">
+            <label for="profileimg">Upload a profile picture</label>
+            <input class="form-control" type="file" name="profileimg" value="{{request.profileimg}}">
+        </div>
+        <div class="form-group">
+            <input class="hidden" type="text" name="username" value="{{request.username}}" readonly="true">
+        </div>
+        <div class="form-group">
+            <label for="name">First Name</label>
+            <input class="form-control" type="text" name="firstname"  value="{{request.firstname}}">
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input class="form-control" type="text" name="surname"  value="{{request.surname}}">
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input class="form-control" type="date" name="dob" id="dob" value="{{request.dob}}">
+        </div>
+        <div class="form-group">
+            
+            <!--Find how to get the current gender from db-->
+
+            <label for="ismale">Gender </label>
+            {% if request.gender == "Male" %}
+            <input class="" type="radio" name="ismale" value="true" checked="true"> Male&nbsp;
+            <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+            {% else %}
+            <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+            <input class="" type="radio" name="ismale" value="false" checked="true"> Female&nbsp;
+            {% endif %}
+
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" type="text" name="email" id="validateEmail" value="{{request.email}}">
+            <span id="emailValidate"></span>
+        </div>
+      <div class="form-group">
+        <input class="btn btn-default pull-right" type="submit" value="Update Profile">
+      </div>
+    </form>
+    <br />
+    <br />
+</div>
+
+{% endblock %}

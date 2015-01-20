@@ -61,79 +61,82 @@ $(document).ready(function() {
 
 {% block content %}
 
-<h2>Registration</h2>
-<!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
-<form name="register" action="/register" id="register" method="POST">
-	<!-- Display any messages -->
-	{% if message != null %}
-		<div class="alert alert-{{type}} alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-			{{message}}
-		</div>
-	{% endif %}
-
-  <div class="form-group" id="usernameError">
-    <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
-    <input id="usernameInput" class="form-control" type="text" name="username">
-  </div>
-
-  <div class="form-group">
-    <label for="firstname">First Name</label>
-    <input class="form-control" type="text" name="firstname">
-  </div>
-
-  <div class="form-group">
-    <label for="surname">Surname</label>
-    <input class="form-control" type="text" name="surname">
-  </div>
-
-  <div class="form-group">
-    <label for="dob">Date of Birth</label>
-    <input class="form-control" type="date" name="dob" id="validateDOB">
-		<span id="DOBValidation"></span>
-  </div>
-
-  <div class="form-group">
-    <label for="isMale">Gender </label>
-    <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
-    <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
-	</div>
-
-  <div class="form-group">
-    <label for="accounttype">Account Type</label>
-    <select name="accounttype" class="form-control">
-    	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
-    	<option value="patient">Patient</option>
-    	<option value="carer">Carer</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="email">Email Address</label>
-    <input class="form-control" type="text" id="validateEmail" name="email">
-		<span id="emailValidate"></span>
-	</div>
-
-  <div class="form-group">
-  	<label for="password">Password</label>
-    <input class="form-control" type="password" id="password" name="password">
-		<span id="result"></span>
-  </div>
-
-  <div class="form-group">
-    <label for="confirmpassword">Confirm Password</label>
-    <input class="form-control" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
-		<span id="confirmationMessage"></span>
-  </div>
-
-	<div class="form-group checkbox">
-		<input type="checkbox" name="terms"> I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a>
-	</div>
-
-	<div class="form-group">
-		<input class="btn btn-default pull-right" type="submit" value="Register">
-		<br />
-	</div>
+<h3>Registration</h3>
+<fieldset>
+    <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
+    <form name="register" action="/register" id="register" method="POST">
+    	<!-- Display any messages -->
+    	{% if message != null %}
+    		<div class="alert alert-{{type}} alert-dismissible" role="alert">
+    			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    			{{message}}
+    		</div>
+    	{% endif %}
+    
+      <div class="form-group" id="usernameError">
+        <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
+        <input id="usernameInput" class="form-control" type="text" name="username">
+      </div>
+    
+      <div class="form-group">
+        <label for="firstname">First Name</label>
+        <input class="form-control" type="text" name="firstname">
+      </div>
+    
+      <div class="form-group">
+        <label for="surname">Surname</label>
+        <input class="form-control" type="text" name="surname">
+      </div>
+    
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input class="form-control" type="date" name="dob" id="validateDOB">
+    		<span id="DOBValidation"></span>
+      </div>
+    
+      <div class="form-group">
+        <label for="isMale">Gender </label>
+        <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+        <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+      </div>
+    
+      <div class="form-group">
+        <label for="accounttype">Account Type</label>
+        <select name="accounttype" class="form-control">
+        	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
+        	<option value="patient">Patient</option>
+        	<option value="carer">Carer</option>
+        </select>
+      </div>
+    
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input class="form-control" type="text" id="validateEmail" name="email">
+    		<span id="emailValidate"></span>
+    	</div>
+    
+      <div class="form-group">
+      	<label for="password">Password</label>
+        <input class="form-control" type="password" id="password" name="password">
+    		<span id="result"></span>
+      </div>
+    
+      <div class="form-group">
+        <label for="confirmpassword">Confirm Password</label>
+        <input class="form-control" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
+    		<span id="confirmationMessage"></span>
+      </div>
+    
+        <div class="form-group checkbox">
+            <label for="terms" type="hidden"></label>
+    		<input type="checkbox" name="terms"> I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a>
+    	</div>
+    
+    	<div class="form-group">
+    		<input class="btn btn-default pull-right" type="submit" value="Register">
+    		<br />
+    	</div>
+    </fieldset>
 </form>
 	<!--A modal which shows the terms and conditions a user is agreeing to when they register -->
 	<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
