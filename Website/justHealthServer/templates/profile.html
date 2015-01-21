@@ -17,16 +17,19 @@
 {% endblock %}
 
 {% block content %}
-<h3>Personal Profile</h3>
-<br />
+<fieldset class ="form-container">
 
+<h3>Personal Profile</h3>
+<hr>
   <div class="container">
 
       <div class="row">
         <div class="col-lg-7" align="center">
           <div class="panel panel-info">
-            <div class="panel-heading">
+            <div class="panel-body">
               <h3>{{profileDetails.username}}</h3>
+              <hr>
+
             </div>
 
 
@@ -201,6 +204,7 @@
       </div>
     </div>
 </div>
+</fieldset>
 
 
 {% endblock %}

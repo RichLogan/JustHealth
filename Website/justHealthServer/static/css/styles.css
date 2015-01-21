@@ -227,17 +227,13 @@ fieldset.fix {
 
 }
 
-fieldset.form-container {
-  width: 80%;
-
-}
 
 fieldset.form-container {
   margin: auto;
   border: 1px solid silver;
   padding: 20px;
   border-radius: 4px;
-  background: #FFFFFF
+  background: #FFFFFF;
 }
 
 hr {
