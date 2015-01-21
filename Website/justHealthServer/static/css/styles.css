@@ -98,7 +98,7 @@ html, body {
 	margin: 0;
 	padding: 0;
   height: 100%;
-  background-color: #FAFAFA;
+  background-color: #F1F1F1;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -108,8 +108,8 @@ html, body {
 }
 
 header {
-
   padding: 20px;
+}
 
 #content {
   padding:10px;
@@ -117,7 +117,6 @@ header {
   width: 55%;
   margin: 0 auto;
   margin-top: 40px;
-
 }
 
 footer {
@@ -228,9 +227,13 @@ fieldset.fix {
 }
 
 fieldset.form-container {
-  width: 60%;
   margin: auto;
   border: 1px solid silver;
   padding: 20px;
   border-radius: 4px;
+  background: #FFFFFF
+}
+
+hr {
+  color: #000000;
 }
