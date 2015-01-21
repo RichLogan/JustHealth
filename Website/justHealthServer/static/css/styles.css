@@ -226,10 +226,17 @@ fieldset.fix {
   padding: 8px;
 }
 
-fieldset.form-container {
+fieldset.login-outer {
   margin: auto;
   border: 1px solid silver;
   padding: 20px;
+  border-radius: 4px;
+  background: #FFFFFF
+}
+
+fieldset.login-inner {
+  width: 50%;
+  margin: auto;
   border-radius: 4px;
   background: #FFFFFF
 }
@@ -240,8 +247,4 @@ fieldset.register {
   padding: 20px;
   border-radius: 4px;
   background: #FFFFFF
-}
-
-hr {
-  color: #000000;
 }
