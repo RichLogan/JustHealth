@@ -99,6 +99,7 @@ html, body {
 	padding: 0;
   height: 100%;
   background-color: #FAFAFA;
+  font-family: 'Roboto', sans-serif;
 }
 
 #container {
@@ -107,15 +108,16 @@ html, body {
 }
 
 header {
+
   padding: 20px;
-}
 
 #content {
   padding:10px;
   padding-bottom:40px;   /* Height of the footer */
-  width: 65%;
+  width: 55%;
   margin: 0 auto;
-  margin-top: 35px;
+  margin-top: 40px;
+
 }
 
 footer {
@@ -219,9 +221,16 @@ footer #footerContainer {
   position: absolute;
 }
 
-fieldset {
+fieldset.fix {
+  width: 75%;
+  margin: auto;
+  padding: 8px;
+}
+
+fieldset.form-container {
   width: 60%;
   margin: auto;
   border: 1px solid silver;
-  padding: 20px;    
+  padding: 20px;
   border-radius: 4px;
+}
