@@ -13,6 +13,9 @@
         <item name="android:background">
             @color/action_bar
         </item>
+        <item name="android:actionOverflowButtonStyle">
+            @color/white
+        </item>
     </style>
 
     <style name="defaultActionBarText" parent="@style/android:TextAppearance.Holo.Widget.ActionBar.Title">
@@ -59,6 +62,16 @@
         <item name="android:background">@drawable/form_border</item>
     </style>
 
+    <style name="inputFieldsStyle">
+        <item name="android:layout_marginTop">20sp</item>
+    </style>
+
+    <style name="defaultConfirmButton">
+        <item name="android:layout_marginLeft">20sp</item>
+        <item name="android:layout_marginRight">20sp</item>
+        <item name="android:background">@style/successButton</item>
+    </style>
+
     <!-- Button Styles -->
     <style name="primaryButton" parent="@android:style/Widget.Holo.Button">
         <item name="android:background">@color/primary</item>
@@ -103,6 +116,4 @@
 
     <!-- ActionBar color strip -->
     <dimen name="colorstrip">5dp</dimen>
-
-
 </resources>
