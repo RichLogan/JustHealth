@@ -60,6 +60,7 @@
         <item name="android:layout_marginRight">20sp</item>
         <item name="android:layout_marginLeft">20sp</item>
         <item name="android:background">@drawable/form_border</item>
+        <item name="android:layout_marginTop">65sp</item>
     </style>
 
     <style name="inputFieldsStyle">
@@ -69,7 +70,11 @@
     <style name="defaultConfirmButton">
         <item name="android:layout_marginLeft">20sp</item>
         <item name="android:layout_marginRight">20sp</item>
-        <item name="android:background">@style/successButton</item>
+        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <!-- Button Styles -->
