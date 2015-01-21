@@ -227,6 +227,14 @@ fieldset.fix {
   padding: 8px;
 }
 
+fieldset.form-container {
+  margin: auto;
+  border: 1px solid silver;
+  padding: 20px;
+  border-radius: 4px;
+  background: #FFFFFF;
+}
+
 fieldset.login-outer {
   margin: auto;
   border: 1px solid silver;
@@ -247,9 +255,10 @@ fieldset.register {
   border: 1px solid silver;
   padding: 20px;
   border-radius: 4px;
-  background: #FFFFFF
+  background: #FFFFFF;
 }
 
 hr {
+  color: #000000;
   width: 100%;
 }

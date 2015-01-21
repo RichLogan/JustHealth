@@ -8,9 +8,12 @@
 {% endblock %}
 
 {% block content %}
-<h3> Search </h3>
 
 <!--Seach box to search for users to conency to-->
+<fieldset class ="form-container">
+  <h3> Search for user</h3>
+  <hr>
+
   <form action="/search" method="POST">
     <div class="form-group">
       <label for="username"></label>
@@ -61,5 +64,6 @@
 </div>
 
    <br />
+ </fieldset>
 
 {% endblock %}

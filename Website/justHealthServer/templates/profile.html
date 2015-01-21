@@ -17,29 +17,25 @@
 {% endblock %}
 
 {% block content %}
-<h3>User Profile</h3>
-<br />
-<!--Tab layout -->
-<div role="tabpanel">
-<!--Tab Headers -->
-  <ul class="nav nav-tabs nav-justified" role="tablist" id="profileTab">
-    <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-    <li role="presentation"><a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a></li>
-  </ul>
+<fieldset class ="form-container">
 
-  <br />
-<!--Tab for users profile -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active container" id="profile">
-      <div class="row" align ="center">
-        <div class="col-md-6 col-lg-6 ">
+<h3>Personal Profile</h3>
+<hr>
+  <div class="container">
+
+      <div class="row">
+        <div class="col-lg-7" align="center">
           <div class="panel panel-info">
-            <div class="panel-heading">
-              <h3>{{profileDetails.username}}</h3>
-            </div>
             <div class="panel-body">
+              <h3>{{profileDetails.username}}</h3>
+              <hr>
+
+            </div>
+
+
+            <div class="panel-body">
+              <div class="col-lg-3 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
               <div class="row">
-                <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"> </div>
                 <div class=" col-md-10 col-lg-8 ">
                   <table class="table table-user-information">
                     <tbody>
@@ -76,122 +72,139 @@
             </div>
             <!--Link to be able to edit your profile -->
             <div class="panel-footer"> <a href="/editProfile" >Edit Profile</a></div>
+            <div class="panel-footer"> <a data-toggle="modal" data-target="#terms"> View Connections </a>
+              <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title" id="terms"> Connections</h4>
+                    </div>
+                    <div class="modal-body">
+                      <h4>Outgoing</h4>
+                      <table class="table table-condensed ">
+                        <thead>
+                          <th>Username</th>
+                          <th>First Name</th>
+                          <th>Surname</th>
+                          <th>Account Type</th>
+                          <th></th>
+                          <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in outgoing %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <td>{{connection.code}}</td>
+                              <form action="/api/cancelConnection" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
+                              </form>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <!--Table for incomming connections -->
+                        <br />
+                        <h4>Incoming</h4>
+                        <table class="table table-condensed">
+                          <thead>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Account Type</th>
+                            <th></th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in incoming %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
+                              <form action="/api/cancelConnection" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
+                              </form>
+                              <!--model which asks the user to enter in a verification code to complete the incomming connection -->
+                              <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                      <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <h4>Please enter the verification code given by the requestor</h1>
+                                        <form role="form" action="/completeConnectionWeb" method="POST">
+                                          <div style="width: 70%;margin: 0 auto;">
+                                            <input name="requestor" type="hidden" value="{{connection.username}}">
+                                            <input name="username" type="hidden" value="{{session.username}}">
+                                            <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                            <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                          <!--Table for completed connections -->
+                          <br />
+                          <h4>Completed</h4>
+                          <table class="table table-condensed ">
+                            <thead>
+                              <th>Username</th>
+                              <th>First Name</th>
+                              <th>Surname</th>
+                              <th>Account Type</th>
+                              <th></th>
+                            </thead>
+                            <tbody>
+                              {% for connection in completed %}
+                              <tr>
+                                <td>{{connection.username}}</td>
+                                <td>{{connection.firstname}}</td>
+                                <td>{{connection.surname}}</td>
+                                <td>{{connection.accounttype}}</td>
+                                <form action="/api/deleteConnection" method="POST">
+                                  <input type="hidden" name="user" value="{{session.username}}">
+                                  <input type="hidden" name="connection" value="{{connection.username}}">
+                                  <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
+                                </form>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-    <!--Second tab connections, showing all outgoing, incoming and completed connections -->
-    <div role="tabpanel" class="tab-pane fade" id="connections">
-      <!--Table for outgoing connections -->
-      <h4>Outgoing</h4>
-      <table class="table table-condensed table-hover makeDataTable">
-        <thead>
-          <th>Username</th>
-          <th>First Name</th>
-          <th>Second Name
-          <th>Account Type</th>
-          <th>Code</th>
-          <th></th>
-        </thead>
-        <tbody>
-          {% for connection in outgoing %}
-            <tr>
-              <td>{{connection.username}}</td>
-              <td>{{connection.firstname}}</td>
-              <td>{{connection.surname}}</td>
-              <td>{{connection.accounttype}}</td>
-              <td>{{connection.code}}</td>
-              <form action="/api/cancelConnection" method="POST">
-                <input type="hidden" name="user" value="{{session.username}}">
-                <input type="hidden" name="connection" value="{{connection.username}}">
-                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
-              </form>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <!--Table for incomming connections -->
-      <h4>Incoming</h4>
-      <table class="table table-condensed table-hover makeDataTable">
-        <thead>
-          <th>Username</th>
-          <th>First Name</th>
-          <th>Surname</th>
-          <th>Account Type</th>
-          <th></th>
-          <th></th>
-        </thead>
-        <tbody>
-          {% for connection in incoming %}
-            <tr>
-              <td>{{connection.username}}</td>
-              <td>{{connection.firstname}}</td>
-              <td>{{connection.surname}}</td>
-              <td>{{connection.accounttype}}</td>
-              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
-              <form action="/api/cancelConnection" method="POST">
-                <input type="hidden" name="user" value="{{session.username}}">
-                <input type="hidden" name="connection" value="{{connection.username}}">
-                <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
-              </form>
-              <!--model which asks the user to enter in a verification code to complete the incomming connection -->
-              <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
-                    </div>
-                    <div class="modal-body">
-                      <h4>Please enter the verification code given by the requestor</h1>
-                      <form role="form" action="/completeConnectionWeb" method="POST">
-                        <div style="width: 70%;margin: 0 auto;">
-                          <input name="requestor" type="hidden" value="{{connection.username}}">
-                          <input name="username" type="hidden" value="{{session.username}}">
-                          <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
-                          <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <!--Table for completed connections -->
-      <h4>Completed</h4>
-      <table class="table table-condensed table-hover makeDataTable">
-        <thead>
-          <th>Username</th>
-          <th>First Name</th>
-          <th>Surname</th>
-          <th>Account Type</th>
-          <th></th>
-        </thead>
-        <tbody>
-          {% for connection in completed %}
-            <tr>
-              <td>{{connection.username}}</td>
-              <td>{{connection.firstname}}</td>
-              <td>{{connection.surname}}</td>
-              <td>{{connection.accounttype}}</td>
-              <form action="/api/deleteConnection" method="POST">
-                <input type="hidden" name="user" value="{{session.username}}">
-                <input type="hidden" name="connection" value="{{connection.username}}">
-                <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
-              </form>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-  </div>
 </div>
-
-<!-- Modal -->
+</fieldset>
 
 
 {% endblock %}
