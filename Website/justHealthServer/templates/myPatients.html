@@ -46,8 +46,10 @@
 {% endblock %}
 
 {% block content %}
-  <h1>My Patients</h1>
+<fieldset class ="form-container">
 
+  <h1>My Patients</h1>
+  <hr>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for patient in patients %}
       <div class="panel panel-default">
@@ -698,4 +700,5 @@
             </div>
     {% endfor %}
   </div>
+</fieldset>
 {% endblock %}

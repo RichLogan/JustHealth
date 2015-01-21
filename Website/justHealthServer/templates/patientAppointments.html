@@ -40,7 +40,10 @@
 {% endblock %}
 
 {% block content %}
+<fieldset class ="form-container">
+
 	<h3>Your Appointments</h3>
+  <hr>
 	<br />
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -257,4 +260,5 @@
     </div>
   </div>
 </div>
+</fieldset>
 {% endblock %}

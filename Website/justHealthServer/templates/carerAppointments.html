@@ -41,7 +41,10 @@ $('time').each(function(i, e) {
 {% endblock %}
 
 {% block content %}
+<fieldset class ="form-container">
+
 <h3>Your Appointments</h3>
+<hr>
 <br />
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
@@ -191,4 +194,5 @@ $('time').each(function(i, e) {
       </div>
     </div>
   </div>
+</fieldset>
 {% endblock %}

@@ -5,7 +5,10 @@
 {% block scriptsAndStyles %}{% endblock %}
 
 {% block content %}
+<fieldset class ="form-container">
+
 <h2>Prescriptions</h2>
+<hr>
 <!--List format to display a patients prescritpions -->
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   {%for prescription in prescriptions%}
@@ -34,4 +37,5 @@
 </div>
   {% endfor %}
 </div>
+</fieldset>
 {% endblock %}
