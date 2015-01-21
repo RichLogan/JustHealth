@@ -649,13 +649,7 @@
                                           <input class="form-control" type="text" name="name">
                                         </div>
                                         <div class="form-group">
-                                          <label for="apptype">Appointment Type</label>
-                                          <select name="apptype" class="form-control">
-                                            <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
-                                            {% for type in appType %}
-                                              <option>{{type.type}}</option>
-                                            {% endfor %}
-                                          </select>
+                                          <input name="apptype" type="hidden" value="Carer">
                                         </div>
                                         <div class="form-group">
                                           <label for="addressnamenumber">Building Name/Number</label>
