@@ -62,6 +62,10 @@
         <item name="android:background">@drawable/form_border</item>
     </style>
 
+    <style name="inputFieldsStyle">
+        <item name="android:layout_marginTop">20sp</item>
+    </style>
+
     <!-- Button Styles -->
     <style name="primaryButton" parent="@android:style/Widget.Holo.Button">
         <item name="android:background">@color/primary</item>
@@ -76,7 +80,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-
+  
     <!-- Text sizes -->
     <dimen name="text_size_small">14.0sp</dimen>
     <dimen name="text_size_medium">16.0sp</dimen>
