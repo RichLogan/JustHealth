@@ -100,6 +100,7 @@ html, body {
   height: 100%;
   background-color: #F1F1F1;
   font-family: 'Roboto', sans-serif;
+  font-size: 0.875em
 }
 
 #container {
@@ -224,9 +225,7 @@ fieldset.fix {
   width: 100%;
   margin: auto;
   padding: 8px;
-
 }
-
 
 fieldset.form-container {
   margin: auto;
@@ -236,6 +235,30 @@ fieldset.form-container {
   background: #FFFFFF;
 }
 
+fieldset.login-outer {
+  margin: auto;
+  border: 1px solid silver;
+  padding: 20px;
+  border-radius: 4px;
+  background: #FFFFFF
+}
+
+fieldset.login-inner {
+  width: 50%;
+  margin: auto;
+  border-radius: 4px;
+  background: #FFFFFF
+}
+
+fieldset.register {
+  margin: auto;
+  border: 1px solid silver;
+  padding: 20px;
+  border-radius: 4px;
+  background: #FFFFFF;
+}
+
 hr {
   color: #000000;
+  width: 100%;
 }

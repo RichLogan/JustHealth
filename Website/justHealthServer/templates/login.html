@@ -38,28 +38,29 @@
     </div>
   {% endif %}
 
-    <fieldset class ="form-container">
+    <fieldset class="login-outer">
         <h4 class="pull-left strong">JustHealth Login</h4>
         <button class="btn btn-success pull-right" onclick="javascript:location.href='/register'">Sign up</button>
-    </br>
         <hr>
-        
+        <fieldset class="login-inner">
 	    <form action="/login" method="POST">   
 	   	    <!--Input box for username -->
             <div class="form-group">
                 <label for="username">Username</label>
-                <input class="form-control" type="text" name="username">
+                <input class="form-control input-sm" type="text" name="username">
             </div>
 	   	    <!--Input box for password -->
+        
             <div class="form-group">
               <label for="password">Password</label>
-              <input class="form-control" type="password" name="password">
+              <input class="form-control input-sm" type="password" name="password">
             </div>
             <input class="btn btn-default pull-right" type="submit" value="Login">
 	    </form>
-
-    <a class="smallLink" data-toggle="modal" data-target="#forgotPassword">Forgot Password</a>
+        <a class="smallLink" data-toggle="modal" data-target="#forgotPassword">Forgot Password</a>
+        </fieldset>
     </fieldset>
+
 		<!--Forgot password modal, onlcick the modal will appear and ask the user to enter their email address in order to be able to reset their password -->
 	<div class="modal fade" id="forgotPassword" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
 		<div class="modal-dialog">
