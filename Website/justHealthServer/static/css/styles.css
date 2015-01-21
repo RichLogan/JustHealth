@@ -216,15 +216,14 @@ footer #footerContainer {
 }
 
 fieldset.fix {
-  width: 75%;
+  width: 100%;
   margin: auto;
   padding: 8px;
-
 
 }
 
 fieldset.form-container {
-  width: 75%;
+  width: 80%;
   margin: auto;
   border: 1px solid silver;
   padding: 8px;
