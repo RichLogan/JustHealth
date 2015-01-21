@@ -134,12 +134,19 @@ fieldset.login-inner {
   background: #FFFFFF
 }
 
-fieldset.register {
+fieldset.register-outer {
   margin: auto;
   border: 1px solid silver;
   padding: 20px;
   border-radius: 4px;
   background: #FFFFFF;
+}
+
+fieldset.register-inner {
+  width: 75%;
+  margin: auto;
+  border-radius: 4px;
+  background: #FFFFFF
 }
 
 hr {
@@ -198,6 +205,11 @@ hr {
   color: #2272EB;
   display:block;
   text-decoration: none
+}
+
+.headingIcon {
+  font-size: 35px;
+  color: #2272EB;
 }
 
 .smallIcon {

@@ -63,10 +63,11 @@ $(document).ready(function() {
 
 {% block content %}
 
-<fieldset class="register">
-    <h4 class="pull-left strong">Register your account here</h4>
+<fieldset class="register-outer">
+    <i class="fa fa-edit headingIcon pull-left"></i><h4 class="pull-left strong">Register your account here</h4>
     </br>
         <hr>
+    <fieldset class="register-inner">
     <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
     <form name="register" action="/register" id="register" method="POST">
     	<!-- Display any messages -->
@@ -139,8 +140,10 @@ $(document).ready(function() {
     		<input class="btn btn-success pull-right" type="submit" value="Sign up">
     		<br />
     	</div>
+    
+    </form>
     </fieldset>
-</form>
+</fieldset>
 	<!--A modal which shows the terms and conditions a user is agreeing to when they register -->
 	<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
 		<div class="modal-dialog">
