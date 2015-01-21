@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,94 +18,165 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Username"
-                android:inputType="textAutoComplete"
-                android:ems="10"
-                android:id="@+id/username"
-                android:layout_gravity="center_horizontal"
-                android:maxLength="25" />
+            <!-- Username -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="Username"
+                    android:inputType="textAutoComplete"
+                    android:ems="10"
+                    android:id="@+id/username"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLength="25"
+                    style="@style/inputWithIcon"/>
+                <IconTextView
+                    android:text="{fa-user}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="First Name"
-                android:ems="10"
-                android:id="@+id/firstName"
-                android:maxLength="100" />
+            <!-- First Name -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="First Name"
+                    android:ems="10"
+                    android:id="@+id/firstName"
+                    android:maxLength="100"
+                    style="@style/inputWithIcon"/>
+                <IconTextView
+                    android:text="{fa-user}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Surname"
-                android:ems="10"
-                android:id="@+id/surname"
-                android:maxLength="100" />
+            <!-- Surname -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="Surname"
+                    android:ems="10"
+                    android:id="@+id/surname"
+                    android:maxLength="100"
+                    style="@style/inputWithIcon"/>
+                <IconTextView
+                    android:text="{fa-user}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="10"
-                android:id="@+id/dob"
-                android:hint="DOB" />
+            <!-- Date of Birth -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/dob"
+                    android:hint="DOB"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-calendar}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Gender"/>
+            <!-- Gender -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gender"
+                    android:entries="@array/gender"
+                    android:prompt="@string/genderPopup"
+                    android:spinnerMode="dialog"
+                    style="@style/spinnerWithIcon"/>
+                <IconTextView
+                    android:id="@+id/genderIcon"
+                    android:text="{fa-male}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gender"
-                android:entries="@array/gender"
-                android:prompt="@string/genderPopup"
-                android:spinnerMode="dialog" />
+            <!-- Account Type -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accountType"
+                    android:entries="@array/accountType"
+                    android:prompt="@string/accountTypePopup"
+                    android:spinnerMode="dialog"
+                    style="@style/spinnerWithIcon"/>
+                <IconTextView
+                    android:id="@+id/accountTypeIcon"
+                    android:text="{fa-user}"
+                    style="@style/inputIcon"/>
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Account Type"/>
+            <!-- Email -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/email"
+                    android:hint="Email"
+                    android:maxLength="100"
+                    style="@style/inputWithIcon"/>
+                <IconTextView
+                    android:text="{fa-at}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accountType"
-                android:entries="@array/accountType"
-                android:prompt="@string/accountTypePopup"
-                android:spinnerMode="dialog" />
+            <!-- Password -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/password"
+                    android:hint="Password"
+                    android:maxLength="255"
+                    style="@style/inputWithIcon"/>
+                <IconTextView
+                    android:text="{fa-lock}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/email"
-                android:hint="Email"
-                android:maxLength="100" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/password"
-                android:hint="Password"
-                android:maxLength="255" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/confirmPassword"
-                android:hint="Confirm Password"
-                android:maxLength="255" />
+            <!-- Confirm Password -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/confirmPassword"
+                    android:hint="Confirm Password"
+                    android:maxLength="255"
+                    style="@style/inputWithIcon"/>
+                <IconTextView
+                    android:text="{fa-lock}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
 
             <CheckBox
                 android:layout_width="match_parent"

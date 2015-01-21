@@ -8,9 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.IconTextView;
 import android.widget.Spinner;
 
 import java.util.HashMap;
@@ -35,7 +38,54 @@ public class Register extends Activity {
             }
         );
 
+        // Spinner listeners
+        initSpinners();
+
         //TODO: Link to Terms and Conditions
+    }
+
+    private void initSpinners() {
+        // Gender Spinner
+        final Spinner genderSpinner = (Spinner) findViewById(R.id.gender);
+        genderSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                String selected = genderSpinner.getSelectedItem().toString();
+                IconTextView genderIcon = (IconTextView) findViewById(R.id.genderIcon);
+                if (selected.equals("Male")) {
+                    genderIcon.setText("{fa-male}");
+
+                }
+                else if (selected.equals("Female")) {
+                    genderIcon.setText("{fa-female}");
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        // Account Type Spinner
+        final Spinner typeSpinner = (Spinner) findViewById(R.id.accountType);
+        typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                String selected = typeSpinner.getSelectedItem().toString();
+                IconTextView typeIcon = (IconTextView) findViewById(R.id.accountTypeIcon);
+                if (selected.equals("Patient")) {
+                    typeIcon.setText("{fa-user}");
+
+                }
+                else if (selected.equals("Carer")) {
+                    typeIcon.setText("{fa-user-md}");
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
     private void sendRegister() {
