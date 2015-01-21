@@ -19,6 +19,9 @@ import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.support.v4.app.NavUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -60,36 +63,32 @@ public class SelfAppointments extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Appointments");
 
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(actionBarLayout);
+        getUpcomingAppointments();
+    }
 
-        // You customization
-        final int actionBarColor = getResources().getColor(R.color.action_bar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(actionBarColor));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_self_appointments, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-
-        final Button addAppointment = (Button) findViewById(R.id.addAppointment);
-        addAppointment.setText("Add");
-        addAppointment.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                Intent add = new Intent(SelfAppointments.this, CreateSelfAppointment.class);
-                startActivity(add);
-            }
-        });
-
-
-        final Button actionViewMore = (Button) findViewById(R.id.more);
-        actionViewMore.setText("Archived");
-        actionViewMore.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.archived:
                 Intent archived = new Intent(SelfAppointments.this, SelfArchivedAppointments.class);
                 archived.putExtra("appointments", getApps.toString());
                 startActivity(archived);
-            }
-        });
-
-
-        getUpcomingAppointments();
+                return true;
+            case R.id.add:
+                startActivity(new Intent(SelfAppointments.this, CreateSelfAppointment.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 

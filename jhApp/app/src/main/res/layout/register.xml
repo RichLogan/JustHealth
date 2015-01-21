@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Register"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <ScrollView
         xmlns:tools="http://schemas.android.com/tools"
@@ -11,12 +12,19 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/off_white">
+
+        <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp">
+            android:layout_marginRight="15dp"
+            style="@style/defaultLinearForm">
 
             <!-- Username -->
             <RelativeLayout
@@ -184,14 +192,12 @@
                 android:text="I accept the terms and conditions"
                 android:id="@+id/tsandcs"
                 android:checked="false" />
-
+</LinearLayout>
            <Button
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
                android:text="@string/register"
                android:id="@+id/register"
-               android:layout_gravity="center_horizontal"
-               style="@style/successButton" />
+               android:layout_marginTop="35dp"
+               style="@style/defaultConfirmButton" />
        </LinearLayout>
     </ScrollView>
 </RelativeLayout>
