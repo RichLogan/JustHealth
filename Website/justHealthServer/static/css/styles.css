@@ -1,7 +1,13 @@
-a:link    {color:#A8A8A8; background-color:transparent}
-a:visited {color:#A8A8A8; background-color:transparent}
-a:hover   {color:#A8A8A8; background-color:transparent}
-a:active  {color:#A8A8A8; background-color:transparent}
+a:link    {color:#2272EB; background-color:transparent}
+a:visited {color:#2272EB; background-color:transparent}
+a:hover   {color:#2272EB; background-color:transparent}
+a:active  {color:#2272EB; background-color:transparent}
+
+.runner {color: #FFFFFF;}
+a.runner:link    {color:#FFFFFF; background-color:transparent}
+a.runner:visited {color:#FFFFFF; background-color:transparent}
+a.runner:hover   {color:#FFFFFF; background-color:transparent}
+a.runner:active  {color:#FFFFFF; background-color:transparent}
 
 .codeInput {
   width: 300px;
@@ -39,6 +45,7 @@ a:active  {color:#A8A8A8; background-color:transparent}
   padding: 0px;
   color: #2272EB;
   display:block;
+  text-decoration: none
 }
 
 .wrongInputs {
@@ -100,7 +107,7 @@ html, body {
 }
 
 header {
-  padding: 10px;
+  padding: 20px;
 }
 
 #content {
@@ -213,8 +220,8 @@ footer #footerContainer {
 }
 
 fieldset {
-  width: 75%;
+  width: 60%;
   margin: auto;
   border: 1px solid silver;
-  padding: 8px;    
+  padding: 20px;    
   border-radius: 4px;
