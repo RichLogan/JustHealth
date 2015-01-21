@@ -100,6 +100,7 @@ html, body {
   height: 100%;
   background-color: #F1F1F1;
   font-family: 'Roboto', sans-serif;
+  font-size: 0.875em
 }
 
 #container {
@@ -247,4 +248,8 @@ fieldset.register {
   padding: 20px;
   border-radius: 4px;
   background: #FFFFFF
+}
+
+hr {
+  width: 100%;
 }

@@ -61,8 +61,10 @@ $(document).ready(function() {
 
 {% block content %}
 
-<h4 class="strong">Registration</h>
-<fieldset class ="form-container">
+<fieldset class="register">
+    <h4 class="pull-left strong">Register your account here</h4>
+    </br>
+        <hr>
     <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
     <form name="register" action="/register" id="register" method="POST">
     	<!-- Display any messages -->
@@ -75,22 +77,22 @@ $(document).ready(function() {
 
       <div class="form-group" id="usernameError">
         <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
-        <input id="usernameInput" class="form-control" type="text" name="username">
+        <input id="usernameInput" class="form-control input-sm" type="text" name="username">
       </div>
 
       <div class="form-group">
         <label for="firstname">First Name</label>
-        <input class="form-control" type="text" name="firstname">
+        <input class="form-control input-sm" type="text" name="firstname">
       </div>
 
       <div class="form-group">
         <label for="surname">Surname</label>
-        <input class="form-control" type="text" name="surname">
+        <input class="form-control input-sm" type="text" name="surname">
       </div>
 
       <div class="form-group">
         <label for="dob">Date of Birth</label>
-        <input class="form-control" type="date" name="dob" id="validateDOB">
+        <input class="form-control input-sm" type="date" name="dob" id="validateDOB">
     		<span id="DOBValidation"></span>
       </div>
 
@@ -102,7 +104,7 @@ $(document).ready(function() {
 
       <div class="form-group">
         <label for="accounttype">Account Type</label>
-        <select name="accounttype" class="form-control">
+        <select name="accounttype" class="form-control input-sm">
         	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
         	<option value="patient">Patient</option>
         	<option value="carer">Carer</option>
@@ -111,28 +113,28 @@ $(document).ready(function() {
 
       <div class="form-group">
         <label for="email">Email Address</label>
-        <input class="form-control" type="text" id="validateEmail" name="email">
+        <input class="form-control input-sm" type="text" id="validateEmail" name="email">
     		<span id="emailValidate"></span>
     	</div>
 
       <div class="form-group">
       	<label for="password">Password</label>
-        <input class="form-control" type="password" id="password" name="password">
+        <input class="form-control input-sm" type="password" id="password" name="password">
     		<span id="result"></span>
       </div>
 
       <div class="form-group">
         <label for="confirmpassword">Confirm Password</label>
-        <input class="form-control" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
+        <input class="form-control input-sm" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
     		<span id="confirmationMessage"></span>
       </div>
 
         <div class="form-group checkbox">
-    		<label for="terms"><input type="checkbox" name="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions<i class="fa fa-file"></i></a></label>
+    		<label for="terms"><input type="checkbox" name="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a></label>
     	</div>
 
     	<div class="form-group">
-    		<input class="btn btn-default pull-right" type="submit" value="Register">
+    		<input class="btn btn-success pull-right" type="submit" value="Sign up">
     		<br />
     	</div>
     </fieldset>
