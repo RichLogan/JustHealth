@@ -61,7 +61,7 @@
         <form name="connect" action="/createConnectionWeb" method="POST">
           <input name="username" type="hidden" value="{{username}}">
           <input name="target" type="hidden" value="{{result.username}}">
-          <input type="submit" class="btn btn-success" value="Connect">
+          <input type="submit" class="btn btn-success" value="Connect" onclick="return confirm('Are you sure you want to connect to {{result.username}}?')">
         </form>
       {% endif %}
    </td>

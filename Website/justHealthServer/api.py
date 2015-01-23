@@ -554,7 +554,7 @@ def completeConnection(details):
         # Delete this Relationship instance
         with database.transaction():
             instance.delete_instance()
-        return "Connection to " + target + " completed"
+        return "Connection to " + requestor + " completed"
     else:
         return "Incorrect code"
     return None
