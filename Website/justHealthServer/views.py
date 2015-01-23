@@ -217,11 +217,40 @@ def resetPasswordRedirect():
 
 @app.route('/createConnectionWeb', methods=['POST', 'GET'])
 def createConnectionWeb():
-    return createConnection(request.form)
+    result = createConnection(request.form)
+    if result != "Connection already established":
+        flash(result, 'success')
+        return redirect('/profile?go=connections')
+    else:
+        flash(result, 'danger')
+        return redirect(url_for('search'))
 
 @app.route('/completeConnectionWeb', methods=['POST', 'GET'])
 def completeConnectionWeb():
-    return completeConnection(request.form)
+    result = completeConnection(request.form)
+    if result == "Incorrect code":
+        flash(result, 'danger')
+    else:
+        flash(result, 'success')
+    return redirect('/profile?go=connections')
+
+@app.route('/deleteConnectionWeb', methods=['POST', 'GET'])
+def deleteConnectionWeb():
+    result = deleteConnection(request.form)
+    if result == "True":
+        flash("Delete successful", 'success')
+    else:
+        flash("Delete failed. Please contact an administrator", 'danger')
+    return redirect('/profile?go=connections')
+
+@app.route('/cancelConnectionWeb', methods=['POST', 'GET'])
+def cancelConnectionWeb():
+    result = cancelRequest(request.form)
+    if result == "True":
+        flash("Cancellation successful", 'success')
+    else:
+        flash("Cancel failed. Please contact an administrator", 'danger')
+    return redirect('/profile?go=connections')
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():

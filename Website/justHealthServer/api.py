@@ -11,8 +11,6 @@ import smtplib
 import json
 import random
 
-
-
 auth = HTTPBasicAuth()
 
 @auth.verify_password
@@ -461,6 +459,22 @@ def searchPatientCarer(username, searchterm):
         jsonResult.append(result)
     return json.dumps(jsonResult)
 
+def getConnectionStatus(username, target):
+    currentConnections = json.loads(getConnections(username))
+
+    for connection in json.loads(currentConnections['outgoing']):
+        if connection['username'] == target:
+            return "Already Requested"
+    
+    for connection in json.loads(currentConnections['incoming']):
+        if connection['username'] == target:
+            return "Request Waiting"
+
+    for connection in json.loads(currentConnections['completed']):
+        if connection['username'] == target:
+            return "Already Connected"
+    return "None"
+
 ####
 # Client/Client relationships
 ####
@@ -475,20 +489,14 @@ def createConnection(details):
     currentUser = details['username']
     targetUser = details['target']
 
-    #Handle existing entries. Need to check all == 0
-    with database.transaction():
-        if Relationship.select().where(Relationship.requestor == currentUser and Relationship.target == targetUser).count() != 0:
-            return "Connection already established"
-        if Relationship.select().where(Relationship.requestor == targetUser and Relationship.target == currentUser).count() != 0:
-            return "Connection already established"
-        if Patientcarer.select().where(Patientcarer.patient == currentUser and Patientcarer.carer == targetUser).count() != 0:
-            return "Connection already established"
-        if Patientcarer.select().where(Patientcarer.patient == targetUser and Patientcarer.carer == currentUser).count() != 0:
-            return "Connection already established"
-
     # Get user types
     currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
     targetUser_type = json.loads(getAccountInfo(targetUser))['accounttype']
+
+    # Need to check if connection already exists, requested, or if they have requested for you.
+    check = getConnectionStatus(currentUser, targetUser)
+    if check != "None":
+        return check
 
     # Generate 4 digit code
     x = ""
@@ -546,28 +554,28 @@ def completeConnection(details):
         # Delete this Relationship instance
         with database.transaction():
             instance.delete_instance()
-        return "Correct"
+        return "Connection to " + requestor + " completed"
     else:
-        return "Incorrect"
+        return "Incorrect code"
     return None
 
 @app.route('/api/deleteConnection', methods=['POST'])
 @auth.login_required
 def deleteConnection():
     """Deletes connection between a patient and carer POST[user, connection]"""
-    return deleteConnection(request.form['user'], request.form['connection'])
+    return deleteConnection(request.form)
 
-def deleteConnection(user,connection):
-    userType = json.loads(getAccountInfo(user))['accounttype']
-    connectionType = json.loads(getAccountInfo(connection))['accounttype']
+def deleteConnection(details):
+    userType = json.loads(getAccountInfo(details['user']))['accounttype']
+    connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
     if (userType == "Patient" and connectionType == "Carer"):
-        instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
+        instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
         return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
-        instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
+        instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
         with database.transaction():
             instance.delete_instance()
         return "True"
@@ -577,18 +585,23 @@ def deleteConnection(user,connection):
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
 def cancelRequest():
-    cancelRequest(request.form['user'], request.form['connection'])
+    return cancelRequest(request.form)
 
-def cancelRequest(user, connection):
+def cancelRequest(details):
     """Cancels the user request to connect before completion"""
     try:
-        instance = Relationship.select().where(Relationship.requestor == user).get()
         with database.transaction():
+            instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
             instance.delete_instance()
-    except RelationshipDoesNotExist:
-        instance = Relationship.select().where(Relationship.target == connection).get()
-        with database.transaction():
-            instance.delete_instance()
+            return "True"
+    except Relationship.DoesNotExist:
+        try:
+            with database.transaction():
+                instance = Relationship.select().where(Relationship.requestor == details['connection'] and Relationship.target == details['user']).get()
+                instance.delete_instance()
+                return "True"
+        except:
+            return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
 @auth.login_required
