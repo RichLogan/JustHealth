@@ -42,7 +42,72 @@
 {% block content %}
 <fieldset class ="form-container">
 
-  <i class="fa fa-calendar headingIcon pull-left"></i><h4>Your Appointments</h4>
+  <i class="fa fa-calendar headingIcon pull-left"></i><h4 class ="pull-left">Your Appointments</h4>
+   <a data-toggle="modal" data-target="#references" class="btn btn-success pull-right bold"> Create</a> 
+  <!--Modle to create a new appointment -->
+                <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="terms">Create New Appointment</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+                        <form name="createAppointment" method="POST" onsubmit="return !!validateFormAddAppointment();" >
+                        <div class="form-group">
+                          <label for="name">Appointment Title</label>
+                          <input class="form-control" type="text" name="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="apptype">Appointment Type</label>
+                          <select name="apptype" class="form-control">
+                            <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
+                            {% for type in appType %}
+                              <option>{{type.type}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="addressnamenumber">Building Name/Number</label>
+                          <input class="form-control" type="text" name="addressnamenumber">
+                        </div>
+                        <div class="form-group">
+                          <label for="postcode">Postcode</label>
+                          <input class="form-control" type="text" name="postcode">
+                        </div>
+                        <div class="form-group">
+                          <label for="startdate">Start Date</label>
+                          <input onfocusout="checkPastDate()" class="form-control" type="date" name="startdate" id="startdate">
+                          <span id="validDate"></span>
+                        </div>
+                        <div class="form-group">
+                          <label for="starttime">Start Time</label>
+                          <input class="form-control" type="time" name="starttime" id="starttime">
+                        </div>
+                        <div class="form-group">
+                          <label for="enddate">End Date</label>
+                          <input class="form-control" type="date" name="enddate" id="enddate">
+                          <span id=""></span>
+                        </div>
+                        <div class="form-group">
+                          <label for="endtime">End Time</label>
+                          <input class="form-control" type="time" name="endtime" id="endtime">
+                        </div>
+                        <div class="form-group">
+                          <label for="description">Details</label>
+                          <textarea class="form-control" name="description" id="description"></textarea>
+                        </div>
+                        <div class="modal-footer">
+             
+                          <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
+                        </div>
+                      </form>
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                </div>
   <hr>
 	<br />
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -68,7 +133,6 @@
 
   <ul class="nav nav-pills nav-justified" role="tablist">
     <li role="presentation" class="active"><a href="#upcoming" aria-controls="upcoming" role="tab" data-toggle="tab">Upcoming</a></li>
-    <li role="presentation"><a href="#newAppointment" aria-controls="newAppointment" role="tab" data-toggle="tab">Create</a></li>
     <li role="presentation"><a href="#archived" aria-controls="archived" role="tab" data-toggle="tab">Past</a></li>
   </ul>
 
@@ -139,7 +203,7 @@
     </div>
   </div>
 
-	<!--This shows the tab for the new appointments-->
+	<!--This shows the tab for the new appointments- chnaged to a button, but leaving in for now
 	<div role="tabpanel" class="tab-pane fade" id="newAppointment">
 		<div class="row">
       <div class="panel panel-info">
@@ -198,7 +262,7 @@
         </div>
   		</div>
   	</div>
-  </div>
+  </div>-->
   <!--Tab for archived appointments -->
   <div role="tabpanel" class="tab-pane fade in active container" id="archived" style="width: 100%">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="archived">
