@@ -17,9 +17,9 @@ $(document).ready(function() {
 
 {% block content %}
 <fieldset class ="form-container">
-	<i class="fa fa-cog headingIcon pull-left"></i><h4> Settings </h4>
+	<i class="fa fa-warning headingIcon pull-left"></i><h4> Deactivate your account </h4>
 	<hr>
-	<div role="tabpanel">
+	<div>
 		<!--Tab Headers -->
 		<ul class="nav nav-pills nav-justified" role="tablist">
     		<li role="presentation"><a href="/settings" aria-controls="settings">Account Settings</a></li>
@@ -29,8 +29,7 @@ $(document).ready(function() {
 		<hr>
 		<br />
 
-		<div role="tabpanel" class="tab-pane fade in active container" id="deactivate">
-			<h4>Deactivate account </h4>
+		<div id="deactivate">
 			{% if message != null %}
 			<div class="alert alert-{{type}} alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -44,17 +43,19 @@ $(document).ready(function() {
 
 				<input type="hidden" name="username" value="{{user}}">
 				<!--Drop down list populated from the database of reasons why you may deactivate -->
+				<fieldset class="deactivateoptions">
 				<div class="form-group">
-					<select name="reason" class="form-control">
+					<select name="reason" class="form-control input-sm">
 						<option class="placeholder" disabled selected>Please select a reason</option>
 						{% for reason in reasons %}
 						<option>{{reason.reason}}</option>
 						{% endfor %}
 					</select>
 				</div>
+			</fieldset>
 
 				<div class="form-group">
-					<textarea name="comments" id="comments" class="form-control" placeholder="Any comments..."></textarea>
+					<textarea name="comments" id="comments" class="form-control input-sm" placeholder="Any comments..."></textarea>
 				</div>
 
 				<div class="form-group">
@@ -104,35 +105,7 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
-
 		</div>
-
-		<div role="tabpanel" class="tab-pane fade in active container" id="security">
-			<h4>Security </h4>
-
-		</div>
-
-		<div role="tabpanel" class="tab-pane fade in active container" id="privacy">
-			<h4>Privacy & FAQ's </h4>
-			<ol>
-				<li> Who can connect with me? </li>
-				As a Patient only carers can search for you, as a carer only patients can search for you
-				<li> Who view my data? </li>
-				As a patient only you and your carer can view your data
-				As a carer patients can only see your username, firstname and surname
-				<li> Where is my data stored? </li>
-				All data is stored on JustHealth's database which protected by many security settings
-				<li> How can I delete appointments about myself? </li>
-				To delete appointments and prescriptions this can be done within the respective pages.
-				<li> How can I delete all my data? </li>
-				To delete all data about you, you need to deactivate your account and check the box to remove all your data.
-				<li> How can I leave JustHealth? </li>
-				To remove your account, this is done via the deactivation tab.
-			</ol>
-
-
-		</div>
-</div>
 
 </fieldset>
 {% endblock %}
