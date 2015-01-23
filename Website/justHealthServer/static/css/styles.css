@@ -238,6 +238,11 @@ hr {
   color: #FFFFFF;
 }
 
+.plusIcon{
+  font-size: 35px;
+  color: #33CC33;
+}
+
 /*Form validation Styles*/
 .placeholder {
   display: none;
