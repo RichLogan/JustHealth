@@ -79,6 +79,10 @@ def privacy():
 def references():
     return render_template('references.html')
 
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
+
 @app.route('/sitemap')
 def sitemap():
     return render_template('sitemap.html')
