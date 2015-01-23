@@ -602,6 +602,7 @@ def cancelRequest(details):
                 return "True"
         except:
             return "False"
+    return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
 @auth.login_required
