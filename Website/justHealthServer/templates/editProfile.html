@@ -21,8 +21,11 @@
 
 {% block content %}
 <div>
-<h3>Edit your profile</h3>
+    <fieldset class ="form-container">
 
+<i class=" fa fa-pencil-square-o headingIcon pull-left"> </i> <h4 class ="pull-left">Edit your profile</h4>
+   <a href="/settings"><i class="fa fa-cog headingIcon pull-right"></i> </a>
+<hr>
     <br />
     <!--Form to update profile details -->
     <form name="editDetails" method="POST" action="/updateProfile">
@@ -65,11 +68,11 @@
             <span id="emailValidate"></span>
         </div>
       <div class="form-group">
-        <input class="btn btn-default pull-right" type="submit" value="Update Profile">
+        <input class="btn btn-success pull-right" type="submit" value="Update Profile">
       </div>
     </form>
     <br />
     <br />
 </div>
-
+</fieldset>
 {% endblock %}

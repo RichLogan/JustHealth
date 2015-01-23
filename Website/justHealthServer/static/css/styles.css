@@ -212,6 +212,16 @@ hr {
   color: #2272EB;
 }
 
+.editIcon {
+  font-size: 35px;
+  color: #A8A8A8;
+}
+
+.deleteIcon {
+  font-size: 35px;
+  color: #DF111C;
+}
+
 .smallIcon {
   font-size: 50px;
   padding: 10px;
