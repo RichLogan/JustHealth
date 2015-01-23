@@ -585,7 +585,7 @@ def deleteConnection(details):
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
 def cancelRequest():
-    cancelRequest(request.form)
+    return cancelRequest(request.form)
 
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
@@ -602,7 +602,6 @@ def cancelRequest(details):
                 return "True"
         except:
             return "False"
-    return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
 @auth.login_required
