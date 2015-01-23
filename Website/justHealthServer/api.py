@@ -11,8 +11,6 @@ import smtplib
 import json
 import random
 
-
-
 auth = HTTPBasicAuth()
 
 @auth.verify_password
@@ -309,13 +307,43 @@ def editProfile(details):
     user.ismale = gender
     clientObject.dob = details['dob']
     clientObject.email = details['email']
-    
+
     # Execute Updated
     with database.transaction():
         user.save()
         clientObject.save()
         return "Edit Successful"
     return "Failed"
+
+@app.route('/api/changePassword', methods=['POST'])
+@auth.login_required
+def changePasswordAPI():
+    return changePasswordAPI(request.form)
+
+def changePasswordAPI(details):
+    """Allows a user to change their password. POST [username, oldpassword, newpassword]"""
+    try:
+        currentPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == details['username']) & (uq8LnAWi7D.iscurrent==True))
+        # If old password is correct
+        if sha256_crypt.verify(details['oldpassword'], currentPassword.password):
+            # Invalidate Old Password
+            currentPassword.iscurrent = False
+        
+            # Insert New Password
+            newPassword = uq8LnAWi7D.insert(
+                username = details['username'],
+                password = sha256_crypt.encrypt(details['newpassword']),
+                iscurrent = 'TRUE',
+                expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
+            )
+
+            # Execute
+            with database.transaction():
+                currentPassword.save()
+                newPassword.execute()
+                return "Password changed"
+        else: return "Incorrect password"
+    except: return "User does not exist"
 
 ####
 # Account Helper Functions
@@ -420,7 +448,6 @@ def sendPasswordResetEmail(username):
     # Send
     server.sendmail(sender, recipient, m+message)
     server.quit()
-
 
 ####
 # Search Patient Carer
@@ -693,8 +720,6 @@ def addPatientAppointment(details):
   
   return appId
 
-  
-
 @app.route('/api/addInviteeAppointment', methods=['POST'])
 @auth.login_required
 def addInviteeAppointment():
@@ -773,7 +798,6 @@ def getAllAppointments(loggedInUser, targetUser):
 
   return json.dumps(allAppointments)
 
-
 #deletes an appointment
 @app.route('/api/deleteAppointment', methods=['POST'])
 @auth.login_required
@@ -846,7 +870,6 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
 
   return "Appointment Updated"
 
-
 @app.route('/api/addMedication', methods=['POST'])
 @auth.login_required
 def addMedication():
@@ -916,7 +939,6 @@ def addPrescription(details):
             return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
-
 
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
@@ -1051,5 +1073,4 @@ def addAndroidEventId():
   dbId = request.form['dbid']
   androidId = request.form['androidid']
   addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
-
   return "Android ID added to database"
