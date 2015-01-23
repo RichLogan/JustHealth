@@ -2,14 +2,10 @@
 {% block title %}Settings{% endblock %}
 <!--java Script to load the tab format -->
 {% block scriptsAndStyles %}
-
-<!--javaScript to confirm a users deactivation -->
 <script>
-$(document).ready(function() {
-  $("#deactivate").submit(function(e) {
-    if (!confirm('Are you sure you want to deactivate this account?')) {
-      e.preventDefault();
-    }
+$(document).ready(function(){
+  $("#hide").click(function(){
+    $("p").toggle();
   });
 });
 </script>
@@ -17,55 +13,33 @@ $(document).ready(function() {
 
 {% block content %}
 <fieldset class ="form-container">
-  <i class="fa fa-cog headingIcon pull-left"></i><h4> Settings </h4>
+  <i class="fa fa-question headingIcon pull-left"></i><h4>Frequently Asked Questions</h4>
   <hr>
     <ul class="nav nav-pills btn-margin nav-justified" role="navigation">
-      <li role="presentation" class="active"><a href="/settings" aria-controls="settings" role="tab" data-toggle="tab">Account Settings</a></li>
-      <li role="presentation"><a href="/security" aria-controls="security" role="tab" data-toggle="tab">Security & Privacy</a></li>
-      <li role="presentation"><a href="/faq" aria-controls="faq" role="tab" data-toggle="tab">FAQ's</a></li>
+    <ul class="nav nav-pills btn-margin nav-justified" role="navigation">
+      <li role="presentation"><a href="/settings" aria-controls="settings">Account Settings</a></li>
+      <li role="presentation"><a href="/security" aria-controls="security">Security & Privacy</a></li>
+      <li role="presentation" class="active"><a href="/faq" aria-controls="faq">FAQs</a></li>
     </ul>
     <hr>
     <br/>
-    <fieldset class="links">
-    <table class="table">
-      <tbody>
-        <tr>
-          <td class="bold">Name: {{profileDetails.firstname}} {{profileDetails.surname}}</td>
-          <td><a href="/editProfile" class="pull-right">Edit Profile</a></td>
-        </tr>
-        <tr>
-          <td class="bold">Password</td>
-          <td><a href="/password" class="pull-right">Change Password</a></td>
-        </tr>
-        <tr>
-          <td class="bold">Account</td>
-          <td><a href="/deactivate" class="pull-right">Deactivate Account </a></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-    </fieldset>
+    <div id="privacy">
+        <ul>
+          <li class="bold"> Who can connect with me? </li>
+          <p>As a Patient only carers can search for you, as a carer only patients can search for you</p>
+          <li class="bold"> Who view my data? </li>
+          <p>If you are a patient, only you and your carer can view your data</br>
+          If you are a carer, your patients can only see your username, firstname and surname</p>
+          <li class="bold"> Where is my data stored? </li>
+          <p>All data is stored on JustHealth's database which protected by many security settings</p>
+          <li class="bold"> How can I delete appointments about myself? </li>
+          <p>To delete appointments and prescriptions this can be done within the respective pages</p>
+          <li class="bold"> How can I delete all my data? </li>
+          <p>To delete all data about you, you need to deactivate your account and check the box to remove all your data</p>
+          <li class="bold"> How can I leave JustHealth? </li>
+          <p>To remove your account, this is done via the deactivation tab</p>
+        </ul>
+    </div>
 </fieldset>
 
 {% endblock %}
-    <div role="tabpanel" class="tab-pane fade in active container" id="privacy">
-      <h4>FAQs </h4>
-        <ol>
-          <li> Who can connect with me? </li>
-       As a Patient only carers can search for you, as a carer only patients can search for you
-          <li> Who view my data? </li>
-         As a patient only you and your carer can view your data
-         As a carer patients can only see your username, firstname and surname
-          <li> Where is my data stored? </li>
-        All data is stored on JustHealth's database which protected by many security settings
-          <li> How can I delete appointments about myself? </li>
-          To delete appointments and prescriptions this can be done within the respective pages.
-          <li> How can I delete all my data? </li>
-          To delete all data about you, you need to deactivate your account and check the box to remove all your data.
-          <li> How can I leave JustHealth? </li>
-          To remove your account, this is done via the deactivation tab.
-        </ol>
-    </div>
