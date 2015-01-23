@@ -22,10 +22,11 @@ $(document).ready(function() {
 	<div role="tabpanel">
 		<!--Tab Headers -->
 		<ul class="nav nav-pills nav-justified" role="tablist">
-			<li role="presentation" class="active"><a href="#deactivate" aria-controls="deactivate" role="tab" data-toggle="tab">Deactivate Account</a></li>
+			<li role="presentation" class="active"><a href="#deactivate" aria-controls="deactivate" role="tab" data-toggle="tab">Account Settings</a></li>
 			<li role="presentation"><a href="#security" aria-controls="security" role="tab" data-toggle="tab">Security & Privacy</a></li>
 			<li role="presentation"><a href="#privacy" aria-controls="privacy" role="tab" data-toggle="tab">FAQ's</a></li>
 		</ul>
+		<hr>
 		<br />
 
 		<div role="tabpanel" class="tab-pane fade in active container" id="deactivate">
@@ -36,6 +37,8 @@ $(document).ready(function() {
 				{{message}}
 			</div>
 			{% endif %}
+			
+			<fieldset class="deactivate">
 			<!--Form for users to fill in details why they are deactivating -->
 			<form name="deactivate" action="/deactivate" id="deactivate" method="POST">
 
@@ -64,6 +67,7 @@ $(document).ready(function() {
 					<input class="btn btn-danger pull-right" id="deactivateConfirm" type="submit" value="Deactivate">
 				</div>
 			</form>
+			</fieldset>
 
 			<!-- Information Modal -->
 			<div class="modal fade" id="keepData" tabindex="-1" role="dialog" aria-labelledby="keepDataLabel" aria-hidden="true">

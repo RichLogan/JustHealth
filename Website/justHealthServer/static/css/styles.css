@@ -130,7 +130,6 @@ fieldset.login-outer {
 fieldset.login-inner {
   width: 50%;
   margin: auto;
-  border-radius: 4px;
   background: #FFFFFF
 }
 
@@ -145,7 +144,18 @@ fieldset.register-outer {
 fieldset.register-inner {
   width: 75%;
   margin: auto;
-  border-radius: 4px;
+  background: #FFFFFF
+}
+
+fieldset.deactivate {
+  width: 90%;
+  margin: auto;
+  background: #FFFFFF
+}
+
+fieldset.links {
+  width: 85%;
+  margin: auto;
   background: #FFFFFF
 }
 

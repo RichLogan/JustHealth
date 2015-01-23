@@ -92,7 +92,6 @@ def settings():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Carer' )
 
-
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
@@ -150,6 +149,11 @@ def verifyUser(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return render_template('login.html', type='success', message='Thank you for verifying your account.')
+
+@app.route('/password')
+def changePassword():
+    """Change password form (when user knows their current password)"""
+    return render_template('changePassword.html')
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
