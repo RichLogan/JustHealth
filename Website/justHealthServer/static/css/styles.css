@@ -149,9 +149,16 @@ fieldset.register-inner {
 }
 
 fieldset.deactivate {
-  width: 90%;
+  width: 85%;
   margin: auto;
   background: #FFFFFF
+}
+
+fieldset.deactivateoptions {
+  width: 50%;
+  margin: auto;
+  background: #FFFFFF;
+  float: left;
 }
 
 fieldset.links {
