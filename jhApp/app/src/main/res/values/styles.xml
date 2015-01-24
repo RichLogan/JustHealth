@@ -97,11 +97,13 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">15sp</item>
+        <item name="android:layout_marginTop">20sp</item>
     </style>
     <style name="spinnerWithIcon" parent="@android:style/Widget.Holo.Spinner">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">15sp</item>
+        <item name="android:layout_marginTop">20sp</item>
     </style>
     <style name="inputIcon">
         <item name="android:layout_height">match_parent</item>
