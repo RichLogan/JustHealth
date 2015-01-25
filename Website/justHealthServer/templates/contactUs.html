@@ -18,33 +18,35 @@
   <h5> If you have any questions please contact us using the form below or tweet us <a href="https://twitter.com/JustHealthHelp">@JustHealthHelp</a> </h5>
   <br />
 <fieldset class="links">
-    <table class="table">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12">
-              <form role="form" action="" method="post" >
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label for="InputName">Your Name</label>
+  <form role="form" action="" method="post" >
+    <div class="container">
+       <div class="row">
+          <div class="col-md-12">
+            <form role="form" action="" method="post" >
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="InputName">Your Name</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" name="InputName" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true">
+                      <input type="text" class="form-control" name="InputName" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true" >
                       <span class="input-group-addon"></span></div>
-                  </div>
-                  <div class="form-group">
-                    <label for="InputEmail">Your Email</label>
-                    <div class="input-group">
-                      <input type="email" class="form-control" id="InputEmail" name="InputEmail" placeholder="Enter Email"   >
-                      <span class="input-group-addon"></span></div>
-                  </div>
-                  <div class="form-group">
-                    <label for="InputMessage">Message</label>
-                    <div class="input-group">
-                      <textarea name="InputMessage" id="InputMessage" class="form-control" rows="5" ></textarea>
-                      <span class="input-group-addon"></span></div>
-                  </div>
-                    
-       </table>
+                    </div>
+                    <div class="form-group">
+                     <label for="InputEmail">Your Email</label>
+                      <div class="input-group">
+                        <input type="email" class="form-control" id="InputEmail" name="InputEmail" value="{{profileDetails.email}}" readonly="true"  >
+                        <span class="input-group-addon"></span></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="InputMessage">Message</label>
+                      <div class="input-group">
+                        <textarea name="InputMessage" id="InputMessage" class="form-control" rows="5" ></textarea>
+                        <span class="input-group-addon"></span></div>
+                    </div>
+                    <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-success pull-right">
+             </div>
+          </form>                  
     </fieldset>
  </fieldset>
 
 {% endblock %}
+
