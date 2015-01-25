@@ -95,7 +95,7 @@ public class EditProfile extends Activity {
         parameters.put("ismale", "false");
         int idSelected = ((RadioGroup) findViewById(R.id.editGender)).getCheckedRadioButtonId();
         if (idSelected == R.id.editGender_male) {
-            parameters.put("ismale", "on");
+            parameters.put("ismale", "true");
         }
 
         String response = Request.post("editProfile", parameters, getApplicationContext());

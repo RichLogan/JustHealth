@@ -43,6 +43,18 @@ def profile():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
+@app.route('/editProfile', methods=['POST', 'GET'])
+def getEditDetails_view():
+  if request.method == 'GET':
+    username = request.args.get('username')
+    getUpdate = json.loads(getAccountInfo(session['username']))
+    return render_template('editProfile.html', request=getUpdate)
+   
+@app.route('/updateProfile', methods=['POST'])
+def editDetails_view():
+    updated = editProfile(request.form)
+    flash(updated, 'success')
+    return redirect(url_for('profile'))
 
 @app.route('/termsandconditions')
 def terms():
@@ -67,9 +79,21 @@ def privacy():
 def references():
     return render_template('references.html')
 
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
+
 @app.route('/sitemap')
 def sitemap():
     return render_template('sitemap.html')
+
+@app.route('/contactUs')
+def contactUs():
+    profileDetails = json.loads(getAccountInfo(session['username']))
+    if profileDetails['accounttype'] == "Patient":
+        return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = 'Patient')
+    elif profileDetails['accounttype'] == "Carer":
+        return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = 'Carer' )  
 
 @app.route('/settings')
 @needLogin
@@ -79,7 +103,6 @@ def settings():
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Patient')
     elif profileDetails['accounttype'] == "Carer":
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Carer' )
-
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
@@ -138,6 +161,11 @@ def verifyUser(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return render_template('login.html', type='success', message='Thank you for verifying your account.')
+
+@app.route('/password')
+def changePassword():
+    """Change password form (when user knows their current password)"""
+    return render_template('changePassword.html')
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
@@ -432,3 +460,19 @@ def internal_error(error):
 @app.errorhandler(401)
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 401
+
+@app.route('/adminPortal')
+def adminPortal():
+  return render_template('adminHome.html')
+
+@app.route('/allUsers')
+def allUsers():
+  return render_template('adminAllUsers.html')
+
+@app.route('/activeUsers')
+def adminUsers():
+  return render_template('adminActiveUsers.html')
+
+@app.route('/adminMedication')
+def adminMedication():
+  return render_template('adminMedication.html')

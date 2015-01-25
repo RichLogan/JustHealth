@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} | JustHealth</title>
+    <!-- jQuery -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://malsup.github.io/min/jquery.cycle2.min.js"></script>
+
+    <!-- Boostrap -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- DataTables plugin -->
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.css">
+    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+    <!--Date, Time Validation-->
+    <script type="text/javascript" src="/static/js/moment.js"></script>
+
+    <!-- Our resources -->
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <link rel="icon" type="image/png" href="/static/images/icon.png"/>
+    {% block scriptsAndStyles %}{% endblock %}
+  </head>
+
+  <body>
+    <div id="container">
+      <!--Header -->
+      <header>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navBar">
+          <a href="/" class="pull-left"><img src="/static/images/logo.png" id="mainLogo"></img></a>
+          <h2 class="pull-left"> {{session.username}}</h2>
+
+          <a href="/logout" class="pull-right btn-margin"><input class="btn btn-default" type="submit" value="Log out"></a>
+          <a href="/adminPortal" class="pull-right"><i class="fa fa-home smallIcon"></i></a>          
+          <ul class="nav nav-pills btn-margin pull-right">
+            <!--To have tabs with all users/active users -->
+            <li role="presentation" class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role= "button" aria-expanded="false" href="/adminUsers"> Users <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/allUsers">Users</a></li>
+                <li class="divider"></li>
+                <li><a href="/activeUsers">Active Sessions</a></li>
+              </ul>
+            </li>
+            <li role="presentation"><a href="/adminMedication">Medication</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <div id="content">
+        {% block content %}{% endblock %}
+      </div>
+
+      <br />
+      <!--Footer -->
+      <footer>
+        <div id="footerContainer">
+          <span id='footer1'> Contact us: JustHealth@justhealth.co.uk </span>
+          <span id='footer2'> <a href="/termsandconditions">Terms</a></span>
+          <span id='footer3'> <a href="/legal">Privacy and Legal</a></span>
+          <span id='footer4'> Copyright JustHealth Ltd </span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
