@@ -24,6 +24,10 @@
     {% endwith %}
   });
 
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
   function isNumber(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -627,9 +631,14 @@
                                     <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
+
                                     {% if appointment.creator != session['username'] %}
-                                    <td><button class="btn btn-warning[disabled]">Update</button></td>
-                                    <td><button class="btn btn-danger[disabled]">Delete</button></td> 
+                                    <td>
+                                      <button class="btn btn-warning[disabled]" data-toggle="tooltip" data-placement="left" title="You did not create this appointment.">Update</button>
+                                    </td>
+                                    <td>
+                                      <button class="btn btn-danger[disabled]" data-toggle="tooltip" data-placement="right" title="You did not create this appointment.">Delete</button>
+                                    </td> 
                                     {% else %}
                                     <td> <a href="/updateAppointment?appid={{appointment.appid}}">
                                         <button class="btn btn-warning">Update</button>
@@ -642,6 +651,7 @@
                                       </form>
                                     </td>
                                     {% endif %}
+
                                   <tr>
                                   {% endfor %}
                                 </tbody>
