@@ -16,4 +16,5 @@
     <!-- Spinner Prompts -->
     <string name="genderPopup">Gender</string>
     <string name="accountTypePopup">Account Type</string>
+    <string name="appointmentTypePopup">Appointment Type</string>
 </resources>

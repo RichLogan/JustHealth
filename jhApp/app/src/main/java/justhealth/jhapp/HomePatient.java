@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.IconTextView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class HomePatient extends Activity {
 
@@ -21,7 +23,7 @@ public class HomePatient extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(username);
 
-        ImageButton settings = (ImageButton) findViewById(R.id.settings);
+        IconTextView settings = (IconTextView) findViewById(R.id.settings);
         settings.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
@@ -30,7 +32,7 @@ public class HomePatient extends Activity {
                 }
         );
 
-        Button search = (Button) findViewById(R.id.search);
+        IconTextView search = (IconTextView) findViewById(R.id.search);
         search.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
@@ -39,7 +41,7 @@ public class HomePatient extends Activity {
             }
         );
 
-        Button connections = (Button) findViewById(R.id.connections);
+        IconTextView connections = (IconTextView) findViewById(R.id.connections);
         connections.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
@@ -48,7 +50,7 @@ public class HomePatient extends Activity {
             }
         );
 
-        Button appointments = (Button) findViewById(R.id.appointments);
+        IconTextView appointments = (IconTextView) findViewById(R.id.appointments);
         appointments.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
@@ -57,7 +59,7 @@ public class HomePatient extends Activity {
                 }
         );
 
-        ImageButton profile = (ImageButton) findViewById(R.id.profile);
+        IconTextView profile = (IconTextView) findViewById(R.id.profile);
         profile.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
@@ -66,7 +68,7 @@ public class HomePatient extends Activity {
             }
         );
 
-        Button medication  = (Button) findViewById(R.id.medication);
+        IconTextView medication  = (IconTextView) findViewById(R.id.medication);
         medication.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {

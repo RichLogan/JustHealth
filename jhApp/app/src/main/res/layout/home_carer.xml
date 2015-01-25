@@ -9,21 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_gravity="center" >
 
-        <ImageButton
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
+        <IconTextView
             android:layout_weight="1"
-            android:src="@drawable/ic_action_user"
-            android:id = "@+id/profile" />
+            android:id="@+id/profile"
+            android:text="{fa-user}"
+            style="@style/homePageButton" />
 
-        <Button
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
+        <IconTextView
             android:layout_weight="1"
             android:id="@+id/search"
-            android:text="Search" />
+            android:text="{fa-search}"
+            style="@style/homePageButton" />
 
     </LinearLayout>
 
@@ -31,43 +30,42 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_gravity="center" >
 
-        <Button
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
+        <IconTextView
             android:layout_weight="1"
             android:id="@+id/connections"
-            android:text="Connections"/>
+            android:text="{fa-link}"
+            style="@style/homePageButton" />
 
-        <Button
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
+        <IconTextView
+            android:layout_weight="1"
             android:id="@+id/mypatients"
-            android:text="My Patients"
-            android:layout_weight="1"/>
+            android:text="{fa-users}"
+            style="@style/homePageButton"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:layout_gravity="center" >
 
-        <Button
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
+
+        <IconTextView
             android:layout_weight="1"
             android:id="@+id/myAppointments"
-            android:text="Appointments" />
+            android:text="{fa-calendar}"
+            style="@style/homePageButton" />
 
-        <ImageButton
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
+        <IconTextView
             android:layout_weight="1"
-            android:src="@drawable/ic_action_settings"
             android:id="@+id/settings"
-            />
+            android:text="{fa-cog}"
+            style="@style/homePageButton" />
+
     </LinearLayout>
 
 </LinearLayout>
