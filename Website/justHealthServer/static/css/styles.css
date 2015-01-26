@@ -252,6 +252,11 @@ hr {
   color: #DF111C;
 }
 
+.sideIcons {
+  font-size: 20px;
+  color: #2272EB;
+}
+
 /*Form validation Styles*/
 .placeholder {
   display: none;

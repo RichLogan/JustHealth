@@ -10,14 +10,16 @@
 	<div class="col-md-2 dashPanel">
 		<div id="dashProfile">
 			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50" class="img-circle"><br />
+			<br />
 			<strong>{{session.username}}</strong>
 			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
+
+			<a class"thumbnail" href="/editProfile"> 
+			<h5><i class="fa fa-pencil-square-o sideIcons" ></i> Edit Profile </h5> </a>
 		</div>
-
 		<hr />
-
 		<div id="dashConnections">
-			<strong>Connections</strong>
+		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
 
 			{% if connections %}
 				{% for connection in connections %}
@@ -27,6 +29,13 @@
 			{% else %}
 				<strong>No connections yet</strong>
 			{% endif %}
+		</div>
+		<br />
+		<div id="dashConnections">	
+			<a class"thumbnail" href="/search"> 
+			<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
+			<a class"thumbnail" href="/settings"> 
+			<h5><i class="fa fa-cog sideIcons" ></i> Settings </h5> </a>
 		</div>
 	</div>
 
@@ -46,8 +55,21 @@
 		{% endif %}
 
 		<!-- Main Content -->
-		<p>Begin Main Content</p>
+		<fieldset class ="form-container">
+
+		<a class"thumbnail" href="/appointments"> 
+		<h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4></a>
+		<br /> <hr>
+		<a class"thumbnail" href="/prescriptions"> 
+		<h4><i class="fa fa-flask headingIcon" ></i> Prescriptions </h4> </a>
+		<br /> <hr>
+		<a class"thumbnail" href="/settings"> 
+		<h4><i class="fa fa-cog headingIcon" ></i> Settings </h4> </a>
+
+
+
 	</div>
+</fieldset>
 </div>
 
 {% endblock %}
