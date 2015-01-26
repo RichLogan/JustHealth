@@ -54,13 +54,24 @@
     </style>
 
     <style name="defaultLinearForm">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:layout_marginRight">20sp</item>
+    <item name="android:layout_marginLeft">20sp</item>
+    <item name="android:background">@drawable/form_border</item>
+    <item name="android:layout_marginTop">65sp</item>
+</style>
+
+    <style name="defaultLinearLayout">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_marginRight">20sp</item>
         <item name="android:layout_marginLeft">20sp</item>
         <item name="android:background">@drawable/form_border</item>
-        <item name="android:layout_marginTop">65sp</item>
+        <item name="android:layout_marginTop">0sp</item>
+        <item name="android:paddingTop">50sp</item>
     </style>
 
     <style name="inputFieldsStyle">
