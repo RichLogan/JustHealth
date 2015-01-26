@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
 <!-- Home screen tile layout for carer -->
+
+    <!-- Row 1 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center" >
-
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/profile"
@@ -23,22 +24,20 @@
             android:id="@+id/search"
             android:text="{fa-search}"
             style="@style/homePageButton" />
-
     </LinearLayout>
 
+    <!-- Row 2 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center" >
-
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/connections"
             android:text="{fa-link}"
-            style="@style/homePageButton" />
-
+            style="@style/homePageButton"/>
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/mypatients"
@@ -46,26 +45,22 @@
             style="@style/homePageButton"/>
     </LinearLayout>
 
+    <!-- Row 3 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center" >
-
-
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/myAppointments"
             android:text="{fa-calendar}"
             style="@style/homePageButton" />
-
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/settings"
             android:text="{fa-cog}"
             style="@style/homePageButton" />
-
     </LinearLayout>
-
 </LinearLayout>
