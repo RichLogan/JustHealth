@@ -27,6 +27,27 @@ def index():
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
 
+@app.route('/home')
+@needLogin
+def home():
+    """Dashboard home page"""
+    accountInfo = json.loads(getAccountInfo(session['username']))
+    #notifications = json.loads(getNotifications(session['username']))
+    connections = json.loads(json.loads(getConnections(session['username']))['completed'])
+    
+    # Notification example
+    notifications = []
+    notification1 = {}
+    notification1['type'] = "danger"
+    notification1['content'] = "Testing"
+    notifications.append(notification1)
+    notification2 = {}
+    notification2['type'] = "success"
+    notification2['content'] = "Testing 2"
+    notifications.append(notification2)
+
+    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections)
+
 @app.route('/profile')
 @needLogin
 def profile():
