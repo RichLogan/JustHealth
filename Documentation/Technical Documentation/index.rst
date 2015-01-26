@@ -16,5 +16,6 @@ Welcome to JustHealth's documentation!
    users
    database
    html
+   security
 
 JustHealth is a healthcare app designed to support care for patients with chronic health conditions and their patients.

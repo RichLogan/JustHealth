@@ -39,11 +39,11 @@ public class Search extends Activity {
         //check for the search button being pressed
         Button search = (Button) findViewById(R.id.searchButton);
         search.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-                        searchName();
-                    }
+            new View.OnClickListener() {
+                public void onClick(View view) {
+                    searchName();
                 }
+            }
         );
 
     }
@@ -174,27 +174,37 @@ public class Search extends Activity {
     View.OnClickListener connectOnClick(final Button button, final String targetUsername) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                connectUsers(targetUsername);
-                button.setText("Connection Requested");
-                button.setTextSize(11);
-                button.setClickable(false);
+                //Confirm Connection Create
+                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                alert.setTitle("Create connection?");
+                alert.setMessage("Are you sure you want to connect to " + targetUsername + "?");
+                alert.setNegativeButton("Cancel", null);
+                alert.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        HashMap<String, String> connectRequest = new HashMap<String, String>();
+                        connectRequest.put("username", getSharedPreferences("account",0).getString("username", null));
+                        connectRequest.put("target", targetUsername);
+                        Request.post("createConnection", connectRequest, getApplicationContext());
+
+                        button.setText("Connection Requested");
+                        button.setTextSize(11);
+                        button.setClickable(false);
+
+                        // Go to connections?
+                        AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                        alert.setTitle("View connections?");
+                        alert.setMessage("Would you like to view the connection info now?");
+                        alert.setNegativeButton("Not now", null);
+                        alert.setPositiveButton("View", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                startActivity(new Intent(Search.this, Connections.class));
+                            }
+                        });
+                        alert.show();
+                    }
+                });
+                alert.show();
             }
         };
     }
-
-
-    private void connectUsers(String targetUser) {
-        HashMap<String, String> connectRequest = new HashMap<String, String>();
-
-        //this is adding the username as null - INCORRECT
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-
-        //add search to HashMap
-        connectRequest.put("username", username);
-        connectRequest.put("target", targetUser);
-
-        Request.post("createConnection", connectRequest, getApplicationContext());
-    }
 }
-

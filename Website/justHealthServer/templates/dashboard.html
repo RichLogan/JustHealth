@@ -1,0 +1,53 @@
+{% extends "template.html" %}
+{% block title %}Home{% endblock %}
+{% block scriptsAndStyles %}{% endblock %}
+{% block content %}
+
+<br />
+
+<div class="row">
+
+	<div class="col-md-2 dashPanel">
+		<div id="dashProfile">
+			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50" class="img-circle"><br />
+			<strong>{{session.username}}</strong>
+			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
+		</div>
+
+		<hr />
+
+		<div id="dashConnections">
+			<strong>Connections</strong>
+
+			{% if connections %}
+				{% for connection in connections %}
+					<p>{{connection.firstname}} {{connection.surname}} <strong>({{connection.username}})</strong></p>
+				{% endfor %}
+				<a href="/profile?go=connections">View all connections</a>
+			{% else %}
+				<strong>No connections yet</strong>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="col-md-10 dashPanel">
+		
+		<!-- Notifications -->
+		{% if notifications %}
+			<div class="well well-sm">
+				<h4>Notifications</h4>
+				{% for notification in notifications %}
+					<div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
+	    				<button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        				{{notification.content}}
+    				</div>
+    			{% endfor %}
+			</div>
+		{% endif %}
+
+		<!-- Main Content -->
+		<p>Begin Main Content</p>
+	</div>
+</div>
+
+{% endblock %}

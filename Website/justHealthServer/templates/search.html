@@ -9,6 +9,17 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{category}} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        {{message}}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <!--Seach box to search for users to conency to-->
 <fieldset class ="form-container">
    <i class="fa fa-search headingIcon pull-left"></i><h4>Search for a user</h4>
@@ -50,10 +61,10 @@
           <input type="submit" class="btn btn-primary" value="{{result.message}}">
         </form>
       {% else %}
-        <form name="connect" action="/api/createConnection" method="POST">
+        <form name="connect" action="/createConnectionWeb" method="POST">
           <input name="username" type="hidden" value="{{username}}">
           <input name="target" type="hidden" value="{{result.username}}">
-          <input type="submit" class="btn btn-success" value="Connect">
+          <input type="submit" class="btn btn-success" value="Connect" onclick="return confirm('Are you sure you want to connect to {{result.username}}?')">
         </form>
       {% endif %}
    </td>

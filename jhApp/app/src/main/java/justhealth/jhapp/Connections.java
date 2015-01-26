@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
@@ -24,9 +23,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-/**
- * Created by Stephen on 25/11/2014.
- */
 public class Connections extends Activity {
 
     private int rowOfTable = 0;
@@ -61,7 +57,6 @@ public class Connections extends Activity {
         JSONArray completed = null;
         try {
             queryReturn = new JSONObject(response);
-            System.out.println(queryReturn);
             String outgoingString = queryReturn.getString("outgoing");
             outgoing = new JSONArray(outgoingString);
             String incomingString = queryReturn.getString("incoming");
@@ -72,7 +67,6 @@ public class Connections extends Activity {
             e.printStackTrace();
         }
 
-        System.out.print(queryReturn);
         printTableHeader();
         printOutgoingConnections(outgoing);
         printIncomingConnections(incoming);
@@ -150,7 +144,6 @@ public class Connections extends Activity {
             for (int i = 0; i < outgoing.length(); i++) {
                 try {
                     JSONObject obj = outgoing.getJSONObject(i);
-                    System.out.println(obj);
                     String outgoingUsername = obj.getString("username");
                     String outgoingFirstName = obj.getString("firstname");
                     String outgoingSurname = obj.getString("surname");
@@ -176,7 +169,7 @@ public class Connections extends Activity {
                     outgoingCancel.setTextColor(Color.WHITE);
                     outgoingCancel.setBackgroundColor(getResources().getColor(R.color.header));
                     outgoingCancel.setPadding(5, 5, 5, 5);
-                    outgoingCancel.setOnClickListener(cancelOnClick(outgoingCancel, outgoingUsername));
+                    outgoingCancel.setOnClickListener(cancelConnection(outgoingCancel, outgoingUsername));
 
                     //add the views to the row
                     row.addView(forUsername);
@@ -216,16 +209,13 @@ public class Connections extends Activity {
             searchTable.addView(row, rowOfTable);
             rowOfTable += 1;
         } else {
-
             for (int i = 0; i < incoming.length(); i++) {
                 try {
                     JSONObject obj = incoming.getJSONObject(i);
-                    System.out.println(obj);
                     String incomingUsername = obj.getString("username");
                     String incomingFirstName = obj.getString("firstname");
                     String incomingSurname = obj.getString("surname");
                     //add button
-
 
                     TableRow row = new TableRow(this);
                     //add username to TextView
@@ -244,13 +234,20 @@ public class Connections extends Activity {
                     incomingConnect.setBackgroundColor(getResources().getColor(R.color.header));
                     incomingConnect.setPadding(5, 5, 5, 5);
                     incomingConnect.setOnClickListener(connectOnClick(incomingConnect, incomingUsername));
-                    //add what to do on click
+
+                    Button incomingReject = new Button(this);
+                    incomingReject.setText("Reject");
+                    incomingReject.setTextColor(Color.WHITE);
+                    incomingReject.setBackgroundColor(getResources().getColor(R.color.header));
+                    incomingReject.setPadding(5, 5, 5, 5);
+                    incomingReject.setOnClickListener(cancelConnection(incomingReject, incomingUsername));
 
                     //add the views to the row
                     row.addView(forUsername);
                     row.addView(forFirstName);
                     row.addView(forSurname);
                     row.addView(incomingConnect);
+                    row.addView(incomingReject);
 
                     searchTable.addView(row, rowOfTable);
                     rowOfTable += 1;
@@ -288,7 +285,6 @@ public class Connections extends Activity {
             for (int i = 0; i < completed.length(); i++) {
                 try {
                     JSONObject obj = completed.getJSONObject(i);
-                    System.out.println(obj);
                     String completedUsername = obj.getString("username");
                     String completedFirstName = obj.getString("firstname");
                     String completedSurname = obj.getString("surname");
@@ -311,7 +307,7 @@ public class Connections extends Activity {
                     completedRemove.setTextColor(Color.WHITE);
                     completedRemove.setBackgroundColor(getResources().getColor(R.color.header));
                     completedRemove.setPadding(5, 5, 5, 5);
-                    completedRemove.setOnClickListener(removeOnClick(completedRemove, completedUsername));
+                    completedRemove.setOnClickListener(removeConnection(completedRemove, completedUsername));
                     //add what to do on click
 
                     //add the views to the row
@@ -334,19 +330,32 @@ public class Connections extends Activity {
      * It run the removeConnection method, changes the text on the button and stops the button being clicked again.
      *
      * @param button   the button that the onclick listener is applied too
-     * @param username the username of the person that they want to remove as a connection
+     * @param connection the username of the person that they want to remove as a connection
      */
-    View.OnClickListener removeOnClick(final Button button, final String username) {
+    View.OnClickListener removeConnection(final Button button, final String connection) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                if (removeConnection(username) == true) {
-                    button.setText("Connection Removed");
-                    button.setTextSize(11);
-                    button.setClickable(false);
-                } else {
-                    System.out.println("Failed");
-                    //add alert unable to be removed
-                }
+                AlertDialog.Builder alert = new AlertDialog.Builder(Connections.this);
+                alert.setTitle("Remove connection?");
+                alert.setMessage("Are you sure you would like to remove " + connection + "?");
+                alert.setNegativeButton("No", null);
+                alert.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        HashMap<String, String> deleteConnection = new HashMap<String, String>();
+                        deleteConnection.put("user", getSharedPreferences("account", 0).getString("username", null));
+                        deleteConnection.put("connection", connection);
+                        String response = Request.post("deleteConnection", deleteConnection, getApplicationContext());
+                        if (response.equals("True")) {
+                            Feedback.toast("Connection to " + connection + " removed", true, getApplicationContext());
+                            finish();
+                            startActivity(getIntent());
+                        }
+                        else {
+                            Feedback.toast("Failed", false, Connections.this);
+                        }
+                    }
+                });
+                alert.show();
             }
         };
     }
@@ -356,19 +365,33 @@ public class Connections extends Activity {
      * It run the cancelOutgoingConnection method, changes the text on the button and stops the button being clicked again.
      *
      * @param button   the button that the onclick listener is applied too
-     * @param username the username of the person that they want to remove as a connection
+     * @param connection the username of the person that they want to remove as a connection
      */
-    View.OnClickListener cancelOnClick(final Button button, final String username) {
+    View.OnClickListener cancelConnection(final Button button, final String connection) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                if (cancelOutgoingConnection(username) == true) {
-                    button.setText("Request Cancelled");
-                    button.setTextSize(11);
-                    button.setClickable(false);
-                } else {
-                    System.out.println("Failed");
-                    //add alert unable to be removed
-                }
+                // Cancel connection with username
+                AlertDialog.Builder alert = new AlertDialog.Builder(Connections.this);
+                alert.setTitle("Cancel connection?");
+                alert.setMessage("Are you sure you would like to cancel the connection request to " + connection + "?");
+                alert.setNegativeButton("No", null);
+                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        HashMap<String, String> cancelConnection = new HashMap<String, String>();
+                        cancelConnection.put("user", getSharedPreferences("account", 0).getString("username", null));
+                        cancelConnection.put("connection", connection);
+                        String response = Request.post("cancelConnection", cancelConnection, getApplicationContext());
+                        if (response.equals("True")) {
+                            Feedback.toast("Request to " + connection + " cancelled", true, Connections.this);
+                            finish();
+                            startActivity(getIntent());
+                        }
+                        else {
+                            Feedback.toast("Failed", false, Connections.this);
+                        }
+                    }
+                });
+                alert.show();
             }
         };
     }
@@ -388,46 +411,11 @@ public class Connections extends Activity {
         };
     }
 
-    private boolean cancelOutgoingConnection(String connection) {
-        HashMap<String, String> deleteConnection = new HashMap<String, String>();
-
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-
-        deleteConnection.put("user", username);
-        deleteConnection.put("connection", connection);
-
-        String responseString = Request.post("cancelConnection", deleteConnection, getApplicationContext());
-
-        if (responseString == "True") {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean removeConnection(String connection) {
-        HashMap<String, String> deleteConnection = new HashMap<String, String>();
-
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-
-        deleteConnection.put("user", username);
-        deleteConnection.put("connection", connection);
-
-        String response = Request.post("deleteConnection", deleteConnection, getApplicationContext());
-        if (response == "True") {
-            return true;
-        }
-        return false;
-    }
-
-
     private void enterCode(final String incomingUser, String message) {
-
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
         alert.setTitle("Please enter the verification code given by the requester");
         alert.setMessage(message);
+
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -440,21 +428,10 @@ public class Connections extends Activity {
 
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Editable value = input.getText();
-                String code = value.toString();
-                // Do something with value!
-                System.out.println(code);
-                submitCode(incomingUser, code);
-
+                submitCode(incomingUser, input.getText().toString());
             }
         });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Cancelled.
-            }
-        });
-
+        alert.setNegativeButton("Cancel", null);
         alert.show();
     }
 
@@ -478,10 +455,11 @@ public class Connections extends Activity {
 
         String response = Request.post("completeConnection", attemptParameters, getApplicationContext());
 
-        if(response.equals("Incorrect")) {
+        if(response.equals("Incorrect code")) {
             enterCode(requestor, "An incorrect code was entered. Please try again.");
         }
-        else if(response.equals("Correct")) {
+        else {
+            Feedback.toast(response, true, getApplicationContext());
             finish();
             startActivity(getIntent());
         }
