@@ -453,19 +453,17 @@ def sendPasswordResetEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
-def sendContactUsMessage(username):
+def sendContactUs(details):
     """Sends email to justhealth when a user has a question"""
-    s = getSerializer()
-    payload = s.dumps(username)
-
     #Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")
     # Build Message
-    sender = Client.get(username = username).email
-    recipient = "<justhealth@richlogan.co.uk>"
+    sender = "'JustHealth User Question' <justhealth@richlogan.co.uk>"
+    cc = Client.get(username = details['username']).email
+    recipient = 'justhealth@richlogan.co.uk'
     subject = "JustHealth User Question"
-    message = "Test"
+    message = details['message']
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
     # Send
     server.sendmail(sender, recipient, m+message)

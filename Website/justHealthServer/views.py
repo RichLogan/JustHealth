@@ -87,13 +87,15 @@ def faq():
 def sitemap():
     return render_template('sitemap.html')
 
-@app.route('/contactUs')
+@app.route('/contactUs', methods=['POST', 'GET'])
 def contactUs():
     profileDetails = json.loads(getAccountInfo(session['username']))
-    if profileDetails['accounttype'] == "Patient":
-        return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = 'Patient')
-    elif profileDetails['accounttype'] == "Carer":
-        return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = 'Carer' )  
+    if request.method == 'POST': 
+        result = sendContactUs(request.form)
+        return render_template('contactUs.html', type="success", message = 'Your message has been sent, please allow up to 24 hours for a response', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
+    else: 
+       return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
+    
 
 @app.route('/settings')
 @needLogin

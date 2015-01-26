@@ -9,42 +9,51 @@
 
 {% block content %}
 
+
 <!--Seach box to search for users to conency to-->
 <fieldset class ="form-container">
    <i class="fa fa-paper-plane-o headingIcon pull-left"></i><h4 class= "pull-left">Contact Us</h4>
       <a href="/settings"><i class="fa fa-cog headingIcon pull-right"></i> </a>
 
   <hr>
+  {% if message != null %}
+    <div class="alert alert-{{type}} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      {{message}}
+    </div>
+  {% endif %}
   <h5> If you have any questions please contact us using the form below or tweet us <a href="https://twitter.com/JustHealthHelp">@JustHealthHelp</a> </h5>
   <br />
 <fieldset class="links">
-  <form role="form" action="" method="post" >
+  <form role="form" action="/contactUs" method="post" >
     <div class="container">
        <div class="row">
           <div class="col-md-12">
-            <form role="form" action="" method="post" >
               <div class="col-lg-6">
                 <div class="form-group">
                   <label for="InputName">Your Name</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" name="InputName" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true" >
+                      <input type="text" class="form-control" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true" >
                       <span class="input-group-addon"></span></div>
                     </div>
+                    <input type="hidden" class="form-control" name="username" id="username" value="{{profileDetails.username}}" readonly="true" >
                     <div class="form-group">
                      <label for="InputEmail">Your Email</label>
                       <div class="input-group">
-                        <input type="email" class="form-control" id="InputEmail" name="InputEmail" value="{{profileDetails.email}}" readonly="true"  >
+                        <input type="email" class="form-control" id="InputEmail" value="{{profileDetails.email}}" readonly="true"  >
                         <span class="input-group-addon"></span></div>
                     </div>
                     <div class="form-group">
                       <label for="InputMessage">Message</label>
                       <div class="input-group">
-                        <textarea name="InputMessage" id="InputMessage" class="form-control" rows="5" ></textarea>
+                        <textarea name="message" id="InputMessage" class="form-control" rows="5" ></textarea>
                         <span class="input-group-addon"></span></div>
                     </div>
                     <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
              </div>
-          </form>                  
+           </div>
+         </div>
+      </form>                  
     </fieldset>
  </fieldset>
 
