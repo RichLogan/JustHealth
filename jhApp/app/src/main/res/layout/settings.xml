@@ -57,7 +57,8 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/logout"/>
+            android:text="@string/logout"
+            android:id="@+id/logout"/>
     </LinearLayout>
 
 </LinearLayout>

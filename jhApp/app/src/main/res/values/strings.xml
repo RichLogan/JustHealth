@@ -17,4 +17,6 @@
     <string name="genderPopup">Gender</string>
     <string name="accountTypePopup">Account Type</string>
     <string name="appointmentTypePopup">Appointment Type</string>
+    <string name="deactivateReasons">Reason</string>
+    <string name="whyDeactivate"><u>Why should we keep your data?</u></string>
 </resources>
