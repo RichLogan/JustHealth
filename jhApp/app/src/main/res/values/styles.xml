@@ -118,7 +118,7 @@
     </style>
     <style name="inputIcon">
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">0sp</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_marginTop">25sp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:shadowColor">#22000000</item>
