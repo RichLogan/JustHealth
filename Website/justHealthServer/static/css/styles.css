@@ -167,6 +167,15 @@ fieldset.links {
   background: #FFFFFF
 }
 
+fieldset.dashboard {
+    width: 20%;
+  margin: auto;
+  background: #FFFFFF;
+  float: left;
+  padding: 20px;
+  border-radius: 4px;
+}
+
 hr {
   color: #000000;
   width: 100%;

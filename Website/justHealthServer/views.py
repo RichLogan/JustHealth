@@ -33,7 +33,12 @@ def home():
     """Dashboard home page"""
     accountInfo = json.loads(getAccountInfo(session['username']))
     #notifications = json.loads(getNotifications(session['username']))
-    connections = json.loads(json.loads(getConnections(session['username']))['completed'])
+    connections = json.loads(getConnections(session['username']))
+    appointments = json.loads(getAllAppointments(session['username'], session['username']))
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    outgoingConnections = json.loads(connections['outgoing'])
+    incomingConnections = json.loads(connections['incoming'])
+    completedConnections = json.loads(connections['completed'])
     
     # Notification example
     notifications = []
@@ -46,7 +51,8 @@ def home():
     notification2['content'] = "Testing 2"
     notifications.append(notification2)
 
-    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections)
+    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
+
 
 @app.route('/profile')
 @needLogin
