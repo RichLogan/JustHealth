@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <resources xmlns:android="http://schemas.android.com/apk/res/android">
-        <style name="JustHealthTheme" parent="@android:style/Theme.Holo.Light">
-            <item name="android:actionBarStyle">
-                @style/defaultActionBar
-            </item>
-        </style>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="JustHealthTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">
+            @style/defaultActionBar
+        </item>
+    </style>
 
     <style name="defaultActionBar" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:titleTextStyle">
@@ -54,14 +54,14 @@
     </style>
 
     <style name="defaultLinearForm">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:orientation">vertical</item>
-    <item name="android:layout_marginRight">20sp</item>
-    <item name="android:layout_marginLeft">20sp</item>
-    <item name="android:background">@drawable/form_border</item>
-    <item name="android:layout_marginTop">65sp</item>
-</style>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginRight">20sp</item>
+        <item name="android:layout_marginLeft">20sp</item>
+        <item name="android:background">@drawable/form_border</item>
+        <item name="android:layout_marginTop">65sp</item>
+    </style>
 
     <style name="defaultLinearLayout">
         <item name="android:layout_width">match_parent</item>
@@ -155,4 +155,22 @@
 
     <!-- ActionBar color strip -->
     <dimen name="colorstrip">5dp</dimen>
+
+
+    <!-- FAQs -->
+    <style name="question">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:layout_marginTop">15sp</item>
+        <item name="android:layout_marginBottom">5sp</item>
+    </style>
+
+    <style name="answer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginTop">5sp</item>
+    </style>
 </resources>
