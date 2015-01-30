@@ -10,6 +10,10 @@ a:active  {color:#A8A8A8; background-color:transparent}
   font-size: 25px;
 }
 
+#profilePicture {
+  width: 7.5em;
+}
+
 .smallIcon {
   font-size: 50px;
   padding: 10px;

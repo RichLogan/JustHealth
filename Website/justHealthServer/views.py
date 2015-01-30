@@ -1,3 +1,4 @@
+from flask import send_from_directory
 from justHealthServer import *
 from api import *
 from functools import wraps
@@ -15,6 +16,11 @@ def needLogin(f):
     # User logged in, continue as normal
     return f(*args, **kwargs)
   return loginCheck
+
+@app.route('/images/<filename>')
+@needLogin
+def getProfilePicture(filename):
+    return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/')
 @needLogin
@@ -73,8 +79,11 @@ def getEditDetails_view():
    
 @app.route('/updateProfile', methods=['POST'])
 def editDetails_view():
-    updated = editProfile(request.form)
-    flash(updated, 'success')
+    updated = editProfile(request.form, request.files)
+    if updated == "Failed":
+        flash(updated, 'danger')
+    else:
+        flash(updated, 'success')
     return redirect(url_for('profile'))
 
 @app.route('/termsandconditions')
@@ -112,7 +121,6 @@ def settings():
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Patient')
     elif profileDetails['accounttype'] == "Carer":
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Carer' )
-
 
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin

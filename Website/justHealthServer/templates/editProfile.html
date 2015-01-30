@@ -25,10 +25,10 @@
 
     <br />
     <!--Form to update profile details -->
-    <form name="editDetails" method="POST" action="/updateProfile">
+    <form name="editDetails" method="POST" action="/updateProfile" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="profileimg">Upload a profile picture</label>
-            <input class="form-control" type="file" name="profileimg" value="{{request.profileimg}}">
+            <label for="image">Upload a profile picture</label>
+            <input class="form-control" name="image" type="file" value="">
         </div>
         <div class="form-group">
             <input class="hidden" type="text" name="username" value="{{request.username}}" readonly="true">
