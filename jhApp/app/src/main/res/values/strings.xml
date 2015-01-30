@@ -12,6 +12,7 @@
     <string name="privacy">Privacy</string>
     <string name="account">Account</string>
     <string name="profile">Profile</string>
+    <string name="searchNHS">Search</string>
 
     <!-- Spinner Prompts -->
     <string name="genderPopup">Gender</string>

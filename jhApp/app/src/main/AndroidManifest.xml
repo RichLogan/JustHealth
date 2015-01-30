@@ -225,6 +225,9 @@
                 android:value=".Login" />
             </activity>
 
+        <activity android:name=".SearchNHSWebsite"
+            android:label="Just Health" />
+
     </application>
 
 </manifest>
