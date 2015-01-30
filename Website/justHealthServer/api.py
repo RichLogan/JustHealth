@@ -1074,6 +1074,18 @@ def getPrescription(details):
     prescription['enddate'] = str(prescription['enddate'])
     return json.dumps(prescription)
 
+
+@app.route('/api/searchNHSDirectWebsite', methods=['POST'])
+@auth.login_required
+def searchNHSDirect():
+    return searchNHSDirect(request.form['searchterms'])
+
+def searchNHSDirect(search):
+    newTerm = search.replace(" ", "+")
+    website = "http://www.nhs.uk/Search/Pages/Results.aspx?___JSSniffer=true&q="
+    searchWeb = website + newTerm
+    return searchWeb
+
 @app.route('/api/getDeactivateReasons', methods=['POST','GET'])
 @auth.login_required
 def getDeactivateReasons():

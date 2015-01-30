@@ -2,6 +2,7 @@ from justHealthServer import *
 from api import *
 from functools import wraps
 import json
+import webbrowser
 
 # Decorator Functions
 def needLogin(f):
@@ -544,6 +545,14 @@ def inviteeappointments():
 
     added = addInviteeAppointment(details)
     return redirect(url_for("myPatients"))
+
+@app.route('/nhsSearch', methods=['POST', 'GET'])
+def searchNHS():
+  if request.method == 'POST':
+    website = searchNHSDirect(request.form['searchterm'])
+    webbrowser.open(website,new=2)
+  return render_template('searchNHSDirect.html')
+
 
 @app.errorhandler(500)
 def internal_error(error):
