@@ -92,7 +92,6 @@ class Appointmenttype(BaseModel):
     class Meta:
         db_table = 'appointmenttype'
 
-
 class Appointments(BaseModel):
     appid = PrimaryKeyField()
     creator = ForeignKeyField(db_column='creator', rel_model=Client, to_field='username', related_name='creator')
@@ -111,18 +110,6 @@ class Appointments(BaseModel):
 
     class Meta:
         db_table = 'appointments'
-
-def createAll():
-    dropAll()
-    Client.create_table()
-    Patient.create_table()
-    Carer.create_table()
-    uq8LnAWi7D.create_table()
-    Deactivatereason.create_table()
-    Userdeactivatereason.create_table()
-    Relationship.create_table()
-    Patientcarer.create_table()
-    Appointments.create_table()
 
 class Medication(BaseModel):
     name = CharField(primary_key=True)
@@ -149,48 +136,54 @@ class Prescription(BaseModel):
     class Meta:
         db_table = 'prescription'
 
-# def createAll():
-#     dropAll()
-    # Client.create_table()
-    # Patient.create_table()
-    # Carer.create_table()
-    # uq8LnAWi7D.create_table()
-    # Deactivatereason.create_table()
-    # Userdeactivatereason.create_table()
-    # Relationship.create_table()
-    # Patientcarer.create_table()
-    # Medication.create_table()
-    # Prescription.create_table()
-    # Appointments.create_table()
+def createAll():
+    dropAll()
+    Client.create_table()
+    Carer.create_table()
+    Patient.create_table()
+    uq8LnAWi7D.create_table()
+    Deactivatereason.create_table()
+    Userdeactivatereason.create_table()
+    Relationship.create_table()
+    Patientcarer.create_table()
+    Appointmenttype.create_table()
+    Appointments.create_table()
+    Medication.create_table()
+    Prescription.create_table()
 
+def dropAll():
+    if Client.table_exists():
+        Client.drop_table(cascade=True)
 
-# def dropAll():
-    # if Client.table_exists():
-    #     Client.drop_table(cascade=True)
-    #
-    # if Patient.table_exists():
-    #     Patient.drop_table(cascade=True)
-    #
-    # if Carer.table_exists():
-    #     Carer.drop_table(cascade=True)
-    #
-    # if uq8LnAWi7D.table_exists():
-    #     uq8LnAWi7D.drop_table(cascade=True)
-    #
-    # if Deactivatereason.table_exists():
-    #     Deactivatereason.drop_table(cascade=True)
-    #
-    # if Userdeactivatereason.table_exists():
-    #     Userdeactivatereason.drop_table(cascade=True)
-    #
-    # if Relationship.table_exists():
-    #     Relationship.drop_table(cascade=True)
-    #
-    # # if Patientcarer.table_exists():
-    # #     Patientcarer.drop_table(cascade=True)
-    # #
-    # if Medication.table_exists():
-    #     Medication.drop_table(cascade=True)
-    #
-    # if Prescription.table_exists():
-    #     Prescription.drop_table(cascade=True)
+    if Patient.table_exists():
+        Patient.drop_table(cascade=True)
+    
+    if Carer.table_exists():
+        Carer.drop_table(cascade=True)
+
+    if uq8LnAWi7D.table_exists():
+        uq8LnAWi7D.drop_table(cascade=True)
+
+    if Deactivatereason.table_exists():
+        Deactivatereason.drop_table(cascade=True)
+
+    if Userdeactivatereason.table_exists():
+        Userdeactivatereason.drop_table(cascade=True)
+
+    if Relationship.table_exists():
+        Relationship.drop_table(cascade=True)
+
+    if Patientcarer.table_exists():
+        Patientcarer.drop_table(cascade=True)
+
+    if Appointmenttype.table_exists():
+        Appointmenttype.drop_table(cascade=True)
+
+    if Appointments.table_exists():
+        Appointments.drop_table(cascade=True)
+
+    if Medication.table_exists():
+        Medication.drop_table(cascade=True)
+
+    if Prescription.table_exists():
+        Prescription.drop_table(cascade=True)
