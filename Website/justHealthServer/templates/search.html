@@ -25,14 +25,16 @@
    <i class="fa fa-search headingIcon pull-left"></i><h4>Search for a user</h4>
   <hr>
 
+  <fieldset class="login-inner">
   <form action="/search" method="POST">
     <div class="form-group">
       <label for="username"></label>
-      <input class="form-control" type="text" name="searchterm">
+      <input class="form-control input-sm" type="text" name="searchterm">
     </div>
     <input class="form-control" type="hidden" name="username" value='{{username}}'>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-default pull-right">Search</button>
   </form>
+  </fieldset>
 <br />
 <br />
 <br />

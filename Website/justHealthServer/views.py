@@ -119,9 +119,9 @@ def profile():
 
 @app.route('/editProfile', methods=['POST', 'GET'])
 def getEditDetails_view():
-  if request.method == 'GET':
-    username = request.args.get('username')
-    getUpdate = json.loads(getAccountInfo(session['username']))
+    if request.method == 'GET':
+        username = request.args.get('username')
+        getUpdate = json.loads(getAccountInfo(session['username']))
     return render_template('editProfile.html', request=getUpdate)
    
 @app.route('/updateProfile', methods=['POST'])
@@ -188,7 +188,7 @@ def search():
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
         result = json.loads(result)
         return render_template ('search.html',results = result, username= session['username'])
-    return render_template('search.html',username= session['username'])
+    return render_template('search.html', username= session['username'])
 
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin

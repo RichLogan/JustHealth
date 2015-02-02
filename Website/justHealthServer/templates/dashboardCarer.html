@@ -6,17 +6,19 @@
 <br />
 
 <div class="row">
-	<div class="col-md-2 dashPanel">
+	<div class="col-md-3 dashPanel">
 		<div id="dashProfile">
+      <fieldset class="style">
 			<a class"thumbnail" href="/editProfile"> 
 			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" ></i>  </h5> </a>
 			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"><br />
 			<br />
 			<strong>{{session.username}}</strong>
 			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
-
+      </fieldset>
 		</div>
-		<hr />
+		
+    <fieldset class="style">
 		<div id="dashConnections">
 		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
 
@@ -147,7 +149,8 @@
                   </div>
       			</div>
 			</div>
-		<br />
+		</fieldset>
+    <fieldset class="style">
 		<div id="dashConnections">	
 			<a class"thumbnail" href="/search"> 
 			<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
@@ -156,9 +159,10 @@
       <a class"thumbnail" href="/nhsSearch">
       <h5><i class="fa fa-search-plus sideIcons" ></i> NHS Search </h5> </a>
 		</div>
+    </fieldset>
 	</div>
 
-	<div class="col-md-10 dashPanel">
+	<div class="col-md-9 dashPanel">
 		
 		<!-- Notifications -->
 		{% if notifications %}
