@@ -218,3 +218,26 @@ fieldset {
   border: 1px solid silver;
   padding: 8px;    
   border-radius: 4px;
+}
+
+/* Dashboard Styles */
+
+#dashProfile {
+  text-align: center;
+}
+
+.dashPanel {
+  padding: 1em;
+}
+
+#dashConnections {
+  text-align: center;
+}
+
+.dashPanel#main {
+
+}
+
+.dashPanel#side {
+
+}

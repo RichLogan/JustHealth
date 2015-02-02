@@ -7,8 +7,8 @@ import json
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
-class testCancelConnection(unittest.TestCase):
-    """Testing that a patient/carer can successfully reject an incoming connection request or cancel an outgoing"""
+class testCompleteConnection(unittest.TestCase):
+    """Testing that a patient/carer can successfully connect"""
 
     def setUp(self):
         """Create needed tables and example record"""
@@ -71,41 +71,35 @@ class testCancelConnection(unittest.TestCase):
             targettype = "Patient")
         testRelationship.execute()
 
-    def testValidReject(self):
-        """Atempt to reject an incoming connection"""
+    def testCorrectCode(self):
+        """Atempt to connect giving the correct code"""
         payload = {
-            "user" : "patient",
-            "connection" : "carer",
+            "username" : "patient",
+            "requestor" : "carer",
+            "codeattempt" : "1234"
         }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('patient', 'test'))
-        self.assertEqual(result.text, "True")
-
-    def testValidCancel(self):
-        """Atempt to cancel an outgoing connection"""
+        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('patient', 'test'))
+        self.assertEqual(result.text, "Connection to " + payload['requestor'] + " completed")
+    
+    def testIncorrectCode(self):
+        """Atempt to connect giving the incorrect code"""
         payload = {
-            "user" : "carer",
-            "connection" : "patient",
+            "username" : "patient",
+            "requestor" : "carer",
+            "codeattempt" : "4321"
         }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('carer', 'test'))
-        self.assertEqual(result.text, "True")
-
-    def testInvalidReject(self):
-        """Atempt to reject an nonexistant incoming connection"""
+        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('patient', 'test'))
+        self.assertEqual(result.text, "Incorrect code")
+    
+    def testRelationshipDoesntExist(self):
+        """Atempt to a user who has not requested a connection"""
         payload = {
-            "user" : "patient",
-            "connection" : "1234",
+            "username" : "patient",
+            "requestor" : "abcd",
+            "codeattempt" : "4321"
         }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('patient', 'test'))
-        self.assertEqual(result.text, "False")
-
-    def testInvalidCancel(self):
-        """Atempt to cancel an nonexistant outgoing connection"""
-        payload = {
-            "user" : "carer",
-            "connection" : "1234",
-        }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('carer', 'test'))
-        self.assertEqual(result.text, "False")
+        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('patient', 'test'))
+        self.assertEqual(result.text, "Connection not requested")
 
     def tearDown(self):
         """Delete all tables"""

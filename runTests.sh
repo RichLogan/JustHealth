@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # About
-# This should run all tests and give results. It will also automatically alter API in order to point to the database, and change back when finshed.
+# This should run all tests and give results. It will also automatically alter the local server in order to point to the database, and change back when finshed.
+# More detailed output can be added by appending -v to the test in question
 
 # Usage
 # Run using '$ . runTests.sh'
@@ -51,23 +52,40 @@ sed -i "" -e "5s/.*/from database import */" Website/justHealthServer/api.py;
 function runTests {
   echo -e "---------------Just Health Testing Suite---------------"
 
-  echo "Iteration 1"
-  # python -m unittest discover Iteration\ 1/Test\ Cases/Testing\ Scripts/
-  echo -e "\n"
+  # echo "Iteration 1"
+  # # python -m unittest discover Iteration\ 1/Test\ Cases/Testing\ Scripts/
+  # echo -e "\n"
 
-  echo "Iteration 2"
-  # testPath
-  echo -e "\n"
+  # echo "Iteration 2"
+  # # testPath
+  # echo -e "\n"
 
-  echo "Iteration 3"
-  # testPath
-  echo -e "\n"
+  # echo "Iteration 3"
+  # # testPath
+  # echo -e "\n"
 
   echo "Iteration 4"
-  python -m unittest discover Iteration\ 4/Test\ Cases/
+  echo "--"
+    echo "Search Patient Carer"
+    python -m unittest discover Iteration\ 4/Test\ Cases/ testSearchPatientCarer.py
+  
+    echo "Create Connection"
+    python -m unittest discover Iteration\ 4/Test\ Cases/ testCreateConnection.py
+    
+    echo "Complete Connection"
+    python -m unittest discover Iteration\ 4/Test\ Cases/ testCompleteConnection.py
+    
+    echo "Delete Connection"
+    python -m unittest discover Iteration\ 4/Test\ Cases/ testDeleteConnection.py
+    
+    echo "Cancel Connection"
+    python -m unittest discover Iteration\ 4/Test\ Cases/ testCancelConnection.py
+    
+    echo "Get Connections"
+    python -m unittest discover Iteration\ 4/Test\ Cases/ testGetConnections.py
   echo -e "\n"
 
-  echo "Iteration 5"
-  python -m unittest discover Iteration\ 5/Test\ Cases/
-  echo -e "\n"
+  # echo "Iteration 5"
+  # python -m unittest discover Iteration\ 5/Test\ Cases/
+  # echo -e "\n"
 }

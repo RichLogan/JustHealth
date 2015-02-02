@@ -7,8 +7,8 @@ import json
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
-class testCancelConnection(unittest.TestCase):
-    """Testing that a patient/carer can successfully reject an incoming connection request or cancel an outgoing"""
+class testDeleteConnection(unittest.TestCase):
+    """Testing that a patient/carer can successfully delete an existing completed connection"""
 
     def setUp(self):
         """Create needed tables and example record"""
@@ -63,50 +63,37 @@ class testCancelConnection(unittest.TestCase):
             username = "patient")
         patientPassword.execute()
 
-        testRelationship = testDatabase.Relationship.insert(
-            code = 1234,
-            requestor = "carer",
-            requestortype = "Carer",
-            target = "patient",
-            targettype = "Patient")
+        testRelationship = testDatabase.Patientcarer.insert(
+            carer = "carer",
+            patient = "patient")
         testRelationship.execute()
 
-    def testValidReject(self):
-        """Atempt to reject an incoming connection"""
+    def testValidDelete(self):
+        """Atempt to delete a connection"""
         payload = {
             "user" : "patient",
             "connection" : "carer",
         }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('patient', 'test'))
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('patient', 'test'))
         self.assertEqual(result.text, "True")
 
-    def testValidCancel(self):
-        """Atempt to cancel an outgoing connection"""
-        payload = {
-            "user" : "carer",
-            "connection" : "patient",
-        }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('carer', 'test'))
-        self.assertEqual(result.text, "True")
-
-    def testInvalidReject(self):
-        """Atempt to reject an nonexistant incoming connection"""
+    def testInvalidDelete(self):
+        """Attempt to delete a connection that does not exists"""
         payload = {
             "user" : "patient",
             "connection" : "1234",
         }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('patient', 'test'))
-        self.assertEqual(result.text, "False")
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('patient', 'test'))
+        self.assertEqual(result.text, "Connection does not exist")
 
-    def testInvalidCancel(self):
-        """Atempt to cancel an nonexistant outgoing connection"""
         payload = {
             "user" : "carer",
             "connection" : "1234",
         }
-        result = requests.post("http://127.0.0.1:9999/api/cancelConnection", data=payload, auth=('carer', 'test'))
-        self.assertEqual(result.text, "False")
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('patient', 'test'))
+        self.assertEqual(result.text, "Connections does not exist")
 
+    
     def tearDown(self):
         """Delete all tables"""
         testDatabase.dropAll()
