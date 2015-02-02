@@ -9,6 +9,7 @@ Welcome to JustHealth's documentation!
 .. toctree::
    :maxdepth: 4
 
+   examiner
    arch
    development
    api
