@@ -358,268 +358,6 @@ From the home page all 3 notifications should be able to be viewed
 
 
 
--------------------------------------------------------------------------
-Android
--------------------------------------------------------------------------
-
-Create Legitimate Connection Request Notification
-
-Two accounts created - one patient, one carer
-No connection established between them
-
-1. Request connection between the two accounts
-2. Log on to the account that the request was not made from
-
-There is a notification on the account informing the user that a connection has been requested. 
-
-
-
-
-Create Legitimate Connection Successful Notification
-
-Two accounts created - one patient, one carer
-No connection established between them
-Connection request between the two accounts created 
-
-1. Log on to the account that the connection has been requested to
-2. Accept the connection by typing in the code associated with the request
-3. Log into the other user account that made the initial request
-
-There is a notification on the account informing the user that the connection that they requested has been completed successfully.
-
-
-
-
-Create New Prescription Created Notification
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Log onto carer account
-2. Add a prescription for the associated patient account
-3. Log into the patient account
-
-There is a notification on the user's account, informing them that a new prescription has been added by their carer
-
-
-
-
-[Carer] Prescription Expiring (2 days time)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Prescription set up by carer for assigned patient to expire in two days time
-2. Navigate to the home page
-
-There is a notification on the carer's account, informing them that the prescription is expiring for patient [First Name + Last Name] in 2 days time. 
-
-
-
-
-[Patient] Prescription Expiring (2 days time)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Prescription set up by carer for assigned patient to expire in two days time
-2. Log into the associated patient account
-
-There is a notification on the patient's account, informing them that their prescription is expiring in 2 days time. 
-
-
-
-
-[Carer] Prescription Expiring (today)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Prescription set up by carer for assigned patient to expire on that current day
-2. Navigate to the home page
-
-There is a notification on the carer's account, informing them that the prescription is expiring for patient [First Name + Last Name] today. 
-
-
-
-
-[Patient] Prescription Expiring (today)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Prescription set up by carer for assigned patient to expire on that current day
-2. Log into the associated patient account
-
-There is a notification on the patient's account, informing them that their prescription is expiring today. 
-
-
-
-
-[Patient] Take Medication (15mins)
-
-Two accounts created - one patient, one carer
-Connection established between them
-Prescription set up by carer for assigned patient to take medication
-
-1. Log into patient account 15mins before a medication is due to be takens
-
-There is a notification on the patient's account, informing them that they are due to take [medication name] in 15mins.
-
-
-
-
-[Patient] Take Medication (now)
-
-Two accounts created - one patient, one carer
-Connection established between them
-Prescription set up by carer for assigned patient to take medication
-
-1. Log into patient account when medication is due to be takens
-
-There is a notification on the patient's account, informing them that they are due to take [medication name] now.
-
-
-
-
-[Patient] Appointment Created by Carer
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Appointment created by carer with the associated patient
-2. Log into patient account
-
-There is a notification on the patient's account, informing them that they have been scheduled an appointment with [Carer Name] at [Date + Time]. 
-
-
-
-
-[Carer] Appointment Due (60mins)
-
-Account created of type Carer
-
-1. Create an appointment for the carer which start time and date is in one hour, 3mins time
-2. Navigate to the home page
-3. When the appointment is due in 60mins, refresh the home page
-
-There is a notification on the carer's account, informing them that they have [Appointment Title] in 60mins time. 
-
-
-
-
-[Carer] Appointment Due (15mins)
-
-Account created of type Carer
-
-1. Create an appointment for the carer which start time and date is in 18mins
-2. Navigate to the home page
-3. When the appointment is due in 15mins, refresh the home page
-
-There is a notification on the carer's account, informing them that they have [Appointment Title] in 15mins time. 
-
-
-
-
-[Carer] Appointment Due (on time)
-
-Account created of type Carer
-
-1. Create an appointment for the carer which start time and date is in 5mins
-2. Navigate to the home page
-3. When the appointment is due to start, refresh the home page
-
-There is a notification on the carer's account, informing them that they have [Appointment Title] starting now. 
-
-
-
-
-[Patient] Appointment Due (60mins)
-
-Account created of type Patient
-
-1. Create an appointment for the patient which start time and date is in one hour, 3mins time
-2. Navigate to the home page
-3. When the appointment is due in 60mins, refresh the home page
-
-There is a notification on the patient's account, informing them that they have [Appointment Title] in 60mins time. 
-
-
-
-
-[Patient] Appointment Due (15mins)
-
-Account created of type Patient
-
-1. Create an appointment for the patient which start time and date is in 18mins
-2. Navigate to the home page
-3. When the appointment is due in 15mins, refresh the home page
-
-There is a notification on the patient's account, informing them that they have [Appointment Title] in 15mins time. 
-
-
-
-
-[Patient] Appointment Due (on time)
-
-Account created of type Patient
-
-1. Create an appointment for the patient which start time and date is in 5mins
-2. Navigate to the home page
-3. When the appointment is due to start, refresh the home page
-
-There is a notification on the patient's account, informing them that they have [Appointment Title] starting now. 
-
-
-
-
-[Patient/Carer] Appointment Due (60mins)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Appointment created by carer with the associated patient which has a start time in one hour, 3mins time
-2. In another tab, log into the patients account
-3. Navigate to the carers home page simultaneously
-4. When the appointment is due in 60mins, refresh both the patient and the carer home pages
-
-
-There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] in 60mins time. 
-
-
-
-
-[Patient/Carer] Appointment Due (15mins)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Appointment created by carer with the associated patient which has a start time in 18mins time
-2. In another tab, log into the patients account
-3. Navigate to the carers home page simultaneously
-4. When the appointment is due in 15mins, refresh both the patient and the carer home pages
-
-
-There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] in 15mins time. 
-
-
-
-
-[Patient/Carer] Appointment Due (on time)
-
-Two accounts created - one patient, one carer
-Connection established between them
-
-1. Appointment created by carer with the associated patient which has a start time in 5mins
-2. In another tab, log into the patients account
-3. Navigate to the carers home page simultaneously
-4. When the appointment is due to start, refresh both the patient and the carer home pages
-
-
-There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] starting now. 
-
-
-
 
 [Patient] Dismiss Notification
 
@@ -718,6 +456,380 @@ From the home page all 3 notifications should be able to be viewed
 
 
 
+-------------------------------------------------------------------------
+Android
+-------------------------------------------------------------------------
+
+Create Legitimate Connection Request Notification
+
+Two accounts created - one patient, one carer
+No connection established between them
+
+1. Request connection between the two accounts
+2. Log on to the account that the request was not made from
+
+There is a notification on the account informing the user that a connection has been requested. 
+
+
+
+
+Create Legitimate Connection Successful Notification
+
+Two accounts created - one patient, one carer
+No connection established between them
+Connection request between the two accounts created 
+
+1. Log on to the account that the connection has been requested to
+2. Accept the connection by typing in the code associated with the request
+3. Log into the other user account that made the initial request
+
+There is a notification on the account informing the user that the connection that they requested has been completed successfully.
+
+
+
+
+Create New Prescription Created Notification
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Log onto carer account
+2. Add a prescription for the associated patient account
+3. Log into the patient account on the android application
+<<Expected Result One>>
+4. Click the notification
+5. Click add to native android reminders
+<<Expected Result Two>>
+
+Expected Result One: There is a notification on the user's account, informing them that a new prescription has been added by their carer [FirstName + Surname]
+Expected Result One: The reminder is added into the native reminders on the android device
+
+
+
+
+[Carer] Prescription Expiring (2 days time)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire in two days time
+2. Navigate to the home page of the application
+
+There is a notification on the carer's account, informing them that the prescription is expiring for patient [First Name + Last Name] in 2 days time. 
+
+
+
+
+[Patient] Prescription Expiring (2 days time)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire in two days time
+2. Log into the associated patient's account 
+
+There is a notification on the patient's account, informing them that their prescription is expiring in 2 days time. 
+
+
+
+
+[Carer] Prescription Expiring (today)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire on that current day
+2. Navigate to the home page
+
+There is a notification on the carer's account, informing them that the prescription is expiring for patient [First Name + Last Name] today. 
+
+
+
+
+[Patient] Prescription Expiring (today)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire on that current day
+2. Log into the associated patient account
+
+There is a notification on the patient's account, informing them that their prescription is expiring today. 
+
+
+
+
+[Patient] Carer adds Prescription Web / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the web application as the carer and add a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click add to native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Carer adds Prescription Android / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the android application as the carer and add a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click add to native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Carer updates Prescription Web / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the web application as the carer and update a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click update native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification, informing the user that their prescription has been updated 
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Carer updates Prescription Android / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the android application as the carer and add a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click update native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification, informing the user that their prescription has been updated 
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+[Patient] Take Medication (15mins)
+
+Carer adds Prescription Web / Add to reminders in native Reminders Android - must have passed //add test ID//
+Carer adds Prescription Android / Add to reminders in native Reminders Android - must have passed //add test ID//
+Two accounts created - one patient, one carer
+Connection established between them
+Prescription set up by carer for assigned patient to take medication
+Prescription has been added to the patient's android device's native reminders application
+
+N/A
+
+There is a notification on the patient's account, informing them that they are due to take [medication name] in 15mins.
+
+
+
+
+[Patient] Take Medication (now)
+
+Carer adds Prescription Web / Add to reminders in native Reminders Android - must have passed //add test ID//
+Carer adds Prescription Android / Add to reminders in native Reminders Android - must have passed //add test ID//
+Two accounts created - one patient, one carer
+Connection established between them
+Prescription set up by carer for assigned patient to take medication
+Prescription has been added to the patient's android device's native reminders application
+
+N/A
+
+There is a notification on the patient's account, informing them that they are due to take [medication name] now.
+
+
+
+
+[Patient] Appointment Created by Carer
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Appointment created by carer with the associated patient
+2. Log into patient account
+
+There is a notification on the patient's account, informing them that they have been scheduled an appointment with [Carer Name] at [Date + Time]. 
+
+
+
+
+[Carer] Create Patient/Carer appointment Web/Add to native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient on the web application
+
+1. Log in to the android application with the same carer account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click add appointment to calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: Appointment added to native android calendar
+
+
+
+
+[Patient] Create Patient/Carer appointment Web/Add to native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient on the web application
+
+1. Log in to the android application with the patient account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click add appointment to calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: Appointment added to native android calendar
+
+
+
+
+[Carer] Create Patient/Carer appointment Android/Add to native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient on the web application
+
+1. Log in to the android application with the same carer account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click do not add appointment to calendar
+4. Log out of the android application
+5. Log back in to the android application
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The notification should not re-appear
+
+
+
+
+[Patient] Create Patient/Carer appointment Android/Add to native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient on the web application
+
+1. Log in to the android application with the patient account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click do not add appointment to calendar
+4. Log out of the android application
+5. Log back in to the android application
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The notification should not re-appear
+
+
+
+
+[Carer] Appointment Due (60mins)
+
+Account created of type Carer
+
+1. Create an appointment for the carer which start time and date is in one hour, 3mins time
+2. Add this appointment to the native android calendar
+
+There is a notification on the carer's android device, informing them that they have [Appointment Title] in 60mins time. 
+
+
+
+
+[Carer] Appointment Due (15mins)
+
+Account created of type Carer
+
+1. Create an appointment for the carer which start time and date is in 18mins
+2. Add this appointment to the native android calendar
+
+There is a notification on the carer's android device, informing them that they have [Appointment Title] in 15mins time. 
+
+
+
+
+[Carer] Appointment Due (on time)
+
+Account created of type Carer
+
+1. Create an appointment for the carer which start time and date is in 5mins
+2. Add this appointment to the native android calendar
+
+There is a notification on the carer's android device, informing them that they have [Appointment Title] starting now. 
+
+
+
+
+[Patient] Appointment Due (60mins)
+
+Account created of type Patient
+
+1. Create an appointment for the patient which start time and date is in one hour, 3mins time
+2. Add this appointment to the native android calendar
+
+There is a notification on the patient's android device, informing them that they have [Appointment Title] in 60mins time. 
+
+
+
+
+[Patient] Appointment Due (15mins)
+
+Account created of type Patient
+
+1. Create an appointment for the patient which start time and date is in 18mins
+2. Add this appointment to the native android calendar
+
+There is a notification on the patient's android device, informing them that they have [Appointment Title] in 15mins time. 
+
+
+
+
+[Patient] Appointment Due (on time)
+
+Account created of type Patient
+
+1. Create an appointment for the patient which start time and date is in 5mins
+2. Add this appointment to the native android calendar
+
+There is a notification on the patient's android device, informing them that they have [Appointment Title] starting now. 
+
+
+
 
 [Patient] Create appointment Web/Add to native Calendar Android
 
@@ -749,6 +861,391 @@ Appointment created on the web application
 
 Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
 Expected Result Two: Appointment added to native android calendar
+
+
+
+
+[Patient] Create appointment Web/Add to native Calendar Android
+
+Account of type patient created
+Appointment created on the web application
+
+1. Log in to the android application with the same patient account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click do not add appointment to calendar
+4. Log out of the android application
+5. Log back in to the android application
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The notification should not re-appear
+
+
+
+
+[Carer] Create appointment Web/Add to native Calendar Android
+
+Account of type carer created
+Appointment created on the web application
+
+1. Log in to the android application with the same carer account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click do not add appointment to calendar
+4. Log out of the android application
+5. Log back in to the android application
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The notification should not re-appear 
+
+
+
+
+[Patient] Update appointment Web/Push to update android native calendar
+
+Account type of patient created
+Appointment created for the user 
+Appointment already added to the native calendar on the phone 
+
+1. Log into the web application, click update on the appoinment that has already been created
+2. Log into the mobile application
+<<Expected Result One>>
+3. Click update appointment in native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The appointment is updated in the native calendar
+
+
+
+
+[Carer] Update appointment Web/Push to update android native calendar
+
+Account type of carer created
+Appointment created for the user 
+Appointment already added to the native calendar on the phone 
+
+1. Log into the web application, click update on the appoinment that has already been created
+2. Log into the mobile application
+<<Expected Result One>>
+3. Click update appointment in native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The appointment is updated in the native calendar
+
+
+
+
+[Patient] Update Patient/Carer appointment Web/Update to native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient
+Appointment already added to the patients native android calendar
+
+1. Log in to the android application with the patient account
+2. Click the notification that you have an updated appointment
+<<Expected Result One>> 
+3. Click update appointment in the native calendar
+4. Log out of the android application
+5. Log back in to the android application
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to update the appointment in the phone calendar
+Expected Result Two: The appointment should be updated in the calendar
+
+
+
+
+[Carer] Update Patient/Carer appointment Web/Update to native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient
+Appointment already added to the carers native android calendar
+
+1. Log in to the android application with the carer account
+2. Click the notification that you have an updated appointment
+<<Expected Result One>> 
+3. Click update appointment in the native calendar
+4. Log out of the android application
+5. Log back in to the android application
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to update the appointment in the phone calendar
+Expected Result Two: The appointment should be updated in the calendar
+
+
+
+
+[Carer] Delete Patient/Carer appointment Web/Delete in native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient
+Appointment already added to the carers native android calendar
+
+1. Log into the web application as the carer and delete the appointment that has been created
+2. Log in to the android application with the carer account
+3. Click the notification that you have an appointment that has been deleted on the web
+<<Expected Result One>> 
+4. Click delete appointment in the native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to delete the appointment in the phone calendar
+Expected Result Two: The appointment should be delete in the calendar
+
+
+
+
+[Patient] Delete appointment Web/Push to delete android native calendar
+
+Account type of patient created
+Appointment created for the user 
+Appointment already added to the native calendar on the phone 
+
+1. Log into the web application, click delete on the appoinment that has already been created
+2. Log into the mobile application
+<<Expected Result One>>
+3. Click delete appointment in native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to delete the appointment to the phone calendar
+Expected Result Two: The appointment is deleted from the native calendar
+
+
+
+
+[Carer] Delete appointment Web/Push to delete android native calendar
+
+Account type of carer created
+Appointment created for the user 
+Appointment already added to the native calendar on the phone 
+
+1. Log into the web application, click delete on the appoinment that has already been created
+2. Log into the mobile application
+<<Expected Result One>>
+3. Click delete appointment in native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: The appointment is deleted from the native calendar
+
+
+
+
+[Patient] Delete Patient/Carer appointment Web/Delete in native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient
+Appointment already added to the patients native android calendar
+
+1. Log into the android application as the carer and delete the appointment that has been created
+2. Log in to the android application with the patient account
+3. Click the notification that you have an appointment that has been deleted by the carer [First Name + Surname]
+<<Expected Result One>> 
+4. Click delete appointment in the native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to delete the appointment in the phone calendar
+Expected Result Two: The appointment should be delete in the calendar
+
+
+
+
+[Patient] Update Patient/Carer appointment Web/Update in native Calendar Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+Appointment created by the carer with the patient
+Appointment already added to the patients native android calendar
+
+1. Log into the android application as the carer and update the appointment that has been created
+2. Log in to the android application with the patient account
+3. Click the notification that you have an appointment that has been updated by the carer [First Name + Surname]
+<<Expected Result One>> 
+4. Click delete appointment in the native calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to update the appointment in the phone calendar
+Expected Result Two: The appointment should be update in the calendar
+
+
+
+
+[Patient] Carer adds Prescription Web / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the web application as the carer and add a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click add to native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Carer adds Prescription Android / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the android application as the carer and add a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click add to native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Carer updates Prescription Web / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the web application as the carer and update a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click update native android reminders
+<<Expected Result>>
+
+Expected Result One: There is an outstanding notification, informing the user that their prescription has been updated 
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Carer updates Prescription Android / Add to reminders in native Reminders Android
+
+Account of type carer created
+Account type of patient created
+Patient and carer connected
+
+1. Log into the android application as the carer and add a prescription for the associated patient
+2. Log into the android application as the patient
+<<Expected Result One>> 
+3. Click the notification
+4. Click update native android reminders
+<<Expected Result Two>>
+
+Expected Result One: There is an outstanding notification, informing the user that their prescription has been updated 
+Expected Result Two: The prescription is added to the device's native reminders
+
+
+
+
+[Patient] Dismiss Notification
+
+Account of type patient created
+Account of type carer created
+
+1. Log in to the patient account on the web application
+2. Request to connect with carer
+3. Log into the carer account on the android application
+4. View the notification
+5. Click the notification to dismiss it
+<<Expected Result One>>
+6. Navigate away from and back to the home page
+<<Expected Result Two>>
+7. Log out of the account
+8. Log back into the patient account
+<<Expected Result Three>>
+
+Expected Result One: The notification disappears
+Expected Result Two: The notification does not re-appear
+Expected Result Three: The notification does not re-appear
+
+
+
+
+[Carer] Dismiss Notification
+
+Account of type carer created
+Account of type carer created
+
+1. Log in to the carer account on the web application
+2. Request to connect with patient
+3. Log into the patient account on the android application
+4. View the notification
+5. Click the 'x' to dismiss the notification
+<<Expected Result One>>
+6. Refresh the home page
+<<Expected Result Two>>
+7. Log out of the account
+8. Log back into the carer account
+<<Expected Result Three>>
+
+Expected Result One: The notification disappears
+Expected Result Two: The notification does not re-appear
+Expected Result Three: The notification does not re-appear
+
+
+
+
+[Patient] More than one notification 
+
+Account of type patient created
+
+1. Log in to the patient account on the web 
+2. Generate multiple appointments
+3. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+4. Log in to the mobile application
+5. Wait for all of the notifications to be generated
+
+From the home page all 3 notifications should be able to be viewed 
+
+
+
+
+[Carer] More than one notification 
+
+Account of type carer created
+
+1. Log in to the patient account on the web 
+2. Generate multiple appointments
+3. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+4. Log in to the mobile application
+5. Wait for all of the notifications to be generated
+
+From the home page all 3 notifications should be able to be viewed 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

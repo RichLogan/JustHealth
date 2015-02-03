@@ -37,6 +37,7 @@ Functional
 	- Dismiss on app / Dismisses on Web [Carer]
 	- Dismiss on Web / Dismisses on App [Patient]
 	- Dismiss on Web / Dismisses on App [Carer]
+
 	- Add appointment Web [patient] / Pushed to the mobile app [patient]
 	- Add appointment mobile[carer] / Pushed to patient mobile app [patient]
 	- Add appointment Web[carer] / Pushed to patient mobile app [patient] [carer]
@@ -45,10 +46,12 @@ Functional
 
 
  - Reminders (Android Only)
- 	- Add the Medication reminder to the phone
+ 	- Add prescription android / push to mobile app [patient]
+	- Add prescription Web / push to mobile app [patient]
+	- Update prescription Web / puhs to mobile app [patient]
+	- Update prescription Android / push to mobile app [patient]
  	- Take Medication (15mins)
  	- Take Medication (on time)
- 	- Check if they want the Appoinments added to native calendar (If added Web/by Carer)
 
 
 
