@@ -489,7 +489,7 @@ def internal_error(error):
 
 @app.errorhandler(400)
 def internal_error(error):
-  return render_template('400RequestMalformed.html'), 400
+  return "Your request appears to be malformed", 400
 
 @app.errorhandler(401)
 def internal_error(error):
