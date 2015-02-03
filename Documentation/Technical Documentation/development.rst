@@ -31,8 +31,210 @@ Development Tools
 Testing
 ------------------
 
-We strived to use Test-Driven Development as best we could throughout the entirety of the project. This involves creating tests before any code is written showing the general expected inputs and outputs. The functionality should then be written so that it passes the test. One of the downsides of this approach is that it relies on how well the test covers all eventualities. This did result in tests being rewritten and rerun throughout the entire development time when needed. 
+We strived to use Test-Driven Development as best we could throughout the entirety of the project. This involves creating tests before any code is written showing the general expected inputs and outputs. The functionality should then be written so that it passes the test. One of the downsides of this approach is that it relies on how well the test covers all eventualities. This did result in tests being rewritten and rerun throughout the entire development time when needed.
+
+We also had a seperate JustHealthTest database which the application would connect to, so that we were not running tests against our Production environment. 
 
 We had numerous types of tests:
 
-1. Automated API tests. 
+1. Automated API tests.
+#. Functional web application tests
+#. Functional mobile application (Android) tests
+
+Around Iteration 3, we realised that keeping track of all the testing was causing issues. We tried a number of different options, such as implementing a `Continuous Integration`_ tool such as `Travis CI`_ or `Jenkins`_. This would cause all of our (automated) tests to be ran whenever a merge to the ``master`` branch is made, automatically recording the results of a build and notifying us. However, due to challenges with working on the Kent network, and the added hassle of learning these skills we decided against this.
+
+Instead, Stephen built the `JustHealth Testing Portal`_, a small appliction again written in Python/Flask, which allowed us to store all tests and individual runs/results in a database with a front end interface. This greatly improved the speed and quality of our tests/runs. 
+
+--------------------
+Automated API Tests
+--------------------
+
+**Introduction**
+
+The automated tests made use of Python's built in ``unittest`` package, which allows tests to created combining calls to our application and assert statements in order to set the pass/fail conditions. The ``setUp()`` and ``tearDown()`` run before and after every test respectively (although are not used in the example below). 
+
+.. code-block:: python
+	
+	import unittest
+	class testExample(unittest.TestCase):
+		def setUp(self): pass
+
+		def testPass(self):
+			self.assertEqual('hello', a)
+
+		def testFail(self):
+			a = "world"
+			self.assertEqual('hello', a)
+
+		def tearDown(self): pass
+
+We can run this using:
+
+.. code-block:: bash
+
+	$ python -m unittest -v testExample
+
+Which will give the following output:
+
+.. code-block:: bash
+
+	testFail (testExample.testExample) ... FAIL
+	testPass (testExample.testExample) ... ok
+
+	======================================================================
+	FAIL: testFail (testExample.testExample)
+	----------------------------------------------------------------------
+	Traceback (most recent call last):
+  		File "testExample.py", line 9, in testFail
+    		self.assertEqual('hello', a)
+	AssertionError: 'hello' != 'world'
+
+	----------------------------------------------------------------------
+	Ran 2 tests in 0.000s
+
+	FAILED (failures=1)
+
+This gives us a quick summary of which tests passed/failed in each TestCase, and why any failures occured. 
+
+In order to write tests effectively we used the following iterative method:
+
+1. **Write descriptions of tests only**
+
+.. code-block:: python
+	
+	import unittest
+
+	testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
+
+	class testCreateNotification(unittest.TestCase):
+		def testLegitimate(self):
+			"""Attempt to create a legitimate notification"""
+			return False
+	
+		def testInvalidType(self):
+			"""Attempt to create a notification with a non Foreign Key type"""
+			return False
+
+		def testInvalidUser(self):
+			"""Attempt to create a notification for a user that doesn't exist"""
+			return False
+
+Here we have written the 3 tests we are going to write for the ``CreateNotification`` functionality. They all ``return False`` so that they fail.
+
+2. **Implement database functionality / setUp(), tearDown()**
+
+------------
+runTests.sh
+------------
+
+In order to further make testing easier, Rich developed the ``.runTests.sh`` bash script in order to run all recorded tests. It accomplished:
+
+1. Switching the local server to run against the test server (in order to minimise the risk of unintentinally dropping production data)
+2. Running every single automated test and recording all results.
+
+This file can be run from the root of the project, provided a local server is running and connection to the Kent network is available. 
+
+.. code-block:: bash
+
+	$ . runTests.sh
+
+The source of this file is below:
+
+.. code-block:: bash
+
+	#!/bin/bash
+
+	# About
+	# This should run all tests and give results. It will also automatically alter the local server in order to point to the database, and change back when finshed.
+	# More detailed output can be added by appending -v to the test in question
+
+	# Usage
+	# Run using '$ . runTests.sh'
+	# Must be on kent.ac.uk network
+	# Line 5 in Website/justHealthServer/api.py !!!MUST!!! be the database import
+
+	# Results
+	# . = PASS
+	# F = Fail
+	# E = Error
+
+	function getImport {
+	  sed '5q;d' Website/justHealthServer/api.py
+	}
+
+	importStatement=`getImport`;
+
+	echo -e "-------------------------Setup-------------------------"
+
+	if [[ $importStatement == "from database import *" ]];  then
+	  sed -i "" -e "5s/.*/from testDatabase import */" Website/justHealthServer/api.py;
+	  echo "Application now pointing to TEST database"
+
+	  echo "Allowing server to restart..."
+	  sleep 1
+	  echo -ne "..1.."\\r
+	  sleep 1
+	  echo -ne "..1..2"\\r
+	  sleep 1
+	  echo -ne "..1..2..3"\\r
+	  sleep 1
+	  echo -ne "..1..2..3..4"\\r
+	  sleep 1
+	  echo -e "..1..2..3..4..5"\\r
+	  echo "Done!"
+	  runTests
+	elif [[ $importStatement == "from testDatabase import *" ]]; then
+	  echo "Application already pointing to TEST database";
+	  runTests
+	else
+	  echo "Something went wrong. Check DB import statement of Website/justHealthServer/api.py";
+	fi
+
+	echo "Reverting application to PRODUCTION database"
+	sed -i "" -e "5s/.*/from database import */" Website/justHealthServer/api.py;
+
+	function runTests {
+	  echo -e "---------------Just Health Testing Suite---------------"
+
+	  # echo "Iteration 1"
+	  # # python -m unittest discover Iteration\ 1/Test\ Cases/Testing\ Scripts/
+	  # echo -e "\n"
+
+	  # echo "Iteration 2"
+	  # # testPath
+	  # echo -e "\n"
+
+	  # echo "Iteration 3"
+	  # # testPath
+	  # echo -e "\n"
+
+	  echo "Iteration 4"
+	  echo "--"
+	    echo "Search Patient Carer"
+	    python -m unittest discover Iteration\ 4/Test\ Cases/ testSearchPatientCarer.py
+	  
+	    echo "Create Connection"
+	    python -m unittest discover Iteration\ 4/Test\ Cases/ testCreateConnection.py
+	    
+	    echo "Complete Connection"
+	    python -m unittest discover Iteration\ 4/Test\ Cases/ testCompleteConnection.py
+	    
+	    echo "Delete Connection"
+	    python -m unittest discover Iteration\ 4/Test\ Cases/ testDeleteConnection.py
+	    
+	    echo "Cancel Connection"
+	    python -m unittest discover Iteration\ 4/Test\ Cases/ testCancelConnection.py
+	    
+	    echo "Get Connections"
+	    python -m unittest discover Iteration\ 4/Test\ Cases/ testGetConnections.py
+	  echo -e "\n"
+
+	  # echo "Iteration 5"
+	  # python -m unittest discover Iteration\ 5/Test\ Cases/
+	  # echo -e "\n"
+	}
+
+.. _`Continuous Integration`: http://www.thoughtworks.com/continuous-integration
+.. _`Travis CI`: https://travis-ci.com/
+.. _`Jenkins`: http://jenkins-ci.org/
+.. _`JustHealth Testing Portal`: http://raptor.kent.ac.uk:5001/
