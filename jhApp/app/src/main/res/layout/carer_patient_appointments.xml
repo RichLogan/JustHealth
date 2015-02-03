@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    tools:context=".login"
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,12 +24,8 @@
             android:padding="20sp"
             android:layout_gravity="right"
             android:textColor="@color/primary"
-            android:background="@color/off_white"/>
+            android:background="@android:color/transparent"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" ></LinearLayout>
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -38,7 +35,8 @@
                     android:layout_height="match_parent"
                     android:id="@+id/appointments"
                     android:orientation="vertical"
-                    style="@style/defaultLinearForm" >
+                    style="@style/defaultLinearForm"
+                    android:layout_marginTop="0sp">
 
                 </LinearLayout>
 
