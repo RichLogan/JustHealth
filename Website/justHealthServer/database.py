@@ -136,6 +136,23 @@ class Prescription(BaseModel):
     class Meta:
         db_table = 'prescription'
 
+class Notificationtype(BaseModel):
+    typename = PrimaryKeyField()
+    typeclass = CharField(max_length=25)
+
+    class Meta:
+        db_table = 'notificationtype'
+
+class Notification(BaseModel):
+    notificationid = PrimaryKeyField()
+    content = CharField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    notificationtype = ForeignKeyField(db_column='typename', rel_model=Notificationtype, to_field='typename')
+    dismissed = BooleanField(default=False)
+
+    class Meta:
+        db_table = 'notification'
+
 def createAll():
     dropAll()
     Client.create_table()
@@ -150,6 +167,8 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+    Notificationtype.create_table()
+    Notification.create_table()
 
 def dropAll():
     if Client.table_exists():
@@ -187,3 +206,9 @@ def dropAll():
 
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
+
+    if Notificationtype.table_exists():
+        Notificationtype.drop_table(cascade=True)
+
+    if Notification.table_exists():
+        Notification.drop_table(cascade=True)
