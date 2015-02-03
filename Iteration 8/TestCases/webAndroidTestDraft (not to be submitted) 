@@ -1,3 +1,8 @@
+-------------------------------------------------------------------------
+Web
+-------------------------------------------------------------------------
+
+
 Create Legitimate Connection Request Notification
 
 Two accounts created - one patient, one carer
@@ -253,5 +258,498 @@ Connection established between them
 
 
 There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] starting now. 
+
+
+
+
+[Patient] Dismiss Notification
+
+Account of type patient created
+
+1. Log in to the patient account
+2. Create an appointment, which start time date is in 65mins time
+3. Wait until the appointment is due in 60mins time, navigate to the home page
+4. View the notification
+5. Click the 'x' to dismiss the notification
+<<Expected Result One>>
+6. Refresh the home page
+<<Expected Result Two>>
+7. Log out of the account
+8. Log back into the patient account
+
+Expected Result One: The notification disappears
+Expected Result Two: The notification does not re-appear
+Expected Result Three: The notification does not re-appear
+
+
+
+
+[Carer] Dismiss Notification
+
+Account of type carer created
+
+1. Log in to the carer account
+2. Create an appointment, which start time date is in 65mins time
+3. Wait until the appointment is due in 60mins time, navigate to the home page
+4. View the notification
+5. Click the 'x' to dismiss the notification
+<<Expected Result One>>
+6. Refresh the home page
+<<Expected Result Two>>
+7. Log out of the account
+8. Log back into the carer account
+
+Expected Result One: The notification disappears
+Expected Result Two: The notification does not re-appear
+Expected Result Three: The notification does not re-appear
+
+
+
+
+[Patient] View all notifications
+
+Account of type patient created
+
+1. Log in to the patient account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Ensure that these notifications have been dismissed
+4. Click the view all of the notifications 
+
+From the view all notifications page you are able to view all of the notifications, even those that have been dismissed by the user. 
+
+
+
+
+[Carer] View all notifications
+
+Account of type carer created
+
+1. Log in to the carer account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Ensure that these notifications have been dismissed
+4. Click the view all of the notifications 
+
+From the view all notifications page you are able to view all of the notifications, even those that have been dismissed by the user. 
+
+
+
+
+[Patient] More than one notification 
+
+Account of type patient created
+
+1. Log in to the patient account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Wait for all of the notifications to be generated
+
+From the home page all 3 notifications should be able to be viewed 
+
+
+
+[Carer] More than one notification 
+
+Account of type carer created
+
+1. Log in to the carer account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Wait for all of the notifications to be generated
+
+From the home page all 3 notifications should be able to be viewed 
+
+
+
+-------------------------------------------------------------------------
+Android
+-------------------------------------------------------------------------
+
+Create Legitimate Connection Request Notification
+
+Two accounts created - one patient, one carer
+No connection established between them
+
+1. Request connection between the two accounts
+2. Log on to the account that the request was not made from
+
+There is a notification on the account informing the user that a connection has been requested. 
+
+
+
+
+Create Legitimate Connection Successful Notification
+
+Two accounts created - one patient, one carer
+No connection established between them
+Connection request between the two accounts created 
+
+1. Log on to the account that the connection has been requested to
+2. Accept the connection by typing in the code associated with the request
+3. Log into the other user account that made the initial request
+
+There is a notification on the account informing the user that the connection that they requested has been completed successfully.
+
+
+
+
+Create New Prescription Created Notification
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Log onto carer account
+2. Add a prescription for the associated patient account
+3. Log into the patient account
+
+There is a notification on the user's account, informing them that a new prescription has been added by their carer
+
+
+
+
+[Carer] Prescription Expiring (2 days time)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire in two days time
+2. Navigate to the home page
+
+There is a notification on the carer's account, informing them that the prescription is expiring for patient [First Name + Last Name] in 2 days time. 
+
+
+
+
+[Patient] Prescription Expiring (2 days time)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire in two days time
+2. Log into the associated patient account
+
+There is a notification on the patient's account, informing them that their prescription is expiring in 2 days time. 
+
+
+
+
+[Carer] Prescription Expiring (today)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire on that current day
+2. Navigate to the home page
+
+There is a notification on the carer's account, informing them that the prescription is expiring for patient [First Name + Last Name] today. 
+
+
+
+
+[Patient] Prescription Expiring (today)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Prescription set up by carer for assigned patient to expire on that current day
+2. Log into the associated patient account
+
+There is a notification on the patient's account, informing them that their prescription is expiring today. 
+
+
+
+
+[Patient] Take Medication (15mins)
+
+Two accounts created - one patient, one carer
+Connection established between them
+Prescription set up by carer for assigned patient to take medication
+
+1. Log into patient account 15mins before a medication is due to be takens
+
+There is a notification on the patient's account, informing them that they are due to take [medication name] in 15mins.
+
+
+
+
+[Patient] Take Medication (now)
+
+Two accounts created - one patient, one carer
+Connection established between them
+Prescription set up by carer for assigned patient to take medication
+
+1. Log into patient account when medication is due to be takens
+
+There is a notification on the patient's account, informing them that they are due to take [medication name] now.
+
+
+
+
+[Patient] Appointment Created by Carer
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Appointment created by carer with the associated patient
+2. Log into patient account
+
+There is a notification on the patient's account, informing them that they have been scheduled an appointment with [Carer Name] at [Date + Time]. 
+
+
+
+
+[Carer] Appointment Due (60mins)
+
+Account created of type Carer
+
+1. Create an appointment for the carer which start time and date is in one hour, 3mins time
+2. Navigate to the home page
+3. When the appointment is due in 60mins, refresh the home page
+
+There is a notification on the carer's account, informing them that they have [Appointment Title] in 60mins time. 
+
+
+
+
+[Carer] Appointment Due (15mins)
+
+Account created of type Carer
+
+1. Create an appointment for the carer which start time and date is in 18mins
+2. Navigate to the home page
+3. When the appointment is due in 15mins, refresh the home page
+
+There is a notification on the carer's account, informing them that they have [Appointment Title] in 15mins time. 
+
+
+
+
+[Carer] Appointment Due (on time)
+
+Account created of type Carer
+
+1. Create an appointment for the carer which start time and date is in 5mins
+2. Navigate to the home page
+3. When the appointment is due to start, refresh the home page
+
+There is a notification on the carer's account, informing them that they have [Appointment Title] starting now. 
+
+
+
+
+[Patient] Appointment Due (60mins)
+
+Account created of type Patient
+
+1. Create an appointment for the patient which start time and date is in one hour, 3mins time
+2. Navigate to the home page
+3. When the appointment is due in 60mins, refresh the home page
+
+There is a notification on the patient's account, informing them that they have [Appointment Title] in 60mins time. 
+
+
+
+
+[Patient] Appointment Due (15mins)
+
+Account created of type Patient
+
+1. Create an appointment for the patient which start time and date is in 18mins
+2. Navigate to the home page
+3. When the appointment is due in 15mins, refresh the home page
+
+There is a notification on the patient's account, informing them that they have [Appointment Title] in 15mins time. 
+
+
+
+
+[Patient] Appointment Due (on time)
+
+Account created of type Patient
+
+1. Create an appointment for the patient which start time and date is in 5mins
+2. Navigate to the home page
+3. When the appointment is due to start, refresh the home page
+
+There is a notification on the patient's account, informing them that they have [Appointment Title] starting now. 
+
+
+
+
+[Patient/Carer] Appointment Due (60mins)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Appointment created by carer with the associated patient which has a start time in one hour, 3mins time
+2. In another tab, log into the patients account
+3. Navigate to the carers home page simultaneously
+4. When the appointment is due in 60mins, refresh both the patient and the carer home pages
+
+
+There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] in 60mins time. 
+
+
+
+
+[Patient/Carer] Appointment Due (15mins)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Appointment created by carer with the associated patient which has a start time in 18mins time
+2. In another tab, log into the patients account
+3. Navigate to the carers home page simultaneously
+4. When the appointment is due in 15mins, refresh both the patient and the carer home pages
+
+
+There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] in 15mins time. 
+
+
+
+
+[Patient/Carer] Appointment Due (on time)
+
+Two accounts created - one patient, one carer
+Connection established between them
+
+1. Appointment created by carer with the associated patient which has a start time in 5mins
+2. In another tab, log into the patients account
+3. Navigate to the carers home page simultaneously
+4. When the appointment is due to start, refresh both the patient and the carer home pages
+
+
+There is a notification on the patient's and carer's accounts, informing them that they have [Appointment Title] starting now. 
+
+
+
+
+[Patient] Dismiss Notification
+
+Account of type patient created
+
+1. Log in to the patient account
+2. Create an appointment, which start time date is in 65mins time
+3. Wait until the appointment is due in 60mins time, navigate to the home page
+4. View the notification
+5. Click the 'x' to dismiss the notification
+<<Expected Result One>>
+6. Refresh the home page
+<<Expected Result Two>>
+7. Log out of the account
+8. Log back into the patient account
+
+Expected Result One: The notification disappears
+Expected Result Two: The notification does not re-appear
+Expected Result Three: The notification does not re-appear
+
+
+
+
+[Carer] Dismiss Notification
+
+Account of type carer created
+
+1. Log in to the carer account
+2. Create an appointment, which start time date is in 65mins time
+3. Wait until the appointment is due in 60mins time, navigate to the home page
+4. View the notification
+5. Click the 'x' to dismiss the notification
+<<Expected Result One>>
+6. Refresh the home page
+<<Expected Result Two>>
+7. Log out of the account
+8. Log back into the carer account
+
+Expected Result One: The notification disappears
+Expected Result Two: The notification does not re-appear
+Expected Result Three: The notification does not re-appear
+
+
+
+
+[Patient] View all notifications
+
+Account of type patient created
+
+1. Log in to the patient account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Ensure that these notifications have been dismissed
+4. Click the view all of the notifications 
+
+From the view all notifications page you are able to view all of the notifications, even those that have been dismissed by the user. 
+
+
+
+
+[Carer] View all notifications
+
+Account of type carer created
+
+1. Log in to the carer account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Ensure that these notifications have been dismissed
+4. Click the view all of the notifications 
+
+From the view all notifications page you are able to view all of the notifications, even those that have been dismissed by the user. 
+
+
+
+
+[Patient] More than one notification 
+
+Account of type patient created
+
+1. Log in to the patient account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Wait for all of the notifications to be generated
+
+From the home page all 3 notifications should be able to be viewed 
+
+
+
+
+[Carer] More than one notification 
+
+Account of type carer created
+
+1. Log in to the carer account
+2. Ensure that at least 3 notifications have been set to generate, and have been subsequently initiated
+3. Wait for all of the notifications to be generated
+
+From the home page all 3 notifications should be able to be viewed 
+
+
+
+
+[Patient] Create appointment Web/Add to native Calendar Android
+
+Account of type patient created
+Appointment created on the web application
+
+1. Log in to the android application with the same patient account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click add appointment to calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: Appointment added to native android calendar
+
+
+
+
+[Carer] Create appointment Web/Add to native Calendar Android
+
+Account of type carer created
+Appointment created on the web application
+
+1. Log in to the android application with the same carer account
+2. Click the notification that you have an outstanding appointment
+<<Expected Result One>> 
+3. Click add appointment to calendar
+<<Expected Result Two>>
+
+Expected Result One: Pop up asking whether you want to add the appointment to the phone calendar
+Expected Result Two: Appointment added to native android calendar
+
+
 
 
