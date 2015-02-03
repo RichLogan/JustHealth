@@ -1,16 +1,24 @@
 package justhealth.jhapp;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+//import android.support.v7.app.ActionBarActivity;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,35 +32,35 @@ public class CarerPrescriptions extends Activity{
         setContentView(R.layout.carer_prescriptions);
 
         //Get data passed from MyPatients
-        String username = "";
         String firstname = "";
-        String surname= "";
+        String username = "";
+
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("targetUsername");
             firstname = extras.getString("firstName");
-            surname = extras.getString("surname");
         }
 
+        final String user = username;
+
+        // Action Bar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(firstname + "'s Prescriptions");
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.action_bar_carer_prescriptions);
 
-        Button addNewPrescription = (Button)findViewById(R.id.addNewPrescription);
-        addNewPrescription.setOnClickListener(
-            new Button.OnClickListener() {
-                public void onClick(View view) {
-                    Intent intent = new Intent(getBaseContext(), AddPrescription.class);
-                    String username =  extras.getString("targetUsername");
-                    intent.putExtra("username", username);
-                    startActivity(intent);
-                }
+        final Button addPrescription = (Button) findViewById(R.id.addPrescriptionActionBar);
+        addPrescription.setText("{fa-plus}");
+        addPrescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        Iconify.addIcons(addPrescription);
+        addPrescription.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View view) {
+                Intent add = new Intent(CarerPrescriptions.this, AddPrescription.class);
+                add.putExtra("username", user);
+                startActivity(add);
             }
-        );
-
-        //Set text of patientName to username
-        TextView title=(TextView)findViewById(R.id.patientName);
-        title.setText("Prescriptions: " + firstname + " " + surname + " (" + username + ")");
+        });
 
         //Display Prescriptions
         displayPrescriptions(getPrescriptions(username, "active"), "active");
@@ -170,7 +178,7 @@ public class CarerPrescriptions extends Activity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
+        // TODO Something is breaking here if go back from edit without doing anything
         super.onActivityResult(requestCode, resultCode, data);
         if(data.getExtras().containsKey("response")){
             Boolean success = (resultCode == 1);
