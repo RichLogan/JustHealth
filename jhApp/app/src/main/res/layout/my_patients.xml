@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".login">
 
-    <include android:id="@+id/header" layout="@layout/header" />
 
     <LinearLayout
         android:layout_width="fill_parent"

@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,10 @@ public class Profile extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Profile");
 
         final String profileInfo = getProfile();
         print(profileInfo);
