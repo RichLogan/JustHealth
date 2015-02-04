@@ -162,8 +162,8 @@
 		  	<h5><i class="fa fa-search-plus sideIcons" ></i> NHS Search </h5> </a>
 		  </div>
     </fieldset>
-	</div>
 
+	</div>
 	<div class="col-md-9 dashPanel">
 		
 		<!-- Notifications -->
@@ -183,16 +183,16 @@
 		<fieldset class ="form-container">
 		<!--All active prescriptions to show on the dashboard -->	
 
-		<a class"thumbnail" href="/prescriptions"> 
-		<h4><i class="fa fa-flask sideIcons pull-left" ></i> Prescriptions </h4> </a>
+		<i class="fa fa-medkit headingIcon pull-left" ></i> <h4>Prescriptions </h4> </a>
+    <hr>
 		{%for prescription in prescriptions%}
 		  <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="heading{{prescription.prescriptionid}}">
-		      <h3 class="panel-title">
-		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
+		    <div class="panel-heading" role="tab" id="myPatientsTab" id="heading{{prescription.prescriptionid}}">
+		      <h4 class="panel-title">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}" id="myPatientsPatientName">
 		          <h4>{{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
 		        </a>
-		      </h3>
+		      </h4>
 		      <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
 		        <div class="panel-body">
 		          <div class="row">
@@ -212,16 +212,17 @@
 		 {% endfor %}
 		  <hr>
 		 <!--Appointments to show on dashboard --> 
-		<a href="/appointments" class="pull-right"> View all Appointments </a>
-		<a class"thumbnail" href="/appointments"> 
-		<h4><i class="fa fa-calendar sideIcons"></i> Appointments</h4></a>
+	   <h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
+        <a href="/appointments" class="pull-right"> View all Appointments </a>
+
+    <hr>
 		 {% block upcoming %}
         {% for appointment in appointments %}
           {% if appointment.upcoming == True %}
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
+              <div class="panel-heading" role="tab" id="myPatientsTab" id="heading{{appointment.appid}}">
                 <h3 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
                         <p>{{appointment.name}}</p>
