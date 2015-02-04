@@ -274,9 +274,14 @@ def login():
         if result == "Authenticated":
             # Valid user, set SESSION
             session["username"] = request.form['username']
+            nameresult = json.loads(getAccountInfo(session['username']))
+            session['firstname'] = nameresult['firstname']
+            session['surname'] = nameresult['surname']
+            fullname = session['firstname'] + " " + session['surname']
+
             return redirect(url_for('index'))
         else:
-            return render_template('login.html', type="danger", message = result)
+            return render_template('login.html', printname = fullname, type="danger", message = result)
     try:
       session['username']
     except KeyError, e:
