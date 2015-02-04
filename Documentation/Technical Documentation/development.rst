@@ -4,7 +4,7 @@ Development
 
 The JustHealth application was developed using an iterative approach with a strong focus on being as fast and lightweight as possible.
 
-One of the ways we achieved this was through the use of various tools, below is an outline of general development process and how these tools were used in order to improve the way we worked.
+One of the primary ways we achieved this was through the use of various tools and processes. In some cases we took small parts of methodologies or tools in order to make them work best for us. 
 
 ---------------------------
 General Development Process
@@ -129,7 +129,7 @@ runTests.sh
 
 In order to further make testing easier, Rich developed the ``.runTests.sh`` bash script in order to run all recorded tests. It accomplished:
 
-1. Switching the local server to run against the test server (in order to minimise the risk of unintentinally dropping production data)
+1. Switching the local server to run against the test database (in order to minimise the risk of unintentinally modifying production tables/data)
 2. Running every single automated test and recording all results.
 
 This file can be run from the root of the project, provided a local server is running and connection to the Kent network is available. 
