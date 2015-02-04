@@ -10,11 +10,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,17 +39,15 @@ public class Search extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Search");
 
-
-        //check for the search button being pressed
+        // On Search Press
         Button search = (Button) findViewById(R.id.searchButton);
         search.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-                        searchName();
-                    }
+            new View.OnClickListener() {
+                public void onClick(View view) {
+                    searchName();
                 }
+            }
         );
-
     }
 
     private void searchName() {
@@ -72,32 +74,31 @@ public class Search extends Activity {
     private void printTable(JSONArray array) {
         TableLayout searchTable = (TableLayout) findViewById(R.id.searchTable);
         searchTable.removeAllViews();
+
         //create heading row
         TableRow head = new TableRow(this);
-        //add properties to the header row
         head.setBackgroundColor(getResources().getColor(R.color.header));
 
         //create the headings of the table
         TextView headingUsername = new TextView(this);
         headingUsername.setTextColor(Color.WHITE);
-        headingUsername.setPadding(5, 5, 5, 5);
+        headingUsername.setPadding(25,0,25,0);
 
         TextView headingFirstName = new TextView(this);
         headingFirstName.setTextColor(Color.WHITE);
-        headingFirstName.setPadding(5, 5, 5, 5);
+        headingFirstName.setPadding(0,0,25,0);
 
         TextView headingSurname = new TextView(this);
         headingSurname.setTextColor(Color.WHITE);
-        headingSurname.setPadding(5, 5, 5, 5);
+        headingSurname.setPadding(0,0,25,0);
 
         TextView headingAction = new TextView(this);
         headingAction.setTextColor(Color.WHITE);
-        headingAction.setPadding(5, 5, 5, 5);
 
         headingUsername.setText("Username");
         headingFirstName.setText("First Name");
         headingSurname.setText("Surname");
-        headingAction.setText("Action");
+        headingAction.setText("");
 
         //add the headings to the row
         head.addView(headingUsername);
@@ -105,7 +106,6 @@ public class Search extends Activity {
         head.addView(headingSurname);
         head.addView(headingAction);
         searchTable.addView(head, 0);
-
 
         for (int i = 0; i < array.length(); i++) {
             try {
@@ -116,54 +116,68 @@ public class Search extends Activity {
                 String resultSurname = obj.getString("surname");
 
                 TableRow row = new TableRow(this);
+
                 //add username to TextView
                 TextView forUsername = new TextView(this);
                 forUsername.setText(resultUsername);
+                forUsername.setPadding(25,0,25,0);
+
                 //add first name to TextView
                 TextView forFirstName = new TextView(this);
                 forFirstName.setText(resultFirstName);
+                forFirstName.setPadding(0,0,25,0);
+
                 //add surname to TextView
                 TextView forSurname = new TextView(this);
                 forSurname.setText(resultSurname);
-                //add connect button
+                forSurname.setPadding(0,0,25,0);
+
+                //Add connect button
                 Button connect = new Button(this);
+                connect.setTextColor(Color.WHITE);
 
                 // Check if connection is already established
-                String resultMessage = null;
                 try {
-                    resultMessage = obj.getString("message");
-                    connect.setText(resultMessage);
-                    connect.setOnClickListener(
-                        new Button.OnClickListener() {
-                            public void onClick(View view) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
-                                alert.setTitle("View Connections");
-                                alert.setMessage("Would you like to view this connection?");
-                                alert.setNegativeButton("Cancel", null);
-                                alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        startActivity(new Intent(Search.this, Connections.class));
-                                    }
-                                });
-                                alert.show();
-                            }
+                    final String resultMessage = obj.getString("message");
+
+                    if (resultMessage.equals("Already Connected")) {
+                        connect.setText("{fa-check}");
+                        connect.setBackgroundColor(getResources().getColor(R.color.primary));
+                    }
+                    else {
+                        connect.setText("{fa-question}");
+                        connect.setBackgroundColor(getResources().getColor(R.color.warning));
+                    }
+
+                    connect.setOnClickListener(new Button.OnClickListener() {
+                        public void onClick(View view) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                            alert.setTitle(resultMessage);
+                            alert.setMessage("Would you like to view this connection?");
+                            alert.setNegativeButton("Cancel", null);
+                            alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    startActivity(new Intent(Search.this, Connections.class));
+                                }
+                            });
+                            alert.show();
                         }
-                    );
-                }
-                catch (JSONException e) {
-                    connect.setText("Connect");
+                    });
+                } catch (JSONException e) {
+                    // No connection existing
+                    connect.setText("{fa-user-plus}");
+                    connect.setBackgroundColor(getResources().getColor(R.color.success));
                     connect.setOnClickListener(connectOnClick(connect, resultUsername));
                 }
-                connect.setTextColor(Color.WHITE);
-                connect.setBackgroundColor(getResources().getColor(R.color.header));
-                connect.setPadding(5, 5, 5, 5);
+
+                // Render Icons
+                Iconify.addIcons(connect);
 
                 //add the views to the row
                 row.addView(forUsername);
                 row.addView(forFirstName);
                 row.addView(forSurname);
                 row.addView(connect);
-
                 searchTable.addView(row, i + 1);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -174,27 +188,49 @@ public class Search extends Activity {
     View.OnClickListener connectOnClick(final Button button, final String targetUsername) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                connectUsers(targetUsername);
-                button.setText("Connection Requested");
-                button.setTextSize(11);
-                button.setClickable(false);
+                // Confirm connect to targerUsername
+                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                alert.setTitle("Add Connection");
+                alert.setMessage("Are you sure you would like to connect to " + targetUsername);
+                alert.setNegativeButton("Cancel", null);
+                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        // Create Connection
+                        HashMap<String, String> connectRequest = new HashMap<String, String>();
+                        String username = getSharedPreferences("account", 0).getString("username", null);
+                        connectRequest.put("username", username);
+                        connectRequest.put("target", targetUsername);
+                        String result = Request.post("createConnection", connectRequest, getApplicationContext());
+
+                        // Display Information
+                        AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                        alert.setTitle("Request Sent");
+                        alert.setMessage("Your connection code for " + targetUsername + " is: " + result);
+                        alert.show();
+
+                        // Disable Connection Button
+                        button.setText(result);
+
+                        // Change Button action to show the new connection
+                        button.setOnClickListener(new Button.OnClickListener() {
+                            public void onClick(View view) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                                alert.setTitle("Connections");
+                                alert.setMessage("Would you like to view this connection?");
+                                alert.setNegativeButton("Cancel", null);
+                                alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        startActivity(new Intent(Search.this, Connections.class));
+                                    }
+                                });
+                                alert.show();
+                            }
+                        });
+                    }
+                });
+                alert.show();
             }
         };
     }
-
-
-    private void connectUsers(String targetUser) {
-        HashMap<String, String> connectRequest = new HashMap<String, String>();
-
-        //this is adding the username as null - INCORRECT
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-
-        //add search to HashMap
-        connectRequest.put("username", username);
-        connectRequest.put("target", targetUser);
-
-        Request.post("createConnection", connectRequest, getApplicationContext());
-    }
 }
-
