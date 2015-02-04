@@ -41,9 +41,16 @@ We had numerous types of tests:
 #. Functional web application tests
 #. Functional mobile application (Android) tests
 
-Around Iteration 3, we realised that keeping track of all the testing was causing issues. We tried a number of different options, such as implementing a `Continuous Integration`_ tool such as `Travis CI`_ or `Jenkins`_. This would cause all of our (automated) tests to be ran whenever a merge to the ``master`` branch is made, automatically recording the results of a build and notifying us. However, due to challenges with working on the Kent network, and the added hassle of learning these skills we decided against this.
+Around Iteration 3, we realised that keeping track of all the testing in a word document was causing issues. We tried a number of different options, such as implementing a `Continuous Integration`_ tool such as `Travis CI`_ or `Jenkins`_. This would cause all of our (automated) tests to be ran whenever a merge to the ``master`` branch is made, automatically recording the results of a build and notifying us. However, due to challenges with working on the Kent network, and the added hassle of learning these skills we decided against this.
 
 Instead, Stephen built the `JustHealth Testing Portal`_, a small appliction again written in Python/Flask, which allowed us to store all tests and individual runs/results in a database with a front end interface. This greatly improved the speed and quality of our tests/runs. 
+
+At Iteration 3 we added also added Iteration 1 and 2 tests under Iteration 3 as these were then tested again and to reflect starting using the portal. All our initial SQL database tests were added undter iteration 0 since these were now redundant as we no longer touched the database with SQL, it is now all done programmatically using Python, Psycopg2 and PeeWee. 
+
+At Iteration 4 we realised we were not thoroughly testing all the API functions that we had written, therefore as part of our testing for iteration 4 we wrote API tests for all the function we had already written and continued to do this going forward for each iteration. As previously mentioned these are re run every iteration. 
+
+Another improvement we have made over the course of each iteration, is making the tests more thorough and ensuring the prerequisits are clearly explained. This has improved throughout the project with running test driven development. 
+
 
 --------------------
 Automated API Tests
