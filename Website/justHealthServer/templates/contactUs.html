@@ -10,7 +10,6 @@
 {% block content %}
 
 
-<!--Seach box to search for users to conency to-->
 <fieldset class ="form-container">
    <i class="fa fa-paper-plane-o headingIcon pull-left"></i><h4 class= "pull-left">Contact Us</h4>
       <a href="/settings"><i class="fa fa-cog headingIcon pull-right"></i> </a>
@@ -22,9 +21,11 @@
       {{message}}
     </div>
   {% endif %}
+  <!--Twitter link -->
   <p><span class="bold">Tweet us <i class="fa fa-twitter"></i>: </span><a href="https://twitter.com/JustHealthHelp">@JustHealthHelp</a> 
   <p>If you have a question or would like to report a problem, please contact us using the form below</p>
   <br />
+  <!--Form for users to submit a question -->
 <fieldset class="links">
   <form role="form" action="/contactUs" method="post" >
     <div class="container">

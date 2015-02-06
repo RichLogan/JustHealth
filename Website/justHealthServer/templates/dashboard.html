@@ -6,6 +6,7 @@
 <br />
 
 <div class="row">
+  <!--side pannel for profile picture -->
 	<div class="col-md-3 dashPanel">
     <fieldset class="style">
 		<div id="dashProfile">
@@ -18,7 +19,7 @@
 
 		</div>
     </fieldset>
-
+      <!--side pannel to display connections -->
     <fieldset class="style">
 		<div id="dashConnections">
 		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
@@ -30,7 +31,7 @@
 			{% else %}
 				<strong>No connections yet</strong>
 			{% endif %}
-
+      <!--model to show connections information -->
 		<a data-toggle="modal" data-target="#terms"> View Connections </a>
               <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
                 <div class="modal-dialog">
