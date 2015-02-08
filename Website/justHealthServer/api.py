@@ -29,8 +29,17 @@ def encryptPassword():
     """Encrypts the users password and returns it to them"""
     #used so that we are able to store the encrypted users password in android SharedPreferences
     plaintext = request.form['password']
-    cipherText = encrypt(password, plaintext)
+    cipherText = encrypt(app.secret_key, plaintext)
     return cipherText
+
+
+@app.route("/api/decryptPassword", methods=["POST"])
+def decryptPassword():
+    """Encrypts the users password and returns it to them"""
+    #used so that we are able to store the encrypted users password in android SharedPreferences
+    cipherText = request.form['password']
+    plaintext = decrypt(app.secret_key, cipherText)
+    return plaintext
 
 
 @app.route("/api/registerUser", methods=["POST"])
