@@ -7,6 +7,8 @@ from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 #used to encrypt and decrypt the password in the method encryptPassword() and decryptPassword()
 from simplecrypt import encrypt, decrypt
+import binascii
+
 import re
 import datetime
 import smtplib
@@ -18,9 +20,10 @@ auth = HTTPBasicAuth()
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
+    plaintextPassword = decryptPassword(password)
     try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
-        return sha256_crypt.verify(password, hashedPassword)
+        return sha256_crypt.verify(plaintextPassword, hashedPassword)
     except:
         return False
 
@@ -30,15 +33,15 @@ def encryptPassword():
     #used so that we are able to store the encrypted users password in android SharedPreferences
     plaintext = request.form['password']
     cipherText = encrypt(app.secret_key, plaintext)
-    return cipherText
+    stringCipher = binascii.hexlify(cipherText)
+    return stringCipher
 
 
-@app.route("/api/decryptPassword", methods=["POST"])
-def decryptPassword():
-    """Encrypts the users password and returns it to them"""
+def decryptPassword(cipherText):
+    """Decrypts the users password and returns it so that we are able to authenticate them"""
     #used so that we are able to store the encrypted users password in android SharedPreferences
-    cipherText = request.form['password']
-    plaintext = decrypt(app.secret_key, cipherText)
+    bytesCipher = binascii.unhexlify(cipherText)
+    plaintext = decrypt(app.secret_key, bytesCipher)
     return plaintext
 
 
