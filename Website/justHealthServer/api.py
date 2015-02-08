@@ -5,6 +5,8 @@ from flask.ext.httpauth import HTTPBasicAuth
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
+#used to encrypt and decrypt the password in the method encryptPassword() and decryptPassword()
+from simplecrypt import encrypt, decrypt
 import re
 import datetime
 import smtplib
@@ -21,6 +23,15 @@ def verify_password(username,password):
         return sha256_crypt.verify(password, hashedPassword)
     except:
         return False
+
+@app.route("/api/encryptPassword", methods=["POST"])
+def encryptPassword():
+    """Encrypts the users password and returns it to them"""
+    #used so that we are able to store the encrypted users password in android SharedPreferences
+    plaintext = request.form['password']
+    cipherText = encrypt(password, plaintext)
+    return cipherText
+
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
