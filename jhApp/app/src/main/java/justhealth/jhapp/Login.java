@@ -97,14 +97,19 @@ public class Login extends Activity {
     private void requestLogin() {
         HashMap<String, String> loginInformation = new HashMap<String, String>();
         loginInformation.put("username", ((EditText) findViewById(R.id.loginUsername)).getText().toString());
-        loginInformation.put("password", ((EditText) findViewById(R.id.loginPassword)).getText().toString());
+
+        String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
+        loginInformation.put("password", password);
+
+        String encryptedPassword = getEncryptedPassword(password);
+        System.out.println("This is the encrypted password: " + encryptedPassword);
 
         String response = Request.post("authenticate", loginInformation, getApplicationContext());
         if (response.equals("Authenticated")) {
             SharedPreferences account = getSharedPreferences("account", 0);
             SharedPreferences.Editor edit = account.edit();
             edit.putString("username", loginInformation.get("username"));
-            edit.putString("password", loginInformation.get("password"));
+            edit.putString("password", encryptedPassword);
             edit.commit();
 
             if (getAccountType(loginInformation.get("username")).equals("Patient")) {
@@ -133,5 +138,12 @@ public class Login extends Activity {
             System.out.println(e.getStackTrace());
         }
         return null;
+    }
+
+    private String getEncryptedPassword(String plaintextPassword) {
+        HashMap<String, String> ptPassword = new HashMap<String, String>();
+        ptPassword.put("password", plaintextPassword);
+        String response = Request.post("encryptPassword", ptPassword, getApplicationContext());
+        return response;
     }
 }
