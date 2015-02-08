@@ -20,6 +20,35 @@ $(document).ready(function(){
     });
   });
 
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  //Check if date is in the past
+  $('#startdate').focusout(function() {
+  var selectedDate = $('#startdate').datepicker('getDate');
+  var now = new Date();
+  if (selectedDate < now) {
+    // selected date is in the past
+    $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+  }
+  });
+
+  $('#enddate').focusout(function() {
+  var selectedDate = $('#enddate').datepicker('getDate');
+  var now = new Date();
+  if (selectedDate < now) {
+    // selected date is in the past
+    $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+  }
+  });
+
   /*var allDates = $(document.getElementsByClassName('dateForJS'));
   var now = moment().format();
   //for loops through allDates
@@ -58,11 +87,11 @@ $('time').each(function(i, e) {
                         <form name="createAppointment" method="POST" onsubmit="return !!validateFormAddAppointment();" >
                         <div class="form-group">
                           <label for="name">Appointment Title</label>
-                          <input class="form-control" type="text" name="name">
+                          <input class="form-control input-sm" type="text" name="name">
                         </div>
                         <div class="form-group">
                           <label for="apptype">Appointment Type</label>
-                          <select name="apptype" class="form-control">
+                          <select name="apptype" class="form-control input-sm">
                             <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
                             {% for type in appType %}
                               <option>{{type.type}}</option>
@@ -71,33 +100,33 @@ $('time').each(function(i, e) {
                         </div>
                         <div class="form-group">
                           <label for="addressnamenumber">Building Name/Number</label>
-                          <input class="form-control" type="text" name="addressnamenumber">
+                          <input class="form-control input-sm" type="text" name="addressnamenumber">
                         </div>
                         <div class="form-group">
                           <label for="postcode">Postcode</label>
-                          <input class="form-control" type="text" name="postcode">
+                          <input class="form-control input-sm" type="text" name="postcode">
                         </div>
                         <div class="form-group">
                           <label for="startdate">Start Date</label>
-                          <input onfocusout="checkPastDate()" class="form-control" type="date" name="startdate" id="startdate">
-                          <span id="validDate"></span>
+                          <input class="form-control input-sm" type="date" name="startdate" id="startdate">
+                          <span id="dateValidate1"></span>
                         </div>
                         <div class="form-group">
                           <label for="starttime">Start Time</label>
-                          <input class="form-control" type="time" name="starttime" id="starttime">
+                          <input class="form-control input-sm" type="time" name="starttime" id="starttime">
                         </div>
                         <div class="form-group">
                           <label for="enddate">End Date</label>
-                          <input class="form-control" type="date" name="enddate" id="enddate">
-                          <span id=""></span>
+                          <input class="form-control input-sm" type="date" name="enddate" id="enddate">
+                          <span id="dateValidate2"></span>
                         </div>
                         <div class="form-group">
                           <label for="endtime">End Time</label>
-                          <input class="form-control" type="time" name="endtime" id="endtime">
+                          <input class="form-control input-sm" type="time" name="endtime" id="endtime">
                         </div>
                         <div class="form-group">
                           <label for="description">Details</label>
-                          <textarea class="form-control" name="description" id="description"></textarea>
+                          <textarea class="form-control input-sm" name="description" id="description"></textarea>
                         </div>
                          <div class="modal-footer">
              
