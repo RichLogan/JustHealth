@@ -1,8 +1,10 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
@@ -28,6 +30,11 @@ public class AddPrescription extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_add_prescription);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Add Prescription");
+
 
         //Populate Spinner
         ArrayList<String> populateSpinner = new ArrayList<String>();

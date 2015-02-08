@@ -4,7 +4,7 @@ Development
 
 The JustHealth application was developed using an iterative approach with a strong focus on being as fast and lightweight as possible.
 
-One of the ways we achieved this was through the use of various tools, below is an outline of general development process and how these tools were used in order to improve the way we worked.
+One of the primary ways we achieved this was through the use of various tools and processes. In some cases we took small parts of methodologies or tools in order to make them work best for us. 
 
 ---------------------------
 General Development Process
@@ -41,9 +41,16 @@ We had numerous types of tests:
 #. Functional web application tests
 #. Functional mobile application (Android) tests
 
-Around Iteration 3, we realised that keeping track of all the testing was causing issues. We tried a number of different options, such as implementing a `Continuous Integration`_ tool such as `Travis CI`_ or `Jenkins`_. This would cause all of our (automated) tests to be ran whenever a merge to the ``master`` branch is made, automatically recording the results of a build and notifying us. However, due to challenges with working on the Kent network, and the added hassle of learning these skills we decided against this.
+Around Iteration 3, we realised that keeping track of all the testing in a word document was causing issues. We tried a number of different options, such as implementing a `Continuous Integration`_ tool such as `Travis CI`_ or `Jenkins`_. This would cause all of our (automated) tests to be ran whenever a merge to the ``master`` branch is made, automatically recording the results of a build and notifying us. However, due to challenges with working on the Kent network, and the added hassle of learning these skills we decided against this.
 
 Instead, Stephen built the `JustHealth Testing Portal`_, a small appliction again written in Python/Flask, which allowed us to store all tests and individual runs/results in a database with a front end interface. This greatly improved the speed and quality of our tests/runs. 
+
+At Iteration 3 we added also added Iteration 1 and 2 tests under there respetive Iteration number. However, the dates reflect the testing completed at the end of Iteration 3 as these were  tested again on input and to reflect starting using the portal. All our initial SQL database tests were added undter iteration 0 since these were now redundant as we no longer touched the database with SQL, it is now all done programmatically using Python, Psycopg2 and PeeWee. 
+
+At Iteration 4 we realised we were not thoroughly testing all the API functions that we had written, therefore as part of our testing for iteration 4 we wrote API tests for all the function we had already written and continued to do this going forward for each iteration. As previously mentioned these are re run every iteration. 
+
+Another improvement we have made over the course of each iteration, is making the tests more thorough and ensuring the prerequisits are clearly explained. This has improved throughout the project with running a test driven development approach. 
+
 
 --------------------
 Automated API Tests
@@ -129,7 +136,7 @@ runTests.sh
 
 In order to further make testing easier, Rich developed the ``.runTests.sh`` bash script in order to run all recorded tests. It accomplished:
 
-1. Switching the local server to run against the test server (in order to minimise the risk of unintentinally dropping production data)
+1. Switching the local server to run against the test database (in order to minimise the risk of unintentinally modifying production tables/data)
 2. Running every single automated test and recording all results.
 
 This file can be run from the root of the project, provided a local server is running and connection to the Kent network is available. 

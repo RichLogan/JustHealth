@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/insertAlert"/>
-
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/createAppointmentScroll">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+
         <LinearLayout
             android:id="@+id/createAppointmentView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/defaultLinearForm"
             android:orientation="vertical">
 
-            <EditText android:layout_width="wrap_content"
+            <EditText android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Appointment Title"
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/name"/>
+                android:id="@+id/name"
+                style="@style/inputFieldsStyle"/>
 
             <Spinner
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/type"
-                android:layout_marginTop="70dp"
                 android:layout_below="@+id/name"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                style="@style/inputFieldsStyle" />
 
             <EditText android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +49,8 @@
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/buildingNameNumber"/>
+                android:id="@+id/buildingNameNumber"
+                style="@style/inputFieldsStyle" />
 
             <EditText android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +59,8 @@
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/postcode"/>
+                android:id="@+id/postcode"
+                style="@style/inputFieldsStyle" />
 
             <EditText android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +70,8 @@
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/startDate"/>
+                android:id="@+id/startDate"
+                style="@style/inputFieldsStyle" />
 
             <EditText android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +81,8 @@
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/startTime"/>
+                android:id="@+id/startTime"
+                style="@style/inputFieldsStyle" />
 
             <EditText android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +92,8 @@
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/endDate"/>
+                android:id="@+id/endDate"
+                style="@style/inputFieldsStyle" />
 
             <EditText android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,33 +103,38 @@
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/endTime"/>
+                android:id="@+id/endTime"
+                style="@style/inputFieldsStyle" />
 
-            <EditText android:layout_width="wrap_content"
+            <EditText android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Details"
                 android:layout_below="@+id/endTime"
                 android:textSize="20dip"
                 android:textColor="@color/header"
                 android:layout_marginBottom="5dip"
-                android:id="@+id/details"/>
+                android:id="@+id/details"
+                style="@style/inputFieldsStyle" />
 
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tick to make the appointment private"
                 android:id="@+id/appPrivate"
-                android:checked="false" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create"
-                android:id="@+id/buttonAppointment"
-                android:layout_above="@+id/scrollView"
-                android:layout_gravity="center_horizontal" />
+                android:checked="false"
+                style="@style/inputFieldsStyle" />
 
         </LinearLayout>
+
+            <Button
+                android:text="Create"
+                android:id="@+id/buttonAppointment"
+                android:layout_marginTop="35sp"
+                style="@style/defaultConfirmButton" />
+        </LinearLayout>
+
     </ScrollView>
+
+
 
 </LinearLayout>

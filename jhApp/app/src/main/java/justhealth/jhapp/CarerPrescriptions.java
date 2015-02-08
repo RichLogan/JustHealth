@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -32,6 +33,10 @@ public class CarerPrescriptions extends Activity{
             firstname = extras.getString("firstName");
             surname = extras.getString("surname");
         }
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(firstname + "'s Prescriptions");
 
         Button addNewPrescription = (Button)findViewById(R.id.addNewPrescription);
         addNewPrescription.setOnClickListener(

@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -48,6 +49,11 @@ public class DeactivateAccount extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deactivate_account);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Deactivate");
+
         populateSpinner();
 
         Button submit = (Button) findViewById(R.id.deactivateButton);

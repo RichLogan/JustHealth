@@ -5,13 +5,22 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,8 +37,10 @@ public class Login extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
         ActionBar actionBar = getActionBar();
-        actionBar.hide();
+        actionBar.setDisplayShowHomeEnabled(true);
+
 
         TextView register = (TextView) findViewById(R.id.link_to_forgot_password);
         register.setOnClickListener(
@@ -49,17 +60,8 @@ public class Login extends Activity {
                 }
         );
 
-        TextView terms = (TextView) findViewById(R.id.link_to_terms);
-        terms.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-                        startActivity(new Intent(Login.this, TermsAndConditions.class));
-                    }
-                }
-        );
 
         Button loginButton = (Button) findViewById(R.id.login);
-        loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
@@ -67,6 +69,29 @@ public class Login extends Activity {
                     }
                 }
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_login, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.terms:
+                startActivity(new Intent(Login.this, TermsAndConditions.class));
+                return true;
+            case R.id.privacy:
+                startActivity(new Intent(Login.this, Privacy.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void requestLogin() {

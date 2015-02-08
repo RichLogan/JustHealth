@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -32,6 +33,11 @@ public class Connections extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connections);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Connections");
+
         getConnections();
     }
 

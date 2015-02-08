@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,6 +26,10 @@ public class MyPatients extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_patients);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Patients");
 
         String username = getSharedPreferences("account", 0).getString("username", null);
         displayPatients(getPatients(username));
