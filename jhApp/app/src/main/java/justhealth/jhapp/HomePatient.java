@@ -48,7 +48,7 @@ public class HomePatient extends Activity {
         connections.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
-                    startActivity(new Intent(HomePatient.this, Connections.class));
+                    startActivity(new Intent(HomePatient.this, ConnectionsMain.class));
                 }
             }
         );

@@ -82,7 +82,7 @@ public class Search extends Activity {
         //create the headings of the table
         TextView headingUsername = new TextView(this);
         headingUsername.setTextColor(Color.WHITE);
-        headingUsername.setPadding(25,0,25,0);
+        headingUsername.setPadding(0,0,25,0);
 
         TextView headingFirstName = new TextView(this);
         headingFirstName.setTextColor(Color.WHITE);
@@ -120,7 +120,7 @@ public class Search extends Activity {
                 //add username to TextView
                 TextView forUsername = new TextView(this);
                 forUsername.setText(resultUsername);
-                forUsername.setPadding(25,0,25,0);
+                forUsername.setPadding(0,0,25,0);
 
                 //add first name to TextView
                 TextView forFirstName = new TextView(this);
@@ -157,7 +157,7 @@ public class Search extends Activity {
                             alert.setNegativeButton("Cancel", null);
                             alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    startActivity(new Intent(Search.this, Connections.class));
+                                    startActivity(new Intent(Search.this, ConnectionsMain.class));
                                 }
                             });
                             alert.show();
@@ -221,7 +221,7 @@ public class Search extends Activity {
                                 alert.setNegativeButton("Cancel", null);
                                 alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
-                                        startActivity(new Intent(Search.this, Connections.class));
+                                        startActivity(new Intent(Search.this, ConnectionsMain.class));
                                     }
                                 });
                                 alert.show();

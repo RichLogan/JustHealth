@@ -36,4 +36,10 @@
         <item>Patient Appointments</item>
         <item>Your appointments with this patient</item>
     </string-array>
+
+    <string-array name="connectionActions">
+        <item>incoming</item>
+        <item>outgoing</item>
+        <item>completed</item>
+    </string-array>
 </resources>

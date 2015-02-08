@@ -89,8 +89,6 @@
         <activity android:name=".AddPrescription" />
         <activity android:name=".EditPrescription" />
 
-        <activity android:name=".Connections" />
-
         <activity
         android:name=".Search"
         android:label="@string/app_name"
@@ -228,6 +226,8 @@
         <activity android:name=".SearchNHSWebsite"
             android:label="Just Health" />
 
+        <activity android:name=".ConnectionsMain"/>
+        <activity android:name=".ConnectionsView"/>
     </application>
 
 </manifest>
