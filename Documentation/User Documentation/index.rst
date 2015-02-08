@@ -3,7 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to JustHealth's User Documentation!
+Welcome to JustHealth's User documentation!
+======================================
 
 JustHealth is a healthcare app designed to support carers for patients with chronic health conditions and their patients.
 
@@ -24,6 +25,7 @@ Under each functionality heading I will list the features for the respective use
 
    registration
    login
+   homepages
    forgotpassword
    accountLocked
    deactivate
@@ -31,3 +33,4 @@ Under each functionality heading I will list the features for the respective use
    appointments
    prescriptions
    medication
+   searchnhs
