@@ -592,10 +592,11 @@ def internal_error(error):
 @app.route('/adminPortal')
 def adminPortal():
     if request.method == 'POST':
+        result = deactivateAccount(request.form)  
         result = addDeactivate(request.form)  
-        return render_template('adminHome.html', type="success", message = 'Your update has been')
+        return render_template('adminHome.html', reasons = Deactivatereason.select(), type="success", message = 'Your update has been')
     else: 
-       return render_template('adminHome.html')
+       return render_template('adminHome.html', reasons = Deactivatereason.select())
 
 
 @app.route('/allUsers')

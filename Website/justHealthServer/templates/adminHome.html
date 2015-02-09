@@ -5,6 +5,43 @@
 {% block scriptsAndStyles %}{% endblock %}
 
 {% block content %}
+   <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'reason');
+        data.addColumn('number', 'number');
+        data.addRows([
+          ['Mushrooms', 3],
+          ['Onions', 1],
+          ['Olives', 1],
+          ['Zucchini', 1],
+          ['Pepperoni', 2]
+        ]);
+
+        // Set chart options
+        var options = {'title':'Reasons for users deactivation',
+                       'width':500,
+                       'height':400};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
 
 
 <br/ >
@@ -56,33 +93,67 @@
    				<br />
       				<h5>Welcome to the JustHealth IM Portal</h5>
       					<ul> 
-      						<li> Please note you have access to personal data on this site and have access to changing account settings. </li> 
+      						<li> Please remember you have access to personal data on the admin portal. For more information on data protection please view the terms and conditions </li> 
+                  <li> </li>
       						<li> Please use responsibly and for any more details contact either Charlotte Hutchinson, Richard Logan, Ben McGreogor or Stephen Tate</li>
       					</ul>
    			</div>
    		<div class="tab-pane fade" id="users">
    			<br />
-      		<p>List users here</p>		
+      		<h5>User Information</h5>	
+            <div id="queryTable">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Account Type</th>
+                    <th>Verified</th>
+                    <th>Account Locked</th>
+                  </tr>
+                </thead>
+              <tbody>
+              <!--List data here-->
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td> </td>
+                  <td> </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
    		</div>
-
    		<div class="tab-pane fade" id="currentMedication">
    			<br />
       		<p>List currentMedication here</p>
    		</div>
    		<div class="tab-pane fade" id="addNewMedicaion">
    			<br />
-      		<p> Add new Medication</p>
+      		<h5> Please enter the new medication below:</h5>
+        <br />
+        <form role="form" action="/addMedication" method="POST">   
+            <div class="form-group">
+                <input class="form-control input-sm" type="text" name="medication" id="medication">
+            </div>
+              <input class="btn btn-success pull-right" type="submit" value="Submit">
+       </form>
    		</div>
     	<div class="tab-pane fade" id="deactivateStats">
     		<br />
-      		<p> Deactivate Stats</p>
+          <div id="chart_div"></div>
    		</div>
      	<div class="tab-pane fade" id="deactivateReasons">
      		<br />
       		<h5> Deactivate Reasons</h5>
-				{% for reason in reasons %}
-				<li>{{reason.reason}}</li>
-				{% endfor %}
+				      {% for reason in reasons %}
+				    <li>{{reason.reason}}</li>
+				        {% endfor %}
    		</div>
     	<div class="tab-pane fade" id="addNewDeactivate">
     	<br />
@@ -100,27 +171,27 @@
       		<p> Charts </p>
    		</div>
    		<div class="tab-pane fade" id="twitter">
-    	      	<br />
-		 <a class="twitter-timeline"
-			  width="250"
-			  height="300"
-			  href="https://twitter.com/twitterdev"
-			  data-widget-id="564749021659795456">
-			Tweets by @twitterdev
-		</a>
-		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		</script>
-		<script>window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-		</script>
- 		<a class="twitter-timeline"
-			  width="250"
-			  height="300"
-			  href="https://twitter.com/twitterdev"
-			  data-widget-id="564797112014360576">
-			Tweets by @twitterdev
-		</a>
-		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		</script>
+    	 <br />
+		      <a class="twitter-timeline"
+			       width="250"
+			       height="300"
+			       href="https://twitter.com/twitterdev"
+			       data-widget-id="564749021659795456">
+			       Tweets by @twitterdev
+		      </a>
+		      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+		      </script>
+		      <script>window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+		      </script>
+ 		       <a class="twitter-timeline"
+			       width="250"
+			       height="300"
+			       href="https://twitter.com/twitterdev"
+			       data-widget-id="564797112014360576">
+			       Tweets by @twitterdev
+		      </a>
+		      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+		      </script>
    		</div>
 		</div>
 	</div>
