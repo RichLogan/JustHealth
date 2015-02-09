@@ -1,96 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DeactivateAccount"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register">
-
-    <include android:id="@+id/header" layout="@layout/header" />
+    android:background="@color/background">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/scrollView">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/off_white" >
 
-
-            <TextView android:layout_width="wrap_content"
+            <LinearLayout
                 android:layout_height="wrap_content"
-                android:text="Deactivate Account"
-                android:layout_above="@+id/scrollView"
-                android:textSize="30dip"
-                android:textColor="@color/header"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip"/>
-        </LinearLayout>
-       </ScrollView>
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                style="@style/defaultLinearForm">
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/reasonsDeactivate"
-        android:layout_marginTop="70dp"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
+        android:prompt="@string/deactivateReasons"
+        android:spinnerMode="dialog"
+        style="@style/inputWithIcon" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/comments"
         android:hint="Additional Comments."
         android:maxLength="500"
-        android:padding="10dp"
-        android:height="80dp"
-        android:visibility="visible"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        style="@style/inputWithIcon"
+        android:focusable="true"
+        android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+        android:layout_marginTop="40sp"/>
 
     <CheckBox
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Please select if you want JustHealth to delete all your data "
+        android:layout_marginTop="60sp"
+        android:text="Please select if you want JustHealth to delete all your data"
         android:id="@+id/checkBox"
         android:checked="false"
-        android:padding="10dp"
-        android:layout_above="@+id/linkKeepYourData"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
+        style="@style/inputWithIcon"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Why should we keep your data?"
-        android:id="@+id/linkKeepYourData"
-        android:padding="10dp"
-        android:layout_above="@+id/deactivateButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="33dp" />
+        android:text="@string/whyDeactivate"
+        android:textSize="15sp"
+        android:textColor="@color/primary"
+        android:gravity="right"
+        android:textAlignment="gravity"
+        android:layout_marginTop="20sp"
+        android:id="@+id/linkKeepYourData" />
+        </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deactivate"
-        android:id="@+id/deactivateButton"
-        android:background="#2272EB"
-        android:padding="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp" />
+            <Button
+                android:text="Deactivate"
+                android:id="@+id/deactivateButton"
+                android:layout_marginTop="35dp"
+                style="@style/defaultConfirmButton" />
+        </LinearLayout>
+
+    </ScrollView>
 
 
 </RelativeLayout>

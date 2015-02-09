@@ -24,6 +24,10 @@
     {% endwith %}
   });
 
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
   function isNumber(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -46,8 +50,10 @@
 {% endblock %}
 
 {% block content %}
-  <h1>My Patients</h1>
+<fieldset class ="form-container">
 
+  <i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4>
+  <hr>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for patient in patients %}
       <div class="panel panel-default">
@@ -68,7 +74,7 @@
                 <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
                   <div style="height:25px;">
                     <p style="line-height: 25px;font-size: 25px;">
-                      <i class="fa fa-flask"></i> Prescriptions
+                      <i class="fa fa-medkit"></i> Prescriptions
                     </p>
                   </div>
                 </a>
@@ -243,7 +249,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -365,7 +371,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -485,7 +491,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -613,25 +619,39 @@
                                   <th>Where</th>
                                   <th>End Date/Time</th>
                                   <th>Description</th>
-                                  <th style= "color: green"> Update </th>
-                                  <th style="color: red">Delete</th>
+                                  <th> </th>
+                                  <th> </th>
 
                                 </thead>
                                 <tbody>
                                   {% for appointment in appointmentsMapping[patient.username] %}
                                   <tr>
                                     <td>{{appointment.name}}</td>
-                                    <td>{{appointment.apptype.apptype}}</td>
+                                    <td>{{appointment.apptype}}</td>
                                     <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
-                                    <td style= "color: green"> <button class="fa fa-pencil fa-2x"></button> </td>
+
+                                    {% if appointment.creator != session['username'] %}
+                                    <td>
+                                      <button class="btn btn-warning[disabled]" data-toggle="tooltip" data-placement="left" title="You did not create this appointment.">Update</button>
+                                    </td>
+                                    <td>
+                                      <button class="btn btn-danger[disabled]" data-toggle="tooltip" data-placement="right" title="You did not create this appointment.">Delete</button>
+                                    </td> 
+                                    {% else %}
+                                    <td> <a href="/updateAppointment?appid={{appointment.appid}}">
+                                        <button class="btn btn-warning">Update</button>
+                                          </a>
+                                    </td>
                                     <td>
                                       <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
                                         <input type="hidden" name="appid" value="{{appointment.appid}}">
                                         <input type="submit" class="btn btn-danger" value="Delete">
                                       </form>
                                     </td>
+                                    {% endif %}
+
                                   <tr>
                                   {% endfor %}
                                 </tbody>
@@ -649,13 +669,7 @@
                                           <input class="form-control" type="text" name="name">
                                         </div>
                                         <div class="form-group">
-                                          <label for="apptype">Appointment Type</label>
-                                          <select name="apptype" class="form-control">
-                                            <option class="placeholder" disabled selected> -- Please select an appointment type -- </option>
-                                            {% for type in appType %}
-                                              <option>{{type.type}}</option>
-                                            {% endfor %}
-                                          </select>
+                                          <input name="apptype" type="hidden" value="Carer">
                                         </div>
                                         <div class="form-group">
                                           <label for="addressnamenumber">Building Name/Number</label>
@@ -704,4 +718,5 @@
             </div>
     {% endfor %}
   </div>
+</fieldset>
 {% endblock %}

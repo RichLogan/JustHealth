@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,10 @@ public class Profile extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Profile");
 
         final String profileInfo = getProfile();
         print(profileInfo);
@@ -54,21 +59,19 @@ public class Profile extends Activity {
 
             //Get TextViews
             TextView username = (TextView) findViewById(R.id.profileUsername);
-            TextView firstName = (TextView) findViewById(R.id.profileFirstName);
-            TextView surname = (TextView) findViewById(R.id.profileSurname);
+            TextView name = (TextView) findViewById(R.id.profileName);
             TextView dob = (TextView) findViewById(R.id.profileDOB);
             TextView gender = (TextView) findViewById(R.id.profileGender);
             TextView accountType = (TextView) findViewById(R.id.profileAccount);
             TextView email = (TextView) findViewById(R.id.profileEmail);
 
             //Populate TextViews
-            username.setText(profileInfo.getString("username"));
-            firstName.setText(profileInfo.getString("firstname"));
-            surname.setText(profileInfo.getString("surname"));
-            dob.setText(profileInfo.getString("dob"));
-            gender.setText(profileInfo.getString("gender"));
-            accountType.setText(profileInfo.getString("accounttype"));
-            email.setText(profileInfo.getString("email"));
+            username.setText("Username: " + profileInfo.getString("username"));
+            name.setText("Name: " + profileInfo.getString("firstname") + " " + profileInfo.getString("surname"));
+            dob.setText("D.O.B: " + profileInfo.getString("dob"));
+            gender.setText("Gender: " + profileInfo.getString("gender"));
+            accountType.setText("Account Type: " + profileInfo.getString("accounttype"));
+            email.setText("Email: " + profileInfo.getString("email"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

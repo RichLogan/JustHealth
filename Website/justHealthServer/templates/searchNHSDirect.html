@@ -1,0 +1,31 @@
+{% extends "template.html" %}
+
+{% block title %}Search NHS Direct{% endblock %}
+
+{% block scriptsAndStyles %}
+
+
+{% endblock %}
+
+{% block content %}
+
+<fieldset class ="form-container">
+   <i class="fa fa-search-plus headingIcon pull-left"></i><h4>Search the NHS Direct Website</h4>
+  <hr>
+<!--Search NHS website -->
+  <fieldset class="register-inner">
+    <form action="/nhsSearch" method="POST">
+      <div class="form-group">
+
+        <h5> Do you have symptoms that you would like to search the NHS website directly?</h5>
+        <h5> Search below and it will open in a new window </h5>
+        <label for="searchTerms"></label>
+        <input class="form-control input-sm" type="text" name="searchterm">
+      </div>
+      <input class="form-control" type="hidden" name="searchTerms" value='{{searchTerms}}'>
+      <button type="submit" class="btn btn-default pull-right">Search</button>
+    </form>
+  </fieldset>
+</fieldset>
+
+{% endblock %}

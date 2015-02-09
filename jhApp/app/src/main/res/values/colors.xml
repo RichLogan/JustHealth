@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <color name="header">#2272EB</color>
 
     <!-- Alerts -->
@@ -8,10 +7,15 @@
     <color name="dangerBackground">#F2DEDE</color>
     <color name="successText">#3C763D</color>
     <color name="successBackground">#DFF0D8</color>
-    <color name="background">#3cdafcff</color>
+    <color name="background">#91dafcff</color>
     <color name="action_bar">#ff2272eb</color>
     <color name="white">#ffffffff</color>
     <color name="off_white">#99ffffff</color>
     <color name="button">#3271a7ff</color>
 
+    <!-- Information Styles -->
+    <color name="primary">#337AB7</color>
+    <color name="success">#5CB85C</color>
+    <color name="danger">#D9534F</color>
+    <color name="warning">#F0AD4E</color>
 </resources>

@@ -1,18 +1,23 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +34,25 @@ public class AddPrescription extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_add_prescription);
 
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Add Prescription");
+
+        initMedicationSpinner();
+
+        Button submit = (Button) findViewById(R.id.addPrescription);
+        submit.setOnClickListener(
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    if (validateForm()) {
+                        addPrescription();
+                    }
+                }
+            }
+        );
+    }
+
+    private void initMedicationSpinner() {
         //Populate Spinner
         ArrayList<String> populateSpinner = new ArrayList<String>();
 
@@ -46,17 +70,6 @@ public class AddPrescription extends Activity {
 
         Spinner medication = (Spinner) findViewById(R.id.medication);
         medication.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
-
-        Button submit = (Button) findViewById(R.id.addPrescription);
-        submit.setOnClickListener(
-            new Button.OnClickListener() {
-                public void onClick(View view) {
-                    if (validateForm()) {
-                        addPrescription();
-                    }
-                }
-            }
-        );
     }
 
     private void addPrescription() {

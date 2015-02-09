@@ -9,7 +9,7 @@ Please not you once your account has bee deactivated, you will not be able to co
 ---------------
 Web Application
 ---------------
-1. To deactivate your account you will need to navigate from the home screen to the deactivate page. This can be done by clicking on the 'settings' button on the bottom right then selecting 'Deactivate'
+1. To deactivate your account you will need to navigate from the home screen to the deactivate page. This can be done by clicking on the 'settings' button on the left hand side of the home page. Once you are on the settings page you will need to click on the 'Deactivate Account' link. 
 
 2. On the deactivate page select a reason you wish to deactivate your account.
 

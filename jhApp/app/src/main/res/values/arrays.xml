@@ -5,6 +5,11 @@
         <item>Carer</item>
     </string-array>
 
+    <string-array name="patient_options">
+        <item>Prescriptions</item>
+        <item>Appointments</item>
+    </string-array>
+
     <string-array name="reasons_deactivate">
         <item>I don’t understand how to use JustHealth</item>
         <item>I’m only leaving temporarily</item>
@@ -15,9 +20,9 @@
         <item>Other (Please specify)</item>
     </string-array>
 
-    <string-array name="patient_options">
-        <item>Prescriptions</item>
-        <item>Appointments</item>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
     </string-array>
 
     <string-array name="patient_appointments_options">
@@ -30,5 +35,11 @@
         <item>All Appointments</item>
         <item>Patient Appointments</item>
         <item>Your appointments with this patient</item>
+    </string-array>
+
+    <string-array name="connectionActions">
+        <item>incoming</item>
+        <item>outgoing</item>
+        <item>completed</item>
     </string-array>
 </resources>

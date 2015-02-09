@@ -1,0 +1,65 @@
+{% extends "template.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block scriptsAndStyles %}
+
+
+{% endblock %}
+
+{% block content %}
+
+
+<fieldset class ="form-container">
+   <i class="fa fa-paper-plane-o headingIcon pull-left"></i><h4 class= "pull-left">Contact Us</h4>
+      <a href="/settings"><i class="fa fa-cog headingIcon pull-right"></i> </a>
+
+  <hr>
+  {% if message != null %}
+    <div class="alert alert-{{type}} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      {{message}}
+    </div>
+  {% endif %}
+  <!--Twitter link -->
+  <p><span class="bold">Tweet us <i class="fa fa-twitter"></i>: </span><a href="https://twitter.com/JustHealthHelp">@JustHealthHelp</a> 
+  <p>If you have a question or would like to report a problem, please contact us using the form below</p>
+  <br />
+  <!--Form for users to submit a question -->
+<fieldset class="links">
+  <form role="form" action="/contactUs" method="post" >
+    <div class="container">
+       <div class="row">
+          <div class="col-md-12">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="InputName">Your Name</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true" >
+                      <span class="input-group-addon"></span></div>
+                    </div>
+                    <input type="hidden" class="form-control" name="username" id="username" value="{{profileDetails.username}}" readonly="true" >
+                    <div class="form-group">
+                     <label for="InputEmail">Your Email</label>
+                      <div class="input-group">
+                        <input type="email" class="form-control" id="InputEmail" value="{{profileDetails.email}}" readonly="true"  >
+                        <span class="input-group-addon"></span></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="InputMessage">Message</label>
+                      <div class="input-group">
+                        <textarea name="message" id="InputMessage" class="form-control" rows="5" ></textarea>
+                        <span class="input-group-addon"></span></div>
+                    </div>
+                    <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
+                    <p class="italic pull-left">Have you checked our <a href="/faq">FAQs</a>?</p>
+
+             </div>
+           </div>
+         </div>
+      </form>                  
+    </fieldset>
+ </fieldset>
+
+{% endblock %}
+

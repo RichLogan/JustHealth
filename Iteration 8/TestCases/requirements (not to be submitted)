@@ -1,0 +1,61 @@
+Functional
+ - Notifications
+ 	- Create Notification
+ 	- Dismiss Notification
+ 	- Get Notifications
+
+ - Initiated from
+ 	- Connection Request
+ 	- Connection Complete
+ 	- New Prescription [Patient Notified]
+ 	- Prescription Expiring (2 days before) [Patient]
+ 	- Prescription Expiring (2 days before) [Carer]
+ 	- Prescription Expiring (on the day) [Patient]
+ 	- Prescription Expiring (on the day) [Carer]
+ 	- Take Medication (15mins) [Web] [Patient]
+ 	- Take Medication (on time) [Web] [Patient]
+ 	- Appointment Created (Carer -> Patient)
+ 	- Appointment Due (60mins) [Web] [Carer Self]
+ 	- Appointment Due (15mins) [Web] [Carer Self]
+ 	- Appointment Due(on time) [Web] [Carer Self]
+ 	- Appointment Due (60mins) [Web] [Patient Self]
+ 	- Appointment Due (15mins) [Web] [Patient Self]
+ 	- Appointment Due(on time) [Web] [Patient Self]
+ 	- Appointment Due (60mins) [Web] [Patient Carer]
+ 	- Appointment Due (15mins) [Web] [Patient Carer]
+ 	- Appointment Due(on time) [Web] [Patient Carer]
+
+
+ - General notification function tests
+	- Dismiss [Patient]
+	- Dismiss [Carer]
+	- View all notifications [Patient]
+	- View all notifications [Patient]
+	- More than one notification displays [Patient]
+	- More than one notification displays [Carer]
+	- Dismiss on app / Dismisses on Web [Patient]
+	- Dismiss on app / Dismisses on Web [Carer]
+	- Dismiss on Web / Dismisses on App [Patient]
+	- Dismiss on Web / Dismisses on App [Carer]
+
+	- Add appointment Web [patient] / Pushed to the mobile app [patient]
+	- Add appointment mobile[carer] / Pushed to patient mobile app [patient]
+	- Add appointment Web[carer] / Pushed to patient mobile app [patient] [carer]
+	- Add appointment Web [carer] / Pushed to carer mobile [carer]
+		-These should raise a notification on the application (mobile) that when clicked ask you whether you want to add the appointment/prescription to native calendar/reminders 
+
+
+ - Reminders (Android Only)
+ 	- Add prescription android / push to mobile app [patient]
+	- Add prescription Web / push to mobile app [patient]
+	- Update prescription Web / puhs to mobile app [patient]
+	- Update prescription Android / push to mobile app [patient]
+ 	- Take Medication (15mins)
+ 	- Take Medication (on time)
+
+
+
+
+
+
+

@@ -6,31 +6,166 @@
 <br />
 
 <div class="row">
-
-	<div class="col-md-2 dashPanel">
+  <!--side pannel for profile picture -->
+	<div class="col-md-3 dashPanel">
+    <fieldset class="style">
 		<div id="dashProfile">
-			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50" class="img-circle"><br />
+			<a class"thumbnail" href="/editProfile"> 
+			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" ></i>  </h5> </a>
+			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"><br />
+			<br />
 			<strong>{{session.username}}</strong>
 			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
+
 		</div>
-
-		<hr />
-
+    </fieldset>
+      <!--side pannel to display connections -->
+    <fieldset class="style">
 		<div id="dashConnections">
-			<strong>Connections</strong>
+		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
 
 			{% if connections %}
-				{% for connection in connections %}
+				{% for connection in completed %}
 					<p>{{connection.firstname}} {{connection.surname}} <strong>({{connection.username}})</strong></p>
 				{% endfor %}
-				<a href="/profile?go=connections">View all connections</a>
 			{% else %}
 				<strong>No connections yet</strong>
 			{% endif %}
-		</div>
-	</div>
+      <!--model to show connections information -->
+		<a data-toggle="modal" data-target="#terms"> View Connections </a>
+              <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title" id="terms"> Connections</h4>
+                    </div>
+                    <div class="modal-body">
+                      <h4>Outgoing</h4>
+                      <table class="table table-condensed ">
+                        <thead>
+                          <th>Username</th>
+                          <th>First Name</th>
+                          <th>Surname</th>
+                          <th>Account Type</th>
+                          <th></th>
+                          <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in outgoing %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <td>{{connection.code}}</td>
+                              <form action="/api/cancelConnection" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
+                              </form>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <!--Table for incomming connections -->
+                        <br />
+                        <h4>Incoming</h4>
+                        <table class="table table-condensed">
+                          <thead>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Account Type</th>
+                            <th></th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in incoming %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
+                              <form action="/api/cancelConnection" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
+                              </form>
+                              <!--model which asks the user to enter in a verification code to complete the incomming connection -->
+                              <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                      <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <h4>Please enter the verification code given by the requestor</h4>
+                                        <form role="form" action="/completeConnectionWeb" method="POST">
+                                          <div style="width: 70%;margin: 0 auto;">
+                                            <input name="requestor" type="hidden" value="{{connection.username}}">
+                                            <input name="username" type="hidden" value="{{session.username}}">
+                                            <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                            <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                          <!--Table for completed connections -->
+                          <br />
+                          <h4>Completed</h4>
+                          <table class="table table-condensed ">
+                            <thead>
+                              <th>Username</th>
+                              <th>First Name</th>
+                              <th>Surname</th>
+                              <th>Account Type</th>
+                              <th></th>
+                            </thead>
+                            <tbody>
+                              {% for connection in completed %}
+                              <tr>
+                                <td>{{connection.username}}</td>
+                                <td>{{connection.firstname}}</td>
+                                <td>{{connection.surname}}</td>
+                                <td>{{connection.accounttype}}</td>
+                                <form action="/api/deleteConnection" method="POST">
+                                  <input type="hidden" name="user" value="{{session.username}}">
+                                  <input type="hidden" name="connection" value="{{connection.username}}">
+                                  <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
+                                </form>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+      				</div>
+                  </div>
+      			</div>
+			</div>
+    </fieldset>
 
-	<div class="col-md-10 dashPanel">
+    <fieldset class="style">
+		  <div id="dashConnections">	
+		  	<a class"thumbnail" href="/search"> 
+		  	<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
+		  	<a class"thumbnail" href="/settings"> 
+		  	<h5><i class="fa fa-cog sideIcons" ></i> Settings </h5> </a>
+		  	<a class"thumbnail" href="/nhsSearch">
+		  	<h5><i class="fa fa-search-plus sideIcons" ></i> NHS Search </h5> </a>
+		  </div>
+    </fieldset>
+
+	</div>
+	<div class="col-md-9 dashPanel">
 		
 		<!-- Notifications -->
 		{% if notifications %}
@@ -46,8 +181,108 @@
 		{% endif %}
 
 		<!-- Main Content -->
-		<p>Begin Main Content</p>
-	</div>
-</div>
+		<fieldset class ="form-container">
+		<!--All active prescriptions to show on the dashboard -->	
+
+		<i class="fa fa-medkit headingIcon pull-left" ></i> <h4>Prescriptions </h4> </a>
+    <hr>
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+		{%for prescription in prescriptions%}
+		  <div class="panel panel-default">
+		    <div class="panel-heading"  id="myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
+		      <h4 class="panel-title">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}" id="myPatientsPatientName">
+		          <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
+		        </a>
+		      </h4>
+		      <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
+		        <div class="panel-body">
+		          <div class="row">
+		            <h5>
+		              <ul>
+		                <li>Start Date: {{prescription.startdate}}</li>
+		                <li>End Date: {{prescription.enddate}}</li>
+		                <li>Extra Info: {{prescription.prerequisite}}</li>
+		                <li>Repeat: {{prescription.repeat}} </li>
+		              </ul>
+		            </h5>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		 {% endfor %}
+		  <hr>
+		 <!--Appointments to show on dashboard --> 
+	   <h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
+        <a href="/appointments" class="pull-right"> View all Appointments </a>
+
+    <hr>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+     {% block upcoming %}
+        {% for appointment in appointments %}
+          {% if appointment.upcoming == True %}
+                <div class="panel panel-default">
+
+              <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
+                    <i class="fa fa-caret-right"></i> {{appointment.name}}
+                      </a>
+                      </h4>
+                    </div>
+
+                   <div class="row">
+                      <div class="col-md-6">
+                        <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+                      </div>
+                    </div>
+                  </a>
+                </h3>
+                <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
+                        <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
+                        {% if appointment.private == True %}
+                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
+                        {% endif %}
+                      </div>
+                      <div class="col-md-6">
+                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+                        </iframe>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <a href="/updateAppointment?appid={{appointment.appid}}">
+                          <button class="btn btn-warning">Update</button>
+                        </a>
+                      </div>
+                      <div class="col-md-2">
+                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                          <input type="hidden" name="appid" value="{{appointment.appid}}">
+                          <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
+                      </div>
+                      <div class="col-md-8">
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          {% endif %}
+        {% endfor %}
+      {% endblock %}
+    </div>
+  </div>
+</fieldset>
 
 {% endblock %}
