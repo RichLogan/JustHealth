@@ -5,11 +5,13 @@ from flask.ext.httpauth import HTTPBasicAuth
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
+from werkzeug import secure_filename
 #used to encrypt and decrypt the password in the method encryptPassword() and decryptPassword()
 from simplecrypt import encrypt, decrypt
 import binascii
-
 import re
+import os
+import sys
 import datetime
 import smtplib
 import json
@@ -302,38 +304,65 @@ def getAccountInfo(username):
     result['username'] = user.username.username
     result['email'] = user.username.email
     result['dob'] = str(user.username.dob)
+    result['profilepicture'] = user.username.profilepicture
     if user.ismale:
         result['gender'] = 'Male'
     else:
         result['gender'] ='Female'
     return json.dumps(result)
 
+@app.route('/api/setProfilePicture', methods=['POST'])
+def setProfilePicture():
+    return setProfilePicture(request.files)
+
+def setProfilePicture(details):
+    dest = "/static/images/profilePictures"
+    allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
+
+    file = details['image']
+
+    if file and ('.' in file.filename and file.filename.rsplit('.', 1)[1] in allowedExtension):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(dest, filename))
+        return filename
+    return False
+
 @app.route('/api/editProfile', methods=['POST'])
 @auth.login_required
 def editProfile():
-    return editProfile(request.form)
+    return editProfile(request.form, request.files)
 
-def editProfile(details):
+def editProfile(profile, picture):
     user = None
     # What type of user are we dealing with?
     try:
-        user = Patient.select().join(Client).where(Client.username==details['username']).get()
+        user = Patient.select().join(Client).where(Client.username==profile['username']).get()
     except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==details['username']).get()
+        user = Carer.select().join(Client).where(Client.username==profile['username']).get()
 
     # Access to their corresponding Client entry
     clientObject = Client.select().where(Client.username == user.username).get()
 
     gender = False
-    if details['ismale'] == "true":
+    if profile['ismale'] == "true":
         gender = True
 
     # Update
-    user.firstname = details['firstname']
-    user.surname = details['surname']
+    user.firstname = profile['firstname']
+    user.surname = profile['surname']
     user.ismale = gender
-    clientObject.dob = details['dob']
-    clientObject.email = details['email']
+    clientObject.dob = profile['dob']
+    clientObject.email = profile['email']
+
+    # Profile Picture Upload
+    allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
+    file = picture['image']
+    filename = file.filename
+    fileExtension = filename.rsplit('.', 1)[1]
+    if file and ('.' in filename and fileExtension in allowedExtension):
+        filename = secure_filename(getSerializer().dumps(filename)) + "." + fileExtension
+        file.save(os.path.join(app.config['PROFILE_PICTURE'], filename))
+        clientObject.profilepicture = filename
 
     # Execute Updated
     with database.transaction():

@@ -339,3 +339,7 @@ hr {
   text-align: center;
   font-size: 25px;
 }
+
+#profilePicture {
+  width: 7.5em;
+}
