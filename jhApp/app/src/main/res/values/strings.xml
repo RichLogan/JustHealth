@@ -12,8 +12,12 @@
     <string name="privacy">Privacy</string>
     <string name="account">Account</string>
     <string name="profile">Profile</string>
+    <string name="searchNHS">Search</string>
 
     <!-- Spinner Prompts -->
     <string name="genderPopup">Gender</string>
     <string name="accountTypePopup">Account Type</string>
+    <string name="appointmentTypePopup">Appointment Type</string>
+    <string name="deactivateReasons">Reason</string>
+    <string name="whyDeactivate"><u>Why should we keep your data?</u></string>
 </resources>

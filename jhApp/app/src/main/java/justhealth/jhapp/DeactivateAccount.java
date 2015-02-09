@@ -52,7 +52,7 @@ public class DeactivateAccount extends Activity {
 
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Deactivate");
+        actionBar.setTitle("Deactivate Account");
 
         populateSpinner();
 
