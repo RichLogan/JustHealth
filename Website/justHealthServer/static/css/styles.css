@@ -346,9 +346,18 @@ hr {
 }
 /* Admin portal new */
 fieldset.form-admin {
-  width: 180%;
+  width: 100%;
+  margin: 0 auto;
   border: 1px solid silver;
-  padding: 20px;
+  padding: 25px;
   border-radius: 4px;
   background: #FFFFFF;
+}
+
+#contentAdmin {
+  padding:10px;
+  padding-bottom:40px;   /* Height of the footer */
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 40px;
 }

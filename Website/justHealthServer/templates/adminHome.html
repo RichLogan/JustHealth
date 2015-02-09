@@ -1,4 +1,4 @@
-{% extends "template.html" %}
+{% extends "adminTemplate.html" %}
 
 {% block title %}Admin Home{% endblock %}
 
@@ -9,12 +9,12 @@
 
 <br/ >
 <fieldset class="form-admin">
-	   <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">Welcome to the JustHealth IM Portal</h4>
+	   <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">JustHealth Information Management Portal</h4>
 <br />
 <br />
 <br />
 <div class="row">
-	<div class="col-md-2">
+	<div class="col-md-3">
 		<ul class="nav nav-pills nav-stacked">
    			<li class="active">
       			<a href="#home" data-toggle="tab">
@@ -50,18 +50,19 @@
    		</ul>
 	</div>
 
-	<div class="col-md-10">
+	<div class="col-md-9">
 		<div id="myTabContent" class="tab-content pull right">
    			<div class="tab-pane fade in active" id="home">
    				<br />
-      			<p>
-      				Remember you are responsible etc...
-      				<br />
-      			</p>
+      				<h5>Welcome to the JustHealth IM Portal</h5>
+      					<ul> 
+      						<li> Please note you have access to personal data on this site and have access to changing account settings. </li> 
+      						<li> Please use responsibly and for any more details contact either Charlotte Hutchinson, Richard Logan, Ben McGreogor or Stephen Tate</li>
+      					</ul>
    			</div>
    		<div class="tab-pane fade" id="users">
    			<br />
-      		<p>List users here</p>
+      		<p>List users here</p>		
    		</div>
 
    		<div class="tab-pane fade" id="currentMedication">
@@ -78,16 +79,26 @@
    		</div>
      	<div class="tab-pane fade" id="deactivateReasons">
      		<br />
-      		<p> Deactivate Stats</p>
+      		<h5> Deactivate Reasons</h5>
+				{% for reason in reasons %}
+				<li>{{reason.reason}}</li>
+				{% endfor %}
    		</div>
     	<div class="tab-pane fade" id="addNewDeactivate">
     	<br />
-      	<p> addNewDeactivate</p>
+      	<h5> Please enter below the new deactivation reason you would like to add:</h5>
+      	<br />
+      	<form action="/addDeactivate" method="POST">   
+	   	    <!--Input box for new reason -->
+            <div class="form-group">
+                <input class="form-control input-sm" type="text" name="deactivateNewReason">
+            </div>
+            <input class="btn btn-success pull-right" type="submit" value="Submit">
+	    </form>
    		</div>
    		<div class="tab-pane fade" id="charts">
     		<br />
-      		<p> Charts
-      		</p>
+      		<p> Charts </p>
    		</div>
    		<div class="tab-pane fade" id="twitter">
     	      	<br />

@@ -591,7 +591,12 @@ def internal_error(error):
 #Admin Portal pages
 @app.route('/adminPortal')
 def adminPortal():
-  return render_template('adminHome.html')
+    if request.method == 'POST':
+        result = deactivateAccount(request.form)  
+        result = sendContactUs(request.form)  
+        return render_template('adminHome.html', reasons = Deactivatereason.select(), type="success", message = 'Your message has been sent, please allow up to 24 hours for a response')
+    else: 
+       return render_template('adminHome.html', reasons = Deactivatereason.select())
 
 @app.route('/allUsers')
 def allUsers():
