@@ -1,130 +1,172 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CreateSelfAppointment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/background">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/createAppointmentScroll">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/white">
+            android:background="@color/off_white">
 
-        <LinearLayout
-            android:id="@+id/createAppointmentView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/defaultLinearForm"
-            android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/createAppointmentView"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    style="@style/defaultLinearForm">
 
-            <EditText android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Appointment Title"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/name"
-                style="@style/inputFieldsStyle"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Appointment Title"
+                        android:id="@+id/name"
+                        android:layout_gravity="center_horizontal"
+                        android:ems="10"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-tag}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/type"
-                android:layout_below="@+id/name"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/type"
+                    style="@style/spinnerWithIcon"
+                    android:spinnerMode="dialog"
+                    android:prompt="@string/appointmentTypePopup"/>
+                    <IconTextView
+                        android:layout_marginTop="40sp"
+                        android:text="{fa-spinner}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <EditText android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Building Name Number"
-                android:layout_below="@+id/type"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/buildingNameNumber"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Building Name Number"
+                        android:textColor="@color/header"
+                        android:id="@+id/buildingNameNumber"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-building}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <EditText android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Postcode"
-                android:layout_below="@+id/buildingNameNumber"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/postcode"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Postcode"
+                        android:textColor="@color/header"
+                        android:id="@+id/postcode"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-location-arrow}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <EditText android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Start Date"
-                android:inputType="date"
-                android:layout_below="@+id/postcode"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/startDate"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Start Date"
+                        android:inputType="date"
+                        android:textColor="@color/header"
+                        android:id="@+id/startDate"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-calendar}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <EditText android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Start Time"
-                android:inputType="time"
-                android:layout_below="@+id/startDate"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/startTime"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Start Time"
+                        android:inputType="time"
+                        android:textColor="@color/header"
+                        android:id="@+id/startTime"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-clock-o}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <EditText android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="End Date"
-                android:inputType="date"
-                android:layout_below="@+id/startTime"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/endDate"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="End Date"
+                        android:inputType="date"
+                        android:textColor="@color/header"
+                        android:id="@+id/endDate"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-calendar}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <EditText android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="End Time"
-                android:inputType="time"
-                android:layout_below="@+id/endDate"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/endTime"
-                style="@style/inputFieldsStyle" />
 
-            <EditText android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Details"
-                android:layout_below="@+id/endTime"
-                android:textSize="20dip"
-                android:textColor="@color/header"
-                android:layout_marginBottom="5dip"
-                android:id="@+id/details"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="End Time"
+                        android:inputType="time"
+                        android:textColor="@color/header"
+                        android:id="@+id/endTime"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-clock-o}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tick to make the appointment private"
-                android:id="@+id/appPrivate"
-                android:checked="false"
-                style="@style/inputFieldsStyle" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Details"
+                        android:id="@+id/details"
+                        style="@style/inputWithIcon" />
+                    <IconTextView
+                        android:text="{fa-ellipsis-h}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
 
-        </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:text="Tick to make the appointment private"
+                        android:id="@+id/appPrivate"
+                        android:checked="false"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="20sp"
+                        android:layout_marginLeft="10sp"/>
+                    <IconTextView
+                        android:text="{fa-lock}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <Button
                 android:text="Create"
@@ -137,4 +179,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

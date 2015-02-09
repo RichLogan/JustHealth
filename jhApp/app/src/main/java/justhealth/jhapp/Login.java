@@ -7,16 +7,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.joanzapata.android.iconify.IconDrawable;
@@ -25,9 +32,14 @@ import com.joanzapata.android.iconify.Iconify;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
-public class Login extends Activity {
+public class Login extends Activity implements SurfaceHolder.Callback {
+
+    private MediaPlayer mp = null;
+    SurfaceView surfaceView = null;
+    SurfaceHolder surfaceHolder = null;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -41,6 +53,10 @@ public class Login extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
 
+        surfaceView = (SurfaceView)findViewById(R.id.loginVideoSurface);
+        surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(this);
+        mp = new MediaPlayer();
 
         TextView register = (TextView) findViewById(R.id.link_to_forgot_password);
         register.setOnClickListener(
@@ -60,7 +76,6 @@ public class Login extends Activity {
                 }
         );
 
-
         Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -70,6 +85,24 @@ public class Login extends Activity {
                 }
         );
     }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        // Thanks to: http://stackoverflow.com/questions/8830111/integrating-video-file-in-android-app-as-app-background
+        try {
+            mp.setDisplay(holder);
+            mp.setDataSource(this, Uri.parse("android:resource://" + getPackageName() + "/" + R.raw.phone));
+            mp.prepare();
+            mp.start();
+        } catch (IOException e) {
+            System.out.println("Video load failed");
+        }
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder h) {System.out.println("1");}
+    @Override
+    public void surfaceChanged(SurfaceHolder h, int a, int b, int c) {System.out.println("1");}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,6 +138,7 @@ public class Login extends Activity {
         System.out.println("This is the encrypted password: " + encryptedPassword);
 
         String response = Request.post("authenticate", loginInformation, getApplicationContext());
+
         if (response.equals("Authenticated")) {
             SharedPreferences account = getSharedPreferences("account", 0);
             SharedPreferences.Editor edit = account.edit();

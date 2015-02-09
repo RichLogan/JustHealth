@@ -2,10 +2,12 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    tools:context=".login"
+    android:background="@color/background">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -16,91 +18,107 @@
         android:layout_alignParentStart="true"
         android:id="@+id/scrollView">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/off_white"
+            android:orientation="vertical">
 
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="User Profile"
-            android:textSize="20sp"
-            android:textColor="@color/header"/>
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                style="@style/defaultLinearForm">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="96sp"
+                    android:layout_height="96sp"
+                    android:src="@drawable/default_profile"
+                    android:layout_gravity="center"
+                    app:border_width="1sp"
+                    app:border_color="#FF000000"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Username"
+                    android:textColor="@color/primary"
+                    android:id="@+id/profileUsername"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Name"
+                    android:id="@+id/profileName"
+                    android:textColor="@color/primary"
+                    android:layout_below="@id/profileUsername"
+                    android:layout_marginTop="10sp"
+                    android:layout_gravity="center"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="D.O.B"
+                    android:id="@+id/profileDOB"
+                    android:textColor="@color/primary"
+                    android:layout_below="@id/profileName"
+                    android:layout_marginTop="10sp"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Gender"
+                    android:id="@+id/profileGender"
+                    android:layout_gravity="center"
+                    android:textColor="@color/primary"
+                    android:layout_below="@id/profileDOB"
+                    android:layout_marginTop="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Account Type"
+                    android:id="@+id/profileAccount"
+                    android:layout_gravity="center"
+                    android:textColor="@color/primary"
+                    android:layout_below="@id/profileGender"
+                    android:layout_marginTop="10sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Email"
+                    android:id="@+id/profileEmail"
+                    android:layout_gravity="center"
+                    android:textColor="@color/primary"
+                    android:layout_below="@id/profileAccount"
+                    android:layout_marginTop="10sp"/>
+
+            </LinearLayout>
+
+            <Button
+                android:text="Edit Profile"
+                android:id="@+id/editProfile"
+                style="@style/defaultConfirmButton"
+                android:layout_marginTop="35dp" />
+
+        </LinearLayout>
     </ScrollView>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Username"
-        android:id="@+id/profileUsername"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="First Name"
-        android:id="@+id/profileFirstName"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Surname"
-        android:id="@+id/profileSurname"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="210dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="D.O.B"
-        android:id="@+id/profileDOB"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="240dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Gender"
-        android:id="@+id/profileGender"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Account Type"
-        android:id="@+id/profileAccount"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Email"
-        android:id="@+id/profileEmail"
-        android:layout_alignTop="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="330dp" />
-
-    <Button
-        android:layout_width="115dp"
-        android:layout_height="wrap_content"
-        android:text="Edit Profile"
-        android:id="@+id/editProfile"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="450dp" />
 </RelativeLayout>

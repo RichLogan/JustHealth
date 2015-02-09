@@ -645,14 +645,13 @@ def deleteConnection(details):
         instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
-        return "True"
+            return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
         instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
         with database.transaction():
             instance.delete_instance()
-        return "True"
-    else:
-        return "False"
+            return "True"
+    return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
@@ -662,6 +661,12 @@ def cancelRequest():
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
     try:
+        instance = Relationship.select().where(Relationship.requestor == user).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "True"
+    except RelationshipDoesNotExist:
+        instance = Relationship.select().where(Relationship.target == connection).get()
         with database.transaction():
             instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
             instance.delete_instance()
@@ -674,6 +679,7 @@ def cancelRequest(details):
                 return "True"
         except:
             return "False"
+    return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
 @auth.login_required

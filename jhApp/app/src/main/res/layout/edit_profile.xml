@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    tools:context=".login"
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -12,121 +13,125 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit Profile"
-                android:textSize="20sp"
-                android:textColor="@color/header"
-                android:layout_marginTop="50dip"
-                android:layout_marginBottom="20dip"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
             <ScrollView
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/off_white">
+
+
                 <LinearLayout
                     android:id="@+id/editProfile"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    style="@style/defaultLinearForm">
 
                     <!-- First Name -->
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="First Name"/>
-                    <EditText android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="First Name"
-                        android:textSize="20sp"
-                        android:layout_marginBottom="5dip"
-                        android:id="@+id/editFirstname"/>
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:hint="First Name"
+                            android:ems="10"
+                            android:id="@+id/editFirstname"
+                            android:maxLength="100"
+                            style="@style/inputWithIcon"/>
+                        <IconTextView
+                            android:text="{fa-user}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
 
                     <!-- Surname -->
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Surname"/>
-                    <EditText android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Surname"
-                        android:textSize="20sp"
-                        android:layout_marginBottom="5dip"
-                        android:id="@+id/editSurname"/>
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:hint="Surname"
+                            android:ems="10"
+                            android:id="@+id/editSurname"
+                            android:maxLength="100"
+                            style="@style/inputWithIcon"/>
+                        <IconTextView
+                            android:text="{fa-user}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
 
                     <!-- Date of Birth -->
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date of Birth"/>
-                    <EditText android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Date of Birth"
-                        android:textSize="20sp"
-                        android:layout_marginBottom="5dip"
-                        android:id="@+id/editDOB"/>
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:id="@+id/editDOB"
+                            android:hint="DOB"
+                            style="@style/inputWithIcon" />
+                        <IconTextView
+                            android:text="{fa-calendar}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
 
                     <!-- Gender -->
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gender"/>
-                    <RadioGroup
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false"
-                        android:id="@+id/editGender">
-
-                        <RadioButton
-                            android:layout_width="163dp"
+                        android:layout_height="wrap_content">
+                        <Spinner
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:id="@+id/editGender_male"
-                            android:text="Male"/>
-
-                        <RadioButton
-                            android:layout_width="182dp"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:id="@+id/editGender_female"
-                            android:text="Female"
-                            android:layout_gravity="right" />
-                    </RadioGroup>
+                            android:id="@+id/editGender"
+                            android:entries="@array/gender"
+                            android:prompt="@string/genderPopup"
+                            android:spinnerMode="dialog"
+                            style="@style/spinnerWithIcon"/>
+                        <IconTextView
+                            android:id="@+id/genderIcon"
+                            android:text="{fa-male}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
 
                     <!-- Email Address -->
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Email Address"/>
-                    <EditText android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Email"
-                        android:textSize="20sp"
-                        android:layout_marginBottom="50dip"
-                        android:inputType="textEmailAddress"
-                        android:id="@+id/editEmail"/>
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:ems="10"
+                            android:id="@+id/editEmail"
+                            android:hint="Email"
+                            android:maxLength="100"
+                            style="@style/inputWithIcon"/>
+                        <IconTextView
+                            android:text="{fa-at}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+                </LinearLayout>
 
                     <!-- Update Button -->
                     <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_marginTop="35dp"
+                        style="@style/defaultConfirmButton"
                         android:text="Update"
                         android:id="@+id/editProfileButton"
-                        android:layout_gravity="center_horizontal" />
+                       />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
-    </LinearLayout>
 </RelativeLayout>

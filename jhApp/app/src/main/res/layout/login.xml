@@ -5,6 +5,18 @@
     android:background="@color/background"
     tools:context=".login">
 
+    <ProgressBar
+        android:id="@+id/loginLoadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Video Background -->
+    <SurfaceView
+        android:id="@+id/loginVideoSurface"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+    />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
@@ -12,14 +24,6 @@
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-
-        <!-- Placeholder for alert message -->
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/insertAlert"/>
-
 
         <LinearLayout
             style="@style/defaultLinearForm"
@@ -45,52 +49,49 @@
                 android:hint="Password"/>
         </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:id="@+id/login"
-                android:layout_gravity="center_horizontal"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20sp"
-                android:layout_marginRight="20sp"
-                android:layout_marginLeft="20sp"
-                style="@style/successButton"/>
-
-    </LinearLayout>
-        <LinearLayout
-            android:layout_marginRight="0sp"
-            android:layout_marginLeft="0sp"
-            android:layout_marginTop="70sp"
-            android:layout_marginBottom="0sp"
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Login"
+            android:id="@+id/login"
             android:layout_gravity="center_horizontal"
-            android:gravity="bottom"
-            android:weightSum="2"
-            android:layout_alignParentBottom="true">
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginLeft="20sp"
+            style="@style/successButton"/>
+    </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Forgot Password?"
-                android:layout_gravity="center_horizontal"
-                style="@style/dangerButton"
-                android:id="@+id/link_to_forgot_password"
-                android:layout_weight="1" />
+    <!-- Footer -->
+    <LinearLayout
+        android:layout_marginRight="0sp"
+        android:layout_marginLeft="0sp"
+        android:layout_marginTop="70sp"
+        android:layout_marginBottom="0sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom"
+        android:weightSum="2"
+        android:layout_alignParentBottom="true">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign Up"
-                android:layout_gravity="center_horizontal"
-                style="@style/primaryButton"
-                android:id="@+id/link_to_register"
-                android:layout_weight="1"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:layout_gravity="center_horizontal"
+            style="@style/dangerButton"
+            android:id="@+id/link_to_forgot_password"
+            android:layout_weight="1" />
 
-
-            </LinearLayout>
-
-
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:layout_gravity="center_horizontal"
+            style="@style/primaryButton"
+            android:id="@+id/link_to_register"
+            android:layout_weight="1"/>
+    </LinearLayout>
 </RelativeLayout>

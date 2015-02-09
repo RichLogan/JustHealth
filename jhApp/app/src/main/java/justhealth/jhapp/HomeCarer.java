@@ -5,8 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.IconTextView;
 import android.widget.ImageButton;
 
 public class HomeCarer extends Activity {
@@ -21,7 +25,7 @@ public class HomeCarer extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(username);
 
-        ImageButton settings = (ImageButton) findViewById(R.id.settings);
+        IconTextView settings = (IconTextView) findViewById(R.id.settings);
         settings.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
@@ -30,7 +34,7 @@ public class HomeCarer extends Activity {
             }
         );
 
-        Button search = (Button) findViewById(R.id.search);
+        IconTextView search = (IconTextView) findViewById(R.id.search);
         search.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
@@ -39,16 +43,16 @@ public class HomeCarer extends Activity {
             }
         );
 
-        Button connections = (Button) findViewById(R.id.connections);
+        IconTextView connections = (IconTextView) findViewById(R.id.connections);
         connections.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
-                    startActivity(new Intent(HomeCarer.this, Connections.class));
+                    startActivity(new Intent(HomeCarer.this, ConnectionsMain.class));
                 }
             }
         );
 
-        Button mypatients = (Button) findViewById(R.id.mypatients);
+        IconTextView mypatients = (IconTextView) findViewById(R.id.mypatients);
         mypatients.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
@@ -57,7 +61,7 @@ public class HomeCarer extends Activity {
             }
         );
 
-        Button appointments = (Button) findViewById(R.id.myAppointments);
+        IconTextView appointments = (IconTextView) findViewById(R.id.myAppointments);
         appointments.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
@@ -66,7 +70,7 @@ public class HomeCarer extends Activity {
                 }
         );
 
-        ImageButton profile = (ImageButton) findViewById(R.id.profile);
+        IconTextView profile = (IconTextView) findViewById(R.id.profile);
         profile.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View view) {
@@ -75,4 +79,25 @@ public class HomeCarer extends Activity {
                 }
         );
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_home_screens, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.search_badge:
+                startActivity(new Intent(HomeCarer.this, SearchNHSWebsite.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

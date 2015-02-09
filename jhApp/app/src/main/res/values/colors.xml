@@ -17,4 +17,5 @@
     <color name="primary">#337AB7</color>
     <color name="success">#5CB85C</color>
     <color name="danger">#D9534F</color>
+    <color name="warning">#F0AD4E</color>
 </resources>

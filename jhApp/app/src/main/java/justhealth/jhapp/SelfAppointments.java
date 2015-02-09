@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.support.v4.app.NavUtils;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,7 +63,7 @@ public class SelfAppointments extends Activity {
         // Set up your ActionBar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Appointments");
+        actionBar.setTitle("Upcoming Appointments");
 
         getUpcomingAppointments();
     }
@@ -147,14 +149,16 @@ public class SelfAppointments extends Activity {
                 Date now = new Date();
                 if (appDateTime.after(now)) {
 
-                    Button app = new Button(this);
-                    final int buttonColour = getResources().getColor(R.color.button);
-                    app.setBackgroundDrawable(new ColorDrawable(buttonColour));
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+                    Button app = new Button(newContext);
+                    app.setBackgroundColor(Color.rgb(51, 122, 185));
                     app.setText(name + " " + startDate + " " + startTime);
                     LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+
                     layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                     LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
+                    center.setMargins(0,30,0,0);
                     center.gravity = Gravity.CENTER;
                     app.setLayoutParams(center);
 

@@ -47,6 +47,15 @@ public class Settings extends Activity {
                     }
                 }
         );
+
+        Button logout = (Button) findViewById(R.id.logout);
+        logout.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View view) {
+                        Logout.logout(getApplicationContext());
+                    }
+                }
+        );
     }
 
 }
