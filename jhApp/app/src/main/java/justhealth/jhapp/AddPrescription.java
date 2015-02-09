@@ -1,18 +1,23 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +34,25 @@ public class AddPrescription extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_add_prescription);
 
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Add Prescription");
+
+        initMedicationSpinner();
+
+        Button submit = (Button) findViewById(R.id.addPrescription);
+        submit.setOnClickListener(
+            new Button.OnClickListener() {
+                public void onClick(View view) {
+                    if (validateForm()) {
+                        addPrescription();
+                    }
+                }
+            }
+        );
+    }
+
+    private void initMedicationSpinner() {
         //Populate Spinner
         ArrayList<String> populateSpinner = new ArrayList<String>();
 
@@ -46,17 +70,6 @@ public class AddPrescription extends Activity {
 
         Spinner medication = (Spinner) findViewById(R.id.medication);
         medication.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
-
-        Button submit = (Button) findViewById(R.id.addPrescription);
-        submit.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View view) {
-                        if (validateForm()) {
-                            addPrescription();
-                        }
-                    }
-                }
-        );
     }
 
     private void addPrescription() {
@@ -111,57 +124,3 @@ public class AddPrescription extends Activity {
         toast.show();
     }
 }
-
-//// delete prescription- to carry on working!!
-//
-//    private boolean deletePrescriptions(String connection) {
-//        HashMap<String, String> deletePrescriptions = new HashMap<String, String>();
-//
-//        SharedPreferences account = getSharedPreferences("account", 0);
-//        String username = account.getString("username", null);
-//        String password = account.getString("password", null);
-//
-//        //add search to HashMap
-//        deletePrescriptions.put("user", username);
-//        deletePrescriptions.put("connection", connection);
-//
-//                   //Create new HttpClient and Post Header
-//            HttpClient httpclient = new DefaultHttpClient();
-//            String authentication = username + ":" + password;
-//            String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-//
-//            HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/deletePrescription");
-//            httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-//            //assigns the HashMap to list, for post request encoding
-//            try {
-//                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-//
-//            Set<Map.Entry<String, String>> detailsSet = deletePrescriptions.entrySet();
-//            for (Map.Entry<String, String> string : detailsSet) {
-//                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-//            }
-//
-//            //pass the list to the post request
-//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//            HttpResponse response = httpclient.execute(httppost);
-//
-//            String responseString = EntityUtils.toString(response.getEntity());
-//            System.out.print(responseString);
-//
-//            if (responseString == "True") {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//
-//
-//        } catch (ClientProtocolException e) {
-//            //TODO Auto-generated catch block
-//        } catch (IOException e) {
-//            //TODO Auto-generated catch block
-//        } catch (NullPointerException e) {
-//            //TODO Auto-generated catch block
-//        }
-//        return false;
-//    }
-//}

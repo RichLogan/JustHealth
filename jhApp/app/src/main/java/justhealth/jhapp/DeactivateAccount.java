@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -29,6 +30,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +49,11 @@ public class DeactivateAccount extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deactivate_account);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Deactivate Account");
+
         populateSpinner();
 
         Button submit = (Button) findViewById(R.id.deactivateButton);
@@ -62,39 +69,18 @@ public class DeactivateAccount extends Activity {
         System.out.println("populateSpinner");
         ArrayList populateSpinner = new ArrayList<String>();
 
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
+        String response = Request.get("getDeactivateReasons", getApplicationContext());
+        System.out.println(response);
+        JSONArray appointmentTypes = null;
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
 
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/getDeactivateReasons");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
         try {
-            //pass the list to the post request
-            HttpResponse response = httpclient.execute(httppost);
-            System.out.println("post request executed");
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println("this is the array: " + responseString);
-
-            JSONArray appointmentTypes = null;
-
-
-            try {
-                appointmentTypes = new JSONArray(responseString);
-                for (int i = 0; i < appointmentTypes.length(); i++) {
-                    String app = appointmentTypes.getString(i);
-                    populateSpinner.add(app);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            appointmentTypes = new JSONArray(response);
+            for (int i = 0; i < appointmentTypes.length(); i++) {
+                String app = appointmentTypes.getString(i);
+                populateSpinner.add(app);
             }
-
-        } catch (IOException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -103,7 +89,7 @@ public class DeactivateAccount extends Activity {
     }
 
     private void popUpDeactivate() {
-        HashMap<String, String> reasons = new HashMap<>();
+        HashMap<String, String> reasons = new HashMap<String, String>();
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);

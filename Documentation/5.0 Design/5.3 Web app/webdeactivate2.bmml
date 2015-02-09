@@ -1,0 +1,106 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1280" measuredH="519" mockupW="1002" mockupH="492">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="278" y="27" w="741" h="492" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14540253</color>
+        <text>JustHealth%0Ahttp%3A//www.justhealth.uk/</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Image" x="285" y="106" w="153" h="66" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logo</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Arrow" x="977" y="137" w="256" h="50" measuredW="150" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>-1</curvature>
+        <rightArrow>false</rightArrow>
+        <stroke>solid</stroke>
+        <text>Button%20is%20no%20longer%20a%20settings%20icon</text>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::HRule" x="438" y="162" w="575" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Canvas" x="446" y="172" w="441" h="310" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1"/>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1001" y="100" w="-1" h="392" measuredW="16" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <value>0</value>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Icon" x="847" y="115" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>HomeIcon%7Clarge</icon>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Button" x="901" y="126" w="-1" h="-1" measuredW="68" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Log%20out</text>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::SubTitle" x="457" y="181" w="-1" h="-1" measuredW="212" measuredH="27" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Deactivate%20account</text>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::Tree" x="467" y="244" w="409" h="230" measuredW="300" measuredH="225" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>16777215</color>
+        <text>%5Bx%5D%20Are%20you%20sure%20you%20want%20to%20deactivate%20your%20account%3F%0A%20%0A%20%0A%20%0A%20%0A%20%0A%20%0A%20%0A-%20Please%20select%20if%20you%20want%20us%20to%20delete%20your%20information%0A%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::ComboBox" x="469" y="278" w="148" h="-1" measuredW="92" measuredH="24" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%28Reason%3F%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::TextArea" x="468" y="309" w="359" h="92" measuredW="200" measuredH="140" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Any%20comments...</text>
+      </controlProperties>
+    </control>
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="817" y="410" w="20" h="16" measuredW="20" measuredH="16" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%5Bx%5D</text>
+      </controlProperties>
+    </control>
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::Link" x="489" y="435" w="-1" h="-1" measuredW="158" measuredH="17" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <italic>true</italic>
+        <size>11</size>
+        <text>Why%20should%20we%20keep%20your%20data%3F</text>
+      </controlProperties>
+    </control>
+    <control controlID="73" controlTypeID="com.balsamiq.mockups::Button" x="742" y="435" w="85" h="27" measuredW="85" measuredH="27" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Deactivate</text>
+      </controlProperties>
+    </control>
+    <control controlID="74" controlTypeID="com.balsamiq.mockups::Alert" x="1059" y="265" w="221" h="133" measuredW="200" measuredH="133" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Account%20Settings%0AAre%20you%20sure%20you%20want%20to%20deactivate%20your%20account%3F%0ANo%2C%20Yes</text>
+      </controlProperties>
+    </control>
+    <control controlID="75" controlTypeID="com.balsamiq.mockups::Arrow" x="847" y="413" w="353" h="39" measuredW="150" measuredH="100" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <curvature>-1</curvature>
+        <direction>bottom</direction>
+        <text>Alert%20to%20appear%20on%20click</text>
+      </controlProperties>
+    </control>
+    <control controlID="76" controlTypeID="com.balsamiq.mockups::HRule" x="455" y="204" w="417" h="-1" measuredW="100" measuredH="10" zOrder="17" locked="false" isInGroup="-1"/>
+    <control controlID="77" controlTypeID="com.balsamiq.mockups::Button" x="505" y="216" w="131" h="27" measuredW="125" measuredH="27" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Account%20Settings</text>
+      </controlProperties>
+    </control>
+    <control controlID="78" controlTypeID="com.balsamiq.mockups::Button" x="675" y="216" w="151" h="27" measuredW="54" measuredH="27" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>FAQs</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

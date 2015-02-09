@@ -1,44 +1,31 @@
 package justhealth.jhapp;
 
-import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Base64;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import com.joanzapata.android.iconify.Iconify;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-/**
- * Created by Stephen Tate on 14/11/2014.
- */
 public class Search extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,107 +35,70 @@ public class Search extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
-        //check for the search button being pressed
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Search");
+
+        // On Search Press
         Button search = (Button) findViewById(R.id.searchButton);
         search.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View view) {
-                        System.out.println("onclick");
-                        searchName();
-                    }
+            new View.OnClickListener() {
+                public void onClick(View view) {
+                    searchName();
                 }
+            }
         );
-
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void searchName() {
         HashMap<String, String> searchInformation = new HashMap<String, String>();
 
-        //this is adding the username as null - INCORRECT
+        // Get Username
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
-        //todo remove this line
-        System.out.println(username);
 
-        //add search to HashMap
+        // Add search to HashMap
         searchInformation.put("username", username);
         searchInformation.put("searchterm", ((EditText) findViewById(R.id.searchField)).getText().toString());
 
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/searchPatientCarer");
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-
-        //assigns the HashMap to list, for post request encoding
+        String response = Request.post("searchPatientCarer", searchInformation, getApplicationContext());
         try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = searchInformation.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            System.out.println("Post Request: " + searchInformation);
-            HttpResponse response = httpclient.execute(httppost);
-            System.out.println(response);
-
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println("this is the array: " + responseString);
-            JSONArray queryReturn = null;
-            try {
-                queryReturn = new JSONArray(responseString);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            System.out.print(queryReturn);
+            JSONArray queryReturn = new JSONArray(response);
             printTable(queryReturn);
-
-        } catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+        }
+        catch (JSONException e) {
+            System.out.println(e.getStackTrace());
         }
     }
 
     private void printTable(JSONArray array) {
         TableLayout searchTable = (TableLayout) findViewById(R.id.searchTable);
         searchTable.removeAllViews();
+
         //create heading row
         TableRow head = new TableRow(this);
-        //add properties to the header row
         head.setBackgroundColor(getResources().getColor(R.color.header));
 
         //create the headings of the table
         TextView headingUsername = new TextView(this);
         headingUsername.setTextColor(Color.WHITE);
-        headingUsername.setPadding(5, 5, 5, 5);
+        headingUsername.setPadding(0,0,25,0);
 
         TextView headingFirstName = new TextView(this);
         headingFirstName.setTextColor(Color.WHITE);
-        headingFirstName.setPadding(5, 5, 5, 5);
+        headingFirstName.setPadding(0,0,25,0);
 
         TextView headingSurname = new TextView(this);
         headingSurname.setTextColor(Color.WHITE);
-        headingSurname.setPadding(5, 5, 5, 5);
+        headingSurname.setPadding(0,0,25,0);
 
         TextView headingAction = new TextView(this);
         headingAction.setTextColor(Color.WHITE);
-        headingAction.setPadding(5, 5, 5, 5);
 
         headingUsername.setText("Username");
         headingFirstName.setText("First Name");
         headingSurname.setText("Surname");
-        headingAction.setText("Action");
+        headingAction.setText("");
 
         //add the headings to the row
         head.addView(headingUsername);
@@ -156,7 +106,6 @@ public class Search extends Activity {
         head.addView(headingSurname);
         head.addView(headingAction);
         searchTable.addView(head, 0);
-
 
         for (int i = 0; i < array.length(); i++) {
             try {
@@ -166,31 +115,69 @@ public class Search extends Activity {
                 String resultFirstName = obj.getString("firstname");
                 String resultSurname = obj.getString("surname");
 
-
                 TableRow row = new TableRow(this);
+
                 //add username to TextView
                 TextView forUsername = new TextView(this);
                 forUsername.setText(resultUsername);
+                forUsername.setPadding(0,0,25,0);
+
                 //add first name to TextView
                 TextView forFirstName = new TextView(this);
                 forFirstName.setText(resultFirstName);
+                forFirstName.setPadding(0,0,25,0);
+
                 //add surname to TextView
                 TextView forSurname = new TextView(this);
                 forSurname.setText(resultSurname);
-                //add connect button
+                forSurname.setPadding(0,0,25,0);
+
+                //Add connect button
                 Button connect = new Button(this);
-                connect.setText("Connect");
                 connect.setTextColor(Color.WHITE);
-                connect.setBackgroundColor(getResources().getColor(R.color.header));
-                connect.setPadding(5, 5, 5, 5);
-                connect.setOnClickListener(connectOnClick(connect, resultUsername));
+
+                // Check if connection is already established
+                try {
+                    final String resultMessage = obj.getString("message");
+
+                    if (resultMessage.equals("Already Connected")) {
+                        connect.setText("{fa-check}");
+                        connect.setBackgroundColor(getResources().getColor(R.color.primary));
+                    }
+                    else {
+                        connect.setText("{fa-question}");
+                        connect.setBackgroundColor(getResources().getColor(R.color.warning));
+                    }
+
+                    connect.setOnClickListener(new Button.OnClickListener() {
+                        public void onClick(View view) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                            alert.setTitle(resultMessage);
+                            alert.setMessage("Would you like to view this connection?");
+                            alert.setNegativeButton("Cancel", null);
+                            alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    startActivity(new Intent(Search.this, ConnectionsMain.class));
+                                }
+                            });
+                            alert.show();
+                        }
+                    });
+                } catch (JSONException e) {
+                    // No connection existing
+                    connect.setText("{fa-user-plus}");
+                    connect.setBackgroundColor(getResources().getColor(R.color.success));
+                    connect.setOnClickListener(connectOnClick(connect, resultUsername));
+                }
+
+                // Render Icons
+                Iconify.addIcons(connect);
 
                 //add the views to the row
                 row.addView(forUsername);
                 row.addView(forFirstName);
                 row.addView(forSurname);
                 row.addView(connect);
-
                 searchTable.addView(row, i + 1);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -198,55 +185,60 @@ public class Search extends Activity {
         }
     }
 
+    /**
+     * This method is the action listener that is applied to the Connect button to create a new connection after searching for a user.
+     * It runs the connect method, gives you the option to cancel or connect and changes the text on the button and stops the button being clicked again.
+     *
+     * @param button           the button that the onclick listener is applied too
+     * @param targetUsername the username of the person that they want to remove as a connection
+     */
+
     View.OnClickListener connectOnClick(final Button button, final String targetUsername) {
         return new View.OnClickListener() {
             public void onClick(View view) {
-                connectUsers(targetUsername);
-                button.setText("Connection Requested");
-                button.setTextSize(11);
-                button.setClickable(false);
+                // Confirm connect to targerUsername
+                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                alert.setTitle("Add Connection");
+                alert.setMessage("Are you sure you would like to connect to " + targetUsername);
+                alert.setNegativeButton("Cancel", null);
+                alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        // Create Connection
+                        HashMap<String, String> connectRequest = new HashMap<String, String>();
+                        String username = getSharedPreferences("account", 0).getString("username", null);
+                        connectRequest.put("username", username);
+                        connectRequest.put("target", targetUsername);
+                        String result = Request.post("createConnection", connectRequest, getApplicationContext());
+
+                        // Display Information
+                        AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                        alert.setTitle("Request Sent");
+                        alert.setMessage("Your connection code for " + targetUsername + " is: " + result);
+                        alert.show();
+
+                        // Disable Connection Button
+                        button.setText(result);
+
+                        // Change Button action to show the new connection
+                        button.setOnClickListener(new Button.OnClickListener() {
+                            public void onClick(View view) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(Search.this);
+                                alert.setTitle("Connections");
+                                alert.setMessage("Would you like to view this connection?");
+                                alert.setNegativeButton("Cancel", null);
+                                alert.setPositiveButton("Go to connections", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        startActivity(new Intent(Search.this, ConnectionsMain.class));
+                                    }
+                                });
+                                alert.show();
+                            }
+                        });
+                    }
+                });
+                alert.show();
             }
         };
     }
-
-
-    private void connectUsers(String targetUser) {
-        HashMap<String, String> connectRequest = new HashMap<String, String>();
-
-        //this is adding the username as null - INCORRECT
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-
-        //add search to HashMap
-        connectRequest.put("username", username);
-        connectRequest.put("target", targetUser);
-
-        //Create new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/createConnection");
-        System.out.println(connectRequest);
-        //assigns the HashMap to list, for post request encoding
-        try {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-            Set<Map.Entry<String, String>> detailsSet = connectRequest.entrySet();
-            for (Map.Entry<String, String> string : detailsSet) {
-                nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
-            }
-
-            //pass the list to the post request
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            HttpResponse response = httpclient.execute(httppost);
-            String responseString = EntityUtils.toString(response.getEntity());
-            System.out.println(responseString);
-
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
-

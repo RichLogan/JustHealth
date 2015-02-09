@@ -1,0 +1,145 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1214" measuredH="519" mockupW="936" mockupH="492">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="278" y="27" w="741" h="492" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14540253</color>
+        <text>JustHealth%0Ahttp%3A//www.justhealth.uk/</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Image" x="285" y="106" w="153" h="66" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logo</text>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::HRule" x="438" y="162" w="575" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Canvas" x="485" y="172" w="416" h="299" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1"/>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1001" y="100" w="-1" h="392" measuredW="16" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <value>0</value>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Icon" x="863" y="115" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>HomeIcon%7Clarge</icon>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Button" x="918" y="126" w="-1" h="-1" measuredW="68" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Log%20out</text>
+      </controlProperties>
+    </control>
+    <control controlID="96" controlTypeID="com.balsamiq.mockups::Icon" x="491" y="178" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactsIcon%7Cmedium</icon>
+      </controlProperties>
+    </control>
+    <control controlID="119" controlTypeID="com.balsamiq.mockups::HRule" x="492" y="210" w="401" h="-1" measuredW="100" measuredH="10" zOrder="8" locked="false" isInGroup="-1"/>
+    <control controlID="120" controlTypeID="com.balsamiq.mockups::Label" x="530" y="181" w="-1" h="-1" measuredW="148" measuredH="26" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>18</size>
+        <text>Your%20connections</text>
+      </controlProperties>
+    </control>
+    <control controlID="121" controlTypeID="com.balsamiq.mockups::Button" x="822" y="182" w="-1" h="-1" measuredW="63" measuredH="27" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>40463</color>
+        <text>Search</text>
+      </controlProperties>
+    </control>
+    <control controlID="122" controlTypeID="com.balsamiq.mockups::Button" x="530" y="219" w="131" h="27" measuredW="96" measuredH="27" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <state>selected</state>
+        <text>Connections</text>
+      </controlProperties>
+    </control>
+    <control controlID="123" controlTypeID="com.balsamiq.mockups::Button" x="700" y="219" w="151" h="27" measuredW="70" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Pending</text>
+      </controlProperties>
+    </control>
+    <control controlID="124" controlTypeID="com.balsamiq.mockups::TitleWindow" x="509" y="249" w="356" h="108" measuredW="450" measuredH="400" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="125" controlTypeID="com.balsamiq.mockups::IconLabel" x="515" y="251" w="154" h="-1" measuredW="154" measuredH="21" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="126" controlTypeID="com.balsamiq.mockups::TitleWindow" x="509" y="369" w="356" h="23" measuredW="450" measuredH="400" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="127" controlTypeID="com.balsamiq.mockups::IconLabel" x="515" y="371" w="154" h="-1" measuredW="154" measuredH="21" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="128" controlTypeID="com.balsamiq.mockups::TitleWindow" x="509" y="407" w="356" h="23" measuredW="450" measuredH="400" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="129" controlTypeID="com.balsamiq.mockups::IconLabel" x="515" y="409" w="154" h="-1" measuredW="154" measuredH="21" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="130" controlTypeID="com.balsamiq.mockups::TitleWindow" x="509" y="443" w="356" h="23" measuredW="450" measuredH="400" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <text/>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="131" controlTypeID="com.balsamiq.mockups::IconLabel" x="515" y="445" w="154" h="-1" measuredW="154" measuredH="21" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>ContactIcon%7Cxsmall</icon>
+        <labelPosition>right</labelPosition>
+        <text>%28FirstName%20LastName%29</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="132" controlTypeID="com.balsamiq.mockups::Icon" x="810" y="279" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>PencilIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="133" controlTypeID="com.balsamiq.mockups::Icon" x="834" y="279" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>Trash2Icon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="134" controlTypeID="com.balsamiq.mockups::Paragraph" x="515" y="279" w="275" h="69" measuredW="275" measuredH="80" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Details%20listed%0A*%20here%0A*%20and%20here%0A*%20further%20details</text>
+      </controlProperties>
+    </control>
+    <control controlID="135" controlTypeID="com.balsamiq.mockups::VCurly" x="1034" y="225" w="180" h="231" measuredW="180" measuredH="140" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Each%20name%20can%20be%20clicked%20to%20reveal%20a%20list%20of%20all%20details%0A%20%0AFrom%20this%20page%20the%20user%20will%20be%20able%20to%20edit/remove%20the%20connection</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

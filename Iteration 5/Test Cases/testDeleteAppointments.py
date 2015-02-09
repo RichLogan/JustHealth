@@ -5,7 +5,7 @@ import unittest
 import imp
 import json
 
-testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
+testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
 class testDeleteAppointments(unittest.TestCase):
 
@@ -43,12 +43,12 @@ class testDeleteAppointments(unittest.TestCase):
             apptype = "test",
             addressnamenumber = "Test",
             postcode = "Test",
-            startdate = 01/01/2020,
-            starttime = 00:00,
-            enddate = 01/01/2020,
-            endtime = 00:00,
+            startdate = "01/01/2020",
+            starttime = "00:00",
+            enddate = "01/01/2020",
+            endtime = "00:00",
             description = "Test",
-            private = True)       
+            private = True)
         testAppointment.execute()
 
     def deleteWorks(self):

@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    tools:context=".login"
+    android:background="@color/background">
 
-
-    <include android:id="@+id/header" layout="@layout/header" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -17,37 +16,61 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/scrollView">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/defaultLinearForm"
+            android:layout_marginTop="0sp"
+            android:layout_marginBottom="0sp">
+
+            <TextView
+                android:text= "1. Who can connect with me?"
+                style="@style/question" />
+
+            <TextView
+                style="@style/answer"
+                android:text="As a Patient only carers can search for you, as a carer only patients can search for you."
+                />
+
+            <TextView
+                style="@style/question"
+                android:text="2. Who can view my data?"/>
+
+            <TextView
+                style="@style/answer"
+                android:text="As a patient only you and your carer can view your data As a carer patients can only see your Username, First Name, Surname and Profile Picture." />
+
+            <TextView
+                style="@style/question"
+                android:text="3. Where is my data stored?"/>
+
+            <TextView
+                style="@style/answer"
+                android:text="All data is stored on JustHealth's database which protected by many security settings." />
+
+            <TextView
+                style="@style/question"
+                android:text="4. How can I delete data about myself?"/>
+
+            <TextView
+                style="@style/answer"
+                android:text="To delete appointments and prescriptions this can be done within the respective pages. To delete all data about you, you need to deactivate your account and check the box to remove all your data." />
+
+            <TextView
+                style="@style/question"
+                android:text="5. How can I leave JustHealth?"/>
+
+            <TextView
+                style="@style/answer"
+                android:text="To remove your account, this is done via the deactivation tab." />
 
 
-        <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Privacy and FAQ's"
-            android:layout_above="@+id/scrollView"
-            android:textSize="20dip"
-            android:textColor="@color/header"/>
+
+
+
+        </LinearLayout>
+
     </ScrollView>
-
-    <TextView android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text= "
-
-
-1. Who can connect with me?
-As a Patient only carers can search for you, as a carer only patients can search for you
-2. Who view my data?
-As a patient only you and your carer can view your data As a carer patients can only see your username, firstname and surname
-3. Where is my data stored?
-All data is stored on JustHealth's database which protected by many security settings
-4. How can I delete data about myself?
-To delete appointments and prescriptions this can be done within the respective pages. To delete all data about you, you need to deactivate your account and check the box to remove all your data.
-5. How can I leave JustHealth?
-To remove your account, this is done via the deactivation tab."
-        android:textSize="10dip"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView3" />
-
 
 
 

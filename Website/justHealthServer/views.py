@@ -1,7 +1,9 @@
+from flask import send_from_directory
 from justHealthServer import *
 from api import *
 from functools import wraps
 import json
+import webbrowser
 
 # Decorator Functions
 def needLogin(f):
@@ -16,15 +18,94 @@ def needLogin(f):
     return f(*args, **kwargs)
   return loginCheck
 
+@app.route('/images/<filename>')
+@needLogin
+def getProfilePicture(filename):
+    return send_from_directory(app.config['PROFILE_PICTURE'], filename)
+
 @app.route('/')
 @needLogin
 def index():
+    """Sends user to home page according to account type if session is active"""
     result = json.loads(getAccountInfo(session['username']))
     name = result['firstname'] + " " + result['surname']
     if result['accounttype'] == "Patient":
       return render_template('patienthome.html', printname = name)
     elif result['accounttype'] == "Carer":
       return render_template('carerhome.html', printname = name)
+
+@app.route('/home')
+@needLogin
+def home():
+    """Dashboard home page patient"""
+    accountInfo = json.loads(getAccountInfo(session['username']))
+    #notifications = json.loads(getNotifications(session['username']))
+    connections = json.loads(getConnections(session['username']))
+    appointments = json.loads(getAllAppointments(session['username'], session['username']))
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    outgoingConnections = json.loads(connections['outgoing'])
+    incomingConnections = json.loads(connections['incoming'])
+    completedConnections = json.loads(connections['completed'])
+    
+    # Notification example
+    notifications = []
+    notification1 = {}
+    notification1['type'] = "danger"
+    notification1['content'] = "Testing"
+    notifications.append(notification1)
+    notification2 = {}
+    notification2['type'] = "success"
+    notification2['content'] = "Testing 2"
+    notifications.append(notification2)
+
+    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
+
+@app.route('/homecarer')
+@needLogin
+def homecarer():
+    """Dashboard home page carer"""
+    accountInfo = json.loads(getAccountInfo(session['username']))
+    #notifications = json.loads(getNotifications(session['username']))
+    connections = json.loads(getConnections(session['username']))
+    appointments = json.loads(getAllAppointments(session['username'], session['username']))
+    outgoingConnections = json.loads(connections['outgoing'])
+    incomingConnections = json.loads(connections['incoming'])
+    completedConnections = json.loads(connections['completed'])
+    
+    # Notification example
+    notifications = []
+    notification1 = {}
+    notification1['type'] = "danger"
+    notification1['content'] = "Testing"
+    notifications.append(notification1)
+    notification2 = {}
+    notification2['type'] = "success"
+    notification2['content'] = "Testing 2"
+    notifications.append(notification2)
+
+ # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+    # Get all appointments
+    appointmentsMapping = {}
+    # Get all prescriptions
+    activePrescriptions = {}
+    upcomingPrescriptions = {}
+    expiredPrescriptions = {}
+    for patient in patients:
+        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
+
+        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+
+    return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/profile')
 @needLogin
@@ -38,35 +119,66 @@ def profile():
     completedConnections = json.loads(connections['completed'])
 
     if profileDetails['accounttype'] == "Patient":
-      return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Patient')
+        return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Patient')
     elif profileDetails['accounttype'] == "Carer":
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
+@app.route('/editProfile', methods=['POST', 'GET'])
+def getEditDetails_view():
+    if request.method == 'GET':
+        username = request.args.get('username')
+        getUpdate = json.loads(getAccountInfo(session['username']))
+    return render_template('editProfile.html', request=getUpdate)
+   
+@app.route('/updateProfile', methods=['POST'])
+def editDetails_view():
+    updated = editProfile(request.form, request.files)
+    if updated == "Failed":
+        flash(updated, 'danger')
+    else:
+        flash(updated, 'success')
+    return redirect(url_for('profile'))
 
 @app.route('/termsandconditions')
 def terms():
-    """terms and conditions page link"""
+    """JustHealth terms and conditions reference page for all users"""
     return render_template('termsandconditions.html')
 
 @app.route('/corpusindex')
 def corpus():
-  return render_template('indexCorpus.html')
+    return render_template('indexCorpus.html')
 
 @app.route('/legal')
 def legal():
-  return render_template('legal.html')
+    """This page hold 4 tiles each a link onto the respective legal page"""
+    return render_template('legal.html')
 
 @app.route('/privacypolicy')
 def privacy():
-  return render_template('privacypolicy.html')
+    """JustHealth privacy policy and data protection reference page"""
+    return render_template('privacypolicy.html')
 
 @app.route('/references')
 def references():
-  return render_template('references.html')
+    return render_template('references.html')
+
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
 
 @app.route('/sitemap')
 def sitemap():
-  return render_template('sitemap.html')
+    return render_template('sitemap.html')
+
+@app.route('/contactUs', methods=['POST', 'GET'])
+def contactUs():
+    profileDetails = json.loads(getAccountInfo(session['username']))
+    if request.method == 'POST': 
+        result = sendContactUs(request.form)
+        return render_template('contactUs.html', type="success", message = 'Your message has been sent, please allow up to 24 hours for a response', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
+    else: 
+       return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
+    
 
 @app.route('/settings')
 @needLogin
@@ -77,21 +189,22 @@ def settings():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Carer' )
 
-
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
+    """Search to find a different user's profile"""
     if request.method =='POST':
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
         result = json.loads(result)
         return render_template ('search.html',results = result, username= session['username'])
-    return render_template('search.html',username= session['username'])
+    return render_template('search.html', username= session['username'])
 
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
 def deactivate():
+    """Handles account deactivation form"""
     if request.method == 'POST':
-        result = deactivateAccount()
+        result = deactivateAccount(request.form)
         if result == "Deleted":
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deleted")
@@ -105,6 +218,7 @@ def deactivate():
 # Account Pages
 @app.route('/register', methods=['POST', 'GET'])
 def registration():
+    """Handles user registration form"""
     if request.method == 'POST':
         result = registerUser()
         if result == "True":
@@ -116,11 +230,13 @@ def registration():
 @app.route('/logout')
 @needLogin
 def logout():
-  session.pop('username', None)
-  return redirect(url_for('index'))
+    """Terminates user session"""
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):
+    """User confirmation of account verification"""
     s = getSerializer()
     try:
         retrievedUsername = s.loads(payload)
@@ -130,6 +246,11 @@ def verifyUser(payload):
     verifiedTrue = Client.update(verified = True).where(Client.username == retrievedUsername)
     verifiedTrue.execute()
     return render_template('login.html', type='success', message='Thank you for verifying your account.')
+
+@app.route('/password')
+def changePassword():
+    """Change password form (when user knows their current password)"""
+    return render_template('changePassword.html')
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
@@ -156,14 +277,20 @@ def loadPasswordReset(payload):
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    """Gets username from login in order to authenticate session"""
     if request.method == 'POST':
         result = authenticate()
         if result == "Authenticated":
             # Valid user, set SESSION
             session["username"] = request.form['username']
+            nameresult = json.loads(getAccountInfo(session['username']))
+            session['firstname'] = nameresult['firstname']
+            session['surname'] = nameresult['surname']
+            fullname = session['firstname'] + " " + session['surname']
+
             return redirect(url_for('index'))
         else:
-            return render_template('login.html', type="danger", message = result)
+            return render_template('login.html', printname = fullname, type="danger", message = result)
     try:
       session['username']
     except KeyError, e:
@@ -172,6 +299,7 @@ def login():
 
 @app.route('/forgotPassword', methods=['POST', 'GET'])
 def forgotPassword():
+    """Finds the user's account from the email address it was registered with"""
     if request.method == 'POST':
       username = getUserFromEmail(request.form['email'])
       if username == "False":
@@ -183,16 +311,56 @@ def forgotPassword():
 # This method is run once the form to reset the password has been submitted
 @app.route('/resetpassword', methods=['POST', 'GET'])
 def resetPasswordRedirect():
-  if request.method == 'POST':
-    result = resetPassword()
+    """Follows unique link in email to allow user to reset password, only after forgotPassword form is submitted."""
+    if request.method == 'POST':
+        result = resetPassword()
     if result == "True":
         return render_template('login.html', type="success", message="Your password has been reset, please check your email and click the link to verify.")
     else:
         return render_template('resetpassword.html', type="danger", message=result)
-  return render_template('resetpassword.html')
+    return render_template('resetpassword.html')
+
+
+@app.route('/createConnectionWeb', methods=['POST', 'GET'])
+def createConnectionWeb():
+    result = createConnection(request.form)
+    if result != "Connection already established":
+        flash(result, 'success')
+        return redirect('/profile?go=connections')
+    else:
+        flash(result, 'danger')
+        return redirect(url_for('search'))
+
+@app.route('/completeConnectionWeb', methods=['POST', 'GET'])
+def completeConnectionWeb():
+    result = completeConnection(request.form)
+    if result == "Incorrect code":
+        flash(result, 'danger')
+    else:
+        flash(result, 'success')
+    return redirect('/profile?go=connections')
+
+@app.route('/deleteConnectionWeb', methods=['POST', 'GET'])
+def deleteConnectionWeb():
+    result = deleteConnection(request.form)
+    if result == "True":
+        flash("Delete successful", 'success')
+    else:
+        flash("Delete failed. Please contact an administrator", 'danger')
+    return redirect('/profile?go=connections')
+
+@app.route('/cancelConnectionWeb', methods=['POST', 'GET'])
+def cancelConnectionWeb():
+    result = cancelRequest(request.form)
+    if result == "True":
+        flash("Cancellation successful", 'success')
+    else:
+        flash("Cancel failed. Please contact an administrator", 'danger')
+    return redirect('/profile?go=connections')
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
+  """Form for patient to add an appointment, they choose privacy level for their carer."""
   appointments = json.loads(getAllAppointments(session['username'], session['username']))
 
   if request.method == 'POST':
@@ -226,6 +394,7 @@ def appointments():
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
 def deleteAppointment_view():
+  """Shows message to inform the user that the appointment has been deleted"""
   if request.method == 'GET':
     appid = request.args.get("appid")
     deleted = deleteAppointment(session['username'], appid)
@@ -234,6 +403,7 @@ def deleteAppointment_view():
 
 @app.route('/updateAppointment', methods=['POST', 'GET'])
 def getUpdateAppointment_view():
+  """Takes the appointment ID to put the existing appointment information in the form, ready to be updated"""
   if request.method == 'GET':
     appid = request.args.get('appid')
     getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
@@ -254,6 +424,7 @@ def updateAppointment_view():
 
 @app.route('/myPatients')
 def myPatients():
+    """Shows carer page listing their connected patients, they can edit each patient's prescriptions and appointments from here"""
     # Get Patients
     if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
         # Get all patients connected to this user
@@ -277,8 +448,15 @@ def myPatients():
         expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
     return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
+@app.route('/prescriptions')
+def prescriptions():
+    """Shows all the active prescriptions for the patient selected"""
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    return render_template('prescriptions.html', prescriptions = prescriptions)
+
 @app.route('/deletePrescription')
 def deletePrescription_view():
+    """Informs Carer that the prescription has been deleted from the selected patient"""
     prescriptionid = request.args.get('id', '')
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
     username = request.args.get('username', '')
@@ -299,6 +477,7 @@ def deletePrescription_view():
 
 @app.route('/addPrescription', methods=['POST'])
 def addPrescription_view():
+    """Informs Carer that the prescription has been added to the selected patient"""
     result = addPrescription(request.form)
     username = request.form['username']
     if result != "Could not add prescription":
@@ -316,6 +495,7 @@ def addPrescription_view():
 
 @app.route('/updatePrescription', methods=['POST'])
 def updatePrescription_view():
+    """Informs Carer that the prescription has been updated for the selected patient"""
     result = editPrescription(request.form)
     username = request.form['username']
     if result != "Failed":
@@ -331,14 +511,9 @@ def updatePrescription_view():
         flash(username, 'user')
         return redirect(url_for('myPatients'))
 
-@app.route('/prescriptions')
-def  prescriptions():
-    prescriptions = json.loads(getPrescriptions(session['username']))
-    return render_template('prescriptions.html', prescriptions = prescriptions)
-
-
 @app.route('/carerAppointments', methods=['POST', 'GET'])
 def carerappointments():
+  """Form for carer to add a personal appointment, this is not shown to patients."""
   if request.method == 'POST':
 
     private = "True"
@@ -366,6 +541,7 @@ def carerappointments():
 
 @app.route('/inviteeappointments', methods=['POST', 'GET'])
 def inviteeappointments():
+  """Form for carer to add an appointment with a specific patient they are connected with, this will show on the patient's calendar."""
   if request.method == 'POST':
 
     details = {}
@@ -384,6 +560,14 @@ def inviteeappointments():
     added = addInviteeAppointment(details)
     return redirect(url_for("myPatients"))
 
+@app.route('/nhsSearch', methods=['POST', 'GET'])
+def searchNHS():
+  if request.method == 'POST':
+    website = searchNHSDirect(request.form['searchterm'])
+    webbrowser.open(website,new=2)
+  return render_template('searchNHSDirect.html')
+
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('internalError.html'), 500
@@ -398,7 +582,7 @@ def internal_error(error):
 
 @app.errorhandler(400)
 def internal_error(error):
-  return render_template('400RequestMalformed.html'), 400
+  return "Your request appears to be malformed", 400
 
 @app.errorhandler(401)
 def internal_error(error):

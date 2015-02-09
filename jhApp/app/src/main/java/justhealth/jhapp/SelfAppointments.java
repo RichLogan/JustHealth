@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,7 +19,11 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.support.v4.app.NavUtils;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -58,38 +63,34 @@ public class SelfAppointments extends Activity {
         // Set up your ActionBar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Appointments");
+        actionBar.setTitle("Upcoming Appointments");
 
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(actionBarLayout);
+        getUpcomingAppointments();
+    }
 
-        // You customization
-        final int actionBarColor = getResources().getColor(R.color.action_bar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(actionBarColor));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_self_appointments, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-
-        final Button addAppointment = (Button) findViewById(R.id.addAppointment);
-        addAppointment.setText("Add");
-        addAppointment.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                Intent add = new Intent(SelfAppointments.this, CreateSelfAppointment.class);
-                startActivity(add);
-            }
-        });
-
-
-        final Button actionViewMore = (Button) findViewById(R.id.more);
-        actionViewMore.setText("Archived");
-        actionViewMore.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.archived:
                 Intent archived = new Intent(SelfAppointments.this, SelfArchivedAppointments.class);
                 archived.putExtra("appointments", getApps.toString());
                 startActivity(archived);
-            }
-        });
-
-
-        getUpcomingAppointments();
+                return true;
+            case R.id.add:
+                startActivity(new Intent(SelfAppointments.this, CreateSelfAppointment.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 
@@ -148,14 +149,16 @@ public class SelfAppointments extends Activity {
                 Date now = new Date();
                 if (appDateTime.after(now)) {
 
-                    Button app = new Button(this);
-                    final int buttonColour = getResources().getColor(R.color.button);
-                    app.setBackgroundDrawable(new ColorDrawable(buttonColour));
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+                    Button app = new Button(newContext);
+                    app.setBackgroundColor(Color.rgb(51, 122, 185));
                     app.setText(name + " " + startDate + " " + startTime);
                     LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+
                     layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                     LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
+                    center.setMargins(0,30,0,0);
                     center.gravity = Gravity.CENTER;
                     app.setLayoutParams(center);
 

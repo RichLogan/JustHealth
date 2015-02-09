@@ -16,9 +16,9 @@ Web Application
 
 *Creating personal appointment*
 
-1. Click on the appointment tile
+1. Click on the appointments link on the home page
 
-2. On the appointment page click the create appointment tab
+2. On the appointment page click the create appointment 
 
 3. To create an appointment you are required to fill in the fields:
   - Title- name of the appointment (text)
@@ -46,7 +46,7 @@ Web Application
 
 *Creating a patients appointment*
 
-1. Click on the 'my patients' tile on the home page
+1. Click on the 'my patients' link on the home page
 
 2. Click on the patients name which you want to create and appointment for
 
@@ -77,7 +77,7 @@ Web Application
 
 **Patient:**
 
-1. Click on the appointment tile
+1. Click on the appointment link on the home page
 
 2. On the appointment page click the 'create' tab
 
@@ -116,7 +116,7 @@ Web Application
 
 *Edit a personal appointment*
 
-1. Click on the calendar icon on the home screen.
+1. Click on the link 'view appointments' on the home screen.
 
 2. Find the appointment you wish to edit and click on it.
 
@@ -182,7 +182,7 @@ To delete a patients appointment you created
 **Patient:**
 *A patient can only edit their own appointments*
 
-1. Click on the calendar icon on the home page
+1. Click on the 'view all appointments' link on the home page
 
 2. Find the appointment you wish to delete and click on it
 
@@ -196,7 +196,7 @@ To delete a patients appointment you created
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. A carer can view their personal appointments by clicking on the calendar icon on the home screen
+1. A carer can view their personal appointments by clicking on the 'view all appointments' link on the home screen
 
 2. On the tab layout to view upcoming appointment click the upcoming tab
 
@@ -204,7 +204,7 @@ To delete a patients appointment you created
 
 **Patient:**
 
-1. A patient can view their personal appointments by clicking on the calendar icon on the home screen
+1. A patient can view their personal appointments by clicking on the 'view all appointments' link on the home screen
 
 2. On the tab layout to view upcoming appointment click the upcoming tab
 

@@ -1,87 +1,59 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".login">
 
-    <include android:id="@+id/header" layout="@layout/header" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/prescriptionButtons"
+            style="@style/defaultLinearLayout">
 
-            <TextView android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:textColor="@color/header"
-                android:layout_marginTop="50dip"
-                android:layout_marginBottom="20dip"
-                android:id="@+id/patientName"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Add New Prescription"
-                android:id="@+id/addNewPrescription"/>
-
-            <ScrollView
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:id="@+id/prescriptionButtons">
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="@color/header"
+                android:text="Active Prescriptions"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/activePrescriptionButtons"
+                android:orientation="vertical">
+            </LinearLayout>
 
-                    <TextView android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="20dip"
-                        android:layout_marginTop="20dip"
-                        android:textColor="@color/header"
-                        android:text="Active Prescriptions"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/activePrescriptionButtons"
-                        android:orientation="vertical">
-                    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="@color/header"
+                android:text="Upcoming Prescriptions"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/upcomingPrescriptionButtons"
+                android:orientation="vertical">
+            </LinearLayout>
 
-                    <TextView android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="20dip"
-                        android:layout_marginTop="20dip"
-                        android:textColor="@color/header"
-                        android:text="Upcoming Prescriptions"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/upcomingPrescriptionButtons"
-                        android:orientation="vertical">
-                    </LinearLayout>
-
-                    <TextView android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="20dip"
-                        android:layout_marginTop="20dip"
-                        android:textColor="@color/header"
-                        android:text="Expired Prescriptions"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/expiredPrescriptionButtons"
-                        android:orientation="vertical">
-                    </LinearLayout>
-                </LinearLayout>
-            </ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:textColor="@color/header"
+                android:text="Expired Prescriptions"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/expiredPrescriptionButtons"
+                android:orientation="vertical">
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -15,7 +15,7 @@ Web Application
 1.0 Creating the Connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. First click on the tile with a magnifying glass on (3,3).
+1. First click on the 'Search' linke on the left hand side of the home page.
 
 #. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
 
@@ -33,7 +33,7 @@ Web Application
 2.0 Accepting a connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. To accept a connection you need to navigate to the profile page (1,1) and click on the 'connections' tab.
+1. To accept a connection you will recieve a notification at the top of your home page. Or you can click on the 'View connections' link of the left hand side of the home page.
 
 #. Under the heading incoming you will see the request made.
 
@@ -47,7 +47,7 @@ Web Application
 3.0 Cancelling a connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. If you wish to cancel a request, please navigate to the profile page (1,1), the click on the connections tab.
+1. If you wish to cancel a request, please navigate to the home page, the click on the 'view connections' link.
 
 #. Under the heading outgoing you will see the connection pending, to cancle simply click the cancel button at the end of the row.
 
@@ -55,7 +55,7 @@ Web Application
 4.0 Rejecting a connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. To reject a connection you need to navigate to the profile page (1,1) and click on the 'connections' tab.
+1. To reject a connection you need to navigate to the home page, the click on the 'view connections' link.
 
 #. Under the heading incoming you will see the request made.
 
