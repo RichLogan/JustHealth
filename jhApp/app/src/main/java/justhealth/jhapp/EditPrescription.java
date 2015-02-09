@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,6 +36,10 @@ public class EditPrescription extends Activity {
             prescriptionid = extras.getString("prescriptionid");
             targetUsername = extras.getString("targetUsername");
         }
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(targetUsername + "'s Prescriptions");
 
         displayPrescription();
 

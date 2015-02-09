@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,6 +26,10 @@ public class MyPatients extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_patients);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Patients");
 
         String username = getSharedPreferences("account", 0).getString("username", null);
         displayPatients(getPatients(username));
@@ -72,27 +77,26 @@ public class MyPatients extends Activity {
                     patientButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(MyPatients.this);
-                            alert.setTitle("Patient Options")
-                                    .setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (which == 0) {
-                                                Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
-                                                intent.putExtra("targetUsername", username);
-                                                intent.putExtra("firstName", firstname);
-                                                intent.putExtra("surname", surname);
-                                                startActivity(intent);
-                                            }
-                                            else if (which == 1) {
-                                                Intent intent = new Intent(MyPatients.this, CarerPatientAppointments.class);
-                                                intent.putExtra("targetUsername", username);
-                                                intent.putExtra("patientFirstName", firstname);
-                                                intent.putExtra("patientSurname", surname);
-                                                startActivity(intent);
-                                            }
-
+                            alert.setTitle("Patient Options");
+                            alert.setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (which == 0) {
+                                        Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
+                                        intent.putExtra("targetUsername", username);
+                                        intent.putExtra("firstName", firstname);
+                                        intent.putExtra("surname", surname);
+                                        startActivity(intent);
                                     }
-                                });
-                                alert.show();
+                                    else if (which == 1) {
+                                        Intent intent = new Intent(MyPatients.this, CarerPatientAppointments.class);
+                                        intent.putExtra("targetUsername", username);
+                                        intent.putExtra("patientFirstName", firstname);
+                                        intent.putExtra("patientSurname", surname);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
+                            alert.show();
                         }
                     });
                 }

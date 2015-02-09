@@ -1,15 +1,19 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.IconTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -24,6 +28,10 @@ public class EditProfile extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Profile");
 
         // Set update button
         Button update = (Button) findViewById(R.id.editProfileButton);
@@ -48,6 +56,29 @@ public class EditProfile extends Activity {
         loadProfile();
     }
 
+    private void initSpinners() {
+        // Gender Spinner
+        final Spinner genderSpinner = (Spinner) findViewById(R.id.editGender);
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                String selected = genderSpinner.getSelectedItem().toString();
+                IconTextView genderIcon = (IconTextView) findViewById(R.id.genderIcon);
+                if (selected.equals("Male")) {
+                    genderIcon.setText("{fa-male}");
+
+                } else if (selected.equals("Female")) {
+                    genderIcon.setText("{fa-female}");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
+
     private void loadProfile() {
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -62,11 +93,12 @@ public class EditProfile extends Activity {
                 ((TextView) findViewById(R.id.editEmail)).setText(profileInfo.getString("email"));
 
                 // Populate Gender Radio Button
-                ((RadioButton) findViewById(R.id.editGender_female)).setChecked(true);
-                ((RadioButton) findViewById(R.id.editGender_male)).setChecked(false);
+                Spinner spinner = (Spinner) findViewById(R.id.editGender);
                 if (profileInfo.getString("gender").equals("Male")) {
-                    ((RadioButton) findViewById(R.id.editGender_male)).setChecked(true);
-                    ((RadioButton) findViewById(R.id.editGender_female)).setChecked(false);
+                    spinner.setSelection(0);
+                }
+                else {
+                    spinner.setSelection(1);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -87,11 +119,13 @@ public class EditProfile extends Activity {
         parameters.put("email", ((EditText)findViewById(R.id.editEmail)).getText().toString());
 
         //Gender
-        parameters.put("ismale", "false");
-        int idSelected = ((RadioGroup) findViewById(R.id.editGender)).getCheckedRadioButtonId();
-        if (idSelected == R.id.editGender_male) {
-            parameters.put("ismale", "true");
+        String ismale = "false";
+        Spinner gender = (Spinner)findViewById(R.id.editGender);
+        String genderValue = gender.getSelectedItem().toString();
+        if (genderValue.equals("Male")) {
+            ismale = "true";
         }
+        parameters.put("ismale", ismale);
 
         String response = Request.post("editProfile", parameters, getApplicationContext());
 

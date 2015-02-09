@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,6 +19,10 @@ public class ForgotPassword extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgot_password);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Forgot Password");
 
         Button submitButton = (Button) findViewById(R.id.submit);
         submitButton.setOnClickListener(

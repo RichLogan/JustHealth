@@ -171,8 +171,10 @@ class testSearchPatientCarer(unittest.TestCase):
         }
 
         result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('carer','test'))
+
+        result = json.loads(result.text)
         
-        self.assertEqual(result.text, 'a')
+        self.assertEqual(len(result), 0)
 
     def tearDown(self):
         """Delete all tables"""

@@ -5,7 +5,13 @@ from flask.ext.httpauth import HTTPBasicAuth
 from database import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
+from werkzeug import secure_filename
+#used to encrypt and decrypt the password in the method encryptPassword() and decryptPassword()
+from simplecrypt import encrypt, decrypt
+import binascii
 import re
+import os
+import sys
 import datetime
 import smtplib
 import json
@@ -16,11 +22,30 @@ auth = HTTPBasicAuth()
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
+    plaintextPassword = decryptPassword(password)
     try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
-        return sha256_crypt.verify(password, hashedPassword)
+        return sha256_crypt.verify(plaintextPassword, hashedPassword)
     except:
         return False
+
+@app.route("/api/encryptPassword", methods=["POST"])
+def encryptPassword():
+    """Encrypts the users password and returns it to them"""
+    #used so that we are able to store the encrypted users password in android SharedPreferences
+    plaintext = request.form['password']
+    cipherText = encrypt(app.secret_key, plaintext)
+    stringCipher = binascii.hexlify(cipherText)
+    return stringCipher
+
+
+def decryptPassword(cipherText):
+    """Decrypts the users password and returns it so that we are able to authenticate them"""
+    #used so that we are able to store the encrypted users password in android SharedPreferences
+    bytesCipher = binascii.unhexlify(cipherText)
+    plaintext = decrypt(app.secret_key, bytesCipher)
+    return plaintext
+
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -67,6 +92,10 @@ def registerUser():
     # Encrypt password with SHA 256
     profile['password'] = sha256_crypt.encrypt(profile['password'])
 
+    isMale = False
+    if profile['ismale'] == "true":
+        isMale = True
+
     #Check for existing username
     if Client.select().where(Client.username == profile['username']).count() != 0:
       return "Username already taken"
@@ -93,7 +122,7 @@ def registerUser():
         username = profile['username'],
         firstname = profile['firstname'],
         surname = profile['surname'],
-        ismale = profile['ismale'],
+        ismale = isMale,
     )
 
     # Build insert password query
@@ -275,45 +304,102 @@ def getAccountInfo(username):
     result['username'] = user.username.username
     result['email'] = user.username.email
     result['dob'] = str(user.username.dob)
+    result['profilepicture'] = user.username.profilepicture
     if user.ismale:
         result['gender'] = 'Male'
     else:
         result['gender'] ='Female'
     return json.dumps(result)
 
+@app.route('/api/setProfilePicture', methods=['POST'])
+def setProfilePicture():
+    return setProfilePicture(request.files)
+
+def setProfilePicture(details):
+    dest = "/static/images/profilePictures"
+    allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
+
+    file = details['image']
+
+    if file and ('.' in file.filename and file.filename.rsplit('.', 1)[1] in allowedExtension):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(dest, filename))
+        return filename
+    return False
+
 @app.route('/api/editProfile', methods=['POST'])
 @auth.login_required
 def editProfile():
-    return editProfile(request.form)
+    return editProfile(request.form, request.files)
 
-def editProfile(details):
+def editProfile(profile, picture):
     user = None
     # What type of user are we dealing with?
     try:
-        user = Patient.select().join(Client).where(Client.username==details['username']).get()
+        user = Patient.select().join(Client).where(Client.username==profile['username']).get()
     except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==details['username']).get()
+        user = Carer.select().join(Client).where(Client.username==profile['username']).get()
 
     # Access to their corresponding Client entry
     clientObject = Client.select().where(Client.username == user.username).get()
 
     gender = False
-    if details['ismale'] == "true":
+    if profile['ismale'] == "true":
         gender = True
 
     # Update
-    user.firstname = details['firstname']
-    user.surname = details['surname']
+    user.firstname = profile['firstname']
+    user.surname = profile['surname']
     user.ismale = gender
-    clientObject.dob = details['dob']
-    clientObject.email = details['email']
-    
+    clientObject.dob = profile['dob']
+    clientObject.email = profile['email']
+
+    # Profile Picture Upload
+    allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
+    file = picture['image']
+    filename = file.filename
+    fileExtension = filename.rsplit('.', 1)[1]
+    if file and ('.' in filename and fileExtension in allowedExtension):
+        filename = secure_filename(getSerializer().dumps(filename)) + "." + fileExtension
+        file.save(os.path.join(app.config['PROFILE_PICTURE'], filename))
+        clientObject.profilepicture = filename
+
     # Execute Updated
     with database.transaction():
         user.save()
         clientObject.save()
         return "Edit Successful"
     return "Failed"
+
+@app.route('/api/changePassword', methods=['POST'])
+@auth.login_required
+def changePasswordAPI():
+    return changePasswordAPI(request.form)
+
+def changePasswordAPI(details):
+    """Allows a user to change their password. POST [username, oldpassword, newpassword]"""
+    try:
+        currentPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == details['username']) & (uq8LnAWi7D.iscurrent==True))
+        # If old password is correct
+        if sha256_crypt.verify(details['oldpassword'], currentPassword.password):
+            # Invalidate Old Password
+            currentPassword.iscurrent = False
+        
+            # Insert New Password
+            newPassword = uq8LnAWi7D.insert(
+                username = details['username'],
+                password = sha256_crypt.encrypt(details['newpassword']),
+                iscurrent = 'TRUE',
+                expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
+            )
+
+            # Execute
+            with database.transaction():
+                currentPassword.save()
+                newPassword.execute()
+                return "Password changed"
+        else: return "Incorrect password"
+    except: return "User does not exist"
 
 ####
 # Account Helper Functions
@@ -419,6 +505,21 @@ def sendPasswordResetEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
+def sendContactUs(details):
+    """Sends email to justhealth when a user has a question"""
+    #Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build Message
+    sender = "'JustHealth User Question' <justhealth@richlogan.co.uk>"
+    cc = Client.get(username = details['username']).email
+    recipient = 'justhealth@richlogan.co.uk'
+    subject = "JustHealth User Question"
+    message = details['message']
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 ####
 # Search Patient Carer
@@ -573,14 +674,13 @@ def deleteConnection(details):
         instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
-        return "True"
+            return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
         instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
         with database.transaction():
             instance.delete_instance()
-        return "True"
-    else:
-        return "False"
+            return "True"
+    return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
@@ -590,6 +690,12 @@ def cancelRequest():
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
     try:
+        instance = Relationship.select().where(Relationship.requestor == user).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "True"
+    except RelationshipDoesNotExist:
+        instance = Relationship.select().where(Relationship.target == connection).get()
         with database.transaction():
             instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
             instance.delete_instance()
@@ -602,6 +708,7 @@ def cancelRequest(details):
                 return "True"
         except:
             return "False"
+    return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
 @auth.login_required
@@ -706,8 +813,6 @@ def addPatientAppointment(details):
   
   return appId
 
-  
-
 @app.route('/api/addInviteeAppointment', methods=['POST'])
 @auth.login_required
 def addInviteeAppointment():
@@ -786,7 +891,6 @@ def getAllAppointments(loggedInUser, targetUser):
 
   return json.dumps(allAppointments)
 
-
 #deletes an appointment
 @app.route('/api/deleteAppointment', methods=['POST'])
 @auth.login_required
@@ -859,7 +963,6 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
 
   return "Appointment Updated"
 
-
 @app.route('/api/addMedication', methods=['POST'])
 @auth.login_required
 def addMedication():
@@ -929,7 +1032,6 @@ def addPrescription(details):
             return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
-
 
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
@@ -1030,6 +1132,18 @@ def getPrescription(details):
     prescription['enddate'] = str(prescription['enddate'])
     return json.dumps(prescription)
 
+
+@app.route('/api/searchNHSDirectWebsite', methods=['POST'])
+@auth.login_required
+def searchNHSDirect():
+    return searchNHSDirect(request.form['searchterms'])
+
+def searchNHSDirect(search):
+    newTerm = search.replace(" ", "+")
+    website = "http://www.nhs.uk/Search/Pages/Results.aspx?___JSSniffer=true&q="
+    searchWeb = website + newTerm
+    return searchWeb
+
 @app.route('/api/getDeactivateReasons', methods=['POST','GET'])
 @auth.login_required
 def getDeactivateReasons():
@@ -1064,5 +1178,4 @@ def addAndroidEventId():
   dbId = request.form['dbid']
   androidId = request.form['androidid']
   addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
-
   return "Android ID added to database"

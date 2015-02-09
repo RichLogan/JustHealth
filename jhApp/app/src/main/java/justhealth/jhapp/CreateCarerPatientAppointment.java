@@ -53,13 +53,7 @@ public class CreateCarerPatientAppointment extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_carer_patient_appointment);
-        // Set up your ActionBar
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Create Appointment");
-        // You customization
-        final int actionBarColor = getResources().getColor(R.color.action_bar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(actionBarColor));
+
 
         Button createAppointment = (Button) findViewById(R.id.buttonAppointment);
         createAppointment.setOnClickListener(
@@ -76,9 +70,10 @@ public class CreateCarerPatientAppointment extends Activity {
         String firstName = create.getStringExtra("firstName");
         String surname = create.getStringExtra("surname");
 
-        //setting the title of the page
-        TextView appointmentWith = (TextView) findViewById(R.id.appointmentWith);
-        appointmentWith.setText("Create appointment with " + firstName + " " + surname);
+        // Set up your ActionBar
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Create Appointment with " + firstName + " " + surname);
 
     }
 

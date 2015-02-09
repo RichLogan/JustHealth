@@ -14,9 +14,9 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Patient:**
 
-1. Click on the medicine flask on the home page
+1. All active prescriptions can be viewed on the home page under the prescriptions heading
 
-2. This page then lists all the prescriptions you are currently taking
+2. This lists all the prescriptions you are currently taking
 
 3. To find out more click on the name of the drug
 
@@ -27,7 +27,7 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients tile
+1. On the home screen click on the my patients link
 
 2. Click on the patient you wish to add a prescription for
 
@@ -69,7 +69,7 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients tile
+1. On the home screen click on the my patients link
 
 2. Click on the patient you wish to add a prescription for
 
@@ -89,7 +89,7 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients tile
+1. On the home screen click on the my patients link
 
 2. Click on the patient you wish to add a prescription for
 
@@ -111,7 +111,7 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Patient:**
 
-1. Click on the medicine flask on the home page
+1. Click on the medicine box on the home page
 
 2. This page then lists all the prescriptions you are currently taking
 
