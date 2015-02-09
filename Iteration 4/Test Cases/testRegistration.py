@@ -113,7 +113,6 @@ class testRegistration(unittest.TestCase):
         # self.assertEqual(testDatabase.Client.select().count(), 0)
         # payload['email'] = "justhealth@richlogan.co.uk"
 
-
     def testDataTypes(self):
         """Inserting incorrect data types"""
 
@@ -133,23 +132,10 @@ class testRegistration(unittest.TestCase):
         # Date of birth
         payload['dob'] = "aaa" #Should be date format
         registration = requests.post("http://127.0.0.1:9999/api/registerUser", data=payload)
+        # Produces Data Error
         self.assertEqual(registration.text, "Incorrect data type")
         self.assertEqual(testDatabase.Client.select().count(), 0)
         payload['dob'] = "01/01/1991"
-
-        # isMale
-        payload['isMale'] = "aaa" #Should be boolean
-        registration = requests.post("http://127.0.0.1:9999/api/registerUser", data=payload)
-        self.assertEqual(registration.text, "Incorrect data type")
-        self.assertEqual(testDatabase.Client.select().count(), 0)
-        payload['isMale'] = "true"
-
-        # terms
-        payload['terms'] = "aaa" #Should be 'on'
-        registration = requests.post("http://127.0.0.1:9999/api/registerUser", data=payload)
-        self.assertEqual(registration.text, "Incorrect data type")
-        self.assertEqual(testDatabase.Client.select().count(), 0)
-        payload['terms'] = "on"
 
     def tearDown(self):
         """Delete all tables"""

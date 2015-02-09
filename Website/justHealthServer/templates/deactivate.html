@@ -1,9 +1,9 @@
 {% extends "template.html" %}
 
-{% block title %}Account{% endblock %}
+{% block title %}Settings{% endblock %}
 
 {% block scriptsAndStyles %}
-<!--javaScript to confirm a users deactivation -->
+<!--JavaScript to confirm a users deactivation -->
 <script>
 $(document).ready(function() {
 	$("#deactivate").submit(function(e) {
@@ -16,77 +16,96 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
+<fieldset class ="form-container">
+	<i class="fa fa-warning headingIcon pull-left"></i><h4> Deactivate your account </h4>
+	<hr>
+	<div>
+		<!--Tab Headers -->
+		<ul class="nav nav-pills nav-justified" role="tablist">
+    		<li role="presentation"><a href="/settings" aria-controls="settings">Account Settings</a></li>
+<!--    		<li role="presentation"><a href="/security" aria-controls="security">Security & Privacy</a></li> -->
+    		<li role="presentation"><a href="/faq" aria-controls="faq">FAQs</a></li>
+		</ul>
+		<hr>
+		<br />
 
-<h2>Deactivate account</h2>
+		<div id="deactivate">
+			{% if message != null %}
+			<div class="alert alert-{{type}} alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				{{message}}
+			</div>
+			{% endif %}
+			
+			<fieldset class="deactivate">
+			<!--Form for users to fill in details why they are deactivating -->
+			<form name="deactivate" action="/deactivate" id="deactivate" method="POST">
 
-	{% if message != null %}
-		<div class="alert alert-{{type}} alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-			{{message}}
-		</div>
-	{% endif %}
-	<!--Form for users to fill in details why they are deactivating -->
-	<form name="deactivate" action="/deactivate" id="deactivate" method="POST">
-
-		<input type="hidden" name="username" value="{{user}}">
-		<!--Drop down list populated from the database of reasons why you may deactivate -->
-		<div class="form-group">
-			<select name="reason" class="form-control">
-				<option class="placeholder" disabled selected>Please select a reason</option>
-				{% for reason in reasons %}
-					<option>{{reason.reason}}</option>
-				{% endfor %}
-			</select>
-		</div>
-
-		<div class="form-group">
-			<textarea name="comments" id="comments" class="form-control" placeholder="Any comments..."></textarea>
-		</div>
-
-		<div class="form-group">
-			<input type="checkbox" name="deletecheckbox"> Please check the box if you want us to delete your data
-			<br />
-			<a class="smallLink" data-toggle="modal" data-target="#keepData"><i class="fa fa-file"></i> Why should we keep your data?</a>
-		</div>
-
-		<div class="form-group">
-			<input class="btn btn-danger pull-right" id="deactivateConfirm" type="submit" value="Deactivate">
-		</div>
-	</form>
-
-	<!-- Information Modal -->
-	<div class="modal fade" id="keepData" tabindex="-1" role="dialog" aria-labelledby="keepDataLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="keepDataLabel">What happens to your information</h4>
+				<input type="hidden" name="username" value="{{user}}">
+				<!--Drop down list populated from the database of reasons why you may deactivate -->
+				<fieldset class="deactivateoptions">
+				<div class="form-group">
+					<select name="reason" class="form-control input-sm">
+						<option class="placeholder" disabled selected>Please select a reason</option>
+						{% for reason in reasons %}
+						<option>{{reason.reason}}</option>
+						{% endfor %}
+					</select>
 				</div>
-				<div class="modal-body">
-					<p>
-					We store your information in a completely secure database, if your personal information changes, you may correct or update it by making a change in <a href="/settings">Settings</a> > <a href="/editprofile">Edit Profile</a>.
-					</p>
-					<p>
-					If you wish to deactivate your JustHealth account, we will retain your information for as long as your account is active or is needed to provide you required functionality. We will retain and use your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements.<br/>
-					</p>
-					<p class="bold">
-					If you wish, we can retain your information, there are benefits to doing so.
-					</p>
-					<ul>
-						<li>If you are only temporarily leaving, we will be able to restore your account to the point you left it when you return.</li>
-						<li>If you don’t want us to keep your data, you will have to completely re-register instead of reactivating your account.</li>
-					</ul>
-					<p>
-					If you select to leave your information with us, you can contact <a href="mailto:justhealth@justhealth.co.uk">justhealth@justhealth.co.uk</a> if you change your mind.
-					</p>
-					<p>
-					We promise to notify you of any changes to our privacy policy or to the way your information is stored.
-					</p>
+			</fieldset>
+
+				<div class="form-group">
+					<textarea name="comments" id="comments" class="form-control input-sm" placeholder="Any comments..."></textarea>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+				<div class="form-group">
+					<input type="checkbox" name="deletecheckbox"> Please check the box if you want us to delete your data
+					<br />
+					<a class="smallLink" data-toggle="modal" data-target="#keepData"><i class="fa fa-file"></i> Why should we keep your data?</a>
+				</div>
+
+				<div class="form-group">
+					<input class="btn btn-danger pull-right" id="deactivateConfirm" type="submit" value="Deactivate">
+				</div>
+			</form>
+			</fieldset>
+
+			<!-- Information Modal -->
+			<div class="modal fade" id="keepData" tabindex="-1" role="dialog" aria-labelledby="keepDataLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="keepDataLabel">What happens to your information</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								We store your information in a completely secure database, if your personal information changes, you may correct or update it by making a change in <a href="/settings">Settings</a> > <a href="/editProfile">Edit Profile</a>.
+							</p>
+							<p>
+								If you wish to deactivate your JustHealth account, we will retain your information for as long as your account is active or is needed to provide you required functionality. We will retain and use your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements.<br/>
+							</p>
+							<p class="bold">
+								If you wish, we can retain your information, there are benefits to doing so.
+							</p>
+							<ul>
+								<li>If you are only temporarily leaving, we will be able to restore your account to the point you left it when you return.</li>
+								<li>If you don’t want us to keep your data, you will have to completely re-register instead of reactivating your account.</li>
+							</ul>
+							<p>
+								If you select to leave your information with us, you can <a href="/contactUs">contact us</a> if you change your mind.
+							</p>
+							<p>
+								We promise to notify you of any changes to our privacy policy or to the way your information is stored.
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+
+</fieldset>
 {% endblock %}

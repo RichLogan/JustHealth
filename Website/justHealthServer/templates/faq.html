@@ -1,0 +1,50 @@
+{% extends "template.html" %}
+{% block title %}Settings{% endblock %}
+<!--java Script to load the tab format -->
+{% block scriptsAndStyles %}
+<script>
+$(document).ready(function(){
+  $("p").each(function() {
+    var x = $(this)
+     $(this).prev().click(function(){
+      x.toggle(250);
+    });
+  });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<fieldset class ="form-container">
+  <i class="fa fa-question headingIcon pull-left"></i><h4>Frequently Asked Questions</h4>
+  <hr>
+    <ul class="nav nav-pills btn-margin nav-justified" role="navigation">
+      <li role="presentation"><a href="/settings" aria-controls="settings">Account Settings</a></li>
+<!--      <li role="presentation"><a href="/security" aria-controls="security">Security & Privacy</a></li> -->
+      <li role="presentation" class="active"><a href="/faq" aria-controls="faq">FAQs</a></li>
+    </ul>
+    <hr>
+    <br/>
+    <!--toggles list of questions and answers for FAQ's -->
+    <div id="privacy">
+        <p class="italic"> Can't find the answer you're looking for? Please <a href="/contactUs">contact us</a> with your question!</p></br>
+        <ul>
+          <li id="toggle" class="bold"> Who can connect with me? </li>
+          <p style="display: none;">Patient: <span class="italic">only carers can search for and connect with you</span></br>
+          Carer: <span class="italic">only patients can search for and connect with you</span></p></br>
+          <li id="toggle" class="bold"> Who can see my information? </li>
+          <p style="display: none;">Patient: <span class="italic">only you and your carer can see your data</span></br>
+          Carer: <span class="italic">your patients can only see your username, firstname and surname</span></p></br>
+          <li id="toggle" class="bold"> Where is my data stored? </li>
+          <p style="display: none;">All your data is stored on the secure JustHealth database. If you would like more information on our security settings, please <a href="/contactUs">contact us</a></p></br>
+          <li id="toggle" class="bold"> How can I edit and delete information? </li>
+          <p style="display: none;">Your profile details, appointments and prescriptions can all be edited and deleted by clicking on the item and clicking the appropriate button</p></br>
+          <li id="toggle" class="bold"> How can I delete my information from the JustHealth database? </li>
+          <p style="display: none;">To delete all the information that we have stored for you, you need to deactivate your account. Just check the box to remove all your information when you do so</p></br>
+          <li id="toggle" class="bold"> How can I leave JustHealth? </li>
+          <p style="display: none;">To deactivate your account, go to <a href="/settings" class="bold">Account Settings</a> or <a href="/deactivate" class="bold">Deactivate Account</a></strong></p>
+        </ul>
+    </div>
+</fieldset>
+
+{% endblock %}

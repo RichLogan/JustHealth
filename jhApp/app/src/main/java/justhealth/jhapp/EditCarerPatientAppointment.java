@@ -62,9 +62,6 @@ public class EditCarerPatientAppointment extends Activity {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Update Appointment");
-        // You customization
-        final int actionBarColor = getResources().getColor(R.color.action_bar);
-        actionBar.setBackgroundDrawable(new ColorDrawable(actionBarColor));
 
         Button createAppointment = (Button) findViewById(R.id.buttonAppointment);
         createAppointment.setText("Update");
@@ -81,9 +78,6 @@ public class EditCarerPatientAppointment extends Activity {
         Intent intent = getIntent();
         String firstName = intent.getStringExtra("firstName");
         String surname = intent.getStringExtra("surname");
-        //setting the title of the page
-        TextView appointmentWith = (TextView) findViewById(R.id.appointmentWith);
-        appointmentWith.setText("Edit appointment with " + firstName + " " + surname);
     }
 
     private void setCurrentDetails(Intent intent) {

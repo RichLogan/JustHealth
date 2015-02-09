@@ -1,7 +1,9 @@
+from flask import send_from_directory
 from justHealthServer import *
 from api import *
 from functools import wraps
 import json
+import webbrowser
 
 # Decorator Functions
 def needLogin(f):
@@ -15,6 +17,11 @@ def needLogin(f):
     # User logged in, continue as normal
     return f(*args, **kwargs)
   return loginCheck
+
+@app.route('/images/<filename>')
+@needLogin
+def getProfilePicture(filename):
+    return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/')
 @needLogin
@@ -30,10 +37,15 @@ def index():
 @app.route('/home')
 @needLogin
 def home():
-    """Dashboard home page"""
+    """Dashboard home page patient"""
     accountInfo = json.loads(getAccountInfo(session['username']))
     #notifications = json.loads(getNotifications(session['username']))
-    connections = json.loads(json.loads(getConnections(session['username']))['completed'])
+    connections = json.loads(getConnections(session['username']))
+    appointments = json.loads(getAllAppointments(session['username'], session['username']))
+    prescriptions = json.loads(getPrescriptions(session['username']))
+    outgoingConnections = json.loads(connections['outgoing'])
+    incomingConnections = json.loads(connections['incoming'])
+    completedConnections = json.loads(connections['completed'])
     
     # Notification example
     notifications = []
@@ -46,7 +58,54 @@ def home():
     notification2['content'] = "Testing 2"
     notifications.append(notification2)
 
-    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections)
+    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
+
+@app.route('/homecarer')
+@needLogin
+def homecarer():
+    """Dashboard home page carer"""
+    accountInfo = json.loads(getAccountInfo(session['username']))
+    #notifications = json.loads(getNotifications(session['username']))
+    connections = json.loads(getConnections(session['username']))
+    appointments = json.loads(getAllAppointments(session['username'], session['username']))
+    outgoingConnections = json.loads(connections['outgoing'])
+    incomingConnections = json.loads(connections['incoming'])
+    completedConnections = json.loads(connections['completed'])
+    
+    # Notification example
+    notifications = []
+    notification1 = {}
+    notification1['type'] = "danger"
+    notification1['content'] = "Testing"
+    notifications.append(notification1)
+    notification2 = {}
+    notification2['type'] = "success"
+    notification2['content'] = "Testing 2"
+    notifications.append(notification2)
+
+ # Get Patients
+    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+        # Get all patients connected to this user
+        connections = json.loads(getConnections(session['username']))
+        completedConnections = json.loads(connections['completed'])
+        patients = []
+        for connection in completedConnections:
+            if connection['accounttype'] == "Patient":
+                patients.append(connection)
+    # Get all appointments
+    appointmentsMapping = {}
+    # Get all prescriptions
+    activePrescriptions = {}
+    upcomingPrescriptions = {}
+    expiredPrescriptions = {}
+    for patient in patients:
+        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
+
+        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+
+    return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/profile')
 @needLogin
@@ -66,15 +125,18 @@ def profile():
 
 @app.route('/editProfile', methods=['POST', 'GET'])
 def getEditDetails_view():
-  if request.method == 'GET':
-    username = request.args.get('username')
-    getUpdate = json.loads(getAccountInfo(session['username']))
+    if request.method == 'GET':
+        username = request.args.get('username')
+        getUpdate = json.loads(getAccountInfo(session['username']))
     return render_template('editProfile.html', request=getUpdate)
    
 @app.route('/updateProfile', methods=['POST'])
 def editDetails_view():
-    updated = editProfile(request.form)
-    flash(updated, 'success')
+    updated = editProfile(request.form, request.files)
+    if updated == "Failed":
+        flash(updated, 'danger')
+    else:
+        flash(updated, 'success')
     return redirect(url_for('profile'))
 
 @app.route('/termsandconditions')
@@ -100,9 +162,23 @@ def privacy():
 def references():
     return render_template('references.html')
 
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
+
 @app.route('/sitemap')
 def sitemap():
     return render_template('sitemap.html')
+
+@app.route('/contactUs', methods=['POST', 'GET'])
+def contactUs():
+    profileDetails = json.loads(getAccountInfo(session['username']))
+    if request.method == 'POST': 
+        result = sendContactUs(request.form)
+        return render_template('contactUs.html', type="success", message = 'Your message has been sent, please allow up to 24 hours for a response', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
+    else: 
+       return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
+    
 
 @app.route('/settings')
 @needLogin
@@ -113,7 +189,6 @@ def settings():
     elif profileDetails['accounttype'] == "Carer":
         return render_template('settings.html', profileDetails=profileDetails, printaccounttype = 'Carer' )
 
-
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
@@ -122,7 +197,7 @@ def search():
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
         result = json.loads(result)
         return render_template ('search.html',results = result, username= session['username'])
-    return render_template('search.html',username= session['username'])
+    return render_template('search.html', username= session['username'])
 
 @app.route('/deactivate', methods=['POST', 'GET'])
 @needLogin
@@ -172,6 +247,11 @@ def verifyUser(payload):
     verifiedTrue.execute()
     return render_template('login.html', type='success', message='Thank you for verifying your account.')
 
+@app.route('/password')
+def changePassword():
+    """Change password form (when user knows their current password)"""
+    return render_template('changePassword.html')
+
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
     s = getSerializer()
@@ -203,9 +283,14 @@ def login():
         if result == "Authenticated":
             # Valid user, set SESSION
             session["username"] = request.form['username']
+            nameresult = json.loads(getAccountInfo(session['username']))
+            session['firstname'] = nameresult['firstname']
+            session['surname'] = nameresult['surname']
+            fullname = session['firstname'] + " " + session['surname']
+
             return redirect(url_for('index'))
         else:
-            return render_template('login.html', type="danger", message = result)
+            return render_template('login.html', printname = fullname, type="danger", message = result)
     try:
       session['username']
     except KeyError, e:
@@ -475,6 +560,14 @@ def inviteeappointments():
     added = addInviteeAppointment(details)
     return redirect(url_for("myPatients"))
 
+@app.route('/nhsSearch', methods=['POST', 'GET'])
+def searchNHS():
+  if request.method == 'POST':
+    website = searchNHSDirect(request.form['searchterm'])
+    webbrowser.open(website,new=2)
+  return render_template('searchNHSDirect.html')
+
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('internalError.html'), 500
@@ -489,7 +582,7 @@ def internal_error(error):
 
 @app.errorhandler(400)
 def internal_error(error):
-  return render_template('400RequestMalformed.html'), 400
+  return "Your request appears to be malformed", 400
 
 @app.errorhandler(401)
 def internal_error(error):
