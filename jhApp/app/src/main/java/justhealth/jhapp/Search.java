@@ -185,6 +185,14 @@ public class Search extends Activity {
         }
     }
 
+    /**
+     * This method is the action listener that is applied to the Connect button to create a new connection after searching for a user.
+     * It runs the connect method, gives you the option to cancel or connect and changes the text on the button and stops the button being clicked again.
+     *
+     * @param button           the button that the onclick listener is applied too
+     * @param targetUsername the username of the person that they want to remove as a connection
+     */
+
     View.OnClickListener connectOnClick(final Button button, final String targetUsername) {
         return new View.OnClickListener() {
             public void onClick(View view) {
