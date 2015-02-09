@@ -234,6 +234,17 @@ def deactivateAccount(details):
             unverifyUser.execute()
         return "Kept"
 
+@app.route('/api/addDeactivate', methods=['POST'])
+def addDeactivate():
+    deactivateReason['reason'] = request.form['reason']
+    try: 
+        insert = deactivateReason.insert(
+        reason = deactivateReason['reason']
+    )
+    except KeyError, e:
+      return "Error"
+
+
 @app.route('/api/resetpassword', methods=['POST'])
 def resetPassword():
     """Form validation and database checks for user when they forget a password (overrides the old password)"""

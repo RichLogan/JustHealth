@@ -592,11 +592,11 @@ def internal_error(error):
 @app.route('/adminPortal')
 def adminPortal():
     if request.method == 'POST':
-        result = deactivateAccount(request.form)  
-        result = sendContactUs(request.form)  
-        return render_template('adminHome.html', reasons = Deactivatereason.select(), type="success", message = 'Your message has been sent, please allow up to 24 hours for a response')
+        result = addDeactivate(request.form)  
+        return render_template('adminHome.html', type="success", message = 'Your update has been')
     else: 
-       return render_template('adminHome.html', reasons = Deactivatereason.select())
+       return render_template('adminHome.html')
+
 
 @app.route('/allUsers')
 def allUsers():

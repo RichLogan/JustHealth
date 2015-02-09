@@ -14,7 +14,7 @@
 <br />
 <br />
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<ul class="nav nav-pills nav-stacked">
    			<li class="active">
       			<a href="#home" data-toggle="tab">
@@ -50,7 +50,7 @@
    		</ul>
 	</div>
 
-	<div class="col-md-9">
+	<div class="col-md-10">
 		<div id="myTabContent" class="tab-content pull right">
    			<div class="tab-pane fade in active" id="home">
    				<br />
@@ -88,13 +88,12 @@
     	<br />
       	<h5> Please enter below the new deactivation reason you would like to add:</h5>
       	<br />
-      	<form action="/addDeactivate" method="POST">   
-	   	    <!--Input box for new reason -->
+      	<form role="form" action="/addDeactivate" method="POST">   
             <div class="form-group">
-                <input class="form-control input-sm" type="text" name="deactivateNewReason">
+                <input class="form-control input-sm" type="text" name="reason" id="reason">
             </div>
-            <input class="btn btn-success pull-right" type="submit" value="Submit">
-	    </form>
+              <input class="btn btn-success pull-right" type="submit" value="Submit">
+	     </form>
    		</div>
    		<div class="tab-pane fade" id="charts">
     		<br />
