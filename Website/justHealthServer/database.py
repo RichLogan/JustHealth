@@ -138,7 +138,8 @@ class Prescription(BaseModel):
         db_table = 'prescription'
 
 class Notificationtype(BaseModel):
-    typename = PrimaryKeyField()
+    typeid = PrimaryKeyField()
+    typename = CharField(max_length=25)
     typeclass = CharField(max_length=25)
 
     class Meta:
@@ -146,10 +147,11 @@ class Notificationtype(BaseModel):
 
 class Notification(BaseModel):
     notificationid = PrimaryKeyField()
-    content = CharField()
     username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
-    notificationtype = ForeignKeyField(db_column='typename', rel_model=Notificationtype, to_field='typename')
+    notificationtype = ForeignKeyField(db_column='typename', rel_model=Notificationtype)
     dismissed = BooleanField(default=False)
+    relatedObject = IntegerField(null=True)
+    relatedObjectTable = CharField(null=True)
 
     class Meta:
         db_table = 'notification'
