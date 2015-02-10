@@ -1199,3 +1199,4 @@ def createNotificationRecord(user, notificationType, relatedObject):
         createNotification.execute()
         return "True"
     return "False"
+
