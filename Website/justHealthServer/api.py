@@ -606,7 +606,7 @@ def createConnection(details):
     x = int(x)
 
     # Insert into Connection table
-    newConnection = Relationship.insert(
+    newConnection = Relationship.create(
         code = x,
         requestor = currentUser,
         requestortype = currentUser_type,
@@ -614,8 +614,10 @@ def createConnection(details):
         targettype = targetUser_type
     )
     with database.transaction():
-        newConnection.execute()
-    return str(x)
+        newConnection.save()
+        createNotificationRecord(targetUser, "Create Connection", int(newConnection.connectionid))
+        return str(x)
+    return "False"
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 @auth.login_required
@@ -1179,3 +1181,21 @@ def addAndroidEventId():
   androidId = request.form['androidid']
   addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
   return "Android ID added to database"
+
+
+def createNotificationRecord(user, notificationType, relatedObject):
+    #dictionary mapping notificationType to referencing table
+    notificationTypeTable = {}
+    notificationTypeTable['Create Connection'] = "Relationship"
+
+    createNotification = Notification.insert(
+        username = user,
+        notificationtype = notificationType,
+        relatedObjectTable = notificationTypeTable[notificationType], 
+        relatedObject = relatedObject
+    )
+
+    with database.transaction():
+        createNotification.execute()
+        return "True"
+    return "False"
