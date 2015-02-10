@@ -1182,7 +1182,6 @@ def addAndroidEventId():
   addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
   return "Android ID added to database"
 
-
 def createNotificationRecord(user, notificationType, relatedObject):
     #dictionary mapping notificationType to referencing table
     notificationTypeTable = {}
@@ -1199,4 +1198,15 @@ def createNotificationRecord(user, notificationType, relatedObject):
         createNotification.execute()
         return "True"
     return "False"
+
+@app.route('/api/getNotifications', methods=['POST'])
+@auth.login_required
+def getNotifications():
+    return getNotifications(request.form['username'])
+
+def getNotification(username):
+    """Returns all of the notifications that have been associated with a user"""
+    notifications = Notification.select().where(Notification.username == username and Notification.dismissed == False).dicts()
+    return json.loads(notifications)
+
 
