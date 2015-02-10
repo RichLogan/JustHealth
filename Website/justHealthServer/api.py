@@ -1209,7 +1209,7 @@ def getNotifications(username):
     notifications = Notification.select().dicts().where(Notification.username == username and Notification.dismissed == False)
 
     notificationList = []
-    for notication in notifications:
+    for notification in notifications:
         notificationList.append(notification)
 
     return json.loads(notificationList)
