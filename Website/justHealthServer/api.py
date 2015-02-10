@@ -690,24 +690,15 @@ def cancelRequest():
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
     try:
-        instance = Relationship.select().where(Relationship.requestor == user).get()
+        instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
         with database.transaction():
-            instance.delete_instance()
-            return "True"
-    except RelationshipDoesNotExist:
-        instance = Relationship.select().where(Relationship.target == connection).get()
-        with database.transaction():
-            instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
             instance.delete_instance()
             return "True"
     except Relationship.DoesNotExist:
-        try:
-            with database.transaction():
-                instance = Relationship.select().where(Relationship.requestor == details['connection'] and Relationship.target == details['user']).get()
-                instance.delete_instance()
-                return "True"
-        except:
-            return "False"
+        instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "True"
     return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
