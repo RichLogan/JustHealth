@@ -24,6 +24,7 @@
 
     <!--Date, Time Validation-->
     <script type="text/javascript" src="/static/js/moment.js"></script>
+    <script type="text/javascript" src="/static/js/is.min.js"></script>    
 
     <!-- Our resources -->
     {% block CSS %}
@@ -44,19 +45,28 @@
             {% block logoutBtn %}
             <!--<button class="btn btn-default btn-margin pull-right" onclick="javascript:location.href='/logout'">Log out</button>-->
             
-              <a href="#" class="dropdown-toggle pull-right" data-toggle="dropdown" role="button" aria-expanded="false"><i style="color:#FFF" class="fa fa-bars headingIcon"></i></a>
+              <a href="#" class="dropdown-toggle pull-right" style="" data-toggle="dropdown" role="button" aria-expanded="false"><i style="color:#FFF; padding:5px 10px 0px 10px" class="fa fa-bars headingIcon"></i></a>
               <ul class="dropdown-menu dropdown-menu-right" role="menu">
                 <li><a href="/"><i class="fa fa-home sideIcons"></i>  Home</a></li>
-                <li><a href="#"><i class="fa fa-medkit sideIcons"></i>  Prescriptions</a></li>
-                <li><a href="#"><i class="fa fa-calendar sideIcons"></i>  Appointments</a></li>
+
+                {% if session.accounttype == "Patient" %}
+                <li><a href="/prescriptions"><i class="fa fa-medkit sideIcons"></i>  Prescriptions</a></li>
+                {% else %}
+                <li><a href="/myPatients"><i class="fa fa-users sideIcons"></i>  My Patients</a></li>
+                {% endif %}
+
+                {% if session.accounttype == "Patient" %}
+                <li><a href="appointments"><i class="fa fa-calendar sideIcons"></i>  Appointments</a></li>
+                {% else %}
+                <li><a href="carerAppointments"><i class="fa fa-calendar sideIcons"></i>  Appointments</a></li>
+                {% endif %}
+
                 <li><a href="/settings"><i class="fa fa-cog sideIcons"></i>  Settings</a></li>
                 <li class="divider"></li>
                 <li><a href="/logout"><i class="fa fa-sign-out sideIcons"></i>  <span class="bold">Log out</span></a></li>
               </ul>
             
-            {% endblock %}
-            {% block username %}
-            <a href="/profile"><h4 class="headerFooterText pull-right">{{printname}}</h4></a>
+            <a href="/profile"><h4 class="headerFooterText pull-right" style="color:#FFF; padding-top:4px">{{session.firstname}} {{session.surname}}</h4></a>
             {% endblock %}
           </div>
         </nav>
@@ -65,7 +75,7 @@
       <div id="content">
         <fieldset class ="fix">
         {% block content %}{% endblock %}
-      </fieldset>
+        </fieldset>
 
       </div>
       <br />

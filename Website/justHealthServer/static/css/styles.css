@@ -27,6 +27,8 @@ a.runner:active  {color:#FFFFFF; background-color:transparent}
 
 header {
   padding: 10px;
+  height: 7%;
+  background-color:#2272EB;
 }
 
 #mainLogo {
@@ -34,7 +36,6 @@ header {
 }
 
 #navBar {
-  height: 7%;
   background-color:#2272EB;
 }
 
