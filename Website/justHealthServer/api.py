@@ -1206,7 +1206,7 @@ def getNotifications():
 
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user"""
-    notifications = Notification.select().where(Notification.username == username and Notification.dismissed == False).dicts()
+    notifications = Notification.select().dicts().where(Notification.username == username and Notification.dismissed == False)
     return json.loads(notifications)
 
 
