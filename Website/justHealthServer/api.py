@@ -657,6 +657,10 @@ def completeConnection(details):
         # Delete this Relationship instance
         with database.transaction():
             instance.delete_instance()
+            
+            #creates the notification to inform the original requestor
+            createNotificationRecord(requestor, "New Connection", None)
+
         return "Connection to " + requestor + " completed"
     else:
         return "Incorrect code"
@@ -1186,6 +1190,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
     #dictionary mapping notificationType to referencing table
     notificationTypeTable = {}
     notificationTypeTable['Connection Request'] = "Relationship"
+    notificationTypeTable['New Connection'] = ""
 
     createNotification = Notification.insert(
         username = user,
@@ -1222,11 +1227,15 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Connection Request":
         requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
         content = "You have a new connection request from " + requestor.requestor.username
+    if notification['notificationtype'] == "New Connection":
+        content = "You have a new connection, click above to view."
     return content
 
 def getNotificationLink(notification):
     """gets the notification link that will make it clickable"""
     if notification['notificationtype'] == "Connection Request":
+        link = "/profile?go=connections"
+    if notification['notificationtype'] == "New Connection":
         link = "/profile?go=connections"
     return link
 
