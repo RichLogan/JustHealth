@@ -39,24 +39,13 @@ def index():
 def home():
     """Dashboard home page patient"""
     accountInfo = json.loads(getAccountInfo(session['username']))
-    #notifications = json.loads(getNotifications(session['username']))
+    notifications = json.loads(getNotifications(session['username']))
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     prescriptions = json.loads(getPrescriptions(session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
     incomingConnections = json.loads(connections['incoming'])
     completedConnections = json.loads(connections['completed'])
-    
-    # Notification example
-    notifications = []
-    notification1 = {}
-    notification1['type'] = "danger"
-    notification1['content'] = "Testing"
-    notifications.append(notification1)
-    notification2 = {}
-    notification2['type'] = "success"
-    notification2['content'] = "Testing 2"
-    notifications.append(notification2)
 
     return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
 
@@ -65,25 +54,14 @@ def home():
 def homecarer():
     """Dashboard home page carer"""
     accountInfo = json.loads(getAccountInfo(session['username']))
-    #notifications = json.loads(getNotifications(session['username']))
+    notifications = json.loads(getNotifications(session['username']))
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
     incomingConnections = json.loads(connections['incoming'])
     completedConnections = json.loads(connections['completed'])
-    
-    # Notification example
-    notifications = []
-    notification1 = {}
-    notification1['type'] = "danger"
-    notification1['content'] = "Testing"
-    notifications.append(notification1)
-    notification2 = {}
-    notification2['type'] = "success"
-    notification2['content'] = "Testing 2"
-    notifications.append(notification2)
 
- # Get Patients
+    # Get Patients
     if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
         # Get all patients connected to this user
         connections = json.loads(getConnections(session['username']))
