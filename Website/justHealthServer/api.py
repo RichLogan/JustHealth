@@ -1017,7 +1017,7 @@ def addPrescription():
     return addPrescription(request.form)
 
 def addPrescription(details):
-    insertPrescription = Prescription.insert(
+    insertPrescription = Prescription.create(
         username = details['username'],
         medication = details['medication'],
         dosage = details['dosage'],
@@ -1034,7 +1034,8 @@ def addPrescription(details):
 
     try:
         with database.transaction():
-            insertPrescription.execute()
+            insertPrescription.save()
+            createNotificationRecord(details['username'], "Prescription Added", int(insertPrescription.prescriptionid))
             return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
@@ -1191,6 +1192,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable = {}
     notificationTypeTable['Connection Request'] = "Relationship"
     notificationTypeTable['New Connection'] = ""
+    notificationTypeTable['Prescription Added'] = "Prescription"
 
     createNotification = Notification.insert(
         username = user,
@@ -1229,6 +1231,9 @@ def getNotificationContent(notification):
         content = "You have a new connection request from " + requestor.requestor.username
     if notification['notificationtype'] == "New Connection":
         content = "You have a new connection, click above to view."
+    if notification['notificationtype'] == "Prescription Added":
+        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        content = "A new prescription for " + prescription.medication.name + " has been added to your profile."
     return content
 
 def getNotificationLink(notification):
@@ -1237,6 +1242,8 @@ def getNotificationLink(notification):
         link = "/profile?go=connections"
     if notification['notificationtype'] == "New Connection":
         link = "/profile?go=connections"
+    if notification['notificationtype'] == "Prescription Added":
+        link = "/prescriptions"
     return link
 
 def getNotificationTypeClass(notification):
