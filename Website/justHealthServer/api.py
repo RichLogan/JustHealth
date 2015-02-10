@@ -1212,6 +1212,6 @@ def getNotifications(username):
     for notification in notifications:
         notificationList.append(notification)
 
-    return json.loads(notificationList)
+    return json.dumps(notificationList)
 
 
