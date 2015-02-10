@@ -615,7 +615,7 @@ def createConnection(details):
     )
     with database.transaction():
         newConnection.save()
-        createNotificationRecord(targetUser, "Create Connection", int(newConnection.connectionid))
+        createNotificationRecord(targetUser, "Connection Request", int(newConnection.connectionid))
         return str(x)
     return "False"
 
@@ -1185,7 +1185,7 @@ def addAndroidEventId():
 def createNotificationRecord(user, notificationType, relatedObject):
     #dictionary mapping notificationType to referencing table
     notificationTypeTable = {}
-    notificationTypeTable['Create Connection'] = "Relationship"
+    notificationTypeTable['Connection Request'] = "Relationship"
 
     createNotification = Notification.insert(
         username = user,
@@ -1210,8 +1210,43 @@ def getNotifications(username):
 
     notificationList = []
     for notification in notifications:
+        notification['content'] = getNotificationContent(notification)
+        notification['link'] = getNotificationLink(notification)
+        notification['type'] = getNotificationTypeClass(notification)
         notificationList.append(notification)
 
     return json.dumps(notificationList)
+
+def getNotificationContent(notification):
+    """gets the body/content of the notification"""
+    if notification['notificationtype'] == "Connection Request":
+        requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
+        content = "You have a new connection request from " + requestor.requestor.username
+    return content
+
+def getNotificationLink(notification):
+    """gets the notification link that will make it clickable"""
+    if notification['notificationtype'] == "Connection Request":
+        link = "/profile?go=connections"
+    return link
+
+def getNotificationTypeClass(notification):
+    """gets the class which in turn will decide the background colour of the notification"""
+    notificationClass = Notificationtype.select().where(Notificationtype.typename == notification['notificationtype']).get()
+    return notificationClass.typeclass
+
+@app.route('/api/dismissNotification', methods=['POST'])
+@auth.login_required
+def dismissNotification():
+    return dismissNotification(request.form['notificationid'])
+
+def dismissNotification(notificationid):
+    """This sets the dismiss boolean field in the database to true"""
+    dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
+
+    with database.transaction():
+        dismiss.execute()
+        return "True"
+    return "False"
 
 

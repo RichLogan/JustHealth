@@ -540,11 +540,17 @@ def inviteeappointments():
 
 @app.route('/nhsSearch', methods=['POST', 'GET'])
 def searchNHS():
+  """enables the user to be able to search the NHS website"""
   if request.method == 'POST':
     website = searchNHSDirect(request.form['searchterm'])
     webbrowser.open(website,new=2)
   return render_template('searchNHSDirect.html')
 
+@app.route('/dismissNotification', methods=['POST', 'GET'])
+def dismissNotifications():
+    """dismiss the notification by running a method from the API"""
+    if request.method == 'POST':
+        notificationDismiss = dismissNotification(request.form['notificationid'])
 
 @app.errorhandler(500)
 def internal_error(error):

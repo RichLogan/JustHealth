@@ -168,17 +168,19 @@
 	<div class="col-md-9 dashPanel">
 		
 		<!-- Notifications -->
-		{% if notifications %}
-			<div class="well well-sm">
-				<h4>Notifications</h4>
-				{% for notification in notifications %}
-					<div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
-	    				<button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        				{{notification.content}}
-    				</div>
-    			{% endfor %}
-			</div>
-		{% endif %}
+    {% if notifications %}
+      <div class="well well-sm">
+        <h4>Notifications</h4>
+        {% for notification in notifications %}
+          <div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
+              <button type="button" class="close btn btn-danger" data-dismiss="alert" onclick="$.post('/dismissNotification', {'notificationid':'{{notification.notificationid}}'});"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <a href="{{notification.link}}"> <strong>{{notification.notificationtype}}</strong> </a>
+                <br />
+                {{notification.content}}
+            </div>
+          {% endfor %}
+      </div>
+    {% endif %}
 
 		<!-- Main Content -->
 		<fieldset class ="form-container">
