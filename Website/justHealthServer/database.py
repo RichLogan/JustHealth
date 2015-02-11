@@ -20,6 +20,7 @@ class Client(BaseModel):
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
+    profilepicture = CharField(max_length=100, null=True)
     verified = BooleanField()
 
     class Meta:
@@ -137,6 +138,7 @@ class Prescription(BaseModel):
         db_table = 'prescription'
 
 def createAll():
+    """Creates all tables, dropping old instances if they exist"""
     dropAll()
     Client.create_table()
     Carer.create_table()
@@ -152,38 +154,26 @@ def createAll():
     Prescription.create_table()
 
 def dropAll():
+    """Drops all tables providing that they exists"""
     if Client.table_exists():
         Client.drop_table(cascade=True)
-
     if Patient.table_exists():
         Patient.drop_table(cascade=True)
-    
     if Carer.table_exists():
         Carer.drop_table(cascade=True)
-
     if uq8LnAWi7D.table_exists():
         uq8LnAWi7D.drop_table(cascade=True)
-
     if Deactivatereason.table_exists():
         Deactivatereason.drop_table(cascade=True)
-
     if Userdeactivatereason.table_exists():
         Userdeactivatereason.drop_table(cascade=True)
-
     if Relationship.table_exists():
         Relationship.drop_table(cascade=True)
-
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
-
-    if Appointmenttype.table_exists():
-        Appointmenttype.drop_table(cascade=True)
-
     if Appointments.table_exists():
         Appointments.drop_table(cascade=True)
-
     if Medication.table_exists():
         Medication.drop_table(cascade=True)
-
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)

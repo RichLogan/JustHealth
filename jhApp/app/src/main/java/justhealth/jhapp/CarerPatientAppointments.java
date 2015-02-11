@@ -11,12 +11,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -55,31 +60,6 @@ public class CarerPatientAppointments extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_patient_appointments);
 
-        final ViewGroup actionBarLayout = (ViewGroup) getLayoutInflater().inflate(
-                R.layout.appointment_action_bar, null);
-
-        // Set up your ActionBar
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Appointments");
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(actionBarLayout);
-
-
-
-        final Button addAppointment = (Button) findViewById(R.id.addAppointment);
-        addAppointment.setText("Add");
-        addAppointment.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                Intent add = new Intent(CarerPatientAppointments.this, CreateCarerPatientAppointment.class);
-                add.putExtra("patient", patient);
-                add.putExtra("firstName", firstname);
-                add.putExtra("surname", surname);
-                startActivity(add);
-            }
-        });
-
         //Get data passed from MyPatients
 
         final Bundle extras = getIntent().getExtras();
@@ -89,6 +69,11 @@ public class CarerPatientAppointments extends Activity {
             surname = extras.getString("patientSurname");
         }
 
+        // Set up your ActionBar
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(firstname + "'s Appointments");
+
         Button filter = (Button) findViewById(R.id.filter);
         filter.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View view) {
@@ -96,25 +81,42 @@ public class CarerPatientAppointments extends Activity {
             }
         });
 
-        final Button actionViewMore = (Button) findViewById(R.id.more);
-        actionViewMore.setText("Archived");
-        actionViewMore.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
+        getAppointments(patient);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_self_appointments, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.archived:
                 Intent archived = new Intent(CarerPatientAppointments.this, CarerPatientArchivedAppointments.class);
                 archived.putExtra("appointments", getApps.toString());
                 archived.putExtra("patient", patient);
                 archived.putExtra("firstName", firstname);
                 archived.putExtra("surname", surname);
                 startActivity(archived);
-            }
-        });
-
-        //set the name of the patient
-        TextView patientName = (TextView) findViewById(R.id.patientName);
-        patientName.setText(firstname + " " + surname);
-
-        getAppointments(patient);
+                return true;
+            case R.id.add:
+                Intent add = new Intent(CarerPatientAppointments.this, CreateCarerPatientAppointment.class);
+                add.putExtra("patient", patient);
+                add.putExtra("firstName", firstname);
+                add.putExtra("surname", surname);
+                startActivity(add);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
+
 
     private void getAppointments(String targetUsername) {
         //this will not work when API authentication is put in place
@@ -199,14 +201,15 @@ public class CarerPatientAppointments extends Activity {
         Date now = new Date();
         if (appDateTime.after(now)) {
             appointmentHolder = new LinearLayout(this);
-            Button app = new Button(this);
-            final int buttonColour = getResources().getColor(R.color.button);
-            app.setBackgroundDrawable(new ColorDrawable(buttonColour));
+            ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+            Button app = new Button(newContext);
+            app.setBackgroundColor(Color.rgb(51, 122, 185));
             app.setText(name + " " + startDate + " " + startTime);
             appointmentHolder = (LinearLayout) findViewById(R.id.appointments);
             appointmentHolder.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
             LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
+            center.setMargins(0,30,0,0);
             center.gravity = Gravity.CENTER;
             app.setLayoutParams(center);
 

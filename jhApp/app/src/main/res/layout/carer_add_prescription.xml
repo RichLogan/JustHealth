@@ -2,184 +2,191 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    tools:context=".login"
+    android:background="@color/background">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Patient Medication"
-                android:textSize="20dp"
-                android:textColor="@color/header"
-                android:layout_marginTop="50dip"
-                android:layout_marginBottom="20dip"/>
+            android:orientation="vertical"
+            android:background="@color/off_white">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/insertAlert"/>
+                android:id="@+id/addmedication"
+                android:layout_marginTop="15sp"
+                style="@style/defaultLinearForm">
 
+                <!-- Medication -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/medication"
+                        android:hint="Medication Name"
+                        style="@style/spinnerWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Quantity -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Quantity (To Take at once)"
+                        android:id="@+id/quantity"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Dosage Value -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Dosage Value (e.g. 100)"
+                        android:id="@+id/dosageValue"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Dosage Unit -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Dosage Unit (e.g. Mg)"
+                        android:id="@+id/dosageUnit"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Frequency -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Frequency (e.g. 1)"
+                        android:inputType="time"
+                        android:id="@+id/frequency"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Frequency Unit -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Frequency Unit (e.g. Daily)"
+                        android:id="@+id/frequencyUnit"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Dosage Form -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Dosage Form (e.g. Tablet)"
+                        android:id="@+id/type"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Start Date -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Start Date"
+                        android:inputType="date"
+                        android:id="@+id/startDate"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-calendar}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- End Date -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="End Date"
+                        android:inputType="date"
+                        android:id="@+id/endDate"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-calendar}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Stock Left -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Patient's Current Stock"
+                        android:id="@+id/stockLeft"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-medkit}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+
+                <!-- Observations -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="Observations"
+                        android:id="@+id/observations"
+                        style="@style/inputWithIcon"/>
+                    <IconTextView
+                        android:text="{fa-question}"
+                        style="@style/inputIcon" />
+                </RelativeLayout>
+
+                <!-- Repeat? -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Repeat Prescription"
+                        android:id="@+id/repeat"
+                        android:checked="false" />
+                </RelativeLayout>
+
+                <!-- Add -->
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add"
+                    android:id="@+id/addPrescription"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
         </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-                <ScrollView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-                    <LinearLayout
-                        android:id="@+id/addmedication"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="vertical">
-
-                        <Spinner
-                            android:textSize="20sp"
-                            android:id="@+id/medication"
-                            android:hint="Medication Name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Quantity (To Take at once)"
-                            android:layout_below="@+id/medication"
-                            android:textSize="20sp"
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/quantity"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Dosage Value (e.g. 100)"
-                            android:layout_below="@+id/quantity"
-                            android:textSize="20dip"
-
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/dosageValue"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Dosage Unit (e.g. Mg)"
-                            android:layout_below="@+id/dosageValue"
-                            android:textSize="20dip"
-
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/dosageUnit"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Frequency (e.g. 1)"
-                            android:inputType="time"
-                            android:layout_below="@+id/DosageUnit"
-                            android:textSize="20dip"
-
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/frequency"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Frequency Unit (e.g. Daily)"
-                            android:layout_below="@+id/frequency"
-                            android:textSize="20dip"
-
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/frequencyUnit"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Dosage Form (e.g. Tablet)"
-                            android:layout_below="@+id/frequencyUnit"
-                            android:textSize="20dip"
-
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/type"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Start Date"
-                            android:inputType="date"
-                            android:layout_below="@+id/frequency"
-                            android:textSize="20dip"
-
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/startDate"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="End Date"
-                            android:inputType="date"
-                            android:layout_below="@+id/endDate"
-                            android:textSize="20dip"
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/endDate"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Patient's Current Stock"
-                            android:layout_below="@+id/endTime"
-                            android:textSize="20dip"
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/stockLeft"/>
-
-                        <EditText android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Observations"
-                            android:layout_below="@+id/StockLeft"
-                            android:textSize="20dip"
-                            android:layout_marginBottom="5dip"
-                            android:id="@+id/observations"/>
-
-                        <CheckBox
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Repeat Prescription"
-                            android:id="@+id/repeat"
-                            android:checked="false" />
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Add"
-                            android:id="@+id/addPrescription"
-                            android:layout_above="@+id/scrollView"
-                            android:layout_gravity="center_horizontal" />
-                    </LinearLayout>
-                </ScrollView>
-            </FrameLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--Link to Terms and Conditions-->
-    <TextView android:id="@+id/link_to_terms"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Terms and Conditions"
-        android:gravity="center"
-        android:textSize="15dip"
-        android:textColor="#FFFFFF"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/header"/>
+    </ScrollView>
 </RelativeLayout>

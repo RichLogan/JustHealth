@@ -11,13 +11,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -53,36 +58,37 @@ public class SelfArchivedAppointments extends Activity {
         // Set up your ActionBar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Archived Appointments");
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(actionBarLayout);
+        actionBar.setTitle("Past Appointments");
 
         // You customization
         final int actionBarColor = getResources().getColor(R.color.action_bar);
         actionBar.setBackgroundDrawable(new ColorDrawable(actionBarColor));
 
-
-        final Button addAppointment = (Button) findViewById(R.id.addAppointment);
-        addAppointment.setText("Add");
-        addAppointment.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                Intent add = new Intent(SelfArchivedAppointments.this, CreateSelfAppointment.class);
-                startActivity(add);
-            }
-        });
-
-
-        final Button actionViewMore = (Button) findViewById(R.id.more);
-        actionViewMore.setText("Upcoming");
-        actionViewMore.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View view) {
-                Intent upcoming = new Intent(SelfArchivedAppointments.this, SelfAppointments.class);
-                startActivity(upcoming);
-            }
-        });
-
         printArchivedAppointments();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_self_archived_appointments, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.upcoming:
+                //Intent future = new Intent(SelfArchivedAppointments.this, SelfAppointments.class);
+                finish();
+                return true;
+            case R.id.add:
+                startActivity(new Intent(SelfArchivedAppointments.this, CreateSelfAppointment.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void printArchivedAppointments() {
@@ -130,15 +136,16 @@ public class SelfArchivedAppointments extends Activity {
                 Date now = new Date();
                 if (appDateTime.before(now)) {
 
-                    Button app = new Button(this);
-                    final int buttonColour = getResources().getColor(R.color.button);
-                    app.setBackgroundDrawable(new ColorDrawable(buttonColour));
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+                    Button app = new Button(newContext);
+                    app.setBackgroundColor(Color.rgb(51, 122, 185));
                     app.setText(name + " " + startDate + " " + startTime);
                     LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
                     layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                     LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
                     center.gravity = Gravity.CENTER;
+                    center.setMargins(0,30,0,0);
                     app.setLayoutParams(center);
 
                     System.out.println("onclick listener applied");
