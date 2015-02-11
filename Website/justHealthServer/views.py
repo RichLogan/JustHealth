@@ -290,7 +290,7 @@ def login():
 
             return redirect(url_for('index'))
         else:
-            return render_template('login.html', printname = fullname, type="danger", message = result)
+            return render_template('login.html', type="danger", message = result)
     try:
       session['username']
     except KeyError, e:
