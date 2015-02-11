@@ -591,11 +591,12 @@ def internal_error(error):
 #Admin Portal pages
 @app.route('/adminPortal')
 def adminPortal():
+    allUsers = json.loads(getAllUsers())
     if request.method == 'POST':
         result = deactivateAccount(request.form)  
-        return render_template('adminHome.html', reasons = Deactivatereason.select())
+        return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers)
     else: 
-       return render_template('adminHome.html', reasons = Deactivatereason.select())
+       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers)
 
 @app.route('/addNewDeactivate', methods=['POST'])
 def addNewDeactivate():
@@ -617,26 +618,3 @@ def addNewMedication():
     else:   
        return render_template('adminHome.html')
 
-@app.route('/allUsers')
-def allUsers():
-  return render_template('adminAllUsers.html')
-
-@app.route('/activeUsers')
-def adminUsers():
-  return render_template('adminActiveUsers.html')
-
-@app.route('/adminMedication')
-def adminMedication():
-  return render_template('adminMedication.html')
-
-@app.route('/adminUsage')
-def adminUsage():
-  return render_template('adminCharts.html')
-
-@app.route('/adminSettings')
-def adminSettings():
-  return render_template('adminSettings.html')
-
-@app.route('/adminDeactivate')
-def adminDeactivate():
-  return render_template('adminDeactivate.html')

@@ -1203,3 +1203,39 @@ def newMedication(medication):
         return "True"
     return "False"
 
+@app.route('/api/getAllUsers', methods=['POST'])
+@auth.login_required
+def getAllUsers():
+    return getAllUsers()
+
+def getAllUsers():
+    """Get All information from client and patient/carer table"""
+    results = []
+    for u in Client.select(Client.username):
+        userDetails = {}
+        try:
+          user = Patient.select().join(Client).where(Client.username==u.username).get()
+          userDetails['accounttype'] = "Patient"
+        except Patient.DoesNotExist:
+            user = Carer.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Carer"
+
+        userDetails['firstname'] = user.firstname
+        userDetails['surname'] = user.surname
+        userDetails['username'] = user.username.username
+        userDetails['email'] = user.username.email
+        userDetails['dob'] = str(user.username.dob)
+        userDetails['accountdeactivated'] = user.username.accountdeactivated
+        userDetails['accountlocked'] = user.username.accountlocked
+        userDetails['loginattempts'] = user.username.loginattempts
+        userDetails['verified'] = user.username.verified
+        if user.ismale:
+            userDetails['gender'] = 'Male'
+        else:
+            userDetails['gender'] ='Female'
+        results.append(userDetails)
+    return json.dumps(results)
+
+
+
+
