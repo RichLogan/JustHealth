@@ -286,7 +286,7 @@ def resetPassword():
 
 @app.route('/api/images/<filename>')
 @auth.login_required
-def getProfilePicture(filename):
+def getProfilePictureAPI(filename):
     return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/api/getAccountInfo', methods=['POST'])
