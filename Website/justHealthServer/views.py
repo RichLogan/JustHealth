@@ -597,12 +597,24 @@ def adminPortal():
     else: 
        return render_template('adminHome.html', reasons = Deactivatereason.select())
 
-@app.route('/addDeactivate')
-def addDeactivate():
+@app.route('/addNewDeactivate', methods=['POST'])
+def addNewDeactivate():
     if request.method == 'POST':
         result = addDeactivate(request.form)  
-        return render_template('adminHome.html',type="success", reason = 'Your update has been added')
+        if result == "True":
+            return render_template('adminHome.html',type="success", message = 'Deactivate Reason Added')
+        else: render_template('adminHome.html',type="warning", message = 'Update failed')
     else: 
+       return render_template('adminHome.html')
+
+@app.route('/addNewMedication', methods=['POST'])
+def addNewMedication():
+    if request.method == 'POST':
+        result = newMedication(request.form)  
+        if result == "True":
+            return render_template('adminHome.html',type="success", message = 'Medication Added')
+        else: render_template('adminHome.html',type="warning", message = 'Update failed')
+    else:   
        return render_template('adminHome.html')
 
 @app.route('/allUsers')

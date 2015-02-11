@@ -43,161 +43,154 @@
       }
     </script>
 
-
 <br/ >
 <fieldset class="form-admin">
-	   <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">JustHealth Information Management Portal</h4>
-<br />
-<br />
-<br />
-<div class="row">
-	<div class="col-md-2">
-		<ul class="nav nav-pills nav-stacked">
-   			<li class="active">
-      			<a href="#home" data-toggle="tab">
-         			Home
-      			</a>
-   			</li>
-   			<li><a href="#users" data-toggle="tab">Users</a></li>
-
-   			<li class="dropdown">
-      			<a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">
-      				Medication 
-         			<b class="caret"></b>
-      			</a>
-      			<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-         			<li><a href="#currentMedication" tabindex="-1" data-toggle="tab">Current Medication</a></li>
-         			<li><a href="#addNewMedicaion" tabindex="-1" data-toggle="tab">Add New Medication</a></li>
-      			</ul>
-   			</li>
-    		
-    		<li class="dropdown">
-      			<a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">
-      				Deactivate account  
-         			<b class="caret"></b>
-      			</a>
-      			<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-         			<li><a href="#deactivateStats" tabindex="-1" data-toggle="tab">Statistics</a></li>
-         			<li><a href="#deactivateReasons" tabindex="-1" data-toggle="tab">Deactive Reasons</a></li>
-			         <li><a href="#addNewDeactivate" tabindex="-1" data-toggle="tab">Add New Deactive Reason</a></li>
-      			</ul>
-    			<li><a href="#charts" data-toggle="tab">Charts</a></li>
-				<li><a href="#twitter" data-toggle="tab">Twitter</a></li>
-   			</li>
-   		</ul>
-	</div>
-
-	<div class="col-md-10">
-		<div id="myTabContent" class="tab-content pull right">
-   			<div class="tab-pane fade in active" id="home">
-   				<br />
-      				<h5>Welcome to the JustHealth IM Portal</h5>
-      					 
-      						<p> Please remember you have access to personal data on the admin portal. For more information on data protection please view the terms and conditions </p> 
-                  <p>On this site you are able to: view and add new medication, view and add new deactivation readings, view user statistics and other relevent statistics. </p>
-      						<p> Please use responsibly</p>
-      					</ul>
-   			</div>
-   		<div class="tab-pane fade" id="users">
-   			<br />
-      		<h5>User Information</h5>	
-            <div id="queryTable">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>First Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Account Type</th>
-                    <th>Verified</th>
-                    <th>Account Locked</th>
-                    <th>Edit </th>
-                  </tr>
-                </thead>
-              <tbody>
-              <!--List data here-->
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-   		</div>
-   		<div class="tab-pane fade" id="currentMedication">
-   			<br />
-      		<p>List currentMedication here</p>
-   		</div>
-   		<div class="tab-pane fade" id="addNewMedicaion">
-   			<br />
-      		<h5> Please enter the new medication below:</h5>
+      {% if message != null %}
+        <div class="alert alert-{{type}} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            {{message}}
+        </div>
+        {% endif %}
+    <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">JustHealth Information Management Portal</h4>
         <br />
-        <form role="form" action="/addMedication" method="POST">   
-            <div class="form-group">
-                <input class="form-control input-sm" type="text" name="medication" id="medication">
+        <br />
+        <br />
+            <div class="row">
+	           <div class="col-md-2">
+		          <ul class="nav nav-pills nav-stacked">
+   			          <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+   			          <li><a href="#users" data-toggle="tab">Users</a></li>
+   			          <li class="dropdown">
+      			           <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown"> Medication 
+                                <b class="caret"></b>
+      			           </a>
+      			         <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+         			        <li><a href="#currentMedication" tabindex="-1" data-toggle="tab">Current Medication</a></li>
+         			        <li><a href="#addNewMedicaion" tabindex="-1" data-toggle="tab">Add New Medication</a></li>
+      			       </ul>
+   			          </li>
+    		          <li class="dropdown">
+                        <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">Deactivate account  
+         			        <b class="caret"></b>
+                        </a>
+      			           <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+         			            <li><a href="#deactivateStats" tabindex="-1" data-toggle="tab">Statistics</a></li>
+         			            <li><a href="#deactivateReasons" tabindex="-1" data-toggle="tab">Deactive Reasons</a></li>
+                                <li><a href="#addNewDeactivate" tabindex="-1" data-toggle="tab">Add New Deactive Reason</a></li>
+      			           </ul>
+    			             <li><a href="#charts" data-toggle="tab">Charts</a></li>
+                             <li><a href="#twitter" data-toggle="tab">Twitter</a></li>
+   			          </li>
+   		           </ul>
+	           </div>
+	           <div class="col-md-10">
+		          <div id="myTabContent" class="tab-content pull right">
+   			          <div class="tab-pane fade in active" id="home">
+   				         <br />
+                         <h5>Welcome to the JustHealth IM Portal</h5>
+                         <p> Please remember you have access to personal data on the admin portal. For more information on data protection please view the terms and conditions </p> 
+                         <p>On this site you are able to: view and add new medication, view and add new deactivation readings, view user statistics and other relevent statistics. </p>
+                         <p> Please use responsibly</p>
+   			          </div>
+                      <div class="tab-pane fade" id="users">
+                        <br />
+                        <h5>User Information</h5>	
+                        <div id="queryTable">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>First Name</th>
+                                        <th>Surname</th>
+                                        <th>Email</th>
+                                        <th>Account Type</th>
+                                        <th>Verified</th>
+                                        <th>Account Locked</th>
+                                        <th>Edit </th>
+                                        <th>No.of Connections</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <!--List data here-->
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                             </table>
+                        </div>
+   		               </div>
+                       <div class="tab-pane fade" id="currentMedication">
+                        <br />
+                        <p>List currentMedication here</p>
+   		               </div>
+                       <div class="tab-pane fade" id="addNewMedicaion">
+   			              <br /> 
+                          <h5> Please enter the new medication below:</h5>
+                          <br />
+                        <form role="form" action="/addNewMedication" method="POST">   
+                            <div class="form-group">
+                                <input class="form-control input-sm" type="text" name="medication" id="medication">
+                            </div>
+                                <input class="btn btn-success pull-right" type="submit" value="Submit">
+                        </form>
+   		               </div>
+                       <div class="tab-pane fade" id="deactivateStats">
+                        <br />
+                        <div id="chart_div"></div>
+   		               </div>
+                       <div class="tab-pane fade" id="deactivateReasons">
+     		             <br />
+                         <h5> Deactivate Reasons</h5>
+				            {% for reason in reasons %}
+                            <li>{{reason.reason}}</li>
+				            {% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="addNewDeactivate">
+                            <br />
+                            <h5> Please enter below the new deactivation reason you would like to add:</h5>
+                            <br />
+                            <form role="form" action="/addNewDeactivate" method="POST">   
+                                <div class="form-group">
+                                    <input class="form-control input-sm" type="text" name="reason" id="reason">
+                                </div>
+                                    <input class="btn btn-success pull-right" type="submit" value="Submit">
+	                       </form>
+                       </div>
+   		               <div class="tab-pane fade" id="charts">
+    		              <br />
+      		                <p> Charts </p>
+   		               </div>
+                       <div class="tab-pane fade" id="twitter">
+    	                   <br />
+		                      <a class="twitter-timeline"
+			                     width="250"
+			                     height="300"
+			                     href="https://twitter.com/twitterdev"
+			                     data-widget-id="564749021659795456">
+			                     Tweets by @twitterdev
+		                      </a>
+                              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+		                      </script>
+		                      <script>window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+		                      </script>
+ 		                         <a class="twitter-timeline"
+                                    width="250"
+                                    height="300"
+                                    href="https://twitter.com/twitterdev" 
+                                    data-widget-id="564797112014360576"> Tweets by @twitterdev
+                                </a>
+		                      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+		                      </script>
+   		               </div>
+		          </div>
+	           </div>
             </div>
-              <input class="btn btn-success pull-right" type="submit" value="Submit">
-       </form>
-   		</div>
-    	<div class="tab-pane fade" id="deactivateStats">
-    		<br />
-          <div id="chart_div"></div>
-   		</div>
-     	<div class="tab-pane fade" id="deactivateReasons">
-     		<br />
-      		<h5> Deactivate Reasons</h5>
-				      {% for reason in reasons %}
-				    <li>{{reason.reason}}</li>
-				        {% endfor %}
-   		</div>
-    	<div class="tab-pane fade" id="addNewDeactivate">
-    	<br />
-      	<h5> Please enter below the new deactivation reason you would like to add:</h5>
-      	<br />
-      	<form role="form" action="/addDeactivate" method="POST">   
-            <div class="form-group">
-                <input class="form-control input-sm" type="text" name="reason" id="reason">
-            </div>
-              <input class="btn btn-success pull-right" type="submit" value="Submit">
-	     </form>
-   		</div>
-   		<div class="tab-pane fade" id="charts">
-    		<br />
-      		<p> Charts </p>
-   		</div>
-   		<div class="tab-pane fade" id="twitter">
-    	 <br />
-		      <a class="twitter-timeline"
-			       width="250"
-			       height="300"
-			       href="https://twitter.com/twitterdev"
-			       data-widget-id="564749021659795456">
-			       Tweets by @twitterdev
-		      </a>
-		      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		      </script>
-		      <script>window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-		      </script>
- 		       <a class="twitter-timeline"
-			       width="250"
-			       height="300"
-			       href="https://twitter.com/twitterdev"
-			       data-widget-id="564797112014360576">
-			       Tweets by @twitterdev
-		      </a>
-		      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		      </script>
-   		</div>
-		</div>
-	</div>
-</div>
-
-</fieldset>
+    </fieldset>
 
 {% endblock %}

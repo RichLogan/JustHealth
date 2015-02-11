@@ -975,9 +975,10 @@ def addMedication(medicationName):
     with database.transaction():
         try:
             insertMedication.execute()
+            return "Added " + medicationName
         except IntegrityError:
             return medicationName + " already exists"
-    return "Added " + medicationName
+    return "False"
 
 @app.route('/api/deleteMedication', methods=['POST'])
 @auth.login_required
@@ -1182,12 +1183,23 @@ def addAndroidEventId():
 
 
   #Admin Portal Pages
-@app.route('/api/addNewDeactivate', methods=['POST'])
-def addNewDeactivate():
-    addDeactivate['reason'] = request.form['reason']
-    try: 
-        insert = deactivateReason.insert(
-        reason = deactivateReason['reason']
+def addDeactivate(reason):
+    insert = Deactivatereason.insert(
+        reason = request.form['reason']
     )
-    except KeyError, e:
-      return "Error"
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
+def newMedication(medication):
+    insert = Medication.insert(
+        name = request.form['medication']
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
