@@ -22,15 +22,14 @@ def needLogin(f):
 def index():
     """Sends user to home page according to account type if session is active"""
     result = json.loads(getAccountInfo(session['username']))
-    name = result['firstname'] + " " + result['surname']
     if result['accounttype'] == "Patient":
-      return render_template('patienthome.html', printname = name)
+      return redirect(url_for('homepatient'))
     elif result['accounttype'] == "Carer":
-      return render_template('carerhome.html', printname = name)
+      return redirect(url_for('homecarer'))
 
-@app.route('/home')
+@app.route('/home-p')
 @needLogin
-def home():
+def homepatient():
     """Dashboard home page patient"""
     accountInfo = json.loads(getAccountInfo(session['username']))
     #notifications = json.loads(getNotifications(session['username']))
@@ -52,9 +51,17 @@ def home():
     notification2['content'] = "Testing 2"
     notifications.append(notification2)
 
+    ## Set all common stuff
+    # if carer:
+    # add carer stuff
+    # render template
+    # else patient
+    # add patient stuff
+    # render template
+
     return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
 
-@app.route('/homecarer')
+@app.route('/home-c')
 @needLogin
 def homecarer():
     """Dashboard home page carer"""

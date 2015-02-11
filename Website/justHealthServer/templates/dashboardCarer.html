@@ -1,6 +1,8 @@
 {% extends "template.html" %}
 {% block title %}Home{% endblock %}
 {% block scriptsAndStyles %}{% endblock %}
+
+{% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
 
 <br />
@@ -849,7 +851,7 @@
     {% endfor %}
     <br />
 
-
+    <hr>
 		 <!--Carer Appointments to show on dashboard --> 
 		<h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
         <a href="/appointments" class="pull-right"> View all Appointments </a>

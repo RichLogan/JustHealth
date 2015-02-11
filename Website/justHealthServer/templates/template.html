@@ -66,13 +66,16 @@
                 <li><a href="/logout"><i class="fa fa-sign-out sideIcons"></i>  <span class="bold">Log out</span></a></li>
               </ul>
             
-            <a href="/profile"><h4 class="headerFooterText pull-right" style="color:#FFF; padding-top:4px">{{session.firstname}} {{session.surname}}</h4></a>
+            <a href="/"><h4 class="headerFooterText pull-right" style="color:#FFF; padding-top:4px">{{session.firstname}} {{session.surname}}</h4></a>
+
             {% endblock %}
           </div>
         </nav>
       </header>
 
+      {% block homeCSS %}
       <div id="content">
+      {% endblock %}
         <fieldset class ="fix">
         {% block content %}{% endblock %}
         </fieldset>

@@ -58,6 +58,14 @@ header {
   margin-top: 40px;
 }
 
+#homecontent {
+  padding:10px;
+  padding-bottom:40px;   /* Height of the footer */
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
 footer {
   position:absolute;
   bottom:0;
@@ -109,8 +117,8 @@ footer #footerContainer {
 /*Fixes footer issue */
 fieldset.fix {
   width: 100%;
-  margin: auto;
-  padding: 8px;
+  margin: 0 auto;
+  padding: 0px;
 }
 
 fieldset.form-container {
