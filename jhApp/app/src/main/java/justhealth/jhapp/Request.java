@@ -22,15 +22,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Helper class containing static methods for communication with the JustHealth server.
+ * Primarily provides access to POST and GET requests.
+ */
 public class Request {
 
+    // The URL and port of the JustHealth Server
     private static String SERVER_URL = "http://raptor.kent.ac.uk:5000";
 
+    /**
+     * Provides POST request communication to JustHealth's public facing API located at /api
+     * Takes credentials for the server from the logged in user's details
+     * @param url The API function url for the request, not the full URL. e.g http://server/api/{THIS_URL_HERE}
+     * @param parameters The parameters for the post request in the form of a HashMap<String, String> corresponding to the key/value pairs the API function expects.
+     * @param context The current application context, usually provided by getApplicationContext(). Allows access to SharedPreferences.
+     * @return The result of the API call as a String. This is most often JSON but should be decoded by the calling functionality.
+     */
     public static String post(String url, HashMap<String, String> parameters, Context context) {
-         HttpClient httpClient = new DefaultHttpClient();
+        // Create HTTP Objects
+        HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(SERVER_URL + "/api/" + url);
 
-        //Authentication
+        // Add Authentication
         SharedPreferences account = context.getSharedPreferences("account", 0);
         String username = account.getString("username", null);
         String password = account.getString("password", null);
@@ -38,6 +52,7 @@ public class Request {
         String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
         httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
 
+        // Convert Parameters to URL Encoded name/value pairs
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             Set<Map.Entry<String, String>> detailsSet = parameters.entrySet();
@@ -49,45 +64,18 @@ public class Request {
 
             return EntityUtils.toString(response.getEntity());
         }
-        catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
+        catch (Exception e) {
+            Feedback.toast("Cannot connect to Server", false, context);
+            return null;
         }
-        Feedback.toast("Cannot connect to Server", false, context);
-        return null;
     }
 
-    public static String postNoParams(String url, Context context) {
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(SERVER_URL + "/api/" + url);
-
-        //Authentication
-        SharedPreferences account = context.getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
-        String authentication = username + ":" + password;
-        String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
-        httppost.setHeader("Authorization", "Basic " + encodedAuthentication);
-
-        try {
-            HttpResponse response = httpClient.execute(httppost);
-
-            return EntityUtils.toString(response.getEntity());
-        }
-        catch (ClientProtocolException e) {
-            //TODO Auto-generated catch block
-        } catch (IOException e) {
-            //TODO Auto-generated catch block
-        } catch (NullPointerException e) {
-            //TODO Auto-generated catch block
-        }
-        Feedback.toast("Cannot connect to Server", false, context);
-        return null;
-    }
-
+    /**
+     * Provides GET request communication to JustHealth's public facing API located at /api when no parameters need to be passed
+     * @param url The API function url for the request, not the full URL. e.g http://server/api/{THIS_URL_HERE}
+     * @param context The current application context, usually provided by getApplicationContext(). Allows access to SharedPreferences.
+     * @return The result of the API call as a String. This is most often JSON but should be decoded by the calling functionality.
+     */
     public static String get(String url, Context context) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet();
@@ -121,6 +109,11 @@ public class Request {
         return "Failed";
     }
 
+    /**
+     * Build the correct URL of a profilepicture image that is stored on the server
+     * @param filename The filename of the image. Can be found via /api/getAccountInfo
+     * @return The full URL of the resource
+     */
     public static String getProfilePictureURL(String filename) {
         return SERVER_URL + "/api/images/" + filename;
     }
