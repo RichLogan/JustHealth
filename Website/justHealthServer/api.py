@@ -909,7 +909,11 @@ def deleteAppointment(user, appid):
 
   if isCreator.creator.username == user:
     with database.transaction():
-      isCreator.delete_instance()
+        if isCreator.invitee.username != None:
+            invitee = isCreator.invitee.username
+            createNotificationRecord(invitee, "Appointment Cancelled", None)
+        isCreator.delete_instance()
+
     return "Appointment Deleted"
 
 #gets the appointment that is to be updated
@@ -948,7 +952,7 @@ def updateAppointment():
   return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
-  if private == "True": 
+  if private == "True":
     isPrivate = True
   else: 
     isPrivate = False
@@ -967,6 +971,12 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
 
   with database.transaction():
     updateAppointment.execute()
+
+    #check if the appointment has an invitee
+    appointment = Appointments.select().where(Appointments.appid == appid).get()
+    if appointment.invitee.username != None:
+        createNotificationRecord(appointment.invitee.username, "Appointment Updated", appid)
+
 
   return "Appointment Updated"
 
@@ -1063,6 +1073,9 @@ def editPrescription(details):
 
     try:
         updatePrescription.execute()
+        patient = Prescription.select().where(Prescription.prescriptionid == details['prescriptionid']).get()
+        createNotificationRecord(patient.username.username, "Prescription Updated", details['prescriptionid'])
+
         return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
     except:
         return "Failed"
@@ -1194,7 +1207,10 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Connection Request'] = "Relationship"
     notificationTypeTable['New Connection'] = ""
     notificationTypeTable['Prescription Added'] = "Prescription"
+    notificationTypeTable['Prescription Updated'] = "Prescription"
     notificationTypeTable['Appointment Invite'] = "Appointments"
+    notificationTypeTable['Appointment Updated'] = "Appointments"
+    notificationTypeTable['Appointment Cancelled'] = ""
 
     createNotification = Notification.insert(
         username = user,
@@ -1238,10 +1254,21 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Added":
         prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
         content = "A new prescription for " + prescription.medication.name + " has been added to your profile."
+
+    if notification['notificationtype'] == "Prescription Updated":
+        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        content = "Your prescription for " + prescription.medication.name + " has been updated."
     
     if notification['notificationtype'] == "Appointment Invite":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
         content = appointment.creator.username + " has added an appointment with you on" + str(appointment.startdate) + "."
+
+    if notification['notificationtype'] == "Appointment Updated":
+        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + "."
+
+    if notification['notificationtype'] == "Appointment Cancelled":
+        content = "One of your appointments has been cancelled, click above to view your updated calendar."
     
     return content
 
@@ -1255,8 +1282,17 @@ def getNotificationLink(notification):
     
     if notification['notificationtype'] == "Prescription Added":
         link = "/prescriptions"
+
+    if notification['notificationtype'] == "Prescription Updated":
+        link = "/prescriptions"
     
     if notification['notificationtype'] == "Appointment Invite":
+        link = "/appointments"
+
+    if notification['notificationtype'] == "Appointment Updated":
+        link = "/appointments"
+
+    if notification['notificationtype'] == "Appointment Cancelled":
         link = "/appointments"
     
     return link
