@@ -21,51 +21,9 @@ def needLogin(f):
 @needLogin
 def index():
     """Sends user to home page according to account type if session is active"""
-    result = json.loads(getAccountInfo(session['username']))
-    if result['accounttype'] == "Patient":
-      return redirect(url_for('homepatient'))
-    elif result['accounttype'] == "Carer":
-      return redirect(url_for('homecarer'))
-
-@app.route('/home-p')
-@needLogin
-def homepatient():
-    """Dashboard home page patient"""
+    ## set common functionality
     accountInfo = json.loads(getAccountInfo(session['username']))
-    #notifications = json.loads(getNotifications(session['username']))
-    connections = json.loads(getConnections(session['username']))
-    appointments = json.loads(getAllAppointments(session['username'], session['username']))
-    prescriptions = json.loads(getPrescriptions(session['username']))
-    outgoingConnections = json.loads(connections['outgoing'])
-    incomingConnections = json.loads(connections['incoming'])
-    completedConnections = json.loads(connections['completed'])
-    
-    # Notification example
-    notifications = []
-    notification1 = {}
-    notification1['type'] = "danger"
-    notification1['content'] = "Testing"
-    notifications.append(notification1)
-    notification2 = {}
-    notification2['type'] = "success"
-    notification2['content'] = "Testing 2"
-    notifications.append(notification2)
 
-    ## Set all common stuff
-    # if carer:
-    # add carer stuff
-    # render template
-    # else patient
-    # add patient stuff
-    # render template
-
-    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
-
-@app.route('/home-c')
-@needLogin
-def homecarer():
-    """Dashboard home page carer"""
-    accountInfo = json.loads(getAccountInfo(session['username']))
     #notifications = json.loads(getNotifications(session['username']))
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
@@ -84,29 +42,38 @@ def homecarer():
     notification2['content'] = "Testing 2"
     notifications.append(notification2)
 
- # Get Patients
-    if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
-        # Get all patients connected to this user
-        connections = json.loads(getConnections(session['username']))
-        completedConnections = json.loads(connections['completed'])
-        patients = []
-        for connection in completedConnections:
-            if connection['accounttype'] == "Patient":
-                patients.append(connection)
-    # Get all appointments
-    appointmentsMapping = {}
-    # Get all prescriptions
-    activePrescriptions = {}
-    upcomingPrescriptions = {}
-    expiredPrescriptions = {}
-    for patient in patients:
-        appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
-
-        activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
-        upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
-        expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
-
-    return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
+    # if user is a patient
+    if accountInfo['accounttype'] == "Patient":
+    # add patient functionality
+        prescriptions = json.loads(getPrescriptions(session['username']))
+    # render template
+        return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
+    # else carer
+    elif accountInfo['accounttype'] == "Carer":
+    # add carer functionality
+    # Get Patients
+        if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
+            # Get all patients connected to this user
+            connections = json.loads(getConnections(session['username']))
+            completedConnections = json.loads(connections['completed'])
+            patients = []
+            for connection in completedConnections:
+                if connection['accounttype'] == "Patient":
+                    patients.append(connection)
+        # Get all appointments
+        appointmentsMapping = {}
+        # Get all prescriptions
+        activePrescriptions = {}
+        upcomingPrescriptions = {}
+        expiredPrescriptions = {}
+        for patient in patients:
+            appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
+    
+            activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
+            upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
+            expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+    # render template
+        return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/profile')
 @needLogin
