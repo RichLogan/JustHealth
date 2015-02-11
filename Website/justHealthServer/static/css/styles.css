@@ -20,6 +20,12 @@ a.runner:visited {color:#FFFFFF; background-color:transparent}
 a.runner:hover   {color:#FFFFFF; background-color:transparent}
 a.runner:active  {color:#FFFFFF; background-color:transparent}
 
+.header-nav a {color: #FFFFFF;}
+a.header-nav:link    {color:#FFFFFF; background-color:transparent}
+a.header-nav:visited {color:#FFFFFF; background-color:transparent}
+a.header-nav:hover .fa  {color:#28E378; background-color:transparent}
+a.header-nav:active  {color:#FFFFFF; background-color:transparent}
+
 .smallLink {
   font-style: italic;
   font-size: 0.8em;
