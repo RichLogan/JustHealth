@@ -536,9 +536,12 @@ def searchPatientCarer(username, searchterm):
     searchterm = "%" + searchterm + "%"
     try:
         patient = Patient.get(username=username)
-        results = Carer.select().dicts().where((Carer.username % searchterm) | (Carer.firstname % searchterm) |(Carer.surname % searchterm))
+        results = Carer.select().dicts().where((Carer.username ** searchterm) | (Carer.firstname ** searchterm) |(Carer.surname ** searchterm))
     except Patient.DoesNotExist:
-        results = Patient.select().dicts().where((Patient.username % searchterm) | (Patient.firstname % searchterm) |(Patient.surname % searchterm))
+        results = Patient.select().dicts().where((Patient.username ** searchterm) | (Patient.firstname ** searchterm) |(Patient.surname ** searchterm))
+
+    if results.count() == 0:
+        return "No users found"
 
     jsonResult = []
     for result in results:

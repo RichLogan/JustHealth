@@ -178,7 +178,6 @@ def contactUs():
         return render_template('contactUs.html', type="success", message = 'Your message has been sent, please allow up to 24 hours for a response', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
     else: 
        return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
-    
 
 @app.route('/settings')
 @needLogin
@@ -195,8 +194,11 @@ def search():
     """Search to find a different user's profile"""
     if request.method =='POST':
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
-        result = json.loads(result)
-        return render_template ('search.html',results = result, username= session['username'])
+        if result == "No users found":
+            flash(result, 'danger')
+        else:
+            result = json.loads(result)
+            return render_template ('search.html',results = result, username= session['username'])
     return render_template('search.html', username= session['username'])
 
 @app.route('/deactivate', methods=['POST', 'GET'])
@@ -389,7 +391,6 @@ def appointments():
       flash("Appointment Added", 'success')
       return redirect(url_for('appointments'))
   return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
-
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
 def deleteAppointment_view():
