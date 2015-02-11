@@ -103,52 +103,52 @@
                                     </div>
                                     <div class="modal-body">
                                       <h4>Please enter the verification code given by the requestor</h4>
-                                        <form role="form" action="/completeConnectionWeb" method="POST">
-                                          <div style="width: 70%;margin: 0 auto;">
-                                            <input name="requestor" type="hidden" value="{{connection.username}}">
-                                            <input name="username" type="hidden" value="{{session.username}}">
-                                            <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
-                                            <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
-                                          </div>
-                                        </form>
-                                      </div>
+                                      <form role="form" action="/completeConnectionWeb" method="POST">
+                                        <div style="width: 70%;margin: 0 auto;">
+                                          <input name="requestor" type="hidden" value="{{connection.username}}">
+                                          <input name="username" type="hidden" value="{{session.username}}">
+                                          <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                          <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                                        </div>
+                                      </form>
                                     </div>
                                   </div>
                                 </div>
-                              </tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
-                          <!--Table for completed connections -->
-                          <br />
-                          <h4>Completed</h4>
-                          <table class="table table-condensed ">
-                            <thead>
-                              <th>Username</th>
-                              <th>First Name</th>
-                              <th>Surname</th>
-                              <th>Account Type</th>
-                              <th></th>
-                            </thead>
-                            <tbody>
-                              {% for connection in completed %}
-                              <tr>
-                                <td>{{connection.username}}</td>
-                                <td>{{connection.firstname}}</td>
-                                <td>{{connection.surname}}</td>
-                                <td>{{connection.accounttype}}</td>
-                                <form action="/api/deleteConnection" method="POST">
-                                  <input type="hidden" name="user" value="{{session.username}}">
-                                  <input type="hidden" name="connection" value="{{connection.username}}">
-                                  <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
-                                </form>
-                              </tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
-                        </div>
-      				</div>
-                  </div>
+                              </div>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        <!--Table for completed connections -->
+                        <br />
+                        <h4>Completed</h4>
+                        <table class="table table-condensed ">
+                          <thead>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Account Type</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in completed %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <form action="/api/deleteConnection" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
+                              </form>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+      				    </div>
+                </div>
       			</div>
 			</div>
     </fieldset>
@@ -212,11 +212,11 @@
 		    </div>
 		  </div>
 		</div>
-		 {% endfor %}
-		  <hr>
-		 <!--Appointments to show on dashboard --> 
-	   <h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
-        <a href="/appointments" class="pull-right"> View all Appointments </a>
+		{% endfor %}
+		<hr>
+		<!--Appointments to show on dashboard --> 
+	  <i class="fa fa-calendar headingIcon pull-left"></i> <h4>Appointments</h4>
+    <a href="/appointments" class="pull-right"> View all Appointments </a>
 
     <hr>
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
