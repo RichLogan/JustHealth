@@ -842,6 +842,7 @@ def addInviteeAppointment(details):
     )
 
   appId = str(appointmentInsert.execute())
+  createNotificationRecord(details['username'], "Appointment Invite", appId)
   
   return appId
 
@@ -1193,6 +1194,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Connection Request'] = "Relationship"
     notificationTypeTable['New Connection'] = ""
     notificationTypeTable['Prescription Added'] = "Prescription"
+    notificationTypeTable['Appointment Invite'] = "Appointments"
 
     createNotification = Notification.insert(
         username = user,
@@ -1229,21 +1231,34 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Connection Request":
         requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
         content = "You have a new connection request from " + requestor.requestor.username
+    
     if notification['notificationtype'] == "New Connection":
         content = "You have a new connection, click above to view."
+    
     if notification['notificationtype'] == "Prescription Added":
         prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
         content = "A new prescription for " + prescription.medication.name + " has been added to your profile."
+    
+    if notification['notificationtype'] == "Appointment Invite":
+        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        content = appointment.creator.username + " has added an appointment with you on" + str(appointment.startdate) + "."
+    
     return content
 
 def getNotificationLink(notification):
     """gets the notification link that will make it clickable"""
     if notification['notificationtype'] == "Connection Request":
         link = "/profile?go=connections"
+    
     if notification['notificationtype'] == "New Connection":
         link = "/profile?go=connections"
+    
     if notification['notificationtype'] == "Prescription Added":
         link = "/prescriptions"
+    
+    if notification['notificationtype'] == "Appointment Invite":
+        link = "/appointments"
+    
     return link
 
 def getNotificationTypeClass(notification):
