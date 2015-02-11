@@ -24,9 +24,11 @@ import java.util.Set;
 
 public class Request {
 
+    private static String SERVER_URL = "http://raptor.kent.ac.uk:5000";
+
     public static String post(String url, HashMap<String, String> parameters, Context context) {
          HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
+        HttpPost httppost = new HttpPost(SERVER_URL + "/api/" + url);
 
         //Authentication
         SharedPreferences account = context.getSharedPreferences("account", 0);
@@ -60,7 +62,7 @@ public class Request {
 
     public static String postNoParams(String url, Context context) {
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://raptor.kent.ac.uk:5000/api/" + url);
+        HttpPost httppost = new HttpPost(SERVER_URL + "/api/" + url);
 
         //Authentication
         SharedPreferences account = context.getSharedPreferences("account", 0);
@@ -99,7 +101,7 @@ public class Request {
         httpget.setHeader("Authorization", "Basic " + encodedAuthentication);
 
         try {
-            URI website = new URI("http://raptor.kent.ac.uk:5000/api/" + url);
+            URI website = new URI(SERVER_URL + "/api/" + url);
             httpget.setURI(website);
         } catch (Exception e) {
             System.out.println("Failed");
@@ -117,5 +119,9 @@ public class Request {
             //TODO Auto-generated catch block
         }
         return "Failed";
+    }
+
+    public static String getProfilePictureURL(String filename) {
+        return SERVER_URL + "/api/images/" + filename;
     }
 }
