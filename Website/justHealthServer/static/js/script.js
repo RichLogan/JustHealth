@@ -141,4 +141,8 @@ function getUrlParameter(sParam)
             return sParameterName[1];
         }
     }
-}     
+}
+
+function goBack() {
+    window.history.back()
+}
