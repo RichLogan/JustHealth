@@ -11,13 +11,15 @@
     <!--side pannel for profile picture -->
 	<div class="col-md-3 dashPanel">
 		<div id="dashProfile">
-      <fieldset class="style">
+      <fieldset class="style center-element">
+      <h4 style="text-align:left;" class="bold">{{session.username}}</h4>
 			<a class"thumbnail" href="/editProfile"> 
-			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" ></i>  </h5> </a>
-			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"><br />
-			<br />
-			<strong>{{session.username}}</strong>
-			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
+			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" style="position: absolute; top: 5%; right: 5%;"></i></h5>
+      </a>
+			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle center-element" style="position: relative; top: 0; left: 0;"></br></br>
+			<p style="text-align:left;">{{accountInfo.firstname}} {{accountInfo.surname}}
+      </br>
+      {{accountInfo.email}}</p>
       </fieldset>
 		</div>
 		
@@ -28,7 +30,7 @@
 
 			{% if connections %}
 				{% for connection in completed %}
-					<p>{{connection.firstname}} {{connection.surname}} <strong>({{connection.username}})</strong></p>
+					<p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p>
 				{% endfor %}
 			{% else %}
 				<strong>No connections yet</strong>
@@ -189,7 +191,7 @@
 		<!-- Main Content -->
 		<fieldset class ="form-container">
 		<!--All completed connections the carer has-->	
-<i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4>
+  <i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4>
   <hr>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for patient in patients %}
@@ -858,7 +860,7 @@
 
     <hr>
 		 <!--Carer Appointments to show on dashboard --> 
-		<h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
+		<i class="fa fa-calendar headingIcon pull-left"></i><h4>Appointments</h4>
         <a href="/appointments" class="pull-right"> View all Appointments </a>
 
     <hr>

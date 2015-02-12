@@ -9,17 +9,18 @@
 <div class="row">
   <!--side pannel for profile picture -->
 	<div class="col-md-3 dashPanel">
-    <fieldset class="style">
 		<div id="dashProfile">
-			<a class"thumbnail" href="/editProfile"> 
-			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" ></i>  </h5> </a><br />
-			<img alt="User Pic" src="images/{{accountInfo.profilepicture}}" id="profilePicture" class="img-circle">
-      <br />
-			<strong>{{session.username}}</strong>
-			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
-
+      <fieldset class="style center-element">
+      <h4 style="text-align:left;" class="bold">{{session.username}}</h4>
+      <a class"thumbnail" href="/editProfile"> 
+      <h5><i class="fa fa-pencil-square-o sideIcons pull-right" style="position: absolute; top: 5%; right: 5%;"></i></h5>
+      </a>
+      <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle center-element" style="position: relative; top: 0; left: 0;"></br></br>
+      <p style="text-align:left;">{{accountInfo.firstname}} {{accountInfo.surname}}
+      </br>
+      {{accountInfo.email}}</p>
+      </fieldset>
 		</div>
-    </fieldset>
       <!--side pannel to display connections -->
     <fieldset class="style">
 		<div id="dashConnections">
