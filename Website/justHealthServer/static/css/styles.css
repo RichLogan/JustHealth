@@ -259,6 +259,11 @@ hr.dashboard {
   position: fixed;
 }
 
+.nav-profile-img {
+  height: 40px;
+  padding:5px 10px 0px 10px;
+}
+
 /*Icon styles: Font Awesome*/
 .largeIcon {
   font-size: 100px;
@@ -280,6 +285,12 @@ hr.dashboard {
   font-size: 20px;
   padding-right: 5px;
   color: #2272EB;
+}
+
+.navIcon {
+  font-size: 35px;
+  color: #FFFFFF;
+  padding:5px 10px 0px 10px;
 }
 
 .headingIcon {
@@ -366,8 +377,4 @@ hr.dashboard {
   height: 100px;
   text-align: center;
   font-size: 25px;
-}
-
-#profilePicture {
-  width: 7.5em;
 }
