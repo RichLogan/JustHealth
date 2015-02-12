@@ -290,7 +290,7 @@ def login():
 
             return redirect(url_for('index'))
         else:
-            return render_template('login.html', type="danger", message = result)
+            return render_template('login.html', printname = fullname, type="danger", message = result)
     try:
       session['username']
     except KeyError, e:
@@ -593,10 +593,12 @@ def internal_error(error):
 def adminPortal():
     allUsers = json.loads(getAllUsers())
     if request.method == 'POST':
-        result = deactivateAccount(request.form)  
-        return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers)
+        result = deactivateAccount(request.form)
+        if allUsers['accounttype'] == "Patient":
+            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient')
     else: 
-       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers)
+       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer')
+
 
 @app.route('/addNewDeactivate', methods=['POST'])
 def addNewDeactivate():
@@ -617,4 +619,5 @@ def addNewMedication():
         else: render_template('adminHome.html',type="warning", message = 'Update failed')
     else:   
        return render_template('adminHome.html')
+
 

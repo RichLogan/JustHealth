@@ -41,7 +41,26 @@
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
+
+      $(document).ready(function () {
+
+          (function ($) {
+
+              $('#filter').keyup(function () {
+
+                  var rex = new RegExp($(this).val(), 'i');
+                  $('.searchable tr').hide();
+                  $('.searchable tr').filter(function () {
+                      return rex.test($(this).text());
+                  }).show();
+
+              })
+
+          }(jQuery));
+
+      });
     </script>
+
 
 <br/ >
 <fieldset class="form-admin">
@@ -51,7 +70,7 @@
             {{message}}
         </div>
         {% endif %}
-    <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">JustHealth Information Management Portal</h4>
+        <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">JustHealth Information Management Portal</h4>
         <br />
         <br />
         <br />
@@ -62,24 +81,24 @@
    			          <li><a href="#users" data-toggle="tab">Users</a></li>
    			          <li class="dropdown">
       			           <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown"> Medication 
-                                <b class="caret"></b>
+                          <b class="caret"></b>
       			           </a>
       			         <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
          			        <li><a href="#currentMedication" tabindex="-1" data-toggle="tab">Current Medication</a></li>
          			        <li><a href="#addNewMedicaion" tabindex="-1" data-toggle="tab">Add New Medication</a></li>
-      			       </ul>
+                    </ul>
    			          </li>
     		          <li class="dropdown">
                         <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">Deactivate account  
-         			        <b class="caret"></b>
+         			            <b class="caret"></b>
                         </a>
       			           <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
          			            <li><a href="#deactivateStats" tabindex="-1" data-toggle="tab">Statistics</a></li>
          			            <li><a href="#deactivateReasons" tabindex="-1" data-toggle="tab">Deactive Reasons</a></li>
-                                <li><a href="#addNewDeactivate" tabindex="-1" data-toggle="tab">Add New Deactive Reason</a></li>
+                          <li><a href="#addNewDeactivate" tabindex="-1" data-toggle="tab">Add New Deactive Reason</a></li>
       			           </ul>
     			             <li><a href="#charts" data-toggle="tab">Charts</a></li>
-                             <li><a href="#twitter" data-toggle="tab">Twitter</a></li>
+                       <li><a href="#twitter" data-toggle="tab">Twitter</a></li>
    			          </li>
    		           </ul>
 	           </div>
@@ -96,7 +115,11 @@
                         <br />
                         <h5>User Information</h5>	
                         <div id="queryTable">
-                            <table class="table">
+                         <div class="input-group"> <span class="input-group-addon">Filter</span>
+                           <input id="filter" type="text" class="form-control" placeholder="Search for user here...">
+                          </div>  
+                          <br />
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>Username</th>
@@ -108,22 +131,27 @@
                                         <th>Account Deactivate </th>
                                         <th>Verified</th>
                                         <th>Account Locked</th>
-                                        <th>Login Attempts </th>
-                                        <th>Edit </th>
-                                        <th>No.of Connections</th>
+                                        <th>Failed Login Attempts </th>
+                                        <th> </th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="searchable">
                                 <!--List data here-->
+                                {% for allUsers in allUsers %}
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{allUsers.username}}</td>
+                                        <td>{{allUsers.firstname}}</td>
+                                        <td>{{allUsers.surname}}</td>
+                                        <td>{{allUsers.email}}</td>
+                                        <td>{{allUsers.dob}}</td>
+                                        <td>{{printaccounttype}}</td>
+                                        <td>{{allUsers.accountdeactivated}}</td>
+                                        <td>{{allUsers.verified}} </td>
+                                        <td>{{allUsers.accountlocked}}  </td>
+                                        <td>{{allUsers.loginattempts}} </td>
+                                        <td> <button class="btn btn-warning">Update </a></td>
                                     </tr>
+                                  {% endfor %}
                                 </tbody>
                              </table>
                         </div>
@@ -133,7 +161,7 @@
                         <p>List currentMedication here</p>
    		               </div>
                        <div class="tab-pane fade" id="addNewMedicaion">
-   			              <br /> 
+   			                  <br /> 
                           <h5> Please enter the new medication below:</h5>
                           <br />
                         <form role="form" action="/addNewMedication" method="POST">   
@@ -148,7 +176,7 @@
                         <div id="chart_div"></div>
    		               </div>
                        <div class="tab-pane fade" id="deactivateReasons">
-     		             <br />
+     		                <br />
                          <h5> Deactivate Reasons</h5>
 				            {% for reason in reasons %}
                             <li>{{reason.reason}}</li>
@@ -165,11 +193,11 @@
                                     <input class="btn btn-success pull-right" type="submit" value="Submit">
 	                       </form>
                        </div>
-   		               <div class="tab-pane fade" id="charts">
-    		              <br />
+   		                 <div class="tab-pane fade" id="charts">
+    		                <br />
       		                <p> Charts </p>
-   		               </div>
-                       <div class="tab-pane fade" id="twitter">
+   		                 </div>
+                        <div class="tab-pane fade" id="twitter">
     	                   <br />
 		                      <a class="twitter-timeline"
 			                     width="250"
