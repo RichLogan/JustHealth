@@ -26,7 +26,8 @@
     <fieldset class="style">
     <!--side pannel to display connections -->
 		<div id="dashConnections">
-		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
+		<a data-toggle="modal" data-target="#terms"><h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
+    <hr class="dashboard">
 
 			{% if connections %}
 				{% for connection in completed %}
@@ -36,22 +37,20 @@
 				<strong>No connections yet</strong>
 			{% endif %}
       <!--model to show connections information -->
-		<a data-toggle="modal" data-target="#terms"> View Connections </a>
               <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms"> Connections</h4>
+                      <h4 class="modal-title" id="terms"><i class="fa fa-users headingIcon"></i> Connections</h4>
                     </div>
                     <div class="modal-body">
-                      <h4>Outgoing</h4>
+                      <h5>Outgoing</h5>
                       <table class="table table-condensed ">
                         <thead>
                           <th>Username</th>
-                          <th>First Name</th>
-                          <th>Surname</th>
-                          <th>Account Type</th>
+                          <th>Name</th>
+                          <th>Relationship</th>
                           <th></th>
                           <th></th>
                           </thead>
@@ -59,8 +58,7 @@
                             {% for connection in outgoing %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}}</td>
-                              <td>{{connection.surname}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td>{{connection.code}}</td>
                               <form action="/api/cancelConnection" method="POST">
@@ -74,13 +72,12 @@
                         </table>
                         <!--Table for incomming connections -->
                         <br />
-                        <h4>Incoming</h4>
+                        <h5>Incoming</h5>
                         <table class="table table-condensed">
                           <thead>
                             <th>Username</th>
-                            <th>First Name</th>
-                            <th>Surname</th>
-                            <th>Account Type</th>
+                            <th>Name</th>
+                            <th>Relationship</th>
                             <th></th>
                             <th></th>
                           </thead>
@@ -88,8 +85,7 @@
                             {% for connection in incoming %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}}</td>
-                              <td>{{connection.surname}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
                               <form action="/api/cancelConnection" method="POST">
@@ -125,21 +121,19 @@
                           </table>
                           <!--Table for completed connections -->
                           <br />
-                          <h4>Completed</h4>
+                          <h5>Completed</h5>
                           <table class="table table-condensed ">
                             <thead>
                               <th>Username</th>
-                              <th>First Name</th>
-                              <th>Surname</th>
-                              <th>Account Type</th>
+                              <th>Name</th>
+                              <th>Relationship</th>
                               <th></th>
                             </thead>
                             <tbody>
                               {% for connection in completed %}
                               <tr>
                                 <td>{{connection.username}}</td>
-                                <td>{{connection.firstname}}</td>
-                                <td>{{connection.surname}}</td>
+                                <td>{{connection.firstname}} {{connection.surname}}</td>
                                 <td>{{connection.accounttype}}</td>
                                 <form action="/api/deleteConnection" method="POST">
                                   <input type="hidden" name="user" value="{{session.username}}">
@@ -159,9 +153,7 @@
     <fieldset class="style">
 		  <div id="dashConnections">	
 		  	<a class"thumbnail" href="/search"> 
-		  	<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
-		  	<a class"thumbnail" href="/settings"> 
-		  	<h5><i class="fa fa-cog sideIcons" ></i> Settings </h5> </a>
+		  	<h5><i class="fa fa-search sideIcons" ></i> Search</h5> </a>
 		  </div>
     </fieldset>
 
@@ -171,6 +163,13 @@
         <h5><i class="fa fa-search-plus sideIcons" ></i> Search the NHS website </h5> </a>
       </div>
     </fieldset>
+
+    <fieldset class="style">
+      <div>
+        <a class"thumbnail" href="/settings"> 
+        <h5><i class="fa fa-cog sideIcons"></i> Settings </h5> </a>
+      </div>
+    </fieldset>
   </div>
 
 	<div class="col-md-9 dashPanel">
@@ -178,7 +177,7 @@
 		<!-- Notifications -->
 		{% if notifications %}
 			<div class="well well-sm">
-				<h4>Notifications</h4>
+				<h4><i class="fa fa-tag sideIcons"></i> Notifications</h4>
 				{% for notification in notifications %}
 					<div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
 	    				<button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -860,8 +859,7 @@
 
     <hr>
 		 <!--Carer Appointments to show on dashboard --> 
-		<i class="fa fa-calendar headingIcon pull-left"></i><h4>Appointments</h4>
-        <a href="/appointments" class="pull-right"> View all Appointments </a>
+		<a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
 
     <hr>
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
