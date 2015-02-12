@@ -211,7 +211,7 @@
                 <!-- View Prescriptions -->
                 <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
                   <div style="height:25px;">
-                    <p style="line-height: 25px;font-size: 25px;">
+                    <p style="line-height: 20px;font-size: 20px;">
                       <i class="fa fa-medkit"></i> Prescriptions
                     </p>
                   </div>
@@ -221,9 +221,10 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="prescription{{patient.username}}Label">{{patient.firstname}} {{patient.surname}} ({{patient.username}})'s Prescriptions</h4>
+                        <h4 class="modal-title" id="prescription{{patient.username}}Label">{{patient.firstname}} {{patient.surname}}'s Prescriptions</h4>
                       </div>
                       <div class="modal-body" id="prescription{{patient.username}}body">
+                        
                         <!-- Display flashed return message -->
                         {% with returnType = get_flashed_messages(category_filter=["type"]) %}
                           {% if returnType %}
@@ -348,8 +349,8 @@
 
                         <div role="tabpanel">
                           <!-- Nav tabs -->
-                          <ul class="nav nav-tabs nav-justified" role="tablist">
-                            <li role="presentation" class="active"><a href="#{{patient.username}}active" aria-controls="{{patient.username}}active" role="tab" data-toggle="tab">Active</a></li>
+                          <ul class="nav nav-pills nav-justified" role="tablist">
+                            <li role="presentation" class="active"><a href="#{{patient.username}}active" aria-controls="{{patient.username}}active" role="tab" data-toggle="tab">Current</a></li>
                             <li role="presentation"><a href="#{{patient.username}}futureExpired" aria-controls="{{patient.username}}futureExpired" role="tab" data-toggle="tab">Upcoming &amp; Expired</a></li>
                           </ul>
 
@@ -387,7 +388,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -509,7 +510,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -723,8 +724,8 @@
                         </div>
                       </div>
                       <div class="modal-footer">
+                        <button class="btn btn-success" id="{{patient.username}}_addPrescriptionButton" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");$("#{{patient.username}}_addPrescriptionButton").toggle("slow");'>Create new prescription</button>
                         <button class="btn btn-default" id="{{patient.username}}_donePrescriptions" onclick="$('#prescription{{patient.username}}').modal('toggle');">Close</button>
-                        <button class="btn btn-success" id="{{patient.username}}_addPrescriptionButton" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");$("#{{patient.username}}_addPrescriptionButton").toggle("slow");'>Add new Prescription</button>
                       </div>
                     </div>
                   </div>
@@ -735,7 +736,7 @@
                   <!-- View Appointments -->
                   <a onclick='$("#appointments{{patient.username}}").modal("toggle")'>
                     <div style="height:25px;">
-                      <p style="line-height: 25px;font-size: 25px;">
+                      <p style="line-height: 20px;font-size: 20px;">
                         <i class="fa fa-calendar"></i> Appointments
                       </p>
                     </a>
@@ -745,10 +746,10 @@
                           <div class="modal-content">
                             <div class="modal-header">
                               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                              <h4 class="modal-title" id="appointments{{patient.username}}Label">View Appointments</h4>
+                              <h4 class="modal-title" id="appointments{{patient.username}}Label">{{patient.firstname}} {{patient.surname}}'s Appointments</h4>
                             </div>
                             <div class="modal-body">
-                              <button class="btn btn-success" onclick='$("#{{patient.username}}_newAppointment").toggle("slow")'>Add new Appointment</button>
+                              <button class="btn btn-success" onclick='$("#{{patient.username}}_newAppointment").toggle("slow")'>Create</button>
                               <br /><br />
                               <table class="table">
                                 <thead>
@@ -838,7 +839,7 @@
                                           <textarea class="form-control" name="description" id="other"></textarea>
                                         </div>
                                         <div class="form-group">
-                                          <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+                                          <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
                                         </div>
                                       </form>
                                     </div>
