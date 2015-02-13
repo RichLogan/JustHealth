@@ -406,8 +406,9 @@ def getUpdateAppointment_view():
   """Takes the appointment ID to put the existing appointment information in the form, ready to be updated"""
   if request.method == 'GET':
     appid = request.args.get('appid')
+    whereFrom = request.args.get('whereFrom')
     getUpdate = json.loads(getUpdateAppointment(session['username'], appid))
-    return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate)
+    return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate, previousLocation=whereFrom)
 
 @app.route('/patientUpdateAppointment', methods=['POST'])
 def updateAppointment_view():
@@ -420,6 +421,9 @@ def updateAppointment_view():
 
     updated = updateAppointment(request.form['appid'], request.form['name'], request.form['type'], request.form['nameNumber'], request.form['postcode'], request.form['dateFrom'], request.form['startTime'], request.form['dateTo'], request.form['endTime'], request.form['other'], private)
     flash(updated, 'success')
+    if request.form['whereFrom'] == "myPatients":
+        return redirect(url_for('myPatients'))
+        
     return redirect(url_for('appointments'))
 
 @app.route('/myPatients')
