@@ -599,7 +599,6 @@ def adminPortal():
     else: 
        return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer')
 
-
 @app.route('/addNewDeactivate', methods=['POST'])
 def addNewDeactivate():
     if request.method == 'POST':

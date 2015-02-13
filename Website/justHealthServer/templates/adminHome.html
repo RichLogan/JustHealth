@@ -127,6 +127,7 @@
                                         <th>Surname</th>
                                         <th>Email</th>
                                         <th>DoB </th>
+                                        <th>Gender </th>
                                         <th>Account Type</th>
                                         <th>Account Deactivate </th>
                                         <th>Verified</th>
@@ -144,12 +145,13 @@
                                         <td>{{allUsers.surname}}</td>
                                         <td>{{allUsers.email}}</td>
                                         <td>{{allUsers.dob}}</td>
+                                        <td>{{allUsers.gender}}</td>
                                         <td>{{printaccounttype}}</td>
                                         <td>{{allUsers.accountdeactivated}}</td>
                                         <td>{{allUsers.verified}} </td>
                                         <td>{{allUsers.accountlocked}}  </td>
                                         <td>{{allUsers.loginattempts}} </td>
-                                        <td> <button class="btn btn-warning">Update </a></td>
+                                        <td><button class="btn btn-warning">Update </a></td>
                                     </tr>
                                   {% endfor %}
                                 </tbody>
