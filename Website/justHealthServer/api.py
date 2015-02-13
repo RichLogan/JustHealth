@@ -758,6 +758,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         person['connectionid'] = str(connection.connectionid)
         incomingConnectionsDetails.append(person)
     incomingFinal = json.dumps(incomingConnectionsDetails)
@@ -776,6 +777,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)
 
