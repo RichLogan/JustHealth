@@ -72,6 +72,10 @@ public class CreateSelfAppointment extends Activity {
         populateSpinner();
     }
 
+    /**
+     * This makes a post request to the database to get the appointment types and populates the
+     * spinner with these.
+     */
     private void populateSpinner() {
         System.out.println("populateSpinner");
         ArrayList populateSpinner = new ArrayList<String>();
@@ -116,6 +120,15 @@ public class CreateSelfAppointment extends Activity {
         appointmentType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
     }
 
+
+    /**
+     * This method is called to create the appointment. It grabs all of the text etc from the text
+     * boxes and adds these to a HashMap.
+     * Following this, a POST request is made to the API sending the HashMap of the appointment details.
+     * It then will display Appointment added/something went wrong.
+     * If appointment is added the method to produce the pop up asking if the user wants to add the appointment
+     * to their calendar is called.
+     */
     private void createApp() {
 
         SharedPreferences account = getSharedPreferences("account", 0);
@@ -174,7 +187,12 @@ public class CreateSelfAppointment extends Activity {
     }
 
 
-
+    /**
+     * This displays a pop up that asks the user whether they want to add the appointment to their
+     * native android calendar. If yes, another method is invoked to do this.
+     * @param details all of the details about the appointment
+     * @param id the id of the appointment in the database
+     */
     private void addToCalendarQuestion(final HashMap<String, String> details, final int id) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -270,6 +288,13 @@ public class CreateSelfAppointment extends Activity {
 
     }
 
+    /**
+     * This method takes the date and time of the appointment and adds each part to a HashMap.
+     * This is needed when adding the appointment to the native android calendar.
+     * @param date the date of the appointment to be added to the android calendar
+     * @param time the time of the appointment to be added to the android calendar
+     * @return a HashMap of the date and time of the appointment
+     */
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
         HashMap<String, Integer> formattedDateTime = new HashMap<>();
 
