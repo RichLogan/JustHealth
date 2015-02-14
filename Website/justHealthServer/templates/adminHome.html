@@ -106,10 +106,17 @@
 		          <div id="myTabContent" class="tab-content pull right">
    			          <div class="tab-pane fade in active" id="home">
    				         <br />
-                         <h5>Welcome to the JustHealth IM Portal</h5>
-                         <p> Please remember you have access to personal data on the admin portal. For more information on data protection please view the terms and conditions </p> 
-                         <p>On this site you are able to: view and add new medication, view and add new deactivation readings, view user statistics and other relevent statistics. </p>
-                         <p> Please use responsibly</p>
+                        <h5>Welcome to the JustHealth IM Portal</h5>
+                        <p> Please remember you are able to access personal and pontentially sensitive data on this admin portal. For more information on dataprotection please view the terms and conditions.</p> 
+                        On this site you are able to:
+                        <ul>
+                          <li>Edit account settings</li>
+                          <li>View and add new medication</li>
+                          <li>View and add new deactivation reasons</li>
+                          <li>View user statistics</li>
+                          <li>View JustHealth site statistics</li>
+                        </ul>
+                        <p>Remember to use responsibly, any misuse of portal access will subject to disciplinary measures.</p>
    			          </div>
                       <div class="tab-pane fade" id="users">
                         <br />
@@ -151,33 +158,50 @@
                                         <td>{{allUsers.verified}} </td>
                                         <td>{{allUsers.accountlocked}}  </td>
                                         <td>{{allUsers.loginattempts}} </td>
-                                        <td><button class="btn btn-warning">Update </a></td>
+                                        <td><a data-toggle="modal" data-target="#editaccountinfo{{allUsers.username}}" class="btn btn-warning"> Edit</a></td>
                                     </tr>
                                   {% endfor %}
                                 </tbody>
-                             </table>
+                            </table>
                         </div>
-   		               </div>
-                       <div class="tab-pane fade" id="currentMedication">
+   		                </div>
+
+                      <!--Start of edit account information modal-->
+                      <div class="modal fade" id="editaccountinfo{{allUsers.username}}" tabindex="-1" role="dialog" aria-labelledby="editaccountinfo{{allUsers.username}}" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              <h4 class="modal-title" id="editaccountinfo{{allUsers.username}}Label">Edit account for user: {{allUsers.username}}</h4>
+                            </div>
+                            <div class="modal-body">
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--End of account information modal-->
+
+                      <div class="tab-pane fade" id="currentMedication">
                         <br />
                         <p>List currentMedication here</p>
-   		               </div>
-                       <div class="tab-pane fade" id="addNewMedicaion">
+   		                </div>
+                        <div class="tab-pane fade" id="addNewMedicaion">
    			                  <br /> 
                           <h5> Please enter the new medication below:</h5>
                           <br />
                         <form role="form" action="/addNewMedication" method="POST">   
                             <div class="form-group">
-                                <input class="form-control input-sm" type="text" name="medication" id="medication">
+                              <input class="form-control input-sm" type="text" name="medication" id="medication">
                             </div>
-                                <input class="btn btn-success pull-right" type="submit" value="Submit">
+                              <input class="btn btn-success pull-right" type="submit" value="Submit">
                         </form>
-   		               </div>
-                       <div class="tab-pane fade" id="deactivateStats">
+   		                </div>
+                      <div class="tab-pane fade" id="deactivateStats">
                         <br />
                         <div id="chart_div"></div>
-   		               </div>
-                       <div class="tab-pane fade" id="deactivateReasons">
+   		                </div>
+                      <div class="tab-pane fade" id="deactivateReasons">
      		                <br />
                          <h5> Deactivate Reasons</h5>
 				            {% for reason in reasons %}
