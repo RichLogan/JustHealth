@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +73,11 @@ public class Profile extends Activity {
             gender.setText("Gender: " + profileInfo.getString("gender"));
             accountType.setText("Account Type: " + profileInfo.getString("accounttype"));
             email.setText("Email: " + profileInfo.getString("email"));
+
+            // Display Profile Picture
+            String filepath = Request.getProfilePictureURL(profileInfo.getString("profilepicture"));
+            ImageView profilePicture = (ImageView) findViewById(R.id.profilePicture);
+            new LoadImage(profilePicture, getApplicationContext()).execute(filepath);
         } catch (JSONException e) {
             e.printStackTrace();
         }
