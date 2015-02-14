@@ -24,6 +24,7 @@ $(document).ready(function() {
 		}
 	});
 
+    //Check all fields are filled in
 	$('form').submit(function(e) {
 		$("form :input").each(function(){
 			if ($(this).val() == null || $(this).val() == "") {
@@ -33,50 +34,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-
-	//Check if date format is valid
-    //Reference: http://www.jquerybyexample.net/2011/12/validate-date-using-jquery.html
-    $(function() {
-        $('#txtDate').focusout(function() {
-            var txtVal =  $('#txtDate').val();
-            alert(txtVal);
-            alert(isDate(txtVal));
-            //if(!isDate(txtVal)) {
-                //show message if email is not valid
-            //    $('#dobValidate').html('<i class="fa fa-times"></i> Invalid date').addClass('wrongInputs');
-            //}
-        });
-        function isDate(txtDate) {
-            var currVal = txtDate;
-            if(currVal == '')
-                return false;
-            
-            var rxDatePattern = /^(\d{4})(\/|-)(\d{1,2})(\/|-)(\d{1,2})$/; //Declare Regex
-            var dtArray = currVal.match(rxDatePattern); // is format OK?
-            
-            if (dtArray == null) 
-                return false;
-            
-            //Checks for dd/mm/yyyy format.
-            dtDay= dtArray[1];
-            dtMonth = dtArray[3];
-            dtYear = dtArray[5];        
-            
-            if (dtMonth < 1 || dtMonth > 12) 
-                return false;
-            else if (dtDay < 1 || dtDay> 31) 
-                return false;
-            else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) 
-                return false;
-            else if (dtMonth == 2) 
-            {
-                var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
-                if (dtDay> 29 || (dtDay ==29 && !isleap)) 
-                        return false;
-            }
-            return true;
-        }
-    });
 
 	$('#usernameInput').keyup(function() {
 		content = $('#usernameInput').val();
@@ -106,7 +63,7 @@ $(document).ready(function() {
         <hr>
     <fieldset class="register-inner">
     <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
-    <form name="register" action="/register" id="register" method="POST">
+    <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
     	<!-- Display any messages -->
     	{% if message != null %}
     		<div class="alert alert-{{type}} alert-dismissible" role="alert">
@@ -131,8 +88,8 @@ $(document).ready(function() {
       </div>
 
       <div class="form-group">
-        <label for="dob">Date of Birth</label>
-        <input class="form-control input-sm" type="date" name="dob" id="txtDate">
+        <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
+        <input class="form-control input-sm" type="date" name="dob" id="dob">
     		<span id="dobValidate"></span>
       </div>
 
@@ -174,9 +131,8 @@ $(document).ready(function() {
     	</div>
 
     	<div class="form-group">
-    		<input class="btn btn-success pull-right" type="submit" value="Sign up">
+    		<input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
     	</div>
-    
     </form>
     </fieldset>
 </fieldset>

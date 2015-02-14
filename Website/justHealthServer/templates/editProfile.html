@@ -27,7 +27,7 @@
 
         <fieldset class ="register-inner">
         <!--Form to update profile details -->
-            <form name="editDetails" method="POST" action="/updateProfile" enctype="multipart/form-data">
+            <form name="editDetails" method="POST" action="/updateProfile" onSubmit="return ValidateFormProfile()" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="image">Upload a profile picture</label>
                     <input class="form-control" name="image" type="file" value="">
@@ -44,8 +44,9 @@
                     <input class="form-control input-sm" type="text" name="surname"  value="{{request.surname}}">
                 </div>
                 <div class="form-group">
-                    <label for="dob">Date of Birth</label>
+                    <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
                     <input class="form-control input-sm" type="date" name="dob" id="dob" value="{{request.dob}}">
+                    <span id="dobValidate"></span>
                 </div>
                 <div class="form-group">
                 <!--Find how to get the current gender from db-->
@@ -64,7 +65,7 @@
                     <span id="emailValidate"></span>
                 </div>
                 <div class="form-group">
-                    <input class="btn btn-success pull-right" type="submit" value="Update">
+                    <input class="btn btn-success pull-right" name="Submit" type="submit" value="Update">
                     <button class="btn btn-default pull-right" style="margin-right:5px;" onclick="goBack()">Cancel</button>
                 </div>
             </form>
