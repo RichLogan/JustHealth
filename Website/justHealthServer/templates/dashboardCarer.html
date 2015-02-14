@@ -863,22 +863,20 @@
 		<a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
 
     <hr>
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="accordion" aria-multiselectable="true">
 
 		 {% block upcoming %}
         {% for appointment in appointments %}
           {% if appointment.upcoming == True %}
                 <div class="panel panel-default">
 
-              <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
-                <h4 class="panel-title">
+              <div class="panel-heading myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
+                <h3 class="panel-title">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
-                    <i class="fa fa-caret-right"></i> {{appointment.name}}
-                      </a>
-                      </h4>
-                    </div>
-
-                   <div class="row">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                      </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
                       </div>

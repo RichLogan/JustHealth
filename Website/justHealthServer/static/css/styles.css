@@ -229,13 +229,13 @@ hr.dashboard {
   outline:0;
 }
 
-#myPatientsTab {
+.myPatientsTab {
   background-color: #2272EB;
   color: #FFFFFF;
 }
 
 #myPatientsPatientName {
-  color: #FFFFFF;
+  color: #2272EB;
 }
 
 #myPatientsPatientName:hover {

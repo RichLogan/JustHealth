@@ -32,21 +32,21 @@ $(document).ready(function(){
 
   //Check if date is in the past
   $('#startdate').focusout(function() {
-  var selectedDate = $('#startdate').datepicker('getDate');
-  var now = new Date();
-  if (selectedDate < now) {
-    // selected date is in the past
-    $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-  }
+    var selectedDate = $('#startdate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
   });
 
   $('#enddate').focusout(function() {
-  var selectedDate = $('#enddate').datepicker('getDate');
-  var now = new Date();
-  if (selectedDate < now) {
-    // selected date is in the past
-    $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-  }
+    var selectedDate = $('#enddate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
   });
 
   /*var allDates = $(document.getElementsByClassName('dateForJS'));
@@ -128,8 +128,7 @@ $('time').each(function(i, e) {
                           <label for="description">Details</label>
                           <textarea class="form-control input-sm" name="description" id="description"></textarea>
                         </div>
-                         <div class="modal-footer">
-             
+                        <div class="modal-footer">
                           <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
                         </div>
                       </form>
