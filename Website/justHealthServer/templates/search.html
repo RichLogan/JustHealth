@@ -19,6 +19,26 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
+<script type="text/javascript">
+
+          $(document).ready(function () {
+
+          (function ($) {
+
+              $('#filter').keyup(function () {
+
+                  var rex = new RegExp($(this).val(), 'i');
+                  $('.searchable tr').hide();
+                  $('.searchable tr').filter(function () {
+                      return rex.test($(this).text());
+                  }).show();
+
+              })
+
+          }(jQuery));
+
+      });
+    </script>
 
 <!--Seach box to search for users to conency to-->
 <fieldset class ="form-container">
@@ -29,10 +49,10 @@
   <form action="/search" method="POST">
     <div class="form-group">
       <label for="username"></label>
-      <input class="form-control input-sm" type="text" name="searchterm">
+      <input class="form-control" type="text" name="searchterm" placeholder="Search for a user">
     </div>
     <input class="form-control" type="hidden" name="username" value='{{username}}'>
-    <button type="submit" class="btn btn-default pull-right">Search</button>
+    <button type="submit" class="btn btn-success pull-right">Search</button>
   </form>
   </fieldset>
 <br />
@@ -40,7 +60,12 @@
 <br />
 <!--Table to display search results -->
 <div id="queryTable">
-  <table class="table">
+    <div class="input-group"> <span class="input-group-addon">Sort through results</span>
+    <input id="filter" type="text" class="form-control">
+    </div> 
+    <br />
+    <br />
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Username</th>
@@ -49,7 +74,7 @@
         <th>Connect</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="searchable">
 <!--results here-->
   {% for result in results %}
   <tr>
