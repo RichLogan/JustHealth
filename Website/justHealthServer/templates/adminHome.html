@@ -107,7 +107,7 @@
    			          <div class="tab-pane fade in active" id="home">
    				         <br />
                         <h5>Welcome to the JustHealth IM Portal</h5>
-                        <p> Please remember you are able to access personal and pontentially sensitive data on this admin portal. For more information on dataprotection please view the terms and conditions.</p> 
+                        <p> Please remember you are able to access personal and potentially sensitive data on this admin portal. For more information on data protection please view the terms and conditions.</p> 
                         On this site you are able to:
                         <ul>
                           <li>Edit account settings</li>
@@ -116,7 +116,7 @@
                           <li>View user statistics</li>
                           <li>View JustHealth site statistics</li>
                         </ul>
-                        <p>Remember to use responsibly, any misuse of portal access will subject to disciplinary measures.</p>
+                        <p>Remember to use responsibly, any misuse of portal access will be subject to disciplinary measures.</p>
    			          </div>
                       <div class="tab-pane fade" id="users">
                         <br />
@@ -151,7 +151,7 @@
                                         <td>{{allUsers.email}}</td>
                                         <td>{{allUsers.dob}}</td>
                                         <td>{{allUsers.gender}}</td>
-                                        <td>{{printaccounttype}}</td>
+                                        <td>{{allUsers.accounttype}}</td>
                                         <td>{{allUsers.accountdeactivated}}</td>
                                         <td>{{allUsers.verified}} </td>
                                         <td>{{allUsers.accountlocked}}  </td>
@@ -270,12 +270,14 @@
    			                  <br /> 
                           <h5> Please enter the new medication below:</h5>
                           <br />
+                        <fieldset class="register-inner">
                         <form role="form" action="/addNewMedication" method="POST">   
                             <div class="form-group">
                               <input class="form-control input-sm" type="text" name="medication" id="medication">
                             </div>
                               <input class="btn btn-success pull-right" type="submit" value="Submit">
                         </form>
+                        </fieldset>
    		                </div>
                       <div class="tab-pane fade" id="deactivateStats">
                         <br />
@@ -292,12 +294,14 @@
                             <br />
                             <h5> Please enter below the new deactivation reason you would like to add:</h5>
                             <br />
+                            <fieldset class="register-inner">
                             <form role="form" action="/addNewDeactivate" method="POST">   
                                 <div class="form-group">
                                     <input class="form-control input-sm" type="text" name="reason" id="reason">
                                 </div>
                                     <input class="btn btn-success pull-right" type="submit" value="Submit">
-	                       </form>
+	                          </form>
+                            </fieldset>
                        </div>
    		                 <div class="tab-pane fade" id="charts">
     		                <br />
