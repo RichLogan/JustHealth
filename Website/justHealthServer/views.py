@@ -595,6 +595,7 @@ def internal_error(error):
 #Admin Portal pages
 @app.route('/adminPortal')
 def adminPortal():
+    """Loads the pages related to the tablist on the IM portal home page, this includes a list of active users, current medication list and deactivation options"""
     allUsers = json.loads(getAllUsers())
     if request.method == 'POST':
         result = deactivateAccount(request.form)
@@ -605,6 +606,7 @@ def adminPortal():
 
 @app.route('/addNewDeactivate', methods=['POST'])
 def addNewDeactivate():
+    """Submits the form to add a new deactivation reason to the database"""
     if request.method == 'POST':
         result = addDeactivate(request.form)  
         if result == "True":
@@ -615,6 +617,7 @@ def addNewDeactivate():
 
 @app.route('/addNewMedication', methods=['POST'])
 def addNewMedication():
+"""Submits the form to add a new medication name to the database"""
     if request.method == 'POST':
         result = newMedication(request.form)  
         if result == "True":
