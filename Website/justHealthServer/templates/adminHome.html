@@ -160,27 +160,66 @@
                                         <td>{{allUsers.loginattempts}} </td>
                                         <td><a data-toggle="modal" data-target="#editaccountinfo{{allUsers.username}}" class="btn btn-warning"> Edit</a></td>
                                     </tr>
+                                    <!--Start of edit account information modal-->
+                                    <div class="modal fade" id="editaccountinfo{{allUsers.username}}" tabindex="-1" role="dialog" aria-labelledby="editaccountinfo{{allUsers.username}}" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                            <h4 class="modal-title" id="editaccountinfo{{allUsers.username}}Label">Accont settings for user: {{allUsers.username}}</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <fieldset class ="register-inner">
+                                            <!--Form to update profile details -->
+                                              <form name="editAccountDetails" method="POST" action="/updateProfile" enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                  <input class="hidden" type="text" name="username" value="{{allUsers.username}}" readonly="true">
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="name">First Name</label>
+                                                  <input class="form-control input-sm" type="text" name="firstname" value="{{allUsers.firstname}}" readonly="true">
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="surname">Surname</label>
+                                                  <input class="form-control input-sm" type="text" name="surname"  value="{{allUsers.surname}}" readonly="true">
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="dob">Date of Birth</label>
+                                                  <input class="form-control input-sm" type="date" name="dob" id="dob" value="{{allUsers.dob}}">
+                                                </div>
+                                                <div class="form-group">
+                                                <!--Find how to get the current gender from db-->
+                                                  <label for="ismale">Gender </label>
+                                                    {% if allUsers.gender == "Male" %}
+                                                      <input class="" type="radio" name="ismale" value="true" checked="true"> Male&nbsp;
+                                                      <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+                                                    {% else %}
+                                                      <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+                                                      <input class="" type="radio" name="ismale" value="false" checked="true"> Female&nbsp;
+                                                    {% endif %}
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="email">Email</label>
+                                                  <input class="form-control input-sm" type="text" name="email" id="validateEmail" value="{{allUsers.email}}">
+                                                  <span id="emailValidate"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                  <input class="btn btn-success pull-right" type="submit" value="Update Settings">
+                                                </div>
+                                              </form>
+                                            </fieldset>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!--End of account information modal-->
                                   {% endfor %}
                                 </tbody>
                             </table>
                         </div>
    		                </div>
 
-                      <!--Start of edit account information modal-->
-                      <div class="modal fade" id="editaccountinfo{{allUsers.username}}" tabindex="-1" role="dialog" aria-labelledby="editaccountinfo{{allUsers.username}}" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                              <h4 class="modal-title" id="editaccountinfo{{allUsers.username}}Label">Edit account for user: {{allUsers.username}}</h4>
-                            </div>
-                            <div class="modal-body">
-                              
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!--End of account information modal-->
+
 
                       <div class="tab-pane fade" id="currentMedication">
                         <br />
