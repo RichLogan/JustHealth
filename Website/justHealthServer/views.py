@@ -617,7 +617,7 @@ def addNewDeactivate():
 
 @app.route('/addNewMedication', methods=['POST'])
 def addNewMedication():
-"""Submits the form to add a new medication name to the database"""
+    """Submits the form to add a new medication name to the database"""
     if request.method == 'POST':
         result = newMedication(request.form)  
         if result == "True":
