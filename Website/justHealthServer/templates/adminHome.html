@@ -166,7 +166,7 @@
                                         <div class="modal-content">
                                           <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                            <h4 class="modal-title" id="editaccountinfo{{allUsers.username}}Label">Accont settings for user: {{allUsers.username}}</h4>
+                                            <h4 class="modal-title" id="editaccountinfo{{allUsers.username}}Label">Account settings for user: {{allUsers.username}}</h4>
                                           </div>
                                           <div class="modal-body">
                                             <fieldset class ="register-inner">
@@ -202,6 +202,49 @@
                                                   <label for="email">Email</label>
                                                   <input class="form-control input-sm" type="text" name="email" id="validateEmail" value="{{allUsers.email}}">
                                                   <span id="emailValidate"></span>
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="accounttype">Account Type</label>
+                                                  <select name="accounttype" class="form-control input-sm">
+                                                    {% if allUsers.accounttype == "Patient" %}
+                                                    <option value="patient" selected>Patient</option>
+                                                    <option value="carer">Carer</option>
+                                                    {% else %}
+                                                    <option value="patient">Patient</option>
+                                                    <option value="carer" selected>Carer</option>
+                                                    {% endif %}
+                                                  </select>
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="accountdeactivated">Account Deactivate</label>
+                                                </br>
+                                                {% if allUsers.accountdeactivated == True %}
+                                                  <input type="checkbox" name="accountdeactivated" checked>
+                                                {% else %}
+                                                  <input type="checkbox" name="accountdeactivated">
+                                                {% endif %}
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="verified">Verified</label>
+                                                </br>
+                                                {% if allUsers.verified == True %}
+                                                  <input type="checkbox" name="verified" checked>
+                                                {% else %}
+                                                  <input type="checkbox" name="verified">
+                                                {% endif %}
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="accountlocked">Account Locked</label>
+                                                </br>
+                                                {% if allUsers.accountlocked == True %}
+                                                  <input type="checkbox" name="accountlocked" checked>
+                                                {% else %}
+                                                  <input type="checkbox" name="accountlocked">
+                                                {% endif %}
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="loginattempts">Login Attempts</label>
+                                                  <input class="form-control input-sm" type="text" name="loginattempts"  value="{{allUsers.loginattempts}}">
                                                 </div>
                                                 <div class="form-group">
                                                   <input class="btn btn-success pull-right" type="submit" value="Update Settings">
