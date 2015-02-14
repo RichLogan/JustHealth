@@ -130,8 +130,7 @@
                                 <thead>
                                     <tr>
                                         <th>Username</th>
-                                        <th>First Name</th>
-                                        <th>Surname</th>
+                                        <th>Name</th>
                                         <th>Email</th>
                                         <th>DoB </th>
                                         <th>Gender </th>
@@ -148,8 +147,7 @@
                                 {% for allUsers in allUsers %}
                                     <tr>
                                         <td>{{allUsers.username}}</td>
-                                        <td>{{allUsers.firstname}}</td>
-                                        <td>{{allUsers.surname}}</td>
+                                        <td>{{allUsers.firstname}} {{allUsers.surname}}</td>
                                         <td>{{allUsers.email}}</td>
                                         <td>{{allUsers.dob}}</td>
                                         <td>{{allUsers.gender}}</td>
