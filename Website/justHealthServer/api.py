@@ -1,5 +1,5 @@
 from justHealthServer import app
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask import Flask, render_template, request, session, redirect, url_for, abort, request_started
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
@@ -1316,4 +1316,89 @@ def dismissNotification(notificationid):
         return "True"
     return "False"
 
+##
+# Reminder Functionality
+##
 
+def getMinutesDifference(dateTimeOne,dateTimeTwo):
+    """Difference found my timeOne - timeTwo in minutes"""
+    return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
+
+@app.route('/test/a30')
+def getAppointmentsDueIn30():
+    return str(getAppointmentsDueIn30('carer', datetime.datetime.now()))
+def getAppointmentsDueIn30(username, currentTime):
+    select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
+    result = []
+    for appointment in select:
+        appointmentStartTime = datetime.datetime.combine(appointment['startdate'], appointment['starttime'])
+        timeUntil = getMinutesDifference(appointmentStartTime, currentTime)
+        if timeUntil <= 30 and timeUntil > 0:
+            result.append(appointment)
+    return result
+
+@app.route('/test/anow')
+def getAppointmentsDueNow():
+    return str(getAppointmentsDueNow('carer', datetime.datetime.now()))
+def getAppointmentsDueNow(username, currentTime):
+    """Search for appointments due now"""
+    select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
+    result = []
+    for appointment in select:
+        appointmentStartTime = datetime.datetime.combine(appointment['startdate'], appointment['starttime'])
+        timeUntilStart = getMinutesDifference(appointmentStartTime, currentTime)
+        appointmentEndTime = datetime.datetime.combine(appointment['enddate'], appointment['endtime'])
+        timeUntilEnd = getMinutesDifference(appointmentEndTime, currentTime)
+        if timeUntilStart <= 0 and timeUntilEnd > 0:
+            result.append(appointment)
+    return result
+
+def getPrescriptionsDueIn15(username, currentTime):
+    """Search for prescriptions due in 15 mins"""
+
+def getPrescriptionsDueNow(username, currentTime):
+    """Seach for prescriptions due now"""
+
+def pingServer(sender, **extra):
+    try:
+        loggedInUser = session['username']
+        dt = datetime.datetime.now()
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) and (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
+            addReminders(loggedInUser, dt)
+        else:
+            return
+    except KeyError, e:
+        return
+
+def addReminders(username, now):
+    """Method to check for appointments/prescriptions"""
+    appointmentsDueIn30 = getAppointmentsDueIn30(loggedInUser, dt)
+    for a in appointmentsDueIn30:
+        try:
+            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                content = "Due in 30",
+                reminderClass = "warning",
+                relatedObjectTable = "Appointments",
+                relatedObject = a['appid']
+            )
+            with database.transaction():
+                insertReminder.execute()
+
+    appointmentsDueIn30 = getAppointmentsDueIn30(loggedInUser, dt)
+    for a in appointmentsDueIn30:
+        try:
+            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                content = "Due now",
+                reminderClass = "danger",
+                relatedObjectTable = "Appointments",
+                relatedObject = a['appid']
+            )
+            with database.transaction():
+                insertReminder.execute()
+
+# Causes the reminder ping to execute every time a request is started. 
+request_started.connect(pingServer, app)
