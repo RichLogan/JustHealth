@@ -157,6 +157,7 @@ class Notification(BaseModel):
 
 class Reminder(BaseModel):
     reminder = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
     content = CharField(max_length=100)
     reminderClass = CharField(max_length=10)
     relatedObject = IntegerField()
@@ -179,6 +180,7 @@ def createAll():
     Prescription.create_table()
     Notificationtype.create_table()
     Notification.create_table()
+    Reminder.create_table()
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -208,3 +210,5 @@ def dropAll():
         Notificationtype.drop_table(cascade=True)
     if Notification.table_exists():
         Notification.drop_table(cascade=True)
+    if Reminder.table_exists():
+        Reminder.drop_table(cascade=True)

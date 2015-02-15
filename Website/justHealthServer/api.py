@@ -1,5 +1,5 @@
 from justHealthServer import app
-from flask import Flask, render_template, request, session, redirect, url_for, abort, send_form_directory, request_started
+from flask import Flask, render_template, request, session, redirect, url_for, abort, send_from_directory, request_started
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
@@ -1368,7 +1368,7 @@ def pingServer(sender, **extra):
     try:
         loggedInUser = session['username']
         dt = datetime.datetime.now()
-        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) and (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
             addReminders(loggedInUser, dt)
         else:
             return
@@ -1377,12 +1377,17 @@ def pingServer(sender, **extra):
 
 def addReminders(username, now):
     """Method to check for appointments/prescriptions"""
-    appointmentsDueIn30 = getAppointmentsDueIn30(loggedInUser, dt)
+
+    # Get All Reminders (Saving on performance hits later)
+    allReminders = Reminder.select().where(Reminder.username == username)
+
+    appointmentsDueIn30 = getAppointmentsDueIn30(username, now)
     for a in appointmentsDueIn30:
         try:
             Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
+                username = username,
                 content = "Due in 30",
                 reminderClass = "warning",
                 relatedObjectTable = "Appointments",
@@ -1391,12 +1396,13 @@ def addReminders(username, now):
             with database.transaction():
                 insertReminder.execute()
 
-    appointmentsDueIn30 = getAppointmentsDueIn30(loggedInUser, dt)
-    for a in appointmentsDueIn30:
+    appointmentsDueNow = getAppointmentsDueNow(username, now)
+    for a in appointmentsDueNow:
         try:
             Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
+                username = username,
                 content = "Due now",
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
@@ -1404,6 +1410,16 @@ def addReminders(username, now):
             )
             with database.transaction():
                 insertReminder.execute()
-
 # Causes the reminder ping to execute every time a request is started. 
 request_started.connect(pingServer, app)
+
+@app.route('/test/getReminders')
+def getReminders():
+    return getReminders(session['username'])
+
+def getReminders(username):
+    allReminders = Reminder.select().dicts().where(Reminder.username == username)
+    reminders = []
+    for r in allReminders:
+        reminders.append(r)
+    return json.dumps(reminders)
