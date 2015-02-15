@@ -13,9 +13,12 @@ import re
 import os
 import sys
 import datetime
+from datetime import date
+import time
 import smtplib
 import json
 import random
+
 
 auth = HTTPBasicAuth()
 
@@ -169,7 +172,9 @@ def authenticate():
             revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
             with database.transaction():
                 revertAttempts.execute()
-            return "Authenticated"
+                #Password expiry methods need to be added here
+            status = passwordExpiration(attempted.username)
+            return status
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
         if currentLoginAttempts >= 4:
@@ -252,8 +257,8 @@ def resetPassword():
 
     if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
         #set the old password to iscurrent = false
-        notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
-        notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
+        notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == profile['username'])
+        notVerified = Client.update(verified = False).where(Client.username == profile['username'])
 
         #encrypt the password
         profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
@@ -1211,6 +1216,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Appointment Invite'] = "Appointments"
     notificationTypeTable['Appointment Updated'] = "Appointments"
     notificationTypeTable['Appointment Cancelled'] = ""
+    notificationTypeTable['Password Reset'] = ""
 
     createNotification = Notification.insert(
         username = user,
@@ -1269,6 +1275,9 @@ def getNotificationContent(notification):
 
     if notification['notificationtype'] == "Appointment Cancelled":
         content = "One of your appointments has been cancelled, click above to view your updated calendar."
+
+    if notification['notificationtype'] == "Password Reset":
+        content = "Your password has been changed successfully."
     
     return content
 
@@ -1294,7 +1303,9 @@ def getNotificationLink(notification):
 
     if notification['notificationtype'] == "Appointment Cancelled":
         link = "/appointments"
-    
+
+    if notification['notificationtype'] == "Password Reset":
+        link = "/"
     return link
 
 def getNotificationTypeClass(notification):
@@ -1316,4 +1327,45 @@ def dismissNotification(notificationid):
         return "True"
     return "False"
 
+def passwordExpiration(username):
+    """This checks whether the password that the user is using is about to expire"""
+    passwordDetails = uq8LnAWi7D.select().where((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).get()
+    expirationDate = passwordDetails.expirydate
+    today = datetime.datetime.now().date()
+    remainingDays = ((expirationDate - today).total_seconds())/86400
+    #check the number of days until expiration
+    if int(remainingDays) < 1:
+        return "Reset"
+    elif int(remainingDays) < 11: 
+        return "<11"
+    else:
+        return "Authenticated"
 
+@app.route('/api/expiredResetPassword', methods=['POST'])
+@auth.login_required
+def expiredResetPassword():
+    return expiredResetPassword(request.form)
+
+def expiredResetPassword(request):
+    """reset a password that has expired or is expiring"""
+    user = request['username']
+    newPassword = request['newpassword']
+
+    #set existing passwords to not current
+    notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == user)
+    
+    # Build insert password query
+    newCredentials = uq8LnAWi7D.insert(
+      username = user,
+      password = sha256_crypt.encrypt(newPassword),
+      iscurrent = True,
+      expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
+    )
+
+    with database.transaction():
+        notCurrent.execute()
+        newCredentials.execute()
+
+        createNotificationRecord(user, "Password Reset", None)
+        return "True"
+    return "False"

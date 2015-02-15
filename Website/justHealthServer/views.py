@@ -267,6 +267,17 @@ def login():
             fullname = session['firstname'] + " " + session['surname']
 
             return redirect(url_for('index'))
+        #expired password here
+        elif result == "Reset":
+            return render_template('expiredpassword.html', user=request.form['username'], message="Your password has expired and needs to be reset before you will be able to log in.", submessage="JustHealth enforce this from time-to-time to ensure that your privacy and security are maximised whilst using the website.")
+        elif result == "<11":
+            session["username"] = request.form['username']
+            nameresult = json.loads(getAccountInfo(session['username']))
+            session['firstname'] = nameresult['firstname']
+            session['surname'] = nameresult['surname']
+            fullname = session['firstname'] + " " + session['surname']
+
+            return render_template('resetpasswordnowquestion.html')
         else:
             return render_template('login.html', type="danger", message = result)
     try:
@@ -274,6 +285,19 @@ def login():
     except KeyError, e:
       return render_template('login.html')
     return redirect(url_for('index'))
+
+@app.route('/expiredpassword', methods=['POST', 'GET'])
+def expiredpassword():
+    if request.method == 'POST':
+        reset = expiredResetPassword(request.form)
+        if reset == "True":
+            session['username'] = request.form['username']
+            return redirect(url_for('index')) 
+        else: 
+            return render_template('expiredpassword.html', user=session['username'], error="Oops, something went wrong. Please try again.", errortype="danger")
+
+    return render_template('expiredpassword.html', user=session['username'])
+    
 
 @app.route('/forgotPassword', methods=['POST', 'GET'])
 def forgotPassword():
