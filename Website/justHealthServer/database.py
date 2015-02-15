@@ -155,6 +155,13 @@ class Notification(BaseModel):
     class Meta:
         db_table = 'notification'
 
+class Reminder(BaseModel):
+    reminder = PrimaryKeyField()
+    content = CharField(max_length=100)
+    reminderClass = CharField(max_length=10)
+    relatedObject = IntegerField()
+    relatedObjectTable = CharField()
+
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
     dropAll()
