@@ -361,3 +361,10 @@ fieldset.form-admin {
   margin: 0 auto;
   margin-top: 40px;
 }
+.medicationList {
+    -webkit-column-count: 5; /* Chrome, Safari, Opera */
+    -moz-column-count: 5; /* Firefox */
+    column-count: 5;
+  
+}
+.double_column_list li {float: left; width: 15%;}

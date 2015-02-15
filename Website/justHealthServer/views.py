@@ -600,9 +600,9 @@ def adminPortal():
     if request.method == 'POST':
         result = deactivateAccount(request.form)
         if allUsers['accounttype'] == "Patient":
-            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient')
+            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient', medicationList = Medication.select())
     else: 
-       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer')
+       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
 
 @app.route('/addNewDeactivate', methods=['POST'])
 def addNewDeactivate():
