@@ -1349,6 +1349,9 @@ def expiredResetPassword():
 def expiredResetPassword(request):
     """reset a password that has expired or is expiring"""
     user = request['username']
+    if request['confirmnewpassword'] != request['newpassword']:
+        return "Unmatched"
+        
     newPassword = sha256_crypt.encrypt(request['newpassword'])
 
     #set existing passwords to not current
