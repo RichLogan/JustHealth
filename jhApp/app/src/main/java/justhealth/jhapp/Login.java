@@ -3,6 +3,9 @@ package justhealth.jhapp;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class Login extends Activity implements SurfaceHolder.Callback {
@@ -150,8 +156,29 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                 startActivity(new Intent(Login.this, HomePatient.class));
             } else if (getAccountType(loginInformation.get("username")).equals("Carer")) {
                 startActivity(new Intent(Login.this, HomeCarer.class));
-            } else {
             }
+        }
+        else if (response.equals("Reset")) {
+            SharedPreferences account = getSharedPreferences("account", 0);
+            SharedPreferences.Editor edit = account.edit();
+            edit.putString("username", loginInformation.get("username"));
+            edit.putString("password", encryptedPassword);
+            edit.commit();
+            //here
+            Intent reset = new Intent(Login.this, ExpiredPassword.class);
+            reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
+                    "JustHealth enforce this from time-to-time to ensure that your " +
+                    "privacy and security are maximised whilst using the website.");
+            startActivity(reset);
+        }
+        else if (response.equals("<11")) {
+            SharedPreferences account = getSharedPreferences("account", 0);
+            SharedPreferences.Editor edit = account.edit();
+            edit.putString("username", loginInformation.get("username"));
+            edit.putString("password", encryptedPassword);
+            edit.commit();
+            //options dialog
+            giveResetOptions();
         }
         else {
             Feedback.toast(response, false, getApplicationContext());
@@ -179,5 +206,33 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         ptPassword.put("password", plaintextPassword);
         String response = Request.post("encryptPassword", ptPassword, getApplicationContext());
         return response;
+    }
+
+    private void giveResetOptions() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
+        alert.setTitle("Appointment Options")
+                .setItems(R.array.password_expiry_options, new DialogInterface.OnClickListener() {
+                    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            Intent reset = new Intent(Login.this, ExpiredPassword.class);
+                            reset.putExtra("message", "Your password is soon going to expire. " +
+                                    "JustHealth enforce this from time-to-time to ensure that your " +
+                                    "privacy and security are maximised whilst using the website");
+                            startActivity(reset);
+
+                        } else if (which == 1) {
+                            SharedPreferences account = getSharedPreferences("account", 0);
+                            String username = account.getString("username", null);
+
+                            if (getAccountType(username).equals("Patient")) {
+                                startActivity(new Intent(Login.this, HomePatient.class));
+                            } else if (getAccountType(username).equals("Carer")) {
+                                startActivity(new Intent(Login.this, HomeCarer.class));
+                            }
+                        }
+                    }
+                });
+        alert.show();
     }
 }
