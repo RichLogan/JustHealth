@@ -292,7 +292,10 @@ def expiredpassword():
         reset = expiredResetPassword(request.form)
         if reset == "True":
             session['username'] = request.form['username']
-            return redirect(url_for('index')) 
+            return redirect(url_for('index'))
+        #does not work, see API comments for details
+        # elif reset == "Exists":
+        #      return render_template('expiredpassword.html', user=session['username'], error="The password that you have tried to use has already been used as one of your last five passwords. Please try again.", errortype="danger")
         else: 
             return render_template('expiredpassword.html', user=session['username'], error="Oops, something went wrong. Please try again.", errortype="danger")
 

@@ -1349,15 +1349,22 @@ def expiredResetPassword():
 def expiredResetPassword(request):
     """reset a password that has expired or is expiring"""
     user = request['username']
-    newPassword = request['newpassword']
+    newPassword = sha256_crypt.encrypt(request['newpassword'])
 
     #set existing passwords to not current
     notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == user)
     
+    #check its not the same as old passwords - this does not work as passwords hash as something different each time due to the different salt used.
+    # oldPasswords = uq8LnAWi7D.select(uq8LnAWi7D.password).dicts().where(uq8LnAWi7D.username == user).order_by(uq8LnAWi7D.expirydate.desc()).limit(5)
+    # oldPasswords.execute()
+    # for this in oldPasswords:
+    #     if newPassword == this:
+    #         return "Exists"
+
     # Build insert password query
     newCredentials = uq8LnAWi7D.insert(
-      username = user,
-      password = sha256_crypt.encrypt(newPassword),
+      username = user,  
+      password = newPassword,
       iscurrent = True,
       expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
     )
