@@ -1,5 +1,5 @@
 from justHealthServer import app
-from flask import Flask, render_template, request, session, redirect, url_for, abort, request_started
+from flask import Flask, render_template, request, session, redirect, url_for, abort, send_form_directory, request_started
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
@@ -283,6 +283,11 @@ def resetPassword():
 ####
 # Account Information
 ####
+
+@app.route('/api/images/<filename>')
+@auth.login_required
+def getProfilePictureAPI(filename):
+    return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/api/getAccountInfo', methods=['POST'])
 @auth.login_required
