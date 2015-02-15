@@ -343,8 +343,9 @@ $('time').each(function(i, e) {
                                 <div class="form-group">
                                   <label for="{{patient.username}}_medication">Medication</label>
                                   <select name="medication" class="form-control" id="{{patient.username}}_medication">
-                                    <option>Morphine</option>
-                                    <option>Ibuprofen</option>
+                                    {% for medication in medicationList %}
+                                      <option>{{medication.name}}</option>
+                                    {% endfor %}
                                   </select>
                                 </div>
 
