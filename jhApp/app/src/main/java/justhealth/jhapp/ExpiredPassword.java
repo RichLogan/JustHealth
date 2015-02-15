@@ -59,7 +59,9 @@ public class ExpiredPassword extends Activity {
         String password = ((EditText) findViewById(R.id.newPassword)).getText().toString();
         String confirm = ((EditText) findViewById(R.id.confirmNewPassword)).getText().toString();
         if (password.equals(confirm)) {
-            details.put("password", password);
+            //even though the if statement covers this they still need to both be sent to not break back-end validation
+            details.put("newpassword", password);
+            details.put("confirmnewpassword", confirm);
         }
         else {
             Feedback.toast("The two passwords entered do not match", false, getApplicationContext());
