@@ -265,6 +265,7 @@ def login():
             session['firstname'] = nameresult['firstname']
             session['surname'] = nameresult['surname']
             session['accounttype'] = nameresult['accounttype']
+            session['profilepicture'] = nameresult['profilepicture']
             fullname = session['firstname'] + session['surname']
 
             return redirect(url_for('index'))
