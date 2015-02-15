@@ -264,6 +264,11 @@ hr.dashboard {
   padding:5px 10px 0px 10px;
 }
 
+.nav-profileConnection-img {
+  height: 60px;
+  padding:5px 10px 0px 10px;
+}
+
 /*Icon styles: Font Awesome*/
 .largeIcon {
   font-size: 100px;

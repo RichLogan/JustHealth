@@ -23,16 +23,37 @@
 		</div>
       <!--side pannel to display connections -->
     <fieldset class="style">
-		<div id="dashConnections">
-		<a data-toggle="modal" data-target="#terms"><h5><i class="fa fa-users sideIcons"></i> Connections </h5></a>
-    <hr class="dashboard">
-			{% if connections %}
-				{% for connection in completed %}
-					<p>{{connection.firstname}} {{connection.surname}} <strong>({{connection.username}})</strong></p>
-				{% endfor %}
-			{% else %}
-				<strong>No connections yet</strong>
-			{% endif %}
+    <div id="dashConnections">
+    <a data-toggle="modal" data-target="#terms"><h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
+            <hr class="dashboard">
+      {% if connections %}
+        {% for connection in completed %}   
+            <span id='connections'>   <a class="bigLink" data-toggle="modal" data-target="#references"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
+            <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="terms"><span class= "bold"> Username: </span>{{connection.username}}</h4>
+                  </div>
+                  <div class="modal-body">
+                   <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
+                    <span class= "bold"> Full Name: </span> {{connection.firstname}} 
+                    {{connection.surname}}
+                    <br />
+                    <span class= "bold"> Email: </span> {{connection.email}}
+                    <br />
+                    <span class= "bold"> Telephone Number: </span>{{connection.telephone}}
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+
+      {% else %}
+        <strong>No connections yet</strong>
+      {% endif %}
       <!--model to show connections information -->
 
               <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
