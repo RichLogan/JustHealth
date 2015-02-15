@@ -5,6 +5,70 @@
 {% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
 <br />
+<script>
+$(document).ready(function(){
+  $('.makeDataTable').DataTable({
+    paging:false,
+    info:false,
+    searching:false,
+  });
+
+  //Shows confirm box on delete appointment
+  $(document).ready(function() {
+    $("#deleteapp").submit(function(e) {
+      if (!confirm('Are you sure you want to delete this appointment?')) {
+        e.preventDefault();
+      }
+    });
+  });
+
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  //Check if date is in the past
+  $('#startdate').focusout(function() {
+    var selectedDate = $('#startdate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  $('#enddate').focusout(function() {
+    var selectedDate = $('#enddate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  /*var allDates = $(document.getElementsByClassName('dateForJS'));
+  var now = moment().format();
+  //for loops through allDates
+  // each allDates.value() needs to equal
+  for (var i = 0, len = allDates.length; i<len; i++){
+  var formatting = allDates.html(i);
+  var momentFormatting = moment(formatting);
+  format = momentFormatting.calendar();
+  alert(format);
+  allDates.html(format);
+}*/
+
+$('time').each(function(i, e) {
+  var time = moment($(e).attr('datetime'));
+  $(e).html('<span>' + time.calendar() + '</span>');
+});
+});
+</script>
 
 <div class="row">
   <!--side pannel for profile picture -->
