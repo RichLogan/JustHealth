@@ -25,6 +25,9 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+Provides functionality to add a prescription to a patient's account
+ */
 public class AddPrescription extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class AddPrescription extends Activity {
         );
     }
 
+    /**
+     * Populates the medication spinner with a list of medications given by the JustHealth server
+     */
     private void initMedicationSpinner() {
         //Populate Spinner
         ArrayList<String> populateSpinner = new ArrayList<String>();
@@ -72,6 +78,9 @@ public class AddPrescription extends Activity {
         medication.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
     }
 
+    /**
+     * Handles the input from the addPrescription form, add inserts into the database via the addPrescription API function.
+     */
     private void addPrescription() {
         HashMap<String, String> details = new HashMap<String, String>();
 
@@ -106,21 +115,15 @@ public class AddPrescription extends Activity {
         System.out.println(response);
     }
 
+    /**
+     * Form to validate all user input on the addPrescription form.
+     * @return Boolean to show whether the form successfully validated or not.
+     */
     private boolean validateForm() {
         if (((EditText) findViewById(R.id.quantity)).getText().toString().trim().equals("")) {
-            makeToast("Please give a quantity");
+            Feedback.toast("Please give a quantity", false, getApplicationContext());
             return false;
         }
         return true;
-    }
-
-    private void makeToast(String value) {
-        Context context = getApplicationContext();
-        CharSequence text = value;
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-        toast.getView().setBackgroundColor(Color.RED);
-        toast.show();
     }
 }
