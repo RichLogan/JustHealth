@@ -373,7 +373,7 @@ def appointments():
         if added > 0: 
             flash("Appointment Added", 'success')
             return redirect(url_for('appointments'))
-        return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
+    return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
 
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
