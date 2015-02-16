@@ -278,7 +278,7 @@
     <div role="tabpanel" class="tab-pane fade in container" id="archived" style="width: 100%">
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="archived">
         {% block archived %}
-          {% for appointment in appointments %}
+          {% for appointment in appointments|sort(reverse=True, attribute='startdate') %}
             {% if appointment.upcoming == False %}
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
