@@ -775,7 +775,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['email'] = details ['email']
-        person['profilepicture'] = details ['profilepicture']
+        person['telephonenumber'] = details ['telephonenumber']
         person['accounttype'] = details['accounttype']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)
