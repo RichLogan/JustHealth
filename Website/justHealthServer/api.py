@@ -310,6 +310,7 @@ def getAccountInfo(username):
     result['email'] = user.username.email
     result['dob'] = str(user.username.dob)
     result['profilepicture'] = user.username.profilepicture
+    result['telephonenumber'] = user.username.telephonenumber
     if user.ismale:
         result['gender'] = 'Male'
     else:
