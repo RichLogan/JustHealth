@@ -16,6 +16,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+/**
+ * Allows a user access to their incoming, outgoing and completed connections through the creation of ConnectionsView.
+ */
 public class ConnectionsMain extends Activity {
 
     JSONArray incoming = null;
@@ -31,6 +34,8 @@ public class ConnectionsMain extends Activity {
         actionBar.setTitle("Connections");
 
         // Assign Button Actions
+
+        //Incoming
         RelativeLayout incomingButton = (RelativeLayout) findViewById(R.id.incomingButton);
         incomingButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -42,6 +47,7 @@ public class ConnectionsMain extends Activity {
             }
         );
 
+        // Outgoing
         RelativeLayout outgoingButton = (RelativeLayout) findViewById(R.id.outgoingButton);
         outgoingButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -53,6 +59,7 @@ public class ConnectionsMain extends Activity {
             }
         );
 
+        // Completed
         RelativeLayout completedButton = (RelativeLayout) findViewById(R.id.completedButton);
         completedButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -64,10 +71,14 @@ public class ConnectionsMain extends Activity {
             }
         );
 
+        // Load Connections
         getConnections();
         loadBadges();
     }
 
+    /**
+     * Retrieves ALL connections from the database in order for counts to be calculated and displayed via loadBadges()
+     */
     private void getConnections() {
         HashMap<String, String> getConnectionsInfo = new HashMap<String, String>();
         SharedPreferences account = getSharedPreferences("account", 0);
@@ -86,6 +97,9 @@ public class ConnectionsMain extends Activity {
         }
     }
 
+    /**
+     * Loads the number of connections for each category (Incoming, Outgoing, Completed) onto their respective button.
+     */
     private void loadBadges() {
         String incomingCount = Integer.toString(incoming.length());
         String outgoingCount = Integer.toString(outgoing.length());
