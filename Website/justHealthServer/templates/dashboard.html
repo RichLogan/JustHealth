@@ -86,54 +86,64 @@ $('time').each(function(i, e) {
       </fieldset>
 		</div>
       <!--side pannel to display connections -->
-    <fieldset class="style">
-    <div id="dashConnections">
-    <a data-toggle="modal" data-target="#terms"><h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
+       <fieldset class="style">
+    <!--side pannel to display connections -->
+    <div> 
+      <h5><i class="fa fa-users sideIcons" ></i> Connections </h5>
+       {% if connections %}
+        {% for connection in completed %} 
+          <a data-toggle="modal" data-target="#{{connection.username}}"></a>
             <hr class="dashboard">
-      {% if connections %}
-        {% for connection in completed %}   
-            <span id='connections'>   <a class="bigLink" data-toggle="modal" data-target="#references"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
-            <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
+       
+            <a class="modalheader" data-toggle="modal" data-target="#{{connection.username}}"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
+            <div class="modal fade" id="{{connection.username}}" tabindex="-1" role="dialog" aria-labelledby="{{connection.username}}" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="terms"><span class= "bold"> Username: </span>{{connection.username}}</h4>
+                    <h4 class="modal-title" id="{{connection.username}}"><span class= "bold"> Username: </span>{{connection.username}}</h4>
                   </div>
                   <div class="modal-body">
                    <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
                     <span class= "bold"> Full Name: </span> {{connection.firstname}} 
                     {{connection.surname}}
                     <br />
-                    <span class= "bold"> Email: </span> {{connection.email}}
+                    <span class="bold"> Email: </span> {{connection.email}}
                     <br />
-                    <span class= "bold"> Telephone Number: </span>{{connection.telephone}}
+                    <span class="bold"> Telephone Number: </span>{{connection.telephonenumber}}
                     <br />
+                        <form action="/api/deleteConnection" method="POST">
+                            <input type="hidden" name="user" value="{{session.username}}">
+                            <input type="hidden" name="connection" value="{{connection.username}}">
+                            <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
+                       </form>
                   </div>
                 </div>
               </div>
             </div>
         {% endfor %}
-
       {% else %}
         <strong>No connections yet</strong>
-      {% endif %}
+      {% endif %}     
+    </div> 
+    <div id="dashConnections">
       <!--model to show connections information -->
-
+    <a data-toggle="modal" data-target="#terms"> View Pending Connections </a>
               <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms"><i class="fa fa-users headingIcon"></i> Connections</h4>
+                      <h4 class="modal-title" id="terms">Pending Connections</h4>
                     </div>
                     <div class="modal-body">
                       <h4>Outgoing</h4>
                       <table class="table table-condensed ">
                         <thead>
                           <th>Username</th>
-                          <th>Name</th>
-                          <th>Relationship</th>
+                          <th>First Name</th>
+                          <th>Surname</th>
+                          <th>Account Type</th>
                           <th></th>
                           <th></th>
                           </thead>
@@ -141,7 +151,8 @@ $('time').each(function(i, e) {
                             {% for connection in outgoing %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}} {{connection.surname}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td>{{connection.code}}</td>
                               <form action="/api/cancelConnection" method="POST">
@@ -159,8 +170,9 @@ $('time').each(function(i, e) {
                         <table class="table table-condensed">
                           <thead>
                             <th>Username</th>
-                            <th>Name</th>
-                            <th>Relationship</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Account Type</th>
                             <th></th>
                             <th></th>
                           </thead>
@@ -168,7 +180,8 @@ $('time').each(function(i, e) {
                             {% for connection in incoming %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}} {{connection.surname}}</td>
+                              <td>{{connection.firstname}}</td>
+                              <td>{{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
                               <form action="/api/cancelConnection" method="POST">
@@ -185,54 +198,36 @@ $('time').each(function(i, e) {
                                       <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
                                     </div>
                                     <div class="modal-body">
-                                      <h4>Please enter the verification code given by the requestor</h4>
-                                      <form role="form" action="/completeConnectionWeb" method="POST">
-                                        <div style="width: 70%;margin: 0 auto;">
-                                          <input name="requestor" type="hidden" value="{{connection.username}}">
-                                          <input name="username" type="hidden" value="{{session.username}}">
-                                          <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
-                                          <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
-                                        </div>
-                                      </form>
+                                      <h4>Please enter the verification code given by the requestor</h1>
+                                        <form role="form" action="/completeConnectionWeb" method="POST">
+                                          <div style="width: 70%;margin: 0 auto;">
+                                            <input name="requestor" type="hidden" value="{{connection.username}}">
+                                            <input name="username" type="hidden" value="{{session.username}}">
+                                            <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                            <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                                          </div>
+                                        </form>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                        <!--Table for completed connections -->
-                        <br />
-                        <h4>Completed</h4>
-                        <table class="table table-condensed ">
-                          <thead>
-                              <th>Username</th>
-                              <th>Name</th>
-                              <th>Relationship</th>
-                              <th></th>
-                            </thead>
-                          <tbody>
-                            {% for connection in completed %}
-                            <tr>
-                              <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}} {{connection.surname}}</td>
-                              <td>{{connection.accounttype}}</td>
-                              <form action="/api/deleteConnection" method="POST">
-                                <input type="hidden" name="user" value="{{session.username}}">
-                                <input type="hidden" name="connection" value="{{connection.username}}">
-                                <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
-                              </form>
-                            </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                    </div>
-      				    </div>
-                </div>
-      			</div>
-			</div>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                          <br />
+                        </div>
+                     </div>
+                  </div>
+            </div>
+      </div>
     </fieldset>
+
+
+
+
+
+
 
     <fieldset class="style">
 		  <div id="dashConnections">	
