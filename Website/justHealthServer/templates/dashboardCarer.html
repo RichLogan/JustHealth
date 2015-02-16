@@ -32,8 +32,8 @@ $(document).ready(function(){
   });
 
   //Check if date is in the past
-  $('#startdate').focusout(function() {
-    var selectedDate = $('#startdate').datepicker('getDate');
+  $('#startdateappt').focusout(function() {
+    var selectedDate = $('#startdateappt').val();
     var now = new Date();
     if (selectedDate < now) {
       // selected date is in the past
@@ -94,7 +94,7 @@ $('time').each(function(i, e) {
             <hr class="dashboard">
 			{% if connections %}
 				{% for connection in completed %}		
-            <span id='connections'>   <a class="bigLink" data-toggle="modal" data-target="#references"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
+            <a class="modalheader" data-toggle="modal" data-target="#references"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
             <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -107,9 +107,9 @@ $('time').each(function(i, e) {
                     <span class= "bold"> Full Name: </span> {{connection.firstname}} 
                     {{connection.surname}}
                     <br />
-                    <span class= "bold"> Email: </span> {{connection.email}}
+                    <span class="bold"> Email: </span> {{connection.email}}
                     <br />
-                    <span class= "bold"> Telephone Number: </span>{{connection.telephone}}
+                    <span class="bold"> Telephone Number: </span>{{connection.telephone}}
                     <br />
                   </div>
                 </div>
@@ -904,7 +904,8 @@ $('time').each(function(i, e) {
                                         </div>
                                         <div class="form-group">
                                           <label for="datefrom">Start Date</label>
-                                          <input class="form-control" type="date" name="startdate" id="startdate">
+                                          <input class="form-control" type="date" name="startdate" id="startdateappt">
+                                          <span id="datevalidate1"></span>
                                         </div>
                                         <div class="form-group">
                                           <label for="starttime">Start Time</label>
@@ -955,7 +956,7 @@ $('time').each(function(i, e) {
                 <div class="panel panel-default">
 
               <div class="panel-heading" id= "myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
-                <h3 class="panel-title">
+                <h4 class="panel-title">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
@@ -967,7 +968,7 @@ $('time').each(function(i, e) {
                       </div>
                     </div>
                   </a>
-                </h3>
+                </h4>
                 <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
                   <div class="panel-body">
                     <div class="row">

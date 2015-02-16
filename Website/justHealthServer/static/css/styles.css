@@ -11,20 +11,20 @@ html, body {
 /*Links*/
 a:link    {color:#2272EB; background-color:transparent}
 a:visited {color:#2272EB; background-color:transparent}
-a:hover   {color:#2272EB; background-color:transparent}
+a:hover   {color:#28E378; background-color:transparent}
 a:active  {color:#2272EB; background-color:transparent}
 
 .runner {color: #FFFFFF;}
 a.runner:link    {color:#FFFFFF; background-color:transparent}
 a.runner:visited {color:#FFFFFF; background-color:transparent}
-a.runner:hover   {color:#FFFFFF; background-color:transparent}
+a.runner:hover   {color:#28E378; background-color:transparent}
 a.runner:active  {color:#FFFFFF; background-color:transparent}
 
-.header-nav a {color: #FFFFFF;}
-a.header-nav:link    {color:#FFFFFF; background-color:transparent}
-a.header-nav:visited {color:#FFFFFF; background-color:transparent}
-a.header-nav:hover .fa  {color:#28E378; background-color:transparent}
-a.header-nav:active  {color:#FFFFFF; background-color:transparent}
+.modalheader a {color: #000000;}
+a.modalheader:link    {color:#000000; background-color:transparent}
+a.modalheader:visited {color:#000000; background-color:transparent}
+a.modalheader:hover .fa  {color:#28E378; background-color:transparent}
+a.modalheader:active  {color:#000000; background-color:transparent}
 
 .smallLink {
   font-style: italic;
@@ -234,13 +234,8 @@ hr.dashboard {
   color: #FFFFFF;
 }
 
-#myPatientsPatientName {
-  color: #2272EB;
-}
-
-#myPatientsPatientName:hover {
-  color: #FFFFFF;
-}
+#myPatientsPatientName {color: #000000;}
+#myPatientsPatientName:hover {color: #28E378;}
 
 /*Styles for error pages*/
 .errorDiv {
@@ -294,7 +289,6 @@ hr.dashboard {
 
 .navIcon {
   font-size: 35px;
-  color: #FFFFFF;
   padding:5px 10px 0px 10px;
 }
 
