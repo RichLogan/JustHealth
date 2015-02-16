@@ -325,9 +325,9 @@ $('time').each(function(i, e) {
                         {% endwith %}
                         <!-- End flashed message -->
                         <!--Add prescription form -->
+                        <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
                         <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
                           <input name="username" type="hidden" value="{{patient.username}}">
-                          <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -411,14 +411,13 @@ $('time').each(function(i, e) {
                               </div>
                             </div>
 
-                            <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
-
                             <div style="margin-left:auto;margin-right: auto;width: 150px;">
-                              <input class="btn btn-success" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
+                              <input class="btn btn-success pull-right" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                             </div>
                             <hr />
-                          </div>
                         </form>
+                        <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
+                      </div>
                         <!--End form -->
 
                         <div role="tabpanel">
@@ -935,7 +934,7 @@ $('time').each(function(i, e) {
 
     <hr>
 		 <!--Carer Appointments to show on dashboard --> 
-		<a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
+		<a href="/carerAppointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
 
     <hr>
     <div class="panel-group" id="accordion" aria-multiselectable="true">
