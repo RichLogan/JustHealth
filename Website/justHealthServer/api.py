@@ -1365,19 +1365,22 @@ def getPrescriptionsDueNow(username, currentTime):
     """Seach for prescriptions due now"""
 
 def pingServer(sender, **extra):
+    """Checks to see if there are any reminders to create/delete"""
     try:
         loggedInUser = session['username']
         dt = datetime.datetime.now()
+        
+        if Appointments.select().count() != 0:
+            deleteReminders(loggedInUser, dt)
+
         if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
             addReminders(loggedInUser, dt)
-        else:
-            return
+    # No-one logged in
     except KeyError, e:
         return
 
 def addReminders(username, now):
-    """Method to check for appointments/prescriptions"""
-
+    """Adds reminders to the Reminder table"""
     # Get All Reminders (Saving on performance hits later)
     allReminders = Reminder.select().where(Reminder.username == username)
 
@@ -1410,8 +1413,24 @@ def addReminders(username, now):
             )
             with database.transaction():
                 insertReminder.execute()
-# Causes the reminder ping to execute every time a request is started. 
-request_started.connect(pingServer, app)
+
+def deleteReminders(username, now):
+    """Deletes any reminders that have expired"""
+    # Get all Reminders
+    allReminders = Reminder.select().where(Reminder.username == username)
+
+    # Appointments
+    appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
+    allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
+    for reminder in appointmentReminders:
+        appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
+        appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
+        if appointmentEndDateTime < now:
+            with database.transaction():
+                reminder.delete_instance()
+
+    # Prescriptions
+    PrescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
 
 @app.route('/test/getReminders')
 def getReminders():
@@ -1423,3 +1442,10 @@ def getReminders(username):
     for r in allReminders:
         reminders.append(r)
     return json.dumps(reminders)
+
+##
+# Signalling
+##
+
+# Causes the reminder ping to execute every time a request is started.
+request_started.connect(pingServer, app)
