@@ -329,7 +329,7 @@ def resetPasswordRedirect():
     if result == "True":
         return render_template('login.html', type="success", message="Your password has been reset, please check your email and click the link to verify.")
     else:
-        return render_template('resetpassword.html', type="danger", message=result)
+        return render_template('resetpassword.html', type="danger", message="The details that you entered are incorrect. Please try again.", user=result)
     return render_template('resetpassword.html')
 
 

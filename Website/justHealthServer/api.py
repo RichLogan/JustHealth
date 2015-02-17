@@ -283,7 +283,7 @@ def resetPassword():
         sendPasswordResetEmail(profile['username'])
         return "True"
     else:
-        return "Invalid details"
+        return profile['username']
 
 ####
 # Account Information
