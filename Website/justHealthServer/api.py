@@ -1217,6 +1217,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Appointment Updated'] = "Appointments"
     notificationTypeTable['Appointment Cancelled'] = ""
     notificationTypeTable['Password Reset'] = ""
+    notificationTypeTable['Medication Low'] = "Prescription"
 
     createNotification = Notification.insert(
         username = user,
@@ -1278,6 +1279,10 @@ def getNotificationContent(notification):
 
     if notification['notificationtype'] == "Password Reset":
         content = "Your password has been changed successfully."
+
+    if notification['notificationtype'] == "Medication Low":
+        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        content = prescription.username.username + "'s prescription for " + prescription.medication.name + " is running low."
     
     return content
 
@@ -1306,6 +1311,9 @@ def getNotificationLink(notification):
 
     if notification['notificationtype'] == "Password Reset":
         link = "/"
+
+    if notification['notificationtype'] == "Medication Low":
+        link = "/prescriptions"
     return link
 
 def getNotificationTypeClass(notification):
@@ -1379,3 +1387,14 @@ def expiredResetPassword(request):
         createNotificationRecord(user, "Password Reset", None)
         return "True"
     return "False"
+
+def checkPrescriptionLevel(username, activePrescriptions):
+    today = datetime.datetime.now().date()
+    for prescription in activePrescriptions:
+        if(prescription['stockleft'] < 10):
+            if Notification.select().where((Notification.username == username) & (Notification.dismissed == False) & (Notification.notificationtype == "Medication Low") & (Notification.relatedObject == prescription['prescriptionid'])).count() == 0:
+                createNotificationRecord(username, "Medication Low", prescription['prescriptionid'])
+
+            
+
+

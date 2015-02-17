@@ -54,7 +54,6 @@ def home():
 def homecarer():
     """Dashboard home page carer"""
     accountInfo = json.loads(getAccountInfo(session['username']))
-    notifications = json.loads(getNotifications(session['username']))
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
@@ -82,6 +81,12 @@ def homecarer():
         activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
         upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
         expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+        #check patient medication levels
+        checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
+
+    #notifications relies on some of the methods above and therefore needs to be run at the end of this block.
+    #Otherwise the notification won't be displayed until the refresh after it is created.
+    notifications = json.loads(getNotifications(session['username']))
 
     return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
@@ -453,6 +458,7 @@ def myPatients():
         activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
         upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
         expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+
     return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/prescriptions')
