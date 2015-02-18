@@ -21,6 +21,7 @@ class Client(BaseModel):
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
     profilepicture = CharField(max_length=100, null=True)
+    telephonenumber = CharField(max_length=100, null=True)
     verified = BooleanField()
 
     class Meta:

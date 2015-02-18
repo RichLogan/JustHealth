@@ -12,14 +12,20 @@ html, body {
 /*Links*/
 a:link    {color:#2272EB; background-color:transparent}
 a:visited {color:#2272EB; background-color:transparent}
-a:hover   {color:#2272EB; background-color:transparent}
+a:hover   {color:#28E378; background-color:transparent}
 a:active  {color:#2272EB; background-color:transparent}
 
 .runner {color: #FFFFFF;}
 a.runner:link    {color:#FFFFFF; background-color:transparent}
 a.runner:visited {color:#FFFFFF; background-color:transparent}
-a.runner:hover   {color:#FFFFFF; background-color:transparent}
+a.runner:hover   {color:#28E378; background-color:transparent}
 a.runner:active  {color:#FFFFFF; background-color:transparent}
+
+.modalheader a {color: #000000;}
+a.modalheader:link    {color:#000000; background-color:transparent}
+a.modalheader:visited {color:#000000; background-color:transparent}
+a.modalheader:hover .fa  {color:#28E378; background-color:transparent}
+a.modalheader:active  {color:#000000; background-color:transparent}
 
 .smallLink {
   font-style: italic;
@@ -28,6 +34,8 @@ a.runner:active  {color:#FFFFFF; background-color:transparent}
 
 header {
   padding: 10px;
+  height: 7%;
+  background-color:#2272EB;
 }
 
 #mainLogo {
@@ -35,7 +43,6 @@ header {
 }
 
 #navBar {
-  height: 7%;
   background-color:#2272EB;
 }
 
@@ -54,6 +61,14 @@ header {
   padding:10px;
   padding-bottom:40px;   /* Height of the footer */
   width: 55%;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+#homecontent {
+  padding:10px;
+  padding-bottom:40px;   /* Height of the footer */
+  width: 75%;
   margin: 0 auto;
   margin-top: 40px;
 }
@@ -109,8 +124,8 @@ footer #footerContainer {
 /*Fixes footer issue */
 fieldset.fix {
   width: 100%;
-  margin: auto;
-  padding: 8px;
+  margin: 0 auto;
+  padding: 0px;
 }
 
 fieldset.form-container {
@@ -178,16 +193,29 @@ fieldset.dashboard {
 }
 
 fieldset.style {
-  margin: 0px 0px 10px 0px;
+  margin-bottom: 10px;
   background: #FFFFFF;
   border: 1px solid silver;
   padding: 0px 20px 0px 20px;
   border-radius: 4px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.center-element {
+  text-align: center;
 }
 
 hr {
   color: #000000;
   width: 100%;
+}
+
+hr.dashboard {
+  color: #000000;
+  width: 100%;
+  margin: 0.5em 0;
 }
 
 #register label{
@@ -202,18 +230,13 @@ hr {
   outline:0;
 }
 
-#myPatientsTab {
+.myPatientsTab {
   background-color: #2272EB;
   color: #FFFFFF;
 }
 
-#myPatientsPatientName {
-  color: #FFFFFF;
-}
-
-#myPatientsPatientName:hover {
-  color: #FFFFFF;
-}
+#myPatientsPatientName {color: #000000;}
+#myPatientsPatientName:hover {color: #28E378;}
 
 /*Styles for error pages*/
 .errorDiv {
@@ -230,6 +253,16 @@ hr {
   height: 100%;
   float: left;
   position: fixed;
+}
+
+.nav-profile-img {
+  height: 40px;
+  padding:5px 10px 0px 10px;
+}
+
+.nav-profileConnection-img {
+  height: 60px;
+  padding:5px 10px 0px 10px;
 }
 
 /*Icon styles: Font Awesome*/
@@ -255,8 +288,13 @@ hr {
   color: #2272EB;
 }
 
-.headingIcon {
+.navIcon {
   font-size: 35px;
+  padding:5px 10px 0px 10px;
+}
+
+.headingIcon {
+  font-size: 30px;
   color: #2272EB;
 }
 
@@ -288,23 +326,23 @@ hr {
   color: #DF111C;
 }
 
-#result{
+#result {
 	margin-left:5px;
 }
 
-.passwordShort{
+.passwordShort {
 	color: #DF111C;
 }
 
-.passwordWeak{
+.passwordWeak {
 	color: #DF111C;
 }
 
-.passwordGood{
+.passwordGood {
 	color: #FFC90E;
 }
 
-.passwordStrong{
+.passwordStrong {
 	color: #30D917;
 }
 
@@ -344,6 +382,7 @@ hr {
 #profilePicture {
   width: 7.5em;
 }
+
 /* Admin portal new */
 fieldset.form-admin {
   width: 100%;
@@ -365,6 +404,6 @@ fieldset.form-admin {
     -webkit-column-count: 5; /* Chrome, Safari, Opera */
     -moz-column-count: 5; /* Firefox */
     column-count: 5;
-  
 }
+
 .double_column_list li {float: left; width: 15%;}

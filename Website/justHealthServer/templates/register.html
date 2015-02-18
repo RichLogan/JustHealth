@@ -24,6 +24,7 @@ $(document).ready(function() {
 		}
 	});
 
+    //Check all fields are filled in
 	$('form').submit(function(e) {
 		$("form :input").each(function(){
 			if ($(this).val() == null || $(this).val() == "") {
@@ -32,14 +33,6 @@ $(document).ready(function() {
 				return false;
 			}
 		});
-	});
-
-	//check if date format is valid
-	$('#validateDOB').focusout(function() {
-		if(validateDOB($('#validateDOB').val())) {
-			//alert user that date format is invalid
-			alert("Date not valid");
-		}
 	});
 
 	$('#usernameInput').keyup(function() {
@@ -70,7 +63,7 @@ $(document).ready(function() {
         <hr>
     <fieldset class="register-inner">
     <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
-    <form name="register" action="/register" id="register" method="POST">
+    <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
     	<!-- Display any messages -->
     	{% if message != null %}
     		<div class="alert alert-{{type}} alert-dismissible" role="alert">
@@ -95,9 +88,9 @@ $(document).ready(function() {
       </div>
 
       <div class="form-group">
-        <label for="dob">Date of Birth</label>
-        <input class="form-control input-sm" type="date" name="dob" id="validateDOB">
-    		<span id="DOBValidation"></span>
+        <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
+        <input class="form-control input-sm" type="date" name="dob" id="dob">
+    		<span id="dobValidate"></span>
       </div>
 
       <div class="form-group">
@@ -138,9 +131,8 @@ $(document).ready(function() {
     	</div>
 
     	<div class="form-group">
-    		<input class="btn btn-success pull-right" type="submit" value="Sign up">
+    		<input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
     	</div>
-    
     </form>
     </fieldset>
 </fieldset>

@@ -88,6 +88,11 @@ public class DeactivateAccount extends Activity {
         appointmentType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, populateSpinner));
     }
 
+    /**
+     * This method makes a post request to the API to deactivate an account. It adds all of the
+     * parameters to a HashMap.
+     * Once complete, it returns the appropriate message to the user.
+     */
     private void popUpDeactivate() {
         HashMap<String, String> reasons = new HashMap<String, String>();
 
