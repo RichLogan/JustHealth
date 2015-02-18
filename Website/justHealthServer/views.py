@@ -32,37 +32,21 @@ def index():
     """A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
     ## set common functionality
     accountInfo = json.loads(getAccountInfo(session['username']))
-    notifications = json.loads(getNotifications(session['username']))
-    connections = json.loads(getConnections(session['username']))
-    appointments = json.loads(getAllAppointments(session['username'], session['username']))
-    prescriptions = json.loads(getPrescriptions(session['username']))
-    outgoingConnections = json.loads(connections['outgoing'])
-    incomingConnections = json.loads(connections['incoming'])
-    completedConnections = json.loads(connections['completed'])
-
-    return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
-
-@app.route('/homecarer')
-@needLogin
-def homecarer():
-    """Dashboard home page carer"""
-    accountInfo = json.loads(getAccountInfo(session['username']))
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
     incomingConnections = json.loads(connections['incoming'])
     completedConnections = json.loads(connections['completed'])
 
-    # if user is a patient
     if accountInfo['accounttype'] == "Patient":
-        # add patient functionality
+        # Patient Functionality
+        notifications = json.loads(getNotifications(session['username']))
         prescriptions = json.loads(getPrescriptions(session['username']))
-        # render template
         return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
-    # else carer
     elif accountInfo['accounttype'] == "Carer":
-        # add carer functionality
-        # Get Patients
+        # Carer Functionality
+        
+        # Get Carer's Patients
         if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
             # Get all patients connected to this user
             connections = json.loads(getConnections(session['username']))
@@ -71,24 +55,21 @@ def homecarer():
             for connection in completedConnections:
                 if connection['accounttype'] == "Patient":
                     patients.append(connection)
-        # Get all appointments
+        
         appointmentsMapping = {}
-        # Get all prescriptions
         activePrescriptions = {}
         upcomingPrescriptions = {}
         expiredPrescriptions = {}
         for patient in patients:
             appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
-    
             activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
             upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
             expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
             checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
 
-        #notifications relies on some of the methods above and therefore needs to be run at the end of this block.
-        #Otherwise the notification won't be displayed until the refresh after it is created.
+        # Notifications relies on some of the methods above and therefore needs to be run at the end of this block.
+        # Otherwise the notification won't be displayed until the refresh after it is created.
         notifications = json.loads(getNotifications(session['username']))
-
         return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions, medicationList = Medication.select())
 
 @app.route('/profile')
