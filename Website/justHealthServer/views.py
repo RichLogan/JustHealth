@@ -565,6 +565,19 @@ def searchNHS():
     return render_template('searchNHSDirect.html')
 
 
+@app.route('/notes',methods=['POST', 'GET'])
+def notes():
+    """JustHealth correspondence"""
+    connections = json.loads(getConnections(session['username']))    
+    if request.method == "GET":
+        try:
+            patient = request.args.get('user', '')
+            Patientcarer.select().where((Patientcarer.carer == session['username']) & (Patientcarer.patient == patient)).get()
+            correspondence = json.loads(getCorrespondence(session['username'], patient))
+            return render_template('correspondence.html', correspondence=correspondence)
+        except Patientcarer.DoesNotExist:
+            return redirect(url_for('index'))
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('internalError.html'), 500

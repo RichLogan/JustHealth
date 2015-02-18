@@ -138,6 +138,16 @@ class Prescription(BaseModel):
     class Meta:
         db_table = 'prescription'
 
+class Notes(BaseModel):
+    noteid = PrimaryKeyField()
+    carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carernotes')
+    patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patientnotes')
+    notes = CharField(null=True)
+
+    class Meta:
+        db_table = 'notes'
+
+
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
     dropAll()
@@ -153,6 +163,7 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+    Notes.create_table()
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -178,3 +189,5 @@ def dropAll():
         Medication.drop_table(cascade=True)
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
+    if Notes.table_exists():
+        Notes.drop_table(cascade=True)

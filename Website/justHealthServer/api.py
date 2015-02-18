@@ -19,6 +19,7 @@ import random
 
 auth = HTTPBasicAuth()
 
+
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
@@ -1144,6 +1145,7 @@ def getPrescription(details):
     return json.dumps(prescription)
 
 
+
 @app.route('/api/searchNHSDirectWebsite', methods=['POST'])
 @auth.login_required
 def searchNHSDirect():
@@ -1182,6 +1184,17 @@ def getAppointmentTypes():
       typeList.append(appType.type)
     typeList = json.dumps(typeList)
     return typeList
+
+@app.route('/api/getCorrespondence', methods=['GET'])
+@auth.login_required
+def getCorrespondence():
+    return getCorrespondence()
+
+def getCorrespondence(carer, patient):
+     allNotes = Notes.select().where(Notes.carer == carer & Notes.patient == patient).dicts()
+     return json.dumps(allNotes)
+
+
 
 @app.route('/api/addAndroidEventId', methods=['POST'])
 @auth.login_required
