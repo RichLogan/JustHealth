@@ -902,6 +902,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment['description'] = app.description
     appointment['private'] = app.private
     appointment['androideventid'] = app.androideventid
+    appointment['accepted'] = app.accepted
     
     dateTime = str(app.startdate) + " " + str(app.starttime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")

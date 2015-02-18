@@ -173,11 +173,27 @@
                     <div class="panel-body">
                       <div class="row">
                         <div class="col-md-6">
+                          {% if appointment.creator != session['username'] %}
+                            <p><b>Invited By: </b> <br /> {{appointment.creator}} </p>
+                          {% endif %} 
                           <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                           <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
                           <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
-                          {% if appointment.private == True %}
-                            <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating  your appointment.</em></p> <br />
+                          {% if appointment.creator != session['username'] %}
+                            {% if appointment.accepted == true %}
+                              <p><em>You have accepted this appointment.</em></p>
+                            {% endif %}
+                            {% if appointment.accepted == false %}
+                              <p><em>You have declined this appointment.</em></p>
+                            {% endif %}
+                            {% if appointment.accepted == none %}
+                              <p><em>You have yet to respond to this appointment.</em></p>
+                            {% endif %}
+                          {% endif %}
+                          {% if appointment.creator == session['username'] %}
+                            {% if appointment.private == true %}
+                              <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating  your appointment.</em></p> <br />
+                            {% endif %}
                           {% endif %}
                         </div>
                         <div class="col-md-6">
