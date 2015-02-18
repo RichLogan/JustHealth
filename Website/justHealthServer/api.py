@@ -843,7 +843,8 @@ def addInviteeAppointment(details):
     enddate = details['enddate'],
     endtime = details['endtime'],
     description = details['description'],
-    private = False
+    private = False,
+    accepted = False
     )
 
   appId = str(appointmentInsert.execute())
@@ -950,6 +951,7 @@ def getUpdateAppointment(user, appid):
     jsonResult.append(appointment)
     return json.dumps(jsonResult)
 
+
 #update an appointment
 @app.route('/api/updateAppointment', methods=['POST'])
 @auth.login_required
@@ -984,6 +986,60 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
 
 
   return "Appointment Updated"
+
+@app.route('/api/getAppointment', methods=['POST'])
+@auth.login_required
+def getAppointment():
+    return getAppointment(request.form['user'], request.form['appid'])
+
+def getAppointment(user, appid):
+  isRelated = Appointments.select().where(Appointments.appid == appid).get()
+
+  if (isRelated.creator.username == user) or (isRelated.invitee.username):
+
+    appointment = {}
+    appointment['appid'] = isRelated.appid
+    appointment['creator'] = isRelated.creator.username
+    appointment['name'] = isRelated.name
+    appointment['apptype'] = str(isRelated.apptype.type)
+    appointment['addressnamenumber'] = isRelated.addressnamenumber
+    appointment['postcode'] = isRelated.postcode
+    appointment['startdate'] = str(isRelated.startdate)
+    appointment['starttime'] = str(isRelated.starttime)
+    appointment['enddate'] = str(isRelated.enddate)
+    appointment['endtime'] = str(isRelated.endtime)
+    appointment['description'] = isRelated.description
+    appointment['private'] = isRelated.private
+
+    return json.dumps(appointment)
+
+@app.route('/api/acceptDeclineAppointment', methods=['POST'])
+@auth.login_required
+def acceptDeclineAppointment():
+    return acceptDeclineAppointment(request.form['username'], request.form['action'], request.form['appid'])
+
+def acceptDeclineAppointment(user, action, appointmentId): 
+    appointment = Appointments.select().where(Appointments.appid == appointmentId).get()
+    if user == appointment.invitee.username:
+        if action == "Accept": 
+            accepted = True
+            notificationType = "Appointment Accepted"
+            result = "You have accepted this appointment."
+        else:
+            accepted = False
+            notificationType = "Appointment Declined"
+            result = "You have declined this appointment"
+        submitAction = Appointments.update(accepted = accepted).where(Appointments.appid == appointmentId)
+
+        with database.transaction():
+            submitAction.execute()
+            createNotificationRecord(appointment.creator.username, notificationType, appointmentId)
+            return result
+        
+        return "Failed"
+    return "You have not been invited to this appointment."
+
+
 
 @app.route('/api/addMedication', methods=['POST'])
 @auth.login_required
@@ -1218,6 +1274,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Appointment Cancelled'] = ""
     notificationTypeTable['Password Reset'] = ""
     notificationTypeTable['Medication Low'] = "Prescription"
+    notificationTypeTable['Appointment Declined'] = "Appointments"
+    notificationTypeTable['Appointment Accepted'] = "Appointments"
 
     createNotification = Notification.insert(
         username = user,
@@ -1268,7 +1326,7 @@ def getNotificationContent(notification):
     
     if notification['notificationtype'] == "Appointment Invite":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has added an appointment with you on" + str(appointment.startdate) + "."
+        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + "."
 
     if notification['notificationtype'] == "Appointment Updated":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
@@ -1283,6 +1341,14 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Medication Low":
         prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
         content = prescription.username.username + "'s prescription for " + prescription.medication.name + " is running low."
+
+    if notification['notificationtype'] == "Appointment Accepted":
+        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        content = appointment.invitee.username + " has accepted the appointment with you on " + str(appointment.startdate) + "."
+
+    if notification['notificationtype'] == "Appointment Declined":
+        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        content = appointment.invitee.username + " has declined the appointment with you on " + str(appointment.startdate) + "."
     
     return content
 
@@ -1301,7 +1367,7 @@ def getNotificationLink(notification):
         link = "/prescriptions"
     
     if notification['notificationtype'] == "Appointment Invite":
-        link = "/appointments"
+        link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Updated":
         link = "/appointments"
@@ -1309,11 +1375,18 @@ def getNotificationLink(notification):
     if notification['notificationtype'] == "Appointment Cancelled":
         link = "/appointments"
 
+    if notification['notificationtype'] == "Appointment Accepted":
+        link = "/appointments"
+
+    if notification['notificationtype'] == "Appointment Declined":
+        link = "/appointments"
+
     if notification['notificationtype'] == "Password Reset":
         link = "/"
 
     if notification['notificationtype'] == "Medication Low":
         link = "/prescriptions"
+    
     return link
 
 def getNotificationTypeClass(notification):

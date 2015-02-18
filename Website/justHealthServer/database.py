@@ -108,6 +108,7 @@ class Appointments(BaseModel):
     description = CharField(max_length=5000, null=True)
     private = BooleanField()
     androideventid = IntegerField(null=True)
+    accepted = BooleanField(null=True)
 
     class Meta:
         db_table = 'appointments'

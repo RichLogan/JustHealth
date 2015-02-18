@@ -434,6 +434,29 @@ def updateAppointment_view():
     flash(updated, 'success')
     return redirect(url_for('appointments'))
 
+@app.route('/appointmentDetails', methods=['GET', 'POST'])
+def appointmentAcceptDecline_view():
+    if request.method == 'GET':
+        appid = request.args.get('id')
+        getApp = json.loads(getAppointment(session['username'], appid))
+        return render_template('appointmentAcceptDecline.html', appointment=getApp)
+    if request.method == 'POST':
+        action = acceptDeclineAppointment(session['username'], request.form['action'], request.form['appid'])
+        
+        if request.form['action'] == "Accept":
+            messageType = 'success'
+        else: 
+            messageType = 'danger'
+
+        if action == "Failed": 
+            messageType = 'danger'
+        if action == "You have not been invited to this appointment.": 
+            messageType = 'danger'
+
+        getApp = json.loads(getAppointment(session['username'], request.form['appid']))
+        return render_template('appointmentAcceptDecline.html', appointment=getApp, message=action, type=messageType)
+
+
 @app.route('/myPatients')
 def myPatients():
     """Shows carer page listing their connected patients, they can edit each patient's prescriptions and appointments from here"""
