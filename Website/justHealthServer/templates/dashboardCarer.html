@@ -326,8 +326,8 @@ $('time').each(function(i, e) {
                         <!-- End flashed message -->
                         <!--Add prescription form -->
                         <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
-                        <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
-                          <input name="username" type="hidden" value="{{patient.username}}">
+                          <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
+                            <input name="username" type="hidden" value="{{patient.username}}">
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -415,10 +415,11 @@ $('time').each(function(i, e) {
                               <input class="btn btn-success pull-right" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                             </div>
                             <hr />
-                        </form>
+                          </form>
                         <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
-                      </div>
                         <!--End form -->
+                      </div>
+
 
                         <div role="tabpanel">
                           <!-- Nav tabs -->
