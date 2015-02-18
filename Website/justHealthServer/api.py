@@ -891,6 +891,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment = {}
     appointment['appid'] = app.appid
     appointment['creator'] = app.creator.username
+    appointment['invitee'] = app.invitee.username
     appointment['name'] = app.name
     appointment['apptype'] = str(app.apptype.type)
     appointment['addressnamenumber'] = app.addressnamenumber
