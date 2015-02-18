@@ -105,7 +105,19 @@
 	           <div class="col-md-10">
 		          <div id="myTabContent" class="tab-content pull right">
    			          <div class="tab-pane fade in active" id="home">
-   				         <br />
+   				          <br />
+                      {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          <div class=flashes>
+                          {% for category, message in messages %}
+                            <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                            <button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            {{message}}
+                            </div>
+                          {% endfor %}
+                          </div>
+                        {% endif %}
+                      {% endwith %}
                         <h5>Welcome to the JustHealth IM Portal</h5>
                         <p> Please remember you are able to access personal and potentially sensitive data on this admin portal. For more information on data protection please view the terms and conditions.</p> 
                         On this site you are able to:
