@@ -402,7 +402,7 @@ $('time').each(function(i, e) {
 
                               <div class="form-group">
                                 <label for="{{patient.username}}_stockleft">Stock</label>
-                                <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_sotckleft" placeholder="Patient's current stock">
+                                <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Patient's current stock">
                               </div>
 
                               <div class="form-group">
@@ -411,13 +411,15 @@ $('time').each(function(i, e) {
                               </div>
                             </div>
 
-                            <div style="margin-left:auto;margin-right: auto;width: 150px;">
-                              <input class="btn btn-success pull-right" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
+                            <div>
+                              <input class="btn btn-success pull-right" type="submit" value="Add prescription" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                             </div>
-                            <hr />
+                            
                           </form>
-                        <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
+                        <button class="btn btn-danger pull-right" style="margin-right:5px;" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
                         <!--End form -->
+                      </br>
+                        <hr />
                       </div>
 
 
