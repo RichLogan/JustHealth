@@ -143,6 +143,8 @@ class Notes(BaseModel):
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carernotes')
     patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patientnotes')
     notes = CharField(null=True)
+    title = CharField(null=True)
+    datetime = DateField()
 
     class Meta:
         db_table = 'notes'

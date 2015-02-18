@@ -574,7 +574,7 @@ def notes():
             patient = request.args.get('user', '')
             Patientcarer.select().where((Patientcarer.carer == session['username']) & (Patientcarer.patient == patient)).get()
             correspondence = json.loads(getCorrespondence(session['username'], patient))
-            return render_template('correspondence.html', correspondence=correspondence)
+            return render_template('correspondence.html', notes=correspondence)
         except Patientcarer.DoesNotExist:
             return redirect(url_for('index'))
 

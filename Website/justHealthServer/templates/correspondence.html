@@ -11,9 +11,48 @@
 
 
 <fieldset class ="form-container">
+
    <i class="fa fa-pencil headingIcon pull-left"></i><h4 class= "pull-left">Patient Notes</h4>
 
   <hr>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+   {% for note in notes %}
+    <h5><strong>Title: </strong>{{note.title}} </h5>
+    <p><strong>Comment: </p> </strong>
+    <p>{{note.notes}} </p>
+     <p><strong>Date Posted:</p> </strong>
+    {{note.datetime}}
+    <hr>
+   {% endfor %}
+</div>
+  <form role="form" action="/contactUs" method="post" >
+
+          <div class="col-md-8">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <h4> Add Comment </h4>
+                  <label for="InputName">Title</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="Title">
+                      <span class="input-group-addon"></span></div>
+                    </div>
+                    <input type="hidden" class="form-control" name="username" id="username"  readonly="true" >
+                    <div class="form-group">
+                      <label for="InputMessage">Message</label>
+                      <div class="input-group">
+                        <textarea name="message" id="InputMessage" class="form-control" rows="5" ></textarea>
+                        <span class="input-group-addon"></span></div>
+                    </div>
+                    <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
+             </div>
+           </div>
+         </div>
+      </form>                  
+
 
  </fieldset>
 

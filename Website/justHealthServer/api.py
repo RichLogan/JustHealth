@@ -17,6 +17,7 @@ import smtplib
 import json
 import random
 
+
 auth = HTTPBasicAuth()
 
 
@@ -1185,15 +1186,25 @@ def getAppointmentTypes():
     typeList = json.dumps(typeList)
     return typeList
 
-@app.route('/api/getCorrespondence', methods=['GET'])
+@app.route('/api/getCorrespondence', methods=['GET', 'POST'])
 @auth.login_required
 def getCorrespondence():
     return getCorrespondence()
 
 def getCorrespondence(carer, patient):
-     allNotes = Notes.select().where(Notes.carer == carer & Notes.patient == patient).dicts()
-     return json.dumps(allNotes)
-
+     allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
+     
+     results = []
+     for n in allNotes:
+        note = {}
+        note['noteid'] = n.noteid
+        note['carer'] = n.carer.username
+        note['patient'] = n.patient.username
+        note['notes'] = n.notes
+        note['title'] = n.title
+        note['datetime'] = str(n.datetime)
+        results.append(note)
+     return json.dumps(results)
 
 
 @app.route('/api/addAndroidEventId', methods=['POST'])
