@@ -1,7 +1,73 @@
 {% extends "template.html" %}
 {% block title %}Home{% endblock %}
 {% block scriptsAndStyles %}{% endblock %}
+
+{% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
+<script>
+$(document).ready(function(){
+  $('.makeDataTable').DataTable({
+    paging:false,
+    info:false,
+    searching:false,
+  });
+
+  //Shows confirm box on delete appointment
+  $(document).ready(function() {
+    $("#deleteapp").submit(function(e) {
+      if (!confirm('Are you sure you want to delete this appointment?')) {
+        e.preventDefault();
+      }
+    });
+  });
+
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  //Check if date is in the past
+  $('#startdateappt').focusout(function() {
+    var selectedDate = $('#startdateappt').val();
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  $('#enddate').focusout(function() {
+    var selectedDate = $('#enddate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  /*var allDates = $(document.getElementsByClassName('dateForJS'));
+  var now = moment().format();
+  //for loops through allDates
+  // each allDates.value() needs to equal
+  for (var i = 0, len = allDates.length; i<len; i++){
+  var formatting = allDates.html(i);
+  var momentFormatting = moment(formatting);
+  format = momentFormatting.calendar();
+  alert(format);
+  allDates.html(format);
+}*/
+
+$('time').each(function(i, e) {
+  var time = moment($(e).attr('datetime'));
+  $(e).html('<span>' + time.calendar() + '</span>');
+});
+});
+</script>
 
 <br />
 
@@ -9,36 +75,67 @@
     <!--side pannel for profile picture -->
 	<div class="col-md-3 dashPanel">
 		<div id="dashProfile">
-      <fieldset class="style">
+      <fieldset class="style center-element">
+      <h4 style="text-align:left;" class="bold">{{session.username}}</h4>
 			<a class"thumbnail" href="/editProfile"> 
-			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" ></i>  </h5> </a>
-			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"><br />
-			<br />
-			<strong>{{session.username}}</strong>
-			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
+			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" style="position: absolute; top: 5%; right: 5%;"></i></h5>
+      </a>
+			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle" style="position: relative; top: 0; left: 0;"></br></br>
+			<p style="text-align:left;">{{accountInfo.firstname}} {{accountInfo.surname}}
+      </br>
+      {{accountInfo.email}}</p>
       </fieldset>
 		</div>
 		
     <fieldset class="style">
     <!--side pannel to display connections -->
-		<div id="dashConnections">
-		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
-
-			{% if connections %}
-				{% for connection in completed %}
-					<p>{{connection.firstname}} {{connection.surname}} <strong>({{connection.username}})</strong></p>
-				{% endfor %}
-			{% else %}
-				<strong>No connections yet</strong>
-			{% endif %}
+    <div> 
+      <h5><i class="fa fa-users sideIcons" ></i> Connections </h5>
+       {% if connections %}
+        {% for connection in completed %} 
+          <a data-toggle="modal" data-target="#{{connection.username}}"></a>
+            <hr class="dashboard">
+       
+            <a class="modalheader" data-toggle="modal" data-target="#{{connection.username}}"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
+            <div class="modal fade" id="{{connection.username}}" tabindex="-1" role="dialog" aria-labelledby="{{connection.username}}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="{{connection.username}}"><span class= "bold"> Username: </span>{{connection.username}}</h4>
+                  </div>
+                  <div class="modal-body">
+                   <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
+                    <span class= "bold"> Full Name: </span> {{connection.firstname}} 
+                    {{connection.surname}}
+                    <br />
+                    <span class="bold"> Email: </span> {{connection.email}}
+                    <br />
+                    <span class="bold"> Telephone Number: </span>{{connection.telephonenumber}}
+                    <br />
+                        <form action="/api/deleteConnection" method="POST">
+                            <input type="hidden" name="user" value="{{session.username}}">
+                            <input type="hidden" name="connection" value="{{connection.username}}">
+                            <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
+                       </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+      {% else %}
+        <strong>No connections yet</strong>
+      {% endif %}     
+    </div> 
+    <div id="dashConnections">
       <!--model to show connections information -->
-		<a data-toggle="modal" data-target="#terms"> View Connections </a>
+    <a data-toggle="modal" data-target="#terms"> View Pending Connections </a>
               <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms"> Connections</h4>
+                      <h4 class="modal-title" id="terms">Pending Connections</h4>
                     </div>
                     <div class="modal-body">
                       <h4>Outgoing</h4>
@@ -119,57 +216,41 @@
                               {% endfor %}
                             </tbody>
                           </table>
-                          <!--Table for completed connections -->
                           <br />
-                          <h4>Completed</h4>
-                          <table class="table table-condensed ">
-                            <thead>
-                              <th>Username</th>
-                              <th>First Name</th>
-                              <th>Surname</th>
-                              <th>Account Type</th>
-                              <th></th>
-                            </thead>
-                            <tbody>
-                              {% for connection in completed %}
-                              <tr>
-                                <td>{{connection.username}}</td>
-                                <td>{{connection.firstname}}</td>
-                                <td>{{connection.surname}}</td>
-                                <td>{{connection.accounttype}}</td>
-                                <form action="/api/deleteConnection" method="POST">
-                                  <input type="hidden" name="user" value="{{session.username}}">
-                                  <input type="hidden" name="connection" value="{{connection.username}}">
-                                  <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
-                                </form>
-                              </tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
                         </div>
-      				</div>
+                     </div>
                   </div>
-      			</div>
-			</div>
-		</fieldset>
-    <fieldset class="style">
-		<div id="dashConnections">	
-			<a class"thumbnail" href="/search"> 
-			<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
-			<a class"thumbnail" href="/settings"> 
-			<h5><i class="fa fa-cog sideIcons" ></i> Settings </h5> </a>
-      <a class"thumbnail" href="/nhsSearch">
-      <h5><i class="fa fa-search-plus sideIcons" ></i> NHS Search </h5> </a>
-		</div>
+            </div>
+      </div>
     </fieldset>
-	</div>
+    <fieldset class="style">
+		  <div id="dashConnections">	
+		  	<a class"thumbnail" href="/search"> 
+		  	<h5><i class="fa fa-search sideIcons" ></i> Search</h5> </a>
+		  </div>
+    </fieldset>
+
+    <fieldset class="style">
+      <div>
+        <a class"thumbnail" href="/nhsSearch">
+        <h5><i class="fa fa-search-plus sideIcons" ></i> Search the NHS website </h5> </a>
+      </div>
+    </fieldset>
+
+    <fieldset class="style">
+      <div>
+        <a class"thumbnail" href="/settings"> 
+        <h5><i class="fa fa-cog sideIcons"></i> Settings </h5> </a>
+      </div>
+    </fieldset>
+  </div>
 
 	<div class="col-md-9 dashPanel">
 		
 		<!-- Notifications -->
 		{% if notifications %}
 			<div class="well well-sm">
-				<h4>Notifications</h4>
+				<h4><i class="fa fa-tag sideIcons"></i> Notifications</h4>
 				{% for notification in notifications %}
 					<div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
 	    				<button type="button" class="close btn btn-danger" data-dismiss="alert" onclick="$.post('/dismissNotification', {'notificationid':'{{notification.notificationid}}'});"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -184,7 +265,7 @@
 		<!-- Main Content -->
 		<fieldset class ="form-container">
 		<!--All completed connections the carer has-->	
-<i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4>
+  <i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4>
   <hr>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for patient in patients %}
@@ -205,7 +286,7 @@
                 <!-- View Prescriptions -->
                 <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
                   <div style="height:25px;">
-                    <p style="line-height: 25px;font-size: 25px;">
+                    <p style="line-height: 20px;font-size: 20px;">
                       <i class="fa fa-medkit"></i> Prescriptions
                     </p>
                   </div>
@@ -215,9 +296,10 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="prescription{{patient.username}}Label">{{patient.firstname}} {{patient.surname}} ({{patient.username}})'s Prescriptions</h4>
+                        <h4 class="modal-title" id="prescription{{patient.username}}Label">{{patient.firstname}} {{patient.surname}}'s Prescriptions</h4>
                       </div>
                       <div class="modal-body" id="prescription{{patient.username}}body">
+                        
                         <!-- Display flashed return message -->
                         {% with returnType = get_flashed_messages(category_filter=["type"]) %}
                           {% if returnType %}
@@ -245,16 +327,17 @@
                         {% endwith %}
                         <!-- End flashed message -->
                         <!--Add prescription form -->
-                        <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
-                          <input name="username" type="hidden" value="{{patient.username}}">
-                          <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
+                        <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
+                          <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
+                            <input name="username" type="hidden" value="{{patient.username}}">
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="{{patient.username}}_medication">Medication</label>
                                   <select name="medication" class="form-control" id="{{patient.username}}_medication">
-                                    <option>Morphine</option>
-                                    <option>Ibuprofen</option>
+                                    {% for medication in medicationList %}
+                                      <option>{{medication.name}}</option>
+                                    {% endfor %}
                                   </select>
                                 </div>
 
@@ -330,20 +413,20 @@
                               </div>
                             </div>
 
-                            <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
-
                             <div style="margin-left:auto;margin-right: auto;width: 150px;">
-                              <input class="btn btn-success" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
+                              <input class="btn btn-success pull-right" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                             </div>
                             <hr />
-                          </div>
-                        </form>
+                          </form>
+                        <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
                         <!--End form -->
+                      </div>
+
 
                         <div role="tabpanel">
                           <!-- Nav tabs -->
-                          <ul class="nav nav-tabs nav-justified" role="tablist">
-                            <li role="presentation" class="active"><a href="#{{patient.username}}active" aria-controls="{{patient.username}}active" role="tab" data-toggle="tab">Active</a></li>
+                          <ul class="nav nav-pills nav-justified" role="tablist">
+                            <li role="presentation" class="active"><a href="#{{patient.username}}active" aria-controls="{{patient.username}}active" role="tab" data-toggle="tab">Current</a></li>
                             <li role="presentation"><a href="#{{patient.username}}futureExpired" aria-controls="{{patient.username}}futureExpired" role="tab" data-toggle="tab">Upcoming &amp; Expired</a></li>
                           </ul>
 
@@ -381,7 +464,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -503,7 +586,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Dosgae</label>
+                                              <label class="col-sm-2 control-label">Dosage</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                               </div>
@@ -717,8 +800,8 @@
                         </div>
                       </div>
                       <div class="modal-footer">
+                        <button class="btn btn-success" id="{{patient.username}}_addPrescriptionButton" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Create new prescription</button>
                         <button class="btn btn-default" id="{{patient.username}}_donePrescriptions" onclick="$('#prescription{{patient.username}}').modal('toggle');">Close</button>
-                        <button class="btn btn-success" id="{{patient.username}}_addPrescriptionButton" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");$("#{{patient.username}}_addPrescriptionButton").toggle("slow");'>Add new Prescription</button>
                       </div>
                     </div>
                   </div>
@@ -729,7 +812,7 @@
                   <!-- View Appointments -->
                   <a onclick='$("#appointments{{patient.username}}").modal("toggle")'>
                     <div style="height:25px;">
-                      <p style="line-height: 25px;font-size: 25px;">
+                      <p style="line-height: 20px;font-size: 20px;">
                         <i class="fa fa-calendar"></i> Appointments
                       </p>
                     </a>
@@ -739,10 +822,10 @@
                           <div class="modal-content">
                             <div class="modal-header">
                               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                              <h4 class="modal-title" id="appointments{{patient.username}}Label">View Appointments</h4>
+                              <h4 class="modal-title" id="appointments{{patient.username}}Label">{{patient.firstname}} {{patient.surname}}'s Appointments</h4>
                             </div>
                             <div class="modal-body">
-                              <button class="btn btn-success" onclick='$("#{{patient.username}}_newAppointment").toggle("slow")'>Add new Appointment</button>
+                              <button class="btn btn-success" onclick='$("#{{patient.username}}_newAppointment").toggle("slow")'>Create new appointment</button>
                               <br /><br />
                               <table class="table">
                                 <thead>
@@ -813,7 +896,8 @@
                                         </div>
                                         <div class="form-group">
                                           <label for="datefrom">Start Date</label>
-                                          <input class="form-control" type="date" name="startdate" id="startdate">
+                                          <input class="form-control" type="date" name="startdate" id="startdateappt">
+                                          <span id="datevalidate1"></span>
                                         </div>
                                         <div class="form-group">
                                           <label for="starttime">Start Time</label>
@@ -832,7 +916,7 @@
                                           <textarea class="form-control" name="description" id="other"></textarea>
                                         </div>
                                         <div class="form-group">
-                                          <input class="btn btn-default pull-right" type="submit" value="Add Appointment">
+                                          <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
                                         </div>
                                       </form>
                                     </div>
@@ -850,35 +934,33 @@
             </div>
     {% endfor %}
     <br />
-    <br />
-
-		 <!--Carer Appointments to show on dashboard --> 
-		<h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
-        <a href="/appointments" class="pull-right"> View all Appointments </a>
 
     <hr>
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		 <!--Carer Appointments to show on dashboard --> 
+		<a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
+
+    <hr>
+    <div class="panel-group" id="accordion" aria-multiselectable="true">
 
 		 {% block upcoming %}
         {% for appointment in appointments %}
           {% if appointment.upcoming == True %}
                 <div class="panel panel-default">
 
-              <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
+              <div class="panel-heading" id= "myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
                 <h4 class="panel-title">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
-                    <i class="fa fa-caret-right"></i> {{appointment.name}}
-                      </a>
-                      </h4>
-                    </div>
-
-                   <div class="row">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                      </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
                       </div>
+                      </div>
                     </div>
                   </a>
-                </h3>
+                </h4>
                 <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
                   <div class="panel-body">
                     <div class="row">

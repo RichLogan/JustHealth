@@ -6,6 +6,11 @@ import android.os.Bundle;
 
 public class TermsAndConditions extends Activity {
 
+    /**
+     * Creates the action bar items for the Terms and Conditions page
+     * @param savedInstanceState The options menu in which the items are placed
+     * @return True must be returned in order for the terms and conditions page to be displayed
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,3 +21,5 @@ public class TermsAndConditions extends Activity {
         actionBar.setTitle("T & C's");
     }
 }
+
+

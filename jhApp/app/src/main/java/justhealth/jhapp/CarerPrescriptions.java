@@ -26,6 +26,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+/**
+ * Functionality to allow a carer to view all Prescriptions for any patient that they are connected to.
+ */
 public class CarerPrescriptions extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,6 @@ public class CarerPrescriptions extends Activity{
         //Get data passed from MyPatients
         String firstname = "";
         String username = "";
-
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("targetUsername");
@@ -68,6 +70,12 @@ public class CarerPrescriptions extends Activity{
         displayPrescriptions(getPrescriptions(username, "expired"), "expired");
     }
 
+    /**
+     * Retrieves the prescriptions for a given user.
+     * @param username The patient whose prescriptions should be retrieved
+     * @param type The type of prescription you are looking at. One of 'active', 'upcoming', 'expired'
+     * @return A JSON array of all prescriptions
+     */
     private JSONArray getPrescriptions(String username, String type) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
@@ -94,6 +102,11 @@ public class CarerPrescriptions extends Activity{
         return null;
     }
 
+    /**
+     * Builds a list of buttons that provide basic details about each prescription. These can be clicked for more a more in-depth description.
+     * @param prescriptionList The retrieved JSONArray of prescriptions from getPrescriptions()
+     * @param type The type of prescription you are looking at. One of 'active', 'upcoming', 'expired'
+     */
     private void displayPrescriptions(JSONArray prescriptionList, String type) {
         for(int x=0;x<prescriptionList.length();x++) {
             try {
@@ -176,6 +189,12 @@ public class CarerPrescriptions extends Activity{
         }
     }
 
+    /**
+     * Informs the calling activity whether the action was successful for not.
+     * @param requestCode Internal used, autopopulated
+     * @param resultCode 1 for success, 0 for failure
+     * @param data Internally used, autopopulated
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Something is breaking here if go back from edit without doing anything
@@ -188,6 +207,10 @@ public class CarerPrescriptions extends Activity{
         }
     }
 
+    /**
+     * Functionality to delete a specific prescription from the database
+     * @param prescriptionid The id of the prescription to delete
+     */
     private void deletePrescription(String prescriptionid) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("prescriptionid", prescriptionid);

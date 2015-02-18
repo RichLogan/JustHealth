@@ -310,6 +310,7 @@ def getAccountInfo(username):
     result['email'] = user.username.email
     result['dob'] = str(user.username.dob)
     result['profilepicture'] = user.username.profilepicture
+    result['telephonenumber'] = user.username.telephonenumber
     if user.ismale:
         result['gender'] = 'Male'
     else:
@@ -382,7 +383,9 @@ def changePasswordAPI():
     return changePasswordAPI(request.form)
 
 def changePasswordAPI(details):
-    """Allows a user to change their password. POST [username, oldpassword, newpassword]"""
+    """Allows a user to change their password. POST [username, oldpassword, newpassword, confirmnewpassword]"""
+    if request.form['newpassword'] != request.form['confirmnewpassword']:
+        return "Passwords do not match"
     try:
         currentPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == details['username']) & (uq8LnAWi7D.iscurrent==True))
         # If old password is correct
@@ -394,7 +397,7 @@ def changePasswordAPI(details):
             newPassword = uq8LnAWi7D.insert(
                 username = details['username'],
                 password = sha256_crypt.encrypt(details['newpassword']),
-                iscurrent = 'TRUE',
+                iscurrent = True,
                 expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
             )
 
@@ -402,7 +405,8 @@ def changePasswordAPI(details):
             with database.transaction():
                 currentPassword.save()
                 newPassword.execute()
-                return "Password changed"
+                return "Password changed successfully"
+            return "Failed"
         else: return "Incorrect password"
     except: return "User does not exist"
 
@@ -780,6 +784,8 @@ def getConnections(username):
         person['username'] = details['username']
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
+        person['email'] = details ['email']
+        person['telephonenumber'] = details ['telephonenumber']
         person['accounttype'] = details['accounttype']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)

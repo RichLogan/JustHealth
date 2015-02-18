@@ -1,44 +1,140 @@
 {% extends "template.html" %}
 {% block title %}Home{% endblock %}
 {% block scriptsAndStyles %}{% endblock %}
-{% block content %}
 
+{% block homeCSS %}<div id="homecontent">{% endblock %}
+{% block content %}
 <br />
+<script>
+$(document).ready(function(){
+  $('.makeDataTable').DataTable({
+    paging:false,
+    info:false,
+    searching:false,
+  });
+
+  //Shows confirm box on delete appointment
+  $(document).ready(function() {
+    $("#deleteapp").submit(function(e) {
+      if (!confirm('Are you sure you want to delete this appointment?')) {
+        e.preventDefault();
+      }
+    });
+  });
+
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  //Check if date is in the past
+  $('#startdate').focusout(function() {
+    var selectedDate = $('#startdate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  $('#enddate').focusout(function() {
+    var selectedDate = $('#enddate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  /*var allDates = $(document.getElementsByClassName('dateForJS'));
+  var now = moment().format();
+  //for loops through allDates
+  // each allDates.value() needs to equal
+  for (var i = 0, len = allDates.length; i<len; i++){
+  var formatting = allDates.html(i);
+  var momentFormatting = moment(formatting);
+  format = momentFormatting.calendar();
+  alert(format);
+  allDates.html(format);
+}*/
+
+$('time').each(function(i, e) {
+  var time = moment($(e).attr('datetime'));
+  $(e).html('<span>' + time.calendar() + '</span>');
+});
+});
+</script>
 
 <div class="row">
   <!--side pannel for profile picture -->
 	<div class="col-md-3 dashPanel">
-    <fieldset class="style">
 		<div id="dashProfile">
-			<a class"thumbnail" href="/editProfile"> 
-			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" ></i>  </h5> </a><br />
-			<img alt="User Pic" src="images/{{accountInfo.profilepicture}}" id="profilePicture" class="img-circle">
-      <br />
-			<strong>{{session.username}}</strong>
-			<p>{{accountInfo.firstname}} {{accountInfo.surname}}</p>
-
+      <fieldset class="style center-element">
+      <h4 style="text-align:left;" class="bold">{{session.username}}</h4>
+      <a class"thumbnail" href="/editProfile"> 
+      <h5><i class="fa fa-pencil-square-o sideIcons pull-right" style="position: absolute; top: 5%; right: 5%;"></i></h5>
+      </a>
+      <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle" style="position: relative; top: 0; left: 0;"></br></br>
+      <p style="text-align:left;">{{accountInfo.firstname}} {{accountInfo.surname}}
+      </br>
+      {{accountInfo.email}}</p>
+      </fieldset>
 		</div>
-    </fieldset>
       <!--side pannel to display connections -->
-    <fieldset class="style">
-		<div id="dashConnections">
-		<h5><i class="fa fa-users sideIcons" ></i> Connections </h5> </a>
-
-			{% if connections %}
-				{% for connection in completed %}
-					<p>{{connection.firstname}} {{connection.surname}} <strong>({{connection.username}})</strong></p>
-				{% endfor %}
-			{% else %}
-				<strong>No connections yet</strong>
-			{% endif %}
+       <fieldset class="style">
+    <!--side pannel to display connections -->
+    <div> 
+      <h5><i class="fa fa-users sideIcons" ></i> Connections </h5>
+       {% if connections %}
+        {% for connection in completed %} 
+          <a data-toggle="modal" data-target="#{{connection.username}}"></a>
+            <hr class="dashboard">
+       
+            <a class="modalheader" data-toggle="modal" data-target="#{{connection.username}}"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
+            <div class="modal fade" id="{{connection.username}}" tabindex="-1" role="dialog" aria-labelledby="{{connection.username}}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="{{connection.username}}"><span class= "bold"> Username: </span>{{connection.username}}</h4>
+                  </div>
+                  <div class="modal-body">
+                   <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
+                    <span class= "bold"> Full Name: </span> {{connection.firstname}} 
+                    {{connection.surname}}
+                    <br />
+                    <span class="bold"> Email: </span> {{connection.email}}
+                    <br />
+                    <span class="bold"> Telephone Number: </span>{{connection.telephonenumber}}
+                    <br />
+                        <form action="/api/deleteConnection" method="POST">
+                            <input type="hidden" name="user" value="{{session.username}}">
+                            <input type="hidden" name="connection" value="{{connection.username}}">
+                            <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')">
+                        </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+      {% else %}
+        <strong>No connections yet</strong>
+      {% endif %}     
+    </div> 
+    <div id="dashConnections">
       <!--model to show connections information -->
-		<a data-toggle="modal" data-target="#terms"> View Connections </a>
+    <a data-toggle="modal" data-target="#terms"> View Pending Connections </a>
               <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms"> Connections</h4>
+                      <h4 class="modal-title" id="terms">Pending Connections</h4>
                     </div>
                     <div class="modal-body">
                       <h4>Outgoing</h4>
@@ -102,7 +198,7 @@
                                       <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
                                     </div>
                                     <div class="modal-body">
-                                      <h4>Please enter the verification code given by the requestor</h4>
+                                      <h4>Please enter the verification code given by the requestor</h1>
                                         <form role="form" action="/completeConnectionWeb" method="POST">
                                           <div style="width: 70%;margin: 0 auto;">
                                             <input name="requestor" type="hidden" value="{{connection.username}}">
@@ -119,49 +215,39 @@
                               {% endfor %}
                             </tbody>
                           </table>
-                          <!--Table for completed connections -->
                           <br />
-                          <h4>Completed</h4>
-                          <table class="table table-condensed ">
-                            <thead>
-                              <th>Username</th>
-                              <th>First Name</th>
-                              <th>Surname</th>
-                              <th>Account Type</th>
-                              <th></th>
-                            </thead>
-                            <tbody>
-                              {% for connection in completed %}
-                              <tr>
-                                <td>{{connection.username}}</td>
-                                <td>{{connection.firstname}}</td>
-                                <td>{{connection.surname}}</td>
-                                <td>{{connection.accounttype}}</td>
-                                <form action="/api/deleteConnection" method="POST">
-                                  <input type="hidden" name="user" value="{{session.username}}">
-                                  <input type="hidden" name="connection" value="{{connection.username}}">
-                                  <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
-                                </form>
-                              </tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
                         </div>
-      				</div>
+                     </div>
                   </div>
-      			</div>
-			</div>
+            </div>
+      </div>
     </fieldset>
+
+
+
+
+
+
 
     <fieldset class="style">
 		  <div id="dashConnections">	
 		  	<a class"thumbnail" href="/search"> 
 		  	<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
-		  	<a class"thumbnail" href="/settings"> 
-		  	<h5><i class="fa fa-cog sideIcons" ></i> Settings </h5> </a>
-		  	<a class"thumbnail" href="/nhsSearch">
-		  	<h5><i class="fa fa-search-plus sideIcons" ></i> NHS Search </h5> </a>
 		  </div>
+    </fieldset>
+
+    <fieldset class="style">
+      <div>
+        <a class"thumbnail" href="/nhsSearch">
+        <h5><i class="fa fa-search-plus sideIcons" ></i> Search the NHS website </h5> </a>
+      </div>
+    </fieldset>
+
+    <fieldset class="style">
+      <div>
+        <a class"thumbnail" href="/settings"> 
+        <h5><i class="fa fa-cog sideIcons" ></i> Settings </h5> </a>
+      </div>
     </fieldset>
 
 	</div>
@@ -183,7 +269,7 @@
     {% endif %}
 
 		<!-- Main Content -->
-		<fieldset class ="form-container">
+<fieldset class ="form-container">
 		<!--All active prescriptions to show on the dashboard -->	
 
 		<i class="fa fa-medkit headingIcon pull-left" ></i> <h4>Prescriptions </h4> </a>
@@ -192,9 +278,9 @@
 
 		{%for prescription in prescriptions%}
 		  <div class="panel panel-default">
-		    <div class="panel-heading"  id="myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
+		    <div class="panel-heading myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
 		      <h4 class="panel-title">
-		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}" id="myPatientsPatientName">
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
 		          <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
 		        </a>
 		      </h4>
@@ -214,29 +300,27 @@
 		    </div>
 		  </div>
 		</div>
-		 {% endfor %}
-		  <hr>
-		 <!--Appointments to show on dashboard --> 
-	   <h4><i class="fa fa-calendar headingIcon"></i> Appointments</h4>
-        <a href="/appointments" class="pull-right"> View all Appointments </a>
+		{% endfor %}
 
+		<hr>
+		<!--Appointments to show on dashboard --> 
+	  <a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
+ 
     <hr>
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-
-     {% block upcoming %}
+  <div class="panel-group" id="accordion" aria-multiselectable="true">
+    
+      {% block upcoming %}
         {% for appointment in appointments %}
           {% if appointment.upcoming == True %}
-                <div class="panel panel-default">
-
-              <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{appointment.appid}}" >
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
-                    <i class="fa fa-caret-right"></i> {{appointment.name}}
-                      </a>
-                      </h4>
-                    </div>
-
-                   <div class="row">
+              
+              <div class="panel panel-default">
+              <div class="panel-heading myPatientsTab" role="tab" id="heading{{appointment.appid}}">
+                <h3 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                      </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
                       </div>
@@ -280,6 +364,7 @@
                   </div>
                 </div>
               </div>
+            </div>
           {% endif %}
         {% endfor %}
       {% endblock %}
