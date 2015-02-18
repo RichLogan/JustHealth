@@ -225,9 +225,16 @@ def verifyUser(payload):
     verifiedTrue.execute()
     return render_template('login.html', type='success', message='Thank you for verifying your account.')
 
-@app.route('/password')
+@app.route('/password', methods=['POST', 'GET'])
 def changePassword():
     """Opens a change password form (for when user knows their current password)"""
+    if request.method == 'POST':
+        result = changePasswordAPI(request.form)
+        if result == "Password changed successfully":
+            flash(result, "success")
+        else:
+            flash(result, "danger")
+        return redirect(url_for('changePassword'))
     return render_template('changePassword.html')
 
 @app.route('/users/activate/<payload>')
