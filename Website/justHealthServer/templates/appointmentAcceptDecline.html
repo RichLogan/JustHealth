@@ -1,0 +1,74 @@
+{% extends "template.html" %}
+
+{% block title %}Reset Password{% endblock %}
+
+{% block scriptsAndStyles %}{% endblock %}
+
+{% block content %}
+<fieldset class ="form-container">
+		<i class="fa fa-calendar headingIcon pull-left"></i><h4>Appointment Details</h4>
+		<hr /> 
+<!--Automatically fills in the users username -->
+	{% if message != null %}
+		<div class="alert alert-{{type}} alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			{{message}}
+		</div>
+	{% endif %}
+	<fieldset class="register-inner">
+	<h4>{{appointment.name}}</h4>
+		<div class="row">
+		    <div class="col-md-6">
+		    </div>
+		    <div class="col-md-6">
+		        <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
+		    </div>
+		</div>
+		<div id="appointment" class="panel" aria-labelledby="heading{{appointment.appid}}">
+		  	<div class="panel-body">
+		    	<div class="row">
+		      		<div class="col-md-6">
+		      			<h5><b>Invited By:</b> <br /> {{appointment.creator}} </h5> 
+		      			<br /> 
+				        <h5><b>Start Date/Time:</b> <br /> {{appointment.startdate}} {{appointment.starttime}}</h5>
+				        <br /> 
+				        <h5><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</h5>
+		      		</div>
+		      		<div class="col-md-6">
+		        		<h5 class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</h5>
+	        			<iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+	        			</iframe>
+		      		</div>
+		    	</div>
+		    	<div class="row">
+		    		<div class="col-md-12">
+				        <h5><b>Description:</b> <br /> {{appointment.description}}</h5><br />
+				    </div>
+			    </div>
+		    	<br />
+		    	<br />
+		    	<div class="row">
+		    		<div class="col-md-8">
+		        		<p></p>
+		      		</div>
+		      		<div class="col-md-2">
+		        		<form action="/appointmentDetails" method="POST">
+		          			<input type="hidden" name="appid" value="{{appointment.appid}}">
+		          			<input type="hidden" name="action" value="Decline">
+		          			<input type="submit" class="btn btn-danger" value="Decline">
+		        		</form>
+		      		</div>
+		      		<div class="col-md-2">
+		        		<form action="/appointmentDetails" method="POST">
+		          			<input type="hidden" name="appid" value="{{appointment.appid}}">
+		          			<input type="hidden" name="action" value="Accept">
+		          			<input type="submit" class="btn btn-success" value="Accept">
+		        		</form>
+		      		</div>
+		      	</div>
+		    </div>
+		</div>
+	</fieldset>
+</fieldset>
+
+{% endblock %}
