@@ -65,6 +65,7 @@ def index():
             # Get all patients connected to this user
             connections = json.loads(getConnections(session['username']))
             completedConnections = json.loads(connections['completed'])
+
             patients = []
             for connection in completedConnections:
                 if connection['accounttype'] == "Patient":

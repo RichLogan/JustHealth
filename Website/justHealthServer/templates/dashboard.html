@@ -141,18 +141,16 @@ $('time').each(function(i, e) {
                       <table class="table table-condensed ">
                         <thead>
                           <th>Username</th>
-                          <th>First Name</th>
-                          <th>Surname</th>
+                          <th>Name</th>
                           <th>Account Type</th>
-                          <th></th>
+                          <th>Code</th>
                           <th></th>
                           </thead>
                           <tbody>
                             {% for connection in outgoing %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}}</td>
-                              <td>{{connection.surname}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td>{{connection.code}}</td>
                               <form action="/api/cancelConnection" method="POST">
@@ -170,8 +168,7 @@ $('time').each(function(i, e) {
                         <table class="table table-condensed">
                           <thead>
                             <th>Username</th>
-                            <th>First Name</th>
-                            <th>Surname</th>
+                            <th>Name</th>
                             <th>Account Type</th>
                             <th></th>
                             <th></th>
@@ -180,8 +177,7 @@ $('time').each(function(i, e) {
                             {% for connection in incoming %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}}</td>
-                              <td>{{connection.surname}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
                               <form action="/api/cancelConnection" method="POST">
