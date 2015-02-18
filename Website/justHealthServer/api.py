@@ -1391,7 +1391,7 @@ def addReminders(username, now):
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Due in 30",
+                content = "Your " + a['type'] + " appointment starts at " + a['starttime'],
                 reminderClass = "warning",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid']
@@ -1406,7 +1406,7 @@ def addReminders(username, now):
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Due now",
+                content = "Your " + a['type'] + " appointment started at " + a['starttime'],
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid']
