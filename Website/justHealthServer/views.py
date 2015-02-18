@@ -307,7 +307,7 @@ def createConnectionWeb():
     result = createConnection(request.form)
     if result != "Connection already established":
         flash(result, 'success')
-        return redirect('/profile?go=connections')
+        return redirect('/?go=connections')
     else:
         flash(result, 'danger')
         return redirect(url_for('search'))
@@ -320,7 +320,7 @@ def completeConnectionWeb():
         flash(result, 'danger')
     else:
         flash(result, 'success')
-    return redirect('/profile?go=connections')
+    return redirect('/?go=connections')
 
 @app.route('/deleteConnectionWeb', methods=['POST', 'GET'])
 def deleteConnectionWeb():
@@ -330,7 +330,7 @@ def deleteConnectionWeb():
         flash("Delete successful", 'success')
     else:
         flash("Delete failed. Please try again or contact an administrator", 'danger')
-    return redirect('/profile?go=connections')
+    return redirect('/?go=connections')
 
 @app.route('/cancelConnectionWeb', methods=['POST', 'GET'])
 def cancelConnectionWeb():
