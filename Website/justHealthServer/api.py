@@ -1206,6 +1206,20 @@ def getCorrespondence(carer, patient):
         results.append(note)
      return json.dumps(results)
 
+def addCorrespondence(notes):
+    insert = Notes.insert(
+        notes = request.form['notes'],
+        notes = request.form['carer'],
+        notes = request.form['patient'],
+        notes = request.form['title'],
+        notes = request.form['datetime']
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
 
 @app.route('/api/addAndroidEventId', methods=['POST'])
 @auth.login_required

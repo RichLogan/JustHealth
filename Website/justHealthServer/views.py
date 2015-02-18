@@ -578,18 +578,16 @@ def notes():
         except Patientcarer.DoesNotExist:
             return redirect(url_for('index'))
 
-    if request.method == "POST":
-        notes = {}
-        notes['carer'] = session['username']
-        notes['patient'] = request.form['patient']
-        notes['notes'] = request.form['notes']
-        notes['title'] = request.form['title']
-        notes['datetime'] = request.formf['datetime']
+@app.route('/note',methods=['POST', 'GET'])
+def addNote():
 
-        result = notesMessage(notes)
-        return render_template('correspondence.html', type="success", message = 'Note added')
-    else:
-        return render_template('correspondence.html', type="error", message = 'update failed')
+    if request.method == "POST":
+        result = addCorrespondence(request.form)  
+        if result == "True":
+            return render_template('correspondence.html', type="success", message = 'Note Added')
+        else: render_template('correspondence.html',type="warning", message = 'Update failed')
+    else: 
+       return render_template('correspondence.html')
 
 
 @app.errorhandler(500)

@@ -15,7 +15,12 @@
    <i class="fa fa-pencil headingIcon pull-left"></i><h4 class= "pull-left">Patient Notes</h4>
 
   <hr>
-
+  {% if message != null %}
+    <div class="alert alert-{{type}} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      {{message}}
+    </div>
+  {% endif %}
 
 <div class="container">
   <div class="row">
@@ -30,30 +35,31 @@
    {% endfor %}
 </div>
 
-  <form role="form" action="/notes" method="post" >
+  <form role="form" action="/addCorrespondence" method="post" >
     <div class="col-md-8">
         <div class="col-lg-6">
             <div class="form-group">
                 <h4> Add Comment </h4>
 
-                <label for="InputName">Title</label>
+                    <label for="InputName">Title</label>
                     <div class="input-group">
                       <input type="text" class="form-control" id="title">
                       <span class="input-group-addon"></span></div>
                     </div>
 
-                    <input type="hidden" class="form-control" name="username" id="username"  readonly="true" >
+                    <input type="hidden" class="form-control" name="username" id="carer"  readonly="true" >
+                    <input type="hidden" class="form-control" name="patientname" id="patient"  readyonly="true">
                     
                     <div class="form-group">
-                      <label for="InputMessage">Message</label>
-                      <div class="input-group">
+                        <label for="InputMessage">Message</label>
+                        <div class="input-group">
                         <textarea name="message" id="InputMessage" class="form-control" rows="4" ></textarea>
                         <span class="input-group-addon"></span></div>
                     </div>
                     
-                    <label for="dob">Date</label>
-                     <input class="form-control input-sm" type="date" name="dob" id="dob">
-                      <span id="dobValidate"></span>
+                    <label for="date">Date</label>
+                    <input class="form-control input-sm" type="date" name="date" id="date">
+                    <span class="input-group-addon"></span></div>
 
                     <br />
                     <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
