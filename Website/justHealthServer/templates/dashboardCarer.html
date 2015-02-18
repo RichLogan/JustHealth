@@ -5,11 +5,21 @@
 {% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
 <script>
+nextAngle = 0;
+function addAngle(deg) {
+  // Thanks to: 
+  nextAngle += deg;
+  if(nextAngle >= 360) {
+    nextAngle = 0;
+  }
+  return nextAngle;
+}
+
 $(document).ready(function(){
-  $('.makeDataTable').DataTable({
-    paging:false,
-    info:false,
-    searching:false,
+  // Handles Spinning of Notification Arrow
+  $("#notificationsBar").click(function() {
+    deg = addAngle(180);
+    flip("#notificationsArrow",deg);
   });
 
   //Shows confirm box on delete appointment
@@ -252,10 +262,10 @@ $('time').each(function(i, e) {
     <!-- Notifications -->
     {% if notifications or reminders %}
       <div>
-        <button class="btn" type="button" data-toggle="collapse" data-target="#notifications" aria-expanded="false" aria-controls="notifications" style="width: 100%;background-color: #FFF;border: 1px solid silver">
+        <button class="btn" type="button" data-toggle="collapse" data-target="#notifications" aria-expanded="false" aria-controls="notifications" style="width: 100%;background-color: #FFF;border: 1px solid silver" id="notificationsBar">
           <i class="fa fa-tag headingIcon pull-left"></i>
           <h4 class="pull-left">Notifications</h4>
-          <i class="fa fa-angle-double-down pull-right headingIcon" style="margin-top:0.2em;"></i>
+          <i id="notificationsArrow" class="fa fa-angle-double-down pull-right headingIcon" style="margin-top:0.2em;"></i>
           <span class="label label-danger pull-right" style="font-size: 1.5em;margin-top: 0.1em;margin-bottom: 0.1em;min-width: 2em;border: 0.1em solid #D9534F;background-color: #FFF;color: #D9534F;padding-top: 0.4em;">{{(notifications | length) + (reminders | length)}}</span>
         </button>
 
