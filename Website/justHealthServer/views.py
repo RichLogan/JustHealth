@@ -70,7 +70,24 @@ def index():
         # Notifications relies on some of the methods above and therefore needs to be run at the end of this block.
         # Otherwise the notification won't be displayed until the refresh after it is created.
         notifications = json.loads(getNotifications(session['username']))
-        return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions, medicationList = Medication.select())
+        reminders = json.loads(getReminders(session['username']))
+        return render_template(
+            'dashboardCarer.html',
+            accountInfo=accountInfo,
+            notifications=notifications,
+            reminders=reminders,
+            connections=connections,
+            appointments=appointments,
+            outgoing=outgoingConnections,
+            incoming=incomingConnections,
+            completed=completedConnections,
+            patients = patients,
+            appointmentsMapping = appointmentsMapping,
+            activePrescriptions = activePrescriptions,
+            upcomingPrescriptions = upcomingPrescriptions,
+            expiredPrescriptions = expiredPrescriptions,
+            appType=Appointmenttype.select(),
+            medicationList = Medication.select())
 
 @app.route('/profile')
 @needLogin
