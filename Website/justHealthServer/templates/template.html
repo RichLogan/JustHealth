@@ -8,10 +8,13 @@
     <!-- jQuery -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="//malsup.github.io/min/jquery.cycle2.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <!-- Boostrap -->
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <!--http://jsfiddle.net/giorgitbs/52aK9/1/ -->
+
 
     <!-- Font Awesome -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -24,6 +27,7 @@
 
     <!--Date, Time Validation-->
     <script type="text/javascript" src="/static/js/moment.js"></script>
+    <script type="text/javascript" src="/static/js/is.min.js"></script>    
 
     <!-- Our resources -->
     {% block CSS %}
@@ -44,28 +48,43 @@
             {% block logoutBtn %}
             <!--<button class="btn btn-default btn-margin pull-right" onclick="javascript:location.href='/logout'">Log out</button>-->
             
-              <a href="#" class="dropdown-toggle pull-right" data-toggle="dropdown" role="button" aria-expanded="false"><i style="color:#FFF" class="fa fa-bars headingIcon"></i></a>
+              <a href="#" class="dropdown-toggle pull-right runner" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars navIcon"></i></a>
               <ul class="dropdown-menu dropdown-menu-right" role="menu">
                 <li><a href="/"><i class="fa fa-home sideIcons"></i>  Home</a></li>
-                <li><a href="#"><i class="fa fa-medkit sideIcons"></i>  Prescriptions</a></li>
-                <li><a href="#"><i class="fa fa-calendar sideIcons"></i>  Appointments</a></li>
+
+                {% if session.accounttype == "Patient" %}
+                <li><a href="/prescriptions"><i class="fa fa-medkit sideIcons"></i>  Prescriptions</a></li>
+                {% else %}
+                <li><a href="/myPatients"><i class="fa fa-users sideIcons"></i>  My Patients</a></li>
+                {% endif %}
+
+                {% if session.accounttype == "Patient" %}
+                <li><a href="appointments"><i class="fa fa-calendar sideIcons"></i>  Appointments</a></li>
+                {% else %}
+                <li><a href="carerAppointments"><i class="fa fa-calendar sideIcons"></i>  Appointments</a></li>
+                {% endif %}
+
                 <li><a href="/settings"><i class="fa fa-cog sideIcons"></i>  Settings</a></li>
                 <li class="divider"></li>
                 <li><a href="/logout"><i class="fa fa-sign-out sideIcons"></i>  <span class="bold">Log out</span></a></li>
               </ul>
             
-            {% endblock %}
-            {% block username %}
-            <a href="/profile"><h4 class="headerFooterText pull-right">{{printname}}</h4></a>
+            <a href="/" class="runner">
+            <h4 class="pull-right" style="padding-top:4px">{{session.firstname}} {{session.surname}}</h4>
+            <img alt="Profile Picture" src="/images/{{session.profilepicture}}" class="img-circle nav-profile-img pull-right">
+            </a>
+
             {% endblock %}
           </div>
         </nav>
       </header>
 
+      {% block homeCSS %}
       <div id="content">
+      {% endblock %}
         <fieldset class ="fix">
         {% block content %}{% endblock %}
-      </fieldset>
+        </fieldset>
 
       </div>
       <br />

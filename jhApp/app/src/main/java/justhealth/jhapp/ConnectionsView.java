@@ -36,6 +36,9 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Lists of Connections of the given category (Incoming, Outgoing, Completed) as given by ConnectionsMain
+ */
 public class ConnectionsView extends Activity {
     String type;
     Boolean ignoreChange = true;
@@ -86,6 +89,10 @@ public class ConnectionsView extends Activity {
         printConnections();
     }
 
+    /**
+     * Prints the connections as Cards, displaying names, pictures, and a positive and negative
+     * action that is defined by the type of connection it is.
+     */
     private void printConnections() {
         try {
             // Connections of selected type
@@ -160,6 +167,11 @@ public class ConnectionsView extends Activity {
         }
     }
 
+    /**
+     * Sets the positive action of a card to reflect the type of connection it is
+     * @param pos The TextView representing the positive action button
+     * @param details The details of this connection
+     */
     private void setPositiveAction(TextView pos, final JSONObject details) {
         if (type.equals("incoming")) {
             pos.setText("{fa-user-plus}");
@@ -184,6 +196,11 @@ public class ConnectionsView extends Activity {
         }
     }
 
+    /**
+     * Sets the negative action of a card to reflect the type of connection it is
+     * @param neg The TextView representing the negative action button
+     * @param details The details of this connection
+     */
     private void setNegativeAction(TextView neg, final JSONObject details) {
         neg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,6 +272,10 @@ public class ConnectionsView extends Activity {
         });
     }
 
+    /**
+     * Returns all Connection for the user
+     * @return JSONObject of all connections
+     */
     private JSONObject getConnections() {
         HashMap<String, String> getConnectionsInfo = new HashMap<String, String>();
         SharedPreferences account = getSharedPreferences("account", 0);

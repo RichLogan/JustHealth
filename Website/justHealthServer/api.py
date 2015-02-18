@@ -1,5 +1,5 @@
 from justHealthServer import app
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask import Flask, render_template, request, session, redirect, url_for, abort, send_from_directory, request_started
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
@@ -289,6 +289,11 @@ def resetPassword():
 # Account Information
 ####
 
+@app.route('/api/images/<filename>')
+@auth.login_required
+def getProfilePictureAPI(filename):
+    return send_from_directory(app.config['PROFILE_PICTURE'], filename)
+
 @app.route('/api/getAccountInfo', methods=['POST'])
 @auth.login_required
 def getAccountInfo():
@@ -310,6 +315,7 @@ def getAccountInfo(username):
     result['email'] = user.username.email
     result['dob'] = str(user.username.dob)
     result['profilepicture'] = user.username.profilepicture
+    result['telephonenumber'] = user.username.telephonenumber
     if user.ismale:
         result['gender'] = 'Male'
     else:
@@ -382,7 +388,9 @@ def changePasswordAPI():
     return changePasswordAPI(request.form)
 
 def changePasswordAPI(details):
-    """Allows a user to change their password. POST [username, oldpassword, newpassword]"""
+    """Allows a user to change their password. POST [username, oldpassword, newpassword, confirmnewpassword]"""
+    if request.form['newpassword'] != request.form['confirmnewpassword']:
+        return "Passwords do not match"
     try:
         currentPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == details['username']) & (uq8LnAWi7D.iscurrent==True))
         # If old password is correct
@@ -394,7 +402,7 @@ def changePasswordAPI(details):
             newPassword = uq8LnAWi7D.insert(
                 username = details['username'],
                 password = sha256_crypt.encrypt(details['newpassword']),
-                iscurrent = 'TRUE',
+                iscurrent = True,
                 expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
             )
 
@@ -402,7 +410,8 @@ def changePasswordAPI(details):
             with database.transaction():
                 currentPassword.save()
                 newPassword.execute()
-                return "Password changed"
+                return "Password changed successfully"
+            return "Failed"
         else: return "Incorrect password"
     except: return "User does not exist"
 
@@ -780,6 +789,8 @@ def getConnections(username):
         person['username'] = details['username']
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
+        person['email'] = details ['email']
+        person['telephonenumber'] = details ['telephonenumber']
         person['accounttype'] = details['accounttype']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)
@@ -1408,6 +1419,128 @@ def dismissNotification(notificationid):
         return "True"
     return "False"
 
+##
+# Reminder Functionality
+##
+
+def getMinutesDifference(dateTimeOne,dateTimeTwo):
+    """Difference found my timeOne - timeTwo in minutes"""
+    return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
+
+@app.route('/test/a30')
+def getAppointmentsDueIn30():
+    return str(getAppointmentsDueIn30('carer', datetime.datetime.now()))
+def getAppointmentsDueIn30(username, currentTime):
+    select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
+    result = []
+    for appointment in select:
+        appointmentStartTime = datetime.datetime.combine(appointment['startdate'], appointment['starttime'])
+        timeUntil = getMinutesDifference(appointmentStartTime, currentTime)
+        if timeUntil <= 30 and timeUntil > 0:
+            result.append(appointment)
+    return result
+
+@app.route('/test/anow')
+def getAppointmentsDueNow():
+    return str(getAppointmentsDueNow('carer', datetime.datetime.now()))
+def getAppointmentsDueNow(username, currentTime):
+    """Search for appointments due now"""
+    select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
+    result = []
+    for appointment in select:
+        appointmentStartTime = datetime.datetime.combine(appointment['startdate'], appointment['starttime'])
+        timeUntilStart = getMinutesDifference(appointmentStartTime, currentTime)
+        appointmentEndTime = datetime.datetime.combine(appointment['enddate'], appointment['endtime'])
+        timeUntilEnd = getMinutesDifference(appointmentEndTime, currentTime)
+        if timeUntilStart <= 0 and timeUntilEnd > 0:
+            result.append(appointment)
+    return result
+
+def getPrescriptionsDueIn15(username, currentTime):
+    """Search for prescriptions due in 15 mins"""
+
+def getPrescriptionsDueNow(username, currentTime):
+    """Seach for prescriptions due now"""
+
+def pingServer(sender, **extra):
+    """Checks to see if there are any reminders to create/delete"""
+    try:
+        loggedInUser = session['username']
+        dt = datetime.datetime.now()
+        
+        if Appointments.select().count() != 0:
+            deleteReminders(loggedInUser, dt)
+
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
+            addReminders(loggedInUser, dt)
+    # No-one logged in
+    except KeyError, e:
+        return
+
+def addReminders(username, now):
+    """Adds reminders to the Reminder table"""
+    # Get All Reminders (Saving on performance hits later)
+    allReminders = Reminder.select().where(Reminder.username == username)
+
+    appointmentsDueIn30 = getAppointmentsDueIn30(username, now)
+    for a in appointmentsDueIn30:
+        try:
+            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                username = username,
+                content = "Your " + a['type'] + " appointment starts at " + a['starttime'] + " (" + a['starttime'] + ")",
+                reminderClass = "warning",
+                relatedObjectTable = "Appointments",
+                relatedObject = a['appid']
+            )
+            with database.transaction():
+                insertReminder.execute()
+
+    appointmentsDueNow = getAppointmentsDueNow(username, now)
+    for a in appointmentsDueNow:
+        try:
+            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                username = username,
+                content = "Your " + a['type'] + " appointment started at " + a['starttime'] + "(Started " + a['starttime'] + " ago)",
+                reminderClass = "danger",
+                relatedObjectTable = "Appointments",
+                relatedObject = a['appid']
+            )
+            with database.transaction():
+                insertReminder.execute()
+
+def deleteReminders(username, now):
+    """Deletes any reminders that have expired"""
+    # Get all Reminders
+    allReminders = Reminder.select().where(Reminder.username == username)
+
+    # Appointments
+    appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
+    allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
+    for reminder in appointmentReminders:
+        appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
+        appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
+        if appointmentEndDateTime < now:
+            with database.transaction():
+                reminder.delete_instance()
+
+    # Prescriptions
+    PrescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
+
+@app.route('/test/getReminders')
+def getReminders():
+    return getReminders(session['username'])
+
+def getReminders(username):
+    allReminders = Reminder.select().dicts().where(Reminder.username == username)
+    reminders = []
+    for r in allReminders:
+        reminders.append(r)
+    return json.dumps(reminders)
+
 def passwordExpiration(username):
     """This checks whether the password that the user is using is about to expire"""
     passwordDetails = uq8LnAWi7D.select().where((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).get()
@@ -1468,6 +1601,9 @@ def checkPrescriptionLevel(username, activePrescriptions):
             if Notification.select().where((Notification.username == username) & (Notification.dismissed == False) & (Notification.notificationtype == "Medication Low") & (Notification.relatedObject == prescription['prescriptionid'])).count() == 0:
                 createNotificationRecord(username, "Medication Low", prescription['prescriptionid'])
 
-            
+##
+# Signalling
+##
 
-
+# Causes the reminder ping to execute every time a request is started.
+request_started.connect(pingServer, app)

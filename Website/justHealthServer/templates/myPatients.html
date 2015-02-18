@@ -37,6 +37,17 @@
     return true;
   }
 
+  //Checks all form fields are filled in
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
   //Shows confirm box on delete appointment
   $(document).ready(function() {
     $("#deleteapp").submit(function(e) {
@@ -640,7 +651,7 @@
                                       <button class="btn btn-danger[disabled]" data-toggle="tooltip" data-placement="right" title="You did not create this appointment.">Delete</button>
                                     </td> 
                                     {% else %}
-                                    <td> <a href="/updateAppointment?appid={{appointment.appid}}">
+                                    <td> <a href="/updateAppointment?appid={{appointment.appid}}&whereFrom=myPatients">
                                         <button class="btn btn-warning">Update</button>
                                           </a>
                                     </td>
