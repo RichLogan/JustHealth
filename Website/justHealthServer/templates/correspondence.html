@@ -29,24 +29,33 @@
     <hr>
    {% endfor %}
 </div>
-  <form role="form" action="/contactUs" method="post" >
 
-          <div class="col-md-8">
-              <div class="col-lg-6">
-                <div class="form-group">
-                  <h4> Add Comment </h4>
-                  <label for="InputName">Title</label>
+  <form role="form" action="/notes" method="post" >
+    <div class="col-md-8">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <h4> Add Comment </h4>
+
+                <label for="InputName">Title</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" id="Title">
+                      <input type="text" class="form-control" id="title">
                       <span class="input-group-addon"></span></div>
                     </div>
+
                     <input type="hidden" class="form-control" name="username" id="username"  readonly="true" >
+                    
                     <div class="form-group">
                       <label for="InputMessage">Message</label>
                       <div class="input-group">
-                        <textarea name="message" id="InputMessage" class="form-control" rows="5" ></textarea>
+                        <textarea name="message" id="InputMessage" class="form-control" rows="4" ></textarea>
                         <span class="input-group-addon"></span></div>
                     </div>
+                    
+                    <label for="dob">Date</label>
+                     <input class="form-control input-sm" type="date" name="dob" id="dob">
+                      <span id="dobValidate"></span>
+
+                    <br />
                     <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
              </div>
            </div>

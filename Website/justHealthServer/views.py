@@ -578,6 +578,20 @@ def notes():
         except Patientcarer.DoesNotExist:
             return redirect(url_for('index'))
 
+    if request.method == "POST":
+        notes = {}
+        notes['carer'] = session['username']
+        notes['patient'] = request.form['patient']
+        notes['notes'] = request.form['notes']
+        notes['title'] = request.form['title']
+        notes['datetime'] = request.formf['datetime']
+
+        result = notesMessage(notes)
+        return render_template('correspondence.html', type="success", message = 'Note added')
+    else:
+        return render_template('correspondence.html', type="error", message = 'update failed')
+
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('internalError.html'), 500
