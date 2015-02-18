@@ -135,7 +135,7 @@
                                         <th>DoB </th>
                                         <th>Gender </th>
                                         <th>Account Type</th>
-                                        <th>Account Deactivate </th>
+                                        <th>Account Deactivated </th>
                                         <th>Verified</th>
                                         <th>Account Locked</th>
                                         <th>Failed Login Attempts </th>
@@ -169,7 +169,7 @@
                                           <div class="modal-body">
                                             <fieldset class ="register-inner">
                                             <!--Form to update profile details -->
-                                              <form name="editAccountDetails" method="POST" action="/updateProfile" enctype="multipart/form-data">
+                                              <form name="editAccountDetails" method="POST" action="/updateAccountSettings_view">
                                                 <div class="form-group">
                                                   <input class="hidden" type="text" name="username" value="{{allUsers.username}}" readonly="true">
                                                 </div>
@@ -214,7 +214,7 @@
                                                   </select>
                                                 </div>
                                                 <div class="form-group">
-                                                  <label for="accountdeactivated">Account Deactivate</label>
+                                                  <label for="accountdeactivated">Account Deactivated</label>
                                                 </br>
                                                 {% if allUsers.accountdeactivated == True %}
                                                   <input type="checkbox" name="accountdeactivated" checked>

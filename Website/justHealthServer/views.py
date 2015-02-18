@@ -597,6 +597,40 @@ def adminPortal():
     else: 
        return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
 
+@app.route('/updateAccountSettings_view', methods=['POST'])
+def updateAccountSettings_view():
+    
+
+    if request.method == 'POST':
+        #The tick boxes are not sent if they aren't ticked, so we have to catch them here.
+        try:
+            accountdeactivated = request.form['accountdeactivated']
+            accountdeactivated = True
+        except KeyError, e:
+            accountdeactivated = False
+
+        try:
+            accountlocked = request.form['accountlocked']
+            accountlocked = True
+        except KeyError, e:
+            accountlocked = False
+
+        try:       
+            verified = request.form['verified']
+            verified = True
+        except KeyError, e:
+            verified = False
+
+        result = updateAccountSettings(request.form, accountlocked, accountdeactivated, verified)
+
+        if result == "True":
+            flash('Account Settings Updated', 'success')
+            return redirect(url_for('adminPortal'))
+        else:
+            flash('Update failed', 'danger')
+            return redirect(url_for('adminPortal'))
+
+
 @app.route('/addNewDeactivate', methods=['POST'])
 def addNewDeactivate():
     """Submits the form to add a new deactivation reason to the database"""
@@ -618,5 +652,3 @@ def addNewMedication():
         else: render_template('adminHome.html',type="warning", message = 'Update failed')
     else:   
        return render_template('adminHome.html')
-
-

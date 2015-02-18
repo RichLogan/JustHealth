@@ -1247,6 +1247,42 @@ def getAllUsers():
         results.append(userDetails)
     return json.dumps(results)
 
+#Update user account settings in Admin Portal
+@app.route('/api/updateAccountSettings', methods=['POST'])
+def updateAccountSettings():
+    return updateAccountSettings(request.form)
 
+def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
+    user = None
+    # What type of user are we dealing with?
+    try:
+        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
 
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
 
+    gender = False
+    if settings['ismale'] == "true":
+        gender = True
+
+    # Update
+    user.firstname = settings['firstname']
+    user.surname = settings['surname']
+    user.ismale = gender
+
+    clientObject.username = settings['username']
+    clientObject.email = settings['email']
+    clientObject.dob = settings['dob']
+    clientObject.accounttype = settings['accounttype']
+    clientObject.accountdeactivated = accountdeactivated
+    clientObject.accountlocked = accountlocked
+    clientObject.loginattempts = settings['loginattempts']
+    clientObject.verified = verified
+
+    with database.transaction():
+        user.save()
+        clientObject.save()
+        return "True"
+    return "False"
