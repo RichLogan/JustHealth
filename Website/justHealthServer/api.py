@@ -778,6 +778,8 @@ def getConnections(username):
         person['username'] = details['username']
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
+        person['email'] = details ['email']
+        person['telephonenumber'] = details ['telephonenumber']
         person['accounttype'] = details['accounttype']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)

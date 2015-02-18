@@ -20,6 +20,35 @@ $(document).ready(function(){
     });
   });
 
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  //Check if date is in the past
+  $('#startdate').focusout(function() {
+    var selectedDate = $('#startdate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
+  $('#enddate').focusout(function() {
+    var selectedDate = $('#enddate').datepicker('getDate');
+    var now = new Date();
+    if (selectedDate < now) {
+      // selected date is in the past
+      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+    }
+  });
+
   /*var allDates = $(document.getElementsByClassName('dateForJS'));
   var now = moment().format();
   //for loops through allDates
@@ -46,6 +75,7 @@ $('time').each(function(i, e) {
 
   <i class="fa fa-calendar headingIcon pull-left"></i><h4 class= "pull-left">Your Appointments</h4>
   <a data-toggle="modal" data-target="#references" class="btn btn-success pull-right bold"> Create</a> 
+
   <!--Modal to create a new appointment -->
   <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
     <div class="modal-dialog">
@@ -264,7 +294,7 @@ $('time').each(function(i, e) {
     <div role="tabpanel" class="tab-pane fade in container" id="archived" style="width: 100%">
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="archived">
         {% block archived %}
-          {% for appointment in appointments %}
+          {% for appointment in appointments|sort(reverse=True, attribute='startdate') %}
             {% if appointment.upcoming == False %}
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">

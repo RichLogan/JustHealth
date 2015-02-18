@@ -11,6 +11,15 @@
       searching:false,
     });
 
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
 
     /*var allDates = $(document.getElementsByClassName('dateForJS'));
     var now = moment().format();
@@ -44,6 +53,7 @@
 
   <i class="fa fa-calendar headingIcon pull-left"></i><h4 class ="pull-left">Your Appointments</h4>
   <a data-toggle="modal" data-target="#references" class="btn btn-success pull-right bold"> Create</a> 
+
   <!--Modal to create a new appointment -->
   <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
     <div class="modal-dialog">
@@ -268,7 +278,7 @@
     <div role="tabpanel" class="tab-pane fade in container" id="archived" style="width: 100%">
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="archived">
         {% block archived %}
-          {% for appointment in appointments %}
+          {% for appointment in appointments|sort(reverse=True, attribute='startdate') %}
             {% if appointment.upcoming == False %}
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="heading{{appointment.appid}}">
