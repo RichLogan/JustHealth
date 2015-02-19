@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 {% block title %}Home{% endblock %}
-{% block scriptsAndStyles %}{% endblock %}
+{% block scriptsAndStyles %}
+{% endblock %}
 
 {% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
@@ -43,60 +44,64 @@ $(document).ready(function(){
         e.preventDefault();
       }
     });
-  });
 
-  $('form').submit(function(e) {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        alert("All fields must be filled out");
-        e.preventDefault();
-        return false;
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').modal('toggle');
+    }
+
+    $('form').submit(function(e) {
+      $("form :input").each(function(){
+        if ($(this).val() == null || $(this).val() == "") {
+          alert("All fields must be filled out");
+          e.preventDefault();
+          return false;
+        }
+      });
+    });
+
+    //Check if date is in the past
+    $('#startdate').focusout(function() {
+      var selectedDate = $('#startdate').datepicker('getDate');
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
       }
     });
+
+    $('#enddate').focusout(function() {
+      var selectedDate = $('#enddate').datepicker('getDate');
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+      }
+    });
+
+    /*
+    var allDates = $(document.getElementsByClassName('dateForJS'));
+    var now = moment().format();
+    //for loops through allDates
+    // each allDates.value() needs to equal
+    for (var i = 0, len = allDates.length; i<len; i++){
+      var formatting = allDates.html(i);
+      var momentFormatting = moment(formatting);
+      format = momentFormatting.calendar();
+      alert(format);
+      allDates.html(format);
+    }*/
+
+    $('time').each(function(i, e) {
+      var time = moment($(e).attr('datetime'));
+      $(e).html('<span>' + time.calendar() + '</span>');
+    });
   });
-
-  //Check if date is in the past
-  $('#startdate').focusout(function() {
-    var selectedDate = $('#startdate').datepicker('getDate');
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
-
-  $('#enddate').focusout(function() {
-    var selectedDate = $('#enddate').datepicker('getDate');
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
-
-  /*var allDates = $(document.getElementsByClassName('dateForJS'));
-  var now = moment().format();
-  //for loops through allDates
-  // each allDates.value() needs to equal
-  for (var i = 0, len = allDates.length; i<len; i++){
-  var formatting = allDates.html(i);
-  var momentFormatting = moment(formatting);
-  format = momentFormatting.calendar();
-  alert(format);
-  allDates.html(format);
-}*/
-
-$('time').each(function(i, e) {
-  var time = moment($(e).attr('datetime'));
-  $(e).html('<span>' + time.calendar() + '</span>');
-});
-});
 </script>
 
 <div class="row">
   <!--side pannel for profile picture -->
-	<div class="col-md-3 dashPanel">
-		<div id="dashProfile">
+  <div class="col-md-3 dashPanel">
+    <div id="dashProfile">
       <fieldset class="style center-element">
       <h4 style="text-align:left;" class="bold">{{session.username}}</h4>
       <a class"thumbnail" href="/editProfile"> 
@@ -107,7 +112,7 @@ $('time').each(function(i, e) {
       </br>
       {{accountInfo.email}}</p>
       </fieldset>
-		</div>
+    </div>
       <!--side pannel to display connections -->
        <fieldset class="style">
     <!--side pannel to display connections -->
@@ -127,6 +132,7 @@ $('time').each(function(i, e) {
                     <h4 class="modal-title" id="{{connection.username}}"><span class= "bold"> Username: </span>{{connection.username}}</h4>
                   </div>
                   <div class="modal-body">
+
                    <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
                     <span class= "bold"> Full Name: </span> {{connection.firstname}} 
                     {{connection.surname}}
@@ -135,7 +141,7 @@ $('time').each(function(i, e) {
                     <br />
                     <span class="bold"> Telephone Number: </span>{{connection.telephonenumber}}
                     <br />
-                        <form action="/api/deleteConnection" method="POST">
+                        <form action="/deleteConnectionWeb" method="POST">
                             <input type="hidden" name="user" value="{{session.username}}">
                             <input type="hidden" name="connection" value="{{connection.username}}">
                             <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')">
@@ -151,15 +157,27 @@ $('time').each(function(i, e) {
     </div> 
     <div id="dashConnections">
       <!--model to show connections information -->
-    <a data-toggle="modal" data-target="#terms"> View Pending Connections </a>
-              <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+    <a data-toggle="modal" data-target="#connections"> View Pending Connections </a>
+              <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms">Pending Connections</h4>
+                      <h4 class="modal-title" id="">Pending Connections</h4>
                     </div>
                     <div class="modal-body">
+
+                      {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          {% for category, message in messages %}
+                            <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                              <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              {{message}}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      {% endwith %}
+
                       <h4>Outgoing</h4>
                       <table class="table table-condensed ">
                         <thead>
@@ -178,7 +196,7 @@ $('time').each(function(i, e) {
                               <td>{{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td>{{connection.code}}</td>
-                              <form action="/api/cancelConnection" method="POST">
+                              <form action="/cancelConnectionWeb" method="POST">
                                 <input type="hidden" name="user" value="{{session.username}}">
                                 <input type="hidden" name="connection" value="{{connection.username}}">
                                 <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
@@ -207,7 +225,7 @@ $('time').each(function(i, e) {
                               <td>{{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
-                              <form action="/api/cancelConnection" method="POST">
+                              <form action="/cancelConnectionWeb" method="POST">
                                 <input type="hidden" name="user" value="{{session.username}}">
                                 <input type="hidden" name="connection" value="{{connection.username}}">
                                 <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
@@ -253,10 +271,10 @@ $('time').each(function(i, e) {
 
 
     <fieldset class="style">
-		  <div id="dashConnections">	
-		  	<a class"thumbnail" href="/search"> 
-		  	<h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
-		  </div>
+      <div id="dashConnections">  
+        <a class"thumbnail" href="/search"> 
+        <h5><i class="fa fa-search sideIcons" ></i> Search </h5> </a>
+      </div>
     </fieldset>
 
     <fieldset class="style">
@@ -273,6 +291,7 @@ $('time').each(function(i, e) {
       </div>
     </fieldset>
 
+<<<<<<< HEAD
 	</div>
 	<div class="col-md-9 dashPanel">
 		
@@ -311,44 +330,61 @@ $('time').each(function(i, e) {
     {% endif %}
 
     <br />
+=======
+  </div>
+  <div class="col-md-9 dashPanel">
+    
+    <!-- Notifications -->
+    {% if notifications %}
+      <div class="well well-sm">
+        <h4><i class="fa fa-tag sideIcons"></i> Notifications</h4>
+        {% for notification in notifications %}
+          <div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
+              <button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                {{notification.content}}
+            </div>
+          {% endfor %}
+      </div>
+    {% endif %}
+>>>>>>> 975df72b7bf544bc696eaff28c620781298c182d
 
-		<!-- Main Content -->
+    <!-- Main Content -->
 <fieldset class ="form-container">
-		<!--All active prescriptions to show on the dashboard -->	
+    <!--All active prescriptions to show on the dashboard --> 
 
-		<i class="fa fa-medkit headingIcon pull-left" ></i> <h4>Prescriptions </h4> </a>
+    <i class="fa fa-medkit headingIcon pull-left" ></i> <h4>Prescriptions </h4> </a>
     <hr>
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
-		{%for prescription in prescriptions%}
-		  <div class="panel panel-default">
-		    <div class="panel-heading myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
-		      <h4 class="panel-title">
-		        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
-		          <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
-		        </a>
-		      </h4>
-		      <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
-		        <div class="panel-body">
-		          <div class="row">
-		            <h5>
-		              <ul>
-		                <li>Start Date: {{prescription.startdate}}</li>
-		                <li>End Date: {{prescription.enddate}}</li>
-		                <li>Extra Info: {{prescription.prerequisite}}</li>
-		                <li>Repeat: {{prescription.repeat}} </li>
-		              </ul>
-		            </h5>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		{% endfor %}
+    {%for prescription in prescriptions%}
+      <div class="panel panel-default">
+        <div class="panel-heading myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
+              <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
+            </a>
+          </h4>
+          <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
+            <div class="panel-body">
+              <div class="row">
+                <h5>
+                  <ul>
+                    <li>Start Date: {{prescription.startdate}}</li>
+                    <li>End Date: {{prescription.enddate}}</li>
+                    <li>Extra Info: {{prescription.prerequisite}}</li>
+                    <li>Repeat: {{prescription.repeat}} </li>
+                  </ul>
+                </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
 
-		<hr>
-		<!--Appointments to show on dashboard --> 
-	  <a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
+    <hr>
+    <!--Appointments to show on dashboard --> 
+    <a href="/appointments"><i class="fa fa-calendar headingIcon pull-left"></i><h4 style="padding-top:8px;">Your Appointments</h4></a>
  
     <hr>
   <div class="panel-group" id="accordion" aria-multiselectable="true">

@@ -161,7 +161,6 @@ def contactUs():
         return render_template('contactUs.html', type="success", message = 'Your message has been sent, please allow up to 24 hours for a response', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
     else: 
        return render_template('contactUs.html', profileDetails=profileDetails, printaccounttype = profileDetails['accounttype'])
-    
 
 @app.route('/settings')
 @needLogin
@@ -178,8 +177,11 @@ def search():
     """Search to find a different user's profile"""
     if request.method =='POST':
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
-        result = json.loads(result)
-        return render_template ('search.html',results = result, username= session['username'])
+        if result == "No users found":
+            flash(result, 'danger')
+        else:
+            result = json.loads(result)
+            return render_template ('search.html',results = result, username= session['username'])
     return render_template('search.html', username= session['username'])
 
 @app.route('/deactivate', methods=['POST', 'GET'])
@@ -351,7 +353,7 @@ def createConnectionWeb():
         return redirect('/?go=connections')
     else:
         flash(result, 'danger')
-        return redirect(url_for('search'))
+    return redirect('/?go=connections')
 
 @app.route('/completeConnectionWeb', methods=['POST', 'GET'])
 def completeConnectionWeb():
@@ -369,6 +371,7 @@ def deleteConnectionWeb():
     result = deleteConnection(request.form)
     if result == "True":
         flash("Delete successful", 'success')
+        return redirect('/?go=connections')
     else:
         flash("Delete failed. Please try again or contact an administrator", 'danger')
     return redirect('/?go=connections')
@@ -381,7 +384,7 @@ def cancelConnectionWeb():
         flash("Cancellation successful", 'success')
     else:
         flash("Cancellation failed. Please try again or contact an administrator", 'danger')
-    return redirect('/profile?go=connections')
+    return redirect('/?go=connections')
 
 @app.route('/appointments', methods=['POST', 'GET'])
 def appointments():
@@ -415,7 +418,6 @@ def appointments():
             flash("Appointment Added", 'success')
             return redirect(url_for('appointments'))
     return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
-
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
 def deleteAppointment_view():
