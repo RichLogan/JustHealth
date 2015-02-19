@@ -138,6 +138,7 @@ $('time').each(function(i, e) {
             </div>
             <div class="modal-body">
               <h4>Outgoing</h4>
+              {% if outgoing|length != 0 %}
                 <table class="table table-condensed ">
                   <thead>
                     <th>Username</th>
@@ -162,9 +163,13 @@ $('time').each(function(i, e) {
                     {% endfor %}
                   </tbody>
                 </table>
+              {% else %}
+                <strong>You don't have any connections pending</strong>
+              {% endif %}
               <!--Table for incomming connections -->
               <br />
               <h4>Incoming</h4>
+              {% if incoming|length != 0 %}
                 <table class="table table-condensed">
                   <thead>
                     <th>Username</th>
@@ -211,7 +216,9 @@ $('time').each(function(i, e) {
                     {% endfor %}
                   </tbody>
                 </table>
-
+              {% else %}
+                <strong>You have no new connection requests</strong>
+              {% endif %} 
               </br>
             </div>
           </div>
