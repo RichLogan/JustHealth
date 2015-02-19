@@ -5,13 +5,6 @@
 {% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
 <script>
-$(document).ready(function(){
-  $('.makeDataTable').DataTable({
-    paging:false,
-    info:false,
-    searching:false,
-  });
-
   //Shows confirm box on delete appointment
   $(document).ready(function() {
     $("#deleteapp").submit(function(e) {
@@ -19,53 +12,56 @@ $(document).ready(function(){
         e.preventDefault();
       }
     });
-  });
 
-  $('form').submit(function(e) {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        alert("All fields must be filled out");
-        e.preventDefault();
-        return false;
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').modal('toggle');
+    }
+
+    $('form').submit(function(e) {
+      $("form :input").each(function(){
+        if ($(this).val() == null || $(this).val() == "") {
+          alert("All fields must be filled out");
+          e.preventDefault();
+          return false;
+        }
+      });
+    });
+
+    //Check if date is in the past
+    $('#startdateappt').focusout(function() {
+      var selectedDate = $('#startdateappt').val();
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
       }
     });
-  });
 
-  //Check if date is in the past
-  $('#startdateappt').focusout(function() {
-    var selectedDate = $('#startdateappt').val();
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
+    $('#enddate').focusout(function() {
+      var selectedDate = $('#enddate').datepicker('getDate');
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+      }
+    });
 
-  $('#enddate').focusout(function() {
-    var selectedDate = $('#enddate').datepicker('getDate');
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
+    /*var allDates = $(document.getElementsByClassName('dateForJS'));
+    var now = moment().format();
+    //for loops through allDates
+    // each allDates.value() needs to equal
+    for (var i = 0, len = allDates.length; i<len; i++){
+    var formatting = allDates.html(i);
+    var momentFormatting = moment(formatting);
+    format = momentFormatting.calendar();
+    alert(format);
+    allDates.html(format);
+  }*/
 
-  /*var allDates = $(document.getElementsByClassName('dateForJS'));
-  var now = moment().format();
-  //for loops through allDates
-  // each allDates.value() needs to equal
-  for (var i = 0, len = allDates.length; i<len; i++){
-  var formatting = allDates.html(i);
-  var momentFormatting = moment(formatting);
-  format = momentFormatting.calendar();
-  alert(format);
-  allDates.html(format);
-}*/
-
-$('time').each(function(i, e) {
-  var time = moment($(e).attr('datetime'));
-  $(e).html('<span>' + time.calendar() + '</span>');
-});
+    $('time').each(function(i, e) {
+      var time = moment($(e).attr('datetime'));
+      $(e).html('<span>' + time.calendar() + '</span>');
+    });
 });
 </script>
 
@@ -128,85 +124,103 @@ $('time').each(function(i, e) {
       {% endif %}     
     </div> 
     <div id="dashConnections">
-      <!--modal to show connections information -->
+
+    <!--modal to show connections information -->
     <a class="modalheader" data-toggle="modal" data-target="#connections"><i class="fa fa-user-plus xsmallIcon pull-right"></i></a>
-      <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-              <h4 class="modal-title" id="connections">Pending Connections</h4>
-            </div>
-            <div class="modal-body">
-              <h4>Outgoing</h4>
-              {% if outgoing|length != 0 %}
-                <table class="table table-condensed ">
-                  <thead>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Account Type</th>
-                    <th>Code</th>
-                    <th></th>
-                  </thead>
-                  <tbody>
-                    {% for connection in outgoing %}
-                    <tr>
-                      <td>{{connection.username}}</td>
-                      <td>{{connection.firstname}} {{connection.surname}}</td>
-                      <td>{{connection.accounttype}}</td>
-                      <td>{{connection.code}}</td>
-                      <form action="/api/cancelConnection" method="POST">
-                        <input type="hidden" name="user" value="{{session.username}}">
-                        <input type="hidden" name="connection" value="{{connection.username}}">
-                        <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
-                      </form>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              {% else %}
-                <strong>You don't have any connections pending</strong>
-              {% endif %}  
-              <!--Table for incomming connections -->
-              <br />
-              <h4>Incoming</h4>
-              {% if incoming|length != 0 %}
-                <table class="table table-condensed">
-                  <thead>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Account Type</th>
-                    <th></th>
-                    <th></th>
-                  </thead>
-                  <tbody>
-                    {% for connection in incoming %}
-                    <tr>
-                      <td>{{connection.username}}</td>
-                      <td>{{connection.firstname}} {{connection.surname}}</td>
-                      <td>{{connection.accounttype}}</td>
-                      <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
-                      <form action="/api/cancelConnection" method="POST">
-                        <input type="hidden" name="user" value="{{session.username}}">
-                        <input type="hidden" name="connection" value="{{connection.username}}">
-                        <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
-                      </form>
-                      <!--model which asks the user to enter in a verification code to complete the incomming connection -->
-                      <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                              <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
+              <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                      <h4 class="modal-title" id="">Pending Connections</h4>
+                    </div>
+                    <div class="modal-body">
+
+                      {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          {% for category, message in messages %}
+                            <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                              <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              {{message}}
                             </div>
-                            <div class="modal-body">
-                              <h4>Please enter the verification code given by the requestor</h4>
-                              <form role="form" action="/completeConnectionWeb" method="POST">
-                                <div style="width: 70%;margin: 0 auto;">
-                                  <input name="requestor" type="hidden" value="{{connection.username}}">
-                                  <input name="username" type="hidden" value="{{session.username}}">
-                                  <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
-                                  <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                          {% endfor %}
+                        {% endif %}
+                      {% endwith %}
+
+                      <h4>Outgoing</h4>
+                      {% if outgoing|length != 0 %}
+                        <table class="table table-condensed ">
+                          <thead>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Account Type</th>
+                            <th>Code</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in outgoing %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <td>{{connection.code}}</td>
+                              <form action="/cancelConnectionWeb" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
+                              </form>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      {% else %}
+                        <strong>You have no pending connections</strong>
+                      {% endif %}
+                        <!--Table for incomming connections -->
+                        <br />
+                        <h4>Incoming</h4>
+                        {% if incoming|length != 0 %}
+                        <table class="table table-condensed">
+                          <thead>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Account Type</th>
+                            <th></th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            {% for connection in incoming %}
+                            <tr>
+                              <td>{{connection.username}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
+                              <td>{{connection.accounttype}}</td>
+                              <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
+                              <form action="/cancelConnectionWeb" method="POST">
+                                <input type="hidden" name="user" value="{{session.username}}">
+                                <input type="hidden" name="connection" value="{{connection.username}}">
+                                <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
+                              </form>
+                              <!--model which asks the user to enter in a verification code to complete the incomming connection -->
+                              <div class="modal fade" id="completeConnectionModal" tabindex="-1" role="dialog" aria-labelledby="completeConnectionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                      <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <h4>Please enter the verification code given by the requestor</h1>
+                                        <form role="form" action="/completeConnectionWeb" method="POST">
+                                          <div style="width: 70%;margin: 0 auto;">
+                                            <input name="requestor" type="hidden" value="{{connection.username}}">
+                                            <input name="username" type="hidden" value="{{session.username}}">
+                                            <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                            <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </form>
                             </div>
