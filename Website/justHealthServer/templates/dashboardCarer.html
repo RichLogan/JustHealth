@@ -130,16 +130,17 @@ $('time').each(function(i, e) {
     </div> 
     <div id="dashConnections">
       <!--modal to show connections information -->
-    <a class="modalheader" data-toggle="modal" data-target="#terms"><i class="fa fa-user-plus xsmallIcon pull-right"></i></a>
-      <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+    <a class="modalheader" data-toggle="modal" data-target="#connections"><i class="fa fa-user-plus xsmallIcon pull-right"></i></a>
+      <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-              <h4 class="modal-title" id="terms">Pending Connections</h4>
+              <h4 class="modal-title" id="connections">Pending Connections</h4>
             </div>
             <div class="modal-body">
               <h4>Outgoing</h4>
+              {% if outgoing|length != 0 %}
                 <table class="table table-condensed ">
                   <thead>
                     <th>Username</th>
@@ -164,9 +165,13 @@ $('time').each(function(i, e) {
                     {% endfor %}
                   </tbody>
                 </table>
+              {% else %}
+                <strong>You don't have any connections pending</strong>
+              {% endif %}  
               <!--Table for incomming connections -->
               <br />
               <h4>Incoming</h4>
+              {% if incoming|length != 0 %}
                 <table class="table table-condensed">
                   <thead>
                     <th>Username</th>
@@ -213,7 +218,9 @@ $('time').each(function(i, e) {
                     {% endfor %}
                   </tbody>
                 </table>
-
+              {% else %}
+                <strong>You have no new connection requests</strong>
+              {% endif %} 
               </br>
             </div>
           </div>
