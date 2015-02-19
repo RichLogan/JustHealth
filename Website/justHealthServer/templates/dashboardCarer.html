@@ -5,13 +5,6 @@
 {% block homeCSS %}<div id="homecontent">{% endblock %}
 {% block content %}
 <script>
-$(document).ready(function(){
-  $('.makeDataTable').DataTable({
-    paging:false,
-    info:false,
-    searching:false,
-  });
-
   //Shows confirm box on delete appointment
   $(document).ready(function() {
     $("#deleteapp").submit(function(e) {
@@ -19,53 +12,56 @@ $(document).ready(function(){
         e.preventDefault();
       }
     });
-  });
 
-  $('form').submit(function(e) {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        alert("All fields must be filled out");
-        e.preventDefault();
-        return false;
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').modal('toggle');
+    }
+
+    $('form').submit(function(e) {
+      $("form :input").each(function(){
+        if ($(this).val() == null || $(this).val() == "") {
+          alert("All fields must be filled out");
+          e.preventDefault();
+          return false;
+        }
+      });
+    });
+
+    //Check if date is in the past
+    $('#startdateappt').focusout(function() {
+      var selectedDate = $('#startdateappt').val();
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
       }
     });
-  });
 
-  //Check if date is in the past
-  $('#startdateappt').focusout(function() {
-    var selectedDate = $('#startdateappt').val();
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
+    $('#enddate').focusout(function() {
+      var selectedDate = $('#enddate').datepicker('getDate');
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+      }
+    });
 
-  $('#enddate').focusout(function() {
-    var selectedDate = $('#enddate').datepicker('getDate');
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
+    /*var allDates = $(document.getElementsByClassName('dateForJS'));
+    var now = moment().format();
+    //for loops through allDates
+    // each allDates.value() needs to equal
+    for (var i = 0, len = allDates.length; i<len; i++){
+    var formatting = allDates.html(i);
+    var momentFormatting = moment(formatting);
+    format = momentFormatting.calendar();
+    alert(format);
+    allDates.html(format);
+  }*/
 
-  /*var allDates = $(document.getElementsByClassName('dateForJS'));
-  var now = moment().format();
-  //for loops through allDates
-  // each allDates.value() needs to equal
-  for (var i = 0, len = allDates.length; i<len; i++){
-  var formatting = allDates.html(i);
-  var momentFormatting = moment(formatting);
-  format = momentFormatting.calendar();
-  alert(format);
-  allDates.html(format);
-}*/
-
-$('time').each(function(i, e) {
-  var time = moment($(e).attr('datetime'));
-  $(e).html('<span>' + time.calendar() + '</span>');
-});
+    $('time').each(function(i, e) {
+      var time = moment($(e).attr('datetime'));
+      $(e).html('<span>' + time.calendar() + '</span>');
+    });
 });
 </script>
 
@@ -113,10 +109,10 @@ $('time').each(function(i, e) {
                     <br />
                     <span class="bold"> Telephone Number: </span>{{connection.telephonenumber}}
                     <br />
-                        <form action="/api/deleteConnection" method="POST">
+                        <form action="/deleteConnectionWeb" method="POST">
                             <input type="hidden" name="user" value="{{session.username}}">
                             <input type="hidden" name="connection" value="{{connection.username}}">
-                            <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
+                            <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')">
                        </form>
                   </div>
                 </div>
@@ -129,15 +125,27 @@ $('time').each(function(i, e) {
     </div> 
     <div id="dashConnections">
       <!--model to show connections information -->
-    <a data-toggle="modal" data-target="#terms"> View Pending Connections </a>
-              <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+    <a data-toggle="modal" data-target="#connections"> View Pending Connections </a>
+              <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms">Pending Connections</h4>
+                      <h4 class="modal-title" id="">Pending Connections</h4>
                     </div>
                     <div class="modal-body">
+
+                      {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          {% for category, message in messages %}
+                            <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                              <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              {{message}}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      {% endwith %}
+
                       <h4>Outgoing</h4>
                       <table class="table table-condensed ">
                         <thead>
@@ -156,7 +164,7 @@ $('time').each(function(i, e) {
                               <td>{{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td>{{connection.code}}</td>
-                              <form action="/api/cancelConnection" method="POST">
+                              <form action="/cancelConnectionWeb" method="POST">
                                 <input type="hidden" name="user" value="{{session.username}}">
                                 <input type="hidden" name="connection" value="{{connection.username}}">
                                 <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
@@ -185,7 +193,7 @@ $('time').each(function(i, e) {
                               <td>{{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
-                              <form action="/api/cancelConnection" method="POST">
+                              <form action="/cancelConnectionWeb" method="POST">
                                 <input type="hidden" name="user" value="{{session.username}}">
                                 <input type="hidden" name="connection" value="{{connection.username}}">
                                 <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
