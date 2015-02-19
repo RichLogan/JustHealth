@@ -32,35 +32,21 @@ def index():
     """A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
     ## set common functionality
     accountInfo = json.loads(getAccountInfo(session['username']))
-
-    #notifications = json.loads(getNotifications(session['username']))
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
     incomingConnections = json.loads(connections['incoming'])
     completedConnections = json.loads(connections['completed'])
-    
-    # Notification example
-    notifications = []
-    notification1 = {}
-    notification1['type'] = "danger"
-    notification1['content'] = "Testing"
-    notifications.append(notification1)
-    notification2 = {}
-    notification2['type'] = "success"
-    notification2['content'] = "Testing 2"
-    notifications.append(notification2)
 
-    # if user is a patient
     if accountInfo['accounttype'] == "Patient":
-    # add patient functionality
+        # Patient Functionality
+        notifications = json.loads(getNotifications(session['username']))
         prescriptions = json.loads(getPrescriptions(session['username']))
-    # render template
         return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
-    # else carer
     elif accountInfo['accounttype'] == "Carer":
-    # add carer functionality
-    # Get Patients
+        # Carer Functionality
+        
+        # Get Carer's Patients
         if json.loads(api.getAccountInfo(session['username']))['accounttype'] == 'Carer':
             # Get all patients connected to this user
             connections = json.loads(getConnections(session['username']))
@@ -69,20 +55,39 @@ def index():
             for connection in completedConnections:
                 if connection['accounttype'] == "Patient":
                     patients.append(connection)
-        # Get all appointments
+        
         appointmentsMapping = {}
-        # Get all prescriptions
         activePrescriptions = {}
         upcomingPrescriptions = {}
         expiredPrescriptions = {}
         for patient in patients:
             appointmentsMapping[patient['username']] = json.loads(getAllAppointments(session['username'], patient['username']))
-    
             activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
             upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
             expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
-    # render template
-        return render_template('dashboardCarer.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections,patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions, medicationList = Medication.select())
+            checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
+
+        # Notifications relies on some of the methods above and therefore needs to be run at the end of this block.
+        # Otherwise the notification won't be displayed until the refresh after it is created.
+        notifications = json.loads(getNotifications(session['username']))
+        reminders = json.loads(getReminders(session['username']))
+        return render_template(
+            'dashboardCarer.html',
+            accountInfo=accountInfo,
+            notifications=notifications,
+            reminders=reminders,
+            connections=connections,
+            appointments=appointments,
+            outgoing=outgoingConnections,
+            incoming=incomingConnections,
+            completed=completedConnections,
+            patients = patients,
+            appointmentsMapping = appointmentsMapping,
+            activePrescriptions = activePrescriptions,
+            upcomingPrescriptions = upcomingPrescriptions,
+            expiredPrescriptions = expiredPrescriptions,
+            appType=Appointmenttype.select(),
+            medicationList = Medication.select())
 
 @app.route('/profile')
 @needLogin
@@ -278,6 +283,17 @@ def login():
             fullname = session['firstname'] + session['surname']
 
             return redirect(url_for('index'))
+        #expired password here
+        elif result == "Reset":
+            return render_template('expiredpassword.html', user=request.form['username'], message="Your password has expired and needs to be reset before you will be able to log in.", submessage="JustHealth enforce this from time-to-time to ensure that your privacy and security are maximised whilst using the website.")
+        elif result == "<11":
+            session["username"] = request.form['username']
+            nameresult = json.loads(getAccountInfo(session['username']))
+            session['firstname'] = nameresult['firstname']
+            session['surname'] = nameresult['surname']
+            fullname = session['firstname'] + " " + session['surname']
+
+            return render_template('resetpasswordnowquestion.html')
         else:
             return render_template('login.html', type="danger", message = result)
     try:
@@ -285,6 +301,24 @@ def login():
     except KeyError, e:
       return render_template('login.html')
     return redirect(url_for('index'))
+
+@app.route('/expiredpassword', methods=['POST', 'GET'])
+def expiredpassword():
+    if request.method == 'POST':
+        reset = expiredResetPassword(request.form)
+        if reset == "True":
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
+        #does not work, see API comments for details
+        # elif reset == "Exists":
+        #      return render_template('expiredpassword.html', user=session['username'], error="The password that you have tried to use has already been used as one of your last five passwords. Please try again.", errortype="danger")
+        elif reset == "Unmatched":
+            return render_template('expiredpassword.html', user=request.form['username'], error="The two passwords you entered did not match, please try again.", errortype="danger")
+        else: 
+            return render_template('expiredpassword.html', user=session['username'], error="Oops, something went wrong. Please try again.", errortype="danger")
+
+    return render_template('expiredpassword.html', user=session['username'])
+    
 
 @app.route('/forgotPassword', methods=['POST', 'GET'])
 def forgotPassword():
@@ -306,7 +340,7 @@ def resetPasswordRedirect():
     if result == "True":
         return render_template('login.html', type="success", message="Your password has been reset, please check your email and click the link to verify.")
     else:
-        return render_template('resetpassword.html', type="danger", message=result)
+        return render_template('resetpassword.html', type="danger", message="The details that you entered are incorrect. Please try again.", user=result)
     return render_template('resetpassword.html')
 
 
@@ -420,6 +454,29 @@ def updateAppointment_view():
         
     return redirect(url_for('appointments'))
 
+@app.route('/appointmentDetails', methods=['GET', 'POST'])
+def appointmentAcceptDecline_view():
+    if request.method == 'GET':
+        appid = request.args.get('id')
+        getApp = json.loads(getAppointment(session['username'], appid))
+        return render_template('appointmentAcceptDecline.html', appointment=getApp)
+    if request.method == 'POST':
+        action = acceptDeclineAppointment(session['username'], request.form['action'], request.form['appid'])
+        
+        if request.form['action'] == "Accept":
+            messageType = 'success'
+        else: 
+            messageType = 'danger'
+
+        if action == "Failed": 
+            messageType = 'danger'
+        if action == "You have not been invited to this appointment.": 
+            messageType = 'danger'
+
+        getApp = json.loads(getAppointment(session['username'], request.form['appid']))
+        return render_template('appointmentAcceptDecline.html', appointment=getApp, message=action, type=messageType)
+
+
 @app.route('/myPatients')
 def myPatients():
     """Shows carer page listing their connected patients, they can edit each patient's prescriptions and appointments from here"""
@@ -444,6 +501,7 @@ def myPatients():
         activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
         upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
         expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
+
     return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/prescriptions')
@@ -566,6 +624,11 @@ def searchNHS():
         webbrowser.open(website,new=2)
     return render_template('searchNHSDirect.html')
 
+@app.route('/dismissNotification', methods=['POST', 'GET'])
+def dismissNotifications():
+    """dismiss the notification by running a method from the API"""
+    if request.method == 'POST':
+        notificationDismiss = dismissNotification(request.form['notificationid'])
 
 @app.errorhandler(500)
 def internal_error(error):
