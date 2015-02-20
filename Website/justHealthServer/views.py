@@ -574,15 +574,15 @@ def notes():
             patient = request.args.get('user', '')
             Patientcarer.select().where((Patientcarer.carer == session['username']) & (Patientcarer.patient == patient)).get()
             correspondence = json.loads(getCorrespondence(session['username'], patient))
-            return render_template('correspondence.html', notes=correspondence)
+            return render_template('correspondence.html', notes=correspondence, patient=patient)
         except Patientcarer.DoesNotExist:
             return redirect(url_for('index'))
 
-@app.route('/note',methods=['POST', 'GET'])
+@app.route('/addNote',methods=['POST', 'GET'])
 def addNote():
 
     if request.method == "POST":
-        result = addCorrespondence(request.form)  
+        result = addCorrespondence(request.form)
         if result == "True":
             return render_template('correspondence.html', type="success", message = 'Note Added')
         else: render_template('correspondence.html',type="warning", message = 'Update failed')

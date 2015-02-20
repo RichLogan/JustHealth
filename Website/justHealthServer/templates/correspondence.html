@@ -35,7 +35,7 @@
    {% endfor %}
 </div>
 
-  <form role="form" action="/addCorrespondence" method="post" >
+  <form role="form" action="/addNote" method="post" >
     <div class="col-md-8">
         <div class="col-lg-6">
             <div class="form-group">
@@ -43,23 +43,19 @@
 
                     <label for="InputName">Title</label>
                     <div class="input-group">
-                      <input type="text" class="form-control" id="title">
+                      <input type="text" class="form-control" id="title" name="title">
                       <span class="input-group-addon"></span></div>
                     </div>
 
-                    <input type="hidden" class="form-control" name="username" id="carer"  readonly="true" >
-                    <input type="hidden" class="form-control" name="patientname" id="patient"  readyonly="true">
+                    <input type="hidden" class="form-control" name="carer" id="carer"  readonly="true" value="{{session.username}}" >
+                    <input type="hidden" class="form-control" name="patient" id="patient"  readonly="true" value="{{patient}}" >
                     
                     <div class="form-group">
                         <label for="InputMessage">Message</label>
                         <div class="input-group">
-                        <textarea name="message" id="InputMessage" class="form-control" rows="4" ></textarea>
+                        <textarea name="notes" id="InputMessage" class="form-control" rows="4" ></textarea>
                         <span class="input-group-addon"></span></div>
                     </div>
-                    
-                    <label for="date">Date</label>
-                    <input class="form-control input-sm" type="date" name="date" id="date">
-                    <span class="input-group-addon"></span></div>
 
                     <br />
                     <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
