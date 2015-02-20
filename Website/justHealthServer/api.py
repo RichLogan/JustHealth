@@ -1305,7 +1305,6 @@ def deleteNote():
   return deleteNote(request.form['noteid'])
 
 def deleteNote(noteid):
-
     try:
         instance = Notes.select().where(Notes.noteid == noteid).get()
         with database.transaction():

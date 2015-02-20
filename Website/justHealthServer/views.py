@@ -655,14 +655,15 @@ def addNote():
     else: 
        return render_template('correspondence.html')
 
-@app.route('/deleteNote', methods=['POST', 'GET'])
+@app.route('/deleteNote')
 def deleteNote_view():
-    if request.method == 'GET':
-        noteid = request.args.get("noteid")
-        deleted = deleteNote(noteid)
+    noteid = request.args.get("noteid")
+    deleted = deleteNote(noteid)
+    if deleted == "Deleted":
         flash(deleted, 'success')
         return render_template('correspondence.html',type="success", message = 'Note Delete')
-    else:render_template('correspondence.html',type="warning", message = 'Update failed')
+    else:
+        return render_template('correspondence.html',type="warning", message = 'Update failed')
 
 
 @app.errorhandler(500)
