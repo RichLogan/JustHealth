@@ -1489,7 +1489,11 @@ def addReminders(username, now):
             withUser = a['invitee']
 
         try:
-            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            r = Reminder.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            if r.reminderClass == "danger":
+                with database.transaction():
+                    r.delete_instance()
+                raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
@@ -1508,11 +1512,15 @@ def addReminders(username, now):
         if withUser == username:
             withUser = a['invitee']
         try:
-            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            r = Reminder.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            if r.reminderClass == "warning":
+                with database.transaction():
+                    r.delete_instance()
+                raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['type'] + " with " + withUser + " appointment started at " + a['starttime'],
+                content = "Your " + a['apptype'] + " with " + withUser + " appointment started at " + str(a['starttime']) + " and ends at " + str(a['endtime']),
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid'],
