@@ -62,20 +62,11 @@
     </script>
 
 
-<br/ >
-<fieldset class="form-admin">
-      {% if message != null %}
-        <div class="alert alert-{{type}} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            {{message}}
-        </div>
-        {% endif %}
-        <i class="fa fa-android headingIcon pull-left"></i><h4 class= "pull-left">JustHealth Information Management Portal</h4>
-        <br />
-        <br />
-        <br />
+</br>
           <div class="row">
 	          <div class="col-md-2">
+              <fieldset class="style" style="margin: 0 auto; padding: 5px;">
+                <br />
 		          <ul class="nav nav-pills nav-stacked">
    			          <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
    			          <li><a href="#users" data-toggle="tab">Users</a></li>
@@ -101,14 +92,21 @@
                       <li><a href="#twitter" data-toggle="tab">Twitter</a></li>
    			          </li>
    		           </ul>
+              </fieldset>
 	           </div>
 	           <div class="col-md-10">
-		          <div id="myTabContent" class="tab-content pull right">
+		          <div id="myTabContent" class="tab-content">
+                <fieldset class="form-container">
    			          <div class="tab-pane fade in active" id="home">
-   				          <br />
+                      {% if message != null %}
+                      <div class="alert alert-{{type}} alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                          {{message}}
+                      </div>
+                      {% endif %}
                       {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
-                          <div class=flashes>
+                          <div class="flashes">
                           {% for category, message in messages %}
                             <div class="alert alert-{{category}} alert-dismissible" role="alert">
                             <button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -118,6 +116,8 @@
                           </div>
                         {% endif %}
                       {% endwith %}
+                      <i class="fa fa-android headingIcon pull-left"></i><h4 class="pull-left">JustHealth Information Management Portal</h4>
+                      <hr>
                         <h5>Welcome to the JustHealth IM Portal</h5>
                         <p> Please remember you are able to access personal and potentially sensitive data on this admin portal. For more information on data protection please view the terms and conditions.</p> 
                         On this site you are able to:
@@ -131,13 +131,13 @@
                         <p>Remember to use responsibly, any misuse of portal access will be subject to disciplinary measures.</p>
    			          </div>
                       <div class="tab-pane fade" id="users">
-                        <br />
-                        <h5>User Information</h5>	
+                        
+                        <h4>User Accounts</h4>
+                        <hr>
                         <div id="queryTable">
                          <div class="input-group"> <span class="input-group-addon">Filter</span>
                            <input id="filter" type="text" class="form-control" placeholder="Search for user here...">
                           </div>  
-                          <br />
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -273,19 +273,18 @@
    		                </div>
                         <!--List current medication -->
                         <div class="tab-pane fade" id="currentMedication">
-                            <br />
-                                <div class="double_column_list">
-                                    <h5>Medication</h5>
-                                        {% for medication in medicationList %}
-                                        <li>  {{medication.name}} </li>
-                                        {% endfor %}
-                                </div>
+                          <div class="double_column_list">
+                              <h4>Medication</h4>
+                              <hr>
+                                  {% for medication in medicationList %}
+                                  <li>  {{medication.name}} </li>
+                                  {% endfor %}
+                          </div>
    		                </div>
                         <!--Add new medication -->
                         <div class="tab-pane fade" id="addNewMedicaion">
-                            <br /> 
-                                <h5> Please enter the new medication below:</h5>
-                            <br />
+                          <h4> Please enter the new medication below:</h4>
+                          <hr>
                         <fieldset class="register-inner">
                         <form role="form" action="/addNewMedication" method="POST">   
                             <div class="form-group">
@@ -297,34 +296,32 @@
    		                </div>
                         <!-- Graphs to show why people deactivate -->
                         <div class="tab-pane fade" id="deactivateStats">
-                            <br />
                             <div id="chart_div"></div>
    		                </div>
                         <!--List current deactivate reasons -->
                         <div class="tab-pane fade" id="deactivateReasons">
-     		                <br />
-                                 <h5> Deactivate Reasons</h5>
+                                 <h4> Deactivate Reasons</h4>
+                                 <hr>
 				                  {% for reason in reasons %}
                                 <li>{{reason.reason}}</li>
 				                  {% endfor %}
                         </div>
                         <!--add new deactivate reason -->
                         <div class="tab-pane fade" id="addNewDeactivate">
-                            <br />
-                                <h5> Please enter below the new deactivation reason you would like to add:</h5>
-                                    <br />
-                                        <fieldset class="register-inner">
-                                            <form role="form" action="/addNewDeactivate" method="POST">   
-                                                <div class="form-group">
-                                                    <input class="form-control input-sm" type="text" name="reason" id="reason">
-                                                </div>
-                                                    <input class="btn btn-success pull-right" type="submit" value="Submit">
-	                                       </form>
-                                        </fieldset>
+                          <h4> Please enter below the new deactivation reason you would like to add:</h4>
+                          <hr>
+                            <fieldset class="register-inner">
+                                <form role="form" action="/addNewDeactivate" method="POST">   
+                                    <div class="form-group">
+                                        <input class="form-control input-sm" type="text" name="reason" id="reason">
+                                    </div>
+                                        <input class="btn btn-success pull-right" type="submit" value="Submit">
+	                             </form>
+                            </fieldset>
                         </div>
                         <div class="tab-pane fade" id="charts">
-    		                <br />
-      		                    <p> Charts </p>
+      		                <h4> Charts </h4>
+                          <hr>
                         </div>
                         <!--Twitter information -->
                         <div class="tab-pane fade" id="twitter">
