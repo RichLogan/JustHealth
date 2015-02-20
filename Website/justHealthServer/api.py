@@ -1299,6 +1299,21 @@ def addCorrespondence(details):
         return "True"
     return "False"
 
+@app.route('/api/deleteNote', methods=['POST'])
+@auth.login_required
+def deleteNote():
+  return deleteNote(request.form['username'], request.form['appid'])
+
+def deleteNote(noteid, username):
+
+    try:
+        instance = Notes.select().where(Notes.notesid == notesid).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "Deleted"
+    except:
+        return "Failed"
+
 @app.route('/api/addAndroidEventId', methods=['POST'])
 @auth.login_required
 def addAndroidEventId():
