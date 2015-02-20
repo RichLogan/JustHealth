@@ -49,6 +49,10 @@ $(document).ready(function(){
     }
   });
 
+    var appointment = getUrlParameter('open')
+      $('#collapse'+appointment).collapse('show');
+    }
+
   /*var allDates = $(document.getElementsByClassName('dateForJS'));
   var now = moment().format();
   //for loops through allDates

@@ -384,34 +384,53 @@
                       <div class="col-md-6">
                         <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                         <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
-                        {% if appointment.private == True %}
-                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p>
+                        
+                        {% if appointment.creator == session['username'] %}
+                          {% if appointment.private == True %}
+                            <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
+                            }
+                          {% else %}
+                            <br />
+                          {% endif %}
+                        {% else %}
+                          <p><b>Invited By:</b> <br /> {{appointment.creator}}</p> <br />
                         {% endif %}
                       </div>
                       <div class="col-md-6">
-                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                        <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>   
+                        <iframe width="200" height="200" frameborder="0" style="border:0"
                           src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
                         </iframe>
                       </div>
                     </div>
-                    <div class="row">
+                    {% if appointment.creator.username == session['username'] %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          <a href="/updateAppointment?appid={{appointment.appid}}">
+                            <button class="btn btn-warning">Update</button>
+                          </a>
+                        </div>
+                        <div class="col-md-2">
+                          <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                            <input type="hidden" name="appid" value="{{appointment.appid}}">
+                            <input type="submit" class="btn btn-danger" value="Delete">
+                          </form>
+                        </div>
+                        <div class="col-md-8">
+                          <p></p>
+                        </div>
+                      </div>
+                    {% else %}
                       <div class="col-md-2">
-                        <a href="/updateAppointment?appid={{appointment.appid}}">
-                          <button class="btn btn-warning">Update</button>
+                        <a href="/appointmentDetails?id={{appointment.appid}}">
+                          <button class="btn btn-info">Accept/Decline</button>
                         </a>
                       </div>
-                      <div class="col-md-2">
-                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
-                          <input type="hidden" name="appid" value="{{appointment.appid}}">
-                          <input type="submit" class="btn btn-danger" value="Delete">
-                        </form>
-                      </div>
-                      <div class="col-md-8">
+                      <div class="col-md-10">
                         <p></p>
                       </div>
-                    </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>

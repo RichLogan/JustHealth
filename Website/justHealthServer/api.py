@@ -1307,7 +1307,7 @@ def getNotifications():
 
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user"""
-    notifications = Notification.select().dicts().where(Notification.username == username and Notification.dismissed == False)
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
 
     notificationList = []
     for notification in notifications:
@@ -1337,11 +1337,11 @@ def getNotificationContent(notification):
     
     if notification['notificationtype'] == "Appointment Invite":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + "."
+        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Updated":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + "."
+        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Cancelled":
         content = "One of your appointments has been cancelled, click above to view your updated calendar."
@@ -1381,16 +1381,16 @@ def getNotificationLink(notification):
         link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Updated":
-        link = "/appointments"
+        link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Cancelled":
         link = "/appointments"
 
     if notification['notificationtype'] == "Appointment Accepted":
-        link = "/appointments"
+        link = "/appointments?open=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Declined":
-        link = "/appointments"
+        link = "/appointments?open=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Password Reset":
         link = "/"
