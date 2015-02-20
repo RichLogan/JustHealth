@@ -646,13 +646,14 @@ def notes():
 
 @app.route('/addNote',methods=['POST', 'GET'])
 def addNote():
+    patient = request.form['patient']
     if request.method == "POST":
         result = addCorrespondence(request.form)
         if result == "True":
-            return render_template('correspondence.html', type="success", message = 'Note Added')
-        else: render_template('correspondence.html',type="warning", message = 'Update failed')
-    else: 
-       return render_template('correspondence.html')
+            flash("Note successfully added", 'success')
+        else:
+            flash("Note could not be added", 'danger')
+        return redirect("/notes?user=" + patient)
 
 @app.route('/deleteNote', methods=['POST'])
 def deleteNote_view():
