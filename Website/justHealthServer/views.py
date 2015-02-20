@@ -646,7 +646,6 @@ def notes():
 
 @app.route('/addNote',methods=['POST', 'GET'])
 def addNote():
-
     if request.method == "POST":
         result = addCorrespondence(request.form)
         if result == "True":
@@ -655,16 +654,16 @@ def addNote():
     else: 
        return render_template('correspondence.html')
 
-@app.route('/deleteNote')
+@app.route('/deleteNote', methods=['POST'])
 def deleteNote_view():
-    noteid = request.args.get("noteid")
+    patient = request.form['patient']
+    noteid = request.form['noteid']
     deleted = deleteNote(noteid)
     if deleted == "Deleted":
-        flash(deleted, 'success')
-        return render_template('correspondence.html',type="success", message = 'Note Delete')
+        flash("Note successfully deleted", 'success')
     else:
-        return render_template('correspondence.html',type="warning", message = 'Update failed')
-
+        flash("Note could not be deleted", 'danger')
+    return redirect("/notes?user=" + patient)
 
 @app.errorhandler(500)
 def internal_error(error):
