@@ -1478,31 +1478,39 @@ def addReminders(username, now):
 
     appointmentsDueIn30 = getAppointmentsDueIn30(username, now)
     for a in appointmentsDueIn30:
+        withUser = a['creator']
+        if withUser == username:
+            withUser = a['invitee']
+
         try:
             Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                # content = "Your " + a['type'] + " appointment starts at " + a['starttime'] + " (" + a['starttime'] + ")",
-                content = "Test",
+                content = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime']),
                 reminderClass = "warning",
                 relatedObjectTable = "Appointments",
-                relatedObject = a['appid']
+                relatedObject = a['appid'],
+                extraDate = str(datetime.datetime.combine(a['startdate'], a['starttime']))
             )
             with database.transaction():
                 insertReminder.execute()
 
     appointmentsDueNow = getAppointmentsDueNow(username, now)
     for a in appointmentsDueNow:
+        withUser = a['creator']
+        if withUser == username:
+            withUser = a['invitee']
         try:
             Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['type'] + " appointment started at " + a['starttime'] + "(Started " + a['starttime'] + " ago)",
+                content = "Your " + a['type'] + " with " + withUser + " appointment started at " + a['starttime'],
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
-                relatedObject = a['appid']
+                relatedObject = a['appid'],
+                extraDate = str(datetime.datetime.combine(a['enddate'], a['endtime']))
             )
             with database.transaction():
                 insertReminder.execute()
