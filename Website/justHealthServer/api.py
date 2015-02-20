@@ -1302,12 +1302,12 @@ def addCorrespondence(details):
 @app.route('/api/deleteNote', methods=['POST'])
 @auth.login_required
 def deleteNote():
-  return deleteNote(request.form['username'], request.form['appid'])
+  return deleteNote(request.form['noteid'])
 
-def deleteNote(noteid, username):
+def deleteNote(noteid):
 
     try:
-        instance = Notes.select().where(Notes.notesid == notesid).get()
+        instance = Notes.select().where(Notes.noteid == noteid).get()
         with database.transaction():
             instance.delete_instance()
             return "Deleted"

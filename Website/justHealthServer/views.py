@@ -659,9 +659,10 @@ def addNote():
 def deleteNote_view():
     if request.method == 'GET':
         noteid = request.args.get("noteid")
-        deleted = deleteNote(session['username'], noteid)
+        deleted = deleteNote(noteid)
         flash(deleted, 'success')
-    return render_template('correspondence.html')
+        return render_template('correspondence.html',type="success", message = 'Note Delete')
+    else:render_template('correspondence.html',type="warning", message = 'Update failed')
 
 
 @app.errorhandler(500)

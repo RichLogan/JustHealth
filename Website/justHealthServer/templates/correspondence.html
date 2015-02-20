@@ -29,7 +29,7 @@
                 {{note.datetime}}
               
                      <form action="/deleteNote" method="POST">
-                        <input type="hidden" name="user" value="{{notes.notesid}}">
+                        <input type="hidden" name="{{notes.noteid}}" value="{{notes.noteid}}">
                         <input type="submit" class="btn btn-danger pull-right" value="Delete" onclick="return confirm('Are you sure you want to delete this note?')">
                     </form>
 
