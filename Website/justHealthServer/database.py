@@ -109,6 +109,7 @@ class Appointments(BaseModel):
     description = CharField(max_length=5000, null=True)
     private = BooleanField()
     androideventid = IntegerField(null=True)
+    accepted = BooleanField(null=True)
 
     class Meta:
         db_table = 'appointments'
@@ -138,6 +139,7 @@ class Prescription(BaseModel):
     class Meta:
         db_table = 'prescription'
 
+
 class Notes(BaseModel):
     noteid = PrimaryKeyField()
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carernotes')
@@ -149,6 +151,32 @@ class Notes(BaseModel):
     class Meta:
         db_table = 'notes'
 
+
+class Notificationtype(BaseModel):
+    typename = CharField(max_length=25, primary_key=True)
+    typeclass = CharField(max_length=25)
+
+    class Meta:
+        db_table = 'notificationtype'
+
+class Notification(BaseModel):
+    notificationid = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    notificationtype = ForeignKeyField(db_column='notificationtype', rel_model=Notificationtype, to_field="typename")
+    dismissed = BooleanField(default=False)
+    relatedObject = IntegerField(null=True)
+    relatedObjectTable = CharField(null=True)
+
+    class Meta:
+        db_table = 'notification'
+
+class Reminder(BaseModel):
+    reminder = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    content = CharField(max_length=100)
+    reminderClass = CharField(max_length=10)
+    relatedObject = IntegerField()
+    relatedObjectTable = CharField()
 
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
@@ -165,7 +193,13 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+<<<<<<< HEAD
     Notes.create_table()
+=======
+    Notificationtype.create_table()
+    Notification.create_table()
+    Reminder.create_table()
+>>>>>>> d195cb86534de2c957f0d46a8b3552aabf3c9be4
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -191,5 +225,14 @@ def dropAll():
         Medication.drop_table(cascade=True)
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
+<<<<<<< HEAD
     if Notes.table_exists():
         Notes.drop_table(cascade=True)
+=======
+    if Notificationtype.table_exists():
+        Notificationtype.drop_table(cascade=True)
+    if Notification.table_exists():
+        Notification.drop_table(cascade=True)
+    if Reminder.table_exists():
+        Reminder.drop_table(cascade=True)
+>>>>>>> d195cb86534de2c957f0d46a8b3552aabf3c9be4

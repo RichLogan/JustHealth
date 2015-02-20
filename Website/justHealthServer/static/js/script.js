@@ -4,6 +4,20 @@
 //    }
 //);
 
+// Inspired By http://stackoverflow.com/questions/9776015/jquery-animate-a-rotating-div
+function flip(id, degrees) {
+  $(id).animate({
+        borderSpacing: degrees
+    },
+    {
+        step: function(now,fx) {
+            $(this).css('-webkit-transform','rotate('+now+'deg)'); 
+            $(this).css('-moz-transform','rotate('+now+'deg)');
+            $(this).css('transform','rotate('+now+'deg)');
+        }
+    });
+}
+
 function validateFormResetPassword() {
     var x = document.forms["resetpassword"]["username","confirmdob", "confirmemail", "confirmnewpassword", "newpassword"].value;
     if (x==null || x=="") {
