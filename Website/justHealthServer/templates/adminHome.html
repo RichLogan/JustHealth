@@ -165,6 +165,10 @@
                     <td>{{allUsers.accountlocked}}  </td>
                     <td>{{allUsers.loginattempts}} </td>
                     <td><a data-toggle="modal" data-target="#editaccountinfo{{allUsers.username}}" class="btn btn-warning"> Edit</a></td>
+                    <td><form action="/deleteAccount" method="POST">
+                          <input class="btn btn-danger pull-right" id="deactivateConfirm" type="submit" value="Deactivate">
+                        </form>
+                    </td>
                   </tr>
                   <!--Start of edit account information modal-->
                   <div class="modal fade" id="editaccountinfo{{allUsers.username}}" tabindex="-1" role="dialog" aria-labelledby="editaccountinfo{{allUsers.username}}" aria-hidden="true">

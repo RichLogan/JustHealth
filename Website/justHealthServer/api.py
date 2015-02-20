@@ -1286,3 +1286,38 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
         clientObject.save()
         return "True"
     return "False"
+
+@app.route('/api/deleteAccount', methods=['POST'])
+@auth.login_required
+def deleteAccount():
+    return deleteAccount(request.form)
+
+def deleteAccount(settings, details):
+    user = None
+
+    try:
+        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
+
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
+    try:
+        clientObject.username = settings['username']
+    except KeyError, e:
+        return "No username supplied"
+
+    if delete:
+        # Delete User
+        deletedUser = Client.get(clientObject.username == request.form['username'])
+        with database.transaction():
+            deletedUser.delete_instance(recursive=True)
+        return "Deleted"
+    else:
+        # Keep user
+        deactivatedUser = Client.update(accountdeactivated = True).where(clientObject.username == username)
+        unverifyUser = Client.update(verified = False).where(clientObject.username == username)
+        with database.transaction():
+            deactivatedUser.execute()
+            unverifyUser.execute()
+        return "Kept"
