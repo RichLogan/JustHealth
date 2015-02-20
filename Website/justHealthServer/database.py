@@ -193,13 +193,10 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
-<<<<<<< HEAD
     Notes.create_table()
-=======
     Notificationtype.create_table()
     Notification.create_table()
     Reminder.create_table()
->>>>>>> d195cb86534de2c957f0d46a8b3552aabf3c9be4
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -225,14 +222,11 @@ def dropAll():
         Medication.drop_table(cascade=True)
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
-<<<<<<< HEAD
     if Notes.table_exists():
         Notes.drop_table(cascade=True)
-=======
     if Notificationtype.table_exists():
         Notificationtype.drop_table(cascade=True)
     if Notification.table_exists():
         Notification.drop_table(cascade=True)
     if Reminder.table_exists():
         Reminder.drop_table(cascade=True)
->>>>>>> d195cb86534de2c957f0d46a8b3552aabf3c9be4
