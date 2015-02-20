@@ -329,13 +329,13 @@
 
     {%for prescription in prescriptions%}
       <div class="panel panel-default">
-        <div class="panel-heading myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
+        <div class="panel-heading myPatientsTab" role="tab" id="headingpre{{prescription.prescriptionid}}">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapsepre{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapsepre{{prescription.prescriptionid}}">
               <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
             </a>
           </h4>
-          <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
+          <div id="collapsepre{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingpre{{prescription.prescriptionid}}">
             <div class="panel-body">
               <div class="row">
                 <h5>
@@ -365,9 +365,9 @@
           {% if appointment.upcoming == True %}
               
               <div class="panel panel-default">
-              <div class="panel-heading myPatientsTab" role="tab" id="heading{{appointment.appid}}">
+              <div class="panel-heading myPatientsTab" role="tab" id="headingapp{{appointment.appid}}">
                 <h3 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
+                  <a data-toggle="collapse" data-parent="#accordian" href="#collapseapp{{appointment.appid}}" aria-expanded="true" aria-controls="collapseapp{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
                         <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
@@ -378,7 +378,7 @@
                     </div>
                   </a>
                 </h3>
-                <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                <div id="collapseapp{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingapp{{appointment.appid}}">
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-md-6">

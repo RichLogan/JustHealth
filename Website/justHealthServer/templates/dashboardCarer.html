@@ -29,15 +29,15 @@
       $('#connections').modal('toggle');
     }
 
-    $('form').submit(function(e) {
-      $("form :input").each(function(){
-        if ($(this).val() == null || $(this).val() == "") {
-          alert("All fields must be filled out");
-          e.preventDefault();
-          return false;
-        }
-      });
-    });
+    // $('form').submit(function(e) {
+    //   $("form :input").each(function(){
+    //     if ($(this).val() == null || $(this).val() == "") {
+    //       alert("All fields must be filled out");
+    //       e.preventDefault();
+    //       return false;
+    //     }
+    //   });
+    // });
 
     //Check if date is in the past
     $('#startdateappt').focusout(function() {
@@ -893,6 +893,7 @@
                                   <th>Where</th>
                                   <th>End Date/Time</th>
                                   <th>Description</th>
+                                  <th>Response</th>
                                   <th> </th>
                                   <th> </th>
 
@@ -905,6 +906,21 @@
                                     <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
+
+
+                                    {% if appointment.creator == session['username'] %}
+                                      {% if appointment.accepted == true %}
+                                        <td>Accepted</td>
+                                      {% endif %}
+                                      {% if appointment.accepted == false %}
+                                        <td>Decline</td>
+                                      {% endif %}
+                                      {% if appointment.accepted == none %}
+                                        <td>Not Responded</td>
+                                      {% endif %}
+                                    {% else %}
+                                        <td> - </td>
+                                    {% endif %}
 
                                     {% if appointment.creator != session['username'] %}
                                     <td>
@@ -1026,14 +1042,27 @@
                       <div class="col-md-6">
                         <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                         <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
-                        {% if appointment.private == True %}
-                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
-                        {% endif %}
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p>
+
+                        {% if appointment.creator == session['username'] %}
+                          <p><b>Invited:</b> <br /> {{appointment.invitee}}</p>
+                          {% if appointment.accepted == true %}
+                            <p><em>{{appointment.invitee}} has accepted this appointment.</em></p>
+                          {% endif %}
+                          {% if appointment.accepted == false %}
+                            <p><em>{{appointment.invitee}} has declined this appointment.</em></p>
+                          {% endif %}
+                          {% if appointment.accepted == none %}
+                            <p><em>{{appointment.invitee}} is yet to respond to this appointment.</em></p>
+                          {% endif %}
+                        {% endif %} 
+                        <br />
+
                       </div>
                       <div class="col-md-6">
-                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                        <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                        <br />
+                        <iframe width="200" height="200" frameborder="0" style="border:0"
                           src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
                         </iframe>
                       </div>

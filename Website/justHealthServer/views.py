@@ -66,7 +66,7 @@ def index():
             activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
             upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
             expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
-            checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
+            # checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
 
         # Notifications relies on some of the methods above and therefore needs to be run at the end of this block.
         # Otherwise the notification won't be displayed until the refresh after it is created.
@@ -630,6 +630,8 @@ def dismissNotifications():
     """dismiss the notification by running a method from the API"""
     if request.method == 'POST':
         notificationDismiss = dismissNotification(request.form['notificationid'])
+        return notificationDismiss 
+
 
 @app.errorhandler(500)
 def internal_error(error):
