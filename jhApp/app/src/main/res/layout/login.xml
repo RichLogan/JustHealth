@@ -51,12 +51,9 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Login"
             android:id="@+id/login"
             android:layout_gravity="center_horizontal"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="20sp"
             android:layout_marginRight="20sp"
             android:layout_marginLeft="20sp"
@@ -78,7 +75,6 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Forgot Password?"
             android:layout_gravity="center_horizontal"
             style="@style/dangerButton"
@@ -87,7 +83,6 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Sign Up"
             android:layout_gravity="center_horizontal"
             style="@style/primaryButton"

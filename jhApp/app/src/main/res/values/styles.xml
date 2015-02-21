@@ -78,29 +78,22 @@
         <item name="android:layout_marginTop">20sp</item>
     </style>
 
-    <style name="defaultConfirmButton">
-        <item name="android:layout_marginLeft">20sp</item>
-        <item name="android:layout_marginRight">20sp</item>
-        <item name="android:layout_marginBottom">30sp</item>
-        <item name="android:background">@color/primary</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
     <!-- Button Styles -->
     <style name="primaryButton" parent="@android:style/Widget.Holo.Button">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@drawable/primary_button</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:layout_height">@dimen/defaultButtonHeight</item>
+        <item name="android:layout_width">match_parent</item>
     </style>
     <style name="successButton" parent="@android:style/Widget.Holo.Button">
-        <item name="android:background">@color/success</item>
+        <item name="android:background">@drawable/success_button</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:layout_height">@dimen/defaultButtonHeight</item>
     </style>
     <style name="dangerButton" parent="@android:style/Widget.Holo.Button">
-        <item name="android:background">@color/danger</item>
+        <item name="android:background">@drawable/danger_button</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:layout_height">@dimen/defaultButtonHeight</item>
     </style>
     <style name="badgeButton" parent="@style/primaryButton">
         <item name="android:layout_width">match_parent</item>
