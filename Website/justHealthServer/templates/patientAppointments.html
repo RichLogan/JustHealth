@@ -165,7 +165,20 @@
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}">
                       <div class="row">
                         <div class="col-md-6">
-                          <p>{{appointment.name}}</p>
+                          <p>{{appointment.name}}
+                          {% if appointment.creator != session['username'] %}
+                            {% if appointment.accepted == false %}
+                              <font color="red">[Declined]</font> </p>
+                            {% endif %}
+                          {% else %}
+                            {% if appointment.invitee != none %}
+                              {% if appointment.accepted == false %}
+                                <font color="red">[{{appointment.invitee}} Declined]</font>
+                              {% endif %}
+                            {% endif %}
+                            </p>
+                          {% endif %}
+
                         </div>
                         <div class="col-md-6">
                           <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
@@ -183,20 +196,37 @@
                           <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                           <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
                           <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
-                          {% if appointment.creator != session['username'] %}
-                            {% if appointment.accepted == true %}
-                              <p><em>You have accepted this appointment.</em></p>
+
+                          {% if appointment.invitee != "" %}
+                            {% if appointment.invitee != session['username'] %}
+                              {% if appointment.accepted == true %}
+                                <p><em>{{appointment.invitee}} has accepted this appointment.</em></p>
+                              {% endif %}
+                              {% if appointment.accepted == false %}
+                                <p><em>{appointment.invitee}} has declined this appointment.</em></p>
+                              {% endif %}
+                              {% if appointment.accepted == none %}
+                                <p><em>{{appointment.invitee}} has yet to respond to this appointment.</em></p>
+                              {% endif %}
                             {% endif %}
-                            {% if appointment.accepted == false %}
-                              <p><em>You have declined this appointment.</em></p>
+                            {% if appointment.invitee == session['username'] %}
+                              {% if appointment.accepted == true %}
+                                <p><em>You have accepted this appointment.</em></p>
+                              {% endif %}
+                              {% if appointment.accepted == false %}
+                                <p><em>You have declined this appointment.</em></p>
+                              {% endif %}
+                              {% if appointment.accepted == none %}
+                                <p><em>You have yet to respond to this appointment.</em></p>
+                              {% endif %}
                             {% endif %}
-                            {% if appointment.accepted == none %}
-                              <p><em>You have yet to respond to this appointment.</em></p>
-                            {% endif %}
-                          {% endif %}
+                          {% endif %}    
+
                           {% if appointment.creator == session['username'] %}
-                            {% if appointment.private == true %}
-                              <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating  your appointment.</em></p> <br />
+                            {% if appointment.invitee == "" %}
+                              {% if appointment.private == true %}
+                                <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating  your appointment.</em></p> <br />
+                              {% endif %}
                             {% endif %}
                           {% endif %}
                         </div>

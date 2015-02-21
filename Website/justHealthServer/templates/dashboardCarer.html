@@ -1027,7 +1027,20 @@
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
-                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                        <p><i class="fa fa-caret-right"></i> 
+                        {{appointment.name}}
+                          {% if appointment.creator != session['username'] %}
+                            {% if appointment.accepted == false %}
+                              <font color="red">[Declined]</font> </p>
+                            {% endif %}
+                          {% else %}
+                            {% if appointment.invitee != none %}
+                              {% if appointment.accepted == false %}
+                                <font color="red">[{{appointment.invitee}} Declined]</font>
+                              {% endif %}
+                            {% endif %}
+                            </p>
+                          {% endif %}
                       </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>

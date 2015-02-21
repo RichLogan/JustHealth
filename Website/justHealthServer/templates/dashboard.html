@@ -370,7 +370,14 @@
                   <a data-toggle="collapse" data-parent="#accordian" href="#collapseapp{{appointment.appid}}" aria-expanded="true" aria-controls="collapseapp{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
-                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}
+                        {% if appointment.creator != session['username'] %}
+                          {% if appointment.accepted == false %}
+                            <font color="red">[Declined]</font> </p>
+                          {% else %}
+                            </p>
+                          {% endif %}
+                        {% endif %}
                       </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
@@ -395,6 +402,15 @@
                           {% endif %}
                         {% else %}
                           <p><b>Invited By:</b> <br /> {{appointment.creator}}</p> <br />
+                          {% if appointment.accepted == true %}
+                              <p><em>You have accepted this appointment.</em></p> <br />
+                            {% endif %}
+                            {% if appointment.accepted == false %}
+                              <p><em>You have declined this appointment.</em></p> <br />
+                            {% endif %}
+                            {% if appointment.accepted == none %}
+                              <p><em>You have yet to respond to this appointment.</em></p> <br />
+                            {% endif %}
                         {% endif %}
                       </div>
                       <div class="col-md-6">
@@ -404,7 +420,7 @@
                         </iframe>
                       </div>
                     </div>
-                    {% if appointment.creator.username == session['username'] %}
+                    {% if appointment.creator == session['username'] %}
                       <div class="row">
                         <div class="col-md-2">
                           <a href="/updateAppointment?appid={{appointment.appid}}">
@@ -422,13 +438,15 @@
                         </div>
                       </div>
                     {% else %}
-                      <div class="col-md-2">
-                        <a href="/appointmentDetails?id={{appointment.appid}}">
-                          <button class="btn btn-info">Accept/Decline</button>
-                        </a>
-                      </div>
-                      <div class="col-md-10">
-                        <p></p>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <a href="/appointmentDetails?id={{appointment.appid}}">
+                            <button class="btn btn-info">Accept/Decline</button>
+                          </a>
+                        </div>
+                        <div class="col-md-10">
+                          <p></p>
+                        </div>
                       </div>
                     {% endif %}
                   </div>
