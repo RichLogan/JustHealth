@@ -46,6 +46,18 @@
           })
       }(jQuery));
   });
+
+    $(document).ready(function () {
+      (function ($) {
+          $('#test').keyup(function () {
+              var rex = new RegExp($(this).val(), 'i');
+              $('.medication tr').hide();
+              $('.medication tr').filter(function () {
+                  return rex.test($(this).text());
+              }).show();
+          })
+      }(jQuery));
+  });
 </script>
 
 <div class="row">
@@ -280,25 +292,27 @@
         <!--Tab for current medication -->
         <div role="tabpanel" class="tab-pane fade in container" id="currentMedication" style="width: 90%">
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="currentMedication">
-            <div class="double_column_list ">
-              <h5>Medication</h5>
+            <h5>Medication</h5>
               </br>
-              <table class="table table-striped">
-                <thead>
-                  <th> </th>
-                </thead>
-                <tbody>
-                {% for medication in medicationList %}
-                <tr>
-                  <td> {{medication.name}} </td>
-                   {% endfor %}
-                </tr>
-               </tbody>
-             </table>
-            </div>
-          </div>
-        </div>
-
+                <div class="input-group"> <span class="input-group-addon">Filter</span>
+                  <input id="test" type="text" class="form-control" placeholder="Type here...">
+                </div>
+                <table class="table table-striped">
+                  <thead>
+                    <th> </th>
+                  </thead>
+                  <tbody class="medication">
+                  {% for medication in medicationList %}
+                    <tr>
+                      <td>                        
+                        {{medication.name}} 
+                      </td>
+                      {% endfor %}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+           </div>
 
         <!--Tab for new medication -->
         <div role="tabpanel" class="tab-pane fade in container" id="addNewMedication" style="width: 100%">
