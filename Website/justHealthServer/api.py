@@ -902,7 +902,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment['androideventid'] = app.androideventid
     appointment['accepted'] = app.accepted
     
-    dateTime = str(app.startdate) + " " + str(app.starttime)
+    dateTime = str(app.enddate) + " " + str(app.endtime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
 
     if (dateTime >= currentDateTime):
