@@ -104,7 +104,7 @@
        <fieldset class="style">
     <!--side pannel to display connections -->
     <div> 
-      <h5><i class="fa fa-users sideIcons" ></i> Connections </h5>
+      <h5><i class="fa fa-link sideIcons" ></i> Connections </h5>
        {% if connections %}
         {% for connection in completed %} 
           <a data-toggle="modal" data-target="#{{connection.username}}"></a>
@@ -145,7 +145,7 @@
     <div id="dashConnections">
 
     <!--modal to show connections information -->
-    <a class="modalheader" data-toggle="modal" data-target="#connections"><i class="fa fa-user-plus xsmallIcon pull-right"></i></a>
+    <a data-toggle="modal" data-target="#connections">Pending requests</a>
               <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
