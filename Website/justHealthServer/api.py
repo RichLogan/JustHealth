@@ -1292,7 +1292,18 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
 def deleteAccount():
     return deleteAccount(request.form)
 
-def deleteAccount(settings, details):
+def deleteAccount(username):
+    user = None
+
+    try:
+        instance = Client.select().where(Client.username == username).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "Deleted"
+    except:
+        return "Failed"
+
+def old(settings, username):
     user = None
 
     try:

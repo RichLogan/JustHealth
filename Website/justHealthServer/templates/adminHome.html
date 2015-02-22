@@ -165,10 +165,14 @@
                     <td>{{allUsers.accountlocked}}  </td>
                     <td>{{allUsers.loginattempts}} </td>
                     <td><a data-toggle="modal" data-target="#editaccountinfo{{allUsers.username}}" class="btn btn-warning"> Edit</a></td>
+
                     <td><form action="/deleteAccount" method="POST">
-                          <input class="btn btn-danger pull-right" id="deactivateConfirm" type="submit" value="Deactivate">
+                          <input type="hidden" name="username" value="{{allUsers.username}}">
+
+                          <input class="btn btn-danger pull-right" onclick="return confirm('Are you sure you want to delete this account?')" type="submit" value="Deactivate">
                         </form>
                     </td>
+
                   </tr>
                   <!--Start of edit account information modal-->
                   <div class="modal fade" id="editaccountinfo{{allUsers.username}}" tabindex="-1" role="dialog" aria-labelledby="editaccountinfo{{allUsers.username}}" aria-hidden="true">
@@ -274,17 +278,27 @@
         </div>
 
         <!--Tab for current medication -->
-        <div role="tabpanel" class="tab-pane fade in container" id="currentMedication" style="width: 100%">
+        <div role="tabpanel" class="tab-pane fade in container" id="currentMedication" style="width: 90%">
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="currentMedication">
-            <div class="double_column_list">
+            <div class="double_column_list ">
               <h5>Medication</h5>
               </br>
-              {% for medication in medicationList %}
-                <li> {{medication.name}} </li>
-              {% endfor %}
+              <table class="table table-striped">
+                <thead>
+                  <th> </th>
+                </thead>
+                <tbody>
+                {% for medication in medicationList %}
+                <tr>
+                  <td> {{medication.name}} </td>
+                   {% endfor %}
+                </tr>
+               </tbody>
+             </table>
             </div>
           </div>
         </div>
+
 
         <!--Tab for new medication -->
         <div role="tabpanel" class="tab-pane fade in container" id="addNewMedication" style="width: 100%">
@@ -323,9 +337,20 @@
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="deactivateReasons">
             <h5> Deactivate Reasons</h5>
             </br>
-            {% for reason in reasons %}
-              <li>{{reason.reason}}</li>
-            {% endfor %}
+            <table class="table table-striped">
+              <thead> 
+                <tr>
+                  <th> </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for reason in reasons %}
+                <tr>
+                <td>{{reason.reason}}</td>
+                {% endfor %}
+                </tr>
+              </tbody>
+             </table>
           </div>
         </div>
 
