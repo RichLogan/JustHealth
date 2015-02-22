@@ -109,6 +109,7 @@ class Appointments(BaseModel):
     description = CharField(max_length=5000, null=True)
     private = BooleanField()
     androideventid = IntegerField(null=True)
+    accepted = BooleanField(null=True)
 
     class Meta:
         db_table = 'appointments'
@@ -138,6 +139,33 @@ class Prescription(BaseModel):
     class Meta:
         db_table = 'prescription'
 
+class Notificationtype(BaseModel):
+    typename = CharField(max_length=25, primary_key=True)
+    typeclass = CharField(max_length=25)
+
+    class Meta:
+        db_table = 'notificationtype'
+
+class Notification(BaseModel):
+    notificationid = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    notificationtype = ForeignKeyField(db_column='notificationtype', rel_model=Notificationtype, to_field="typename")
+    dismissed = BooleanField(default=False)
+    relatedObject = IntegerField(null=True)
+    relatedObjectTable = CharField(null=True)
+
+    class Meta:
+        db_table = 'notification'
+
+class Reminder(BaseModel):
+    reminder = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    content = CharField(max_length=100)
+    reminderClass = CharField(max_length=10)
+    relatedObject = IntegerField()
+    relatedObjectTable = CharField()
+    extraDate = CharField(null=True)
+
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
     dropAll()
@@ -153,6 +181,9 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+    Notificationtype.create_table()
+    Notification.create_table()
+    Reminder.create_table()
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -178,3 +209,9 @@ def dropAll():
         Medication.drop_table(cascade=True)
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
+    if Notificationtype.table_exists():
+        Notificationtype.drop_table(cascade=True)
+    if Notification.table_exists():
+        Notification.drop_table(cascade=True)
+    if Reminder.table_exists():
+        Reminder.drop_table(cascade=True)

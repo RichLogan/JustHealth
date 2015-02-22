@@ -26,39 +26,35 @@
   <p>If you have a question or would like to report a problem, please contact us using the form below</p>
   <br />
   <!--Form for users to submit a question -->
-<fieldset class="links">
-  <form role="form" action="/contactUs" method="post" >
-    <div class="container">
-       <div class="row">
-          <div class="col-md-12">
-              <div class="col-lg-6">
-                <div class="form-group">
-                  <label for="InputName">Your Name</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true" >
-                      <span class="input-group-addon"></span></div>
-                    </div>
-                    <input type="hidden" class="form-control" name="username" id="username" value="{{profileDetails.username}}" readonly="true" >
-                    <div class="form-group">
-                     <label for="InputEmail">Your Email</label>
-                      <div class="input-group">
-                        <input type="email" class="form-control" id="InputEmail" value="{{profileDetails.email}}" readonly="true"  >
-                        <span class="input-group-addon"></span></div>
-                    </div>
-                    <div class="form-group">
-                      <label for="InputMessage">Message</label>
-                      <div class="input-group">
-                        <textarea name="message" id="InputMessage" class="form-control" rows="5" ></textarea>
-                        <span class="input-group-addon"></span></div>
-                    </div>
-                    <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
-                    <p class="italic pull-left">Have you checked our <a href="/faq">FAQs</a>?</p>
-             </div>
-           </div>
-         </div>
-      </form>                  
-    </fieldset>
- </fieldset>
+  <fieldset class="links">
+    <form role="form" action="/contactUs" method="post" >
+      <div class="form-group">
+        <label for="InputName">Your Name</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="InputName" value="{{profileDetails.firstname}} {{profileDetails.surname}}" readonly="true" >
+          <span class="input-group-addon"></span></div>
+      </div>
+      <input type="hidden" class="form-control" name="username" id="username" value="{{profileDetails.username}}" readonly="true" >
+      <div class="form-group">
+        <label for="InputEmail">Your Email</label>
+        <div class="input-group">
+          <input type="email" class="form-control" id="InputEmail" value="{{profileDetails.email}}" readonly="true"  >
+          <span class="input-group-addon"></span></div>
+      </div>
+      <div class="form-group">
+        <label for="InputMessage">Message</label>
+        <div class="input-group">
+          <textarea name="message" id="InputMessage" class="form-control" rows="5" ></textarea>
+          <span class="input-group-addon"></span></div>
+      </div>
+      <p class="italic pull-left">Have you checked our <a href="/faq">FAQs</a>?</p>
+      <div class="form-group">
+        <input type="submit" name="submit" id="submit" value="Send" class="btn btn-success pull-right">
+      </div>
+    </form>
+    <button class="btn btn-default pull-right" style="margin-right:5px;" onclick="goBack()">Cancel</button>                  
+  </fieldset>
+</fieldset>
 
 {% endblock %}
 

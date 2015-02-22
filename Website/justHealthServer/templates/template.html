@@ -91,7 +91,9 @@
       <!--Footer -->
       <footer>
         <div class="container">
-       <span id='footer1'><a href="/contactUs" class="runner">Contact us</a></span>
+        <span id='footer1'>
+          {% block contactUsLink %}<a href="/contactUs" class="runner">Contact us</a>{% endblock %}          
+        </span>        
          <span id='footer2'>   <a class="runner" data-toggle="modal" data-target="#terms">Terms & Conditions </a>
             <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
               <div class="modal-dialog">
