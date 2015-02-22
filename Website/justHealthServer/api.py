@@ -806,10 +806,10 @@ def addPatientAppointment():
 #Note originally there was going to be a seperate method for carers, however this is no longer the case. 
 def addPatientAppointment(details):
 # Build insert user query
-  if details['private'] == "True":
-    isPrivate = True
-  else: 
+  if details['private'] == "False":
     isPrivate = False
+  else: 
+    isPrivate = True
 
   appointmentInsert = Appointments.insert(
     creator = details['creator'],
@@ -849,7 +849,7 @@ def addInviteeAppointment(details):
     endtime = details['endtime'],
     description = details['description'],
     private = False,
-    accepted = False
+    accepted = None
     )
 
   appId = str(appointmentInsert.execute())
@@ -885,6 +885,10 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment = {}
     appointment['appid'] = app.appid
     appointment['creator'] = app.creator.username
+    if app.invitee == None:
+        appointment['invitee'] = ""
+    else:
+        appointment['invitee'] = app.invitee.username
     appointment['name'] = app.name
     appointment['apptype'] = str(app.apptype.type)
     appointment['addressnamenumber'] = app.addressnamenumber
@@ -896,6 +900,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment['description'] = app.description
     appointment['private'] = app.private
     appointment['androideventid'] = app.androideventid
+    appointment['accepted'] = app.accepted
     
     dateTime = str(app.startdate) + " " + str(app.starttime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
@@ -964,10 +969,10 @@ def updateAppointment():
   return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
-  if private == "True":
-    isPrivate = True
-  else: 
+  if private == "False":
     isPrivate = False
+  else: 
+    isPrivate = True
 
   updateAppointment = Appointments.update(
     name = name,
@@ -979,14 +984,15 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
     enddate = endDate,
     endtime = endTime,
     description = description,
-    private = isPrivate).where(Appointments.appid == appid)
+    private = isPrivate,
+    accepted = None).where(Appointments.appid == appid)
 
   with database.transaction():
     updateAppointment.execute()
 
     #check if the appointment has an invitee
     appointment = Appointments.select().where(Appointments.appid == appid).get()
-    if appointment.invitee.username != None:
+    if appointment.invitee != None:
         createNotificationRecord(appointment.invitee.username, "Appointment Updated", appid)
 
 
@@ -1301,7 +1307,7 @@ def getNotifications():
 
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user"""
-    notifications = Notification.select().dicts().where(Notification.username == username and Notification.dismissed == False)
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
 
     notificationList = []
     for notification in notifications:
@@ -1331,11 +1337,11 @@ def getNotificationContent(notification):
     
     if notification['notificationtype'] == "Appointment Invite":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + "."
+        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Updated":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + "."
+        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Cancelled":
         content = "One of your appointments has been cancelled, click above to view your updated calendar."
@@ -1375,16 +1381,16 @@ def getNotificationLink(notification):
         link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Updated":
-        link = "/appointments"
+        link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Cancelled":
         link = "/appointments"
 
     if notification['notificationtype'] == "Appointment Accepted":
-        link = "/appointments"
+        link = "/appointments?open=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Declined":
-        link = "/appointments"
+        link = "/appointments?open=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Password Reset":
         link = "/"
@@ -1478,31 +1484,39 @@ def addReminders(username, now):
 
     appointmentsDueIn30 = getAppointmentsDueIn30(username, now)
     for a in appointmentsDueIn30:
+        withUser = a['creator']
+        if withUser == username:
+            withUser = a['invitee']
+
         try:
             Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                # content = "Your " + a['type'] + " appointment starts at " + a['starttime'] + " (" + a['starttime'] + ")",
-                content = "Test",
+                content = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime']),
                 reminderClass = "warning",
                 relatedObjectTable = "Appointments",
-                relatedObject = a['appid']
+                relatedObject = a['appid'],
+                extraDate = str(datetime.datetime.combine(a['startdate'], a['starttime']))
             )
             with database.transaction():
                 insertReminder.execute()
 
     appointmentsDueNow = getAppointmentsDueNow(username, now)
     for a in appointmentsDueNow:
+        withUser = a['creator']
+        if withUser == username:
+            withUser = a['invitee']
         try:
             Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['type'] + " appointment started at " + a['starttime'] + "(Started " + a['starttime'] + " ago)",
+                content = "Your " + a['type'] + " with " + withUser + " appointment started at " + a['starttime'],
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
-                relatedObject = a['appid']
+                relatedObject = a['appid'],
+                extraDate = str(datetime.datetime.combine(a['enddate'], a['endtime']))
             )
             with database.transaction():
                 insertReminder.execute()
@@ -1589,12 +1603,14 @@ def expiredResetPassword(request):
         return "True"
     return "False"
 
-def checkPrescriptionLevel(username, activePrescriptions):
-    today = datetime.datetime.now().date()
-    for prescription in activePrescriptions:
-        if(prescription['stockleft'] < 10):
-            if Notification.select().where((Notification.username == username) & (Notification.dismissed == False) & (Notification.notificationtype == "Medication Low") & (Notification.relatedObject == prescription['prescriptionid'])).count() == 0:
-                createNotificationRecord(username, "Medication Low", prescription['prescriptionid'])
+# def checkPrescriptionLevel(username, activePrescriptions):
+#     today = datetime.datetime.now().date()
+#     for prescription in activePrescriptions:
+#         if(prescription['stockleft'] < 10):
+#             if Notification.select().where((Notification.username == username) & (Notification.dismissed == False) & (Notification.notificationtype == "Medication Low") & (Notification.relatedObject == prescription['prescriptionid'])).count() == 0:
+#                 createNotificationRecord(username, "Medication Low", prescription['prescriptionid'])
+
+
 
 ##
 # Signalling

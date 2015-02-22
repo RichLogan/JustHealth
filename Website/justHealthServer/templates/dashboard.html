@@ -329,13 +329,13 @@
 
     {%for prescription in prescriptions%}
       <div class="panel panel-default">
-        <div class="panel-heading myPatientsTab" role="tab" id="heading{{prescription.prescriptionid}}">
+        <div class="panel-heading myPatientsTab" role="tab" id="headingpre{{prescription.prescriptionid}}">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapsepre{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapsepre{{prescription.prescriptionid}}">
               <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
             </a>
           </h4>
-          <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
+          <div id="collapsepre{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingpre{{prescription.prescriptionid}}">
             <div class="panel-body">
               <div class="row">
                 <h5>
@@ -365,12 +365,19 @@
           {% if appointment.upcoming == True %}
               
               <div class="panel panel-default">
-              <div class="panel-heading myPatientsTab" role="tab" id="heading{{appointment.appid}}">
+              <div class="panel-heading myPatientsTab" role="tab" id="headingapp{{appointment.appid}}">
                 <h3 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordian" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
+                  <a data-toggle="collapse" data-parent="#accordian" href="#collapseapp{{appointment.appid}}" aria-expanded="true" aria-controls="collapseapp{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
-                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}
+                        {% if appointment.creator != session['username'] %}
+                          {% if appointment.accepted == false %}
+                            <font color="red">[Declined]</font> </p>
+                          {% else %}
+                            </p>
+                          {% endif %}
+                        {% endif %}
                       </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
@@ -378,40 +385,70 @@
                     </div>
                   </a>
                 </h3>
-                <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
+                <div id="collapseapp{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingapp{{appointment.appid}}">
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-md-6">
                         <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                         <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
-                        {% if appointment.private == True %}
-                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p>
+                        
+                        {% if appointment.creator == session['username'] %}
+                          {% if appointment.private == True %}
+                            <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
+                            }
+                          {% else %}
+                            <br />
+                          {% endif %}
+                        {% else %}
+                          <p><b>Invited By:</b> <br /> {{appointment.creator}}</p> <br />
+                          {% if appointment.accepted == true %}
+                              <p><em>You have accepted this appointment.</em></p> <br />
+                            {% endif %}
+                            {% if appointment.accepted == false %}
+                              <p><em>You have declined this appointment.</em></p> <br />
+                            {% endif %}
+                            {% if appointment.accepted == none %}
+                              <p><em>You have yet to respond to this appointment.</em></p> <br />
+                            {% endif %}
                         {% endif %}
                       </div>
                       <div class="col-md-6">
-                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                        <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>   
+                        <iframe width="200" height="200" frameborder="0" style="border:0"
                           src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
                         </iframe>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-md-2">
-                        <a href="/updateAppointment?appid={{appointment.appid}}">
-                          <button class="btn btn-warning">Update</button>
-                        </a>
+                    {% if appointment.creator == session['username'] %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          <a href="/updateAppointment?appid={{appointment.appid}}">
+                            <button class="btn btn-warning">Update</button>
+                          </a>
+                        </div>
+                        <div class="col-md-2">
+                          <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                            <input type="hidden" name="appid" value="{{appointment.appid}}">
+                            <input type="submit" class="btn btn-danger" value="Delete">
+                          </form>
+                        </div>
+                        <div class="col-md-8">
+                          <p></p>
+                        </div>
                       </div>
-                      <div class="col-md-2">
-                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
-                          <input type="hidden" name="appid" value="{{appointment.appid}}">
-                          <input type="submit" class="btn btn-danger" value="Delete">
-                        </form>
+                    {% else %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          <a href="/appointmentDetails?id={{appointment.appid}}">
+                            <button class="btn btn-info">Accept/Decline</button>
+                          </a>
+                        </div>
+                        <div class="col-md-10">
+                          <p></p>
+                        </div>
                       </div>
-                      <div class="col-md-8">
-                        <p></p>
-                      </div>
-                    </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>

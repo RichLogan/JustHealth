@@ -1,3 +1,5 @@
+<!-- This class is not being used! -->
+
 {% extends "template.html" %}
 
 {% block title %}Calendar{% endblock %}
@@ -48,6 +50,10 @@ $(document).ready(function(){
       $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
     }
   });
+
+    var appointment = getUrlParameter('open')
+      $('#collapse'+appointment).collapse('show');
+    }
 
   /*var allDates = $(document.getElementsByClassName('dateForJS'));
   var now = moment().format();
@@ -184,6 +190,13 @@ $('time').each(function(i, e) {
                       <div class="row">
                         <div class="col-md-6">
                           <p>{{appointment.name}}</p>
+                          {% if appointment.invitee != none %}
+                            {% if appointment.accepted == false %}
+                              <font color="red">[{{appointment.invitee}} Declined]</font> </p>
+                            {% else %}
+                              </p>
+                            {% endif %}
+                          {% endif %}
                         </div>
                         <div class="col-md-6">
                           <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
