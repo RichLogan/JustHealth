@@ -13,6 +13,12 @@ import android.widget.Button;
 
 public class Privacy extends Activity {
 
+
+    /**
+     * Creates the action bar items for the Privacy Policy page
+     * @param savedInstanceState The options menu in which the items are placed
+     * @return True must be returned in order for the Privacy Policy page to be displayed
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.privacy);
