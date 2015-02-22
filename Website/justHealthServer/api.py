@@ -1281,6 +1281,27 @@ def getCorrespondence(carer, patient):
         results.append(note)
      return json.dumps(results)
 
+@app.route('/api/getPatientNotes', methods=['GET', 'POST'])
+@auth.login_required
+def getPatientNotes():
+    return getPatientNotes()
+
+def getPatientNotes(patient, carer):
+     allNotes = Notes.select().where((Notes.patient == patient) & (Notes.carer == carer))
+     
+     results = []
+     for n in allNotes:
+        note = {}
+        note['noteid'] = n.noteid
+        note['carer'] = n.carer.username
+        note['patient'] = n.patient.username
+        note['notes'] = n.notes
+        note['title'] = n.title
+        note['datetime'] = str(n.datetime)
+        results.append(note)
+     return json.dumps(results)
+
+
 @app.route('/api/addCorrespondence', methods=['POST'])
 def addCorrespondence():
     return addCorrespondence(request.form)

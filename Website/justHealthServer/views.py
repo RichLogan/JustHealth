@@ -666,6 +666,18 @@ def deleteNote_view():
         flash("Note could not be deleted", 'danger')
     return redirect("/notes?user=" + patient)
 
+@app.route('/patientNotes',methods=['POST', 'GET'])
+def patientNotes():
+    connections = json.loads(getConnections(session['username']))    
+    if request.method == "GET":
+        try:
+            carer = request.args.get('user', '')
+            Patientcarer.select().where((Patientcarer.patient == session['username']) & (Patientcarer.carer == carer)).get()
+            correspondence = json.loads(getCorrespondence(session['username'], carer))
+            return render_template('patientNotes.html', notes=correspondence, carer = carer)
+        except Patientcarer.DoesNotExist:
+            return render_template('patientNotes.html')
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('internalError.html'), 500
