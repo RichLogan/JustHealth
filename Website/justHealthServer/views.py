@@ -296,7 +296,7 @@ def login():
 
             return render_template('resetpasswordnowquestion.html')
         else:
-            return render_template('login.html', printname = fullname, type="danger", message = result)
+            return render_template('login.html', type="danger", message = result)
     try:
       session['username']
     except KeyError, e:

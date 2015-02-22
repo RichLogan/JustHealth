@@ -159,7 +159,10 @@ def authenticate():
         return "Incorrect username/password"
 
     # Check Password
-    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    try: 
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    except uq8LnAWi7D.DoesNotExist:
+        return "There is no current password for this username. Please use the forgot password link to reset your account."
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
         if attempted.accountdeactivated == True:
