@@ -1,3 +1,4 @@
+
 /*HTML tag styles*/
 html, body {
   margin: 0;
@@ -183,7 +184,7 @@ fieldset.links {
 }
 
 fieldset.dashboard {
-  width: 20%;
+  width: 30%;
   margin: auto;
   background: #FFFFFF;
   float: left;
@@ -325,23 +326,23 @@ hr.dashboard {
   color: #DF111C;
 }
 
-#result{
+#result {
 	margin-left:5px;
 }
 
-.passwordShort{
+.passwordShort {
 	color: #DF111C;
 }
 
-.passwordWeak{
+.passwordWeak {
 	color: #DF111C;
 }
 
-.passwordGood{
+.passwordGood {
 	color: #FFC90E;
 }
 
-.passwordStrong{
+.passwordStrong {
 	color: #30D917;
 }
 
@@ -377,3 +378,32 @@ hr.dashboard {
   text-align: center;
   font-size: 25px;
 }
+
+#profilePicture {
+  width: 7.5em;
+}
+
+/* Admin portal new */
+fieldset.form-admin {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid silver;
+  padding: 25px;
+  border-radius: 4px;
+  background: #FFFFFF;
+}
+
+#contentAdmin {
+  padding:10px;
+  padding-bottom:40px;   /* Height of the footer */
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+.medicationList {
+    -webkit-column-count: 5; /* Chrome, Safari, Opera */
+    -moz-column-count: 5; /* Firefox */
+    column-count: 5;
+}
+
+.double_column_list li {float: left; width: 15%;}

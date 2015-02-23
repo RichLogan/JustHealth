@@ -159,7 +159,10 @@ def authenticate():
         return "Incorrect username/password"
 
     # Check Password
-    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    try: 
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    except uq8LnAWi7D.DoesNotExist:
+        return "There is no current password for this username. Please use the forgot password link to reset your account."
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
         if attempted.accountdeactivated == True:
@@ -902,7 +905,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment['androideventid'] = app.androideventid
     appointment['accepted'] = app.accepted
     
-    dateTime = str(app.startdate) + " " + str(app.starttime)
+    dateTime = str(app.enddate) + " " + str(app.endtime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
 
     if (dateTime >= currentDateTime):
@@ -1064,9 +1067,10 @@ def addMedication(medicationName):
     with database.transaction():
         try:
             insertMedication.execute()
+            return "Added " + medicationName
         except IntegrityError:
             return medicationName + " already exists"
-    return "Added " + medicationName
+    return "False"
 
 @app.route('/api/deleteMedication', methods=['POST'])
 @auth.login_required
@@ -1273,6 +1277,146 @@ def addAndroidEventId():
   addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
   return "Android ID added to database"
 
+  #Admin Portal Pages
+def addDeactivate(reason):
+    insert = Deactivatereason.insert(
+        reason = request.form['reason']
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
+def newMedication(medication):
+    insert = Medication.insert(
+        name = request.form['medication']
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
+@app.route('/api/getAllUsers', methods=['POST'])
+@auth.login_required
+def getAllUsers():
+    return getAllUsers()
+
+def getAllUsers():
+    """Get All information from client and patient/carer table"""
+    results = []
+    for u in Client.select(Client.username):
+        userDetails = {}
+        try:
+          user = Patient.select().join(Client).where(Client.username==u.username).get()
+          userDetails['accounttype'] = "Patient"
+        except Patient.DoesNotExist:
+            user = Carer.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Carer"
+
+        userDetails['firstname'] = user.firstname
+        userDetails['surname'] = user.surname
+        userDetails['username'] = user.username.username
+        userDetails['email'] = user.username.email
+        userDetails['dob'] = str(user.username.dob)
+        userDetails['accountdeactivated'] = user.username.accountdeactivated
+        userDetails['accountlocked'] = user.username.accountlocked
+        userDetails['loginattempts'] = user.username.loginattempts
+        userDetails['verified'] = user.username.verified
+        if user.ismale:
+            userDetails['gender'] = 'Male'
+        else:
+            userDetails['gender'] ='Female'
+        results.append(userDetails)
+    return json.dumps(results)
+
+#Update user account settings in Admin Portal
+@app.route('/api/updateAccountSettings', methods=['POST'])
+def updateAccountSettings():
+    return updateAccountSettings(request.form)
+
+def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
+    user = None
+    # What type of user are we dealing with?
+    try:
+        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
+
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
+
+    gender = False
+    if settings['ismale'] == "true":
+        gender = True
+
+    # Update
+    user.firstname = settings['firstname']
+    user.surname = settings['surname']
+    user.ismale = gender
+
+    clientObject.username = settings['username']
+    clientObject.email = settings['email']
+    clientObject.dob = settings['dob']
+    clientObject.accounttype = settings['accounttype']
+    clientObject.accountdeactivated = accountdeactivated
+    clientObject.accountlocked = accountlocked
+    clientObject.loginattempts = settings['loginattempts']
+    clientObject.verified = verified
+
+    with database.transaction():
+        user.save()
+        clientObject.save()
+        return "True"
+    return "False"
+
+@app.route('/api/deleteAccount', methods=['POST'])
+@auth.login_required
+def deleteAccount():
+    return deleteAccount(request.form)
+
+def deleteAccount(username):
+    user = None
+
+    try:
+        instance = Client.select().where(Client.username == username).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "Deleted"
+    except:
+        return "Failed"
+
+def old(settings, username):
+    user = None
+
+    try:
+        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
+
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
+    try:
+        clientObject.username = settings['username']
+    except KeyError, e:
+        return "No username supplied"
+
+    if delete:
+        # Delete User
+        deletedUser = Client.get(clientObject.username == request.form['username'])
+        with database.transaction():
+            deletedUser.delete_instance(recursive=True)
+        return "Deleted"
+    else:
+        # Keep user
+        deactivatedUser = Client.update(accountdeactivated = True).where(clientObject.username == username)
+        unverifyUser = Client.update(verified = False).where(clientObject.username == username)
+        with database.transaction():
+            deactivatedUser.execute()
+            unverifyUser.execute()
+        return "Kept"
+
 def createNotificationRecord(user, notificationType, relatedObject):
     #dictionary mapping notificationType to referencing table
     notificationTypeTable = {}
@@ -1307,7 +1451,7 @@ def getNotifications():
 
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user"""
-    notifications = Notification.select().dicts().where(Notification.username == username and Notification.dismissed == False)
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
 
     notificationList = []
     for notification in notifications:
@@ -1337,11 +1481,11 @@ def getNotificationContent(notification):
     
     if notification['notificationtype'] == "Appointment Invite":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + "."
+        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Updated":
         appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + "."
+        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Cancelled":
         content = "One of your appointments has been cancelled, click above to view your updated calendar."
@@ -1381,16 +1525,16 @@ def getNotificationLink(notification):
         link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Updated":
-        link = "/appointments"
+        link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Cancelled":
         link = "/appointments"
 
     if notification['notificationtype'] == "Appointment Accepted":
-        link = "/appointments"
+        link = "/appointments?open=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Appointment Declined":
-        link = "/appointments"
+        link = "/appointments?open=" + str(notification['relatedObject'])
 
     if notification['notificationtype'] == "Password Reset":
         link = "/"

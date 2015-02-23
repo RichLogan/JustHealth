@@ -5,6 +5,386 @@
 {% block scriptsAndStyles %}{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{printname}}</h2>
+<!--Load the AJAX API-->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  // Load the Visualization API and the piechart package.
+  google.load('visualization', '1.0', {'packages':['corechart']});
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.setOnLoadCallback(drawChart);
+  // Callback that creates and populates a data table,
+  // instantiates the pie chart, passes in the data and
+  // draws it.
+  function drawChart() {
+    // Create the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'reason');
+    data.addColumn('number', 'number');
+    data.addRows([
+      ['Mushrooms', 3],
+      ['Onions', 1],
+      ['Olives', 1],
+      ['Zucchini', 1],
+      ['Pepperoni', 2]
+    ]);
+    // Set chart options
+    var options = {'title':'Reasons for users deactivation',
+                   'width':500,
+                   'height':400};
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
+  $(document).ready(function () {
+      (function ($) {
+          $('#filter').keyup(function () {
+              var rex = new RegExp($(this).val(), 'i');
+              $('.searchable tr').hide();
+              $('.searchable tr').filter(function () {
+                  return rex.test($(this).text());
+              }).show();
+          })
+      }(jQuery));
+  });
+</script>
+
+<div class="row">
+  <div class="col-md-2">
+    <fieldset class="style" style="margin: 0 auto; padding: 5px;">  
+      <div role="tabpanel">
+      </br>
+        <ul class="nav nav-pills nav-stacked" role="tablist">
+          <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+          <li><a href="#users" data-toggle="tab">Users</a></li>
+          <li class="dropdown">
+            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown"> Medication 
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+              <li><a href="#addNewMedication" tabindex="-1" data-toggle="tab">Add new medication</a></li>
+              <li><a href="#currentMedication" tabindex="-1" data-toggle="tab">Current medication</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">Deactivate account  
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+              <li><a href="#addNewDeactivate" tabindex="-1" data-toggle="tab">Add new deactivation reason</a></li>
+              <li><a href="#deactivateReasons" tabindex="-1" data-toggle="tab">Reasons for deactivation </a></li>
+              <li><a href="#deactivateStats" tabindex="-1" data-toggle="tab">Statistics</a></li>
+            </ul>
+              <li><a href="#charts" data-toggle="tab">Charts</a></li>
+              <li><a href="#twitter" data-toggle="tab">Twitter</a></li>
+          </li>
+        </ul>
+        <br />
+      </div>
+    </fieldset>
+  </div>
+
+
+  <div class="col-md-10">
+    <fieldset class="form-container">
+      <div class="tab-content">
+        <i class="fa fa-android headingIcon pull-left"></i><h4 class="pull-left">JustHealth Information Management Portal</h4>
+        <hr>
+        <!--Tab for admin portal home-->
+        <div role="tabpanel" class="tab-pane fade in active container" id="home" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="home">
+            {% if message != null %}
+              <div class="alert alert-{{type}} alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  {{message}}
+              </div>
+            {% endif %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="flashes">
+                {% for category, message in messages %}
+                  <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                  <button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  {{message}}
+                  </div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            <h5>Welcome to the JustHealth IM Portal</h5>
+            <p> Please remember you are able to access personal and potentially sensitive data on this admin portal. For more information on data protection please view the terms and conditions.</p> 
+            On this site you are able to:
+            <ul>
+              <li>Edit account settings</li>
+              <li>View and add new medication</li>
+              <li>View and add new deactivation reasons</li>
+              <li>View user statistics</li>
+              <li>View JustHealth site statistics</li>
+            </ul>
+            <p>Remember to use responsibly, any misuse of portal access will be subject to disciplinary measures.</p>
+          </div>
+        </div>
+      
+        <!--Tab for user accounts -->
+        <div role="tabpanel" class="tab-pane fade in container" id="users" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="users">
+            <h5>User Accounts</h5>
+            <div id="queryTable">
+              <div class="input-group"> <span class="input-group-addon">Filter</span>
+                <input id="filter" type="text" class="form-control" placeholder="Search for user here...">
+              </div>  
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>DoB </th>
+                    <th>Gender </th>
+                    <th>Account Type</th>
+                    <th>Account Deactivated </th>
+                    <th>Verified</th>
+                    <th>Account Locked</th>
+                    <th>Failed Login Attempts </th>
+                    <th> </th>
+                  </tr>
+                </thead>
+                <tbody class="searchable">
+                <!--List data here-->
+                {% for allUsers in allUsers %}
+                  <tr>
+                    <td>{{allUsers.username}}</td>
+                    <td>{{allUsers.firstname}} {{allUsers.surname}}</td>
+                    <td>{{allUsers.email}}</td>
+                    <td>{{allUsers.dob}}</td>
+                    <td>{{allUsers.gender}}</td>
+                    <td>{{allUsers.accounttype}}</td>
+                    <td>{{allUsers.accountdeactivated}}</td>
+                    <td>{{allUsers.verified}} </td>
+                    <td>{{allUsers.accountlocked}}  </td>
+                    <td>{{allUsers.loginattempts}} </td>
+                    <td><a data-toggle="modal" data-target="#editaccountinfo{{allUsers.username}}" class="btn btn-warning"> Edit</a></td>
+
+                    <td><form action="/deleteAccount" method="POST">
+                          <input type="hidden" name="username" value="{{allUsers.username}}">
+
+                          <input class="btn btn-danger pull-right" onclick="return confirm('Are you sure you want to delete this account?')" type="submit" value="Deactivate">
+                        </form>
+                    </td>
+
+                  </tr>
+                  <!--Start of edit account information modal-->
+                  <div class="modal fade" id="editaccountinfo{{allUsers.username}}" tabindex="-1" role="dialog" aria-labelledby="editaccountinfo{{allUsers.username}}" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                          <h5 class="modal-title" id="editaccountinfo{{allUsers.username}}Label">Account settings for user: {{allUsers.username}}</h5>
+                        </div>
+                        <div class="modal-body">
+                          <fieldset class ="register-inner">
+                          <!--Form to update profile details -->
+                            <form name="editAccountDetails" method="POST" action="/updateAccountSettings_view">
+                              <div class="form-group">
+                                <input class="hidden" type="text" name="username" value="{{allUsers.username}}" readonly="true">
+                              </div>
+                              <div class="form-group">
+                                <label for="name">First Name</label>
+                                <input class="form-control input-sm" type="text" name="firstname" value="{{allUsers.firstname}}" readonly="true">
+                              </div>
+                              <div class="form-group">
+                                <label for="surname">Surname</label>
+                                <input class="form-control input-sm" type="text" name="surname"  value="{{allUsers.surname}}" readonly="true">
+                              </div>
+                              <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input class="form-control input-sm" type="date" name="dob" id="dob" value="{{allUsers.dob}}">
+                              </div>
+                              <div class="form-group">
+                              <!--Find how to get the current gender from db-->
+                                <label for="ismale">Gender </label>
+                                  {% if allUsers.gender == "Male" %}
+                                    <input class="" type="radio" name="ismale" value="true" checked="true"> Male&nbsp;
+                                    <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+                                  {% else %}
+                                    <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+                                    <input class="" type="radio" name="ismale" value="false" checked="true"> Female&nbsp;
+                                  {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label for="email">Email</label>
+                                <input class="form-control input-sm" type="text" name="email" id="validateEmail" value="{{allUsers.email}}">
+                                <span id="emailValidate"></span>
+                              </div>
+                              <div class="form-group">
+                                <label for="accounttype">Account Type</label>
+                                <select name="accounttype" class="form-control input-sm">
+                                  {% if allUsers.accounttype == "Patient" %}
+                                  <option value="patient" selected>Patient</option>
+                                  <option value="carer">Carer</option>
+                                  {% else %}
+                                  <option value="patient">Patient</option>
+                                  <option value="carer" selected>Carer</option>
+                                  {% endif %}
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label for="accountdeactivated">Account Deactivated</label>
+                              </br>
+                              {% if allUsers.accountdeactivated == True %}
+                                <input type="checkbox" name="accountdeactivated" checked>
+                              {% else %}
+                                <input type="checkbox" name="accountdeactivated">
+                              {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label for="verified">Verified</label>
+                              </br>
+                              {% if allUsers.verified == True %}
+                                <input type="checkbox" name="verified" checked>
+                              {% else %}
+                                <input type="checkbox" name="verified">
+                              {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label for="accountlocked">Account Locked</label>
+                              </br>
+                              {% if allUsers.accountlocked == True %}
+                                <input type="checkbox" name="accountlocked" checked>
+                              {% else %}
+                                <input type="checkbox" name="accountlocked">
+                              {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label for="loginattempts">Login Attempts</label>
+                                <input class="form-control input-sm" type="text" name="loginattempts"  value="{{allUsers.loginattempts}}">
+                              </div>
+                              <div class="form-group">
+                                <input class="btn btn-success pull-right" type="submit" value="Update Settings">
+                              </div>
+                            </form>
+                          </fieldset>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--End of account information modal-->
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!--Tab for current medication -->
+        <div role="tabpanel" class="tab-pane fade in container" id="currentMedication" style="width: 90%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="currentMedication">
+            <div class="double_column_list ">
+              <h5>Medication</h5>
+              </br>
+              <table class="table table-striped">
+                <thead>
+                  <th> </th>
+                </thead>
+                <tbody>
+                {% for medication in medicationList %}
+                <tr>
+                  <td> {{medication.name}} </td>
+                   {% endfor %}
+                </tr>
+               </tbody>
+             </table>
+            </div>
+          </div>
+        </div>
+
+
+        <!--Tab for new medication -->
+        <div role="tabpanel" class="tab-pane fade in container" id="addNewMedication" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="addNewMedication">
+            <h5>Please enter the new medication below:</h5>
+            </br>
+            <fieldset class="register-inner">
+              <form role="form" action="/addNewMedication" method="POST">   
+                <div class="form-group">
+                  <input class="form-control input-sm" type="text" name="medication" id="medication">
+                </div>
+                <input class="btn btn-success pull-right" type="submit" value="Submit">
+              </form>
+            </fieldset>
+          </div>
+        </div>
+
+        <!--Tab for new deactivation reason -->
+        <div role="tabpanel" class="tab-pane fade in container" id="addNewDeactivate" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="addNewDeactivate">
+            <h5> Please enter below the new deactivation reason you would like to add:</h5>
+            </br>
+            <fieldset class="register-inner">
+              <form role="form" action="/addNewDeactivate" method="POST">   
+                <div class="form-group">
+                  <input class="form-control input-sm" type="text" name="reason" id="reason">
+                </div>
+                <input class="btn btn-success pull-right" type="submit" value="Submit">
+              </form>
+            </fieldset>
+          </div>
+        </div>
+
+        <!--Tab for deactivation reasons -->
+        <div role="tabpanel" class="tab-pane fade in container" id="deactivateReasons" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="deactivateReasons">
+            <h5> Deactivate Reasons</h5>
+            </br>
+            <table class="table table-striped">
+              <thead> 
+                <tr>
+                  <th> </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for reason in reasons %}
+                <tr>
+                <td>{{reason.reason}}</td>
+                {% endfor %}
+                </tr>
+              </tbody>
+             </table>
+          </div>
+        </div>
+
+        <!--Tab for deactivation stats -->
+        <div role="tabpanel" class="tab-pane fade in container" id="deactivateStats" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="deactivateStats">
+            <div id="chart_div"></div>
+          </div>
+        </div>
+
+        <!--Tab for charts -->
+        <div role="tabpanel" class="tab-pane fade in container" id="charts" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="charts">
+            <h5> Charts </h5>
+            </br>
+          </div>
+        </div>
+
+        <!--Tab for Twitter info -->
+        <div role="tabpanel" class="tab-pane fade in container" id="twitter" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="twitter">
+            <a class="twitter-timeline" width="250" height="300" href="https://twitter.com/twitterdev" data-widget-id="564749021659795456">
+              Tweets by @twitterdev
+            </a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            <script>window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));</script>
+            <a class="twitter-timeline" width="250" height="300" href="https://twitter.com/twitterdev" data-widget-id="564797112014360576"> Tweets by @twitterdev
+            </a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>
 
 {% endblock %}
