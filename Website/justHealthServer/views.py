@@ -630,28 +630,16 @@ def updateAccountSettings_view():
             flash('Update failed', 'danger')
             return redirect(url_for('adminPortal'))
 
-@app.route('/old', methods=['POST'])
-@needLogin
-def old():
-    if request.method == 'POST':
-        result = deleteAccount(request.form)
-        if result == "Deleted":
-            return render_template('adminPortal.html', type="success", message = "Your account has been deleted")
-        elif result == "Kept":
-            return render_template('adminPortal.html', type="success", message = "Your account has been deactivated")
-        else:
-            return render_template('adminPortal.html')
-    return render_template('adminPortal.html')
 
 @app.route('/deleteAccount', methods=['POST'])
-def deleteNote_view():
+def deleteAccount_view():
     username = request.form['username']
     deleted = deleteAccount(username)
     if deleted == "Deleted":
         flash("User successfully deleted", 'success')
     else:
         flash("User could not be deleted", 'danger')
-    return redirect("/adminPortal?user=" + username)
+    return redirect("/adminPortal")
 
 
 @app.route('/addNewDeactivate', methods=['POST'])
