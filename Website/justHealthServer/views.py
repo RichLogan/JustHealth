@@ -350,7 +350,6 @@ def resetPasswordRedirect():
 
 
 @app.route('/createConnectionWeb', methods=['POST', 'GET'])
-@needLogin
 def createConnectionWeb():
     """Shows user a notification if a connection is attempted to tell them of the current connection state with that user"""
     result = createConnection(request.form)
@@ -362,7 +361,6 @@ def createConnectionWeb():
     return redirect('/?go=connections')
 
 @app.route('/completeConnectionWeb', methods=['POST', 'GET'])
-@needLogin
 def completeConnectionWeb():
     """Shows user a notification of whether their attempt to verify a connection was successful, the user has to put in the correct 4 digit code to complete the connection"""
     result = completeConnection(request.form)
@@ -373,7 +371,6 @@ def completeConnectionWeb():
     return redirect('/?go=connections')
 
 @app.route('/deleteConnectionWeb', methods=['POST', 'GET'])
-@needLogin
 def deleteConnectionWeb():
     """Shows user a notification if their attempt to delete a connection was successful or not"""
     result = deleteConnection(request.form)
@@ -385,7 +382,6 @@ def deleteConnectionWeb():
     return redirect('/?go=connections')
 
 @app.route('/cancelConnectionWeb', methods=['POST', 'GET'])
-@needLogin
 def cancelConnectionWeb():
     """Shows user a notification if their attempt to cancel their request for a connection was successful or not"""
     result = cancelRequest(request.form)
