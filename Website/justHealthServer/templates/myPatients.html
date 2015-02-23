@@ -376,7 +376,8 @@
                                       <div class="modal-body" style="height: 650px;">
                                         <!-- Details of Medication -->
                                         <form class="form-horizontal" action="/updatePrescription" method="POST">
-                                          <fieldset id="fieldset{{prescription.prescriptionid}}" disabled>
+                                          <fieldset id="fieldset{
+                                          {prescription.prescriptionid}}" disabled>
                                             <input type="hidden" value="{{prescription.prescriptionid}}" name="prescriptionid">
                                             <input type="hidden" value="{{patient.username}}" name="username">
                                             <div class="form-group">
@@ -635,6 +636,7 @@
                                   <th>Where</th>
                                   <th>End Date/Time</th>
                                   <th>Description</th>
+                                  <th>Response</th>
                                   <th> </th>
                                   <th> </th>
 
@@ -647,6 +649,20 @@
                                     <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
+
+                                    {% if appointment.creator == session['username'] %}
+                                      {% if appointment.accepted == true %}
+                                        <td>Accepted</td>
+                                      {% endif %}
+                                      {% if appointment.accepted == false %}
+                                        <td>Decline</td>
+                                      {% endif %}
+                                      {% if appointment.accepted == none %}
+                                        <td>Not Responded</td>
+                                      {% endif %}
+                                    {% else %}
+                                        <td> - </td>
+                                    {% endif %}
 
                                     {% if appointment.creator != session['username'] %}
                                     <td>

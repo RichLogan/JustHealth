@@ -67,6 +67,12 @@ public class SelfArchivedAppointments extends Activity {
         printArchivedAppointments();
     }
 
+    /**
+     * Creates the action bar items for the SelfArchived Appointments page
+     * @param menu The options menu in which the items are placed
+     * @return True must be returned in order for the options menu to be displayed
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -75,6 +81,11 @@ public class SelfArchivedAppointments extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This method is called when any action from the action bar is selected
+     * @param item The menu item that was selected
+     * @return in order for the method to work, true should be returned here
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -90,6 +101,11 @@ public class SelfArchivedAppointments extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * This method loops through the Array that passed with the Intent and adds them all to a HashMap.
+     * Depending on the Filter that is selected it then checks who the creator of the appointment is and runs the addToView method.
+     */
 
     private void printArchivedAppointments() {
         Bundle intentExtras = getIntent().getExtras();
@@ -161,6 +177,10 @@ public class SelfArchivedAppointments extends Activity {
             }
         }
     }
+    /**
+     * This method creates the dialog box when an appointment is clicked.
+     * @param appointmentDetails this is the HashMap of the appointment that has been pressed
+     */
 
     private void appointmentAction(final HashMap<String, String> appointmentDetails) {
         System.out.println("method running");
@@ -212,6 +232,13 @@ public class SelfArchivedAppointments extends Activity {
         alert.show();
     }
 
+
+    /**
+     * This is run when the user selects to delete the appointment.
+     * It checks whether the appointment has been added to the users calendar. If so this is deleted.
+     * A post request is also made to the API which subsequently removes the event from the calendar.
+     * @param appointmentDetails A HashMap of the appointment to be deleted
+     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void deleteAppointment(HashMap<String, String> appointmentDetails) {
         //The API takes the username and AppID
@@ -266,7 +293,13 @@ public class SelfArchivedAppointments extends Activity {
 
 
     }
-
+    /**
+     * This method takes the date and time from the JustHealth database and adds each part to a HashMap.
+     * This is needed when adding the appointment to the native android calendar.
+     * @param date the date of the appointment to be added to the android calendar
+     * @param time the time of the appointment to be added to the android calendar
+     * @return a HashMap of the date and time of the appointment
+     */
 
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
         HashMap<String, Integer> formattedDateTime = new HashMap<>();
@@ -287,6 +320,13 @@ public class SelfArchivedAppointments extends Activity {
         formattedDateTime.put("minute", minute);
         return formattedDateTime;
     }
+
+    /**
+     * This method takes the date and time as a string, concatenates it and returns it as an android date/time format.
+     * @param date the string of the date
+     * @param time the string of the time
+     * @return a Date object of the combined date and time strings
+     */
 
     private Date getDateTimeObject(String date, String time) {
         String dateTime = date + " " + time;

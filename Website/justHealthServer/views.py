@@ -66,7 +66,7 @@ def index():
             activePrescriptions[patient['username']] = json.loads(getActivePrescriptions(patient['username']))
             upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
             expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
-            checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
+            # checkPrescriptionLevel(session['username'], activePrescriptions[patient['username']])
 
         # Notifications relies on some of the methods above and therefore needs to be run at the end of this block.
         # Otherwise the notification won't be displayed until the refresh after it is created.
@@ -417,7 +417,7 @@ def appointments():
         #checks that an id is returned
         if added > 0: 
             flash("Appointment Added", 'success')
-            return redirect(url_for('appointments'))
+            return redirect(url_for('appointments'))        
     return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
@@ -630,6 +630,8 @@ def dismissNotifications():
     """dismiss the notification by running a method from the API"""
     if request.method == 'POST':
         notificationDismiss = dismissNotification(request.form['notificationid'])
+        return notificationDismiss 
+
 
 @app.errorhandler(500)
 def internal_error(error):
@@ -651,18 +653,93 @@ def internal_error(error):
 def internal_error(error):
   return render_template('400RequestMalformed.html'), 401
 
+#Admin Portal pages
 @app.route('/adminPortal')
 def adminPortal():
-  return render_template('adminHome.html')
+    """Loads the pages related to the tablist on the IM portal home page, this includes a list of active users, current medication list and deactivation options"""
+    allUsers = json.loads(getAllUsers())
+    if request.method == 'POST':
+        result = deactivateAccount(request.form)
+        if allUsers['accounttype'] == "Patient":
+            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient', medicationList = Medication.select())
+    else: 
+       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
 
-@app.route('/allUsers')
-def allUsers():
-  return render_template('adminAllUsers.html')
+@app.route('/updateAccountSettings_view', methods=['POST'])
+def updateAccountSettings_view():
+    
 
-@app.route('/activeUsers')
-def adminUsers():
-  return render_template('adminActiveUsers.html')
+    if request.method == 'POST':
+        #The tick boxes are not sent if they aren't ticked, so we have to catch them here.
+        try:
+            accountdeactivated = request.form['accountdeactivated']
+            accountdeactivated = True
+        except KeyError, e:
+            accountdeactivated = False
 
-@app.route('/adminMedication')
-def adminMedication():
-  return render_template('adminMedication.html')
+        try:
+            accountlocked = request.form['accountlocked']
+            accountlocked = True
+        except KeyError, e:
+            accountlocked = False
+
+        try:       
+            verified = request.form['verified']
+            verified = True
+        except KeyError, e:
+            verified = False
+
+        result = updateAccountSettings(request.form, accountlocked, accountdeactivated, verified)
+
+        if result == "True":
+            flash('Account Settings Updated', 'success')
+            return redirect(url_for('adminPortal'))
+        else:
+            flash('Update failed', 'danger')
+            return redirect(url_for('adminPortal'))
+
+@app.route('/old', methods=['POST'])
+@needLogin
+def old():
+    if request.method == 'POST':
+        result = deleteAccount(request.form)
+        if result == "Deleted":
+            return render_template('adminPortal.html', type="success", message = "Your account has been deleted")
+        elif result == "Kept":
+            return render_template('adminPortal.html', type="success", message = "Your account has been deactivated")
+        else:
+            return render_template('adminPortal.html')
+    return render_template('adminPortal.html')
+
+@app.route('/deleteAccount', methods=['POST'])
+def deleteNote_view():
+    username = request.form['username']
+    deleted = deleteAccount(username)
+    if deleted == "Deleted":
+        flash("User successfully deleted", 'success')
+    else:
+        flash("User could not be deleted", 'danger')
+    return redirect("/adminPortal?user=" + username)
+
+
+@app.route('/addNewDeactivate', methods=['POST'])
+def addNewDeactivate():
+    """Submits the form to add a new deactivation reason to the database"""
+    if request.method == 'POST':
+        result = addDeactivate(request.form)  
+        if result == "True":
+            return render_template('adminHome.html',type="success", message = 'Deactivate Reason Added')
+        else: render_template('adminHome.html',type="warning", message = 'Update failed')
+    else: 
+       return render_template('adminHome.html')
+
+@app.route('/addNewMedication', methods=['POST'])
+def addNewMedication():
+    """Submits the form to add a new medication name to the database"""
+    if request.method == 'POST':
+        result = newMedication(request.form)  
+        if result == "True":
+            return render_template('adminHome.html',type="success", message = 'Medication Added')
+        else: render_template('adminHome.html',type="warning", message = 'Update failed')
+    else:   
+       return render_template('adminHome.html')

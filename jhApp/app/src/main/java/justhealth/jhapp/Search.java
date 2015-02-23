@@ -75,6 +75,8 @@ public class Search extends Activity {
         }
     }
 
+
+
     private void printTable(JSONArray array) {
         TableLayout searchTable = (TableLayout) findViewById(R.id.searchTable);
         searchTable.removeAllViews();
