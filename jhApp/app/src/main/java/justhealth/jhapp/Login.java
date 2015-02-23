@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -153,10 +154,13 @@ public class Login extends Activity implements SurfaceHolder.Callback {
             edit.commit();
 
             if (getAccountType(loginInformation.get("username")).equals("Patient")) {
+                registerWithServer();
                 startActivity(new Intent(Login.this, HomePatient.class));
             } else if (getAccountType(loginInformation.get("username")).equals("Carer")) {
+                registerWithServer();
                 startActivity(new Intent(Login.this, HomeCarer.class));
             }
+
         }
         else if (response.equals("Reset")) {
             SharedPreferences account = getSharedPreferences("account", 0);
@@ -234,5 +238,12 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                     }
                 });
         alert.show();
+    }
+
+    public void registerWithServer() {
+        Intent intent = new Intent("com.google.android.c2dm.intent.REGISTER");
+        intent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+        intent.putExtra("sender", "1054401665950");
+        startService(intent);
     }
 }
