@@ -1286,8 +1286,8 @@ def getCorrespondence(carer, patient):
 def getPatientNotes():
     return getPatientNotes()
 
-def getPatientNotes(patient, carer):
-     allNotes = Notes.select().where((Notes.patient == patient) & (Notes.carer == carer))
+def getPatientNotes(patient):
+     allNotes = Notes.select().where(Notes.patient == patient)
      
      results = []
      for n in allNotes:

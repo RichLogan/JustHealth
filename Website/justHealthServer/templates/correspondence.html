@@ -27,7 +27,10 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
+         <fieldset class= "notes">
+
         {% for note in notes %}
+        <br />
           <h5><strong>Title: </strong>{{note.title}}</h5>
           <p><strong>Comment: </strong></p>
           <p>{{note.notes}}</p>
@@ -42,13 +45,15 @@
 
           <br />
           <br />
-          <hr />
+          <br />
+          <hr class="notes" />
         {% endfor %}
+      </fieldset>
       </div>
 
       <form role="form" action="/addNote" method="post" >
         <div class="col-md-8">
-          <div class="col-lg-9">
+          <div class="col-lg-7">
             <div class="form-group">
               <h4>Add Comment</h4>
               <label for="InputName">Title</label>

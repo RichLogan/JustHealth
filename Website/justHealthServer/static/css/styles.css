@@ -202,6 +202,14 @@ fieldset.style {
   left: 0;
 }
 
+fieldset.notes{
+  margin: auto;
+  border: 1px solid silver;
+  padding: 20px;
+  border-radius: 4px;
+  background: #F1F1F1;
+}
+
 .center-element {
   text-align: center;
 }
@@ -215,6 +223,16 @@ hr.dashboard {
   color: #000000;
   width: 100%;
   margin: 0.5em 0;
+}
+
+hr.notes { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
 }
 
 #register label{

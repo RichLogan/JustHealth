@@ -16,16 +16,18 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
+        <fieldset class= "notes">
         {% for note in notes %}
+        <br />
           <h5><strong>Title: </strong>{{note.title}}</h5>
           <p><strong>Comment: </strong></p>
           <p>{{note.notes}}</p>
           <p><strong>Date Posted: </strong></p>
           <p>{{note.datetime}}</p>
           <br />
-          <br />
-          <hr />
+           <hr class="notes" />
         {% endfor %}
+        </fieldset>
       </div>
                
  </fieldset>

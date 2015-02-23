@@ -668,13 +668,10 @@ def deleteNote_view():
 
 @app.route('/patientNotes',methods=['POST', 'GET'])
 def patientNotes():
-    connections = json.loads(getConnections(session['username']))    
     if request.method == "GET":
         try:
-            carer = request.args.get('user', '')
-            Patientcarer.select().where((Patientcarer.patient == session['username']) & (Patientcarer.carer == carer)).get()
-            correspondence = json.loads(getCorrespondence(session['username'], carer))
-            return render_template('patientNotes.html', notes=correspondence, carer = carer)
+            notes = json.loads(getPatientNotes(session['username']))
+            return render_template('patientNotes.html', notes=notes)
         except Patientcarer.DoesNotExist:
             return render_template('patientNotes.html')
 
