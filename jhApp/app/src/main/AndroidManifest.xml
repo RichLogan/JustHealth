@@ -33,10 +33,6 @@
         <activity
             android:name=".Login"
             android:label="Login" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -223,7 +219,12 @@
         <activity android:name=".ConnectionsMain"/>
         <activity android:name=".ConnectionsView"/>
 
-        <activity android:name=".Main" />
+        <activity android:name=".Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

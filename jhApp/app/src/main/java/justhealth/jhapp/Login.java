@@ -151,10 +151,14 @@ public class Login extends Activity implements SurfaceHolder.Callback {
             SharedPreferences.Editor edit = account.edit();
             edit.putString("username", loginInformation.get("username"));
             edit.putString("password", encryptedPassword);
+            edit.apply();
 
             String accountType = getAccountType(loginInformation.get("username"));
-            edit.putString("accountType", accountType);
-            edit.commit();
+            System.out.println("Account Type: " + accountType);
+
+            SharedPreferences.Editor addAccountType = account.edit();
+            addAccountType.putString("accountType", accountType);
+            addAccountType.commit();
             startActivity(new Intent(Login.this, Main.class));
         }
         else if (response.equals("Reset")) {
@@ -191,6 +195,8 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         try {
             JSONObject accountDetails = new JSONObject(response);
             String accountType  = accountDetails.getString("accounttype");
+            System.out.println("whole array after the get : " + accountDetails);
+            System.out.println("Account type after the get : " + accountDetails);
             return accountType;
         }
         catch (JSONException e) {

@@ -25,6 +25,7 @@ import java.util.HashMap;
  */
 public class Main extends Activity {
 
+
     // JustHealth Google Developer Project Number
     String SENDER_ID = "1054401665950";
 
@@ -36,27 +37,37 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!isLoggedIn()) {
+        account = getSharedPreferences("account", 0);
+        //account.edit().clear().commit();
+
+         if (!isLoggedIn()) {
+            System.out.println("Logged out");
             finish();
             startActivity(new Intent(Main.this, Login.class));
         }
+        else {
 
-        context = getApplicationContext();
+             System.out.println("Logged In");
+             System.out.println(account.getString("username", null));
 
-        // Check for GooglePlayServices support
-        if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId();
+             context = getApplicationContext();
 
-            if (regid.isEmpty()) {
-                registerInBackground();
-            }
+             // Check for GooglePlayServices support
+             if (checkPlayServices()) {
+                 System.out.println("Check google play services");
+                 gcm = GoogleCloudMessaging.getInstance(this);
+                 regid = getRegistrationId();
 
-            //Redirect where they need to go.
-            redirect();
-        } else {
-            Feedback.toast("No valid Google Play Services APK found.", false, context);
-        }
+                 if (regid.isEmpty()) {
+                     registerInBackground();
+                 }
+
+                 //Redirect where they need to go.
+                 redirect();
+             } else {
+                 Feedback.toast("No valid Google Play Services APK found.", false, context);
+             }
+         }
     }
 
     /**
@@ -64,8 +75,17 @@ public class Main extends Activity {
      */
     protected void onResume() {
         super.onResume();
-        checkPlayServices();
-        redirect();
+        if (!isLoggedIn()) {
+            System.out.println("Logged out");
+            finish();
+            startActivity(new Intent(Main.this, Login.class));
+        }
+        else {
+            System.out.println("Logged in");
+            System.out.println(account.getString("username", null));
+            checkPlayServices();
+            redirect();
+        }
     }
 
     /**
@@ -74,7 +94,7 @@ public class Main extends Activity {
      * @return Whether a user is logged in (true) or not (false)
      */
     private boolean isLoggedIn() {
-        String username = getSharedPreferences("account", 0).getString("username", null);
+        String username = account.getString("username", null);
         if (username == null) {
             return false;
         }
@@ -86,6 +106,7 @@ public class Main extends Activity {
      */
     private void redirect() {
         String accountType = getSharedPreferences("account", 0).getString("accountType", null);
+        System.out.println("Account Type: " + accountType);
         if (accountType.equals("Patient")) {
             // Found logged in Patient
             finish();
@@ -197,6 +218,7 @@ public class Main extends Activity {
      * using the 'from' address in the message.
      */
     private void sendRegistrationIdToBackend(String regid) {
+        System.out.println("sending regid to backend API");
         String username = account.getString("username", null);
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", account.getString("username", null));
@@ -204,6 +226,9 @@ public class Main extends Activity {
         String response = Request.post("saveAndroidRegistrationID", params, context);
         if (response.equals("False")) {
             System.out.println("Could not register device");
+        }
+        else {
+            System.out.println("Device registered using the method");
         }
     }
 

@@ -21,9 +21,8 @@ public class Logout extends Activity {
         //remove data from shared preferences
         SharedPreferences account = context.getSharedPreferences("account", 0);
         SharedPreferences.Editor edit = account.edit();
-        edit.remove("username");
-        edit.remove("password");
         edit.clear();
+        edit.commit();
 
 
 
