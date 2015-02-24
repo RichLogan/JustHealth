@@ -1600,11 +1600,26 @@ def getAppointmentsDueNow(username, currentTime):
             result.append(appointment)
     return result
 
-def getPrescriptionsDueIn15(username, currentTime):
-    """Search for prescriptions due in 15 mins"""
+@app.route('/test/getPrescriptionsDueToday')
+def testngasdsd():
+    return str(len(getPrescriptionsDueToday("patient", datetime.datetime.now())))
 
-def getPrescriptionsDueNow(username, currentTime):
+def getPrescriptionsDueToday(username, currentDateTime):
     """Seach for prescriptions due now"""
+    currentDate = currentDateTime.date()
+    currentDay = currentDateTime.strftime("%A")
+
+    activePrescriptions = Prescription.select().where(
+        (Prescription.username == username) &
+        (Prescription.startdate <= currentDate) &
+        (Prescription.enddate >= currentDate) &
+        (eval("Prescription." + currentDay) == True)
+    ).dicts()
+
+    results = []
+    for r in activePrescriptions:
+        results.append(r)
+    return results
 
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
@@ -1615,8 +1630,9 @@ def pingServer(sender, **extra):
         if Appointments.select().count() != 0:
             deleteReminders(loggedInUser, dt)
 
-        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
             addReminders(loggedInUser, dt)
+
     # No-one logged in
     except KeyError, e:
         return
@@ -1633,7 +1649,7 @@ def addReminders(username, now):
             withUser = a['invitee']
 
         try:
-            r = Reminder.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            r = allReminders.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
             if r.reminderClass == "danger":
                 with database.transaction():
                     r.delete_instance()
@@ -1656,7 +1672,7 @@ def addReminders(username, now):
         if withUser == username:
             withUser = a['invitee']
         try:
-            r = Reminder.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            r = allReminders.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
             if r.reminderClass == "warning":
                 with database.transaction():
                     r.delete_instance()
@@ -1673,12 +1689,28 @@ def addReminders(username, now):
             with database.transaction():
                 insertReminder.execute()
 
+    prescriptionsDueToday = getPrescriptionsDueToday(username, now)
+    for p in prescriptionsDueToday:
+        try:
+            r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                username = username,
+                content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " today.",
+                reminderClass = "info",
+                relatedObjectTable = "Prescription",
+                relatedObject = p['prescriptionid'],
+                extraQuantity = int(p['quantity']))
+            with database.transaction():
+                insertReminder.execute()
+
 def deleteReminders(username, now):
     """Deletes any reminders that have expired"""
     # Get all Reminders
     allReminders = Reminder.select().where(Reminder.username == username)
 
     # Appointments
+    # Need to remove all reminders that are no longer immediately happening / 15mins. 
     appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
     allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
     for reminder in appointmentReminders:
@@ -1689,7 +1721,15 @@ def deleteReminders(username, now):
                 reminder.delete_instance()
 
     # Prescriptions
-    PrescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
+    # Need to remove all prescriptions that are not on the current day or start date > now or end date < now. 
+    prescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
+    allPrescriptions = Prescription.select().where(Prescription.username == username)
+    currentDay = now.strftime("%A")
+    for reminder in prescriptionReminders:
+        prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
+        if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
+            with database.transaction():
+                reminder.delete_instance()         
 
 @app.route('/test/getReminders')
 def getReminders():

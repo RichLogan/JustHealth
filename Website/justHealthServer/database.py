@@ -126,15 +126,20 @@ class Prescription(BaseModel):
     medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
     dosage = IntegerField(null=True)
     dosageunit = CharField(null=True)
-    frequency = CharField(max_length=25, null=True)
-    quantity = IntegerField(null=True)
-    frequencyunit = CharField(max_length=10, null=True)
-    startdate = DateField(null=True)
-    enddate = DateField(null=True)
-    repeat = CharField(max_length=25, null=True)
     stockleft = IntegerField(null=True)
     prerequisite = CharField(null=True)
     dosageform = CharField(null=True)
+    # Quantity, days, dates.
+    quantity = IntegerField(null=True)
+    Monday = BooleanField(default=False)
+    Tuesday = BooleanField(default=False)
+    Wednesday = BooleanField(default=False)
+    Thursday = BooleanField(default=False)
+    Friday = BooleanField(default=False)
+    Saturday = BooleanField(default=False)
+    Sunday = BooleanField(default=False)
+    startdate = DateField(null=True)
+    enddate = DateField(null=True)
 
     class Meta:
         db_table = 'prescription'
@@ -165,6 +170,7 @@ class Reminder(BaseModel):
     relatedObject = IntegerField()
     relatedObjectTable = CharField()
     extraDate = CharField(null=True)
+    extraQuantity = IntegerField(null=True, default=None)
 
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
