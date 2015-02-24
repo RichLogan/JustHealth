@@ -1753,7 +1753,10 @@ def saveAndroidRegistrationID():
     username = request.form['username']
     registrationID = request.form['registrationid']
 
-    checkExisting = Androidregistration.select().where(Androidregistration.username == username).get()
+    try: 
+        checkExisting = Androidregistration.select().where(Androidregistration.username == username).get()
+    except Androidregistration.DoesNotExist:
+        checkExisting = None
 
     if checkExisting != None:
         update = Androidregistration.update(
@@ -1766,7 +1769,7 @@ def saveAndroidRegistrationID():
         return "Failed"
     else:
         insert = Androidregistration.insert(
-            username = user,
+            username = username,
             registrationid = registrationID
             )
 
@@ -1774,7 +1777,7 @@ def saveAndroidRegistrationID():
             insert.execute()
             return "True"
         return "Failed"
-        
+
 
 # def checkPrescriptionLevel(username, activePrescriptions):
 #     today = datetime.datetime.now().date()
