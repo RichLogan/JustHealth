@@ -177,6 +177,7 @@ class Reminder(BaseModel):
     reminderClass = CharField(max_length=10)
     relatedObject = IntegerField()
     relatedObjectTable = CharField()
+    extraDate = CharField(null=True)
 
 def createAll():
     """Creates all tables, dropping old instances if they exist"""

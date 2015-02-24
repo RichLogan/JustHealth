@@ -456,6 +456,209 @@ From the home page all 3 notifications should be able to be viewed
 
 
 
+
+[Carer] Password Reset Option (Optional No)
+
+Account of type carer created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click No
+<<Expected Result Two>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to dashboardCarer
+
+
+
+
+[Carer] Password Reset Option (Optional Yes)
+
+Account of type carer created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click Yes
+<<Expected Result Two>>
+4. Enter changed password
+<<Expected Result Three>>
+5. Log out
+6. Log back in with the new password
+<<Expected Result Four>>
+7. Log out
+8. Log back in with the old password
+<<Expected Result Five>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to reset password screen
+Expected Result Three: Directed to dashboardCarer, there is a notification to say password successfully reset
+Expected Result Four: Log in successful, directed to dashboardCarer
+Expected Result Five: Log in failed, incorrect username and password
+
+
+
+
+[Patient] Password Reset Option (Optional No)
+
+Account of type patient created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click No
+<<Expected Result Two>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to dashboardPatient
+
+
+
+
+[Patient] Password Reset Option (Optional Yes)
+
+Account of type patient created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click Yes
+<<Expected Result Two>>
+4. Enter changed password
+<<Expected Result Three>>
+5. Log out
+6. Log back in with the new password
+<<Expected Result Four>>
+7. Log out
+8. Log back in with the old password
+<<Expected Result Five>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to reset password screen
+Expected Result Three: Directed to dashboardPatient, there is a notification to say password successfully reset
+Expected Result Four: Log in successful, directed to dashboardPatient
+Expected Result Five: Log in failed, incorrect username and password
+
+
+
+
+[Carer] Password Reset Forced
+
+Account type of carer created
+
+1. Ensure that the current password is set to expire today
+2. Log in
+<<Expected Result One>>
+3. Enter new passwords
+<<Expected Result Two>>
+4. Log out
+5. Log back in with the new password
+<<Expected Result Three>>
+6. Log out
+7. Log in with the old password 
+<<Expected Result Four>>
+
+Expected Result One: Directed to reset password screen
+Expected Result Two: Directed to dashboardCarer, there is a notification to say password successfully reset
+Expected Result Three: Log in successful, directed to dashboardCarer
+Expected Result Four: Log in failed, incorrect username and password
+
+
+
+
+[Patient] Password Reset Forced
+
+Account type of patient created
+
+1. Ensure that the current password is set to expire today
+2. Log in
+<<Expected Result One>>
+3. Enter new passwords
+<<Expected Result Two>>
+4. Log out
+5. Log back in with the new password
+<<Expected Result Three>>
+6. Log out
+7. Log in with the old password 
+<<Expected Result Four>>
+
+Expected Result One: Directed to reset password screen
+Expected Result Two: Directed to dashboardPatient, there is a notification to say password successfully reset
+Expected Result Three: Log in successful, directed to dashboardPatient
+Expected Result Four: Log in failed, incorrect username and password
+
+
+
+
+Accept Appointment
+
+Account type of patient created 
+Account type of carer created
+Carer created appointment with patient
+
+1. Log in to patient account
+<<Expected Result One>>
+2. Click the appointment
+<<Expected Result Two>>
+3. Accept the appointment
+<<Expected Result Three>>
+4. Login to the carer account
+<<Expected Result Four>>
+
+Expected Result One: Notification for new appointment
+Expected Result Two: Taken to a page showing the appointment, with accept and decline button
+Expected Result Three: The appointment on the dashboard and the appointments page for 'patient' show accepted
+Expected Result Four: Notification to show the patient has accepted the appointment
+
+
+
+
+Decline Appointment
+
+Account type of patient created 
+Account type of carer created
+Carer created appointment with patient
+
+1. Log in to patient account
+<<Expected Result One>>
+2. Click the appointment
+<<Expected Result Two>>
+3. Decline the appointment
+<<Expected Result Three>>
+4. Login to the carer account
+<<Expected Result Four>>
+
+Expected Result One: Notification for new appointment
+Expected Result Two: Taken to a page showing the appointment, with accept and decline button
+Expected Result Three: The appointment on the dashboard and the appointments page for 'patient' show declined
+Expected Result Four: Notification to show the patient has declined the appointment
+
+
+
+
+Updated Appointment
+
+Account type of patient created 
+Account type of carer created
+Carer created appointment with patient
+Patient has accepted or declined the appointment
+
+1. Log into the carer account
+2. Update the appointment to another time
+<<Expected Result One>> 
+3. Log in to the patient account
+<<Expected Result Two
+4. CLick the notification link
+<<Expected Result Three>>
+
+Expected Result One: The appointment shows that you are waiting for the 'patient' to respond
+Expected Result Two: The patient has a notification to show that the appointment has updated
+Expected Result Three: Taken to a page showing the appointment, with accept and decline button
+
+
+
+
 -------------------------------------------------------------------------
 Android
 -------------------------------------------------------------------------
@@ -1233,18 +1436,204 @@ Account of type carer created
 
 From the home page all 3 notifications should be able to be viewed 
 
+[Carer] Password Reset Option (Optional No)
+
+Account of type carer created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click No
+<<Expected Result Two>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to dashboardCarer
 
 
 
 
+[Carer] Password Reset Option (Optional Yes)
+
+Account of type carer created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click Yes
+<<Expected Result Two>>
+4. Enter changed password
+<<Expected Result Three>>
+5. Log out
+6. Log back in with the new password
+<<Expected Result Four>>
+7. Log out
+8. Log back in with the old password
+<<Expected Result Five>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to reset password screen
+Expected Result Three: Directed to dashboardCarer, there is a notification to say password successfully reset
+Expected Result Four: Log in successful, directed to dashboardCarer
+Expected Result Five: Log in failed, incorrect username and password
 
 
 
 
+[Patient] Password Reset Option (Optional No)
+
+Account of type patient created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click No
+<<Expected Result Two>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to dashboardPatient
 
 
 
 
+[Patient] Password Reset Option (Optional Yes)
+
+Account of type patient created
+
+1. Ensure that the current password is set to expire in nine days time
+2. Log in
+<<Expected Result One>>
+3. Click Yes
+<<Expected Result Two>>
+4. Enter changed password
+<<Expected Result Three>>
+5. Log out
+6. Log back in with the new password
+<<Expected Result Four>>
+7. Log out
+8. Log back in with the old password
+<<Expected Result Five>>
+
+Expected Result One: Screen giving option to change password
+Expected Result Two: Directed to reset password screen
+Expected Result Three: Directed to dashboardPatient, there is a notification to say password successfully reset
+Expected Result Four: Log in successful, directed to dashboardPatient
+Expected Result Five: Log in failed, incorrect username and password
+
+
+
+
+[Carer] Password Reset Forced
+
+Account type of carer created
+
+1. Ensure that the current password is set to expire today
+2. Log in
+<<Expected Result One>>
+3. Enter new passwords
+<<Expected Result Two>>
+4. Log out
+5. Log back in with the new password
+<<Expected Result Three>>
+6. Log out
+7. Log in with the old password 
+<<Expected Result Four>>
+
+Expected Result One: Directed to reset password screen
+Expected Result Two: Directed to dashboardCarer, there is a notification to say password successfully reset
+Expected Result Three: Log in successful, directed to dashboardCarer
+Expected Result Four: Log in failed, incorrect username and password
+
+
+
+
+[Patient] Password Reset Forced
+
+Account type of patient created
+
+1. Ensure that the current password is set to expire today
+2. Log in
+<<Expected Result One>>
+3. Enter new passwords
+<<Expected Result Two>>
+4. Log out
+5. Log back in with the new password
+<<Expected Result Three>>
+6. Log out
+7. Log in with the old password 
+<<Expected Result Four>>
+
+Expected Result One: Directed to reset password screen
+Expected Result Two: Directed to dashboardPatient, there is a notification to say password successfully reset
+Expected Result Three: Log in successful, directed to dashboardPatient
+Expected Result Four: Log in failed, incorrect username and password
+
+
+
+
+Accept Appointment
+
+Account type of patient created 
+Account type of carer created
+Carer created appointment with patient
+
+1. Log in to patient account
+<<Expected Result One>>
+2. Click the appointment
+<<Expected Result Two>>
+3. Accept the appointment
+<<Expected Result Three>>
+4. Login to the carer account
+<<Expected Result Four>>
+
+Expected Result One: Notification for new appointment
+Expected Result Two: Taken to a page showing the appointment, with accept and decline button
+Expected Result Three: The appointment on the dashboard and the appointments page for 'patient' show accepted
+Expected Result Four: Notification to show the patient has accepted the appointment
+
+
+
+
+Decline Appointment
+
+Account type of patient created 
+Account type of carer created
+Carer created appointment with patient
+
+1. Log in to patient account
+<<Expected Result One>>
+2. Click the appointment
+<<Expected Result Two>>
+3. Decline the appointment
+<<Expected Result Three>>
+4. Login to the carer account
+<<Expected Result Four>>
+
+Expected Result One: Notification for new appointment
+Expected Result Two: Taken to a page showing the appointment, with accept and decline button
+Expected Result Three: The appointment on the dashboard and the appointments page for 'patient' show declined
+Expected Result Four: Notification to show the patient has declined the appointment
+
+
+
+
+Updated Appointment
+
+Account type of patient created 
+Account type of carer created
+Carer created appointment with patient
+Patient has accepted or declined the appointment
+
+1. Log into the carer account
+2. Update the appointment to another time
+<<Expected Result One>> 
+3. Log in to the patient account
+<<Expected Result Two
+4. CLick the notification link
+<<Expected Result Three>>
+
+Expected Result One: The appointment shows that you are waiting for the 'patient' to respond
+Expected Result Two: The patient has a notification to show that the appointment has updated
+Expected Result Three: Taken to a page showing the appointment, with accept and decline button
 
 
 

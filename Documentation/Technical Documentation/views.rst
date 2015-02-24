@@ -445,4 +445,44 @@ Return Values
 JustHealth Admin Portal
 ------------------------
 
-(Add admin portal page views)
+Admin Portal Home
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.adminPortal
+
+  :URL: /adminPortal
+  :HTTP_METHOD: POST
+
+  :param accounttype: Needed to display the user's accounttype in user statistics
+
+Return values:
+  adminHome.html
+    - Shows the page with all tabs and content loaded for user accounts
+
+New Deactivation Reason
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.addNewDeactivate
+
+  :URL: /addNewDeactivate
+  :HTTP_METHOD: POST
+
+Return values:
+  adminHome.html, "Success"
+    - "Deactivate Reason Added"
+  adminHome.html, "Warning"
+    - "Update failed"
+
+New Medication Name
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.addNewMedication
+
+  :URL: /addNewMedication
+  :HTTP_METHOD: POST
+
+Return values:
+  adminHome.html, "Success"
+    - "Medication Added"
+  adminHome.html, "Warning"
+    - "Update failed"
