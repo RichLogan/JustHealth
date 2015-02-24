@@ -129,8 +129,9 @@ class Prescription(BaseModel):
     stockleft = IntegerField(null=True)
     prerequisite = CharField(null=True)
     dosageform = CharField(null=True)
-    # Quantity, days, dates.
     quantity = IntegerField(null=True)
+    # Frequency, days, dates.
+    frequency = IntegerField(null=True)
     Monday = BooleanField(default=False)
     Tuesday = BooleanField(default=False)
     Wednesday = BooleanField(default=False)
@@ -170,7 +171,7 @@ class Reminder(BaseModel):
     relatedObject = IntegerField()
     relatedObjectTable = CharField()
     extraDate = CharField(null=True)
-    extraQuantity = IntegerField(null=True, default=None)
+    extraFrequency = IntegerField(null=True, default=None)
 
 def createAll():
     """Creates all tables, dropping old instances if they exist"""

@@ -1696,11 +1696,11 @@ def addReminders(username, now):
         except Reminder.DoesNotExist:
             insertReminder = Reminder.insert(
                 username = username,
-                content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " today.",
+                content = "You are due to take " + str(p['frequency']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " today.",
                 reminderClass = "info",
                 relatedObjectTable = "Prescription",
                 relatedObject = p['prescriptionid'],
-                extraQuantity = int(p['quantity']))
+                extraFrequency = int(p['frequency']))
             with database.transaction():
                 insertReminder.execute()
 
@@ -1729,7 +1729,7 @@ def deleteReminders(username, now):
         prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
         if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
             with database.transaction():
-                reminder.delete_instance()         
+                reminder.delete_instance()
 
 @app.route('/test/getReminders')
 def getReminders():
