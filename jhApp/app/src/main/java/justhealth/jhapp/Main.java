@@ -14,6 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * JustHealth main application. The user will never see this, but it acts as the primary activity
@@ -58,12 +59,20 @@ public class Main extends Activity {
         }
     }
 
+    /**
+     * Runs on reopen of application
+     */
     protected void onResume() {
         super.onResume();
         checkPlayServices();
         redirect();
     }
 
+    /**
+     * Checks whether a user appears to be logged in or not
+     *
+     * @return Whether a user is logged in (true) or not (false)
+     */
     private boolean isLoggedIn() {
         String username = getSharedPreferences("account", 0).getString("username", null);
         if (username == null) {
@@ -73,9 +82,7 @@ public class Main extends Activity {
     }
 
     /**
-     * Redirects a user to where they should go.
-     * If logged in as Patient: HomePatient
-     * If logged in as Carer: HomeCarer
+     * Redirects a user to where they should go on app open.
      */
     private void redirect() {
         String accountType = getSharedPreferences("account", 0).getString("accountType", null);
@@ -90,6 +97,7 @@ public class Main extends Activity {
             startActivity(new Intent(Main.this, HomeCarer.class));
         }
         else if (accountType.equals("Admin")) {
+            // Found admin
             Feedback.toast("Administrators cannot yet use the Android Application", false , context);
         }
         else {
@@ -166,13 +174,11 @@ public class Main extends Activity {
                     }
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
-                    sendRegistrationIdToBackend();
+                    sendRegistrationIdToBackend(regid);
                     storeRegistrationId(regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
-                    // If there is an error, don't just keep trying to register.
-                    // Require the user to click a button again, or perform
-                    // exponential back-off.
+                    // TODO: If there is an error, don't just keep trying to register.Require the user to click a button again, or perform exponential back-off.
                 }
                 return msg;
             }
@@ -190,8 +196,15 @@ public class Main extends Activity {
      * device sends upstream messages to a server that echoes back the message
      * using the 'from' address in the message.
      */
-    private void sendRegistrationIdToBackend() {
-        // Your implementation here.
+    private void sendRegistrationIdToBackend(String regid) {
+        String username = account.getString("username", null);
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", account.getString("username", null));
+        params.put("registrationid", regid);
+        String response = Request.post("saveAndroidRegistrationID", params, context);
+        if (response.equals("False")) {
+            System.out.println("Could not register device");
+        }
     }
 
     /**
