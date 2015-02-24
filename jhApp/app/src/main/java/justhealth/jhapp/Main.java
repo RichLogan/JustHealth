@@ -221,14 +221,12 @@ public class Main extends Activity {
         System.out.println("sending regid to backend API");
         String username = account.getString("username", null);
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("username", account.getString("username", null));
+        params.put("username", username);
         params.put("registrationid", regid);
         String response = Request.post("saveAndroidRegistrationID", params, context);
+        System.out.println(response);
         if (response.equals("False")) {
             System.out.println("Could not register device");
-        }
-        else {
-            System.out.println("Device registered using the method");
         }
     }
 
