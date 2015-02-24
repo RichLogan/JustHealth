@@ -244,6 +244,10 @@
 
         <activity android:name=".ConnectionsMain"/>
         <activity android:name=".ConnectionsView"/>
+
+        <activity android:name=".Main" />
+
     </application>
+
 
 </manifest>

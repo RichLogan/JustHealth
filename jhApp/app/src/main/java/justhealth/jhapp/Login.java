@@ -151,38 +151,32 @@ public class Login extends Activity implements SurfaceHolder.Callback {
             SharedPreferences.Editor edit = account.edit();
             edit.putString("username", loginInformation.get("username"));
             edit.putString("password", encryptedPassword);
+
+            String accountType = getAccountType(loginInformation.get("username"));
+            edit.putString("accountType", accountType);
             edit.commit();
-
-            if (getAccountType(loginInformation.get("username")).equals("Patient")) {
-                registerWithServer();
-                startActivity(new Intent(Login.this, HomePatient.class));
-            } else if (getAccountType(loginInformation.get("username")).equals("Carer")) {
-                registerWithServer();
-                startActivity(new Intent(Login.this, HomeCarer.class));
-            }
-
+            startActivity(new Intent(Login.this, Main.class));
         }
         else if (response.equals("Reset")) {
-            SharedPreferences account = getSharedPreferences("account", 0);
-            SharedPreferences.Editor edit = account.edit();
-            edit.putString("username", loginInformation.get("username"));
-            edit.putString("password", encryptedPassword);
-            edit.commit();
-            //here
+            String expiredUsername = loginInformation.get("username");
+            String expiredPassword = encryptedPassword;
+            String expiredAccountType = getAccountType(expiredUsername);
+
             Intent reset = new Intent(Login.this, ExpiredPassword.class);
             reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
                     "JustHealth enforce this from time-to-time to ensure that your " +
                     "privacy and security are maximised whilst using the website.");
+            reset.putExtra("username", expiredUsername);
+            reset.putExtra("password", expiredPassword);
+            reset.putExtra("accountType", expiredAccountType);
             startActivity(reset);
         }
         else if (response.equals("<11")) {
-            SharedPreferences account = getSharedPreferences("account", 0);
-            SharedPreferences.Editor edit = account.edit();
-            edit.putString("username", loginInformation.get("username"));
-            edit.putString("password", encryptedPassword);
-            edit.commit();
+            String expiredUsername = loginInformation.get("username");
+            String expiredPassword = encryptedPassword;
+            String expiredAccountType = getAccountType(expiredUsername);
             //options dialog
-            giveResetOptions();
+            giveResetOptions(expiredUsername, expiredPassword, expiredAccountType);
         }
         else {
             Feedback.toast(response, false, getApplicationContext());
@@ -212,9 +206,9 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         return response;
     }
 
-    private void giveResetOptions() {
+    private void giveResetOptions(final String expiredUsername, final String expiredPassword, final String expiredAccountType) {
         AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
-        alert.setTitle("Appointment Options")
+        alert.setTitle("Password Expiring")
                 .setItems(R.array.password_expiry_options, new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                     public void onClick(DialogInterface dialog, int which) {
@@ -223,17 +217,21 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                             reset.putExtra("message", "Your password is soon going to expire. " +
                                     "JustHealth enforce this from time-to-time to ensure that your " +
                                     "privacy and security are maximised whilst using the website");
+                            reset.putExtra("username", expiredUsername);
+                            reset.putExtra("password", expiredPassword);
+                            reset.putExtra("accountType", expiredAccountType);
                             startActivity(reset);
 
                         } else if (which == 1) {
                             SharedPreferences account = getSharedPreferences("account", 0);
-                            String username = account.getString("username", null);
+                            SharedPreferences.Editor edit = account.edit();
+                            edit.putString("username", expiredUsername);
+                            edit.putString("password", expiredPassword);
 
-                            if (getAccountType(username).equals("Patient")) {
-                                startActivity(new Intent(Login.this, HomePatient.class));
-                            } else if (getAccountType(username).equals("Carer")) {
-                                startActivity(new Intent(Login.this, HomeCarer.class));
-                            }
+                            edit.putString("accountType", expiredAccountType);
+                            edit.commit();
+
+                            startActivity(new Intent(Login.this, Main.class));
                         }
                     }
                 });

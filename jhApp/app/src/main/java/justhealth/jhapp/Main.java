@@ -203,6 +203,7 @@ public class Main extends Activity {
     private void storeRegistrationId(String regId) {
         int appVersion = getAppVersion();
         System.out.println("Successfully stored Registration ID");
+        SharedPreferences account = getSharedPreferences("account", 0);
         SharedPreferences.Editor editor = account.edit();
         editor.putString("registrationid", regId);
         editor.putInt("appversion", appVersion);

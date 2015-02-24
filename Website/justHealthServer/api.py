@@ -1747,6 +1747,35 @@ def expiredResetPassword(request):
         return "True"
     return "False"
 
+@app.route('/api/saveAndroidRegistrationID', methods=['POST'])
+@auth.login_required
+def saveAndroidRegistrationID():
+    username = request.form['username']
+    registrationID = request.form['registrationid']
+
+    checkExisting = Androidregistration.select().where(Androidregistration.username == username).get()
+
+    if checkExisting != None:
+        update = Androidregistration.update(
+            registrationid = registrationID
+            ).where(Androidregistration.username == username)
+
+        with database.transaction():
+            update.execute()
+            return "True"
+        return "Failed"
+    else:
+        insert = Androidregistration.insert(
+            username = user,
+            registrationid = registrationID
+            )
+
+        with database.transaction():
+            insert.execute()
+            return "True"
+        return "Failed"
+        
+
 # def checkPrescriptionLevel(username, activePrescriptions):
 #     today = datetime.datetime.now().date()
 #     for prescription in activePrescriptions:
