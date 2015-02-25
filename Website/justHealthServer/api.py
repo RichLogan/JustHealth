@@ -136,6 +136,7 @@ def registerUser():
       expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
     )
 
+
     # Execute Queries
     with database.transaction():
         userInsert.execute()
