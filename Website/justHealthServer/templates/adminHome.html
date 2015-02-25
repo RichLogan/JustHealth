@@ -35,6 +35,8 @@
     var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
     chart.draw(data, options);
   }
+
+  //search through users
   $(document).ready(function () {
       (function ($) {
           $('#filter').keyup(function () {
@@ -46,7 +48,8 @@
           })
       }(jQuery));
   });
-
+  
+    // search through medication
     $(document).ready(function () {
       (function ($) {
           $('#test').keyup(function () {
@@ -58,6 +61,62 @@
           })
       }(jQuery));
   });
+
+      $(document).ready(function() {
+    //check password strength
+    //keyup event on password field so code will execute on every keypress
+    $('#password').keyup(function() {
+      $('#result').html(checkStrength($('#password').val()));
+    });
+
+    $('#dob').focusout(function() {
+    if(isDate($('#dob').val())) {
+      //show message if email is valid
+      $('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
+    }
+  });
+
+  //Check all fields are filled in
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  $('#usernameInput').keyup(function() {
+    content = $('#usernameInput').val();
+    $.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
+      if (data == "True") {
+        $('#usernameError').addClass("has-error");
+        $('#usernameErrorLabel').text("Username (Username already taken)");
+      }
+      else {
+        $('#usernameError').addClass("has-success");
+        $('#usernameErrorLabel').text("Username (Username available)");
+      }
+    });
+  });
+    //check if email is valid
+  //focus out: validation is performed when different field is active
+  $('#validateEmail').focusout(function() {
+    if(validateEmail($('#validateEmail').val())) {
+      //show message if email is valid
+      $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+    }
+  });
+
 </script>
 
 <div class="row">
@@ -402,9 +461,10 @@
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="RegisterNewAdmin">
             <h5> Register A New Admin </h5>
             </br>
-                <fieldset class="register-inner">
+              <fieldset class="register-inner">
+              <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
 
-                <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
+              <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
 
                 <div class="form-group" id="usernameError">
                   <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
@@ -423,7 +483,7 @@
 
                 <div class="form-group">
                   <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
-                  <input class="form-control input-sm" type="date" name="dob">
+                  <input class="form-control input-sm" type="date" name="dob" id="dob">
                   <span id="dobValidate"></span>
                 </div>
 
@@ -435,7 +495,8 @@
 
                 <div class="form-group">
                   <label for="accounttype">Account Type</label>
-                  <input class="form-control input-sm" type="text" Value="Admin" name="accountType" readonly="True">
+                  <input class="form-control input-sm" type="text" name="accounttype" value="Admin" ReadOnly="True">
+
                 </div>
 
                 <div class="form-group">
@@ -464,7 +525,7 @@
                   <input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
                 </div>
               </form>
-            </fieldset>
+              </fieldset>
           </div>
         </div>
       </div>
