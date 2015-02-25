@@ -46,6 +46,15 @@ class Patient(BaseModel):
     class Meta:
         db_table = 'patient'
 
+class Admin(BaseModel):
+    firstname = CharField(max_length=100)
+    ismale = BooleanField()
+    surname = CharField(max_length=100)
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
+
+    class Meta:
+        db_table = 'admin'
+
 class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
@@ -153,6 +162,7 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+    Admin.create_table()
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -178,3 +188,5 @@ def dropAll():
         Medication.drop_table(cascade=True)
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
+    if Admin.table_exists():
+        Admin.drop_table(cascade=True)
