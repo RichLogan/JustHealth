@@ -24,6 +24,17 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#dob').focusout(function() {
+		if(isDate($('#dob').val())) {
+			//show message if email is valid
+			$('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
+		}
+		else {
+			//show message if email is not valid
+			$('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
+		}
+	});
+
     //Check all fields are filled in
 	$('form').submit(function(e) {
 		$("form :input").each(function(){
