@@ -1,73 +1,85 @@
 {% extends "template.html" %}
 {% block title %}Home{% endblock %}
-{% block scriptsAndStyles %}{% endblock %}
+{% block scriptsAndStyles %}
+<script type="text/javascript">
+  nextAngle = 0;
+  function addAngle(deg) {
+    // Thanks to: 
+    nextAngle += deg;
+    if(nextAngle >= 360) {
+      nextAngle = 0;
+    }
+    return nextAngle;
+  }
 
-{% block homeCSS %}<div id="homecontent">{% endblock %}
-{% block content %}
-<script>
-$(document).ready(function(){
-  $('.makeDataTable').DataTable({
-    paging:false,
-    info:false,
-    searching:false,
-  });
-
-  //Shows confirm box on delete appointment
   $(document).ready(function() {
+    // Handles Spinning of Notification Arrow
+    $("#notificationsBar").click(function() {
+      deg = addAngle(180);
+      flip("#notificationsArrow",deg);
+    });
+
     $("#deleteapp").submit(function(e) {
       if (!confirm('Are you sure you want to delete this appointment?')) {
         e.preventDefault();
       }
     });
-  });
 
-  $('form').submit(function(e) {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        alert("All fields must be filled out");
-        e.preventDefault();
-        return false;
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').modal('toggle');
+    }
+
+    // $('form').submit(function(e) {
+    //   $("form :input").each(function(){
+    //     if ($(this).val() == null || $(this).val() == "") {
+    //       alert("All fields must be filled out");
+    //       e.preventDefault();
+    //       return false;
+    //     }
+    //   });
+    // });
+
+    //Check if date is in the past
+    $('#startdateappt').focusout(function() {
+      var selectedDate = $('#startdateappt').val();
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
       }
     });
+
+    $('#enddate').focusout(function() {
+      var selectedDate = $('#enddate').datepicker('getDate');
+      var now = new Date();
+      if (selectedDate < now) {
+        // selected date is in the past
+        $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+      }
+    });
+
+    /*var allDates = $(document.getElementsByClassName('dateForJS'));
+    var now = moment().format();
+    //for loops through allDates
+    // each allDates.value() needs to equal
+    for (var i = 0, len = allDates.length; i<len; i++){
+    var formatting = allDates.html(i);
+    var momentFormatting = moment(formatting);
+    format = momentFormatting.calendar();
+    alert(format);
+    allDates.html(format);
+    }*/
+
+    $('time').each(function(i, e) {
+      var time = moment($(e).attr('datetime'));
+      $(e).html('<span>' + time.calendar() + '</span>');
+    });
   });
-
-  //Check if date is in the past
-  $('#startdateappt').focusout(function() {
-    var selectedDate = $('#startdateappt').val();
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate1').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
-
-  $('#enddate').focusout(function() {
-    var selectedDate = $('#enddate').datepicker('getDate');
-    var now = new Date();
-    if (selectedDate < now) {
-      // selected date is in the past
-      $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
-    }
-  });
-
-  /*var allDates = $(document.getElementsByClassName('dateForJS'));
-  var now = moment().format();
-  //for loops through allDates
-  // each allDates.value() needs to equal
-  for (var i = 0, len = allDates.length; i<len; i++){
-  var formatting = allDates.html(i);
-  var momentFormatting = moment(formatting);
-  format = momentFormatting.calendar();
-  alert(format);
-  allDates.html(format);
-}*/
-
-$('time').each(function(i, e) {
-  var time = moment($(e).attr('datetime'));
-  $(e).html('<span>' + time.calendar() + '</span>');
-});
-});
 </script>
+{% endblock %}
+
+{% block homeCSS %}<div id="homecontent">{% endblock %}
+{% block content %}
 
 <br />
 
@@ -80,7 +92,7 @@ $('time').each(function(i, e) {
 			<a class"thumbnail" href="/editProfile"> 
 			<h5><i class="fa fa-pencil-square-o sideIcons pull-right" style="position: absolute; top: 5%; right: 5%;"></i></h5>
       </a>
-			<img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle" style="position: relative; top: 0; left: 0;"></br></br>
+			<img alt="Profile Picture" src="/images/{{session.profilepicture}}" class="img-circle" style="position: relative; top: 0; left: 0;width: 10em;"></br></br>
 			<p style="text-align:left;">{{accountInfo.firstname}} {{accountInfo.surname}}
       </br>
       {{accountInfo.email}}</p>
@@ -106,18 +118,18 @@ $('time').each(function(i, e) {
                   </div>
                   <div class="modal-body">
                    <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
-                    <span class= "bold"> Full Name: </span> {{connection.firstname}} 
+                    <form action="/api/deleteConnection" method="POST">
+                      <input type="hidden" name="user" value="{{session.username}}">
+                      <input type="hidden" name="connection" value="{{connection.username}}">
+                      <input type="submit" class="btn btn-danger pull-right" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')">
+                    </form>
+                    <span class= "bold"> Name: </span> {{connection.firstname}} 
                     {{connection.surname}}
                     <br />
                     <span class="bold"> Email: </span> {{connection.email}}
                     <br />
                     <span class="bold"> Telephone Number: </span>{{connection.telephonenumber}}
                     <br />
-                        <form action="/api/deleteConnection" method="POST">
-                            <input type="hidden" name="user" value="{{session.username}}">
-                            <input type="hidden" name="connection" value="{{connection.username}}">
-                            <td><input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')"></td>
-                       </form>
                   </div>
                 </div>
               </div>
@@ -128,35 +140,47 @@ $('time').each(function(i, e) {
       {% endif %}     
     </div> 
     <div id="dashConnections">
-      <!--model to show connections information -->
-    <a data-toggle="modal" data-target="#terms"> View Pending Connections </a>
-              <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+
+    <!--modal to show connections information -->
+    <a class="modalheader" data-toggle="modal" data-target="#connections"><i class="fa fa-user-plus xsmallIcon pull-right"></i></a>
+              <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                      <h4 class="modal-title" id="terms">Pending Connections</h4>
+                      <h4 class="modal-title" id="">Pending Connections</h4>
                     </div>
                     <div class="modal-body">
+
+                      {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          {% for category, message in messages %}
+                            <div class="alert alert-{{category}} alert-dismissible" role="alert">
+                              <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                              {{message}}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      {% endwith %}
+
                       <h4>Outgoing</h4>
-                      <table class="table table-condensed ">
-                        <thead>
-                          <th>Username</th>
-                          <th>First Name</th>
-                          <th>Surname</th>
-                          <th>Account Type</th>
-                          <th></th>
-                          <th></th>
+                      {% if outgoing|length != 0 %}
+                        <table class="table table-condensed ">
+                          <thead>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Account Type</th>
+                            <th>Code</th>
+                            <th></th>
                           </thead>
                           <tbody>
                             {% for connection in outgoing %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}}</td>
-                              <td>{{connection.surname}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td>{{connection.code}}</td>
-                              <form action="/api/cancelConnection" method="POST">
+                              <form action="/cancelConnectionWeb" method="POST">
                                 <input type="hidden" name="user" value="{{session.username}}">
                                 <input type="hidden" name="connection" value="{{connection.username}}">
                                 <td><input type="submit" class="btn btn-danger" value="Cancel" onclick="return confirm('Are you sure you want to cancel this connection?')"></td>
@@ -165,14 +189,17 @@ $('time').each(function(i, e) {
                             {% endfor %}
                           </tbody>
                         </table>
+                      {% else %}
+                        <strong>You have no pending connections</strong>
+                      {% endif %}
                         <!--Table for incomming connections -->
                         <br />
                         <h4>Incoming</h4>
+                        {% if incoming|length != 0 %}
                         <table class="table table-condensed">
                           <thead>
                             <th>Username</th>
-                            <th>First Name</th>
-                            <th>Surname</th>
+                            <th>Name</th>
                             <th>Account Type</th>
                             <th></th>
                             <th></th>
@@ -181,11 +208,10 @@ $('time').each(function(i, e) {
                             {% for connection in incoming %}
                             <tr>
                               <td>{{connection.username}}</td>
-                              <td>{{connection.firstname}}</td>
-                              <td>{{connection.surname}}</td>
+                              <td>{{connection.firstname}} {{connection.surname}}</td>
                               <td>{{connection.accounttype}}</td>
                               <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#completeConnectionModal">Accept</button></td>
-                              <form action="/api/cancelConnection" method="POST">
+                              <form action="/cancelConnectionWeb" method="POST">
                                 <input type="hidden" name="user" value="{{session.username}}">
                                 <input type="hidden" name="connection" value="{{connection.username}}">
                                 <td><input type="submit" class="btn btn-danger" value="Reject" onclick="return confirm('Are you sure you want to reject this connection?')"></td>
@@ -212,17 +238,26 @@ $('time').each(function(i, e) {
                                     </div>
                                   </div>
                                 </div>
-                              </tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
-                          <br />
+                              </form>
+                            </div>
+                          </div>
                         </div>
-                     </div>
-                  </div>
+                      </div>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% else %}
+                <strong>You have no new connection requests</strong>
+              {% endif %} 
+              </br>
             </div>
+          </div>
+        </div>
       </div>
+    </div>
     </fieldset>
+
     <fieldset class="style">
 		  <div id="dashConnections">	
 		  	<a class"thumbnail" href="/search"> 
@@ -244,26 +279,50 @@ $('time').each(function(i, e) {
       </div>
     </fieldset>
   </div>
-
-	<div class="col-md-9 dashPanel">
 		
-		<!-- Notifications -->
-		{% if notifications %}
-			<div class="well well-sm">
-				<h4><i class="fa fa-tag sideIcons"></i> Notifications</h4>
-				{% for notification in notifications %}
-					<div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
-	    				<button type="button" class="close btn btn-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        				{{notification.content}}
-    				</div>
-    			{% endfor %}
-			</div>
-		{% endif %}
+		
+
+  <div class="col-md-9 dashPanel">
+    
+    <!-- Notifications -->
+    {% if notifications or reminders %}
+      <div>
+        <button class="btn" type="button" data-toggle="collapse" data-target="#notifications" aria-expanded="false" aria-controls="notifications" style="width: 100%;background-color: #FFF;border: 1px solid silver" id="notificationsBar">
+          <i class="fa fa-tag headingIcon pull-left"></i>
+          <h4 class="pull-left">Notifications</h4>
+          <i id="notificationsArrow" class="fa fa-angle-double-down pull-right headingIcon" style="margin-top:0.2em;"></i>
+          <span class="label label-danger pull-right" style="font-size: 1.5em;margin-top: 0.1em;margin-bottom: 0.1em;min-width: 2em;border: 0.1em solid #D9534F;background-color: #FFF;color: #D9534F;padding-top: 0.4em;">{{(notifications | length) + (reminders | length)}}</span>
+        </button>
+
+        <div class="collapse" id="notifications">
+          <div class="well well-sm">
+            {% for reminder in reminders %}
+              <div class="alert alert-{{reminder.reminderClass}} alert-dismissible" role="alert">
+                <a href=""><strong>{{reminder.relatedObjectTable}}</strong></a>
+                <br />
+                {{reminder.content}}
+              </div>
+            {% endfor %}
+          
+            {% for notification in notifications %}
+              <div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
+                <button type="button" class="close btn btn-danger" data-dismiss="alert" onclick="$.post('/dismissNotification', {'notificationid':'{{notification.notificationid}}'});"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <a href="{{notification.link}}"> <strong>{{notification.notificationtype}}</strong> </a>
+                <br />
+                {{notification.content}}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <br />
 
 		<!-- Main Content -->
 		<fieldset class ="form-container">
 		<!--All completed connections the carer has-->	
-  <i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4>
+  <a href="/myPatients"><i class="fa fa-users headingIcon pull-left"></i><h4>My Patients</h4></a>
   <hr>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for patient in patients %}
@@ -331,7 +390,8 @@ $('time').each(function(i, e) {
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="{{patient.username}}_medication">Medication</label>
+                                  <label for="{{patient.username}}_medication">Medication</label> 
+                                  <p><i>If the medication you are looking for is not here, please email us at justhealthmedication@justhealth.co.uk</i></p>
                                   <select name="medication" class="form-control" id="{{patient.username}}_medication">
                                     {% for medication in medicationList %}
                                       <option>{{medication.name}}</option>
@@ -402,7 +462,7 @@ $('time').each(function(i, e) {
 
                               <div class="form-group">
                                 <label for="{{patient.username}}_stockleft">Stock</label>
-                                <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_sotckleft" placeholder="Patient's current stock">
+                                <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Patient's current stock">
                               </div>
 
                               <div class="form-group">
@@ -411,13 +471,15 @@ $('time').each(function(i, e) {
                               </div>
                             </div>
 
-                            <div style="margin-left:auto;margin-right: auto;width: 150px;">
-                              <input class="btn btn-success pull-right" type="submit" value="Add Medication" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
+                            <div>
+                              <input class="btn btn-success pull-right" type="submit" value="Add prescription" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                             </div>
-                            <hr />
+                            
                           </form>
-                        <button class="btn btn-danger pull-right" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
+                        <button class="btn btn-danger pull-right" style="margin-right:5px;" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
                         <!--End form -->
+                      </br>
+                        <hr />
                       </div>
 
 
@@ -832,6 +894,7 @@ $('time').each(function(i, e) {
                                   <th>Where</th>
                                   <th>End Date/Time</th>
                                   <th>Description</th>
+                                  <th>Response</th>
                                   <th> </th>
                                   <th> </th>
 
@@ -844,6 +907,21 @@ $('time').each(function(i, e) {
                                     <td>{{appointment.addressnamenumber}}, {{appointment.postcode}}</td>
                                     <td>{{appointment.enddate}} {{appointment.endtime}} </td>
                                     <td>{{appointment.description}}</td>
+
+
+                                    {% if appointment.creator == session['username'] %}
+                                      {% if appointment.accepted == true %}
+                                        <td>Accepted</td>
+                                      {% endif %}
+                                      {% if appointment.accepted == false %}
+                                        <td>Decline</td>
+                                      {% endif %}
+                                      {% if appointment.accepted == none %}
+                                        <td>Not Responded</td>
+                                      {% endif %}
+                                    {% else %}
+                                        <td> - </td>
+                                    {% endif %}
 
                                     {% if appointment.creator != session['username'] %}
                                     <td>
@@ -950,7 +1028,20 @@ $('time').each(function(i, e) {
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{appointment.appid}}" aria-expanded="true" aria-controls="collapse{{appointment.appid}}" id="myPatientsPatientName">
                     <div class="row">
                       <div class="col-md-6">
-                        <p><i class="fa fa-caret-right"></i> {{appointment.name}}</p>
+                        <p><i class="fa fa-caret-right"></i> 
+                        {{appointment.name}}
+                          {% if appointment.creator != session['username'] %}
+                            {% if appointment.accepted == false %}
+                              <font color="red">[Declined]</font> </p>
+                            {% endif %}
+                          {% else %}
+                            {% if appointment.invitee != none %}
+                              {% if appointment.accepted == false %}
+                                <font color="red">[{{appointment.invitee}} Declined]</font>
+                              {% endif %}
+                            {% endif %}
+                            </p>
+                          {% endif %}
                       </div>
                       <div class="col-md-6">
                         <time class="pull-right vertical-center" datetime="{{appointment.startdate}}T{{appointment.starttime}}"></time>
@@ -965,14 +1056,27 @@ $('time').each(function(i, e) {
                       <div class="col-md-6">
                         <p><b>Type:</b> <br /> {{appointment.apptype}}</p>
                         <p><b>End Date/Time:</b> <br /> {{appointment.enddate}} {{appointment.endtime}}</p>
-                        <p><b>Description:</b> <br /> {{appointment.description}}</p><br />
-                        {% if appointment.private == True %}
-                          <p><em>This appointment is marked as private, your connections will not be able to see this. You can change this by updating your appointment.</em></p> <br />
-                        {% endif %}
+                        <p><b>Description:</b> <br /> {{appointment.description}}</p>
+
+                        {% if appointment.creator == session['username'] %}
+                          <p><b>Invited:</b> <br /> {{appointment.invitee}}</p>
+                          {% if appointment.accepted == true %}
+                            <p><em>{{appointment.invitee}} has accepted this appointment.</em></p>
+                          {% endif %}
+                          {% if appointment.accepted == false %}
+                            <p><em>{{appointment.invitee}} has declined this appointment.</em></p>
+                          {% endif %}
+                          {% if appointment.accepted == none %}
+                            <p><em>{{appointment.invitee}} is yet to respond to this appointment.</em></p>
+                          {% endif %}
+                        {% endif %} 
+                        <br />
+
                       </div>
                       <div class="col-md-6">
-                        <p class="pull-right"><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                        <iframe class="pull-right" width="200" height="200" frameborder="0" style="border:0"
+                        <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                        <br />
+                        <iframe width="200" height="200" frameborder="0" style="border:0"
                           src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
                         </iframe>
                       </div>

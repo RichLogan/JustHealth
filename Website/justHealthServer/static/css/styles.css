@@ -15,17 +15,17 @@ a:visited {color:#2272EB; background-color:transparent}
 a:hover   {color:#28E378; background-color:transparent}
 a:active  {color:#2272EB; background-color:transparent}
 
-.runner {color: #FFFFFF;}
+.runner          {color: #FFFFFF;}
 a.runner:link    {color:#FFFFFF; background-color:transparent}
 a.runner:visited {color:#FFFFFF; background-color:transparent}
 a.runner:hover   {color:#28E378; background-color:transparent}
 a.runner:active  {color:#FFFFFF; background-color:transparent}
 
-.modalheader a {color: #000000;}
-a.modalheader:link    {color:#000000; background-color:transparent}
-a.modalheader:visited {color:#000000; background-color:transparent}
-a.modalheader:hover .fa  {color:#28E378; background-color:transparent}
-a.modalheader:active  {color:#000000; background-color:transparent}
+.modalheader            {color: #000000;}
+a.modalheader:link      {color:#000000; background-color:transparent}
+a.modalheader:visited   {color:#000000; background-color:transparent}
+a.modalheader:hover .fa {color:#28E378; background-color:transparent}
+a.modalheader:active    {color:#000000; background-color:transparent}
 
 .smallLink {
   font-style: italic;
@@ -284,8 +284,8 @@ hr.dashboard {
 
 .xsmallIcon {
   font-size: 20px;
-  padding-right: 5px;
-  color: #2272EB;
+  padding-bottom: 5px;
+
 }
 
 .navIcon {
