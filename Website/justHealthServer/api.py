@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, a
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
+from gcm import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 from werkzeug import secure_filename
@@ -1434,7 +1435,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
     )
 
     with database.transaction():
-        createNotification.execute()
+        notificationId = str(createNotification.execute())
+        createPushNotification(notificationId)
         return "True"
     return "False"
 
@@ -1740,37 +1742,6 @@ def expiredResetPassword(request):
         createNotificationRecord(user, "Password Reset", None)
         return "True"
     return "False"
-
-@app.route('/api/saveAndroidRegistrationID', methods=['POST'])
-@auth.login_required
-def saveAndroidRegistrationID():
-    username = request.form['username']
-    registrationID = request.form['registrationid']
-
-    try: 
-        checkExisting = Androidregistration.select().where(Androidregistration.username == username).get()
-    except Androidregistration.DoesNotExist:
-        checkExisting = None
-
-    if checkExisting != None:
-        update = Androidregistration.update(
-            registrationid = registrationID
-            ).where(Androidregistration.username == username)
-
-        with database.transaction():
-            update.execute()
-            return "True"
-        return "Failed"
-    else:
-        insert = Androidregistration.insert(
-            username = username,
-            registrationid = registrationID
-            )
-
-        with database.transaction():
-            insert.execute()
-            return "True"
-        return "Failed"
 
 
 # def checkPrescriptionLevel(username, activePrescriptions):

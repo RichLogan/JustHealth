@@ -43,11 +43,14 @@ public class GcmIntentService extends IntentService {
              */
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                String title = extras.get("title").toString();
+                String content = "Send error: " + extras.get("message").toString();
+                sendNotification(title, content);
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " +
-                        extras.toString());
+                String title = extras.get("title").toString();
+                String content = "Deleted messages on server: " + extras.get("message").toString();
+                sendNotification(title, content);
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
@@ -61,7 +64,7 @@ public class GcmIntentService extends IntentService {
                 }*/
                 System.out.println("Working");
                 // Post notification of received message.
-                sendNotification(extras.get("message").toString());
+                sendNotification(extras.get("title").toString(), extras.get("message").toString());
                 System.out.println("Received Notification Sent");
             }
         }
@@ -72,7 +75,7 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg) {
+    private void sendNotification(String title, String message) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -83,15 +86,14 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.pill)
-                        .setContentTitle("JustHealth")
+                        .setContentTitle(title)
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentText(msg);
+                                .bigText(message))
+                        .setContentText(message);
 
         Uri notify = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         mBuilder.setSound(notify);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-        Feedback.toast("Hello", true, getApplicationContext());
     }
 }

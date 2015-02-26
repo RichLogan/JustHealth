@@ -11,4 +11,4 @@ app.config['GCM_API_KEY'] = "AIzaSyCLEJR4te1Y6i2hJa7mOhkeFkTzBbWfZ9Y"
 # Import Modules
 import justHealthServer.api
 import justHealthServer.views
-import justHealthServer.gcmHTTPServer
+import justHealthServer.gcm
