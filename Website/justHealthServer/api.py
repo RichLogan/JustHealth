@@ -19,7 +19,6 @@ import smtplib
 import json
 import random
 
-
 auth = HTTPBasicAuth()
 
 @auth.verify_password
@@ -41,14 +40,12 @@ def encryptPassword():
     stringCipher = binascii.hexlify(cipherText)
     return stringCipher
 
-
 def decryptPassword(cipherText):
     """Decrypts the users password and returns it so that we are able to authenticate them"""
     #used so that we are able to store the encrypted users password in android SharedPreferences
     bytesCipher = binascii.unhexlify(cipherText)
     plaintext = decrypt(app.secret_key, bytesCipher)
     return plaintext
-
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -136,6 +133,7 @@ def registerUser():
       expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
     )
 
+
     # Execute Queries
     with database.transaction():
         userInsert.execute()
@@ -159,7 +157,10 @@ def authenticate():
         return "Incorrect username/password"
 
     # Check Password
-    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    try: 
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    except uq8LnAWi7D.DoesNotExist:
+        return "There is no current password for this username. Please use the forgot password link to reset your account."
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
         if attempted.accountdeactivated == True:
@@ -1108,10 +1109,8 @@ def addPrescription(details):
         frequency = details['frequency'],
         quantity = details['quantity'],
         dosageunit = details['dosageunit'],
-        frequencyunit = details['frequencyunit'],
         startdate = details['startdate'],
         enddate = details['enddate'],
-        repeat = details['repeat'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
         dosageform = details['dosageform'])
@@ -1136,10 +1135,8 @@ def editPrescription(details):
         frequency = details['frequency'],
         quantity = details['quantity'],
         dosageunit = details['dosageunit'],
-        frequencyunit = details['frequencyunit'],
         startdate = details['startdate'],
         enddate = details['enddate'],
-        repeat = details['repeat'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
         dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
