@@ -8,33 +8,61 @@
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
-  // Load the Visualization API and the piechart package.
-  google.load('visualization', '1.0', {'packages':['corechart']});
-  // Set a callback to run when the Google Visualization API is loaded.
-  google.setOnLoadCallback(drawChart);
-  // Callback that creates and populates a data table,
-  // instantiates the pie chart, passes in the data and
-  // draws it.
-  function drawChart() {
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'reason');
-    data.addColumn('number', 'number');
-    data.addRows([
-      ['Mushrooms', 3],
-      ['Onions', 1],
-      ['Olives', 1],
-      ['Zucchini', 1],
-      ['Pepperoni', 2]
-    ]);
-    // Set chart options
-    var options = {'title':'Reasons for users deactivation',
-                   'width':500,
-                   'height':400};
-    // Instantiate and draw our chart, passing in some options.
-    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
+  $(document).ready(function() {
+  //check password strength
+  //keyup event on password field so code will execute on every keypress
+  $('#password').keyup(function() {
+    $('#result').html(checkStrength($('#password').val()));
+  });
+
+  //check if email is valid
+  //focus out: validation is performed when different field is active
+  $('#validateEmail').focusout(function() {
+    if(validateEmail($('#validateEmail').val())) {
+      //show message if email is valid
+      $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+    }
+  });
+
+  $('#dob').focusout(function() {
+    if(isDate($('#dob').val())) {
+      //show message if email is valid
+      $('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
+    }
+  });
+
+    //Check all fields are filled in
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  $('#usernameInput').keyup(function() {
+    content = $('#usernameInput').val();
+    $.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
+      if (data == "True") {
+        $('#usernameError').addClass("has-error");
+        $('#usernameErrorLabel').text("Username (Username already taken)");
+      }
+      else {
+        $('#usernameError').addClass("has-success");
+        $('#usernameErrorLabel').text("Username (Username available)");
+      }
+    });
+  });
 
   //search through users
   $(document).ready(function () {
@@ -80,42 +108,8 @@
     }
   });
 
-  //Check all fields are filled in
-  $('form').submit(function(e) {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        alert("All fields must be filled out");
-        e.preventDefault();
-        return false;
-      }
-    });
-  });
 
-  $('#usernameInput').keyup(function() {
-    content = $('#usernameInput').val();
-    $.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
-      if (data == "True") {
-        $('#usernameError').addClass("has-error");
-        $('#usernameErrorLabel').text("Username (Username already taken)");
-      }
-      else {
-        $('#usernameError').addClass("has-success");
-        $('#usernameErrorLabel').text("Username (Username available)");
-      }
-    });
-  });
-    //check if email is valid
-  //focus out: validation is performed when different field is active
-  $('#validateEmail').focusout(function() {
-    if(validateEmail($('#validateEmail').val())) {
-      //show message if email is valid
-      $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
-    }
-    else {
-      //show message if email is not valid
-      $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
-    }
-  });
+
 
 </script>
 
@@ -461,71 +455,70 @@
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="RegisterNewAdmin">
             <h5> Register A New Admin </h5>
             </br>
-              <fieldset class="register-inner">
-              <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
+             <fieldset class="register-inner">
+                <!--A form below for a user to fill in in order to register an admin account. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
 
-              <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
+                <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
 
-                <div class="form-group" id="usernameError">
-                  <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
-                  <input id="usernameInput" class="form-control input-sm" type="text" name="username">
-                </div>
+                  <div class="form-group" id="usernameError">
+                    <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
+                    <input id="usernameInput" class="form-control input-sm" type="text" name="username">
+                  </div>
 
-                <div class="form-group">
-                  <label for="firstname">First Name</label>
-                  <input class="form-control input-sm" type="text" name="firstname">
-                </div>
+                  <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input class="form-control input-sm" type="text" name="firstname">
+                  </div>
 
-                <div class="form-group">
-                  <label for="surname">Surname</label>
-                  <input class="form-control input-sm" type="text" name="surname">
-                </div>
+                  <div class="form-group">
+                    <label for="surname">Surname</label>
+                    <input class="form-control input-sm" type="text" name="surname">
+                  </div>
 
-                <div class="form-group">
-                  <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
-                  <input class="form-control input-sm" type="date" name="dob" id="dob">
-                  <span id="dobValidate"></span>
-                </div>
+                  <div class="form-group">
+                    <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
+                    <input class="form-control input-sm" type="date" name="dob" id="dob">
+                    <span id="dobValidate"></span>
+                  </div>
 
-                <div class="form-group">
-                  <label for="isMale">Gender </label>
-                  <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
-                  <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
-                </div>
+                  <div class="form-group">
+                    <label for="isMale">Gender </label>
+                    <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+                    <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+                  </div>
 
-                <div class="form-group">
-                  <label for="accounttype">Account Type</label>
-                  <input class="form-control input-sm" type="text" name="accounttype" value="Admin" ReadOnly="True">
+                  <div class="form-group">
+                    <label for="accounttype">Account Type</label>
+                    <input class="form-control input-sm" type="text" name="accounttype" value="Admin" ReadOnly="True">
+                 </div>
 
-                </div>
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input class="form-control input-sm" type="text" id="validateEmail" name="email">
+                    <span id="emailValidate"></span>
+                  </div>
 
-                <div class="form-group">
-                  <label for="email">Email Address</label>
-                  <input class="form-control input-sm" type="text" id="validateEmail" name="email">
-                  <span id="emailValidate"></span>
-                </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-control input-sm" type="password" id="password" name="password">
+                    <span id="result"></span>
+                  </div>
 
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input class="form-control input-sm" type="password" id="password" name="password">
-                  <span id="result"></span>
-                </div>
+                  <div class="form-group">
+                    <label for="confirmpassword">Confirm Password</label>
+                    <input class="form-control input-sm" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
+                    <span id="confirmationMessage"></span>
+                  </div>
 
-                <div class="form-group">
-                  <label for="confirmpassword">Confirm Password</label>
-                  <input class="form-control input-sm" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
-                  <span id="confirmationMessage"></span>
-                </div>
+                    <div class="form-group checkbox">
+                    <label for="terms"><input type="checkbox" name="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a></label>
+                  </div>
 
-                  <div class="form-group checkbox">
-                  <label for="terms"><input type="checkbox" name="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a></label>
-                </div>
-
-                <div class="form-group">
-                  <input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
-                </div>
-              </form>
-              </fieldset>
+                  <div class="form-group">
+                    <input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
+                  </div>
+                </form>
+                </fieldset>
           </div>
         </div>
       </div>

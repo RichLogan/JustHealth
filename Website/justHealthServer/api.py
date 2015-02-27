@@ -117,6 +117,8 @@ def registerUser():
         accountType = Patient
     elif accountType == "carer":
         accountType = Carer
+    elif accountType == "Admin":
+        accountType = Admin
 
     typeInsert = accountType.insert(
         username = profile['username'],

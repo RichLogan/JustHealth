@@ -89,6 +89,15 @@ def index():
             expiredPrescriptions = expiredPrescriptions,
             appType=Appointmenttype.select(),
             medicationList = Medication.select())
+    elif accountInfo['accounttype'] =="Admin":
+        allUsers = json.loads(getAllUsers())
+    if request.method == 'POST':
+        result = deactivateAccount(request.form)
+        if allUsers['accounttype'] == "Patient":
+            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient', medicationList = Medication.select())
+    else: 
+       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
+
 
 @app.route('/profile')
 @needLogin
