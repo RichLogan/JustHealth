@@ -421,15 +421,9 @@
                                   <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
                                     <option>mg</option>
                                     <option>ml</option>
-                                    <option>puffs </option>
+                                    <option>puffs</option>
                                   </select>
                                 </div>
-
-                                <div class="form-group">
-                                  <label for="{{patient.username}}_frequencyUnit">Frequency Unit</label>
-                                  <input name="frequencyunit" type="text" class="form-control" id="{{patient.username}}_frequencyUnit" placeholder="Frequency Unit (e.g Daily)">
-                                </div>
-
                               </div>
                             </div>
 
@@ -450,14 +444,6 @@
                                   <label for="{{patient.username}}_endDate">End Date</label>
                                   <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
                                 </div>
-                              </div>
-
-                              <div class="form-group">
-                                <label for="{{patient.username}}_repeat">Repeat</label>
-                                <select name="repeat" class="form-control" id="{{patient.username}}_repeat">
-                                  <option>Yes</option>
-                                  <option>No</option>
-                                </select>
                               </div>
 
                               <div class="form-group">
@@ -499,7 +485,7 @@
                               {% for prescription in activePrescriptions[patient.username] %}
                                 <button type="button" class="btn btn-success" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#activeModal{{prescription.prescriptionid}}').modal('toggle');">
                                   {{prescription.medication}} <br />
-                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}}/{{prescription.frequencyunit}})
+                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)
                                 </button>
 
                                 <!-- Active Prescription Modal -->
@@ -552,13 +538,6 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Frequency Unit</label>
-                                              <div class="col-sm-10">
-                                                <input type="text" class="form-control" value="{{prescription.frequencyunit}}" name="frequencyunit">
-                                              </div>
-                                            </div>
-
-                                            <div class="form-group">
                                               <label class="col-sm-2 control-label">Start Date</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
@@ -569,13 +548,6 @@
                                               <label class="col-sm-2 control-label">End Date</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
-                                              </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                              <label class="col-sm-2 control-label">Repeat</label>
-                                              <div class="col-sm-10">
-                                                <input type="text" class="form-control" value="{{prescription.repeat}}" name="repeat">
                                               </div>
                                             </div>
 
@@ -620,7 +592,7 @@
                               {% for prescription in upcomingPrescriptions[patient.username] %}
                                 <button type="button" class="btn btn-primary" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
                                   {{prescription.medication}} <br />
-                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}}/{{prescription.frequencyunit}})<br />
+                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                   Starts on: {{prescription.startdate}}
                                 </button>
 
@@ -674,13 +646,6 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Frequency Unit</label>
-                                              <div class="col-sm-10">
-                                                <input type="text" class="form-control" value="{{prescription.frequencyunit}}" name="frequencyunit">
-                                              </div>
-                                            </div>
-
-                                            <div class="form-group">
                                               <label class="col-sm-2 control-label">Start Date</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
@@ -691,13 +656,6 @@
                                               <label class="col-sm-2 control-label">End Date</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
-                                              </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                              <label class="col-sm-2 control-label">Repeat</label>
-                                              <div class="col-sm-10">
-                                                <input type="text" class="form-control" value="{{prescription.repeat}}" name="repeat">
                                               </div>
                                             </div>
 
@@ -740,7 +698,7 @@
                               {% for prescription in expiredPrescriptions[patient.username] %}
                                 <button type="button" class="btn btn-danger" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
                                   {{prescription.medication}} <br />
-                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}}/{{prescription.frequencyunit}})<br />
+                                  {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                   Ended on: {{prescription.enddate}}
                                 </button>
 
@@ -794,13 +752,6 @@
                                             </div>
 
                                             <div class="form-group">
-                                              <label class="col-sm-2 control-label">Frequency Unit</label>
-                                              <div class="col-sm-10">
-                                                <input type="text" class="form-control" value="{{prescription.frequencyunit}}" name="frequencyunit">
-                                              </div>
-                                            </div>
-
-                                            <div class="form-group">
                                               <label class="col-sm-2 control-label">Start Date</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
@@ -811,13 +762,6 @@
                                               <label class="col-sm-2 control-label">End Date</label>
                                               <div class="col-sm-10">
                                                 <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
-                                              </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                              <label class="col-sm-2 control-label">Repeat</label>
-                                              <div class="col-sm-10">
-                                                <input type="text" class="form-control" value="{{prescription.repeat}}" name="repeat">
                                               </div>
                                             </div>
 

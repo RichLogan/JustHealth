@@ -109,7 +109,6 @@
         {% for connection in completed %} 
           <a data-toggle="modal" data-target="#{{connection.username}}"></a>
             <hr class="dashboard">
-       
             <a class="modalheader" data-toggle="modal" data-target="#{{connection.username}}"><p>{{connection.firstname}} {{connection.surname}} <span class="bold">({{connection.username}})</span></p></a>
             <div class="modal fade" id="{{connection.username}}" tabindex="-1" role="dialog" aria-labelledby="{{connection.username}}" aria-hidden="true">
               <div class="modal-dialog">
@@ -332,7 +331,7 @@
         <div class="panel-heading myPatientsTab" role="tab" id="headingpre{{prescription.prescriptionid}}">
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapsepre{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapsepre{{prescription.prescriptionid}}">
-              <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
+              <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} ({{prescription.frequency}} times today)
             </a>
           </h4>
           <div id="collapsepre{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingpre{{prescription.prescriptionid}}">
@@ -343,7 +342,6 @@
                     <li>Start Date: {{prescription.startdate}}</li>
                     <li>End Date: {{prescription.enddate}}</li>
                     <li>Extra Info: {{prescription.prerequisite}}</li>
-                    <li>Repeat: {{prescription.repeat}} </li>
                   </ul>
                 </h5>
             </div>
