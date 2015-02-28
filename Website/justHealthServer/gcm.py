@@ -75,3 +75,17 @@ def sendPushNotification(username, title, message):
   if (result['success'] == 1) and (result['failure'] == 0):
     return "True"
   return "False"
+
+@app.route('/api/deleteAndroidRegistrationID', methods=['POST'])
+#Need to add decorator here
+def deleteAndroidRegID():
+  username = request.form['username']
+  regId = request.form['registrationid']
+  registration = Androidregistration.select().where((Androidregistration.username == username) and (Androidregistration.registrationid == regId)).get()
+
+  with database.transaction():
+    registration.delete_instance()
+    return "True"
+  return "False"
+
+
