@@ -148,6 +148,14 @@ class Prescription(BaseModel):
     class Meta:
         db_table = 'prescription'
 
+class TakePrescription(BaseModel):
+    prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid', primary_key=True)
+    currentcount = IntegerField()
+    currentdate = DateField()
+
+    class Meta:
+        db_table = 'takeprescription'
+
 class Notificationtype(BaseModel):
     typename = CharField(max_length=25, primary_key=True)
     typeclass = CharField(max_length=25)
@@ -191,6 +199,7 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+    TakePrescription.create_table()
     Notificationtype.create_table()
     Notification.create_table()
     Reminder.create_table()
@@ -219,6 +228,8 @@ def dropAll():
         Medication.drop_table(cascade=True)
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
+    if TakePrescription.table_exists():
+        TakePrescription.drop_table(cascade=True)
     if Notificationtype.table_exists():
         Notificationtype.drop_table(cascade=True)
     if Notification.table_exists():

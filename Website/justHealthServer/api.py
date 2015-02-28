@@ -1223,6 +1223,28 @@ def getPrescription(details):
     prescription['enddate'] = str(prescription['enddate'])
     return json.dumps(prescription)
 
+@app.route('/api/takeprescription', methods=['POST'])
+def takePrescription():
+    return takePrescription(request.form)
+
+def takePrescription(details):
+    try:
+        takeInstance = TakePrescription.select().where((TakePrescription.prescriptionid == details['prescriptionid']) & (TakePrescription.currentdate == datetime.datetime.now().date())).get()
+        takeInstance = TakePrescription.update(
+            currentcount = details['currentcount']
+        ).where(TakePrescription.prescriptionid == details['prescriptionid'])
+        with database.transaction():
+            takeInstance.execute()
+            return "True"
+    except TakePrescription.DoesNotExist:
+        takeInstance = TakePrescription.insert(
+            prescriptionid = details['prescriptionid'],
+            currentcount = details['currentcount'],
+            currentdate = datetime.datetime.now().date())
+        with database.transaction():
+            takeInstance.execute()
+            return "True"
+    return "False"
 
 @app.route('/api/searchNHSDirectWebsite', methods=['POST'])
 @auth.login_required
