@@ -1246,6 +1246,20 @@ def takePrescription(details):
             return "True"
     return "False"
 
+@app.route('/api/getPrescriptionCount', methods=['POST'])
+def getPrescriptionCount():
+    return getPrescriptionCount(request.form)
+
+def getPrescriptionCount(details):
+    try:
+        takeInstance = TakePrescription.select().where(
+                (TakePrescription.prescriptionid == details['prescriptionid']) &
+                (TakePrescription.currentdate == datetime.datetime.now().date())) \
+            .get()
+        return str(takeInstance.currentcount)
+    except TakePrescription.DoesNotExist:
+        return str(0)
+
 @app.route('/api/searchNHSDirectWebsite', methods=['POST'])
 @auth.login_required
 def searchNHSDirect():
@@ -1615,10 +1629,6 @@ def getAppointmentsDueNow(username, currentTime):
         if timeUntilStart <= 0 and timeUntilEnd > 0:
             result.append(appointment)
     return result
-
-@app.route('/test/getPrescriptionsDueToday')
-def testngasdsd():
-    return str(len(getPrescriptionsDueToday("patient", datetime.datetime.now())))
 
 def getPrescriptionsDueToday(username, currentDateTime):
     """Seach for prescriptions due now"""

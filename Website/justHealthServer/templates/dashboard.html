@@ -29,7 +29,20 @@
       {
         prescriptionid : String(prescriptionid),
         currentcount : count
-      });
+      }
+    );
+  }
+
+  function checkPrescriptionBoxes(prescriptionid, checkCount) {
+    var enclosingDiv = $('#prescriptionCount' + String(prescriptionid));
+    var checkBoxList = enclosingDiv.children();
+    var count = 0;
+    $(checkBoxList).each(function(index) {
+      if (count < checkCount) {
+        $(this).prop('checked', true);
+        count++;
+      }
+    });
   }
 
   $(document).ready(function() {
@@ -315,6 +328,11 @@
             {% for x in range(reminder.extraFrequency) %}
               <input type="checkbox" onclick="recordPrescription({{reminder.relatedObject}});">
             {% endfor %}
+            <script type="text/javascript">
+              $.post('/api/getPrescriptionCount', { prescriptionid : String({{reminder.relatedObject}}) }, function(data) {
+                checkPrescriptionBoxes({{reminder.relatedObject}}, data);
+              });
+            </script>
           </div>
         {% endif %}
       </div>
