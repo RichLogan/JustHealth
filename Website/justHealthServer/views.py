@@ -27,9 +27,7 @@ def getProfilePicture(filename):
 @app.route('/')
 @needLogin
 def index():
-    """Sends user to a dashboard according to account type if session is active, it shows their profile and connections"""
-    """A patient will be able to see their notifications, prescriptions and appointments"""
-    """A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
+    """Sends user to a dashboard according to account type if session is active, it shows their profile and connections. A patient will be able to see their notifications, prescriptions and appointments. A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
     ## set common functionality
     accountInfo = json.loads(getAccountInfo(session['username']))
     connections = json.loads(getConnections(session['username']))
@@ -119,6 +117,7 @@ def profile():
         return render_template('profile.html', profileDetails=profileDetails, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections, printaccounttype = 'Carer' )
 
 @app.route('/editProfile', methods=['POST', 'GET'])
+@needLogin
 def getEditDetails_view():
     if request.method == 'GET':
         username = request.args.get('username')
@@ -126,6 +125,7 @@ def getEditDetails_view():
     return render_template('editProfile.html', request=getUpdate)
    
 @app.route('/updateProfile', methods=['POST'])
+@needLogin
 def editDetails_view():
     updated = editProfile(request.form, request.files)
     if updated == "Failed":
@@ -158,14 +158,17 @@ def references():
     return render_template('references.html')
 
 @app.route('/faq')
+@needLogin
 def faq():
     return render_template('faq.html')
 
 @app.route('/sitemap')
+@needLogin
 def sitemap():
     return render_template('sitemap.html')
 
 @app.route('/contactUs', methods=['POST', 'GET'])
+@needLogin
 def contactUs():
     """Shows a form to allow the user to contact JustHealth, it sends an email from the address associated with their account"""
     profileDetails = json.loads(getAccountInfo(session['username']))
@@ -222,7 +225,7 @@ def registration():
         if result == "True":
             return render_template('login.html', type="success",  message="Thanks for registering! Please check your email for a verification link")
         else:
-            render_template('register.html', type="danger", message = result)
+            return render_template('register.html', type="danger", message = result)
     return render_template('register.html')
 
 @app.route('/logout')
@@ -246,6 +249,7 @@ def verifyUser(payload):
     return render_template('login.html', type='success', message='Thank you for verifying your account.')
 
 @app.route('/password', methods=['POST', 'GET'])
+@needLogin
 def changePassword():
     """Opens a change password form (for when user knows their current password)"""
     if request.method == 'POST':
@@ -400,6 +404,7 @@ def cancelConnectionWeb():
     return redirect('/?go=connections')
 
 @app.route('/appointments', methods=['POST', 'GET'])
+@needLogin
 def appointments():
     """Form for patient to add an appointment, they choose privacy level for their carer."""
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
@@ -433,6 +438,7 @@ def appointments():
     return render_template('patientAppointments.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
 
 @app.route('/deleteAppointment', methods=['POST', 'GET'])
+@needLogin
 def deleteAppointment_view():
     """Shows message to inform the user that the appointment has been deleted"""
     if request.method == 'GET':
@@ -442,6 +448,7 @@ def deleteAppointment_view():
         return redirect(url_for('appointments'))
 
 @app.route('/updateAppointment', methods=['POST', 'GET'])
+@needLogin
 def getUpdateAppointment_view():
     """Takes the appointment ID to put the existing appointment information in the form, ready to be updated"""
     if request.method == 'GET':
@@ -451,6 +458,7 @@ def getUpdateAppointment_view():
         return render_template('patientUpdateAppointment.html', appType=Appointmenttype.select(), request=getUpdate, previousLocation=whereFrom)
 
 @app.route('/patientUpdateAppointment', methods=['POST'])
+@needLogin
 def updateAppointment_view():
     """If the privacy option isn't selected, the field isn't sent with the form, so it is caught and handled here"""
     if request.method == 'POST':
@@ -468,6 +476,7 @@ def updateAppointment_view():
     return redirect(url_for('appointments'))
 
 @app.route('/appointmentDetails', methods=['GET', 'POST'])
+@needLogin
 def appointmentAcceptDecline_view():
     if request.method == 'GET':
         appid = request.args.get('id')
@@ -491,6 +500,7 @@ def appointmentAcceptDecline_view():
 
 
 @app.route('/myPatients')
+@needLogin
 def myPatients():
     """Shows carer page listing their connected patients, they can edit each patient's prescriptions and appointments from here"""
     # Get Patients
@@ -518,12 +528,14 @@ def myPatients():
     return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
 
 @app.route('/prescriptions')
+@needLogin
 def prescriptions():
     """Shows all the active prescriptions for the patient selected"""
     prescriptions = json.loads(getPrescriptions(session['username']))
     return render_template('prescriptions.html', prescriptions = prescriptions)
 
 @app.route('/deletePrescription')
+@needLogin
 def deletePrescription_view():
     """Informs Carer that the prescription has been deleted from the selected patient"""
     prescriptionid = request.args.get('id', '')
@@ -545,6 +557,7 @@ def deletePrescription_view():
         return redirect(url_for('myPatients'))
 
 @app.route('/addPrescription', methods=['POST'])
+@needLogin
 def addPrescription_view():
     """Informs Carer that the prescription has been added to the selected patient"""
     result = addPrescription(request.form)
@@ -563,6 +576,7 @@ def addPrescription_view():
         return redirect(url_for('myPatients'))
 
 @app.route('/updatePrescription', methods=['POST'])
+@needLogin
 def updatePrescription_view():
     """Informs Carer that the prescription has been updated for the selected patient"""
     result = editPrescription(request.form)
@@ -581,6 +595,7 @@ def updatePrescription_view():
         return redirect(url_for('myPatients'))
 
 @app.route('/carerAppointments', methods=['POST', 'GET'])
+@needLogin
 def carerappointments():
     """Form for carer to add a personal appointment, this is not shown to patients."""
     if request.method == 'POST':
@@ -609,6 +624,7 @@ def carerappointments():
     return render_template('carerAppointments.html', appType=Appointmenttype.select(), appointments=upcoming, request=None)
 
 @app.route('/inviteeappointments', methods=['POST', 'GET'])
+@needLogin
 def inviteeappointments():
     """Form for carer to add an appointment with a specific patient they are connected with, this will show on the patient's calendar."""
     if request.method == 'POST':
@@ -630,6 +646,7 @@ def inviteeappointments():
         return redirect(url_for("myPatients"))
 
 @app.route('/nhsSearch', methods=['POST', 'GET'])
+@needLogin
 def searchNHS():
     """Posts the search term that the user enters straight to the NHS website and opens a new tab showing the results"""
     if request.method == 'POST':
@@ -638,6 +655,7 @@ def searchNHS():
     return render_template('searchNHSDirect.html')
 
 @app.route('/dismissNotification', methods=['POST', 'GET'])
+@needLogin
 def dismissNotifications():
     """dismiss the notification by running a method from the API"""
     if request.method == 'POST':
