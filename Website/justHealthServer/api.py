@@ -1681,9 +1681,17 @@ def addReminders(username, now):
                     r.delete_instance()
                 raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
+
+            # Is the appointment with another user?
+            if withUser == None:
+                insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
+            else:
+                insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
+            
+            # Create the reminder
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime']),
+                content = insertContent,
                 reminderClass = "warning",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid'],
@@ -1704,9 +1712,17 @@ def addReminders(username, now):
                     r.delete_instance()
                 raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
+            
+            # Is the appointment with another user?
+            if withUser == None:
+                insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
+            else:
+                insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
+
+            # Create the reminder
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['apptype'] + " with " + withUser + " appointment started at " + str(a['starttime']) + " and ends at " + str(a['endtime']),
+                content = insertContent,
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid'],
