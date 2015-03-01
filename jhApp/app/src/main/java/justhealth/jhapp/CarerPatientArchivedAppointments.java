@@ -101,6 +101,11 @@ public class CarerPatientArchivedAppointments extends Activity {
         getAppointments(patient);
     }
 
+    /**
+     * Creates the action bar items for the CarerPatient Appointments page
+     * @param menu The options menu in which the items are placed
+     * @return True must be returned in order for the options menu to be displayed
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -109,6 +114,11 @@ public class CarerPatientArchivedAppointments extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This method is called when any action from the action bar is selected
+     * @param item The menu item that was selected
+     * @return in order for the method to work, true should be returned here
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -128,6 +138,11 @@ public class CarerPatientArchivedAppointments extends Activity {
         }
     }
 
+    /**
+     * This method loops through the Array that passed with the Intent and adds them all to a HashMap.
+     * Depending on the Filter that is selected it then checks who the creator of the appointment is and runs the addToView method.
+     * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for
+     */
     private void getAppointments(String targetUsername) {
 
         for (int i = 0; i < getApps.length(); i++) {
@@ -183,6 +198,10 @@ public class CarerPatientArchivedAppointments extends Activity {
         }
     }
 
+    /**
+     * This prints out the button for each of the appointments that are passed to the method.
+     * @param appointment This is a HashMap containing all of the details of a specific appointment. This is the appointment that will be printed.
+     */
     private void addToView(final HashMap<String, String> appointment) {
         String startDate = appointment.get("startDate");
         String startTime = appointment.get("startTime");
@@ -213,6 +232,11 @@ public class CarerPatientArchivedAppointments extends Activity {
         }
     }
 
+    /**
+     * This method creates the dialog box when an appointment is clicked.
+     * It firstly checks that the carer (logged in) was the creator of the appointment before showing the available actions.
+     * @param appointmentDetails this is the HashMap of the appointment that has been pressed
+     */
     private void appointmentAction(final HashMap<String, String> appointmentDetails) {
         System.out.println("method running");
         AlertDialog.Builder alert = new AlertDialog.Builder(CarerPatientArchivedAppointments.this);
@@ -274,6 +298,12 @@ public class CarerPatientArchivedAppointments extends Activity {
         alert.show();
     }
 
+    /**
+     * This is run when the user selects to delete the appointment.
+     * It checks whether the appointment has been added to the users calendar. If so this is deleted.
+     * A post request is also made to the API which subsequently removes the event from the calendar.
+     * @param appointmentDetails A HashMap of the appointment to be deleted
+     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void deleteAppointment(HashMap<String, String> appointmentDetails) {
         //The API takes the username and AppID
@@ -312,6 +342,13 @@ public class CarerPatientArchivedAppointments extends Activity {
         startActivity(getIntent());
     }
 
+    /**
+     * This method takes the date and time from the JustHealth database and adds each part to a HashMap.
+     * This is needed when adding the appointment to the native android calendar.
+     * @param date the date of the appointment to be added to the android calendar
+     * @param time the time of the appointment to be added to the android calendar
+     * @return a HashMap of the date and time of the appointment
+     */
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
         HashMap<String, Integer> formattedDateTime = new HashMap<>();
 
@@ -332,7 +369,9 @@ public class CarerPatientArchivedAppointments extends Activity {
         return formattedDateTime;
     }
 
-
+    /**
+     * This creates the filter options and the dialog box when the Filter Button is pressed.
+     */
     private void filterOptions() {
         AlertDialog.Builder alert = new AlertDialog.Builder(CarerPatientArchivedAppointments.this);
         alert.setTitle("Filter By:")
@@ -359,6 +398,12 @@ public class CarerPatientArchivedAppointments extends Activity {
         alert.show();
     }
 
+    /**
+     * This method takes the date and time as a string, concatenates it and returns it as an android date/time format.
+     * @param date the string of the date
+     * @param time the string of the time
+     * @return a Date object of the combined date and time strings
+     */
     private Date getDateTimeObject(String date, String time) {
         String dateTime = date + " " + time;
         System.out.println("string: " + dateTime);

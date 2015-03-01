@@ -24,6 +24,18 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#dob').focusout(function() {
+		if(isDate($('#dob').val())) {
+			//show message if email is valid
+			$('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
+		}
+		else {
+			//show message if email is not valid
+			$('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
+		}
+	});
+
+    //Check all fields are filled in
 	$('form').submit(function(e) {
 		$("form :input").each(function(){
 			if ($(this).val() == null || $(this).val() == "") {
@@ -32,14 +44,6 @@ $(document).ready(function() {
 				return false;
 			}
 		});
-	});
-
-	//check if date format is valid
-	$('#validateDOB').focusout(function() {
-		if(validateDOB($('#validateDOB').val())) {
-			//alert user that date format is invalid
-			alert("Date not valid");
-		}
 	});
 
 	$('#usernameInput').keyup(function() {
@@ -63,6 +67,16 @@ $(document).ready(function() {
 
 {% block content %}
 
+
+<!-- Display any messages -->
+
+{% if message != null %}
+<div class="alert alert-{{type}} alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  {{message}}
+</div>
+{% endif %}
+
 <fieldset class="register-outer">
     <i class="fa fa-edit headingIcon pull-left"></i><h4 class="pull-left strong">Register your account here</h4>
     <button class="btn btn-primary pull-right" onclick="javascript:location.href='/login'"><i class="fa fa-arrow-left"></i> Login</button>
@@ -70,14 +84,8 @@ $(document).ready(function() {
         <hr>
     <fieldset class="register-inner">
     <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
-    <form name="register" action="/register" id="register" method="POST">
-    	<!-- Display any messages -->
-    	{% if message != null %}
-    		<div class="alert alert-{{type}} alert-dismissible" role="alert">
-    			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-    			{{message}}
-    		</div>
-    	{% endif %}
+
+    <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
 
       <div class="form-group" id="usernameError">
         <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
@@ -95,9 +103,9 @@ $(document).ready(function() {
       </div>
 
       <div class="form-group">
-        <label for="dob">Date of Birth</label>
-        <input class="form-control input-sm" type="date" name="dob" id="validateDOB">
-    		<span id="DOBValidation"></span>
+        <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
+        <input class="form-control input-sm" type="date" name="dob" id="dob">
+    		<span id="dobValidate"></span>
       </div>
 
       <div class="form-group">
@@ -138,9 +146,8 @@ $(document).ready(function() {
     	</div>
 
     	<div class="form-group">
-    		<input class="btn btn-success pull-right" type="submit" value="Sign up">
+    		<input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
     	</div>
-    
     </form>
     </fieldset>
 </fieldset>
@@ -179,3 +186,4 @@ $(document).ready(function() {
 		</div>
 	</div>
 {% endblock %}
+{% block contactUsLink %}{% endblock %}

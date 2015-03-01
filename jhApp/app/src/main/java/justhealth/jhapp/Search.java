@@ -62,14 +62,20 @@ public class Search extends Activity {
         searchInformation.put("searchterm", ((EditText) findViewById(R.id.searchField)).getText().toString());
 
         String response = Request.post("searchPatientCarer", searchInformation, getApplicationContext());
+        if (response.equals("No users found")) {
+            Feedback.toast("No users found matching your search query", false, getApplicationContext());
+            return;
+        }
         try {
             JSONArray queryReturn = new JSONArray(response);
             printTable(queryReturn);
         }
         catch (JSONException e) {
-            System.out.println(e.getStackTrace());
+            Feedback.toast("Could not load search results", false, getApplicationContext());
         }
     }
+
+
 
     private void printTable(JSONArray array) {
         TableLayout searchTable = (TableLayout) findViewById(R.id.searchTable);

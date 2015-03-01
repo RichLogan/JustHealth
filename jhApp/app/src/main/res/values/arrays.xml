@@ -42,4 +42,9 @@
         <item>outgoing</item>
         <item>completed</item>
     </string-array>
+
+    <string-array name="password_expiry_options">
+        <item>Reset Now</item>
+        <item>Reset Later</item>
+    </string-array>
 </resources>

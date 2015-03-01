@@ -4,6 +4,20 @@
 //    }
 //);
 
+// Inspired By http://stackoverflow.com/questions/9776015/jquery-animate-a-rotating-div
+function flip(id, degrees) {
+  $(id).animate({
+        borderSpacing: degrees
+    },
+    {
+        step: function(now,fx) {
+            $(this).css('-webkit-transform','rotate('+now+'deg)'); 
+            $(this).css('-moz-transform','rotate('+now+'deg)');
+            $(this).css('transform','rotate('+now+'deg)');
+        }
+    });
+}
+
 function validateFormResetPassword() {
     var x = document.forms["resetpassword"]["username","confirmdob", "confirmemail", "confirmnewpassword", "newpassword"].value;
     if (x==null || x=="") {
@@ -15,12 +29,6 @@ function validateFormResetPassword() {
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(email);
-}
-
-//check date of birth is correct format
-function validateDOB(dob) {
-	var pattern = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g;
-	return pattern.test(dob);
 }
 
 //password checking function
@@ -147,4 +155,108 @@ function getUrlParameter(sParam)
             return sParameterName[1];
         }
     }
-}     
+}
+
+function goBack() {
+    window.history.back()
+}
+
+//Date validation: Courtesy of SmartWebby.com (http://www.smartwebby.com/dhtml/datevalidation.asp)
+// Declaring valid date character, minimum year and maximum year
+var dtCh= "/";
+var minYear=1900;
+var maxYear=2100;
+
+function isInteger(s){
+    var i;
+    for (i = 0; i < s.length; i++){   
+        // Check that current character is number.
+        var c = s.charAt(i);
+        if (((c < "0") || (c > "9"))) return false;
+    }
+    // All characters are numbers.
+    return true;
+}
+
+function stripCharsInBag(s, bag){
+    var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++){   
+        var c = s.charAt(i);
+        if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+}
+
+function daysInFebruary (year){
+    // February has 29 days in any year evenly divisible by four,
+    // EXCEPT for centurial years which are not also divisible by 400.
+    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+}
+function DaysArray(n) {
+    for (var i = 1; i <= n; i++) {
+        this[i] = 31
+        if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
+        if (i==2) {this[i] = 29}
+   } 
+   return this
+}
+
+function isDate(dtStr){
+    var daysInMonth = DaysArray(12)
+    var pos1=dtStr.indexOf(dtCh)
+    var pos2=dtStr.indexOf(dtCh,pos1+1)
+    var strDay=dtStr.substring(0,pos1)
+    var strMonth=dtStr.substring(pos1+1,pos2)
+    var strYear=dtStr.substring(pos2+1)
+    strYr=strYear
+    if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+    if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+    for (var i = 1; i <= 3; i++) {
+        if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+    }
+    month=parseInt(strMonth)
+    day=parseInt(strDay)
+    year=parseInt(strYr)
+    if (pos1==-1 || pos2==-1){
+        $('#dobValidate').html('<i class="fa fa-times"></i> Invalid date, please enter it in the format shown').addClass('wrongInputs');
+        return false
+    }
+    if (strMonth.length<1 || month<1 || month>12){
+        $('#dobValidate').html('<i class="fa fa-times"></i> Invalid date, please enter it in the format shown').addClass('wrongInputs');
+        return false
+    }
+    if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+        $('#dobValidate').html('<i class="fa fa-times"></i> Invalid date, please enter it in the format shown').addClass('wrongInputs');
+        return false
+    }
+    if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+        $('#dobValidate').html('<i class="fa fa-times"></i> Invalid date, please enter it in the format shown').addClass('wrongInputs');
+        return false
+    }
+    if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+        $('#dobValidate').html('<i class="fa fa-times"></i> Invalid date, please enter it in the format shown').addClass('wrongInputs');
+        return false
+    }
+return true
+}
+
+function ValidateFormRegister(){
+    var dt=document.register.dob
+    if (isDate(dt.value)==false){
+        dt.focus()
+        return false
+    }
+    return true
+}
+
+function ValidateFormProfile(){
+    var dt=document.editDetails.dob
+    if (isDate(dt.value)==false){
+        dt.focus()
+        return false
+    }
+    return true
+}

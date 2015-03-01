@@ -37,24 +37,23 @@ Home
   :param accounttype: Checks the type of account user has registered with
 
 Return values:
-  patienthome.html
-    - Sends the user to a home page designed specifically for a patient's needs.
-  carerhome.html
+  dashboard.html
+    - Sends the user to a home page designed specifically for a patient's needs. Shows them the basic information they need in one place, and allows them to navigate to other pages easily.
+  dashboardCarer.html
     - Sends the user to a home page designed specifically for a carer's needs, simplifying the administrative work involved with care.
 
-------------------------
-Profile
-------------------------
+Profile Picture
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autofunction:: justHealthServer.views.profile
+.. autofunction:: justHealthServer.views.getProfilePicture
 
-  :URL: /profile
+  :URL: /images/<filename>
 
-  :param username: Gets user's details assigned to their username
+  :param filename: Pulls the user's profile picture from the image directory
 
 Return values:
-  profile.html
-    - Shows user details and existing connections.
+  - Profile Picture
+  
 
 Edit Profile
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -91,6 +90,21 @@ Return values:
   search.html
     - Shows any users found that match the search term.
 
+NHS Search
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.searchNHS
+
+  :URL: /nhsSearch
+  :HTTP_METHOD: POST, GET
+
+  :param searchTerm:  Provides the text that is sent to the NHS website to be searched for
+
+Return values:
+  searchNHSDirect.html
+    - After sending the search term to the NHS website, it opens the page in a new tab showing the results.
+    - The page remains on the search form once submitted.
+
 ------------------------
 Deactivate
 ------------------------
@@ -109,40 +123,6 @@ Return values:
     - User account is deactivated and their information remains in the database.
   Deactivation failed
     - Fields not filled in/Input not valid
-
-------------------------
-Legal
-------------------------
-
-.. autofunction:: justHealthServer.views.legal
-
-  :URL: /legal
-
-Return values:
-  legal.html
-    - Links to each of the JustHealth legal documents.
-
-Terms and Conditions
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. autofunction:: justHealthServer.views.terms
-
-  :URL: /termsandconditions
-
-Return values:
-  termsandconditions.html
-    - Shows JustHealth terms and conditions.
-
-Privacy Policy
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. autofunction:: justHealthServer.views.privacy
-
-  :URL: /privacypolicy
-
-Return values:
-  privacypolicy.html
-    - Shows JustHealth privacy policy.
 
 ------------------------
 User Logout
@@ -204,6 +184,7 @@ Return values:
 ------------------------
 Appointments
 ------------------------
+
 Patient Appointments
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -364,6 +345,89 @@ Return values:
     - myPatients.html, shows the prescription with no changes
 
 ------------------------
+Connections
+------------------------
+
+Create Connection
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.createConnectionWeb
+
+  :URL: /createConnectionWeb
+  :HTTP_METHOD: POST, GET
+
+Return values:
+  Success
+    - Shows notification to inform the user of the result
+  Failed
+    - "Connection already established"
+    - Shows notification to inform the user of the result
+
+Complete Connection
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.completeConnectionWeb
+
+  :URL: /completeConnectionWeb
+  :HTTP_METHOD: POST, GET
+
+Return values:
+  Success
+    - Shows notification to inform the user of the result
+  Failed
+    - "Incorrect code"
+    - Shows notification to inform the user of the result
+
+Delete Connection
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.deleteConnectionWeb
+
+  :URL: /deleteConnectionWeb
+  :HTTP_METHOD: POST, GET
+
+Return values:
+  Success
+    - "Delete successful"
+    - Shows notification to inform the user of the result
+  Failed
+    - "Delete failed. Please try again or contact an administrator"
+    - Shows notification to inform the user of the result
+
+Cancel Connection
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.cancelConnectionWeb
+
+  :URL: /cancelConnectionWeb
+  :HTTP_METHOD: POST, GET
+
+Return values:
+  Success
+    - "Cancellation successful"
+    - Shows notification to inform the user of the result
+  Failed
+    - "Cancellation failed. Please try again or contact an administrator"
+    - Shows notification to inform the user of the result
+
+------------------------
+Contact Us
+------------------------
+
+.. autofunction:: justHealthServer.views.contactUs
+
+  :URL: /contactUs
+
+  :param username: Takes the name and email of the user from the session variable
+
+Return values:
+  contactUs.html, "Success"
+    - Submits the contact form
+    - "Your message has been sent, please allow up to 24 hours for a response"
+  contactUs.html, "Failed"
+    - Stays on this page and doesn't submit the form, handles specific error
+
+------------------------
 Error Handling
 ------------------------
 
@@ -381,4 +445,44 @@ Return Values
 JustHealth Admin Portal
 ------------------------
 
-(Add admin portal page views)
+Admin Portal Home
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.adminPortal
+
+  :URL: /adminPortal
+  :HTTP_METHOD: POST
+
+  :param accounttype: Needed to display the user's accounttype in user statistics
+
+Return values:
+  adminHome.html
+    - Shows the page with all tabs and content loaded for user accounts
+
+New Deactivation Reason
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.addNewDeactivate
+
+  :URL: /addNewDeactivate
+  :HTTP_METHOD: POST
+
+Return values:
+  adminHome.html, "Success"
+    - "Deactivate Reason Added"
+  adminHome.html, "Warning"
+    - "Update failed"
+
+New Medication Name
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.addNewMedication
+
+  :URL: /addNewMedication
+  :HTTP_METHOD: POST
+
+Return values:
+  adminHome.html, "Success"
+    - "Medication Added"
+  adminHome.html, "Warning"
+    - "Update failed"
