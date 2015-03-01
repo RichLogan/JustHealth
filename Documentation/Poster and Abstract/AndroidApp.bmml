@@ -1,49 +1,49 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="743" measuredH="547" mockupW="282" mockupH="510">
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="697" measuredH="566" mockupW="282" mockupH="510">
   <controls>
-    <control controlID="0" controlTypeID="com.balsamiq.mockups::iPhone" x="461" y="37" w="-1" h="-1" measuredW="282" measuredH="510" zOrder="0" locked="false" isInGroup="-1">
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::iPhone" x="415" y="56" w="-1" h="-1" measuredW="282" measuredH="510" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
         <bgPattern>allWhite</bgPattern>
         <model>IPhone4</model>
         <orientation>portrait</orientation>
       </controlProperties>
     </control>
-    <control controlID="6" controlTypeID="com.balsamiq.mockups::RoundButton" x="593" y="437" w="18" h="18" measuredW="32" measuredH="32" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::RoundButton" x="547" y="482" w="16" h="16" measuredW="32" measuredH="32" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>16777215</borderColor>
-        <color>3355443</color>
+        <color>6710886</color>
         <text/>
       </controlProperties>
     </control>
-    <control controlID="7" controlTypeID="com.balsamiq.mockups::RoundButton" x="507" y="437" w="18" h="18" measuredW="32" measuredH="32" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::RoundButton" x="461" y="482" w="15" h="15" measuredW="32" measuredH="32" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>16777215</borderColor>
-        <color>3355443</color>
+        <color>6710886</color>
         <shape>triangle</shape>
         <shapeRotation>90</shapeRotation>
         <text/>
       </controlProperties>
     </control>
-    <control controlID="8" controlTypeID="com.balsamiq.mockups::RoundButton" x="676" y="437" w="18" h="18" measuredW="32" measuredH="32" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::RoundButton" x="630" y="482" w="15" h="15" measuredW="32" measuredH="32" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>16777215</borderColor>
-        <color>3355443</color>
+        <color>6710886</color>
         <shape>rectangle</shape>
         <text/>
       </controlProperties>
     </control>
-    <control controlID="9" controlTypeID="com.balsamiq.mockups::Canvas" x="488" y="432" w="227" h="29" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Canvas" x="442" y="477" w="228" h="25" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>6710886</borderColor>
         <borderStyle>none</borderStyle>
-        <color>3355443</color>
+        <color>6710886</color>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::Image" x="487" y="136" w="227" h="65" measuredW="1365" measuredH="396" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Image" x="444" y="156" w="224" h="64" measuredW="1365" measuredH="396" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <src>./assets/logo.png</src>
       </controlProperties>
     </control>
-    <control controlID="16" controlTypeID="com.balsamiq.mockups::Image" x="524" y="223" w="156" h="182" measuredW="872" measuredH="1024" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Image" x="478" y="253" w="156" h="182" measuredW="872" measuredH="1024" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <src>./assets/android_logo.png</src>
         <text/>
