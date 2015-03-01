@@ -32,6 +32,14 @@ public class Request {
     private static String SERVER_URL = "http://raptor.kent.ac.uk:5000";
 
     /**
+     * Method to get the active server's URL (protocol, host, port)
+     * @return Full URL as String
+     */
+    public static String getServerURL() {
+        return SERVER_URL;
+    }
+
+    /**
      * Provides POST request communication to JustHealth's public facing API located at /api
      * Takes credentials for the server from the logged in user's details
      * @param url The API function url for the request, not the full URL. e.g http://server/api/{THIS_URL_HERE}
@@ -107,14 +115,5 @@ public class Request {
             //TODO Auto-generated catch block
         }
         return "Failed";
-    }
-
-    /**
-     * Build the correct URL of a profilepicture image that is stored on the server
-     * @param filename The filename of the image. Can be found via /api/getAccountInfo
-     * @return The full URL of the resource
-     */
-    public static String getProfilePictureURL(String filename) {
-        return SERVER_URL + "/api/images/" + filename;
     }
 }
