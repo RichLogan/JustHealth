@@ -311,6 +311,11 @@ def getAccountInfo(username):
     except Patient.DoesNotExist:
         user = Carer.select().join(Client).where(Client.username==str(username)).get()
         result['accounttype'] = "Carer"
+    #except Carer.DoesNotExist:
+     #   user = Admin.select().join(Client).where(Client.username==str(username)).get()
+      #  result['accounttype'] = "Admin"
+    #except Admin.DoesNotExist:
+        # Something is wrong
 
     result['firstname'] = user.firstname
     result['surname'] = user.surname
@@ -1299,17 +1304,24 @@ def newMedication(medication):
 def getAllUsers():
     return getAllUsers()
 
+       
+
 def getAllUsers():
-    """Get All information from client and patient/carer table"""
+    """Get All information from client and patient/carer/Admin table"""
     results = []
     for u in Client.select(Client.username):
-        userDetails = {}
-        try:
-          user = Patient.select().join(Client).where(Client.username==u.username).get()
-          userDetails['accounttype'] = "Patient"
-        except Patient.DoesNotExist:
-            user = Carer.select().join(Client).where(Client.username==u.username).get()
-            userDetails['accounttype'] = "Carer"
+      userDetails = {}
+      try:
+        user = Patient.select().join(Client).where(Client.username==u.username).get()
+        userDetails['accounttype'] = "Patient"
+      except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==u.username).get()
+        userDetails['accounttype'] = "Carer"
+      #except Carer.DoesNotExist:
+        #user = Admin.select().join(Client).where(Client.username==u.username).get()
+       # userDetails['accounttype'] = "Admin"
+      #except Admin.DoesNotExist:
+        # Something is wrong
 
         userDetails['firstname'] = user.firstname
         userDetails['surname'] = user.surname
