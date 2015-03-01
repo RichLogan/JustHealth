@@ -1,6 +1,6 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="2174" measuredH="1132" mockupW="1374" mockupH="872">
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="2174" measuredH="1106" mockupW="1374" mockupH="846">
   <controls>
-    <control controlID="3" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="800" y="260" w="1374" h="872" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="800" y="260" w="1374" h="846" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>square</borderStyle>
         <text>Home%20%7C%20JustHealth%0Ahttp%3A//raptor.kent.ac.uk%3A5000/</text>

@@ -75,9 +75,9 @@ public class Profile extends Activity {
             email.setText("Email: " + profileInfo.getString("email"));
 
             // Display Profile Picture
-            String filepath = Request.getProfilePictureURL(profileInfo.getString("profilepicture"));
+            String filepath = LoadImage.getProfilePictureURL(profileInfo.getString("profilepicture"));
             ImageView profilePicture = (ImageView) findViewById(R.id.profilePicture);
-            new LoadImage(profilePicture, getApplicationContext()).execute(filepath);
+            new LoadImage(profilePicture, false, getApplicationContext()).execute(filepath);
         } catch (JSONException e) {
             e.printStackTrace();
         }
