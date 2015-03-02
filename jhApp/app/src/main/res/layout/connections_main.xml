@@ -62,7 +62,7 @@
         <RelativeLayout
             android:id="@+id/completedButton"
             style="@style/badgeButton"
-            android:background="@color/success">
+            android:background="@drawable/success_button">
             <TextView
                 android:text="Completed"
                 style="@style/largeButtonLabel"/>

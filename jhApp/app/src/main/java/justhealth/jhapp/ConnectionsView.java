@@ -4,10 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
@@ -21,7 +19,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
@@ -31,10 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Lists of Connections of the given category (Incoming, Outgoing, Completed) as given by ConnectionsMain
@@ -108,18 +102,27 @@ public class ConnectionsView extends Activity {
                 // Get Connection's Details
                 JSONObject connection = listConnections.getJSONObject(i);
                 String username = connection.getString("username");
-                System.out.println(username);
                 String firstname = connection.getString("firstname");
                 String surname = connection.getString("surname");
+                String filepath = LoadImage.getProfilePictureURL(connection.getString("profilepicture"));
 
                 // Card
                 CardView card = new CardView(this);
                 LinearLayout container = new LinearLayout(this);
                 container.setOrientation(LinearLayout.VERTICAL);
-
+                int cardHeight = 450;
+                int profilePictureHeight = 325;
+                int captionBarHeight = cardHeight - profilePictureHeight;
                 // Profile Container
-                LinearLayout profilePictureContainer = new LinearLayout(this);
-                profilePictureContainer.setBackgroundColor(getResources().getColor(R.color.primary));
+                FrameLayout profilePictureContainer = new FrameLayout(this);
+                ImageView background = new ImageView(this);
+                new LoadImage(background, true, getApplicationContext()).execute(filepath);
+                background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                // Profile Picture
+                ImageView profilePicture = new ImageView(this);
+                new LoadImage(profilePicture, false, getApplicationContext()).execute(filepath);
+                profilePictureContainer.addView(background, FrameLayout.LayoutParams.MATCH_PARENT, profilePictureHeight);
+                profilePictureContainer.addView(profilePicture);
 
                 // Caption Container
                 LinearLayout captionContainer = new LinearLayout(this);
@@ -144,7 +147,7 @@ public class ConnectionsView extends Activity {
                 positiveAction.setTextColor(getResources().getColor(R.color.white));
                 setPositiveAction(positiveAction, connection);
                 Iconify.addIcons(positiveAction);
-                captionContainer.addView(positiveAction, 200, 125);
+                captionContainer.addView(positiveAction, 200, captionBarHeight);
 
                 // Negative Action
                 TextView negativeAction = new TextView(this);
@@ -154,13 +157,13 @@ public class ConnectionsView extends Activity {
                 negativeAction.setText("{fa-user-times}");
                 Iconify.addIcons(negativeAction);
                 setNegativeAction(negativeAction, connection);
-                captionContainer.addView(negativeAction, 200, 125);
+                captionContainer.addView(negativeAction, 200, captionBarHeight);
 
                 // Add Containers
-                container.addView(profilePictureContainer, LinearLayout.LayoutParams.MATCH_PARENT, 325);
-                container.addView(captionContainer, LinearLayout.LayoutParams.FILL_PARENT, 125);
-                card.addView(container, LinearLayout.LayoutParams.MATCH_PARENT, 450);
-                mainList.addView(card, LinearLayout.LayoutParams.MATCH_PARENT, 450);
+                container.addView(profilePictureContainer, LinearLayout.LayoutParams.MATCH_PARENT, profilePictureHeight);
+                container.addView(captionContainer, LinearLayout.LayoutParams.FILL_PARENT, captionBarHeight);
+                card.addView(container, LinearLayout.LayoutParams.MATCH_PARENT, cardHeight);
+                mainList.addView(card, LinearLayout.LayoutParams.MATCH_PARENT, cardHeight);
             }
         } catch (JSONException e) {
             e.printStackTrace();

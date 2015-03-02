@@ -12,13 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
-import android.support.v4.app.NavUtils;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
@@ -162,7 +160,7 @@ public class SelfAppointments extends Activity {
                 Date now = new Date();
                 if (appDateTime.after(now)) {
 
-                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
                     Button app = new Button(newContext);
                     app.setBackgroundColor(Color.rgb(51, 122, 185));
                     app.setText(name + " " + startDate + " " + startTime);

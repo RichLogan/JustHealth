@@ -7,12 +7,10 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,11 +21,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -220,7 +215,7 @@ public class CarerPatientAppointments extends Activity {
         Date now = new Date();
         if (appDateTime.after(now)) {
             appointmentHolder = new LinearLayout(this);
-            ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+            ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
             Button app = new Button(newContext);
             app.setBackgroundColor(Color.rgb(51, 122, 185));
             app.setText(name + " " + startDate + " " + startTime);
