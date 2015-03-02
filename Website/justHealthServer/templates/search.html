@@ -59,11 +59,7 @@
 <br />
 <br />
 <!--Table to display search results -->
-<div id="queryTable">
-    <div class="input-group"> <span class="input-group-addon">Sort through results</span>
-    <input id="filter" type="text" class="form-control">
-    </div> 
-    <br />
+
     <br />
   <table class="table table-striped">
     <thead>
@@ -74,7 +70,7 @@
         <th>Connect</th>
       </tr>
     </thead>
-    <tbody class="searchable">
+    <tbody>
 <!--results here-->
   {% for result in results %}
   <tr>
@@ -99,7 +95,7 @@
   {% endfor %}
     </tbody>
   </table>
-</div>
+
 
    <br />
  </fieldset>
