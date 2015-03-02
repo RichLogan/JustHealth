@@ -309,13 +309,12 @@ def getAccountInfo(username):
       user = Patient.select().join(Client).where(Client.username==str(username)).get()
       result['accounttype'] = "Patient"
     except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==str(username)).get()
-        result['accounttype'] = "Carer"
-    #except Carer.DoesNotExist:
-     #   user = Admin.select().join(Client).where(Client.username==str(username)).get()
-      #  result['accounttype'] = "Admin"
-    #except Admin.DoesNotExist:
-        # Something is wrong
+        try:
+            user = Carer.select().join(Client).where(Client.username==str(username)).get()
+            result['accounttype'] = "Carer"
+        except Carer.DoesNotExist:
+            user = Admin.select().join(Client).where(Client.username==str(username)).get()
+            result['accounttype'] = "Admin"
 
     result['firstname'] = user.firstname
     result['surname'] = user.surname
@@ -1304,8 +1303,6 @@ def newMedication(medication):
 def getAllUsers():
     return getAllUsers()
 
-       
-
 def getAllUsers():
     """Get All information from client and patient/carer/Admin table"""
     results = []
@@ -1315,13 +1312,12 @@ def getAllUsers():
         user = Patient.select().join(Client).where(Client.username==u.username).get()
         userDetails['accounttype'] = "Patient"
       except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==u.username).get()
-        userDetails['accounttype'] = "Carer"
-      #except Carer.DoesNotExist:
-        #user = Admin.select().join(Client).where(Client.username==u.username).get()
-       # userDetails['accounttype'] = "Admin"
-      #except Admin.DoesNotExist:
-        # Something is wrong
+        try:
+            user = Carer.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Carer"
+        except Carer.DoesNotExist:
+            user = Admin.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Admin"
 
         userDetails['firstname'] = user.firstname
         userDetails['surname'] = user.surname

@@ -18,6 +18,14 @@ def needLogin(f):
     return f(*args, **kwargs)
   return loginCheck
 
+def needAdmin(f):
+    @wraps(f)
+    def needAdmin(*args, **kwargs):
+        if session['accounttype'] != "Admin":
+            return render_template('401Unauthorised.html'), 401
+        return f(*args, **kwargs)
+    return needAdmin
+
 @app.route('/images/<filename>')
 @needLogin
 def getProfilePicture(filename):
@@ -30,6 +38,10 @@ def index():
     """Sends user to a dashboard according to account type if session is active, it shows their profile and connections. A patient will be able to see their notifications, prescriptions and appointments. A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
     ## set common functionality
     accountInfo = json.loads(getAccountInfo(session['username']))
+
+    if accountInfo['accounttype'] == "Admin":
+        return redirect(url_for('adminPortal'))
+
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
@@ -87,14 +99,7 @@ def index():
             expiredPrescriptions = expiredPrescriptions,
             appType=Appointmenttype.select(),
             medicationList = Medication.select())
-    elif accountInfo['accounttype'] =="Admin":
-        allUsers = json.loads(getAllUsers())
-    if request.method == 'POST':
-        result = deactivateAccount(request.form)
-        if allUsers['accounttype'] == "Patient":
-            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient', medicationList = Medication.select())
-    else: 
-       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
+    
 
 
 @app.route('/profile')
@@ -682,6 +687,8 @@ def internal_error(error):
 
 #Admin Portal pages
 @app.route('/adminPortal')
+@needLogin
+@needAdmin
 def adminPortal():
     """Loads the pages related to the tablist on the IM portal home page, this includes a list of active users, current medication list and deactivation options"""
     allUsers = json.loads(getAllUsers())
@@ -693,6 +700,8 @@ def adminPortal():
        return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
 
 @app.route('/updateAccountSettings_view', methods=['POST'])
+@needLogin
+@needAdmin
 def updateAccountSettings_view():
     
 
@@ -727,6 +736,8 @@ def updateAccountSettings_view():
 
 
 @app.route('/deleteAccount', methods=['POST'])
+@needLogin
+@needAdmin
 def deleteAccount_view():
     username = request.form['username']
     deleted = deleteAccount(username)
@@ -738,6 +749,8 @@ def deleteAccount_view():
 
 
 @app.route('/addNewDeactivate', methods=['POST'])
+@needLogin
+@needAdmin
 def addNewDeactivate():
     """Submits the form to add a new deactivation reason to the database"""
     if request.method == 'POST':
@@ -749,6 +762,8 @@ def addNewDeactivate():
        return render_template('adminHome.html')
 
 @app.route('/addNewMedication', methods=['POST'])
+@needLogin
+@needAdmin
 def addNewMedication():
     """Submits the form to add a new medication name to the database"""
     if request.method == 'POST':
