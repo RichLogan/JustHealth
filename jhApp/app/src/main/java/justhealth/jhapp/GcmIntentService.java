@@ -81,7 +81,7 @@ public class GcmIntentService extends IntentService {
 
         //This is where the application opens too (we think) therefore this may need to be dynamic depending on Notification Type.
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Profile.class), 0);
+                new Intent(this, Main.class), 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
