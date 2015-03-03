@@ -38,23 +38,23 @@ def saveAndroidRegistrationID():
         return "Failed"
 
 def createPushNotification(notificationid):
-	"""Creates a push notification, that can be sent to the users android device"""
-	notification = Notification.select().dicts().where(Notification.notificationid == notificationid).get()
-	username = notification['username'	]
-	title = notification['notificationtype']
-	content = getAndroidNotificationContent(notification)
+  """Creates a push notification, that can be sent to the users android device"""
+  notification = Notification.select().dicts().where(Notification.notificationid == notificationid).get()
+  username = notification['username']
+  title = notification['notificationtype']
+  content = getAndroidNotificationContent(notification)
   if content == "DoesNotExist":
-    return 
-
-	sendPushNotification(username, title, content)
+    return None
+  else:
+    sendPushNotification(username, title, content)
 
 def sendPushNotification(username, title, message):
   """Sends a push notification to the users Android device with the specified title and message"""
   # Get Registration ID
   try:
-  	registrationid = Androidregistration.select().where(Androidregistration.username == username).get().registrationid
+    registrationid = Androidregistration.select().where(Androidregistration.username == username).get().registrationid
   except Androidregistration.DoesNotExist:
-  	return "False"
+    return "False"
 
   # Build Message
   headers = {
