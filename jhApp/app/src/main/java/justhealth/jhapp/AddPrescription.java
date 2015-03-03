@@ -97,19 +97,11 @@ public class AddPrescription extends Activity {
         details.put("dosage", ((EditText) findViewById(R.id.dosageValue)).getText().toString());
         details.put("dosageunit", ((EditText) findViewById(R.id.dosageUnit)).getText().toString());
         details.put("frequency", ((EditText) findViewById(R.id.frequency)).getText().toString());
-        details.put("frequencyunit", ((EditText) findViewById(R.id.frequencyUnit)).getText().toString());
         details.put("dosageform", ((EditText) findViewById(R.id.type)).getText().toString());
         details.put("startdate", ((EditText) findViewById(R.id.startDate)).getText().toString());
         details.put("enddate", ((EditText) findViewById(R.id.endDate)).getText().toString());
         details.put("stockleft", ((EditText) findViewById(R.id.stockLeft)).getText().toString());
         details.put("prerequisite", ((EditText) findViewById(R.id.observations)).getText().toString());
-
-        final CheckBox repeat = (CheckBox) findViewById(R.id.repeat);
-        if (repeat.isChecked()) {
-            details.put("repeat", "Yes");
-        } else {
-            details.put("repeat", "No");
-        }
 
         String response = Request.post("addPrescription", details, getApplicationContext());
         System.out.println(response);

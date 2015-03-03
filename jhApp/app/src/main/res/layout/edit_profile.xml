@@ -24,7 +24,6 @@
                     android:orientation="vertical"
                     android:background="@color/off_white">
 
-
                 <LinearLayout
                     android:id="@+id/editProfile"
                     android:layout_width="match_parent"
@@ -68,7 +67,6 @@
                             style="@style/inputIcon" />
                     </RelativeLayout>
 
-
                     <!-- Date of Birth -->
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -85,7 +83,6 @@
                             android:text="{fa-calendar}"
                             style="@style/inputIcon" />
                     </RelativeLayout>
-
 
                     <!-- Gender -->
                     <RelativeLayout
@@ -122,16 +119,16 @@
                             android:text="{fa-at}"
                             style="@style/inputIcon" />
                     </RelativeLayout>
-                </LinearLayout>
 
                     <!-- Update Button -->
                     <Button
                         android:layout_marginTop="35dp"
-                        style="@style/defaultConfirmButton"
+                        style="@style/primaryButton"
                         android:text="Update"
                         android:id="@+id/editProfileButton"
-                       />
+                        />
                 </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </RelativeLayout>
