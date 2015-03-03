@@ -180,7 +180,25 @@ def getAndroidNotificationContent(notification):
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
         content = appointment.invitee.username + " has declined the appointment with you on " + str(appointment.startdate) + "."
+
+    if notification['notificationtype'] == "Medication Low":
+      try:
+        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+      except Prescription.DoesNotExist:
+        doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+        with database.transaction():
+          doesNotExist.delete_instance()
+          return "DoesNotExist"
+      content = "You have <3 days stock of " + prescription.medication.name + " left."
+
+    if notification['notificationtype'] == "Patient Medication Low":
+      try:
+        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+      except Prescription.DoesNotExist:
+        doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+        with database.transaction():
+          doesNotExist.delete_instance()
+          return "DoesNotExist"
+      content = prescription.username.username + " has <3 days stock of " + prescription.medication.name + " left."
     
     return content
-
-

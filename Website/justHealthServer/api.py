@@ -1268,8 +1268,8 @@ def checkStockLevel(prescription, level):
     if (thisPrescription.stockleft < ((thisPrescription.frequency * thisPrescription.quantity)*3)):
         patient = thisPrescription.username
         carer = Patientcarer.get(Patientcarer.patient == patient).carer
-        createNotificationRecord(patient, "Medication Low", thisPrescription.prescriptionid)
-        createNotificationRecord(carer, "Patient Medication Low", thisPrescription.prescriptionid)
+        createNotificationRecord(patient.username, "Medication Low", thisPrescription.prescriptionid)
+        createNotificationRecord(carer.username, "Patient Medication Low", thisPrescription.prescriptionid)
 
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
