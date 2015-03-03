@@ -31,6 +31,12 @@
         <item>Delete Appointment</item>
     </string-array>
 
+    <string-array name="patient_invitee_appointments_options">
+        <item>View In Calendar</item>
+        <item>Accept Appointment</item>
+        <item>Decline Appointment</item>
+    </string-array>
+
     <string-array name="my_patient_filter_appointments">
         <item>All Appointments</item>
         <item>Patient Appointments</item>
