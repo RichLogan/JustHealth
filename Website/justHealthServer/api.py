@@ -1234,22 +1234,42 @@ def takePrescription():
 
 def takePrescription(details):
     try:
+        currentCount = int(details['currentcount'])
+        # If a record already exists for this day, update
         takeInstance = TakePrescription.select().where((TakePrescription.prescriptionid == details['prescriptionid']) & (TakePrescription.currentdate == datetime.datetime.now().date())).get()
         takeInstance = TakePrescription.update(
-            currentcount = details['currentcount']
+            currentcount = currentCount
         ).where(TakePrescription.prescriptionid == details['prescriptionid'])
         with database.transaction():
             takeInstance.execute()
+            checkStockLevel(details['prescriptionid'], currentCount)
             return "True"
     except TakePrescription.DoesNotExist:
+        # No record exists for today, create a new one
         takeInstance = TakePrescription.insert(
             prescriptionid = details['prescriptionid'],
             currentcount = details['currentcount'],
             currentdate = datetime.datetime.now().date())
         with database.transaction():
             takeInstance.execute()
+            checkStockLevel(details['prescriptionid'], currentCount)
             return "True"
+    except TypeError:
+        return "Invalid current count (is it an integer?)"
     return "False"
+
+
+def checkStockLevel(prescription, level):
+    thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
+    thisPrescription.stockleft -= level
+    thisPrescription.save()
+
+    # Do they have 3 days worth?
+    if (thisPrescription.stockleft < ((thisPrescription.frequency * thisPrescription.quantity)*3)):
+        patient = thisPrescription.username
+        carer = Patientcarer.get(Patientcarer.patient == patient).carer
+        createNotificationRecord(patient, "Medication Low", thisPrescription.prescriptionid)
+        createNotificationRecord(carer, "Patient Medication Low", thisPrescription.prescriptionid)
 
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
@@ -1463,9 +1483,10 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Appointment Updated'] = "Appointments"
     notificationTypeTable['Appointment Cancelled'] = ""
     notificationTypeTable['Password Reset'] = ""
-    notificationTypeTable['Medication Low'] = "Prescription"
     notificationTypeTable['Appointment Declined'] = "Appointments"
     notificationTypeTable['Appointment Accepted'] = "Appointments"
+    notificationTypeTable['Patient Medication Low'] = "Prescription"
+    notificationTypeTable['Medication Low'] = "Prescription"
 
     createNotification = Notification.insert(
         username = user,
@@ -1559,16 +1580,6 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Password Reset":
         content = "Your password has been changed successfully."
 
-    if notification['notificationtype'] == "Medication Low":
-        try:
-            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
-            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
-            with database.transaction():
-                doesNotExist.delete_instance()
-                return "DoesNotExist"
-        content = prescription.username.username + "'s prescription for " + prescription.medication.name + " is running low."
-
     if notification['notificationtype'] == "Appointment Accepted":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
@@ -1588,7 +1599,26 @@ def getNotificationContent(notification):
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
         content = appointment.invitee.username + " has declined the appointment with you on " + str(appointment.startdate) + "."
-    
+
+    if notification['notificationtype'] == "Medication Low":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "You have <3 days stock of " + prescription.medication.name + " left."
+
+    if notification['notificationtype'] == "Patient Medication Low":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = prescription.username.username + " has <3 days stock of " + prescription.medication.name + " left."
     return content
 
 def getNotificationLink(notification):
@@ -1625,6 +1655,9 @@ def getNotificationLink(notification):
 
     if notification['notificationtype'] == "Medication Low":
         link = "/prescriptions"
+
+    if notification['notificationtype'] == "Patient Medication Low":
+        link = "/"
     
     return link
 

@@ -149,11 +149,12 @@ class Prescription(BaseModel):
         db_table = 'prescription'
 
 class TakePrescription(BaseModel):
-    prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid', primary_key=True)
+    prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid')
     currentcount = IntegerField()
     currentdate = DateField()
 
     class Meta:
+        primary_key = CompositeKey('prescriptionid', 'currentdate')
         db_table = 'takeprescription'
 
 class Notificationtype(BaseModel):
