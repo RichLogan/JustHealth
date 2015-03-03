@@ -1041,7 +1041,7 @@ def acceptDeclineAppointment(user, action, appointmentId):
         else:
             accepted = False
             notificationType = "Appointment Declined"
-            result = "You have declined this appointment"
+            result = "You have declined this appointment."
         submitAction = Appointments.update(accepted = accepted).where(Appointments.appid == appointmentId)
 
         with database.transaction():
