@@ -184,6 +184,13 @@ class Reminder(BaseModel):
     extraDate = CharField(null=True)
     extraFrequency = IntegerField(null=True, default=None)
 
+class Androidregistration(BaseModel):
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    registrationid = CharField(unique=True)
+
+    class Meta:
+        db_table = 'androidregistration'
+
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
     dropAll()
@@ -203,6 +210,7 @@ def createAll():
     Notificationtype.create_table()
     Notification.create_table()
     Reminder.create_table()
+    Androidregistration.create_table()
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -236,3 +244,5 @@ def dropAll():
         Notification.drop_table(cascade=True)
     if Reminder.table_exists():
         Reminder.drop_table(cascade=True)
+    if Androidregistration.table_exists():
+        Androidregistration.drop_table(cascade=True)

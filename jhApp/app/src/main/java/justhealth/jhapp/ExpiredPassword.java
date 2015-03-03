@@ -20,6 +20,11 @@ import java.util.HashMap;
  * Created by Stephen on 15/02/15.
  */
 public class ExpiredPassword extends Activity {
+
+    private String username;
+    private String expiredPassword;
+    private String accountType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +36,15 @@ public class ExpiredPassword extends Activity {
 
         Intent intent = getIntent();
         String message = intent.getStringExtra("message");
+        username = intent.getStringExtra("username");
+        expiredPassword = intent.getStringExtra("password");
+        accountType = intent.getStringExtra("accountType");
 
         TextView messageView = (TextView) findViewById(R.id.input);
         messageView.setText(message);
 
-        Button registerButton = (Button) findViewById(R.id.submit);
-        registerButton.setOnClickListener(
+        Button reset = (Button) findViewById(R.id.submit);
+        reset.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         sendResetExpiredPassword();
@@ -50,8 +58,6 @@ public class ExpiredPassword extends Activity {
     private void sendResetExpiredPassword() {
         HashMap<String, String> details = new HashMap<String, String>();
 
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
         //Text Boxes
         details.put("username", username);
 
@@ -71,49 +77,42 @@ public class ExpiredPassword extends Activity {
         }
 
         //make post request
+        //assign SharedPreferences for post request to authenticate
+        SharedPreferences account = getSharedPreferences("account", 0);
+        SharedPreferences.Editor edit = account.edit();
+        edit.putString("username", username);
+        edit.putString("password", expiredPassword);
+
         String response = Request.post("expiredResetPassword", details, getApplicationContext());
+
         if (response.equals("True")) {
             //overwriting with new encrypted password
             String encryptedPassword = getEncryptedPassword(password);
-            SharedPreferences.Editor edit = account.edit();
             edit.putString("password", encryptedPassword);
+            edit.putString("accountType", accountType);
             edit.commit();
 
-            if (getAccountType(username).equals("Patient")) {
-                startActivity(new Intent(ExpiredPassword.this, HomePatient.class));
-            } else if (getAccountType(username).equals("Carer")) {
-                startActivity(new Intent(ExpiredPassword.this, HomeCarer.class));
-            }
+            startActivity(new Intent(ExpiredPassword.this, Main.class));
         }
         else if(response.equals("Unmatched")) {
+            edit.remove("username");
+            edit.remove("password");
+            edit.clear();
             Feedback.toast("The two passwords you entered did not match, please try again.", false, getApplicationContext());
             Intent intent = getIntent();
             finish();
             startActivity(intent);
         }
         else {
+            edit.remove("username");
+            edit.remove("password");
+            edit.clear();
             Feedback.toast("Oops, something went wrong. Please try again.", false, getApplicationContext());
             Intent intent = getIntent();
             finish();
             startActivity(intent);
         }
 
-    }
-
-    private String getAccountType(String username) {
-        HashMap<String, String> parameters = new HashMap<String, String>();
-        parameters.put("username", username);
-
-        String response = Request.post("getAccountInfo", parameters, getApplicationContext());
-        try {
-            JSONObject accountDetails = new JSONObject(response);
-            String accountType  = accountDetails.getString("accounttype");
-            return accountType;
-        }
-        catch (JSONException e) {
-            System.out.println(e.getStackTrace());
-        }
-        return null;
     }
 
     private String getEncryptedPassword(String plaintextPassword) {

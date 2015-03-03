@@ -1,233 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="justhealth.jhapp"
-    android:versionCode="2"
-    android:versionName="1.0" >
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="justhealth.jhapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="justhealth.jhapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
+    <permission
+        android:name="justhealth.jhapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!-- Application -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/pill"
         android:label="@string/app_name"
         android:theme="@style/JustHealthTheme">
 
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="justhealth.jhapp" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GcmIntentService" />
+
         <activity
             android:name=".Login"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="Login" >
         </activity>
 
         <activity
             android:name=".Register"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Register">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".TermsAndConditions"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Terms and Conditions">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".ForgotPassword"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Forgot Password">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".HomePatient"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Home">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".HomeCarer"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Home">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".MyPatients"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="My Patients">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".CarerPrescriptions"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Prescriptions">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity android:name=".AddPrescription" />
         <activity android:name=".EditPrescription" />
 
         <activity
-        android:name=".Search"
-        android:label="@string/app_name"
-        android:parentActivityName=".Login" >
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".Login" />
+            android:name=".Search"
+            android:label="Search">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".Profile"
-            android:label="@string/app_name"
-            android:parentActivityName=".Settings" >
+            android:label="Profile">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Settings" />
         </activity>
 
         <activity android:name=".EditProfile" />
 
         <activity
             android:name=".DeactivateAccount"
-            android:label="@string/app_name"
-            android:parentActivityName=".Settings" >
+            android:label="Deactivate Account">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Settings" />
         </activity>
 
         <activity
             android:name=".Settings"
-            android:label="@string/app_name"
-            android:parentActivityName=".Login" >
+            android:label="Settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".SelfAppointments"
-            android:label="Just Health" >
+            android:label="Self Appointments">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".SelfArchivedAppointments"
-            android:label="Just Health" >
+            android:label="Archived Appointments">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".PatientMedication"
-            android:label="Just Health"
-            android:parentActivityName=".Login">
+            android:label="Medication">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".Main" />
         </activity>
 
         <activity
             android:name=".CreateSelfAppointment"
-            android:label="Just Health"
-            android:parentActivityName=".SelfAppointments">
+            android:label="Create Appointment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".SelfAppointments" />
         </activity>
 
         <activity
             android:name=".EditSelfAppointment"
-            android:label="Just Health"
-            android:parentActivityName=".SelfAppointments">
+            android:label="Edit Appointment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".SelfAppointments" />
         </activity>
 
         <activity
             android:name=".CarerPatientAppointments"
-            android:label="Just Health"
-            android:parentActivityName=".MyPatients">
+            android:label="Appointments">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".MyPatients" />
         </activity>
 
         <activity
             android:name=".CreateCarerPatientAppointment"
-            android:label="Just Health"
-            android:parentActivityName=".CarerPatientAppointments">
+            android:label="Create Appointment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".CarerPatientAppointments" />
         </activity>
 
         <activity
             android:name=".CarerPatientArchivedAppointments"
-            android:label="Just Health"
-            android:parentActivityName=".MyPatients">
+            android:label="Archived Appointments">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".MyPatients" />
         </activity>
 
         <activity
             android:name=".EditCarerPatientAppointment"
-            android:label="Just Health"
-            android:parentActivityName=".MyPatients">
+            android:label="Edit Appointment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".MyPatients" />
         </activity>
 
         <activity
             android:name=".Privacy"
-            android:label="Just Health"
-            android:parentActivityName=".MyPatients">
+            android:label="Privacy">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".MyPatients" />
         </activity>
 
         <activity android:name=".Logout"
-            android:label="Just Health"
-            android:parentActivityName=".Login" >
+            android:label="Logout">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
-            </activity>
+                android:value=".Main" />
+        </activity>
 
-        <activity android:name=".SearchNHSWebsite"
-            android:label="Just Health" />
-
+        <activity android:name=".SearchNHSWebsite"/>
         <activity android:name=".ConnectionsMain"/>
         <activity android:name=".ConnectionsView"/>
+
+        <activity android:name=".Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, a
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
+from gcm import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 from werkzeug import secure_filename
@@ -1474,7 +1475,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
     )
 
     with database.transaction():
-        createNotification.execute()
+        notificationId = str(createNotification.execute())
+        createPushNotification(notificationId)
         return "True"
     return "False"
 
@@ -1486,39 +1488,69 @@ def getNotifications():
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user"""
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
-
     notificationList = []
     for notification in notifications:
         notification['content'] = getNotificationContent(notification)
         notification['link'] = getNotificationLink(notification)
         notification['type'] = getNotificationTypeClass(notification)
-        notificationList.append(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
 
     return json.dumps(notificationList)
 
 def getNotificationContent(notification):
     """gets the body/content of the notification"""
     if notification['notificationtype'] == "Connection Request":
-        requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
+        try: 
+            requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
+        except Relationship.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = "You have a new connection request from " + requestor.requestor.username
     
     if notification['notificationtype'] == "New Connection":
         content = "You have a new connection, click above to view."
     
     if notification['notificationtype'] == "Prescription Added":
-        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = "A new prescription for " + prescription.medication.name + " has been added to your profile."
 
     if notification['notificationtype'] == "Prescription Updated":
-        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = "Your prescription for " + prescription.medication.name + " has been updated."
     
     if notification['notificationtype'] == "Appointment Invite":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Updated":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Cancelled":
@@ -1528,15 +1560,33 @@ def getNotificationContent(notification):
         content = "Your password has been changed successfully."
 
     if notification['notificationtype'] == "Medication Low":
-        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = prescription.username.username + "'s prescription for " + prescription.medication.name + " is running low."
 
     if notification['notificationtype'] == "Appointment Accepted":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.invitee.username + " has accepted the appointment with you on " + str(appointment.startdate) + "."
 
     if notification['notificationtype'] == "Appointment Declined":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.invitee.username + " has declined the appointment with you on " + str(appointment.startdate) + "."
     
     return content
@@ -1840,6 +1890,7 @@ def expiredResetPassword(request):
         createNotificationRecord(user, "Password Reset", None)
         return "True"
     return "False"
+
 
 # def checkPrescriptionLevel(username, activePrescriptions):
 #     today = datetime.datetime.now().date()
