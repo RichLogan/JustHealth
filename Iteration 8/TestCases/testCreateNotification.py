@@ -4,6 +4,7 @@ import unittest
 import imp
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
+api = imp.load_source('api', 'Website/justHealthServer/api.py')
 
 class testCreateNotificationRecord(unittest.TestCase):
 	"""Testing the CreateNotificationRecord API"""
@@ -46,27 +47,23 @@ class testCreateNotificationRecord(unittest.TestCase):
 
 	def testLegitimate(self):
 		"""Attempt to create a legitimate notification || check that API returns expected response and DB is correct too"""
-
-		payload = {
-			"user" : "patient",
-			"notificationType" : "Connection Request",
-			"relatedObject" : "1"
-		}
+		user = "patient"
+		notificationType = "Connection Request"
+		relatedObject = 1
 
 		#Method is not externally addressable how does this work? 
-		createNotification = requests.post("http://127.0.0.1:9999/api/createNotificationRecord", data=payload)
+		createNotification = api.createNotificationRecord(user, notificationType, relatedObject)
 		self.assertEqual(createNotification.text, "True")
-		self.assertEqual(testDatabase.Notifications.select().where(testDatabase.Notifications.usename == "testUsername".count(), 1)
+		self.assertEqual(testDatabase.Notifications.select().where(testDatabase.Notifications.usename == "testUsername".count(), 1))
 
 	def testInvalidType(self):
 		"""Attempt to create a notification with a non Foreign Key type || check that API returns expected response and DB contains no notifications"""
 		
-		payload = {
-			"user" : "patient"
-			"notificationType" : "Incorrect Notification Type"
-		}
+		user = "patient"
+		notificationType = "Connection Request"
+		relatedObject = 1
 
-		#Method is not externally addressable, how do we send? 
+		createNotification = api.createNotificationRecord(user, notificationType, relatedObject)
 		self.assertEqual(createNotification.text, "Invalid Notification Type")
 
 
