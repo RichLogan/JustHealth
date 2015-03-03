@@ -1249,6 +1249,7 @@ def takePrescription(details):
         takeInstance = TakePrescription.insert(
             prescriptionid = details['prescriptionid'],
             currentcount = details['currentcount'],
+            startingcount = Prescription.get(Prescription.prescriptionid == details['prescriptionid']).stockleft,
             currentdate = datetime.datetime.now().date())
         with database.transaction():
             takeInstance.execute()
@@ -1258,11 +1259,24 @@ def takePrescription(details):
         return "Invalid current count (is it an integer?)"
     return "False"
 
-
-def checkStockLevel(prescription, level):
+def checkStockLevel(prescription, count):
     thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
-    level = level*thisPrescription.quantity
-    thisPrescription.stockleft -= level
+    takeInstance = TakePrescription.select().where(
+        (TakePrescription.prescriptionid == prescription) &
+        (TakePrescription.currentdate == datetime.datetime.now().date())
+    ).get()
+    
+    # Level to decrease stock by is number of times taken today * number of tablets etc. taken each time
+    levelToDecrease = (count * thisPrescription.quantity)
+    
+    # If they have increased their stock, reflect that change
+    if thisPrescription.stockleft > takeInstance.startingcount:
+        takeInstance.startingcount = thisPrescription.stockleft
+    
+    # Remove the amount taken today from stock
+    thisPrescription.stockleft = (takeInstance.startingcount - levelToDecrease)
+    
+    # Commit all changes
     thisPrescription.save()
 
     # Do they have 3 days worth?

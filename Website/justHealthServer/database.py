@@ -151,6 +151,7 @@ class Prescription(BaseModel):
 class TakePrescription(BaseModel):
     prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid')
     currentcount = IntegerField()
+    startingcount = IntegerField()
     currentdate = DateField()
 
     class Meta:
