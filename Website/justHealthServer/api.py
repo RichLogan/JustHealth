@@ -1261,6 +1261,7 @@ def takePrescription(details):
 
 def checkStockLevel(prescription, level):
     thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
+    level = level*thisPrescription.quantity
     thisPrescription.stockleft -= level
     thisPrescription.save()
 
@@ -1608,7 +1609,7 @@ def getNotificationContent(notification):
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
-        content = "You have <3 days stock of " + prescription.medication.name + " left."
+        content = "You have less than 3 days stock of " + prescription.medication.name + " left."
 
     if notification['notificationtype'] == "Patient Medication Low":
         try:
@@ -1618,7 +1619,7 @@ def getNotificationContent(notification):
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
-        content = prescription.username.username + " has <3 days stock of " + prescription.medication.name + " left."
+        content = prescription.username.username + " has less than 3 days stock of " + prescription.medication.name + " left."
     return content
 
 def getNotificationLink(notification):

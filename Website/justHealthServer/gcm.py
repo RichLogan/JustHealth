@@ -189,7 +189,7 @@ def getAndroidNotificationContent(notification):
         with database.transaction():
           doesNotExist.delete_instance()
           return "DoesNotExist"
-      content = "You have <3 days stock of " + prescription.medication.name + " left."
+      content = "You have less than 3 days stock of " + prescription.medication.name + " left."
 
     if notification['notificationtype'] == "Patient Medication Low":
       try:
@@ -199,6 +199,6 @@ def getAndroidNotificationContent(notification):
         with database.transaction():
           doesNotExist.delete_instance()
           return "DoesNotExist"
-      content = prescription.username.username + " has <3 days stock of " + prescription.medication.name + " left."
+      content = prescription.username.username + " has less than 3 days stock of " + prescription.medication.name + " left."
     
     return content
