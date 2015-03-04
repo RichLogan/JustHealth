@@ -23,36 +23,10 @@
       {% endfor %}
     {% endif %}
   {% endwith %}
-
   <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-         <fieldset class= "notes">
-
-        {% for note in notes %}
-        <br />
-          <h5><strong>Title: </strong>{{note.title}}</h5>
-          <p><strong>Comment: </strong></p>
-          <p>{{note.notes}}</p>
-          <p><strong>Date Posted: </strong></p>
-          <p>{{note.datetime}}</p>
-              
-          <form action="/deleteNote" method="POST">
-            <input type="hidden" name="noteid" value="{{note.noteid}}">
-            <input type="hidden" name="patient" value="{{note.patient}}">
-            <input type="submit" class="btn btn-danger pull-right" value="Delete" onclick="return confirm('Are you sure you want to delete this note?')">
-          </form>
-
-          <br />
-          <br />
-          <br />
-          <hr class="notes" />
-        {% endfor %}
-      </fieldset>
-      </div>
-
-      <form role="form" action="/addNote" method="post" >
-        <div class="col-md-8">
+    <!--Form for a Carer to add a new note -->
+    <form role="form" action="/addNote" method="post" >
+        <div class="col-md-10">
           <div class="col-lg-7">
             <div class="form-group">
               <h4>Add Comment</h4>
@@ -72,11 +46,41 @@
                 <textarea name="notes" id="InputMessage" class="form-control" rows="4" ></textarea>
                 <span class="input-group-addon"></span></div>
               </div>
-              <br />
               <input type="submit" name="submit" id="submit" value="Post" class="btn btn-success pull-right">
+                <br />
+                <br />
+                <br />
             </div>
           </div>
         </div>
-      </form>                
+    </form> 
+
+    <div class="container">
+    <!--This contains a for loop listing all the notes the carer has recorded from the corresponding patient visit -->
+        {% for note in notes %}
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="thumbnail">
+                      <img alt="Profile Picture" src="/images/{{session.profilepicture}}" class="img-circle" style="position: relative; top: 0; left: 0;width: 10em;">
+                </div><!-- /thumbnail -->
+            </div><!-- /col-sm-1 -->
+            <div class="col-sm-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Title: </strong> {{note.title}} <span class="text-muted">{{note.datetime}}</span>
+                    </div>
+                    <div class="panel-body">{{note.notes}}
+                     <form action="/deleteNote" method="POST">
+                        <input type="hidden" name="noteid" value="{{note.noteid}}">
+                        <input type="hidden" name="patient" value="{{note.patient}}">
+                        <input type="submit" class="btn btn-danger pull-right" value="Delete" onclick="return confirm('Are you sure you want to delete this note?')">
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+         {% endfor %} 
+         </div>       
  </fieldset>
+
 {% endblock %}

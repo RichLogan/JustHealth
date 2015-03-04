@@ -13,22 +13,27 @@
   <i class="fa fa-pencil headingIcon pull-left"></i><h4 class= "pull-left">Your Notes: {{patient}}</h4>
   <hr>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <fieldset class= "notes">
+    <div class="container">
+      <!--This page contains a for loop listing all the notes the carer has recorded from their visit -->
         {% for note in notes %}
-        <br />
-          <h5><strong>Title: </strong>{{note.title}}</h5>
-          <p><strong>Comment: </strong></p>
-          <p>{{note.notes}}</p>
-          <p><strong>Date Posted: </strong></p>
-          <p>{{note.datetime}}</p>
-          <br />
-           <hr class="notes" />
-        {% endfor %}
-        </fieldset>
-      </div>
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="thumbnail">
+                      <img alt="Profile Picture" src="/images/{{session.profilepicture}}" class="img-circle" style="position: relative; top: 0; left: 0;width: 10em;">
+                </div><!-- /thumbnail -->
+            </div><!-- /col-sm-1 -->
+            <div class="col-sm-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Title: </strong> {{note.title}} <span class="text-muted">{{note.datetime}}</span>
+                    </div>
+                    <div class="panel-body">{{note.notes}}
+                    </div>
+                </div>
+            </div>
+        </div>
+         {% endfor %} 
+         </div> 
                
  </fieldset>
 {% endblock %}
