@@ -40,7 +40,19 @@ def index():
         # Patient Functionality
         notifications = json.loads(getNotifications(session['username']))
         prescriptions = json.loads(getPrescriptions(session['username']))
-        return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
+        reminders = json.loads(getReminders(session['username']))
+        return render_template(
+            'dashboard.html',
+            accountInfo=accountInfo,
+            notifications=notifications,
+            connections=connections,
+            appType=Appointmenttype.select(),
+            appointments=appointments,
+            prescriptions = prescriptions,
+            outgoing=outgoingConnections,
+            incoming=incomingConnections,
+            completed=completedConnections,
+            reminders = reminders)
     elif accountInfo['accounttype'] == "Carer":
         # Carer Functionality
         

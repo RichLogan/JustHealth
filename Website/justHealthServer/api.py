@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, a
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
+from gcm import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
 from werkzeug import secure_filename
@@ -1045,7 +1046,7 @@ def acceptDeclineAppointment(user, action, appointmentId):
         else:
             accepted = False
             notificationType = "Appointment Declined"
-            result = "You have declined this appointment"
+            result = "You have declined this appointment."
         submitAction = Appointments.update(accepted = accepted).where(Appointments.appid == appointmentId)
 
         with database.transaction():
@@ -1228,6 +1229,77 @@ def getPrescription(details):
     prescription['enddate'] = str(prescription['enddate'])
     return json.dumps(prescription)
 
+@app.route('/api/takeprescription', methods=['POST'])
+def takePrescription():
+    return takePrescription(request.form)
+
+def takePrescription(details):
+    try:
+        currentCount = int(details['currentcount'])
+        # If a record already exists for this day, update
+        takeInstance = TakePrescription.select().where((TakePrescription.prescriptionid == details['prescriptionid']) & (TakePrescription.currentdate == datetime.datetime.now().date())).get()
+        takeInstance = TakePrescription.update(
+            currentcount = currentCount
+        ).where(TakePrescription.prescriptionid == details['prescriptionid'])
+        with database.transaction():
+            takeInstance.execute()
+            checkStockLevel(details['prescriptionid'], currentCount)
+            return "True"
+    except TakePrescription.DoesNotExist:
+        # No record exists for today, create a new one
+        takeInstance = TakePrescription.insert(
+            prescriptionid = details['prescriptionid'],
+            currentcount = details['currentcount'],
+            startingcount = Prescription.get(Prescription.prescriptionid == details['prescriptionid']).stockleft,
+            currentdate = datetime.datetime.now().date())
+        with database.transaction():
+            takeInstance.execute()
+            checkStockLevel(details['prescriptionid'], currentCount)
+            return "True"
+    except TypeError:
+        return "Invalid current count (is it an integer?)"
+    return "False"
+
+def checkStockLevel(prescription, count):
+    thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
+    takeInstance = TakePrescription.select().where(
+        (TakePrescription.prescriptionid == prescription) &
+        (TakePrescription.currentdate == datetime.datetime.now().date())
+    ).get()
+    
+    # Level to decrease stock by is number of times taken today * number of tablets etc. taken each time
+    levelToDecrease = (count * thisPrescription.quantity)
+    
+    # If they have increased their stock, reflect that change
+    if thisPrescription.stockleft > takeInstance.startingcount:
+        takeInstance.startingcount = thisPrescription.stockleft
+    
+    # Remove the amount taken today from stock
+    thisPrescription.stockleft = (takeInstance.startingcount - levelToDecrease)
+    
+    # Commit all changes
+    thisPrescription.save()
+
+    # Do they have 3 days worth?
+    if (thisPrescription.stockleft < ((thisPrescription.frequency * thisPrescription.quantity)*3)):
+        patient = thisPrescription.username
+        carer = Patientcarer.get(Patientcarer.patient == patient).carer
+        createNotificationRecord(patient.username, "Medication Low", thisPrescription.prescriptionid)
+        createNotificationRecord(carer.username, "Patient Medication Low", thisPrescription.prescriptionid)
+
+@app.route('/api/getPrescriptionCount', methods=['POST'])
+def getPrescriptionCount():
+    return getPrescriptionCount(request.form)
+
+def getPrescriptionCount(details):
+    try:
+        takeInstance = TakePrescription.select().where(
+                (TakePrescription.prescriptionid == details['prescriptionid']) &
+                (TakePrescription.currentdate == datetime.datetime.now().date())) \
+            .get()
+        return str(takeInstance.currentcount)
+    except TakePrescription.DoesNotExist:
+        return str(0)
 
 
 @app.route('/api/searchNHSDirectWebsite', methods=['POST'])
@@ -1501,9 +1573,10 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Appointment Updated'] = "Appointments"
     notificationTypeTable['Appointment Cancelled'] = ""
     notificationTypeTable['Password Reset'] = ""
-    notificationTypeTable['Medication Low'] = "Prescription"
     notificationTypeTable['Appointment Declined'] = "Appointments"
     notificationTypeTable['Appointment Accepted'] = "Appointments"
+    notificationTypeTable['Patient Medication Low'] = "Prescription"
+    notificationTypeTable['Medication Low'] = "Prescription"
 
     createNotification = Notification.insert(
         username = user,
@@ -1513,7 +1586,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
     )
 
     with database.transaction():
-        createNotification.execute()
+        notificationId = str(createNotification.execute())
+        createPushNotification(notificationId)
         return "True"
     return "False"
 
@@ -1525,39 +1599,69 @@ def getNotifications():
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user"""
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
-
     notificationList = []
     for notification in notifications:
         notification['content'] = getNotificationContent(notification)
         notification['link'] = getNotificationLink(notification)
         notification['type'] = getNotificationTypeClass(notification)
-        notificationList.append(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
 
     return json.dumps(notificationList)
 
 def getNotificationContent(notification):
     """gets the body/content of the notification"""
     if notification['notificationtype'] == "Connection Request":
-        requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
+        try: 
+            requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
+        except Relationship.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = "You have a new connection request from " + requestor.requestor.username
     
     if notification['notificationtype'] == "New Connection":
         content = "You have a new connection, click above to view."
     
     if notification['notificationtype'] == "Prescription Added":
-        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = "A new prescription for " + prescription.medication.name + " has been added to your profile."
 
     if notification['notificationtype'] == "Prescription Updated":
-        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = "Your prescription for " + prescription.medication.name + " has been updated."
     
     if notification['notificationtype'] == "Appointment Invite":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Updated":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + ". Click the link to accept/decline."
 
     if notification['notificationtype'] == "Appointment Cancelled":
@@ -1566,18 +1670,45 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Password Reset":
         content = "Your password has been changed successfully."
 
-    if notification['notificationtype'] == "Medication Low":
-        prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        content = prescription.username.username + "'s prescription for " + prescription.medication.name + " is running low."
-
     if notification['notificationtype'] == "Appointment Accepted":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.invitee.username + " has accepted the appointment with you on " + str(appointment.startdate) + "."
 
     if notification['notificationtype'] == "Appointment Declined":
-        appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
         content = appointment.invitee.username + " has declined the appointment with you on " + str(appointment.startdate) + "."
-    
+
+    if notification['notificationtype'] == "Medication Low":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "You have less than 3 days stock of " + prescription.medication.name + " left."
+
+    if notification['notificationtype'] == "Patient Medication Low":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = prescription.username.username + " has less than 3 days stock of " + prescription.medication.name + " left."
     return content
 
 def getNotificationLink(notification):
@@ -1614,6 +1745,9 @@ def getNotificationLink(notification):
 
     if notification['notificationtype'] == "Medication Low":
         link = "/prescriptions"
+
+    if notification['notificationtype'] == "Patient Medication Low":
+        link = "/"
     
     return link
 
@@ -1673,11 +1807,22 @@ def getAppointmentsDueNow(username, currentTime):
             result.append(appointment)
     return result
 
-def getPrescriptionsDueIn15(username, currentTime):
-    """Search for prescriptions due in 15 mins"""
-
-def getPrescriptionsDueNow(username, currentTime):
+def getPrescriptionsDueToday(username, currentDateTime):
     """Seach for prescriptions due now"""
+    currentDate = currentDateTime.date()
+    currentDay = currentDateTime.strftime("%A")
+
+    activePrescriptions = Prescription.select().where(
+        (Prescription.username == username) &
+        (Prescription.startdate <= currentDate) &
+        (Prescription.enddate >= currentDate) &
+        (eval("Prescription." + currentDay) == True)
+    ).dicts()
+
+    results = []
+    for r in activePrescriptions:
+        results.append(r)
+    return results
 
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
@@ -1688,8 +1833,9 @@ def pingServer(sender, **extra):
         if Appointments.select().count() != 0:
             deleteReminders(loggedInUser, dt)
 
-        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0):
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
             addReminders(loggedInUser, dt)
+
     # No-one logged in
     except KeyError, e:
         return
@@ -1706,11 +1852,23 @@ def addReminders(username, now):
             withUser = a['invitee']
 
         try:
-            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            r = allReminders.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            if r.reminderClass == "danger":
+                with database.transaction():
+                    r.delete_instance()
+                raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
+
+            # Is the appointment with another user?
+            if withUser == None:
+                insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
+            else:
+                insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
+            
+            # Create the reminder
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime']),
+                content = insertContent,
                 reminderClass = "warning",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid'],
@@ -1725,16 +1883,43 @@ def addReminders(username, now):
         if withUser == username:
             withUser = a['invitee']
         try:
-            Reminder.select().dicts().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            r = allReminders.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            if r.reminderClass == "warning":
+                with database.transaction():
+                    r.delete_instance()
+                raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
+            
+            # Is the appointment with another user?
+            if withUser == None:
+                insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
+            else:
+                insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
+
+            # Create the reminder
             insertReminder = Reminder.insert(
                 username = username,
-                content = "Your " + a['type'] + " with " + withUser + " appointment started at " + a['starttime'],
+                content = insertContent,
                 reminderClass = "danger",
                 relatedObjectTable = "Appointments",
                 relatedObject = a['appid'],
                 extraDate = str(datetime.datetime.combine(a['enddate'], a['endtime']))
             )
+            with database.transaction():
+                insertReminder.execute()
+
+    prescriptionsDueToday = getPrescriptionsDueToday(username, now)
+    for p in prescriptionsDueToday:
+        try:
+            r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                username = username,
+                content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today.",
+                reminderClass = "info",
+                relatedObjectTable = "Prescription",
+                relatedObject = p['prescriptionid'],
+                extraFrequency = int(p['frequency']))
             with database.transaction():
                 insertReminder.execute()
 
@@ -1744,6 +1929,7 @@ def deleteReminders(username, now):
     allReminders = Reminder.select().where(Reminder.username == username)
 
     # Appointments
+    # Need to remove all reminders that are no longer immediately happening / 15mins. 
     appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
     allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
     for reminder in appointmentReminders:
@@ -1754,7 +1940,15 @@ def deleteReminders(username, now):
                 reminder.delete_instance()
 
     # Prescriptions
-    PrescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
+    # Need to remove all prescriptions that are not on the current day or start date > now or end date < now. 
+    prescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
+    allPrescriptions = Prescription.select().where(Prescription.username == username)
+    currentDay = now.strftime("%A")
+    for reminder in prescriptionReminders:
+        prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
+        if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
+            with database.transaction():
+                reminder.delete_instance()
 
 @app.route('/test/getReminders')
 def getReminders():
@@ -1819,6 +2013,7 @@ def expiredResetPassword(request):
         createNotificationRecord(user, "Password Reset", None)
         return "True"
     return "False"
+
 
 # def checkPrescriptionLevel(username, activePrescriptions):
 #     today = datetime.datetime.now().date()

@@ -126,17 +126,27 @@ class Prescription(BaseModel):
     medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
     dosage = IntegerField(null=True)
     dosageunit = CharField(null=True)
-    frequency = CharField(max_length=25, null=True)
     quantity = IntegerField(null=True)
     startdate = DateField(null=True)
     enddate = DateField(null=True)
     stockleft = IntegerField(null=True)
     prerequisite = CharField(null=True)
     dosageform = CharField(null=True)
+    quantity = IntegerField(null=True)
+    # Frequency, days, dates.
+    frequency = IntegerField(null=True)
+    Monday = BooleanField(default=False)
+    Tuesday = BooleanField(default=False)
+    Wednesday = BooleanField(default=False)
+    Thursday = BooleanField(default=False)
+    Friday = BooleanField(default=False)
+    Saturday = BooleanField(default=False)
+    Sunday = BooleanField(default=False)
+    startdate = DateField(null=True)
+    enddate = DateField(null=True)
 
     class Meta:
         db_table = 'prescription'
-
 
 class Notes(BaseModel):
     noteid = PrimaryKeyField()
@@ -149,6 +159,15 @@ class Notes(BaseModel):
     class Meta:
         db_table = 'notes'
 
+class TakePrescription(BaseModel):
+    prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid')
+    currentcount = IntegerField()
+    startingcount = IntegerField()
+    currentdate = DateField()
+
+    class Meta:
+        primary_key = CompositeKey('prescriptionid', 'currentdate')
+        db_table = 'takeprescription'
 
 class Notificationtype(BaseModel):
     typename = CharField(max_length=25, primary_key=True)
@@ -176,6 +195,14 @@ class Reminder(BaseModel):
     relatedObject = IntegerField()
     relatedObjectTable = CharField()
     extraDate = CharField(null=True)
+    extraFrequency = IntegerField(null=True, default=None)
+
+class Androidregistration(BaseModel):
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    registrationid = CharField(unique=True)
+
+    class Meta:
+        db_table = 'androidregistration'
 
 def createAll():
     """Creates all tables, dropping old instances if they exist"""
@@ -193,9 +220,11 @@ def createAll():
     Medication.create_table()
     Prescription.create_table()
     Notes.create_table()
+    TakePrescription.create_table()
     Notificationtype.create_table()
     Notification.create_table()
     Reminder.create_table()
+    Androidregistration.create_table()
 
 def dropAll():
     """Drops all tables providing that they exists"""
@@ -223,9 +252,13 @@ def dropAll():
         Prescription.drop_table(cascade=True)
     if Notes.table_exists():
         Notes.drop_table(cascade=True)
+    if TakePrescription.table_exists():
+        TakePrescription.drop_table(cascade=True)
     if Notificationtype.table_exists():
         Notificationtype.drop_table(cascade=True)
     if Notification.table_exists():
         Notification.drop_table(cascade=True)
     if Reminder.table_exists():
         Reminder.drop_table(cascade=True)
+    if Androidregistration.table_exists():
+        Androidregistration.drop_table(cascade=True)

@@ -12,6 +12,39 @@
     return nextAngle;
   }
 
+  function recordPrescription(prescriptionid) {
+    var count = 0;
+    var enclosingDiv = $('#prescriptionCount' + String(prescriptionid));
+    var checkBoxList = enclosingDiv.children();
+    // 0 to 4
+    $(checkBoxList).each(function(index) {
+      if ($(this).prop('checked')) {
+        count++;
+      }
+    });
+
+    // Record taking prescription
+    $.post(
+      "/api/takeprescription",
+      {
+        prescriptionid : String(prescriptionid),
+        currentcount : count
+      }
+    );
+  }
+
+  function checkPrescriptionBoxes(prescriptionid, checkCount) {
+    var enclosingDiv = $('#prescriptionCount' + String(prescriptionid));
+    var checkBoxList = enclosingDiv.children();
+    var count = 0;
+    $(checkBoxList).each(function(index) {
+      if (count < checkCount) {
+        $(this).prop('checked', true);
+        count++;
+      }
+    });
+  }
+
   $(document).ready(function() {
     // Handles Spinning of Notification Arrow
     $("#notificationsBar").click(function() {
@@ -291,6 +324,29 @@
   
   <!-- Main Panel Begins -->
   <div class="col-md-9 dashPanel">
+    <!-- Reminders (Cannot be hidden) -->
+    {% for reminder in reminders %}
+      <div class="alert alert-{{reminder.reminderClass}}" role="alert">
+        <a href=""><strong>{{reminder.relatedObjectTable}}</strong></a>
+        <br />
+        {{reminder.content}}
+        {% if reminder.relatedObjectTable == "Prescription" %}
+          <br />
+          <div id="prescriptionCount{{reminder.relatedObject}}">
+            Record your intake here:
+            {% for x in range(reminder.extraFrequency) %}
+              <input type="checkbox" onclick="recordPrescription({{reminder.relatedObject}});">
+            {% endfor %}
+            <script type="text/javascript">
+              $.post('/api/getPrescriptionCount', { prescriptionid : String({{reminder.relatedObject}}) }, function(data) {
+                checkPrescriptionBoxes({{reminder.relatedObject}}, data);
+              });
+            </script>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
     <!-- Notifications -->
     {% if notifications or reminders %}
       <div>
@@ -303,14 +359,6 @@
 
         <div class="collapse" id="notifications">
           <div class="well well-sm">
-            {% for reminder in reminders %}
-              <div class="alert alert-{{reminder.reminderClass}} alert-dismissible" role="alert">
-                <a href=""><strong>{{reminder.relatedObjectTable}}</strong></a>
-                <br />
-                {{reminder.content}}
-              </div>
-            {% endfor %}
-          
             {% for notification in notifications %}
               <div class="alert alert-{{notification.type}} alert-dismissible" role="alert">
                 <button type="button" class="close btn btn-danger" data-dismiss="alert" onclick="$.post('/dismissNotification', {'notificationid':'{{notification.notificationid}}'});"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
