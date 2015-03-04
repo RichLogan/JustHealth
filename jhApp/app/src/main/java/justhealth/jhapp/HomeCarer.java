@@ -14,6 +14,12 @@ import android.widget.IconTextView;
 import android.widget.ImageButton;
 
 public class HomeCarer extends Activity {
+    /**
+     * Creates the action bar items for the home carer page
+     * @param savedInstanceState The options menu in which the items are placed
+     * @return True must be returned in order for the terms and conditions page to be displayed
+     * This page displays 6 buttons for a user to access all settings options
+     */
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +31,7 @@ public class HomeCarer extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(username);
 
+        // Settings button
         IconTextView settings = (IconTextView) findViewById(R.id.settings);
         settings.setOnClickListener(
             new Button.OnClickListener() {
@@ -34,6 +41,7 @@ public class HomeCarer extends Activity {
             }
         );
 
+        // Search button
         IconTextView search = (IconTextView) findViewById(R.id.search);
         search.setOnClickListener(
             new Button.OnClickListener() {
@@ -43,6 +51,7 @@ public class HomeCarer extends Activity {
             }
         );
 
+        // Search button
         IconTextView connections = (IconTextView) findViewById(R.id.connections);
         connections.setOnClickListener(
             new Button.OnClickListener() {
@@ -52,6 +61,7 @@ public class HomeCarer extends Activity {
             }
         );
 
+        // My Patients button
         IconTextView mypatients = (IconTextView) findViewById(R.id.mypatients);
         mypatients.setOnClickListener(
             new Button.OnClickListener() {
@@ -61,6 +71,7 @@ public class HomeCarer extends Activity {
             }
         );
 
+        // Personal appointments button
         IconTextView appointments = (IconTextView) findViewById(R.id.myAppointments);
         appointments.setOnClickListener(
                 new Button.OnClickListener() {
@@ -70,6 +81,7 @@ public class HomeCarer extends Activity {
                 }
         );
 
+        // Profile page button
         IconTextView profile = (IconTextView) findViewById(R.id.profile);
         profile.setOnClickListener(
                 new Button.OnClickListener() {

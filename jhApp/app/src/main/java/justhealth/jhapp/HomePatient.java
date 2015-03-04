@@ -15,7 +15,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class HomePatient extends Activity {
-
+    /**
+     * Creates the action bar items for the home patient page
+     * @param savedInstanceState The options menu in which the items are placed
+     * @return True must be returned in order for the terms and conditions page to be displayed
+     * This page displays 6 buttons for a user to access all settings options
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_patient);
@@ -26,6 +31,7 @@ public class HomePatient extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(username);
 
+        //Settings page
         IconTextView settings = (IconTextView) findViewById(R.id.settings);
         settings.setOnClickListener(
                 new Button.OnClickListener() {
@@ -35,6 +41,7 @@ public class HomePatient extends Activity {
                 }
         );
 
+        //Search Page
         IconTextView search = (IconTextView) findViewById(R.id.search);
         search.setOnClickListener(
             new Button.OnClickListener() {
@@ -44,6 +51,7 @@ public class HomePatient extends Activity {
             }
         );
 
+        //Connections page
         IconTextView connections = (IconTextView) findViewById(R.id.connections);
         connections.setOnClickListener(
             new Button.OnClickListener() {
@@ -53,6 +61,7 @@ public class HomePatient extends Activity {
             }
         );
 
+        //Personal Appoinments page
         IconTextView appointments = (IconTextView) findViewById(R.id.appointments);
         appointments.setOnClickListener(
                 new Button.OnClickListener() {
@@ -62,6 +71,7 @@ public class HomePatient extends Activity {
                 }
         );
 
+        //Profile page
         IconTextView profile = (IconTextView) findViewById(R.id.profile);
         profile.setOnClickListener(
             new Button.OnClickListener() {
@@ -71,6 +81,7 @@ public class HomePatient extends Activity {
             }
         );
 
+        //Medication oage
         IconTextView medication  = (IconTextView) findViewById(R.id.medication);
         medication.setOnClickListener(
             new Button.OnClickListener() {
