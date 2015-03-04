@@ -54,7 +54,7 @@ class testCreateNotificationRecord(unittest.TestCase):
 		#Method is not externally addressable how does this work? 
 		createNotification = api.createNotificationRecord(user, notificationType, relatedObject)
 		self.assertEqual(createNotification.text, "True")
-		self.assertEqual(testDatabase.Notifications.select().where(testDatabase.Notifications.usename == "testUsername".count(), 1))
+		self.assertEqual(testDatabase.Notifications.select().where((testDatabase.Notifications.username == "testUsername") & (testDatabase.Notifications.dismissed == False)).count(), 1)
 
 	def testInvalidType(self):
 		"""Attempt to create a notification with a non Foreign Key type || check that API returns expected response and DB contains no notifications"""
@@ -69,7 +69,22 @@ class testCreateNotificationRecord(unittest.TestCase):
 
 	def testInvalidUser(self):
 		"""Attempt to create a notification for a user that doesn't exist || check that API returns expected response and DB contains no notifications"""
-		return False
+		user = "doesNotExist"
+		notificationType = "Connection Request"
+		relatedObject = 1
 
-	def testDismissedDefault
-		"""Create a legitimate notification and test that dismissed is set to false || check that API returns expected response and DB is correct too"""
+		createNotification = api.createNotificationRecord(user, notificationType, relatedObject)
+		self.assertEqual(createNotification.text, "User Does Not Exist")
+		self.assertEqual(testDatabase.Notifications.select().where(testDatabase.Notifications.username == "doesNotExist").count(), 0)
+
+	def testInvalidNotificationType(self):
+		"""Attempt to create a notification with a Notification Type that does not exist || check that the API returns expected response and DB contains no notifications"""
+		user = "patient"
+		notificationType = "Does Not Exist"
+		relatedObject = 1
+
+		createNotification = api.createNotificationRecord(user, notificationType, relatedObject)
+		self.assertEqual(createNotification.text, "Invalid Notification Type")
+		self.assertEqual(testDatabase.Notifications.select().where((testDatabase.Notifications.username == "patient") & (testDatabase.Notifications.notificationtype == "Does Not Exist")).count(), 0)
+		
+
