@@ -33,7 +33,6 @@
                 android:layout_marginRight="15dp"
                 style="@style/defaultLinearForm">
 
-
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profilePicture"
                     android:layout_width="96sp"
@@ -64,7 +63,6 @@
                     android:layout_marginTop="10sp"
                     android:layout_gravity="center"
                     />
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,14 +109,12 @@
                     android:layout_below="@id/profileAccount"
                     android:layout_marginTop="10sp"/>
 
+                <Button
+                    android:text="Edit Profile"
+                    android:id="@+id/editProfile"
+                    style="@style/primaryButton"
+                    android:layout_marginTop="35dp" />
             </LinearLayout>
-
-            <Button
-                android:text="Edit Profile"
-                android:id="@+id/editProfile"
-                style="@style/defaultConfirmButton"
-                android:layout_marginTop="35dp" />
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -371,11 +371,12 @@ def editProfile(profile, picture):
     allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
     file = picture['image']
     filename = file.filename
-    fileExtension = filename.rsplit('.', 1)[1]
-    if file and ('.' in filename and fileExtension in allowedExtension):
-        filename = secure_filename(getSerializer().dumps(filename)) + "." + fileExtension
-        file.save(os.path.join(app.config['PROFILE_PICTURE'], filename))
-        clientObject.profilepicture = filename
+    if (filename != "") and (filename != None):
+        fileExtension = filename.rsplit('.', 1)[1]
+        if file and ('.' in filename and fileExtension in allowedExtension):
+            filename = secure_filename(getSerializer().dumps(filename)) + "." + fileExtension
+            file.save(os.path.join(app.config['PROFILE_PICTURE'], filename))
+            clientObject.profilepicture = filename
 
     # Execute Updated
     with database.transaction():
@@ -756,6 +757,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         person['code'] = str(connection.code)
         outgoingConnectionsDetails.append(person)
     outgoingFinal = json.dumps(outgoingConnectionsDetails)
@@ -768,6 +770,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         person['connectionid'] = str(connection.connectionid)
         incomingConnectionsDetails.append(person)
     incomingFinal = json.dumps(incomingConnectionsDetails)
@@ -788,6 +791,7 @@ def getConnections(username):
         person['email'] = details ['email']
         person['telephonenumber'] = details ['telephonenumber']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)
 

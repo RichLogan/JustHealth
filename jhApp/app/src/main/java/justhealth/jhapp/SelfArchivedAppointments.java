@@ -152,7 +152,7 @@ public class SelfArchivedAppointments extends Activity {
                 Date now = new Date();
                 if (appDateTime.before(now)) {
 
-                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
                     Button app = new Button(newContext);
                     app.setBackgroundColor(Color.rgb(51, 122, 185));
                     app.setText(name + " " + startDate + " " + startTime);

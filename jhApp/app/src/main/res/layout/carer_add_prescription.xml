@@ -86,19 +86,6 @@
                         style="@style/inputIcon" />
                 </RelativeLayout>
 
-                <!-- Frequency Unit -->
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:hint="Frequency Unit (e.g. Daily)"
-                        android:id="@+id/frequencyUnit"
-                        style="@style/inputWithIcon"/>
-                    <IconTextView
-                        android:text="{fa-medkit}"
-                        style="@style/inputIcon" />
-                </RelativeLayout>
-
                 <!-- Dosage Form -->
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -153,7 +140,6 @@
                         style="@style/inputIcon" />
                 </RelativeLayout>
 
-
                 <!-- Observations -->
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -167,25 +153,12 @@
                         style="@style/inputIcon" />
                 </RelativeLayout>
 
-                <!-- Repeat? -->
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <CheckBox
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Repeat Prescription"
-                        android:id="@+id/repeat"
-                        android:checked="false" />
-                </RelativeLayout>
-
                 <!-- Add -->
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Add"
                     android:id="@+id/addPrescription"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_width="match_parent"
+                    style="@style/successButton"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
