@@ -172,7 +172,7 @@
                 android:text="Create"
                 android:id="@+id/buttonAppointment"
                 android:layout_marginTop="35sp"
-                style="@style/defaultConfirmButton" />
+                style="@style/primaryButton" />
         </LinearLayout>
 
     </ScrollView>

@@ -99,19 +99,11 @@ public class EditPrescription extends Activity {
             ((EditText)findViewById(R.id.dosageValue)).setText(prescription.getString("dosage"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.dosageUnit)).setText(prescription.getString("dosageunit"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.frequency)).setText(prescription.getString("frequency"), TextView.BufferType.EDITABLE);
-            ((EditText)findViewById(R.id.frequencyUnit)).setText(prescription.getString("frequencyunit"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.type)).setText(prescription.getString("dosageform"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.startDate)).setText(prescription.getString("startdate"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.endDate)).setText(prescription.getString("enddate"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.stockLeft)).setText(prescription.getString("stockleft"), TextView.BufferType.EDITABLE);
             ((EditText)findViewById(R.id.observations)).setText(prescription.getString("prerequisite"), TextView.BufferType.EDITABLE);
-
-            if (prescription.getString("repeat").equals("Yes")) {
-                ((CheckBox) findViewById(R.id.repeat)).setChecked(true);
-            }
-            else {
-                ((CheckBox) findViewById(R.id.repeat)).setChecked(true);
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -129,18 +121,11 @@ public class EditPrescription extends Activity {
         parameters.put("dosage", ((EditText)findViewById(R.id.dosageValue)).getText().toString());
         parameters.put("dosageunit", ((EditText)findViewById(R.id.dosageUnit)).getText().toString());
         parameters.put("frequency", ((EditText)findViewById(R.id.frequency)).getText().toString());
-        parameters.put("frequencyunit", ((EditText)findViewById(R.id.frequencyUnit)).getText().toString());
         parameters.put("dosageform", ((EditText) findViewById(R.id.type)).getText().toString());
         parameters.put("startdate", ((EditText)findViewById(R.id.startDate)).getText().toString());
         parameters.put("enddate", ((EditText)findViewById(R.id.endDate)).getText().toString());
         parameters.put("stockleft", ((EditText) findViewById(R.id.stockLeft)).getText().toString());
         parameters.put("prerequisite", ((EditText)findViewById(R.id.observations)).getText().toString());
-        if (((CheckBox) findViewById(R.id.repeat)).isChecked()) {
-            parameters.put("repeat", "Yes");
-        }
-        else {
-            parameters.put("repeat", "No");
-        }
 
         //Post
         String response = Request.post("editPrescription", parameters, getApplicationContext());

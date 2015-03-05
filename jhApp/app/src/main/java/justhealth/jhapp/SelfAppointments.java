@@ -12,13 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
-import android.support.v4.app.NavUtils;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
@@ -131,6 +129,8 @@ public class SelfAppointments extends Activity {
         for (int i = 0; i < getApps.length(); i++) {
             try {
                 JSONObject obj = getApps.getJSONObject(i);
+                final String creator = obj.getString("creator");
+                final String invitee = obj.getString("invitee");
                 final String appid = obj.getString("appid");
                 final String name = obj.getString("name");
                 final String appType = obj.getString("apptype");
@@ -145,6 +145,8 @@ public class SelfAppointments extends Activity {
                 final String androidId = obj.getString("androideventid");
 
                 final HashMap<String, String> appDetails = new HashMap<>();
+                appDetails.put("creator", creator);
+                appDetails.put("invitee", invitee);
                 appDetails.put("appid", appid);
                 appDetails.put("name", name);
                 appDetails.put("appType", appType);
@@ -162,7 +164,7 @@ public class SelfAppointments extends Activity {
                 Date now = new Date();
                 if (appDateTime.after(now)) {
 
-                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.defaultConfirmButton);
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
                     Button app = new Button(newContext);
                     app.setBackgroundColor(Color.rgb(51, 122, 185));
                     app.setText(name + " " + startDate + " " + startTime);
@@ -193,55 +195,106 @@ public class SelfAppointments extends Activity {
      * It firstly checks that the logged in user was the creator of the appointment before showing the available actions.
      * @param appointmentDetails this is the HashMap of the appointment that has been pressed
      */
-
     private void appointmentAction(final HashMap<String, String> appointmentDetails) {
-        System.out.println("method running");
-        AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
-        alert.setTitle("Appointment Options")
-                .setItems(R.array.patient_appointments_options, new DialogInterface.OnClickListener() {
-                    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            //View appointment
-                            HashMap<String, Integer> appStart = getDateTimeFormat(appointmentDetails.get("startDate"), "00:00");
-                            Calendar start = Calendar.getInstance();
-                            start.set(appStart.get("year"), appStart.get("month"), appStart.get("day"), appStart.get("hour"), appStart.get("minute"));
-                            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
-                            builder.appendPath("time");
-                            ContentUris.appendId(builder, start.getTimeInMillis());
-                            Intent intent = new Intent(Intent.ACTION_VIEW)
-                                    .setData(builder.build());
-                            startActivity(intent);
-                        } else if (which == 1) {
-                            //Edit appointment
-                            Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
-                            intent.putExtra("appointmentDetails", appointmentDetails);
-                            startActivity(intent);
-                        } else if (which == 2) {
-                            //Delete appointment
-                            AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
+        if(isCreator(appointmentDetails.get("creator"))) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
+            System.out.println("method running");
+            alert.setTitle("Appointment Options")
+                    .setItems(R.array.patient_appointments_options, new DialogInterface.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == 0) {
+                                //View appointment
+                                HashMap<String, Integer> appStart = getDateTimeFormat(appointmentDetails.get("startDate"), "00:00");
+                                Calendar start = Calendar.getInstance();
+                                start.set(appStart.get("year"), appStart.get("month"), appStart.get("day"), appStart.get("hour"), appStart.get("minute"));
+                                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                                builder.appendPath("time");
+                                ContentUris.appendId(builder, start.getTimeInMillis());
+                                Intent intent = new Intent(Intent.ACTION_VIEW)
+                                        .setData(builder.build());
+                                startActivity(intent);
+                            } else if (which == 1) {
+                                //Edit appointment
+                                Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
+                                intent.putExtra("appointmentDetails", appointmentDetails);
+                                startActivity(intent);
+                            } else if (which == 2) {
+                                //Delete appointment
+                                AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
 
-                            alert.setTitle("Delete Appointment");
-                            alert.setMessage("Are you sure you want to delete this Appointment?");
+                                alert.setTitle("Delete Appointment");
+                                alert.setMessage("Are you sure you want to delete this Appointment?");
 
-                            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    deleteAppointment(appointmentDetails);
-                                }
-                            });
+                                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        deleteAppointment(appointmentDetails);
+                                    }
+                                });
 
-                            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Cancelled.
-                                }
-                            });
+                                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        // Cancelled.
+                                    }
+                                });
 
-                            alert.show();
+                                alert.show();
+                            }
+                            //others to be added here
                         }
-                        //others to be added here
-                    }
-                });
-        alert.show();
+                    });
+            alert.show();
+        }
+        else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
+            System.out.println("method running");
+            alert.setTitle("Appointment Options")
+                    .setItems(R.array.patient_invitee_appointments_options, new DialogInterface.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == 0) {
+                                //View appointment
+                                HashMap<String, Integer> appStart = getDateTimeFormat(appointmentDetails.get("startDate"), "00:00");
+                                Calendar start = Calendar.getInstance();
+                                start.set(appStart.get("year"), appStart.get("month"), appStart.get("day"), appStart.get("hour"), appStart.get("minute"));
+                                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                                builder.appendPath("time");
+                                ContentUris.appendId(builder, start.getTimeInMillis());
+                                Intent intent = new Intent(Intent.ACTION_VIEW)
+                                        .setData(builder.build());
+                                startActivity(intent);
+                            } else if (which == 1) {
+                                //Edit appointment
+                                HashMap<String, String> details = new HashMap<String, String>();
+                                details.put("username", appointmentDetails.get("invitee"));
+                                details.put("action", "Accept");
+                                details.put("appid", appointmentDetails.get("appid"));
+                                String response = Request.post("acceptDeclineAppointment", details, getApplicationContext());
+                                System.out.println(response);
+                                if (response.equals("You have accepted this appointment.")) {
+                                    Feedback.toast(response, true, getApplicationContext());
+                                }
+                                else {
+                                    Feedback.toast("Somethings gone wrong", false, getApplicationContext());
+                                }
+                            } else if (which == 2) {
+                                HashMap<String, String> details = new HashMap<String, String>();
+                                details.put("username", appointmentDetails.get("invitee"));
+                                details.put("action", "Decline");
+                                details.put("appid", appointmentDetails.get("appid"));
+                                String response = Request.post("acceptDeclineAppointment", details, getApplicationContext());
+                                if (response.equals("You have declined this appointment.")) {
+                                    Feedback.toast(response, true, getApplicationContext());
+                                }
+                                else {
+                                    Feedback.toast("Somethings gone wrong", false, getApplicationContext());
+                                }
+                            }
+                            //others to be added here
+                        }
+                    });
+            alert.show();
+        }
     }
     /**
      * This is run when the user selects to delete the appointment.
@@ -351,5 +404,21 @@ public class SelfAppointments extends Activity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Returns true or false as to whether the person that has logged in is the same person that created the appointment.
+     * @param username the username of the person that created the appointment
+     * @return true/false whether they created the appointment
+     */
+    private boolean isCreator(String username) {
+        SharedPreferences account = this.getSharedPreferences("account", 0);
+        String sharedPreferencesUsername = account.getString("username", null);
+        if(username.equals(sharedPreferencesUsername)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -102,7 +102,7 @@
     <fieldset class="style">
       <!-- Side panel to display connections -->
       <div>
-        <h5><i class="fa fa-users sideIcons"></i> Connections</h5>
+        <h5><i class="fa fa-link sideIcons"></i> Connections</h5>
         {% if connections %}
           {% for connection in completed %} 
             <a data-toggle="modal" data-target="#{{connection.username}}"></a>
@@ -146,7 +146,7 @@
       <div id="dashConnections">
 
         <!-- Modal to show connections -->
-        <a class="modalheader" data-toggle="modal" data-target="#connections"><i class="fa fa-user-plus xsmallIcon pull-right"></i></a>
+        <a class="pull-left" data-toggle="modal" data-target="#connections">Pending requests</a>
         <div class="modal fade" id="connections" tabindex="-1" role="dialog" aria-labelledby="connections" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -983,6 +983,20 @@
                       </div>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <!-- Notes -->
+                      <a href="/notes?user={{patient.username}}">
+                        <div style="height:25px;">
+                          <p style="line-height:20px;font-size:20px;">
+                            <i class="fa fa-pencil"></i>Notes
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1044,43 +1058,44 @@
 
                             {% if appointment.creator == session['username'] %}
                               <p><b>Invited:</b> <br /> {{appointment.invitee}}</p>
-                            {% if appointment.accepted == true %}
-                              <p><em>{{appointment.invitee}} has accepted this appointment.</em></p>
-                            {% endif %}
-                            {% if appointment.accepted == false %}
-                              <p><em>{{appointment.invitee}} has declined this appointment.</em></p>
-                            {% endif %}
-                            {% if appointment.accepted == none %}
-                              <p><em>{{appointment.invitee}} is yet to respond to this appointment.</em></p>
-                            {% endif %}
-                          {% endif %} 
+                              {% if appointment.accepted == true %}
+                                <p><em>{{appointment.invitee}} has accepted this appointment.</em></p>
+                              {% endif %}
+                              {% if appointment.accepted == false %}
+                                <p><em>{{appointment.invitee}} has declined this appointment.</em></p>
+                              {% endif %}
+                              {% if appointment.accepted == none %}
+                                <p><em>{{appointment.invitee}} is yet to respond to this appointment.</em></p>
+                              {% endif %}
+                            {% endif %} 
                           <br />
-                        </div>
+                          </div>
                         
-                        <div class="col-md-6">
-                          <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
-                          <br />
-                          <iframe width="200" height="200" frameborder="0" style="border:0"
-                          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
-                          </iframe>
+                          <div class="col-md-6">
+                            <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
+                            <br />
+                            <iframe width="200" height="200" frameborder="0" style="border:0"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
+                            </iframe>
+                          </div>
                         </div>
-                      </div>
                       
-                      <div class="row">
-                        <div class="col-md-2">
-                          <a href="/updateAppointment?appid={{appointment.appid}}">
-                            <button class="btn btn-warning">Update</button>
-                          </a>
-                        </div>
-                        
-                        <div class="col-md-2">
-                          <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
-                            <input type="hidden" name="appid" value="{{appointment.appid}}">
-                            <input type="submit" class="btn btn-danger" value="Delete">
-                          </form>
-                        </div>
-                        <div class="col-md-8">
-                          <p></p>
+                        <div class="row">
+                          <div class="col-md-2">
+                            <a href="/updateAppointment?appid={{appointment.appid}}">
+                              <button class="btn btn-warning">Update</button>
+                            </a>
+                          </div>
+                          
+                          <div class="col-md-2">
+                            <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                              <input type="hidden" name="appid" value="{{appointment.appid}}">
+                              <input type="submit" class="btn btn-danger" value="Delete">
+                            </form>
+                          </div>
+                          <div class="col-md-8">
+                            <p></p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1090,6 +1105,5 @@
             {% endfor %}
           {% endblock %}
         </div>
-      </div>
     </fieldset>
 {% endblock %}

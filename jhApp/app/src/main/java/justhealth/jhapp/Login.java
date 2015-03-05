@@ -4,35 +4,27 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.joanzapata.android.iconify.IconDrawable;
-import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +39,6 @@ public class Login extends Activity implements SurfaceHolder.Callback {
     SurfaceView surfaceView = null;
     SurfaceHolder surfaceHolder = null;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -150,35 +141,36 @@ public class Login extends Activity implements SurfaceHolder.Callback {
             SharedPreferences.Editor edit = account.edit();
             edit.putString("username", loginInformation.get("username"));
             edit.putString("password", encryptedPassword);
-            edit.commit();
+            edit.apply();
 
-            if (getAccountType(loginInformation.get("username")).equals("Patient")) {
-                startActivity(new Intent(Login.this, HomePatient.class));
-            } else if (getAccountType(loginInformation.get("username")).equals("Carer")) {
-                startActivity(new Intent(Login.this, HomeCarer.class));
-            }
+            String accountType = getAccountType(loginInformation.get("username"));
+            System.out.println("Account Type: " + accountType);
+
+            SharedPreferences.Editor addAccountType = account.edit();
+            addAccountType.putString("accountType", accountType);
+            addAccountType.commit();
+            startActivity(new Intent(Login.this, Main.class));
         }
         else if (response.equals("Reset")) {
-            SharedPreferences account = getSharedPreferences("account", 0);
-            SharedPreferences.Editor edit = account.edit();
-            edit.putString("username", loginInformation.get("username"));
-            edit.putString("password", encryptedPassword);
-            edit.commit();
-            //here
+            String expiredUsername = loginInformation.get("username");
+            String expiredPassword = encryptedPassword;
+            String expiredAccountType = getAccountType(expiredUsername);
+
             Intent reset = new Intent(Login.this, ExpiredPassword.class);
             reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
                     "JustHealth enforce this from time-to-time to ensure that your " +
                     "privacy and security are maximised whilst using the website.");
+            reset.putExtra("username", expiredUsername);
+            reset.putExtra("password", expiredPassword);
+            reset.putExtra("accountType", expiredAccountType);
             startActivity(reset);
         }
         else if (response.equals("<11")) {
-            SharedPreferences account = getSharedPreferences("account", 0);
-            SharedPreferences.Editor edit = account.edit();
-            edit.putString("username", loginInformation.get("username"));
-            edit.putString("password", encryptedPassword);
-            edit.commit();
+            String expiredUsername = loginInformation.get("username");
+            String expiredPassword = encryptedPassword;
+            String expiredAccountType = getAccountType(expiredUsername);
             //options dialog
-            giveResetOptions();
+            giveResetOptions(expiredUsername, expiredPassword, expiredAccountType);
         }
         else {
             Feedback.toast(response, false, getApplicationContext());
@@ -193,6 +185,8 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         try {
             JSONObject accountDetails = new JSONObject(response);
             String accountType  = accountDetails.getString("accounttype");
+            System.out.println("whole array after the get : " + accountDetails);
+            System.out.println("Account type after the get : " + accountDetails);
             return accountType;
         }
         catch (JSONException e) {
@@ -208,9 +202,9 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         return response;
     }
 
-    private void giveResetOptions() {
+    private void giveResetOptions(final String expiredUsername, final String expiredPassword, final String expiredAccountType) {
         AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
-        alert.setTitle("Appointment Options")
+        alert.setTitle("Password Expiring")
                 .setItems(R.array.password_expiry_options, new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                     public void onClick(DialogInterface dialog, int which) {
@@ -219,20 +213,31 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                             reset.putExtra("message", "Your password is soon going to expire. " +
                                     "JustHealth enforce this from time-to-time to ensure that your " +
                                     "privacy and security are maximised whilst using the website");
+                            reset.putExtra("username", expiredUsername);
+                            reset.putExtra("password", expiredPassword);
+                            reset.putExtra("accountType", expiredAccountType);
                             startActivity(reset);
 
                         } else if (which == 1) {
                             SharedPreferences account = getSharedPreferences("account", 0);
-                            String username = account.getString("username", null);
+                            SharedPreferences.Editor edit = account.edit();
+                            edit.putString("username", expiredUsername);
+                            edit.putString("password", expiredPassword);
 
-                            if (getAccountType(username).equals("Patient")) {
-                                startActivity(new Intent(Login.this, HomePatient.class));
-                            } else if (getAccountType(username).equals("Carer")) {
-                                startActivity(new Intent(Login.this, HomeCarer.class));
-                            }
+                            edit.putString("accountType", expiredAccountType);
+                            edit.commit();
+
+                            startActivity(new Intent(Login.this, Main.class));
                         }
                     }
                 });
         alert.show();
+    }
+
+    public void registerWithServer() {
+        Intent intent = new Intent("com.google.android.c2dm.intent.REGISTER");
+        intent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+        intent.putExtra("sender", "1054401665950");
+        startService(intent);
     }
 }

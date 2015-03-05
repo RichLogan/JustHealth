@@ -52,7 +52,19 @@ def index():
         # Patient Functionality
         notifications = json.loads(getNotifications(session['username']))
         prescriptions = json.loads(getPrescriptions(session['username']))
-        return render_template('dashboard.html', accountInfo=accountInfo, notifications=notifications, connections=connections, appType=Appointmenttype.select(), appointments=appointments, prescriptions = prescriptions, outgoing=outgoingConnections, incoming=incomingConnections, completed=completedConnections)
+        reminders = json.loads(getReminders(session['username']))
+        return render_template(
+            'dashboard.html',
+            accountInfo=accountInfo,
+            notifications=notifications,
+            connections=connections,
+            appType=Appointmenttype.select(),
+            appointments=appointments,
+            prescriptions = prescriptions,
+            outgoing=outgoingConnections,
+            incoming=incomingConnections,
+            completed=completedConnections,
+            reminders = reminders)
     elif accountInfo['accounttype'] == "Carer":
         # Carer Functionality
         
@@ -665,6 +677,50 @@ def dismissNotifications():
         return notificationDismiss 
 
 
+@app.route('/notes',methods=['POST', 'GET'])
+def notes():
+    """JustHealth correspondence"""
+    connections = json.loads(getConnections(session['username']))    
+    if request.method == "GET":
+        try:
+            patient = request.args.get('user', '')
+            Patientcarer.select().where((Patientcarer.carer == session['username']) & (Patientcarer.patient == patient)).get()
+            correspondence = json.loads(getCorrespondence(session['username'], patient))
+            return render_template('correspondence.html', notes=correspondence, patient=patient)
+        except Patientcarer.DoesNotExist:
+            return redirect(url_for('index'))
+
+@app.route('/addNote',methods=['POST', 'GET'])
+def addNote():
+    patient = request.form['patient']
+    if request.method == "POST":
+        result = addCorrespondence(request.form)
+        if result == "True":
+            flash("Note successfully added", 'success')
+        else:
+            flash("Note could not be added", 'danger')
+        return redirect("/notes?user=" + patient)
+
+@app.route('/deleteNote', methods=['POST'])
+def deleteNote_view():
+    patient = request.form['patient']
+    noteid = request.form['noteid']
+    deleted = deleteNote(noteid)
+    if deleted == "Deleted":
+        flash("Note successfully deleted", 'success')
+    else:
+        flash("Note could not be deleted", 'danger')
+    return redirect("/notes?user=" + patient)
+
+@app.route('/patientNotes',methods=['POST', 'GET'])
+def patientNotes():
+    if request.method == "GET":
+        try:
+            notes = json.loads(getPatientNotes(session['username']))
+            return render_template('patientNotes.html', notes=notes)
+        except Patientcarer.DoesNotExist:
+            return render_template('patientNotes.html')
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('internalError.html'), 500
@@ -734,7 +790,6 @@ def updateAccountSettings_view():
             flash('Update failed', 'danger')
             return redirect(url_for('adminPortal'))
 
-
 @app.route('/deleteAccount', methods=['POST'])
 @needLogin
 @needAdmin
@@ -746,7 +801,6 @@ def deleteAccount_view():
     else:
         flash("User could not be deleted", 'danger')
     return redirect("/adminPortal")
-
 
 @app.route('/addNewDeactivate', methods=['POST'])
 @needLogin
