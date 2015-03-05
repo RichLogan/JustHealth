@@ -223,6 +223,13 @@
         <activity android:name=".ConnectionsMain"/>
         <activity android:name=".ConnectionsView"/>
 
+        <activity android:name=".PatientCorrespondence"
+            android:label="PatientCorrespondence">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
+        </activity>
+
         <activity android:name=".Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
