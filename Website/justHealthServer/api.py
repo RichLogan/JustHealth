@@ -1119,7 +1119,14 @@ def addPrescription(details):
         enddate = details['enddate'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
-        dosageform = details['dosageform'])
+        dosageform = details['dosageform'],
+        Monday = details['Monday'],
+        Tuesday = details['Tuesday'],
+        Wednesday = details['Wednesday'],
+        Thursday = details['Thursday'],
+        Friday = details['Friday'],
+        Saturday = details['Saturday'],
+        Sunday  = details['Sunday'])
 
     try:
         with database.transaction():
