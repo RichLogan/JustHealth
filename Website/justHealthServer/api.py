@@ -1298,6 +1298,20 @@ def newMedication(medication):
         return "True"
     return "False"
 
+#@app.route('/api/getReasons', methods=['POST'])
+#@auth.login_required
+#def getReasons():
+#    return getReasons()
+#
+#def getReasons():
+#    """Get all the reasons from the deactivate table"""
+#    results = []
+#    for r in Deactivatereason.select(Deactivatereason.reason):
+#        deactivateReasons = {}
+#    
+#        results.append(deactivateReasons)
+#    return json.dumps(results)
+
 @app.route('/api/getAllUsers', methods=['POST'])
 @auth.login_required
 def getAllUsers():
