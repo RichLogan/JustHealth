@@ -2,39 +2,94 @@
 
 {% block title %}Admin Home{% endblock %}
 
-{% block scriptsAndStyles %}{% endblock %}
-
-{% block content %}
+{% block scriptsAndStyles %}
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
-  // Load the Visualization API and the piechart package.
-  google.load('visualization', '1.0', {'packages':['corechart']});
-  // Set a callback to run when the Google Visualization API is loaded.
+  google.load("visualization", "1", {packages:["corechart"]});
   google.setOnLoadCallback(drawChart);
-  // Callback that creates and populates a data table,
-  // instantiates the pie chart, passes in the data and
-  // draws it.
   function drawChart() {
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'reason');
-    data.addColumn('number', 'number');
-    data.addRows([
-      ['Mushrooms', 3],
-      ['Onions', 1],
-      ['Olives', 1],
-      ['Zucchini', 1],
-      ['Pepperoni', 2]
+
+    var data = google.visualization.arrayToDataTable([
+      ['Reason', 'Number'],
+      ['I don’t understand how to use JustHealth', 0],
+      ['I’m only leaving temporarily', 1],
+      ['I’m using a different app', 1],
+      ['I receive too many notifications and emails', 0],
+      ['I don’t find JustHealth useful', 0],
+      ['I have privacy concerns', 0],
+      ['Other (Please specify)', 0]
     ]);
-    // Set chart options
-    var options = {'title':'Reasons for users deactivation',
-                   'width':500,
-                   'height':400};
-    // Instantiate and draw our chart, passing in some options.
-    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+
+    var options = {
+      title: 'Reasons for account deactivation',
+      'width':900,
+      'height':500 
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
     chart.draw(data, options);
   }
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+  //check password strength
+  //keyup event on password field so code will execute on every keypress
+  $('#password').keyup(function() {
+    $('#result').html(checkStrength($('#password').val()));
+  });
+
+  //check if email is valid
+  //focus out: validation is performed when different field is active
+  $('#validateEmail').focusout(function() {
+    if(validateEmail($('#validateEmail').val())) {
+      //show message if email is valid
+      $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+    }
+  });
+
+  $('#dob').focusout(function() {
+    if(isDate($('#dob').val())) {
+      //show message if email is valid
+      $('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
+    }
+  });
+
+    //Check all fields are filled in
+  $('form').submit(function(e) {
+    $("form :input").each(function(){
+      if ($(this).val() == null || $(this).val() == "") {
+        alert("All fields must be filled out");
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+  $('#usernameInput').keyup(function() {
+    content = $('#usernameInput').val();
+    $.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
+      if (data == "True") {
+        $('#usernameError').addClass("has-error");
+        $('#usernameErrorLabel').text("Username (Username already taken)");
+      }
+      else {
+        $('#usernameError').addClass("has-success");
+        $('#usernameErrorLabel').text("Username (Username available)");
+      }
+    });
+  });
+
+  //search through users
   $(document).ready(function () {
       (function ($) {
           $('#filter').keyup(function () {
@@ -46,7 +101,42 @@
           })
       }(jQuery));
   });
+  
+    // search through medication
+    $(document).ready(function () {
+      (function ($) {
+          $('#test').keyup(function () {
+              var rex = new RegExp($(this).val(), 'i');
+              $('.medication tr').hide();
+              $('.medication tr').filter(function () {
+                  return rex.test($(this).text());
+              }).show();
+          })
+      }(jQuery));
+  });
+
+      $(document).ready(function() {
+    //check password strength
+    //keyup event on password field so code will execute on every keypress
+    $('#password').keyup(function() {
+      $('#result').html(checkStrength($('#password').val()));
+    });
+
+    $('#dob').focusout(function() {
+    if(isDate($('#dob').val())) {
+      //show message if email is valid
+      $('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
+    }
+    else {
+      //show message if email is not valid
+      $('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
+    }
+  });
 </script>
+{% endblock %}
+
+{% block content %}
+
 
 <div class="row">
   <div class="col-md-2">
@@ -72,10 +162,10 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
               <li><a href="#addNewDeactivate" tabindex="-1" data-toggle="tab">Add new deactivation reason</a></li>
               <li><a href="#deactivateReasons" tabindex="-1" data-toggle="tab">Reasons for deactivation </a></li>
-              <li><a href="#deactivateStats" tabindex="-1" data-toggle="tab">Statistics</a></li>
             </ul>
-              <li><a href="#charts" data-toggle="tab">Charts</a></li>
+              <li><a href="#charts" data-toggle="tab">Statistics</a></li>
               <li><a href="#twitter" data-toggle="tab">Twitter</a></li>
+              <li><a href="#RegisterNewAdmin" data-toggle="tab">Register an Admin Account</a></li>
           </li>
         </ul>
         <br />
@@ -169,7 +259,7 @@
                     <td><form action="/deleteAccount" method="POST">
                           <input type="hidden" name="username" value="{{allUsers.username}}">
 
-                          <input class="btn btn-danger pull-right" onclick="return confirm('Are you sure you want to delete this account?')" type="submit" value="Deactivate">
+                          <input class="btn btn-danger pull-right" onclick="return confirm('Are you sure you want to delete this account?')" type="submit" value="Delete">
                         </form>
                     </td>
 
@@ -280,25 +370,27 @@
         <!--Tab for current medication -->
         <div role="tabpanel" class="tab-pane fade in container" id="currentMedication" style="width: 90%">
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="currentMedication">
-            <div class="double_column_list ">
-              <h5>Medication</h5>
+            <h5>Medication</h5>
               </br>
-              <table class="table table-striped">
-                <thead>
-                  <th> </th>
-                </thead>
-                <tbody>
-                {% for medication in medicationList %}
-                <tr>
-                  <td> {{medication.name}} </td>
-                   {% endfor %}
-                </tr>
-               </tbody>
-             </table>
-            </div>
-          </div>
-        </div>
-
+                <div class="input-group"> <span class="input-group-addon">Filter</span>
+                  <input id="test" type="text" class="form-control" placeholder="Type here...">
+                </div>
+                <table class="table table-striped">
+                  <thead>
+                    <th> </th>
+                  </thead>
+                  <tbody class="medication">
+                  {% for medication in medicationList %}
+                    <tr>
+                      <td>                        
+                        {{medication.name}} 
+                      </td>
+                      {% endfor %}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+           </div>
 
         <!--Tab for new medication -->
         <div role="tabpanel" class="tab-pane fade in container" id="addNewMedication" style="width: 100%">
@@ -357,15 +449,14 @@
         <!--Tab for deactivation stats -->
         <div role="tabpanel" class="tab-pane fade in container" id="deactivateStats" style="width: 100%">
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="deactivateStats">
-            <div id="chart_div"></div>
+             
           </div>
         </div>
 
         <!--Tab for charts -->
         <div role="tabpanel" class="tab-pane fade in container" id="charts" style="width: 100%">
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="charts">
-            <h5> Charts </h5>
-            </br>
+            <div id="piechart" style="width: 900px; height: 500px;"></div>
           </div>
         </div>
 
@@ -380,6 +471,78 @@
             <a class="twitter-timeline" width="250" height="300" href="https://twitter.com/twitterdev" data-widget-id="564797112014360576"> Tweets by @twitterdev
             </a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </div>
+        </div>
+
+         <!--Tab for RegisterNewAdmin -->
+        <div role="tabpanel" class="tab-pane fade in container" id="RegisterNewAdmin" style="width: 100%">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="RegisterNewAdmin">
+            <h5> Register A New Admin User </h5>
+            </br>
+             <fieldset class="register-inner">
+                <!--A form below for a user to fill in in order to register an admin account. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
+
+                <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
+
+                  <div class="form-group" id="usernameError">
+                    <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
+                    <input id="usernameInput" class="form-control input-sm" type="text" name="username">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input class="form-control input-sm" type="text" name="firstname">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="surname">Surname</label>
+                    <input class="form-control input-sm" type="text" name="surname">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
+                    <input class="form-control input-sm" type="date" name="dob" id="dob">
+                    <span id="dobValidate"></span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="isMale">Gender </label>
+                    <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+                    <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+                  </div>
+
+                  <div class="form-group">
+                    <label for="accounttype">Account Type</label>
+                    <input class="form-control input-sm" type="text" name="accounttype" value="Admin" ReadOnly="True">
+                 </div>
+
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input class="form-control input-sm" type="text" id="validateEmail" name="email">
+                    <span id="emailValidate"></span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-control input-sm" type="password" id="password" name="password">
+                    <span id="result"></span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="confirmpassword">Confirm Password</label>
+                    <input class="form-control input-sm" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
+                    <span id="confirmationMessage"></span>
+                  </div>
+
+                    <div class="form-group checkbox">
+                    <label for="terms"><input type="checkbox" name="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a></label>
+                  </div>
+
+                  <div class="form-group">
+                    <input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
+                  </div>
+                </form>
+                </fieldset>
           </div>
         </div>
       </div>

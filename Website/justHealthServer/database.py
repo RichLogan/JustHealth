@@ -46,6 +46,15 @@ class Patient(BaseModel):
     class Meta:
         db_table = 'patient'
 
+class Admin(BaseModel):
+    firstname = CharField(max_length=100)
+    ismale = BooleanField()
+    surname = CharField(max_length=100)
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
+
+    class Meta:
+        db_table = 'admin'
+
 class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
@@ -225,7 +234,8 @@ def createAll():
     Notification.create_table()
     Reminder.create_table()
     Androidregistration.create_table()
-
+    Admin.create_table()
+    
 def dropAll():
     """Drops all tables providing that they exists"""
     if Client.table_exists():
@@ -262,3 +272,5 @@ def dropAll():
         Reminder.drop_table(cascade=True)
     if Androidregistration.table_exists():
         Androidregistration.drop_table(cascade=True)
+    if Admin.table_exists():
+        Admin.drop_table(cascade=True)
