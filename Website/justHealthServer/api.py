@@ -1597,8 +1597,44 @@ def getNotifications():
     return getNotifications(request.form['username'])
 
 def getNotifications(username):
-    """Returns all of the notifications that have been associated with a user"""
+    """Returns all of the notifications that have been associated with a user that have not been dismissed"""
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
+    notificationList = []
+    for notification in notifications:
+        notification['content'] = getNotificationContent(notification)
+        notification['link'] = getNotificationLink(notification)
+        notification['type'] = getNotificationTypeClass(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
+
+    return json.dumps(notificationList)
+
+@app.route('/api/getAllNotifications', methods=['POST'])
+@auth.login_required
+def getAllNotifications():
+    return getAllNotifications(request.form['username'])
+
+def getAllNotifications(username):
+    """Returns all of the notifications that have been associated with a user, whether or not they have been dismissed"""
+    notifications = Notification.select().dicts().where(Notification.username == username)
+    notificationList = [] 
+    for notification in notifications:
+        notification['content'] = getNotificationContent(notification)
+        notification['link'] = getNotificationLink(notification)
+        notification['type'] = getNotificationTypeClass(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
+
+    return json.dumps(notificationList)
+
+@app.route('/api/getDismissedNotifications', methods=['POST'])
+@auth.login_required
+def getDismissedNotifications():
+    return getDismissedNotifications(request.form['username'])
+
+def getDismissedNotifications(username):
+    """Returns all of the notifications that have been associated with a user that have not been dismissed"""
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == True))
     notificationList = []
     for notification in notifications:
         notification['content'] = getNotificationContent(notification)
