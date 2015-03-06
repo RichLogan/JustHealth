@@ -33,61 +33,7 @@
   }
 </script>
 <script type="text/javascript">
-  $(document).ready(function() {
-  //check password strength
-  //keyup event on password field so code will execute on every keypress
-  $('#password').keyup(function() {
-    $('#result').html(checkStrength($('#password').val()));
-  });
 
-  //check if email is valid
-  //focus out: validation is performed when different field is active
-  $('#validateEmail').focusout(function() {
-    if(validateEmail($('#validateEmail').val())) {
-      //show message if email is valid
-      $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
-    }
-    else {
-      //show message if email is not valid
-      $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
-    }
-  });
-
-  $('#dob').focusout(function() {
-    if(isDate($('#dob').val())) {
-      //show message if email is valid
-      $('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
-    }
-    else {
-      //show message if email is not valid
-      $('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
-    }
-  });
-
-    //Check all fields are filled in
-  $('form').submit(function(e) {
-    $("form :input").each(function(){
-      if ($(this).val() == null || $(this).val() == "") {
-        alert("All fields must be filled out");
-        e.preventDefault();
-        return false;
-      }
-    });
-  });
-
-  $('#usernameInput').keyup(function() {
-    content = $('#usernameInput').val();
-    $.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
-      if (data == "True") {
-        $('#usernameError').addClass("has-error");
-        $('#usernameErrorLabel').text("Username (Username already taken)");
-      }
-      else {
-        $('#usernameError').addClass("has-success");
-        $('#usernameErrorLabel').text("Username (Username available)");
-      }
-    });
-  });
 
   //search through users
   $(document).ready(function () {
@@ -115,23 +61,6 @@
       }(jQuery));
   });
 
-      $(document).ready(function() {
-    //check password strength
-    //keyup event on password field so code will execute on every keypress
-    $('#password').keyup(function() {
-      $('#result').html(checkStrength($('#password').val()));
-    });
-
-    $('#dob').focusout(function() {
-    if(isDate($('#dob').val())) {
-      //show message if email is valid
-      $('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
-    }
-    else {
-      //show message if email is not valid
-      $('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
-    }
-  });
 </script>
 {% endblock %}
 
