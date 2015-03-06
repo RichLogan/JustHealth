@@ -96,7 +96,7 @@ public class HomePatient extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_home_screens, menu);
+        inflater.inflate(R.menu.action_bar_home_screen_patient, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -107,6 +107,8 @@ public class HomePatient extends Activity {
             case R.id.search_badge:
                 startActivity(new Intent(HomePatient.this, SearchNHSWebsite.class));
                 return true;
+            case R.id.notes:
+                startActivity(new Intent(HomePatient.this, PatientCorrespondence.class));
             default:
                 return super.onOptionsItemSelected(item);
         }

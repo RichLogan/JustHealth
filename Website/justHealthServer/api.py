@@ -1350,7 +1350,7 @@ def getAppointmentTypes():
 @app.route('/api/getCorrespondence', methods=['GET', 'POST'])
 @auth.login_required
 def getCorrespondence():
-    return getCorrespondence()
+    return getCorrespondence(request.form['carer'], request.form['patient'])
 
 def getCorrespondence(carer, patient):
      allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
@@ -1370,10 +1370,10 @@ def getCorrespondence(carer, patient):
 @app.route('/api/getPatientNotes', methods=['GET', 'POST'])
 @auth.login_required
 def getPatientNotes():
-    return getPatientNotes()
+    return getPatientNotes(request.form)
 
-def getPatientNotes(patient):
-     allNotes = Notes.select().where(Notes.patient == patient)
+def getPatientNotes(details):
+     allNotes = Notes.select().where(Notes.patient == details['username'])
      
      results = []
      for n in allNotes:
