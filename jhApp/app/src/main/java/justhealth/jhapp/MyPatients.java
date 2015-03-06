@@ -1,13 +1,16 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -25,6 +28,10 @@ public class MyPatients extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_patients);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Patients");
 
         String username = getSharedPreferences("account", 0).getString("username", null);
         displayPatients(getPatients(username));
@@ -58,40 +65,49 @@ public class MyPatients extends Activity {
                 if (accounttype.equals("Patient")) {
                     //Create a button
                     Button patientButton = new Button(this);
-                    String patientString = username + "\n" + firstname + " " + surname;
+                    String patientString = firstname + " " + surname + "\n" + "(" + username + ")";
                     patientButton.setText(patientString);
 
-                    //Add button to view
+                    // Can't set styles, so have to do it manually :( Deprecated method because min API: 11
+                    patientButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.primary_button));
+                    patientButton.setTextColor(Color.WHITE);
                     LinearLayout ll = (LinearLayout) findViewById(R.id.patientButtons);
-                    ll.addView(patientButton, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-                    LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) patientButton.getLayoutParams();
-                    center.gravity = Gravity.CENTER;
-                    patientButton.setLayoutParams(center);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 250);
+                    params.setMargins(10, 25, 10 , 25);
+                    patientButton.setLayoutParams(params);
+                    ll.addView(patientButton);
 
                     patientButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(MyPatients.this);
-                            alert.setTitle("Patient Options")
-                                .setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (which == 0) {
-                                            Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
-                                            intent.putExtra("targetUsername", username);
-                                            intent.putExtra("firstName", firstname);
-                                            intent.putExtra("surname", surname);
-                                            startActivity(intent);
-                                        }
-                                        else if (which == 1) {
-                                            Intent intent = new Intent(getBaseContext(), CarerAppointments.class);
-                                            intent.putExtra("targetUsername", username);
-                                            intent.putExtra("firstName", firstname);
-                                            intent.putExtra("surname", surname);
-                                            startActivity(intent);
-                                        }
+                            alert.setTitle("Patient Options");
+                            alert.setItems(R.array.patient_options, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (which == 0) {
+                                        Intent intent = new Intent(getBaseContext(), CarerPrescriptions.class);
+                                        intent.putExtra("targetUsername", username);
+                                        intent.putExtra("firstName", firstname);
+                                        intent.putExtra("surname", surname);
+                                        startActivity(intent);
                                     }
-                                });
-                                alert.show();
+                                    else if (which == 1) {
+                                        Intent intent = new Intent(MyPatients.this, CarerPatientAppointments.class);
+                                        intent.putExtra("targetUsername", username);
+                                        intent.putExtra("patientFirstName", firstname);
+                                        intent.putExtra("patientSurname", surname);
+                                        startActivity(intent);
+                                    }
+                                    else if (which == 2) {
+                                        Intent intent = new Intent(MyPatients.this, CarerPatientCorrespondence.class);
+                                        intent.putExtra("patientUsername", username);
+                                        intent.putExtra("patientFirstName", firstname);
+                                        intent.putExtra("patientSurname", surname);
+                                        startActivity(intent);
+                                    }
+
+                                }
+                            });
+                            alert.show();
                         }
                     });
                 }

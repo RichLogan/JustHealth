@@ -1,0 +1,77 @@
+{% extends "template.html" %}
+{% block title %}Edit Profile{% endblock %}
+{% block scriptsAndStyles %}
+<script>
+    //check if email is valid
+    //focus out: validation is performed when different field is active
+    $('#validateEmail').focusout(function() {
+        if(validateEmail($('#validateEmail').val())) {
+            //show message if email is valid
+            $('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
+        }
+        else {
+            //show message if email is not valid
+            $('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div>
+    <fieldset class ="form-container">
+        <i class=" fa fa-pencil-square-o headingIcon pull-left"> </i> <h4 class ="pull-left">Edit your profile</h4>
+        <a href="/settings"><i class="fa fa-cog headingIcon pull-right"></i></a>
+        <hr />
+        <br />
+
+        <fieldset class ="register-inner">
+        <!--Form to update profile details -->
+            <form name="editDetails" method="POST" action="/updateProfile" onSubmit="return ValidateFormProfile()" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="image">Upload a profile picture</label>
+                    <input class="form-control" name="image" type="file" value="">
+                </div>
+                <div class="form-group">
+                    <input class="hidden" type="text" name="username" value="{{request.username}}" readonly="true">
+                </div>
+                <div class="form-group">
+                    <label for="name">First Name</label>
+                    <input class="form-control input-sm" type="text" name="firstname"  value="{{request.firstname}}">
+                </div>
+                <div class="form-group">
+                    <label for="surname">Surname</label>
+                    <input class="form-control input-sm" type="text" name="surname"  value="{{request.surname}}">
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
+                    <input class="form-control input-sm" type="date" name="dob" id="dob" value="{{request.dob}}">
+                    <span id="dobValidate"></span>
+                </div>
+                <div class="form-group">
+                <!--Find how to get the current gender from db-->
+                    <label for="ismale">Gender </label>
+                    {% if request.gender == "Male" %}
+                        <input class="" type="radio" name="ismale" value="true" checked="true"> Male&nbsp;
+                        <input class="" type="radio" name="ismale" value="false"> Female&nbsp;
+                    {% else %}
+                        <input class="" type="radio" name="ismale" value="true"> Male&nbsp;
+                        <input class="" type="radio" name="ismale" value="false" checked="true"> Female&nbsp;
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-control input-sm" type="text" name="email" id="validateEmail" value="{{request.email}}">
+                    <span id="emailValidate"></span>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-success pull-right" name="Submit" type="submit" value="Update">
+                    <button class="btn btn-default pull-right" style="margin-right:5px;" onclick="goBack()">Cancel</button>
+                </div>
+            </form>
+        </fieldset>
+        <br />
+        <br />
+    </div>
+</fieldset>
+{% endblock %}

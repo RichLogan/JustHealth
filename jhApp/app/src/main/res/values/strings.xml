@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Just Health</string>
+    <string name="app_name">JustHealth</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="header">HEADER</string>
@@ -12,11 +12,12 @@
     <string name="privacy">Privacy</string>
     <string name="account">Account</string>
     <string name="profile">Profile</string>
+    <string name="searchNHS">Search</string>
 
-    <string-array name="deactivate">
-        <item> </item>
-        <item> </item>
-        <item> </item>
-        <item>  </item>
-    </string-array>
+    <!-- Spinner Prompts -->
+    <string name="genderPopup">Gender</string>
+    <string name="accountTypePopup">Account Type</string>
+    <string name="appointmentTypePopup">Appointment Type</string>
+    <string name="deactivateReasons">Reason</string>
+    <string name="whyDeactivate"><u>Why should we keep your data?</u></string>
 </resources>

@@ -5,7 +5,7 @@
 {% block scriptsAndStyles %}{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{printname}}</h2>
+<h3>Welcome, {{printname}}</h3>
 
 <br />
 <!-- tile layout 3 by 3 containers -->
@@ -55,19 +55,19 @@
 <!--Row 3 -->
 	<div class="row">
 		<div class="col-xs-4 col-md-4">
+			<a class="thumbnail" href="/appointments">
+				<i class="fa fa-calendar largeIcon"></i>
+			</a>
+		</div>​
+
+		<div class="col-xs-4 col-md-4">
 			<a class="thumbnail" href= "/prescriptions">
-				<i class="fa fa-flask largeIcon"></i>
+				<i class="fa fa-medkit largeIcon"></i>
 			</a>
 		</div>​
 
 		<div class="col-xs-4 col-md-4">
-			<a class="thumbnail">
-				<i class="fa fa-ellipsis-h largeIcon"></i>
-			</a>
-		</div>​
-
-		<div class="col-xs-4 col-md-4">
-			<a class="thumbnail">
+			<a class="thumbnail" href= "/settings">
 				<i class="fa fa-cog largeIcon"></i>
 			</a>
 		</div>​

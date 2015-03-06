@@ -1,68 +1,52 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".login">
-
-    <include android:id="@+id/header" layout="@layout/header" />
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:id="@+id/prescriptionButtons"
+        style="@style/defaultLinearLayout">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/header"
+            android:text="Active Prescriptions"/>
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/activePrescriptionButtons"
             android:orientation="vertical">
+        </LinearLayout>
 
-            <TextView android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:textColor="@color/header"
-                android:layout_marginTop="50dip"
-                android:layout_marginBottom="20dip"
-                android:id="@+id/patientName"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/header"
+            android:text="Upcoming Prescriptions"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/upcomingPrescriptionButtons"
+            android:orientation="vertical">
+        </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Add New Prescription"
-                android:id="@+id/addNewPrescription"/>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/prescriptionButtons"
-                    android:orientation="vertical">
-                </LinearLayout>
-            </ScrollView>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/insertAlert"
-                />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/header"
+            android:text="Expired Prescriptions"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/expiredPrescriptionButtons"
+            android:orientation="vertical">
         </LinearLayout>
     </LinearLayout>
-
-    <!--Link to Terms and Conditions-->
-    <TextView android:id="@+id/link_to_terms"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Terms and Conditions"
-        android:gravity="center"
-        android:textSize="15dip"
-        android:textColor="#FFFFFF"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/header"/>
-</RelativeLayout>
+</ScrollView>

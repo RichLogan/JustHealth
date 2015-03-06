@@ -1,5 +1,6 @@
 package justhealth.jhapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,6 +27,11 @@ public class PatientMedication extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_medication);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Medication");
+
         displayPrescriptions(getPrescriptions());
     }
 

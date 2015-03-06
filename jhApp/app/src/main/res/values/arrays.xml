@@ -5,6 +5,12 @@
         <item>Carer</item>
     </string-array>
 
+    <string-array name="patient_options">
+        <item>Prescriptions</item>
+        <item>Appointments</item>
+        <item>Notes</item>
+    </string-array>
+
     <string-array name="reasons_deactivate">
         <item>I don’t understand how to use JustHealth</item>
         <item>I’m only leaving temporarily</item>
@@ -15,8 +21,37 @@
         <item>Other (Please specify)</item>
     </string-array>
 
-    <string-array name="patient_options">
-        <item>Prescriptions</item>
-        <item>Appointments</item>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="patient_appointments_options">
+        <item>View In Calendar</item>
+        <item>Edit Appointment</item>
+        <item>Delete Appointment</item>
+    </string-array>
+
+    <string-array name="patient_invitee_appointments_options">
+        <item>View In Calendar</item>
+        <item>Accept Appointment</item>
+        <item>Decline Appointment</item>
+    </string-array>
+
+    <string-array name="my_patient_filter_appointments">
+        <item>All Appointments</item>
+        <item>Patient Appointments</item>
+        <item>Your appointments with this patient</item>
+    </string-array>
+
+    <string-array name="connectionActions">
+        <item>incoming</item>
+        <item>outgoing</item>
+        <item>completed</item>
+    </string-array>
+
+    <string-array name="password_expiry_options">
+        <item>Reset Now</item>
+        <item>Reset Later</item>
     </string-array>
 </resources>

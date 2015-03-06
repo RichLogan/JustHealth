@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" >
+
+            <ScrollView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/off_white">
+
+                <LinearLayout
+                    android:id="@+id/editProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    style="@style/defaultLinearForm">
+
+                    <!-- First Name -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:hint="First Name"
+                            android:ems="10"
+                            android:id="@+id/editFirstname"
+                            android:maxLength="100"
+                            style="@style/inputWithIcon"/>
+                        <IconTextView
+                            android:text="{fa-user}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
+                    <!-- Surname -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:hint="Surname"
+                            android:ems="10"
+                            android:id="@+id/editSurname"
+                            android:maxLength="100"
+                            style="@style/inputWithIcon"/>
+                        <IconTextView
+                            android:text="{fa-user}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
+                    <!-- Date of Birth -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:id="@+id/editDOB"
+                            android:hint="DOB"
+                            style="@style/inputWithIcon" />
+                        <IconTextView
+                            android:text="{fa-calendar}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
+                    <!-- Gender -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <Spinner
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/editGender"
+                            android:entries="@array/gender"
+                            android:prompt="@string/genderPopup"
+                            android:spinnerMode="dialog"
+                            style="@style/spinnerWithIcon"/>
+                        <IconTextView
+                            android:id="@+id/genderIcon"
+                            android:text="{fa-male}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
+                    <!-- Email Address -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:ems="10"
+                            android:id="@+id/editEmail"
+                            android:hint="Email"
+                            android:maxLength="100"
+                            style="@style/inputWithIcon"/>
+                        <IconTextView
+                            android:text="{fa-at}"
+                            style="@style/inputIcon" />
+                    </RelativeLayout>
+
+                    <!-- Update Button -->
+                    <Button
+                        android:layout_marginTop="35dp"
+                        style="@style/primaryButton"
+                        android:text="Update"
+                        android:id="@+id/editProfileButton"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

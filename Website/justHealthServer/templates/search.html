@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Search{% endblock %}
 
 {% block scriptsAndStyles %}
 
@@ -8,23 +8,60 @@
 {% endblock %}
 
 {% block content %}
-<h3> Search </h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{category}} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        {{message}}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<script type="text/javascript">
+
+          $(document).ready(function () {
+
+          (function ($) {
+
+              $('#filter').keyup(function () {
+
+                  var rex = new RegExp($(this).val(), 'i');
+                  $('.searchable tr').hide();
+                  $('.searchable tr').filter(function () {
+                      return rex.test($(this).text());
+                  }).show();
+
+              })
+
+          }(jQuery));
+
+      });
+    </script>
 
 <!--Seach box to search for users to conency to-->
+<fieldset class ="form-container">
+   <i class="fa fa-search headingIcon pull-left"></i><h4>Search for a user</h4>
+  <hr>
+
+  <fieldset class="login-inner">
   <form action="/search" method="POST">
     <div class="form-group">
       <label for="username"></label>
-      <input class="form-control" type="text" name="searchterm">
+      <input class="form-control" type="text" name="searchterm" placeholder="Search for a user">
     </div>
     <input class="form-control" type="hidden" name="username" value='{{username}}'>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-success pull-right">Search</button>
   </form>
+  </fieldset>
 <br />
 <br />
 <br />
 <!--Table to display search results -->
-<div id="queryTable">
-  <table class="table">
+
+    <br />
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Username</th>
@@ -41,18 +78,26 @@
     <td>{{result.firstname}}</td>
     <td>{{result.surname}}</td>
     <td>
-      <form name="connect" action="/api/createConnection" method="POST">
-        <input name="username" type="hidden" value="{{username}}">
-        <input name="target" type="hidden" value="{{result.username}}">
-        <input type="submit" class="btn btn-default" value="Connect">
-      </form>
+      {% if result.message %}
+        <form action="/profile" method="GET">
+          <input type="hidden" name="go" value="connections">
+          <input type="submit" class="btn btn-primary" value="{{result.message}}">
+        </form>
+      {% else %}
+        <form name="connect" action="/createConnectionWeb" method="POST">
+          <input name="username" type="hidden" value="{{username}}">
+          <input name="target" type="hidden" value="{{result.username}}">
+          <input type="submit" class="btn btn-success" value="Connect" onclick="return confirm('Are you sure you want to connect to {{result.username}}?')">
+        </form>
+      {% endif %}
    </td>
   </tr>
   {% endfor %}
     </tbody>
   </table>
-</div>
+
 
    <br />
+ </fieldset>
 
 {% endblock %}

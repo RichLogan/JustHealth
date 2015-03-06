@@ -1,107 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Register">
+    android:layout_height="match_parent" >
 
-    <include android:id="@+id/header" layout="@layout/header" />
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/scrollView">
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        style="@style/defaultLinearForm">
 
-        <LinearLayout
+        <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/reasonsDeactivate"
+            android:prompt="@string/deactivateReasons"
+            android:spinnerMode="dialog"
+            style="@style/inputWithIcon" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comments"
+            android:hint="Additional Comments."
+            android:maxLength="500"
+            style="@style/inputWithIcon"
+            android:focusable="true"
+            android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+            android:layout_marginTop="40sp"/>
 
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Deactivate Account"
-                android:layout_above="@+id/scrollView"
-                android:textSize="30dip"
-                android:textColor="@color/header"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="20dip"/>
-        </LinearLayout>
-       </ScrollView>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60sp"
+            android:text="Please select if you want JustHealth to delete all your data"
+            android:id="@+id/checkBox"
+            android:checked="false"
+            style="@style/inputWithIcon"/>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Are you sure you want to deactivate your account?"
-        android:id="@+id/deactivate"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="58dp"
-        android:checked="false" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/whyDeactivate"
+            android:textSize="15sp"
+            android:textColor="@color/primary"
+            android:gravity="right"
+            android:textAlignment="gravity"
+            android:layout_marginTop="20sp"
+            android:id="@+id/linkKeepYourData" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@array/reasons_deactivate"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/deactivate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/comments"
-        android:hint="Any Comments....."
-        android:maxLength="500"
-        android:padding="10dp"
-        android:height="80dp"
-        android:visibility="visible"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please select if you want JustHealth to delete all your data "
-        android:id="@+id/checkBox"
-        android:checked="false"
-        android:padding="10dp"
-        android:layout_above="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Why should we keep your data?"
-        android:id="@+id/textView4"
-        android:padding="10dp"
-        android:layout_above="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="33dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deactivate"
-        android:id="@+id/button"
-        android:background="#2272EB"
-        android:padding="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp" />
-
-
-</RelativeLayout>
+        <Button
+            android:text="Deactivate"
+            android:id="@+id/deactivateButton"
+            android:layout_marginTop="35dp"
+            style="@style/primaryButton" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background" >
+
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/createAppointmentScroll">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/createAppointmentView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            style="@style/defaultLinearForm" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <EditText
+                android:hint="Appointment Title"
+                android:id="@+id/name"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                style="@style/inputWithIcon" />
+            <IconTextView
+                android:text="{fa-tag}"
+                style="@style/inputIcon" />
+        </RelativeLayout>
+
+                        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:hint="Building Name Number"
+                android:textColor="@color/header"
+                android:id="@+id/buildingNameNumber"
+                style="@style/inputWithIcon" />
+            <IconTextView
+                android:text="{fa-building}"
+                style="@style/inputIcon" />
+        </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="Postcode"
+                    android:textColor="@color/header"
+                    android:id="@+id/postcode"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-location-arrow}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="Start Date"
+                    android:inputType="date"
+                    android:textColor="@color/header"
+                    android:id="@+id/startDate"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-calendar}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="Start Time"
+                    android:inputType="time"
+                    android:textColor="@color/header"
+                    android:id="@+id/startTime"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-clock-o}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="End Date"
+                    android:inputType="date"
+                    android:textColor="@color/header"
+                    android:id="@+id/endDate"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-calendar}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="End Time"
+                    android:inputType="time"
+                    android:textColor="@color/header"
+                    android:id="@+id/endTime"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-clock-o}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:hint="Details"
+                    android:id="@+id/details"
+                    style="@style/inputWithIcon" />
+                <IconTextView
+                    android:text="{fa-ellipsis-h}"
+                    style="@style/inputIcon" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:text="Create"
+            android:id="@+id/buttonAppointment"
+            android:layout_marginTop="35sp"
+            style="@style/primaryButton" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

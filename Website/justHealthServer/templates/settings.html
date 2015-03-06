@@ -1,0 +1,60 @@
+{% extends "template.html" %}
+{% block title %}Settings{% endblock %}
+<!--java Script to load the tab format -->
+{% block scriptsAndStyles %}
+
+<!--javaScript to confirm a users deactivation -->
+<script>
+$(document).ready(function() {
+  $("#deactivate").submit(function(e) {
+    if (!confirm('Are you sure you want to deactivate this account?')) {
+      e.preventDefault();
+    }
+  });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<fieldset class ="form-container">
+  <i class="fa fa-cog headingIcon pull-left"></i><h4> Settings </h4>
+  <hr>
+  <!--links to respective pages -->
+    <ul class="nav nav-pills btn-margin nav-justified" role="navigation">
+    <ul class="nav nav-pills btn-margin nav-justified" role="navigation">
+      <li role="presentation" class="active"><a href="/settings" aria-controls="settings">Account Settings</a></li>
+<!--      <li role="presentation"><a href="/security" aria-controls="security">Security & Privacy</a></li> -->
+      <li role="presentation"><a href="/faq" aria-controls="faq">FAQs</a></li>
+    </ul>
+    <hr>
+    <br/>
+    <!--table with settings options -->
+    <fieldset class="links">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="bold">Name: {{profileDetails.firstname}} {{profileDetails.surname}}</td>
+          <td><a href="/editProfile" class="pull-right">Edit Profile</a></td>
+        </tr>
+        <tr>
+          <td class="bold">Password</td>
+          <td><a href="/password" class="pull-right">Change Password</a></td>
+        </tr>
+        <tr>
+          <td class="bold">Account</td>
+          <td><a href="/deactivate" class="pull-right">Deactivate Account</a></td>
+        </tr>
+        <tr>
+          <td class="bold">Report a problem</td>
+          <td><a href="/contactUs" class="pull-right">Contact us!</a></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </fieldset>
+</fieldset>
+
+{% endblock %}

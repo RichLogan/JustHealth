@@ -4,7 +4,7 @@ import requests
 import unittest
 import imp
 
-testDatabase = imp.load_source('testDatabase', '../../Website/justHealthServer/testDatabase.py')
+testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
 class testAuthentication(unittest.TestCase):
     """Testing Authentication API"""
@@ -79,7 +79,7 @@ class testAuthentication(unittest.TestCase):
         }
 
         login = requests.post("http://127.0.0.1:9999/api/authenticate", data=payload)
-        self.assertEqual(login.text, "Incorrect username/password")
+        self.assertEqual(login.text, "Your request appears to be malformed")
 
     def testNullPassword(self):
         """Null password attempt"""
@@ -90,7 +90,7 @@ class testAuthentication(unittest.TestCase):
         }
 
         login = requests.post("http://127.0.0.1:9999/api/authenticate", data=payload)
-        self.assertEqual(login.text, "Incorrect username/password")
+        self.assertEqual(login.text, "Your request appears to be malformed")
 
     def testDeactivated(self):
         """Account Deactivated"""

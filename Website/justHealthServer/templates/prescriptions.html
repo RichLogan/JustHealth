@@ -5,27 +5,31 @@
 {% block scriptsAndStyles %}{% endblock %}
 
 {% block content %}
-<h2>Prescriptions</h2>
+<fieldset class ="form-container">
 
+<i class="fa fa-medkit headingIcon pull-left"></i><h4>Your Prescriptions</h4>
+<hr>
+<!--List format to display a patients prescritpions -->
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   {%for prescription in prescriptions%}
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="heading{{prescription.medication}}">
+    <div class="panel-heading" role="tab" id="heading{{prescription.prescriptionid}}">
       <h3 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.medication}}" aria-expanded="true" aria-controls="collapse{{prescription.medication}}">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapse{{prescription.prescriptionid}}">
           <h4>{{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} {{prescription.frequency}} x a {{prescription.frequencyunit}}
         </a>
       </h3>
-      <div id="collapse{{prescription.medication}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{prescription.medication}}">
+      <div id="collapse{{prescription.prescriptionid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{prescription.prescriptionid}}">
         <div class="panel-body">
-          <div class="row"> <h5>
-            <ul>
-              <li>Start Date: {{prescription.startdate}}</li>
-              <li>End Date: {{prescription.enddate}}</li>
-              <li>Extra Info: {{prescription.prerequisite}}</li>
-              <li>Repeat: {{prescription.repeat}} </li>
-            </ul>
-        </h5>
+          <div class="row">
+            <h5>
+              <ul>
+                <li>Start Date: {{prescription.startdate}}</li>
+                <li>End Date: {{prescription.enddate}}</li>
+                <li>Extra Info: {{prescription.prerequisite}}</li>
+                <li>Repeat: {{prescription.repeat}} </li>
+              </ul>
+            </h5>
         </div>
       </div>
     </div>
@@ -33,5 +37,5 @@
 </div>
   {% endfor %}
 </div>
-</div>
+</fieldset>
 {% endblock %}

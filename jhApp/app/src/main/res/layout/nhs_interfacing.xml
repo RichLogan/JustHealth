@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <ScrollView
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/off_white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical"
+            style="@style/defaultLinearForm" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search"
+            android:ems="10"
+            android:id="@+id/searchTerm"
+            android:maxLength="100"
+            style="@style/inputWithIcon"/>
+            <IconTextView
+                android:text="{fa-search-plus}"
+                style="@style/inputIcon" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+         <Button
+             android:text="@string/searchNHS"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginRight="15sp"
+             android:layout_marginLeft="15sp"
+             android:id="@+id/search"
+             android:layout_marginTop="35dp"
+             style="@style/primaryButton"  />
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

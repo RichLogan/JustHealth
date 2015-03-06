@@ -1,26 +1,53 @@
 from justHealthServer import app
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask import Flask, render_template, request, session, redirect, url_for, abort, send_from_directory, request_started
 from flask.ext.httpauth import HTTPBasicAuth
 # Line 5 !!!MUST!!! be the database import in order for /runTests.sh to work. Please do not change without also altering /runTests.sh
 from database import *
+from gcm import *
 from itsdangerous import URLSafeSerializer, BadSignature
 from passlib.hash import sha256_crypt
+from werkzeug import secure_filename
+#used to encrypt and decrypt the password in the method encryptPassword() and decryptPassword()
+from simplecrypt import encrypt, decrypt
+import binascii
 import re
+import os
+import sys
 import datetime
+from datetime import date
+import time
 import smtplib
 import json
 import random
 
 auth = HTTPBasicAuth()
 
+
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
+    plaintextPassword = decryptPassword(password)
     try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
-        return sha256_crypt.verify(password, hashedPassword)
+        return sha256_crypt.verify(plaintextPassword, hashedPassword)
     except:
         return False
+
+@app.route("/api/encryptPassword", methods=["POST"])
+def encryptPassword():
+    """Encrypts the users password and returns it to them"""
+    #used so that we are able to store the encrypted users password in android SharedPreferences
+    plaintext = request.form['password']
+    cipherText = encrypt(app.secret_key, plaintext)
+    stringCipher = binascii.hexlify(cipherText)
+    return stringCipher
+
+def decryptPassword(cipherText):
+    """Decrypts the users password and returns it so that we are able to authenticate them"""
+    #used so that we are able to store the encrypted users password in android SharedPreferences
+    bytesCipher = binascii.unhexlify(cipherText)
+    plaintext = decrypt(app.secret_key, bytesCipher)
+    return plaintext
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
@@ -62,10 +89,14 @@ def registerUser():
     # Validate email correct format
     pattern = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
     if not re.match(pattern, profile['email']):
-      return "Fail email verification"
+      return "Email failed validation"
 
     # Encrypt password with SHA 256
     profile['password'] = sha256_crypt.encrypt(profile['password'])
+
+    isMale = False
+    if profile['ismale'] == "true":
+        isMale = True
 
     #Check for existing username
     if Client.select().where(Client.username == profile['username']).count() != 0:
@@ -88,12 +119,14 @@ def registerUser():
         accountType = Patient
     elif accountType == "carer":
         accountType = Carer
+    elif accountType == "Admin":
+        accountType = Admin
 
     typeInsert = accountType.insert(
         username = profile['username'],
         firstname = profile['firstname'],
         surname = profile['surname'],
-        ismale = profile['ismale'],
+        ismale = isMale,
     )
 
     # Build insert password query
@@ -103,6 +136,7 @@ def registerUser():
       iscurrent = 'TRUE',
       expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
     )
+
 
     # Execute Queries
     with database.transaction():
@@ -127,7 +161,10 @@ def authenticate():
         return "Incorrect username/password"
 
     # Check Password
-    hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    try: 
+        hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
+    except uq8LnAWi7D.DoesNotExist:
+        return "There is no current password for this username. Please use the forgot password link to reset your account."
     attemptedPassword = request.form['password']
     if sha256_crypt.verify(attemptedPassword, hashedPassword):
         if attempted.accountdeactivated == True:
@@ -140,7 +177,9 @@ def authenticate():
             revertAttempts = Client.update(loginattempts = 0).where(Client.username == attempted.username)
             with database.transaction():
                 revertAttempts.execute()
-            return "Authenticated"
+                #Password expiry methods need to be added here
+            status = passwordExpiration(attempted.username)
+            return status
     else:
         currentLoginAttempts = Client.get(Client.username == attempted.username).loginattempts
         if currentLoginAttempts >= 4:
@@ -154,15 +193,19 @@ def authenticate():
         return "Incorrect username/password"
 
 @app.route('/api/deactivateaccount', methods=['POST'])
+@auth.login_required
 def deactivateAccount():
+    return deactivateAccount(request.form)
+
+def deactivateAccount(details):
     """Form validation for account deactivation"""
     try:
-        username = request.form['username']
+        username = details['username']
     except KeyError, e:
         return "No username supplied"
 
     try:
-        if request.form['deletecheckbox'] == "on":
+        if details['deletecheckbox'] == "on":
             delete = True
         else:
             delete = False
@@ -170,12 +213,12 @@ def deactivateAccount():
         delete = False
 
     try:
-        comments = request.form['comments']
+        comments = details['comments']
     except KeyError, e:
         comments = None
 
     try:
-        reason = request.form['reason']
+        reason = details['reason']
     except KeyError, e:
         return "Please select a reason"
 
@@ -188,9 +231,9 @@ def deactivateAccount():
 
     if delete:
         # Delete User
-        deletedUser = Client.delete().where(Client.username == request.form['username'])
+        deletedUser = Client.get(Client.username == request.form['username'])
         with database.transaction():
-            deletedUser.execute()
+            deletedUser.delete_instance(recursive=True)
         return "Deleted"
     else:
         # Keep user
@@ -219,8 +262,8 @@ def resetPassword():
 
     if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
         #set the old password to iscurrent = false
-        notCurrent = uq8LnAWi7D.update(iscurrent = False).where(str(uq8LnAWi7D.username).strip() == profile['username'])
-        notVerified = Client.update(verified = False).where(str(Client.username).strip() == profile['username'])
+        notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == profile['username'])
+        notVerified = Client.update(verified = False).where(Client.username == profile['username'])
 
         #encrypt the password
         profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
@@ -245,50 +288,142 @@ def resetPassword():
         sendPasswordResetEmail(profile['username'])
         return "True"
     else:
-        return "Invalid details"
+        return profile['username']
 
 ####
-# Get account type
+# Account Information
 ####
+
+@app.route('/api/images/<filename>')
+@auth.login_required
+def getProfilePictureAPI(filename):
+    return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/api/getAccountInfo', methods=['POST'])
+@auth.login_required
 def getAccountInfo():
     return getAccountInfo(request.form['username'])
 
 def getAccountInfo(username):
     """Get Account information from client and patient/carer table"""
     result = {}
-    thisUser = str(username)
     try:
-      patient = Patient.get(username=thisUser)
-      user = Patient.select().join(Client).where(Client.username==thisUser).get()
+      user = Patient.select().join(Client).where(Client.username==str(username)).get()
       result['accounttype'] = "Patient"
-      result['firstname'] = user.firstname
-      result['surname'] = user.surname
-      result['username'] = user.username.username
-      result['email'] = user.username.email
-      result['dob'] = str(user.username.dob)
-      if user.ismale:
-        result['gender'] = 'Male'
-      else:
-        result['gender'] ='Female'
-
-      return json.dumps(result)
     except Patient.DoesNotExist:
-      result['accounttype'] = "Carer"
-      carer = Carer.get(username=thisUser)
-      user = Carer.select().join(Client).where(Client.username==thisUser).get()
-      result['firstname'] = user.firstname
-      result['surname'] = user.surname
-      result['username'] = user.username.username
-      result['email'] = user.username.email
-      result['dob'] = str(user.username.dob)
-      if user.ismale:
+        try:
+            user = Carer.select().join(Client).where(Client.username==str(username)).get()
+            result['accounttype'] = "Carer"
+        except Carer.DoesNotExist:
+            user = Admin.select().join(Client).where(Client.username==str(username)).get()
+            result['accounttype'] = "Admin"
+
+    result['firstname'] = user.firstname
+    result['surname'] = user.surname
+    result['username'] = user.username.username
+    result['email'] = user.username.email
+    result['dob'] = str(user.username.dob)
+    result['profilepicture'] = user.username.profilepicture
+    result['telephonenumber'] = user.username.telephonenumber
+    if user.ismale:
         result['gender'] = 'Male'
-      else:
+    else:
         result['gender'] ='Female'
-      return json.dumps(result)
-    return None
+    return json.dumps(result)
+
+@app.route('/api/setProfilePicture', methods=['POST'])
+def setProfilePicture():
+    return setProfilePicture(request.files)
+
+def setProfilePicture(details):
+    dest = "/static/images/profilePictures"
+    allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
+
+    file = details['image']
+
+    if file and ('.' in file.filename and file.filename.rsplit('.', 1)[1] in allowedExtension):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(dest, filename))
+        return filename
+    return False
+
+@app.route('/api/editProfile', methods=['POST'])
+@auth.login_required
+def editProfile():
+    return editProfile(request.form, request.files)
+
+def editProfile(profile, picture):
+    user = None
+    # What type of user are we dealing with?
+    try:
+        user = Patient.select().join(Client).where(Client.username==profile['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==profile['username']).get()
+
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
+
+    gender = False
+    if profile['ismale'] == "true":
+        gender = True
+
+    # Update
+    user.firstname = profile['firstname']
+    user.surname = profile['surname']
+    user.ismale = gender
+    clientObject.dob = profile['dob']
+    clientObject.email = profile['email']
+
+    # Profile Picture Upload
+    allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
+    file = picture['image']
+    filename = file.filename
+    if (filename != "") and (filename != None):
+        fileExtension = filename.rsplit('.', 1)[1]
+        if file and ('.' in filename and fileExtension in allowedExtension):
+            filename = secure_filename(getSerializer().dumps(filename)) + "." + fileExtension
+            file.save(os.path.join(app.config['PROFILE_PICTURE'], filename))
+            clientObject.profilepicture = filename
+
+    # Execute Updated
+    with database.transaction():
+        user.save()
+        clientObject.save()
+        return "Edit Successful"
+    return "Failed"
+
+@app.route('/api/changePassword', methods=['POST'])
+@auth.login_required
+def changePasswordAPI():
+    return changePasswordAPI(request.form)
+
+def changePasswordAPI(details):
+    """Allows a user to change their password. POST [username, oldpassword, newpassword, confirmnewpassword]"""
+    if request.form['newpassword'] != request.form['confirmnewpassword']:
+        return "Passwords do not match"
+    try:
+        currentPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == details['username']) & (uq8LnAWi7D.iscurrent==True))
+        # If old password is correct
+        if sha256_crypt.verify(details['oldpassword'], currentPassword.password):
+            # Invalidate Old Password
+            currentPassword.iscurrent = False
+        
+            # Insert New Password
+            newPassword = uq8LnAWi7D.insert(
+                username = details['username'],
+                password = sha256_crypt.encrypt(details['newpassword']),
+                iscurrent = True,
+                expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
+            )
+
+            # Execute
+            with database.transaction():
+                currentPassword.save()
+                newPassword.execute()
+                return "Password changed successfully"
+            return "Failed"
+        else: return "Incorrect password"
+    except: return "User does not exist"
 
 ####
 # Account Helper Functions
@@ -394,63 +529,102 @@ def sendPasswordResetEmail(username):
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
+def sendContactUs(details):
+    """Sends email to justhealth when a user has a question"""
+    #Login to mail server
+    server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+    server.login('justhealth@richlogan.co.uk', "justhealth")
+    # Build Message
+    sender = "'JustHealth User Question' <justhealth@richlogan.co.uk>"
+    cc = Client.get(username = details['username']).email
+    recipient = 'justhealth@richlogan.co.uk'
+    subject = "JustHealth User Question"
+    message = details['message']
+    m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    # Send
+    server.sendmail(sender, recipient, m+message)
+    server.quit()
 
 ####
 # Search Patient Carer
 ####
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
+@auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchterm]"""
     return searchPatientCarer(request.form['username'], request.form['searchterm'])
 
 def searchPatientCarer(username, searchterm):
     #get username, firstname and surname of current user
-    result = {}
-    thisUser = username
+    results = {}
+    searchterm = "%" + searchterm + "%"
     try:
-        patient = Patient.get(username=thisUser)
-        searchterm = "%" + searchterm + "%"
-        results = Carer.select().dicts().where((Carer.username % searchterm) | (Carer.firstname % searchterm) |(Carer.surname % searchterm))
-
-        jsonResult = []
-        for result in results:
-            jsonResult.append(result)
-        return json.dumps(jsonResult)
-
+        patient = Patient.get(username=username)
+        results = Carer.select().dicts().where((Carer.username ** searchterm) | (Carer.firstname ** searchterm) |(Carer.surname ** searchterm))
     except Patient.DoesNotExist:
-        searchterm = "%" + searchterm + "%"
-        results = Patient.select().dicts().where((Patient.username % searchterm) | (Patient.firstname % searchterm) |(Patient.surname % searchterm))
+        results = Patient.select().dicts().where((Patient.username ** searchterm) | (Patient.firstname ** searchterm) |(Patient.surname ** searchterm))
 
-        jsonResult = []
-        for result in results:
-            jsonResult.append(result)
-        return json.dumps(jsonResult)
-    return None
+    if results.count() == 0:
+        return "No users found"
+
+    jsonResult = []
+    for result in results:
+        # Check if result is already a connection
+        currentConnections = json.loads(getConnections(username))
+
+        for connection in json.loads(currentConnections['outgoing']):
+            if connection['username'] == result['username']:
+                result['message'] = "Already Requested"
+        
+        for connection in json.loads(currentConnections['incoming']):
+            if connection['username'] == result['username']:
+                result['message'] = "Request Waiting"
+
+        for connection in json.loads(currentConnections['completed']):
+            if connection['username'] == result['username']:
+                result['message'] = "Already Connected"
+
+        jsonResult.append(result)
+    return json.dumps(jsonResult)
+
+def getConnectionStatus(username, target):
+    currentConnections = json.loads(getConnections(username))
+
+    for connection in json.loads(currentConnections['outgoing']):
+        if connection['username'] == target:
+            return "Already Requested"
+    
+    for connection in json.loads(currentConnections['incoming']):
+        if connection['username'] == target:
+            return "Request Waiting"
+
+    for connection in json.loads(currentConnections['completed']):
+        if connection['username'] == target:
+            return "Already Connected"
+    return "None"
 
 ####
 # Client/Client relationships
 ####
 @app.route('/api/createConnection', methods=['POST', 'GET'])
+@auth.login_required
 def createConnection():
+    return createConnection(request.form)
+
+def createConnection(details):
     """Creates an initial connection between two users. POST [username, target]"""
     # Get users
-    currentUser = request.form['username']
-    targetUser = request.form['target']
-
-    #Handle existing entries. Need to check all == 0
-    with database.transaction():
-        if Relationship.select().where(Relationship.requestor == currentUser and Relationship.target == targetUser).count() != 0:
-            return "Connection already established"
-        if Relationship.select().where(Relationship.requestor == targetUser and Relationship.target == currentUser).count() != 0:
-            return "Connection already established"
-        if Patientcarer.select().where(Patientcarer.patient == currentUser and Patientcarer.carer == targetUser).count() != 0:
-            return "Connection already established"
-        if Patientcarer.select().where(Patientcarer.patient == targetUser and Patientcarer.carer == currentUser).count() != 0:
-            return "Connection already established"
+    currentUser = details['username']
+    targetUser = details['target']
 
     # Get user types
     currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
     targetUser_type = json.loads(getAccountInfo(targetUser))['accounttype']
+
+    # Need to check if connection already exists, requested, or if they have requested for you.
+    check = getConnectionStatus(currentUser, targetUser)
+    if check != "None":
+        return check
 
     # Generate 4 digit code
     x = ""
@@ -459,7 +633,7 @@ def createConnection():
     x = int(x)
 
     # Insert into Connection table
-    newConnection = Relationship.insert(
+    newConnection = Relationship.create(
         code = x,
         requestor = currentUser,
         requestortype = currentUser_type,
@@ -467,16 +641,22 @@ def createConnection():
         targettype = targetUser_type
     )
     with database.transaction():
-        newConnection.execute()
-    return str(x)
+        newConnection.save()
+        createNotificationRecord(targetUser, "Connection Request", int(newConnection.connectionid))
+        return str(x)
+    return "False"
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
+@auth.login_required
 def completeConnection():
+    return completeConnection(request.form)
+
+def completeConnection(details):
     """Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
     #Take attempted code, match with a entry where they are target
-    target = request.form['username']
-    requestor = request.form['requestor']
-    attemptedCode = int(request.form['codeattempt'])
+    target = details['username']
+    requestor = details['requestor']
+    attemptedCode = int(details['codeattempt'])
 
     # get record
     instance = Relationship.select().where(Relationship.requestor == requestor and Relationship.target == target).get()
@@ -504,49 +684,58 @@ def completeConnection():
         # Delete this Relationship instance
         with database.transaction():
             instance.delete_instance()
-        return "Correct"
+            
+            #creates the notification to inform the original requestor
+            createNotificationRecord(requestor, "New Connection", None)
+
+        return "Connection to " + requestor + " completed"
     else:
-        return "Incorrect"
+        return "Incorrect code"
     return None
 
 @app.route('/api/deleteConnection', methods=['POST'])
+@auth.login_required
 def deleteConnection():
     """Deletes connection between a patient and carer POST[user, connection]"""
-    return deleteConnection(request.form['user'], request.form['connection'])
+    return deleteConnection(request.form)
 
-def deleteConnection(user,connection):
-    userType = json.loads(getAccountInfo(user))['accounttype']
-    connectionType = json.loads(getAccountInfo(connection))['accounttype']
+def deleteConnection(details):
+    userType = json.loads(getAccountInfo(details['user']))['accounttype']
+    connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
     if (userType == "Patient" and connectionType == "Carer"):
-        instance = Patientcarer.select().where(Patientcarer.patient == user and Patientcarer.carer == connection).get()
+        instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
-        return "True"
+            return "True"
     elif (userType == "Carer" and connectionType == "Patient"):
-        instance = Patientcarer.select().where(Patientcarer.patient == connection and Patientcarer.carer == user).get()
+        instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
         with database.transaction():
             instance.delete_instance()
-        return "True"
-    else:
-        return "False"
+            return "True"
+    return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
+@auth.login_required
 def cancelRequest():
-    cancelRequest(request.form['user'], request.form['connection'])
+    return cancelRequest(request.form)
 
-def cancelRequest(user, connection):
+def cancelRequest(details):
     """Cancels the user request to connect before completion"""
     try:
-        instance = Relationship.select().where(Relationship.requestor == user).get()
+        instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
-    except RelationshipDoesNotExist:
-        instance = Relationship.select().where(Relationship.target == connection).get()
+            return "True"
+    except Relationship.DoesNotExist:
+        instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
+            return "True"
+    return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
+@auth.login_required
 def getConnections():
     return getConnections(request.form['username'])
 
@@ -575,6 +764,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         person['code'] = str(connection.code)
         outgoingConnectionsDetails.append(person)
     outgoingFinal = json.dumps(outgoingConnectionsDetails)
@@ -587,6 +777,7 @@ def getConnections(username):
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         person['connectionid'] = str(connection.connectionid)
         incomingConnectionsDetails.append(person)
     incomingFinal = json.dumps(incomingConnectionsDetails)
@@ -604,7 +795,10 @@ def getConnections(username):
         person['username'] = details['username']
         person['firstname'] = details['firstname']
         person['surname'] = details['surname']
+        person['email'] = details ['email']
+        person['telephonenumber'] = details ['telephonenumber']
         person['accounttype'] = details['accounttype']
+        person['profilepicture'] = details['profilepicture']
         completedConnectionsDetails.append(person)
     completedFinal = json.dumps(completedConnectionsDetails)
 
@@ -615,7 +809,264 @@ def getConnections(username):
 
     return json.dumps(result)
 
+#receives the request from android allows a patient to add an appointment
+@app.route('/api/addPatientAppointment', methods=['POST'])
+@auth.login_required
+def addPatientAppointment():
+  return addPatientAppointment(request.form)
+
+#allows a all self appointments to be added 
+#Note originally there was going to be a seperate method for carers, however this is no longer the case. 
+def addPatientAppointment(details):
+# Build insert user query
+  if details['private'] == "False":
+    isPrivate = False
+  else: 
+    isPrivate = True
+
+  appointmentInsert = Appointments.insert(
+    creator = details['creator'],
+    name = details['name'],
+    apptype = details['apptype'],
+    addressnamenumber = details['addressnamenumber'],
+    postcode = details['postcode'],
+    startdate = details['startdate'],
+    starttime = details['starttime'],
+    enddate = details['enddate'],
+    endtime = details['endtime'],
+    description = details['description'],
+    private = isPrivate
+  )
+
+  appId = str(appointmentInsert.execute())
+  
+  return appId
+
+@app.route('/api/addInviteeAppointment', methods=['POST'])
+@auth.login_required
+def addInviteeAppointment():
+  return addInviteeAppointment(request.form)
+
+def addInviteeAppointment(details):
+  #Build insert user query
+  appointmentInsert = Appointments.insert(
+    creator = details['creator'],
+    invitee = details['username'],
+    name = details['name'],
+    apptype = details['apptype'],
+    addressnamenumber = details['addressnamenumber'],
+    postcode = details['postcode'],
+    startdate = details['startdate'],
+    starttime = details['starttime'],
+    enddate = details['enddate'],
+    endtime = details['endtime'],
+    description = details['description'],
+    private = False,
+    accepted = None
+    )
+
+  appId = str(appointmentInsert.execute())
+  createNotificationRecord(details['username'], "Appointment Invite", appId)
+  
+  return appId
+
+#receives the request from android to allow a user to view their upcoming appointments
+@app.route('/api/getAllAppointments', methods=['POST'])
+@auth.login_required
+def getAllAppointments():
+  return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
+
+#gets the appointments from the database
+def getAllAppointments(loggedInUser, targetUser):
+  #get user account type 
+  currentUser_type = json.loads(getAccountInfo(loggedInUser))['accounttype']
+
+  if currentUser_type == "Carer":
+    if loggedInUser == targetUser:
+       appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+    else:
+      appointments = Appointments.select().where(((Appointments.creator == targetUser) & (Appointments.private == False)) | ((Appointments.invitee == targetUser) & (Appointments.private == False))).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  elif currentUser_type == "Patient":
+    appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
+  
+  appointments.execute()
+
+  currentDateTime = datetime.datetime.now()
+
+  allAppointments = []
+  for app in appointments:
+    appointment = {}
+    appointment['appid'] = app.appid
+    appointment['creator'] = app.creator.username
+    if app.invitee == None:
+        appointment['invitee'] = ""
+    else:
+        appointment['invitee'] = app.invitee.username
+    appointment['name'] = app.name
+    appointment['apptype'] = str(app.apptype.type)
+    appointment['addressnamenumber'] = app.addressnamenumber
+    appointment['postcode'] = app.postcode
+    appointment['startdate'] = str(app.startdate)
+    appointment['starttime'] = str(app.starttime)
+    appointment['enddate'] = str(app.enddate)
+    appointment['endtime'] = str(app.endtime)
+    appointment['description'] = app.description
+    appointment['private'] = app.private
+    appointment['androideventid'] = app.androideventid
+    appointment['accepted'] = app.accepted
+    
+    dateTime = str(app.enddate) + " " + str(app.endtime)
+    dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
+
+    if (dateTime >= currentDateTime):
+      appointment['upcoming'] = True
+    else:
+      appointment['upcoming'] = False
+
+    allAppointments.append(appointment)
+
+  return json.dumps(allAppointments)
+
+#deletes an appointment
+@app.route('/api/deleteAppointment', methods=['POST'])
+@auth.login_required
+def deleteAppointment():
+  return deleteAppointment(request.form['username'], request.form['appid'])
+
+def deleteAppointment(user, appid):
+  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+
+  if isCreator.creator.username == user:
+    with database.transaction():
+        if isCreator.invitee.username != None:
+            invitee = isCreator.invitee.username
+            createNotificationRecord(invitee, "Appointment Cancelled", None)
+        isCreator.delete_instance()
+
+    return "Appointment Deleted"
+
+#gets the appointment that is to be updated
+@app.route('/api/getUpdateAppointment', methods=['POST'])
+@auth.login_required
+def getUpdateAppointment():
+  return updateAppointment(request.form['username'], request.form['appid'])
+
+def getUpdateAppointment(user, appid):
+  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+
+  if isCreator.creator.username == user:
+    jsonResult = []
+
+    appointment = {}
+    appointment['appid'] = isCreator.appid
+    appointment['creator'] = isCreator.creator.username
+    appointment['name'] = isCreator.name
+    appointment['apptype'] = str(isCreator.apptype.type)
+    appointment['addressnamenumber'] = isCreator.addressnamenumber
+    appointment['postcode'] = isCreator.postcode
+    appointment['startdate'] = str(isCreator.startdate)
+    appointment['starttime'] = str(isCreator.starttime)
+    appointment['enddate'] = str(isCreator.enddate)
+    appointment['endtime'] = str(isCreator.endtime)
+    appointment['description'] = isCreator.description
+    appointment['private'] = isCreator.private
+
+    jsonResult.append(appointment)
+    return json.dumps(jsonResult)
+
+
+#update an appointment
+@app.route('/api/updateAppointment', methods=['POST'])
+@auth.login_required
+def updateAppointment():
+  return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
+
+def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
+  if private == "False":
+    isPrivate = False
+  else: 
+    isPrivate = True
+
+  updateAppointment = Appointments.update(
+    name = name,
+    apptype = apptype,
+    addressnamenumber = addressnamenumber,
+    postcode = postcode,
+    startdate = startDate,
+    starttime = startTime,
+    enddate = endDate,
+    endtime = endTime,
+    description = description,
+    private = isPrivate,
+    accepted = None).where(Appointments.appid == appid)
+
+  with database.transaction():
+    updateAppointment.execute()
+
+    #check if the appointment has an invitee
+    appointment = Appointments.select().where(Appointments.appid == appid).get()
+    if appointment.invitee != None:
+        createNotificationRecord(appointment.invitee.username, "Appointment Updated", appid)
+
+
+  return "Appointment Updated"
+
+@app.route('/api/getAppointment', methods=['POST'])
+@auth.login_required
+def getAppointment():
+    return getAppointment(request.form['user'], request.form['appid'])
+
+def getAppointment(user, appid):
+  isRelated = Appointments.select().where(Appointments.appid == appid).get()
+
+  if (isRelated.creator.username == user) or (isRelated.invitee.username):
+
+    appointment = {}
+    appointment['appid'] = isRelated.appid
+    appointment['creator'] = isRelated.creator.username
+    appointment['name'] = isRelated.name
+    appointment['apptype'] = str(isRelated.apptype.type)
+    appointment['addressnamenumber'] = isRelated.addressnamenumber
+    appointment['postcode'] = isRelated.postcode
+    appointment['startdate'] = str(isRelated.startdate)
+    appointment['starttime'] = str(isRelated.starttime)
+    appointment['enddate'] = str(isRelated.enddate)
+    appointment['endtime'] = str(isRelated.endtime)
+    appointment['description'] = isRelated.description
+    appointment['private'] = isRelated.private
+
+    return json.dumps(appointment)
+
+@app.route('/api/acceptDeclineAppointment', methods=['POST'])
+@auth.login_required
+def acceptDeclineAppointment():
+    return acceptDeclineAppointment(request.form['username'], request.form['action'], request.form['appid'])
+
+def acceptDeclineAppointment(user, action, appointmentId): 
+    appointment = Appointments.select().where(Appointments.appid == appointmentId).get()
+    if user == appointment.invitee.username:
+        if action == "Accept": 
+            accepted = True
+            notificationType = "Appointment Accepted"
+            result = "You have accepted this appointment."
+        else:
+            accepted = False
+            notificationType = "Appointment Declined"
+            result = "You have declined this appointment."
+        submitAction = Appointments.update(accepted = accepted).where(Appointments.appid == appointmentId)
+
+        with database.transaction():
+            submitAction.execute()
+            createNotificationRecord(appointment.creator.username, notificationType, appointmentId)
+            return result
+        
+        return "Failed"
+    return "You have not been invited to this appointment."
+
+
+
 @app.route('/api/addMedication', methods=['POST'])
+@auth.login_required
 def addMedication():
     return addMedication(request.form['medicationname'])
 
@@ -626,11 +1077,13 @@ def addMedication(medicationName):
     with database.transaction():
         try:
             insertMedication.execute()
+            return "Added " + medicationName
         except IntegrityError:
             return medicationName + " already exists"
-    return "Added " + medicationName
+    return "False"
 
 @app.route('/api/deleteMedication', methods=['POST'])
+@auth.login_required
 def deleteMedication():
     return deleteMedication(request.form['medicationname'])
 
@@ -644,6 +1097,10 @@ def deleteMedication(medicationName):
         return medicationName + "not found"
 
 @app.route('/api/getMedications')
+@auth.login_required
+def getMedications():
+    return getMedications()
+
 def getMedications():
     medicationList = []
     result = Medication.select()
@@ -652,34 +1109,34 @@ def getMedications():
     return json.dumps(medicationList)
 
 @app.route('/api/addPrescription', methods=['POST'])
+@auth.login_required
 def addPrescription():
     return addPrescription(request.form)
 
 def addPrescription(details):
-    insertPrescription = Prescription.insert(
+    insertPrescription = Prescription.create(
         username = details['username'],
         medication = details['medication'],
         dosage = details['dosage'],
         frequency = details['frequency'],
         quantity = details['quantity'],
         dosageunit = details['dosageunit'],
-        frequencyunit = details['frequencyunit'],
         startdate = details['startdate'],
         enddate = details['enddate'],
-        repeat = details['repeat'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
         dosageform = details['dosageform'])
 
     try:
         with database.transaction():
-            insertPrescription.execute()
+            insertPrescription.save()
+            createNotificationRecord(details['username'], "Prescription Added", int(insertPrescription.prescriptionid))
             return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
 
-
 @app.route('/api/editPrescription', methods=['POST'])
+@auth.login_required
 def editPrescription():
     return editPrescription(request.form)
 
@@ -690,21 +1147,23 @@ def editPrescription(details):
         frequency = details['frequency'],
         quantity = details['quantity'],
         dosageunit = details['dosageunit'],
-        frequencyunit = details['frequencyunit'],
         startdate = details['startdate'],
         enddate = details['enddate'],
-        repeat = details['repeat'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
         dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
 
     try:
         updatePrescription.execute()
+        patient = Prescription.select().where(Prescription.prescriptionid == details['prescriptionid']).get()
+        createNotificationRecord(patient.username.username, "Prescription Updated", details['prescriptionid'])
+
         return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  updated for " + details['username']
     except:
         return "Failed"
 
 @app.route('/api/deletePrescription', methods=['POST'])
+@auth.login_required
 def deletePrescription():
     return deletePrescription(request.form['prescriptionid'])
 
@@ -718,6 +1177,7 @@ def deletePrescription(prescriptionid):
         return "Failed"
 
 @app.route('/api/getPrescriptions', methods=['POST'])
+@auth.login_required
 def getPrescriptions():
     return getPrescriptions(request.form['username'])
 
@@ -737,6 +1197,7 @@ def getPrescriptions(username):
         return "Must have Patient account type"
 
 @app.route('/api/getActivePrescriptions', methods=['POST'])
+@auth.login_required
 def getActivePrescriptions():
     return getActivePrescriptions(request.form['username'])
 
@@ -745,6 +1206,7 @@ def getActivePrescriptions(username):
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
 
 @app.route('/api/getUpcomingPrescriptions', methods=['POST'])
+@auth.login_required
 def getUpcomingPrescriptions():
     return getUpcomingPrescriptions(request.form['username'])
 
@@ -753,6 +1215,7 @@ def getUpcomingPrescriptions(username):
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
 
 @app.route('/api/getExpiredPrescriptions', methods=['POST'])
+@auth.login_required
 def getExpiredPrescriptions():
     return getExpiredPrescriptions(request.form['username'])
 
@@ -761,6 +1224,7 @@ def getExpiredPrescriptions(username):
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
 
 @app.route('/api/getPrescription', methods=['POST'])
+@auth.login_required
 def getPrescription():
     return getPrescription(request.form)
 
@@ -771,7 +1235,95 @@ def getPrescription(details):
     prescription['enddate'] = str(prescription['enddate'])
     return json.dumps(prescription)
 
-@app.route('/api/getDeactivateReasons', methods=['POST'])
+@app.route('/api/takeprescription', methods=['POST'])
+def takePrescription():
+    return takePrescription(request.form)
+
+def takePrescription(details):
+    try:
+        currentCount = int(details['currentcount'])
+        # If a record already exists for this day, update
+        takeInstance = TakePrescription.select().where((TakePrescription.prescriptionid == details['prescriptionid']) & (TakePrescription.currentdate == datetime.datetime.now().date())).get()
+        takeInstance = TakePrescription.update(
+            currentcount = currentCount
+        ).where(TakePrescription.prescriptionid == details['prescriptionid'])
+        with database.transaction():
+            takeInstance.execute()
+            checkStockLevel(details['prescriptionid'], currentCount)
+            return "True"
+    except TakePrescription.DoesNotExist:
+        # No record exists for today, create a new one
+        takeInstance = TakePrescription.insert(
+            prescriptionid = details['prescriptionid'],
+            currentcount = details['currentcount'],
+            startingcount = Prescription.get(Prescription.prescriptionid == details['prescriptionid']).stockleft,
+            currentdate = datetime.datetime.now().date())
+        with database.transaction():
+            takeInstance.execute()
+            checkStockLevel(details['prescriptionid'], currentCount)
+            return "True"
+    except TypeError:
+        return "Invalid current count (is it an integer?)"
+    return "False"
+
+def checkStockLevel(prescription, count):
+    thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
+    takeInstance = TakePrescription.select().where(
+        (TakePrescription.prescriptionid == prescription) &
+        (TakePrescription.currentdate == datetime.datetime.now().date())
+    ).get()
+    
+    # Level to decrease stock by is number of times taken today * number of tablets etc. taken each time
+    levelToDecrease = (count * thisPrescription.quantity)
+    
+    # If they have increased their stock, reflect that change
+    if thisPrescription.stockleft > takeInstance.startingcount:
+        takeInstance.startingcount = thisPrescription.stockleft
+    
+    # Remove the amount taken today from stock
+    thisPrescription.stockleft = (takeInstance.startingcount - levelToDecrease)
+    
+    # Commit all changes
+    thisPrescription.save()
+
+    # Do they have 3 days worth?
+    if (thisPrescription.stockleft < ((thisPrescription.frequency * thisPrescription.quantity)*3)):
+        patient = thisPrescription.username
+        carer = Patientcarer.get(Patientcarer.patient == patient).carer
+        createNotificationRecord(patient.username, "Medication Low", thisPrescription.prescriptionid)
+        createNotificationRecord(carer.username, "Patient Medication Low", thisPrescription.prescriptionid)
+
+@app.route('/api/getPrescriptionCount', methods=['POST'])
+def getPrescriptionCount():
+    return getPrescriptionCount(request.form)
+
+def getPrescriptionCount(details):
+    try:
+        takeInstance = TakePrescription.select().where(
+                (TakePrescription.prescriptionid == details['prescriptionid']) &
+                (TakePrescription.currentdate == datetime.datetime.now().date())) \
+            .get()
+        return str(takeInstance.currentcount)
+    except TakePrescription.DoesNotExist:
+        return str(0)
+
+
+@app.route('/api/searchNHSDirectWebsite', methods=['POST'])
+@auth.login_required
+def searchNHSDirect():
+    return searchNHSDirect(request.form['searchterms'])
+
+def searchNHSDirect(search):
+    newTerm = search.replace(" ", "+")
+    website = "http://www.nhs.uk/Search/Pages/Results.aspx?___JSSniffer=true&q="
+    searchWeb = website + newTerm
+    return searchWeb
+
+@app.route('/api/getDeactivateReasons', methods=['POST','GET'])
+@auth.login_required
+def getDeactivateReasons():
+    return getDeactivateReasons()
+
 def getDeactivateReasons():
     """Returns a JSON list of possible reasons a user can deactivate"""
     reasons = Deactivatereason.select()
@@ -780,3 +1332,731 @@ def getDeactivateReasons():
         reasonList.append(reason.reason)
     reasonList = json.dumps(reasonList)
     return reasonList
+
+@app.route('/api/getAppointmentTypes', methods=['POST','GET'])
+@auth.login_required
+def getAppointmentTypes():
+    return getAppointmentTypes()
+
+def getAppointmentTypes():
+    """Returns a JSON list of possible appointment types"""
+    types = Appointmenttype.select()
+    typeList = []
+    for appType in types:
+      typeList.append(appType.type)
+    typeList = json.dumps(typeList)
+    return typeList
+
+@app.route('/api/getCorrespondence', methods=['GET', 'POST'])
+@auth.login_required
+def getCorrespondence():
+    return getCorrespondence(request.form['carer'], request.form['patient'])
+
+def getCorrespondence(carer, patient):
+     allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
+     
+     results = []
+     for n in allNotes:
+        note = {}
+        note['noteid'] = n.noteid
+        note['carer'] = n.carer.username
+        note['patient'] = n.patient.username
+        note['notes'] = n.notes
+        note['title'] = n.title
+        note['datetime'] = str(n.datetime)
+        results.append(note)
+     return json.dumps(results)
+
+@app.route('/api/getPatientNotes', methods=['GET', 'POST'])
+@auth.login_required
+def getPatientNotes():
+    return getPatientNotes(request.form)
+
+def getPatientNotes(details):
+     allNotes = Notes.select().where(Notes.patient == details['username'])
+     
+     results = []
+     for n in allNotes:
+        note = {}
+        note['noteid'] = n.noteid
+        note['carer'] = n.carer.username
+        note['patient'] = n.patient.username
+        note['notes'] = n.notes
+        note['title'] = n.title
+        note['datetime'] = str(n.datetime)
+        results.append(note)
+     return json.dumps(results)
+
+
+@app.route('/api/addCorrespondence', methods=['POST'])
+def addCorrespondence():
+    return addCorrespondence(request.form)
+
+def addCorrespondence(details):
+    insert = Notes.insert(
+        carer = details['carer'],
+        patient = details['patient'],
+        notes = details['notes'],
+        title = details['title'],
+        datetime = datetime.datetime.now()
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
+@app.route('/api/deleteNote', methods=['POST'])
+@auth.login_required
+def deleteNote():
+  return deleteNote(request.form['noteid'])
+
+def deleteNote(noteid):
+    try:
+        instance = Notes.select().where(Notes.noteid == noteid).get()
+        with database.transaction():
+            instance.delete_instance()
+            return "Deleted"
+    except:
+        return "Failed"
+
+@app.route('/api/addAndroidEventId', methods=['POST'])
+@auth.login_required
+def addAndroidEventId():
+  dbId = request.form['dbid']
+  androidId = request.form['androidid']
+  addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
+  return "Android ID added to database"
+
+  #Admin Portal Pages
+def addDeactivate(reason):
+    insert = Deactivatereason.insert(
+        reason = request.form['reason']
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
+def newMedication(medication):
+    insert = Medication.insert(
+        name = request.form['medication']
+    )
+    
+    with database.transaction():
+        insert.execute()
+        return "True"
+    return "False"
+
+#@app.route('/api/getReasons', methods=['POST'])
+#@auth.login_required
+#def getReasons():
+#    return getReasons()
+#
+#def getReasons():
+#    """Get all the reasons from the deactivate table"""
+#    results = []
+#    for r in Deactivatereason.select(Deactivatereason.reason):
+#        deactivateReasons = {}
+#    
+#        results.append(deactivateReasons)
+#    return json.dumps(results)
+
+@app.route('/api/getAllUsers', methods=['POST'])
+@auth.login_required
+def getAllUsers():
+    return getAllUsers()
+
+def getAllUsers():
+    """Get All information from client and patient/carer/Admin table"""
+    results = []
+    for u in Client.select(Client.username):
+      userDetails = {}
+      try:
+        user = Patient.select().join(Client).where(Client.username==u.username).get()
+        userDetails['accounttype'] = "Patient"
+      except Patient.DoesNotExist:
+        try:
+            user = Carer.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Carer"
+        except Carer.DoesNotExist:
+            user = Admin.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Admin"
+
+        userDetails['firstname'] = user.firstname
+        userDetails['surname'] = user.surname
+        userDetails['username'] = user.username.username
+        userDetails['email'] = user.username.email
+        userDetails['dob'] = str(user.username.dob)
+        userDetails['accountdeactivated'] = user.username.accountdeactivated
+        userDetails['accountlocked'] = user.username.accountlocked
+        userDetails['loginattempts'] = user.username.loginattempts
+        userDetails['verified'] = user.username.verified
+        if user.ismale:
+            userDetails['gender'] = 'Male'
+        else:
+            userDetails['gender'] ='Female'
+        results.append(userDetails)
+    return json.dumps(results)
+
+#Update user account settings in Admin Portal
+@app.route('/api/updateAccountSettings', methods=['POST'])
+def updateAccountSettings():
+    return updateAccountSettings(request.form)
+
+def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
+    user = None
+    # What type of user are we dealing with?
+    try:
+        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
+    except Patient.DoesNotExist:
+        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
+
+    # Access to their corresponding Client entry
+    clientObject = Client.select().where(Client.username == user.username).get()
+
+    gender = False
+    if settings['ismale'] == "true":
+        gender = True
+
+    # Update
+    user.firstname = settings['firstname']
+    user.surname = settings['surname']
+    user.ismale = gender
+
+    clientObject.username = settings['username']
+    clientObject.email = settings['email']
+    clientObject.dob = settings['dob']
+    clientObject.accounttype = settings['accounttype']
+    clientObject.accountdeactivated = accountdeactivated
+    clientObject.accountlocked = accountlocked
+    clientObject.loginattempts = settings['loginattempts']
+    clientObject.verified = verified
+
+    with database.transaction():
+        user.save()
+        clientObject.save()
+        return "True"
+    return "False"
+
+@app.route('/api/deleteAccount', methods=['POST'])
+@auth.login_required
+def deleteAccount():
+    return deleteAccount(request.form)
+
+def deleteAccount(username):
+
+    try:
+        instance = Client.select().where(Client.username == username).get()
+    except:
+        return "Failed"
+    with database.transaction():
+        instance.delete_instance(recursive=True)
+        return "Deleted"
+    return "Failed"
+
+def createNotificationRecord(user, notificationType, relatedObject):
+    #dictionary mapping notificationType to referencing table
+    notificationTypeTable = {}
+    notificationTypeTable['Connection Request'] = "Relationship"
+    notificationTypeTable['New Connection'] = ""
+    notificationTypeTable['Prescription Added'] = "Prescription"
+    notificationTypeTable['Prescription Updated'] = "Prescription"
+    notificationTypeTable['Appointment Invite'] = "Appointments"
+    notificationTypeTable['Appointment Updated'] = "Appointments"
+    notificationTypeTable['Appointment Cancelled'] = ""
+    notificationTypeTable['Password Reset'] = ""
+    notificationTypeTable['Appointment Declined'] = "Appointments"
+    notificationTypeTable['Appointment Accepted'] = "Appointments"
+    notificationTypeTable['Patient Medication Low'] = "Prescription"
+    notificationTypeTable['Medication Low'] = "Prescription"
+
+    createNotification = Notification.insert(
+        username = user,
+        notificationtype = notificationType,
+        relatedObjectTable = notificationTypeTable[notificationType], 
+        relatedObject = relatedObject
+    )
+
+    with database.transaction():
+        notificationId = str(createNotification.execute())
+        createPushNotification(notificationId)
+        return "True"
+    return "False"
+
+@app.route('/api/getNotifications', methods=['POST'])
+@auth.login_required
+def getNotifications():
+    return getNotifications(request.form['username'])
+
+def getNotifications(username):
+    """Returns all of the notifications that have been associated with a user that have not been dismissed"""
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
+    notificationList = []
+    for notification in notifications:
+        notification['content'] = getNotificationContent(notification)
+        notification['link'] = getNotificationLink(notification)
+        notification['type'] = getNotificationTypeClass(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
+
+    return json.dumps(notificationList)
+
+@app.route('/api/getAllNotifications', methods=['POST'])
+@auth.login_required
+def getAllNotifications():
+    return getAllNotifications(request.form['username'])
+
+def getAllNotifications(username):
+    """Returns all of the notifications that have been associated with a user, whether or not they have been dismissed"""
+    notifications = Notification.select().dicts().where(Notification.username == username)
+    notificationList = [] 
+    for notification in notifications:
+        notification['content'] = getNotificationContent(notification)
+        notification['link'] = getNotificationLink(notification)
+        notification['type'] = getNotificationTypeClass(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
+
+    return json.dumps(notificationList)
+
+@app.route('/api/getDismissedNotifications', methods=['POST'])
+@auth.login_required
+def getDismissedNotifications():
+    return getDismissedNotifications(request.form['username'])
+
+def getDismissedNotifications(username):
+    """Returns all of the notifications that have been associated with a user that have not been dismissed"""
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == True))
+    notificationList = []
+    for notification in notifications:
+        notification['content'] = getNotificationContent(notification)
+        notification['link'] = getNotificationLink(notification)
+        notification['type'] = getNotificationTypeClass(notification)
+        if (notification['content'] != "DoesNotExist"):
+            notificationList.append(notification)
+
+    return json.dumps(notificationList)
+
+def getNotificationContent(notification):
+    """gets the body/content of the notification"""
+    if notification['notificationtype'] == "Connection Request":
+        try: 
+            requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
+        except Relationship.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "You have a new connection request from " + requestor.requestor.username
+    
+    if notification['notificationtype'] == "New Connection":
+        content = "You have a new connection, click above to view."
+    
+    if notification['notificationtype'] == "Prescription Added":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "A new prescription for " + prescription.medication.name + " has been added to your profile."
+
+    if notification['notificationtype'] == "Prescription Updated":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "Your prescription for " + prescription.medication.name + " has been updated."
+    
+    if notification['notificationtype'] == "Appointment Invite":
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = appointment.creator.username + " has added an appointment with you on " + str(appointment.startdate) + ". Click the link to accept/decline."
+
+    if notification['notificationtype'] == "Appointment Updated":
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = appointment.creator.username + " has updated the following appointment with you: " + str(appointment.name) + ". Click the link to accept/decline."
+
+    if notification['notificationtype'] == "Appointment Cancelled":
+        content = "One of your appointments has been cancelled, click above to view your updated calendar."
+
+    if notification['notificationtype'] == "Password Reset":
+        content = "Your password has been changed successfully."
+
+    if notification['notificationtype'] == "Appointment Accepted":
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = appointment.invitee.username + " has accepted the appointment with you on " + str(appointment.startdate) + "."
+
+    if notification['notificationtype'] == "Appointment Declined":
+        try:
+            appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
+        except Appointments.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = appointment.invitee.username + " has declined the appointment with you on " + str(appointment.startdate) + "."
+
+    if notification['notificationtype'] == "Medication Low":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "You have less than 3 days stock of " + prescription.medication.name + " left."
+
+    if notification['notificationtype'] == "Patient Medication Low":
+        try:
+            prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = prescription.username.username + " has less than 3 days stock of " + prescription.medication.name + " left."
+    return content
+
+def getNotificationLink(notification):
+    """gets the notification link that will make it clickable"""
+    if notification['notificationtype'] == "Connection Request":
+        link = "/profile?go=connections"
+    
+    if notification['notificationtype'] == "New Connection":
+        link = "/profile?go=connections"
+    
+    if notification['notificationtype'] == "Prescription Added":
+        link = "/prescriptions"
+
+    if notification['notificationtype'] == "Prescription Updated":
+        link = "/prescriptions"
+    
+    if notification['notificationtype'] == "Appointment Invite":
+        link = "/appointmentDetails?id=" + str(notification['relatedObject'])
+
+    if notification['notificationtype'] == "Appointment Updated":
+        link = "/appointmentDetails?id=" + str(notification['relatedObject'])
+
+    if notification['notificationtype'] == "Appointment Cancelled":
+        link = "/appointments"
+
+    if notification['notificationtype'] == "Appointment Accepted":
+        link = "/appointments?open=" + str(notification['relatedObject'])
+
+    if notification['notificationtype'] == "Appointment Declined":
+        link = "/appointments?open=" + str(notification['relatedObject'])
+
+    if notification['notificationtype'] == "Password Reset":
+        link = "/"
+
+    if notification['notificationtype'] == "Medication Low":
+        link = "/prescriptions"
+
+    if notification['notificationtype'] == "Patient Medication Low":
+        link = "/"
+    
+    return link
+
+def getNotificationTypeClass(notification):
+    """gets the class which in turn will decide the background colour of the notification"""
+    notificationClass = Notificationtype.select().where(Notificationtype.typename == notification['notificationtype']).get()
+    return notificationClass.typeclass
+
+@app.route('/api/dismissNotification', methods=['POST'])
+@auth.login_required
+def dismissNotification():
+    return dismissNotification(request.form['notificationid'])
+
+def dismissNotification(notificationid):
+    """This sets the dismiss boolean field in the database to true"""
+    dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
+
+    with database.transaction():
+        dismiss.execute()
+        return "True"
+    return "False"
+
+##
+# Reminder Functionality
+##
+
+def getMinutesDifference(dateTimeOne,dateTimeTwo):
+    """Difference found my timeOne - timeTwo in minutes"""
+    return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
+
+@app.route('/test/a30')
+def getAppointmentsDueIn30():
+    return str(getAppointmentsDueIn30('carer', datetime.datetime.now()))
+def getAppointmentsDueIn30(username, currentTime):
+    select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
+    result = []
+    for appointment in select:
+        appointmentStartTime = datetime.datetime.combine(appointment['startdate'], appointment['starttime'])
+        timeUntil = getMinutesDifference(appointmentStartTime, currentTime)
+        if timeUntil <= 30 and timeUntil > 0:
+            result.append(appointment)
+    return result
+
+@app.route('/test/anow')
+def getAppointmentsDueNow():
+    return str(getAppointmentsDueNow('carer', datetime.datetime.now()))
+def getAppointmentsDueNow(username, currentTime):
+    """Search for appointments due now"""
+    select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
+    result = []
+    for appointment in select:
+        appointmentStartTime = datetime.datetime.combine(appointment['startdate'], appointment['starttime'])
+        timeUntilStart = getMinutesDifference(appointmentStartTime, currentTime)
+        appointmentEndTime = datetime.datetime.combine(appointment['enddate'], appointment['endtime'])
+        timeUntilEnd = getMinutesDifference(appointmentEndTime, currentTime)
+        if timeUntilStart <= 0 and timeUntilEnd > 0:
+            result.append(appointment)
+    return result
+
+def getPrescriptionsDueToday(username, currentDateTime):
+    """Seach for prescriptions due now"""
+    currentDate = currentDateTime.date()
+    currentDay = currentDateTime.strftime("%A")
+
+    activePrescriptions = Prescription.select().where(
+        (Prescription.username == username) &
+        (Prescription.startdate <= currentDate) &
+        (Prescription.enddate >= currentDate) &
+        (eval("Prescription." + currentDay) == True)
+    ).dicts()
+
+    results = []
+    for r in activePrescriptions:
+        results.append(r)
+    return results
+
+def pingServer(sender, **extra):
+    """Checks to see if there are any reminders to create/delete"""
+    try:
+        loggedInUser = session['username']
+        dt = datetime.datetime.now()
+        
+        if Appointments.select().count() != 0:
+            deleteReminders(loggedInUser, dt)
+
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
+            addReminders(loggedInUser, dt)
+
+    # No-one logged in
+    except KeyError, e:
+        return
+
+def addReminders(username, now):
+    """Adds reminders to the Reminder table"""
+    # Get All Reminders (Saving on performance hits later)
+    allReminders = Reminder.select().where(Reminder.username == username)
+
+    appointmentsDueIn30 = getAppointmentsDueIn30(username, now)
+    for a in appointmentsDueIn30:
+        withUser = a['creator']
+        if withUser == username:
+            withUser = a['invitee']
+
+        try:
+            r = allReminders.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            if r.reminderClass == "danger":
+                with database.transaction():
+                    r.delete_instance()
+                raise Reminder.DoesNotExist
+        except Reminder.DoesNotExist:
+
+            # Is the appointment with another user?
+            if withUser == None:
+                insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
+            else:
+                insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
+            
+            # Create the reminder
+            insertReminder = Reminder.insert(
+                username = username,
+                content = insertContent,
+                reminderClass = "warning",
+                relatedObjectTable = "Appointments",
+                relatedObject = a['appid'],
+                extraDate = str(datetime.datetime.combine(a['startdate'], a['starttime']))
+            )
+            with database.transaction():
+                insertReminder.execute()
+
+    appointmentsDueNow = getAppointmentsDueNow(username, now)
+    for a in appointmentsDueNow:
+        withUser = a['creator']
+        if withUser == username:
+            withUser = a['invitee']
+        try:
+            r = allReminders.select().where((Reminder.relatedObjectTable == 'Appointments') & (Reminder.relatedObject == a['appid'])).get()
+            if r.reminderClass == "warning":
+                with database.transaction():
+                    r.delete_instance()
+                raise Reminder.DoesNotExist
+        except Reminder.DoesNotExist:
+            
+            # Is the appointment with another user?
+            if withUser == None:
+                insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
+            else:
+                insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
+
+            # Create the reminder
+            insertReminder = Reminder.insert(
+                username = username,
+                content = insertContent,
+                reminderClass = "danger",
+                relatedObjectTable = "Appointments",
+                relatedObject = a['appid'],
+                extraDate = str(datetime.datetime.combine(a['enddate'], a['endtime']))
+            )
+            with database.transaction():
+                insertReminder.execute()
+
+    prescriptionsDueToday = getPrescriptionsDueToday(username, now)
+    for p in prescriptionsDueToday:
+        try:
+            r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
+        except Reminder.DoesNotExist:
+            insertReminder = Reminder.insert(
+                username = username,
+                content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today.",
+                reminderClass = "info",
+                relatedObjectTable = "Prescription",
+                relatedObject = p['prescriptionid'],
+                extraFrequency = int(p['frequency']))
+            with database.transaction():
+                insertReminder.execute()
+
+def deleteReminders(username, now):
+    """Deletes any reminders that have expired"""
+    # Get all Reminders
+    allReminders = Reminder.select().where(Reminder.username == username)
+
+    # Appointments
+    # Need to remove all reminders that are no longer immediately happening / 15mins. 
+    appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
+    allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
+    for reminder in appointmentReminders:
+        appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
+        appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
+        if appointmentEndDateTime < now:
+            with database.transaction():
+                reminder.delete_instance()
+
+    # Prescriptions
+    # Need to remove all prescriptions that are not on the current day or start date > now or end date < now. 
+    prescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
+    allPrescriptions = Prescription.select().where(Prescription.username == username)
+    currentDay = now.strftime("%A")
+    for reminder in prescriptionReminders:
+        prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
+        if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
+            with database.transaction():
+                reminder.delete_instance()
+
+@app.route('/test/getReminders')
+def getReminders():
+    return getReminders(session['username'])
+
+def getReminders(username):
+    allReminders = Reminder.select().dicts().where(Reminder.username == username)
+    reminders = []
+    for r in allReminders:
+        reminders.append(r)
+    return json.dumps(reminders)
+
+def passwordExpiration(username):
+    """This checks whether the password that the user is using is about to expire"""
+    passwordDetails = uq8LnAWi7D.select().where((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).get()
+    expirationDate = passwordDetails.expirydate
+    today = datetime.datetime.now().date()
+    remainingDays = ((expirationDate - today).total_seconds())/86400
+    #check the number of days until expiration
+    if int(remainingDays) < 1:
+        return "Reset"
+    elif int(remainingDays) < 11: 
+        return "<11"
+    else:
+        return "Authenticated"
+
+@app.route('/api/expiredResetPassword', methods=['POST'])
+@auth.login_required
+def expiredResetPassword():
+    return expiredResetPassword(request.form)
+
+def expiredResetPassword(request):
+    """reset a password that has expired or is expiring"""
+    user = request['username']
+    if request['confirmnewpassword'] != request['newpassword']:
+        return "Unmatched"
+        
+    newPassword = sha256_crypt.encrypt(request['newpassword'])
+
+    #set existing passwords to not current
+    notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == user)
+    
+    #check its not the same as old passwords - this does not work as passwords hash as something different each time due to the different salt used.
+    # oldPasswords = uq8LnAWi7D.select(uq8LnAWi7D.password).dicts().where(uq8LnAWi7D.username == user).order_by(uq8LnAWi7D.expirydate.desc()).limit(5)
+    # oldPasswords.execute()
+    # for this in oldPasswords:
+    #     if newPassword == this:
+    #         return "Exists"
+
+    # Build insert password query
+    newCredentials = uq8LnAWi7D.insert(
+      username = user,  
+      password = newPassword,
+      iscurrent = True,
+      expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
+    )
+
+    with database.transaction():
+        notCurrent.execute()
+        newCredentials.execute()
+
+        createNotificationRecord(user, "Password Reset", None)
+        return "True"
+    return "False"
+
+
+# def checkPrescriptionLevel(username, activePrescriptions):
+#     today = datetime.datetime.now().date()
+#     for prescription in activePrescriptions:
+#         if(prescription['stockleft'] < 10):
+#             if Notification.select().where((Notification.username == username) & (Notification.dismissed == False) & (Notification.notificationtype == "Medication Low") & (Notification.relatedObject == prescription['prescriptionid'])).count() == 0:
+#                 createNotificationRecord(username, "Medication Low", prescription['prescriptionid'])
+
+
+
+##
+# Signalling
+##
+
+# Causes the reminder ping to execute every time a request is started.
+request_started.connect(pingServer, app)

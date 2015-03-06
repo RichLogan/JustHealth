@@ -1,12 +1,18 @@
 apply plugin: 'com.android.application'
-
 android {
+    signingConfigs {
+        JustHealth {
+            keyAlias 'JustHealthKey'
+            keyPassword 'mbMr3Rbofsi8AU'
+            storeFile file('/Users/Stephen/Documents/University/Co600/JustHealth/jhApp/AndroidKey/JustHealth.jks')
+            storePassword 'mbMr3Rbofsi8AU'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
     defaultConfig {
         applicationId "justhealth.jhapp"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -14,12 +20,17 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.JustHealth
         }
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.gms:play-services:3.1.+'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:cardview-v7:21.0.+'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
+    compile 'com.joanzapata.android:android-iconify:1.0.9'
+    compile 'de.hdodenhof:circleimageview:1.2.1'
 }

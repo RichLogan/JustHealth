@@ -1,15 +1,24 @@
 package justhealth.jhapp;
 
 import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+//import android.support.v7.app.ActionBarActivity;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,47 +26,72 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+/**
+ * Functionality to allow a carer to view all Prescriptions for any patient that they are connected to.
+ */
 public class CarerPrescriptions extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_prescriptions);
 
         //Get data passed from MyPatients
-        String username = "";
         String firstname = "";
-        String surname= "";
+        String username = "";
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("targetUsername");
             firstname = extras.getString("firstName");
-            surname = extras.getString("surname");
         }
 
-        Button addNewPrescription = (Button)findViewById(R.id.addNewPrescription);
-        addNewPrescription.setOnClickListener(
-            new Button.OnClickListener() {
-                public void onClick(View view) {
-                    Intent intent = new Intent(getBaseContext(), AddPrescription.class);
-                    String username =  extras.getString("targetUsername");
-                    intent.putExtra("username", username);
-                    startActivity(intent);
-                }
-            }
-        );
+        final String user = username;
 
-        //Set text of patientName to username
-        TextView title=(TextView)findViewById(R.id.patientName);
-        title.setText("Prescriptions: " + firstname + " " + surname + " (" + username + ")");
+        // Action Bar
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle(firstname + "'s Prescriptions");
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.action_bar_carer_prescriptions);
+
+        final Button addPrescription = (Button) findViewById(R.id.addPrescriptionActionBar);
+        addPrescription.setText("{fa-plus}");
+        addPrescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        Iconify.addIcons(addPrescription);
+        addPrescription.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View view) {
+                Intent add = new Intent(CarerPrescriptions.this, AddPrescription.class);
+                add.putExtra("username", user);
+                startActivity(add);
+            }
+        });
 
         //Display Prescriptions
-        displayPrescriptions(getPrescriptions(username));
+        displayPrescriptions(getPrescriptions(username, "active"), "active");
+        displayPrescriptions(getPrescriptions(username, "upcoming"), "upcoming");
+        displayPrescriptions(getPrescriptions(username, "expired"), "expired");
     }
 
-    private JSONArray getPrescriptions(String username) {
+    /**
+     * Retrieves the prescriptions for a given user.
+     * @param username The patient whose prescriptions should be retrieved
+     * @param type The type of prescription you are looking at. One of 'active', 'upcoming', 'expired'
+     * @return A JSON array of all prescriptions
+     */
+    private JSONArray getPrescriptions(String username, String type) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
 
-        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
+        String url = "getPrescriptions";
+        if (type.equals("active")) {
+            url = "getActivePrescriptions";
+        }
+        else if (type.equals("upcoming")) {
+            url = "getUpcomingPrescriptions";
+        }
+        else if (type.equals("expired")) {
+            url = "getExpiredPrescriptions";
+        }
+
+        String response = Request.post(url, parameters, getApplicationContext());
         try {
             JSONArray result = new JSONArray(response);
             return result;
@@ -68,7 +102,12 @@ public class CarerPrescriptions extends Activity{
         return null;
     }
 
-    private void displayPrescriptions(JSONArray prescriptionList) {
+    /**
+     * Builds a list of buttons that provide basic details about each prescription. These can be clicked for more a more in-depth description.
+     * @param prescriptionList The retrieved JSONArray of prescriptions from getPrescriptions()
+     * @param type The type of prescription you are looking at. One of 'active', 'upcoming', 'expired'
+     */
+    private void displayPrescriptions(JSONArray prescriptionList, String type) {
         for(int x=0;x<prescriptionList.length();x++) {
             try {
                 final JSONObject prescription = prescriptionList.getJSONObject(x);
@@ -93,7 +132,19 @@ public class CarerPrescriptions extends Activity{
                 prescriptionButton.setText(prescriptionString);
 
                 //Add button to view
-                LinearLayout ll = (LinearLayout)findViewById(R.id.prescriptionButtons);
+
+                int layout = R.id.prescriptionButtons;
+                if (type.equals("active")) {
+                    layout = R.id.activePrescriptionButtons;
+                }
+                else if (type.equals("upcoming")) {
+                    layout = R.id.upcomingPrescriptionButtons;
+                }
+                else if (type.equals("expired")) {
+                    layout = R.id.expiredPrescriptionButtons;
+                }
+
+                LinearLayout ll = (LinearLayout)findViewById(layout);
                 ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
                 LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();
@@ -113,15 +164,24 @@ public class CarerPrescriptions extends Activity{
                                 startActivityForResult(intent, 1);
                             }
                         });
-                        alert.setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                        alert.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                            //Cancelled
+                                AlertDialog.Builder confirmDelete = new AlertDialog.Builder(CarerPrescriptions.this);
+                                confirmDelete.setTitle(medication + " (" + dosage + dosageunit + ")");
+                                confirmDelete.setMessage("Are you sure you want to delete this prescription?");
+                                confirmDelete.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        deletePrescription(prescriptionid);
+                                    }
+                                });
+                                confirmDelete.setNegativeButton("No", null);
+                                confirmDelete.show();
                             }
                         });
+                        alert.setPositiveButton("Got It!", null);
                         alert.show();
                     }
                 });
-
             }
             catch (JSONException e) {
                 System.out.print(e.getStackTrace());
@@ -129,9 +189,15 @@ public class CarerPrescriptions extends Activity{
         }
     }
 
+    /**
+     * Informs the calling activity whether the action was successful for not.
+     * @param requestCode Internal used, autopopulated
+     * @param resultCode 1 for success, 0 for failure
+     * @param data Internally used, autopopulated
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
+        // TODO Something is breaking here if go back from edit without doing anything
         super.onActivityResult(requestCode, resultCode, data);
         if(data.getExtras().containsKey("response")){
             Boolean success = (resultCode == 1);
@@ -139,5 +205,23 @@ public class CarerPrescriptions extends Activity{
             finish();
             startActivity(getIntent());
         }
+    }
+
+    /**
+     * Functionality to delete a specific prescription from the database
+     * @param prescriptionid The id of the prescription to delete
+     */
+    private void deletePrescription(String prescriptionid) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("prescriptionid", prescriptionid);
+        String response = Request.post("deletePrescription", parameters, getApplicationContext());
+        if (response.equals("Deleted")) {
+            Feedback.toast("Prescription Deleted", true, getApplicationContext());
+        }
+        else {
+            Feedback.toast("Deletion failed, please try again.", false, getApplicationContext());
+        }
+        finish();
+        startActivity(getIntent());
     }
 }

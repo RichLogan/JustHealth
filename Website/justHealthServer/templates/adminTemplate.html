@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} | JustHealth</title>
+    
+    <!-- When loading resources, use '//' instead of 'http(s)' so that it will load over the protocol that requests it. -->
+    
+    <!-- jQuery -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//malsup.github.io/min/jquery.cycle2.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <!-- Boostrap -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <!--http://jsfiddle.net/giorgitbs/52aK9/1/ -->
+
+    <!-- Font Awesome -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="//use.fonticons.com/f2bc2969.js"></script>
+
+    <!-- DataTables plugin -->
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.css">
+    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/9dcbecd42ad/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
+    <!--Date, Time Validation-->
+    <script type="text/javascript" src="/static/js/moment.js"></script>
+
+    <!-- Our resources -->
+    {% block CSS %}
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    {% endblock %}
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <link rel="icon" type="image/png" href="/static/images/icon.png"/>
+    {% block scriptsAndStyles %}{% endblock %}
+  </head>
+
+  <body>
+    <div id="container">
+      <!--Header -->
+      <header>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navBar">
+          <div>
+            <a href="/adminPortal" class="pull-left"><img src="/static/images/logo.png" id="mainLogo"></img></a>
+            {% block logoutBtn %}
+            <!--<button class="btn btn-default btn-margin pull-right" onclick="javascript:location.href='/logout'">Log out</button>-->
+              <a href="#" class="dropdown-toggle pull-right runner" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bars navIcon"></i></a>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a href="/logout"><i class="fa fa-sign-out sideIcons"></i> <span class="bold">Log out</span></a></li>
+              </ul>
+            
+            <a href="/adminPortal" class="runner">
+              <h4 class="pull-right" style="padding-top:4px">Admin</h4>
+              <img alt="Profile Picture" src="/images/{{session.profilepicture}}" class="img-circle nav-profile-img pull-right">
+            </a>
+            {% endblock %}
+          </div>
+        </nav>
+      </header>
+
+      <div id="contentAdmin">
+        <fieldset class ="fix">
+        {% block content %}{% endblock %}
+      </fieldset>
+
+      </div>
+      <br />
+      <!--Footer -->
+      <footer>
+        <div class="container">
+       <span id='footer1'><a href="/contactUs" class="runner">Contact us</a></span>
+         <span id='footer2'>   <a class="runner" data-toggle="modal" data-target="#terms">Terms & Conditions </a>
+            <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="terms"> Terms and Conditions</h4>
+                  </div>
+                  <div class="modal-body">
+                    <ol>
+                      <li>Any data that is given to JustHealth may be processed by JustHealth to improve the ease of use, performance and/or functionality of the application.
+                      </li> <br />
+                      <li>The data stored by JustHealth will not be passed to any third parties without the consent of the data subject.
+                      </li> <br />
+                      <li>A user’s data may be viewed by their carer, relative, doctor and pharmacist but will not be visible to anyone that isn’t approved to view the data.
+                      </li> <br />
+                      <li>It is the responsibility of the user to ensure that the information that JustHealth holds about them is accurate and up to date. This is not the responsibility of JustHealth or any of its affiliated parties.
+                      </li> <br />
+                      <li>JustHealth will keep all data for the time that a data subject’s account is active; all of the data that JustHealth will hold about a user will be viewable within the mobile and web application.
+                      </li> <br />
+                      <li>When a data subject deactivates their account with JustHealth they will be able to request to have their information removed from the centralised database. This will impact account reactivation.
+                      </li> <br />
+                      <li>A data subject may request the personal data that JustHealth hold about them but this will only be able to be sent to the user within the UK by the postal service. This will not be sent by any other means.
+                      </li> <br />
+                      <li>Users that download data from outside the UK will do so at their own risk and this will not be the responsibility of JustHealth. Any information that JustHealth will hold about a data subject will be stored within the UK.
+                      </li>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </span>
+          <span id='footer3'>
+            <a class="bigLink runner" data-toggle="modal" data-target="#privacy"> Privacy Policy</a>
+            <div class="modal fade" id="privacy" tabindex="-1" role="dialog" aria-labelledby="privacy" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="privacy">JustHealth Privacy Policy</h4>
+                  </div>
+                  <div class="modal-body">
+                    <li>What personal information do we collect from the people that visit our blog, website or app?
+                      <br />
+
+                      When registering on our site, you will be asked to enter your name, email address, health care or other details to help you with your experience.
+                    </li>
+                    <br />
+                    <li>
+                      When do we collect information? <br />
+
+                      We collect information from you when you register on our site or enter information on our site.
+                    </li>
+                    <br />
+                    <li>
+                      How do we use your information?<br />
+                      To personalize user's experience and to allow us to deliver the type of content and product offerings in which you are most interested.
+                    </li>
+                    <br />
+                    <li>
+                      How do we protect visitor information?<br />
+
+                      Our website is scanned on a regular basis for security holes and known vulnerabilities in order to make your visit to our site as safe as possible.
+
+                      Your personal information is contained behind secured networks and is only accessible by a limited number of persons who have special access rights to such systems, and are required to keep the information confidential. In addition, all sensitive/credit information you supply is encrypted via Secure Socket Layer (SSL) technology.
+
+                      We implement a variety of security measures when a user enters, submits, or accesses their information to maintain the safety of your personal information.
+                    </li>
+                    <br />
+                    <li>
+
+                      Do we use 'cookies'? <br />
+
+                      We do not use cookies for tracking purposes
+
+                      You can choose to have your computer warn you each time a cookie is being sent, or you can choose to turn off all cookies. You do this through your browser (like Internet Explorer) settings. Each browser is a little different, so look at your browser's Help menu to learn the correct way to modify your cookies.
+
+                      If you disable cookies off, some features will be disabled that make your site experience more efficient and some of our services will not function properly.
+
+                    </li>
+                    <br />
+                    <li>
+                      Third Party Disclosure<br />
+
+                      We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information unless we provide you with advance notice. This does not include website hosting partners and other parties who assist us in operating our website, conducting our business, or servicing you, so long as those parties agree to keep this information confidential. We may also release your information when we believe release is appropriate to comply with the law, enforce our site policies, or protect ours or others' rights, property, or safety.
+
+                      However, non-personally identifiable visitor information may be provided to other parties for marketing, advertising, or other uses.
+
+                    </li>
+                    <br />
+                    <li>
+                      Third party links <br />
+
+                      We do not include or offer third party products or services on our website.
+                    </li>
+                    <br />
+                  </ol>
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </span>
+          <span id='footer4'>   <a class="bigLink runner" data-toggle="modal" data-target="#references">References</a>
+            <div class="modal fade" id="references" tabindex="-1" role="dialog" aria-labelledby="references" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="terms">JustHealth References</h4>
+                  </div>
+                  <div class="modal-body">
+                    <h5>With thanks to: </h5>
+                    <ul>
+                      <li> Bootstrap</li> <br />
+                      <li> Font Awesome</li> <br />
+                      <li> Pewee </li> <br />
+                      <li> Python</li> <br />
+                      <li> moment.js </li> <br />
+                      <li> Jinja </li> <br />
+                      <li> jquery </li> <br />
+                      <li> Privacy Policy (http://www.freeprivacypolicy.com/) </li>
+                    </ul>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </span>
+          <span id='footer5'>
+            <a class="bigLink runner" data-toggle="modal" data-target="#sitemap"> Sitemap</a>
+            <div class="modal fade" id="sitemap" tabindex="-1" role="dialog" aria-labelledby="sitemap" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="sitemap">JustHealth Sitemap</h4>
+                  </div>
+                  <div class="modal-body">
+
+
+                    <h4> Profile </h4>
+                    <ul>
+                      <li> Edit profile </li>
+                    </ul>
+
+                    <h4> Patient Medication  </h4>
+                    <ul>
+                      <li> View Prescriptions </li>
+                    </ul>
+
+                    <h4> Carer Medication  </h4>
+                    <ul>
+                      <li> View Patient Prescriptions </li>
+                      <li> Create Prescriptions </li>
+                      <li> Edit Prescitpions </li>
+                      <li> Delete Prescriptions</li>
+                    </ul>
+
+                    <h4> Appointments </h4>
+                    <ul>
+                      <li> Create Appointment </li>
+                      <li> View Appointments </li>
+                      <li> Delete Appointments </li>
+                      <li> View old appointments </li>
+                    </ul>
+
+                    <h4> Connections  </h4>
+                    <ul>
+                      <li> Incomming Connections </li>
+                      <li> Outgoing Connections </li>
+                      <li> Established Connections </li>
+                    </ul>
+
+                    <h4> Carer- My Patients </h4>
+                    <ul>
+                      <li> List of all current patients </li>
+                      <li> The ability to view appointments and medication</li>
+                    </ul>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div> </span>
+       </div>
+      </footer>
+    </div>
+  </body>
+</html>
