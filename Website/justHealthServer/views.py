@@ -663,7 +663,12 @@ def inviteeappointments():
         details['description'] = request.form['description']
     
         added = addInviteeAppointment(details)
-        return redirect(url_for("myPatients"))
+      
+        if added > 0: 
+            flash("Appointment Added", 'success')
+            return redirect(url_for('appointments'))        
+    return render_template('myPatients.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
+
 
 @app.route('/nhsSearch', methods=['POST', 'GET'])
 @needLogin
