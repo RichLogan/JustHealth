@@ -33,6 +33,14 @@ def getProfilePicture(filename):
     return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/')
+def frontPage():
+    try:
+        session['username']
+        return redirect(url_for('index'))
+    except KeyError, e:
+        return render_template('frontPage.html')
+
+@app.route('/home')
 @needLogin
 def index():
     """Sends user to a dashboard according to account type if session is active, it shows their profile and connections. A patient will be able to see their notifications, prescriptions and appointments. A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
@@ -612,10 +620,8 @@ def updatePrescription_view():
 @needLogin
 def carerappointments():
     """Form for carer to add a personal appointment, this is not shown to patients."""
-    if request.method == 'POST':
-  
+    if request.method == 'POST':  
         private = "True"
-    
         details = {}
         details['creator'] = session['username']
         details['name'] = request.form['name']
@@ -628,7 +634,7 @@ def carerappointments():
         details['endtime'] = request.form['endtime']
         details['description'] = request.form['description']
         details['private'] = private 
-    
+
         added = int(addPatientAppointment(details))
   
         #checks that an id is returned
@@ -759,8 +765,6 @@ def adminPortal():
 @needLogin
 @needAdmin
 def updateAccountSettings_view():
-    
-
     if request.method == 'POST':
         #The tick boxes are not sent if they aren't ticked, so we have to catch them here.
         try:

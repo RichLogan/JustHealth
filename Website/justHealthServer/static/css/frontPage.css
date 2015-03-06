@@ -1,0 +1,87 @@
+body{
+
+  background-color: #19BB9B;
+  color: #FFFFFF;
+  width: 100% !important;
+}
+
+video#background {
+  position: relative;
+  width: 100% !important;
+  z-index: 1;
+}
+
+#mainTitle {
+  position: absolute;
+  z-index: 2;
+}
+
+#mainTitle h1 {
+
+  color: #FFFFFF;
+  font-size: 10em;
+  text-align: center;
+}
+
+.btn-trans {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 0.1em solid white;
+  font-size: 1em;
+}
+
+#menuButton {
+  position: fixed;
+  margin-left: 96%;
+  margin-top: 1%;
+  z-index: 2;
+}
+
+#loginForm {
+  position: fixed;
+  margin-left: 87em;
+  margin-top: 0.9%;
+  z-index: 2;
+}
+
+#loginForm input {
+  height: 3em;
+}
+
+#closeButton {
+  background-color: transparent;
+  color: #FF0000;
+  border: 0.1em solid red;
+}
+
+.menuButtons {
+  width: 100%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  /*background-color: #000000;*/
+  border: 0.2em solid #2272EB;
+}
+
+.menuButtons:link {
+  color: #FFF;
+}
+
+.segment {
+  height: 30em;
+  background-color: #19BB9B;
+  text-align: center;
+}
+
+.segmentText {
+  font-size: 3em;
+  margin-top: 3em;"
+}
+
+.segmentImage {
+  color: #FFFFFF;
+}
+
+.clear {
+  padding: 0px;
+  margin: 0;
+}
