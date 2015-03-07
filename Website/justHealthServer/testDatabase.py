@@ -154,6 +154,19 @@ class Notification(BaseModel):
     class Meta:
         db_table = 'notification'
 
+class Reminder(BaseModel):
+    reminder = PrimaryKeyField()
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    content = CharField(max_length=100)
+    reminderClass = CharField(max_length=10)
+    relatedObject = IntegerField()
+    relatedObjectTable = CharField()
+    extraDate = CharField(null=True)
+    extraFrequency = IntegerField(null=True, default=None)
+
+    class Meta:
+        db_table = 'reminder'            
+
 def createAll():
     dropAll()
     Client.create_table()
@@ -170,6 +183,7 @@ def createAll():
     Prescription.create_table()
     Notificationtype.create_table()
     Notification.create_table()
+    Reminder.create_table()
 
 def dropAll():
     if Client.table_exists():
@@ -213,3 +227,6 @@ def dropAll():
 
     if Notification.table_exists():
         Notification.drop_table(cascade=True)
+
+    if Reminder.table_exists():
+        Reminder.drop_table(cascade=True)

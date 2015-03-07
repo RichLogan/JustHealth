@@ -199,3 +199,10 @@ class testGetNotifications(unittest.TestCase):
 
 		getNotification = request.post("http://127.0.0.1:9999/api/getNotifications", data=payload)
 		self.assertEqual(getNotification.text, "Invalid Username")
+
+    def tearDown(self):
+        """Delete all tables"""
+        testDatabase.dropAll()
+
+if __name__ == '__main__':
+    unittest.main()

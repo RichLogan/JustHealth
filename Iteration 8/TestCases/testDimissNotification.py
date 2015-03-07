@@ -66,3 +66,11 @@ class testDismissNotification(unittest.TestCase):
 		dismiss = requests.post("http://127.0.0.1:9999/api/dismissNotification", data=payload)
 		self.assertEqual(dismiss.text, "Invalid Notification Id")
 
+
+  def tearDown(self):
+    """Delete all tables"""
+    testDatabase.dropAll()
+
+if __name__ == '__main__':
+  unittest.main()
+

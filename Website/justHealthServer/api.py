@@ -22,7 +22,6 @@ import random
 
 auth = HTTPBasicAuth()
 
-
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
@@ -1808,9 +1807,6 @@ def getMinutesDifference(dateTimeOne,dateTimeTwo):
     """Difference found my timeOne - timeTwo in minutes"""
     return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
 
-@app.route('/test/a30')
-def getAppointmentsDueIn30():
-    return str(getAppointmentsDueIn30('carer', datetime.datetime.now()))
 def getAppointmentsDueIn30(username, currentTime):
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
     result = []
@@ -1821,9 +1817,6 @@ def getAppointmentsDueIn30(username, currentTime):
             result.append(appointment)
     return result
 
-@app.route('/test/anow')
-def getAppointmentsDueNow():
-    return str(getAppointmentsDueNow('carer', datetime.datetime.now()))
 def getAppointmentsDueNow(username, currentTime):
     """Search for appointments due now"""
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
