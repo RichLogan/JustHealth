@@ -1246,7 +1246,10 @@ def takePrescription(details):
         takeInstance = TakePrescription.select().where((TakePrescription.prescriptionid == details['prescriptionid']) & (TakePrescription.currentdate == datetime.datetime.now().date())).get()
         takeInstance = TakePrescription.update(
             currentcount = currentCount
-        ).where(TakePrescription.prescriptionid == details['prescriptionid'])
+        ).where(
+            (TakePrescription.prescriptionid == details['prescriptionid']) &
+            (TakePrescription.currentdate == datetime.datetime.now().date())
+        )
         with database.transaction():
             takeInstance.execute()
             checkStockLevel(details['prescriptionid'], currentCount)
