@@ -13,8 +13,8 @@ sys.path.insert(0, 'Website')
 import justHealthServer
 from justHealthServer import api
 
-class testGetAppointmentsDueIn30(unittest.TestCase):
-	"""Testing the getAppointmentsDueIn30 API method"""
+class testGetAppointmentsDueNow(unittest.TestCase):
+	"""Testing the getAppointmentsDueNow API method"""
 
 	def setUp(self):
 		"""Create all the tables that are needed"""
@@ -56,7 +56,7 @@ class testGetAppointmentsDueIn30(unittest.TestCase):
 		    addressnamenumber = "11",
 		    postcode = "SS17 9AY",
 		    startdate = datetime.datetime.now().date(),
-		    starttime = (datetime.datetime.now() + datetime.timedelta(minutes = 20)).time(),
+		    starttime = datetime.datetime.now().time(),
 		    enddate = datetime.datetime.now().date() + timedelta(days=3),
 		    endtime = datetime.datetime.now().time(),
 		    description = "",
@@ -105,29 +105,29 @@ class testGetAppointmentsDueIn30(unittest.TestCase):
 		)
 		appointmentInsert.execute()
 
-	def testLegitimate(self):
-		"""Attempt to check a appointment that is due in the next 30mins || check that API returns expected response and DB is correct too"""
-		response = api.getAppointmentsDueIn30('patient', datetime.datetime.now())
+    def testLegitimate(self):
+        """Attempt to check an appointment that is due now"""
+        response = api.getAppointmentsDueNow('patient', datetime.datetime.now())
 
-		result = {}
-		result['creator'] = "patient"
-		result['startdate'] = datetime.datetime.now().date()
-		result['enddate'] = datetime.datetime.now().date() + timedelta(days=3)
-		result['name'] = "test"
-		result['apptype'] = "Doctors"
+        result = {}
+        result['creator'] = "patient"
+        result['startdate'] = datetime.datetime.now().date()
+        result['enddate'] = datetime.datetime.now().date() + timedelta(days=3)
+        result['name'] = "test"
+        result['apptype'] = "Doctors"
 
-		reminder = response[0]
+        reminder = response[0]
 
-		self.assertEqual(reminder['creator'], result['creator'])
-		self.assertEqual(reminder['startdate'], result['startdate'])
-		self.assertEqual(reminder['enddate'], result['enddate'])
-		self.assertEqual(reminder['name'], result['name'])
-		self.assertEqual(reminder['apptype'], result['apptype'])
-		
-	def testNotDueIn30(self):
-		"""Attempt to check appointment that is not due in the next 30mins || check that the API returns expected response and nothing has been added to the DB"""
-		response = api.getAppointmentsDueIn30('carer1', datetime.datetime.now())
-		self.assertEqual(len(response), 0)
+        self.assertEqual(reminder['creator'], result['creator'])
+        self.assertEqual(reminder['startdate'], result['startdate'])
+        self.assertEqual(reminder['enddate'], result['enddate'])
+        self.assertEqual(reminder['name'], result['name'])
+        self.assertEqual(reminder['apptype'], result['apptype'])
+
+    def testNotNow(self):
+        """Attempt to check an appointment that is not due now"""
+        response = api.getAppointmentsDueNow('carer1', datetime.datetime.now())
+        self.assertEqual(len(response), 0)
 
     def tearDown(self):
         """Delete all tables"""
@@ -135,4 +135,3 @@ class testGetAppointmentsDueIn30(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
