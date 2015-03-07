@@ -106,8 +106,12 @@ public class Main extends Activity {
      */
     private void redirect() {
         String accountType = getSharedPreferences("account", 0).getString("accountType", null);
-        System.out.println("Account Type: " + accountType);
-        if (accountType.equals("Patient")) {
+        if (accountType == null) {
+            // Need to login
+            finish();
+            startActivity(new Intent(Main.this, Login.class));
+        }
+        else if (accountType.equals("Patient")) {
             // Found logged in Patient
             finish();
             startActivity(new Intent(Main.this, HomePatient.class));

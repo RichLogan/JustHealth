@@ -118,17 +118,15 @@ public class CarerPrescriptions extends Activity{
                 final String frequency = prescription.getString("frequency");
                 final String quantity = prescription.getString("quantity");
                 final String dosageunit = prescription.getString("dosageunit");
-                final String frequencyunit = prescription.getString("frequencyunit");
                 final String startdate = prescription.getString("startdate");
                 final String enddate = prescription.getString("enddate");
-                final String repeat = prescription.getString("repeat");
                 final String stockleft = prescription.getString("stockleft");
                 final String prerequisite = prescription.getString("prerequisite");
                 final String dosageform = prescription.getString("dosageform");
 
                 //Create a button
                 Button prescriptionButton = new Button(this);
-                String prescriptionString = medication + ":\n" + "Take " + quantity + " x " + dosage + " " + dosageunit + " " + dosageform + "(s)\n" + frequency + " x " + "a " + frequencyunit;
+                String prescriptionString = medication + ":\n" + "Take " + quantity + " x " + dosage + " " + dosageunit + " " + dosageform + "(s)\n" + frequency + " x " + "a day";
                 prescriptionButton.setText(prescriptionString);
 
                 //Add button to view
@@ -144,18 +142,20 @@ public class CarerPrescriptions extends Activity{
                     layout = R.id.expiredPrescriptionButtons;
                 }
 
-                LinearLayout ll = (LinearLayout)findViewById(layout);
-                ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+//                LinearLayout ll = (LinearLayout)findViewById(layout);
+//                ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+//
+//                LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();
+//                center.gravity = Gravity.CENTER;
+//                prescriptionButton.setLayoutParams(center);
 
-                LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();
-                center.gravity = Gravity.CENTER;
-                prescriptionButton.setLayoutParams(center);
+                Style.styleButton(prescriptionButton, "primary", (LinearLayout)findViewById(layout), getApplicationContext());
 
                 prescriptionButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(CarerPrescriptions.this);
                         alert.setTitle(medication + " (" + dosage + dosageunit + ")");
-                        alert.setMessage("Start Date: " + startdate + "\nEnd Date: " + enddate + "\nExtra Info: " + prerequisite + "\nRepeat: " + repeat);
+                        alert.setMessage("Start Date: " + startdate + "\nEnd Date: " + enddate + "\nExtra Info: " + prerequisite);
                         alert.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Intent intent = new Intent(getBaseContext(), EditPrescription.class);

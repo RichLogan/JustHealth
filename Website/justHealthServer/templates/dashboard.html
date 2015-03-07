@@ -393,7 +393,7 @@
             <div class="panel-heading myPatientsTab" role="tab" id="headingpre{{prescription.prescriptionid}}">
               <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapsepre{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapsepre{{prescription.prescriptionid}}">
-                  <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} ({{prescription.frequency}} times today)
+                  <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}}(s) ({{prescription.frequency}} times a day)
                 </a>
               </h4>
             </div>
@@ -402,9 +402,10 @@
                 <div class="row">
                   <h5>
                     <ul>
+                      <li>Stock Left: {{prescription.stockleft}}</li>
                       <li>Start Date: {{prescription.startdate}}</li>
                       <li>End Date: {{prescription.enddate}}</li>
-                      <li>Extra Info: {{prescription.prerequisite}}</li>
+                      <li>Extra Info / Comments: {{prescription.prerequisite}}</li>
                     </ul>
                   </h5>
                 </div>

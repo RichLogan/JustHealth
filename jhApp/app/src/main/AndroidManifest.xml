@@ -149,7 +149,7 @@
         </activity>
 
         <activity
-            android:name=".PatientMedication"
+            android:name=".PatientPrescription"
             android:label="Medication">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
