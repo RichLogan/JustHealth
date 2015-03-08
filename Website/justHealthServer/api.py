@@ -22,7 +22,6 @@ import random
 
 auth = HTTPBasicAuth()
 
-
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
@@ -119,6 +118,8 @@ def registerUser():
         accountType = Patient
     elif accountType == "carer":
         accountType = Carer
+    elif accountType == "Admin":
+        accountType = Admin
 
     typeInsert = accountType.insert(
         username = profile['username'],
@@ -309,8 +310,12 @@ def getAccountInfo(username):
       user = Patient.select().join(Client).where(Client.username==str(username)).get()
       result['accounttype'] = "Patient"
     except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==str(username)).get()
-        result['accounttype'] = "Carer"
+        try:
+            user = Carer.select().join(Client).where(Client.username==str(username)).get()
+            result['accounttype'] = "Carer"
+        except Carer.DoesNotExist:
+            user = Admin.select().join(Client).where(Client.username==str(username)).get()
+            result['accounttype'] = "Admin"
 
     result['firstname'] = user.firstname
     result['surname'] = user.surname
@@ -1351,7 +1356,7 @@ def getAppointmentTypes():
 @app.route('/api/getCorrespondence', methods=['GET', 'POST'])
 @auth.login_required
 def getCorrespondence():
-    return getCorrespondence()
+    return getCorrespondence(request.form['carer'], request.form['patient'])
 
 def getCorrespondence(carer, patient):
      allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
@@ -1371,10 +1376,10 @@ def getCorrespondence(carer, patient):
 @app.route('/api/getPatientNotes', methods=['GET', 'POST'])
 @auth.login_required
 def getPatientNotes():
-    return getPatientNotes()
+    return getPatientNotes(request.form)
 
-def getPatientNotes(patient):
-     allNotes = Notes.select().where(Notes.patient == patient)
+def getPatientNotes(details):
+     allNotes = Notes.select().where(Notes.patient == details['username'])
      
      results = []
      for n in allNotes:
@@ -1450,22 +1455,40 @@ def newMedication(medication):
         return "True"
     return "False"
 
+#@app.route('/api/getReasons', methods=['POST'])
+#@auth.login_required
+#def getReasons():
+#    return getReasons()
+#
+#def getReasons():
+#    """Get all the reasons from the deactivate table"""
+#    results = []
+#    for r in Deactivatereason.select(Deactivatereason.reason):
+#        deactivateReasons = {}
+#    
+#        results.append(deactivateReasons)
+#    return json.dumps(results)
+
 @app.route('/api/getAllUsers', methods=['POST'])
 @auth.login_required
 def getAllUsers():
     return getAllUsers()
 
 def getAllUsers():
-    """Get All information from client and patient/carer table"""
+    """Get All information from client and patient/carer/Admin table"""
     results = []
     for u in Client.select(Client.username):
-        userDetails = {}
+      userDetails = {}
+      try:
+        user = Patient.select().join(Client).where(Client.username==u.username).get()
+        userDetails['accounttype'] = "Patient"
+      except Patient.DoesNotExist:
         try:
-          user = Patient.select().join(Client).where(Client.username==u.username).get()
-          userDetails['accounttype'] = "Patient"
-        except Patient.DoesNotExist:
             user = Carer.select().join(Client).where(Client.username==u.username).get()
             userDetails['accounttype'] = "Carer"
+        except Carer.DoesNotExist:
+            user = Admin.select().join(Client).where(Client.username==u.username).get()
+            userDetails['accounttype'] = "Admin"
 
         userDetails['firstname'] = user.firstname
         userDetails['surname'] = user.surname
@@ -1529,45 +1552,15 @@ def deleteAccount():
     return deleteAccount(request.form)
 
 def deleteAccount(username):
-    user = None
 
     try:
         instance = Client.select().where(Client.username == username).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "Deleted"
     except:
         return "Failed"
-
-def old(settings, username):
-    user = None
-
-    try:
-        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
-    except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
-
-    # Access to their corresponding Client entry
-    clientObject = Client.select().where(Client.username == user.username).get()
-    try:
-        clientObject.username = settings['username']
-    except KeyError, e:
-        return "No username supplied"
-
-    if delete:
-        # Delete User
-        deletedUser = Client.get(clientObject.username == request.form['username'])
-        with database.transaction():
-            deletedUser.delete_instance(recursive=True)
+    with database.transaction():
+        instance.delete_instance(recursive=True)
         return "Deleted"
-    else:
-        # Keep user
-        deactivatedUser = Client.update(accountdeactivated = True).where(clientObject.username == username)
-        unverifyUser = Client.update(verified = False).where(clientObject.username == username)
-        with database.transaction():
-            deactivatedUser.execute()
-            unverifyUser.execute()
-        return "Kept"
+    return "Failed"
 
 def createNotificationRecord(user, notificationType, relatedObject):
     #dictionary mapping notificationType to referencing table
@@ -1821,9 +1814,6 @@ def getMinutesDifference(dateTimeOne,dateTimeTwo):
     """Difference found my timeOne - timeTwo in minutes"""
     return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
 
-@app.route('/test/a30')
-def getAppointmentsDueIn30():
-    return str(getAppointmentsDueIn30('carer', datetime.datetime.now()))
 def getAppointmentsDueIn30(username, currentTime):
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
     result = []
@@ -1834,9 +1824,6 @@ def getAppointmentsDueIn30(username, currentTime):
             result.append(appointment)
     return result
 
-@app.route('/test/anow')
-def getAppointmentsDueNow():
-    return str(getAppointmentsDueNow('carer', datetime.datetime.now()))
 def getAppointmentsDueNow(username, currentTime):
     """Search for appointments due now"""
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))

@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <!-- jQuery -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://malsup.github.io/min/jquery.cycle2.min.js"></script>
+
+    <!-- Boostrap -->
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/frontPage.css">
+
+    <script type="text/javascript">
+      function displayTitle() {
+        var $video = $("video", "#landing");
+        var $title = $("#mainTitle");
+        var $toAbout = $("#toAbout")
+        $title.css({
+          top:$video.offset().top + (($video.height()/2) - ($title.height()/2)),
+          left:$video.offset().left + (($video.width()/2) - ($title.width()/2))
+        });
+        $toAbout.css({
+          left: (($title.width()/2) - ($toAbout.width()/2))
+        });
+      }
+
+      $(document).ready(function() {
+        displayTitle();
+
+        $('#toAbout').click(function() {
+          $('html,body').animate({
+            scrollTop: $("#about").offset().top},
+            1250
+          );
+        });
+
+        $('#menuButton').click(function() {
+          $('#loginForm').toggle();
+        })
+      });
+
+      $(window).resize(function() {
+        displayTitle();
+      });
+    </script>
+  </head>
+
+  <body class="clear">
+    <div id="loginForm">
+      <form class="form-inline" method="POST" action="/login">
+        <div class="form-group">
+          <label class="sr-only" for="username">Username</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <label class="sr-only" for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-trans"><i class="fa fa-sign-in" style="font-size: 2em;"></i></button>
+      </form>
+    </div>
+
+    <div id="landing">
+      <div id="mainTitle">
+        <h1>JustHealth</h1>
+        <span class="fa-stack" id="toAbout" style="font-size: 50px;">
+          <i class="fa fa-angle-double-down" style="padding-top: 25%;padding-left: 33%;"></i>
+          <i class="fa fa-circle-thin fa-stack-2x"></i>
+        </span>
+      </div>
+      <video autoplay loop muted id="background">
+        <source src="/static/videos/phone.webm" type="video/webm">
+      </video>
+    </div>
+
+    <div class="segment" id="about">
+      <div class="row" class="clear" style="margin: 0;">
+          <div class="col-md-6 segmentImage" style="font-size: 30em;">
+          <i class="fa fa-mobile"></i>
+        </div>
+        <div class="col-md-6 segmentText">
+          <p>JustHealth helps you track your medication <strong>anytime</strong>, <strong>anywhere</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="segment" style="background-color: #2272EB;">
+      <div class="row" class="clear" style="margin: 0;">
+        <div class="col-md-6 segmentText">
+          Patients can connect with <strong>Carers</strong>, <strong>Doctors</strong> and <strong>Friends / Family</strong>
+        </div>
+        <div class="col-md-6 segmentImage" style="font-size: 15em;margin-top: 0.5em;">
+          <i class="fa fa-users"></i>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

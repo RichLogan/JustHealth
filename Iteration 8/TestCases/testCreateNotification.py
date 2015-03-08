@@ -4,7 +4,11 @@ import unittest
 import imp
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
-api = imp.load_source('api', 'Website/justHealthServer/api.py')
+
+#import the api so we are able to run locally
+sys.path.insert(0, 'Website')
+import justHealthServer
+from justHealthServer import api
 
 class testCreateNotificationRecord(unittest.TestCase):
 	"""Testing the CreateNotificationRecord API"""
@@ -86,5 +90,13 @@ class testCreateNotificationRecord(unittest.TestCase):
 		createNotification = api.createNotificationRecord(user, notificationType, relatedObject)
 		self.assertEqual(createNotification.text, "Invalid Notification Type")
 		self.assertEqual(testDatabase.Notifications.select().where((testDatabase.Notifications.username == "patient") & (testDatabase.Notifications.notificationtype == "Does Not Exist")).count(), 0)
+
+	def tearDown(self):
+        """Delete all tables"""
+        testDatabase.dropAll()
+
+if __name__ == '__main__':
+    unittest.main()
+
 		
 

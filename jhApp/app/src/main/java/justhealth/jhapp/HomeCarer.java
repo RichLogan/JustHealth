@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.IconTextView;
-import android.widget.ImageButton;
 
 public class HomeCarer extends Activity {
     /**
@@ -96,7 +95,7 @@ public class HomeCarer extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_home_screens, menu);
+        inflater.inflate(R.menu.action_bar_home_screen_carer, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

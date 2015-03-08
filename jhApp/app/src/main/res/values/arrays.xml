@@ -8,6 +8,7 @@
     <string-array name="patient_options">
         <item>Prescriptions</item>
         <item>Appointments</item>
+        <item>Notes</item>
     </string-array>
 
     <string-array name="reasons_deactivate">

@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/off_white">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:ems="10"
+        style="@style/defaultLinearForm">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginTop="15sp"
+            android:id="@+id/title"
+            android:hint="Title"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:layout_marginTop="15sp"
+            android:ems="10"
+            android:id="@+id/notes"
+            android:hint="Notes"/>
+
+        <Button
+            android:layout_width="115dp"
+            android:text="Add Note"
+            android:id="@+id/submit"
+            android:layout_marginTop="15sp"
+            android:layout_gravity="center_horizontal"
+            style="@style/successButton"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

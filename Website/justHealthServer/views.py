@@ -18,6 +18,14 @@ def needLogin(f):
     return f(*args, **kwargs)
   return loginCheck
 
+def needAdmin(f):
+    @wraps(f)
+    def needAdmin(*args, **kwargs):
+        if session['accounttype'] != "Admin":
+            return render_template('401Unauthorised.html'), 401
+        return f(*args, **kwargs)
+    return needAdmin
+
 @app.route('/images/<filename>')
 @needLogin
 def getProfilePicture(filename):
@@ -25,11 +33,23 @@ def getProfilePicture(filename):
     return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/')
+def frontPage():
+    try:
+        session['username']
+        return redirect(url_for('index'))
+    except KeyError, e:
+        return render_template('frontPage.html')
+
+@app.route('/home')
 @needLogin
 def index():
     """Sends user to a dashboard according to account type if session is active, it shows their profile and connections. A patient will be able to see their notifications, prescriptions and appointments. A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
     ## set common functionality
     accountInfo = json.loads(getAccountInfo(session['username']))
+
+    if accountInfo['accounttype'] == "Admin":
+        return redirect(url_for('adminPortal'))
+
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
@@ -99,6 +119,8 @@ def index():
             expiredPrescriptions = expiredPrescriptions,
             appType=Appointmenttype.select(),
             medicationList = Medication.select())
+    
+
 
 @app.route('/profile')
 @needLogin
@@ -598,10 +620,8 @@ def updatePrescription_view():
 @needLogin
 def carerappointments():
     """Form for carer to add a personal appointment, this is not shown to patients."""
-    if request.method == 'POST':
-  
+    if request.method == 'POST':  
         private = "True"
-    
         details = {}
         details['creator'] = session['username']
         details['name'] = request.form['name']
@@ -614,7 +634,7 @@ def carerappointments():
         details['endtime'] = request.form['endtime']
         details['description'] = request.form['description']
         details['private'] = private 
-    
+
         added = int(addPatientAppointment(details))
   
         #checks that an id is returned
@@ -643,7 +663,12 @@ def inviteeappointments():
         details['description'] = request.form['description']
     
         added = addInviteeAppointment(details)
-        return redirect(url_for("myPatients"))
+      
+        if added > 0: 
+            flash("Appointment Added", 'success')
+            return redirect(url_for('appointments'))        
+    return render_template('myPatients.html', appType=Appointmenttype.select(), appointments=appointments, request=None)
+
 
 @app.route('/nhsSearch', methods=['POST', 'GET'])
 @needLogin
@@ -729,6 +754,8 @@ def internal_error(error):
 
 #Admin Portal pages
 @app.route('/adminPortal')
+@needLogin
+@needAdmin
 def adminPortal():
     """Loads the pages related to the tablist on the IM portal home page, this includes a list of active users, current medication list and deactivation options"""
     allUsers = json.loads(getAllUsers())
@@ -740,9 +767,9 @@ def adminPortal():
        return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
 
 @app.route('/updateAccountSettings_view', methods=['POST'])
+@needLogin
+@needAdmin
 def updateAccountSettings_view():
-    
-
     if request.method == 'POST':
         #The tick boxes are not sent if they aren't ticked, so we have to catch them here.
         try:
@@ -772,8 +799,21 @@ def updateAccountSettings_view():
             flash('Update failed', 'danger')
             return redirect(url_for('adminPortal'))
 
+@app.route('/deleteAccount', methods=['POST'])
+@needLogin
+@needAdmin
+def deleteAccount_view():
+    username = request.form['username']
+    deleted = deleteAccount(username)
+    if deleted == "Deleted":
+        flash("User successfully deleted", 'success')
+    else:
+        flash("User could not be deleted", 'danger')
+    return redirect("/adminPortal")
 
 @app.route('/addNewDeactivate', methods=['POST'])
+@needLogin
+@needAdmin
 def addNewDeactivate():
     """Submits the form to add a new deactivation reason to the database"""
     if request.method == 'POST':
@@ -785,6 +825,8 @@ def addNewDeactivate():
        return render_template('adminHome.html')
 
 @app.route('/addNewMedication', methods=['POST'])
+@needLogin
+@needAdmin
 def addNewMedication():
     """Submits the form to add a new medication name to the database"""
     if request.method == 'POST':

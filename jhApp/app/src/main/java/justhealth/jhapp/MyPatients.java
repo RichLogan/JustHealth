@@ -97,6 +97,14 @@ public class MyPatients extends Activity {
                                         intent.putExtra("patientSurname", surname);
                                         startActivity(intent);
                                     }
+                                    else if (which == 2) {
+                                        Intent intent = new Intent(MyPatients.this, CarerPatientCorrespondence.class);
+                                        intent.putExtra("patientUsername", username);
+                                        intent.putExtra("patientFirstName", firstname);
+                                        intent.putExtra("patientSurname", surname);
+                                        startActivity(intent);
+                                    }
+
                                 }
                             });
                             alert.show();

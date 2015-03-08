@@ -184,4 +184,12 @@
         <item name="android:textSize">15sp</item>
         <item name="android:layout_marginTop">5sp</item>
     </style>
+
+    <style name="notes" parent="@android:style/Widget.Holo.Button">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:layout_height">@dimen/defaultButtonHeight</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:bottom">@dimen/colorstrip</item>
+    </style>
 </resources>
