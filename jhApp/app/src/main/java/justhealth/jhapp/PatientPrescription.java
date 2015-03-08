@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -52,7 +53,7 @@ public class PatientPrescription extends Activity {
     private void displayPrescriptions(JSONArray prescriptionList) {
         for (int x = 0; x < prescriptionList.length(); x++) {
             try {
-                JSONObject prescription = prescriptionList.getJSONObject(x);
+                final JSONObject prescription = prescriptionList.getJSONObject(x);
                 final String username = prescription.getString("username");
                 final String medication = prescription.getString("medication");
                 final String dosage = prescription.getString("dosage");
@@ -84,12 +85,19 @@ public class PatientPrescription extends Activity {
                         AlertDialog.Builder alert = new AlertDialog.Builder(PatientPrescription.this);
                         alert.setTitle(medication + " (" + dosage + dosageunit + ")");
                         alert.setMessage(
-                                "Start Date: " + startdate + "\n" + "End Date:" + enddate + "\nExtra Info: " + prerequisite);
-                        alert.setNegativeButton("Got it!", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                // Cancelled.
+                            "Stock Left: " + stockleft + "\n"
+                            + "Start Date: " + startdate + "\n"
+                            + "End Date: " + enddate + "\n"
+                            + "Extra Info: " + prerequisite);
+                        alert.setPositiveButton("Take this prescription", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(PatientPrescription.this, TakePrescription.class);
+                                intent.putExtra("prescription", prescription.toString());
+                                startActivity(intent);
                             }
                         });
+                        alert.setNegativeButton("Got it!", null);
                         alert.show();
                     }
                 });

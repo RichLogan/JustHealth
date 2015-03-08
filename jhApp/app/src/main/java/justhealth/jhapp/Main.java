@@ -25,7 +25,6 @@ import java.util.HashMap;
  */
 public class Main extends Activity {
 
-
     // JustHealth Google Developer Project Number
     String SENDER_ID = "1054401665950";
 

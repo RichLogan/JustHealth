@@ -244,6 +244,14 @@
                 android:value=".CarerPatientCorrespondence" />
         </activity>
 
+        <activity
+            android:name=".TakePrescription"
+            android:label="TakePrescription">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PatientPrescription" />
+        </activity>
+
         <activity android:name=".Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
