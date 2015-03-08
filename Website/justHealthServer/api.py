@@ -32,6 +32,14 @@ def verify_password(username,password):
     except:
         return False
 
+@app.route("/api/test", methods=["POST"])
+@auth.login_required
+def verifyUserContent():
+    #authUsername = str(request.headers.get('Authorization'))
+    authUsername = str(request.headers['username'])
+    authPassword = str(request.headers.get('password'))
+    return authUsername + " " + authPassword
+
 @app.route("/api/encryptPassword", methods=["POST"])
 def encryptPassword():
     """Encrypts the users password and returns it to them"""
