@@ -12,9 +12,7 @@ import android.widget.EditText;
 
 import java.util.HashMap;
 
-/**
- * Created by Stephen on 30/01/15.
- */
+
 public class SearchNHSWebsite extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +22,12 @@ public class SearchNHSWebsite extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nhs_interfacing);
 
+        // Set up your ActionBar
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Search NHS Direct Website");
 
+        //Set on click listener to search
         Button search = (Button) findViewById(R.id.search);
         search.setOnClickListener(
                 new View.OnClickListener() {
@@ -38,7 +38,9 @@ public class SearchNHSWebsite extends Activity {
         );
 
     }
-
+    /**
+     * This sends the searched term by the user in a new HashMap as a post request to the NHS website
+     */
     private void getURL() {
         String searchTerms = ((EditText) findViewById(R.id.searchTerm)).getText().toString();
 
@@ -50,6 +52,10 @@ public class SearchNHSWebsite extends Activity {
 
     }
 
+    /**
+     * The method ensure a new browser is opened when a user searches the NHS website
+     * @param website that will be passed in order for the browser to open
+     */
     private void openBrowser(String website) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(website));

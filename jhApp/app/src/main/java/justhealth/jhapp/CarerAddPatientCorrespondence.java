@@ -12,9 +12,7 @@ import android.widget.EditText;
 
 import java.util.HashMap;
 
-/**
- * Created by Stephen on 06/03/15.
- */
+
 public class CarerAddPatientCorrespondence extends Activity {
 
     String patientUsername;
@@ -27,6 +25,7 @@ public class CarerAddPatientCorrespondence extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_add_correspondence);
 
+        // Gets the patients username and firstname
         patientUsername = getIntent().getStringExtra("patientUsername");
         patientFirstName = getIntent().getStringExtra("patientFirstName");
 
@@ -35,6 +34,7 @@ public class CarerAddPatientCorrespondence extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(patientFirstName + ": Add Note");
 
+        //When add note is pressed the send note function is invoked
         Button addNote = (Button) findViewById(R.id.submit);
         addNote.setOnClickListener(
                 new View.OnClickListener() {
@@ -45,6 +45,12 @@ public class CarerAddPatientCorrespondence extends Activity {
         );
     }
 
+    /**
+     * This method is called to create a note that a carer wants to make about a carer. It grabs all of the text etc from the text
+     * boxes and adds these to a HashMap.
+     * Following this, a POST request is made to the API sending the HashMap of the note.
+     * It then will display Note successfully added/something went wrong.
+     */
     private void sendNote() {
 
         HashMap<String, String> details = new HashMap<>();

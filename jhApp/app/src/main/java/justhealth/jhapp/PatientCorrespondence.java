@@ -25,9 +25,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-/**
- * Created by Stephen on 05/03/15.
- */
+
 public class PatientCorrespondence extends Activity {
 
     JSONArray notes;
@@ -48,7 +46,10 @@ public class PatientCorrespondence extends Activity {
         getNotes();
 
     }
-
+    /**
+     * This method makes a post request to the JustHealth API to retrieve all of the notes for a given user.
+     * It then loops through the JSON Array that is returned from the server and adds them all to a HashMap.
+     */
     private void getNotes() {
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
@@ -80,7 +81,12 @@ public class PatientCorrespondence extends Activity {
             }
         }
     }
-
+    /**
+     * This prints out the button for each of the appointments that are passed to the method.
+     * @param title the title of the created
+     * @param date the date of the note created
+     * @param content the content in the note created.
+     */
     private void addToView(String title, String date, String content) {
 
         TextView textViewTitle = new TextView(this);
