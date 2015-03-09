@@ -12,25 +12,51 @@
 
     var data = google.visualization.arrayToDataTable([
       ['Reason', 'Number'],
-      ['I don’t understand how to use JustHealth', 0],
-      ['I’m only leaving temporarily', 1],
-      ['I’m using a different app', 1],
-      ['I receive too many notifications and emails', 0],
-      ['I don’t find JustHealth useful', 0],
-      ['I have privacy concerns', 0],
-      ['Other (Please specify)', 0]
+      {% for key, value in reasonStats.iteritems() %}
+      ["{{key | safe}}", {{value}}],
+      {% endfor %}
     ]);
 
     var options = {
       title: 'Reasons for account deactivation',
-      'width':900,
-      'height':500 
+      'width':810,
+      'height':450 
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
     chart.draw(data, options);
   }
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+<script type="text/javascript">
+    google.load('visualization', '1', {packages: ['corechart']});
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Account Type', 'Total'],
+        ['Patient', {{patients|length}}],
+        ['Carer', {{carers|length}}]
+      ]);
+
+      var options = {
+        title: 'Number of patients and carers',
+        width: 810,
+        height: 450,
+        hAxis: {
+          title: 'Total registered accounts',
+          minValue: 0
+        },
+
+      };
+
+      var chart = new google.visualization.BarChart(
+        document.getElementById('ex0'));
+
+      chart.draw(data, options);
+    }
 </script>
 <script type="text/javascript">
 
@@ -385,7 +411,14 @@
         <!--Tab for charts -->
         <div role="tabpanel" class="tab-pane fade in container" id="charts" style="width: 100%">
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" id="charts">
-            <div id="piechart" style="width: 900px; height: 500px;"></div>
+            <div class="row">
+              <div class="col-md-12">
+                <div id="piechart" style="width: 810px; height: 450px;"></div>
+              </div>
+              <div class="col-md-12">
+                <div id="ex0" style="width: 810px; height: 450px;"></div>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -759,12 +759,15 @@ def internal_error(error):
 def adminPortal():
     """Loads the pages related to the tablist on the IM portal home page, this includes a list of active users, current medication list and deactivation options"""
     allUsers = json.loads(getAllUsers())
+    deactivateReasons = json.loads(getReasons())
+    carers = json.loads(getCarerTotal())
+    patients = json.loads(getPatientTotal())     
     if request.method == 'POST':
         result = deactivateAccount(request.form)
         if allUsers['accounttype'] == "Patient":
-            return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Patient', medicationList = Medication.select())
+            return render_template('adminHome.html', reasons = Deactivatereason.select(), reasonStats = deactivateReasons, allUsers = allUsers, printaccounttype = 'Patient', medicationList = Medication.select(), carer = carers, patient = patients)
     else: 
-       return render_template('adminHome.html', reasons = Deactivatereason.select(), allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select())
+       return render_template('adminHome.html', reasons = Deactivatereason.select(), reasonStats = deactivateReasons, allUsers = allUsers, printaccounttype = 'Carer', medicationList = Medication.select(), carer = carers, patient = patients)
 
 @app.route('/updateAccountSettings_view', methods=['POST'])
 @needLogin
