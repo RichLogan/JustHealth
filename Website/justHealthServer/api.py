@@ -1465,28 +1465,14 @@ def getReasons():
 @app.route('/api/getPatientTotal')
 @auth.login_required
 def getPatientTotal():
-    return getPatientTotal()
-
-def getPatientTotal():
     """Get total number of patients for stats in the admin portal"""
-    patientList = []
-    p = Patient.select()
-    for x in p:
-        patientList.append(x.username.username)
-    return json.dumps(patientList)
+    return Patient.select(Patient.username).count()
 
 @app.route('/api/getCarerTotal')
 @auth.login_required
 def getCarerTotal():
-    return getCarerTotal()
-
-def getCarerTotal():
     """Get total number of carers for stats in the admin portal"""
-    carerList = []
-    c = Carer.select()
-    for x in c:
-        carerList.append(x.username.username)
-    return json.dumps(carerList)
+    return Carer.select(Carer.username).count()
 
 @app.route('/api/getAllUsers', methods=['POST'])
 @auth.login_required
