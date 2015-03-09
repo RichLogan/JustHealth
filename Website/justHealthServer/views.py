@@ -750,7 +750,7 @@ def internal_error(error):
 
 @app.errorhandler(401)
 def internal_error(error):
-  return render_template('400RequestMalformed.html'), 401
+  return "Unauthorised", 401
 
 #Admin Portal pages
 @app.route('/adminPortal')
