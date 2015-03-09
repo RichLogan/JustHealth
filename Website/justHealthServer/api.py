@@ -1462,18 +1462,6 @@ def getReasons():
       result[reason.reason.reason] = a.select().where(Userdeactivatereason.reason == reason.reason).count()
     return json.dumps(result)
 
-@app.route('/api/getPatientTotal')
-@auth.login_required
-def getPatientTotal():
-    """Get total number of patients for stats in the admin portal"""
-    return Patient.select(Patient.username).count()
-
-@app.route('/api/getCarerTotal')
-@auth.login_required
-def getCarerTotal():
-    """Get total number of carers for stats in the admin portal"""
-    return Carer.select(Carer.username).count()
-
 @app.route('/api/getAllUsers', methods=['POST'])
 @auth.login_required
 def getAllUsers():
