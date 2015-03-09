@@ -1271,7 +1271,13 @@ def getPrescriptions(username):
 @app.route('/api/getActivePrescriptions', methods=['POST'])
 @auth.login_required
 def getActivePrescriptions():
-    return getActivePrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getActivePrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getActivePrescriptions(request.form['username'])
 
 def getActivePrescriptions(username):
     allPrescriptions = json.loads(getPrescriptions(username))
@@ -1280,7 +1286,13 @@ def getActivePrescriptions(username):
 @app.route('/api/getUpcomingPrescriptions', methods=['POST'])
 @auth.login_required
 def getUpcomingPrescriptions():
-    return getUpcomingPrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getUpcomingPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getUpcomingPrescriptions(request.form['username'])
 
 def getUpcomingPrescriptions(username):
     allPrescriptions = json.loads(getPrescriptions(username))
@@ -1289,12 +1301,19 @@ def getUpcomingPrescriptions(username):
 @app.route('/api/getExpiredPrescriptions', methods=['POST'])
 @auth.login_required
 def getExpiredPrescriptions():
-    return getExpiredPrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getExpiredPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getExpiredPrescriptions(request.form['username'])
 
 def getExpiredPrescriptions(username):
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
 
+#upToHere
 @app.route('/api/getPrescription', methods=['POST'])
 @auth.login_required
 def getPrescription():
