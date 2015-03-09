@@ -1448,19 +1448,19 @@ def newMedication(medication):
         return "True"
     return "False"
 
-#@app.route('/api/getReasons', methods=['POST'])
-#@auth.login_required
-#def getReasons():
-#    return getReasons()
-#
-#def getReasons():
-#    """Get all the reasons from the deactivate table"""
-#    results = []
-#    for r in Deactivatereason.select(Deactivatereason.reason):
-#        deactivateReasons = {}
-#    
-#        results.append(deactivateReasons)
-#    return json.dumps(results)
+@app.route('/api/getReasons', methods=['GET', 'POST'])
+@auth.login_required
+def getReasons():
+    return getReasons()
+
+def getReasons():
+    """Get all the reasons from the deactivate table"""
+    result = {}
+    a = Userdeactivatereason.select()
+    reasons = Userdeactivatereason.select(Userdeactivatereason.reason).distinct()
+    for reason in reasons:
+      result[reason.reason.reason] = a.select().where(Userdeactivatereason.reason == reason.reason).count()
+    return json.dumps(result)
 
 @app.route('/api/getAllUsers', methods=['POST'])
 @auth.login_required
