@@ -547,7 +547,7 @@ def myPatients():
         upcomingPrescriptions[patient['username']] = json.loads(getUpcomingPrescriptions(patient['username']))
         expiredPrescriptions[patient['username']] = json.loads(getExpiredPrescriptions(patient['username']))
 
-    return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions)
+    return render_template('myPatients.html', patients = patients, appointmentsMapping = appointmentsMapping, activePrescriptions = activePrescriptions, upcomingPrescriptions = upcomingPrescriptions, expiredPrescriptions = expiredPrescriptions, medicationList = Medication.select())
 
 @app.route('/prescriptions')
 @needLogin

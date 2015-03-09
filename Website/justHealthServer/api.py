@@ -1113,6 +1113,48 @@ def addPrescription():
     return addPrescription(request.form)
 
 def addPrescription(details):
+    Monday = True;
+    try:
+        request.form['Monday']
+    except KeyError, e:
+        Monday = False;
+    
+    Tuesday = True;
+    try:
+        request.form['Tuesday']
+    except KeyError, e:
+        Tuesday = False;
+    
+    Wednesday = True;
+    try:
+        request.form['Wednesday']
+    except KeyError, e:
+        Wednesday = False;
+    
+    Thursday = True;
+    try:
+        request.form['Thursday']
+    except KeyError, e:
+        Thursday = False;
+    
+    Friday = True;
+    try:
+        request.form['Friday']
+    except KeyError, e:
+        Friday = False;
+    
+    Saturday = True;
+    try:
+        request.form['Saturday']
+    except KeyError, e:
+        Saturday = False;
+    
+    Sunday = True;
+    try:
+        request.form['Sunday']
+    except KeyError, e:
+        Sunday = False;
+    
     insertPrescription = Prescription.create(
         username = details['username'],
         medication = details['medication'],
@@ -1125,13 +1167,13 @@ def addPrescription(details):
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
         dosageform = details['dosageform'],
-        Monday = details['Monday'],
-        Tuesday = details['Tuesday'],
-        Wednesday = details['Wednesday'],
-        Thursday = details['Thursday'],
-        Friday = details['Friday'],
-        Saturday = details['Saturday'],
-        Sunday  = details['Sunday'])
+        Monday = Monday,
+        Tuesday = Tuesday,
+        Wednesday = Wednesday,
+        Thursday = Thursday,
+        Friday = Friday,
+        Saturday = Saturday,
+        Sunday  = Sunday)
 
     try:
         with database.transaction():
