@@ -1317,7 +1317,13 @@ def getExpiredPrescriptions(username):
 @app.route('/api/getPrescription', methods=['POST'])
 @auth.login_required
 def getPrescription():
-    return getPrescription(request.form)
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getExpiredPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getPrescription(request.form)
 
 def getPrescription(details):
     prescriptionid = details['prescriptionid']
@@ -1328,7 +1334,11 @@ def getPrescription(details):
 
 @app.route('/api/takeprescription', methods=['POST'])
 def takePrescription():
-    return takePrescription(request.form)
+    prescriptionid = details.['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    user = prescription['username']
+    if verifyContentRequest(user, ""):
+        return takePrescription(request.form)
 
 def takePrescription(details):
     try:
@@ -1386,7 +1396,11 @@ def checkStockLevel(prescription, count):
 
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
-    return getPrescriptionCount(request.form)
+    prescriptionid = details.['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    user = prescription['username']
+    if verifyContentRequest(user, ""):
+        return getPrescriptionCount(request.form)
 
 def getPrescriptionCount(details):
     try:
@@ -1441,7 +1455,8 @@ def getAppointmentTypes():
 @app.route('/api/getCorrespondence', methods=['GET', 'POST'])
 @auth.login_required
 def getCorrespondence():
-    return getCorrespondence(request.form['carer'], request.form['patient'])
+    if verifyContentRequest(request.form['carer'], request.form['patient']):
+        return getCorrespondence(request.form['carer'], request.form['patient'])
 
 def getCorrespondence(carer, patient):
      allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
@@ -1461,7 +1476,8 @@ def getCorrespondence(carer, patient):
 @app.route('/api/getPatientNotes', methods=['GET', 'POST'])
 @auth.login_required
 def getPatientNotes():
-    return getPatientNotes(request.form)
+    if verifyContentRequest(request.form['username'], ""):
+        return getPatientNotes(request.form)
 
 def getPatientNotes(details):
      allNotes = Notes.select().where(Notes.patient == details['username'])
@@ -1481,7 +1497,8 @@ def getPatientNotes(details):
 
 @app.route('/api/addCorrespondence', methods=['POST'])
 def addCorrespondence():
-    return addCorrespondence(request.form)
+    if verifyContentRequest(request.form['carer'], request.form['patient']):
+        return addCorrespondence(request.form)
 
 def addCorrespondence(details):
     insert = Notes.insert(
@@ -1500,7 +1517,10 @@ def addCorrespondence(details):
 @app.route('/api/deleteNote', methods=['POST'])
 @auth.login_required
 def deleteNote():
-  return deleteNote(request.form['noteid'])
+    note = Notes.select().where(Notes.noteid == noteid).get()
+    patient = note.patient.username
+    if verifyContentRequest(getUsernameFromHeader(), patient):
+        return deleteNote(request.form['noteid'])
 
 def deleteNote(noteid):
     try:
@@ -1554,10 +1574,6 @@ def newMedication(medication):
 #        results.append(deactivateReasons)
 #    return json.dumps(results)
 
-@app.route('/api/getAllUsers', methods=['POST'])
-@auth.login_required
-def getAllUsers():
-    return getAllUsers()
 
 def getAllUsers():
     """Get All information from client and patient/carer/Admin table"""
@@ -1592,10 +1608,6 @@ def getAllUsers():
     return json.dumps(results)
 
 #Update user account settings in Admin Portal
-@app.route('/api/updateAccountSettings', methods=['POST'])
-def updateAccountSettings():
-    return updateAccountSettings(request.form)
-
 def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
     user = None
     # What type of user are we dealing with?
@@ -1631,13 +1643,7 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
         return "True"
     return "False"
 
-@app.route('/api/deleteAccount', methods=['POST'])
-@auth.login_required
-def deleteAccount():
-    return deleteAccount(request.form)
-
 def deleteAccount(username):
-
     try:
         instance = Client.select().where(Client.username == username).get()
     except:
@@ -1679,7 +1685,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
 @app.route('/api/getNotifications', methods=['POST'])
 @auth.login_required
 def getNotifications():
-    return getNotifications(request.form['username'])
+    if verifyContentRequest(request.form['username']):
+        return getNotifications(request.form['username'])
 
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user that have not been dismissed"""
@@ -1697,7 +1704,8 @@ def getNotifications(username):
 @app.route('/api/getAllNotifications', methods=['POST'])
 @auth.login_required
 def getAllNotifications():
-    return getAllNotifications(request.form['username'])
+    if verifyContentRequest(request.form['username']):
+        return getAllNotifications(request.form['username'])
 
 def getAllNotifications(username):
     """Returns all of the notifications that have been associated with a user, whether or not they have been dismissed"""
@@ -1715,7 +1723,8 @@ def getAllNotifications(username):
 @app.route('/api/getDismissedNotifications', methods=['POST'])
 @auth.login_required
 def getDismissedNotifications():
-    return getDismissedNotifications(request.form['username'])
+    if verifyContentRequest(request.form['username']):
+        return getDismissedNotifications(request.form['username'])
 
 def getDismissedNotifications(username):
     """Returns all of the notifications that have been associated with a user that have not been dismissed"""
@@ -1880,7 +1889,10 @@ def getNotificationTypeClass(notification):
 @app.route('/api/dismissNotification', methods=['POST'])
 @auth.login_required
 def dismissNotification():
-    return dismissNotification(request.form['notificationid'])
+    notification = Notification.select().dicts().where(Notification.id == request.form['notificationid']).get()
+    user = notification['username']
+    if verifyContentRequest(user, ""):
+        return dismissNotification(request.form['notificationid'])
 
 def dismissNotification(notificationid):
     """This sets the dismiss boolean field in the database to true"""
@@ -2065,10 +2077,6 @@ def deleteReminders(username, now):
             with database.transaction():
                 reminder.delete_instance()
 
-@app.route('/test/getReminders')
-def getReminders():
-    return getReminders(session['username'])
-
 def getReminders(username):
     allReminders = Reminder.select().dicts().where(Reminder.username == username)
     reminders = []
@@ -2093,7 +2101,8 @@ def passwordExpiration(username):
 @app.route('/api/expiredResetPassword', methods=['POST'])
 @auth.login_required
 def expiredResetPassword():
-    return expiredResetPassword(request.form)
+    if verifyContentRequest(request.form['username'], ""):
+        return expiredResetPassword(request.form)
 
 def expiredResetPassword(request):
     """reset a password that has expired or is expiring"""
