@@ -22,7 +22,6 @@ import random
 
 auth = HTTPBasicAuth()
 
-
 @auth.verify_password
 def verify_password(username,password):
     """Checks if the password entered is the current password for that account"""
@@ -330,6 +329,12 @@ def getAccountInfo(username):
     else:
         result['gender'] ='Female'
     return json.dumps(result)
+
+def getCarers(username):
+    results = []
+    for c in Patientcarer.select().where(Patientcarer.patient == username):
+        results.append(c.carer.username)
+    return results
 
 @app.route('/api/setProfilePicture', methods=['POST'])
 def setProfilePicture():
@@ -1574,6 +1579,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Appointment Accepted'] = "Appointments"
     notificationTypeTable['Patient Medication Low'] = "Prescription"
     notificationTypeTable['Medication Low'] = "Prescription"
+    notificationTypeTable['Missed Prescription'] = "TakePrescription"
+    notificationTypeTable['Carer Missed Prescription'] = "TakePrescription"
 
     createNotification = Notification.insert(
         username = user,
@@ -1742,6 +1749,29 @@ def getNotificationContent(notification):
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
         content = prescription.username.username + " has less than 3 days stock of " + prescription.medication.name + " left."
+
+    if notification['notificationtype'] == "Missed Prescription":
+        try:
+            takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
+            prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "You only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+
+    if notification['notificationtype'] == "Carer Missed Prescription":
+        try:
+            takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
+            prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
+        except Prescription.DoesNotExist:
+            doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+            with database.transaction():
+                doesNotExist.delete_instance()
+                return "DoesNotExist"
+        content = "Your patient " + str(prescription.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+
     return content
 
 def getNotificationLink(notification):
@@ -1780,6 +1810,12 @@ def getNotificationLink(notification):
         link = "/prescriptions"
 
     if notification['notificationtype'] == "Patient Medication Low":
+        link = "/"
+
+    if notification['notificationtype'] == "Missed Prescription":
+        link = "/"
+
+    if notification['notificationtype'] == "Carer Missed Prescription":
         link = "/"
     
     return link
@@ -1857,9 +1893,27 @@ def getPrescriptionsDueToday(username, currentDateTime):
         results.append(r)
     return results
 
+def checkMissedPrescriptions(username, currentDate):
+    listOfPrescriptions = Prescription.select().where(Prescription.username == username)
+    for x in listOfPrescriptions:
+        takeInstance = TakePrescription.select().where(TakePrescription.prescriptionid == x)
+        for i in takeInstance:
+            if (i.currentdate < currentDate) and (i.currentcount < x.frequency):
+                # Does notification already exist?
+                try:
+                    Notification.select().where(
+                        (Notification.notificationtype == "Missed Prescription") &
+                        (Notification.relatedObject == i.takeid)
+                    ).get()
+                except Notification.DoesNotExist:
+                    createNotificationRecord(username, "Missed Prescription", i.takeid)
+                    for carer in getCarers(username):
+                        createNotificationRecord(carer, "Carer Missed Prescription", i.takeid)
+
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
     try:
+        #loggedInUser = getUsernameFromHeader()
         loggedInUser = session['username']
         dt = datetime.datetime.now()
         
@@ -1868,6 +1922,8 @@ def pingServer(sender, **extra):
 
         if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
             addReminders(loggedInUser, dt)
+
+        checkMissedPrescriptions(loggedInUser, datetime.datetime.now().date())
 
     # No-one logged in
     except KeyError, e:
