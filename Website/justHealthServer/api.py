@@ -1297,7 +1297,7 @@ def getPrescriptions():
     if getAccountType == "Carer":
         if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
             return getPrescriptions(request.form['username'])
-    elif getAccountType == "Patient"
+    elif getAccountType == "Patient":
         if verifyContentRequest(request.form['username'], ""):
             return getPrescriptions(request.form['username'])
 
@@ -1324,7 +1324,7 @@ def getActivePrescriptions():
     if getAccountType == "Carer":
         if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
             return getActivePrescriptions(request.form['username'])
-    elif getAccountType == "Patient"
+    elif getAccountType == "Patient":
         if verifyContentRequest(request.form['username'], ""):
             return getActivePrescriptions(request.form['username'])
 
@@ -1339,7 +1339,7 @@ def getUpcomingPrescriptions():
     if getAccountType == "Carer":
         if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
             return getUpcomingPrescriptions(request.form['username'])
-    elif getAccountType == "Patient"
+    elif getAccountType == "Patient":
         if verifyContentRequest(request.form['username'], ""):
             return getUpcomingPrescriptions(request.form['username'])
 
@@ -1354,7 +1354,7 @@ def getExpiredPrescriptions():
     if getAccountType == "Carer":
         if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
             return getExpiredPrescriptions(request.form['username'])
-    elif getAccountType == "Patient"
+    elif getAccountType == "Patient":
         if verifyContentRequest(request.form['username'], ""):
             return getExpiredPrescriptions(request.form['username'])
 
@@ -1370,7 +1370,7 @@ def getPrescription():
     if getAccountType == "Carer":
         if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
             return getExpiredPrescriptions(request.form['username'])
-    elif getAccountType == "Patient"
+    elif getAccountType == "Patient":
         if verifyContentRequest(request.form['username'], ""):
             return getPrescription(request.form)
 
@@ -1383,7 +1383,7 @@ def getPrescription(details):
 
 @app.route('/api/takeprescription', methods=['POST'])
 def takePrescription():
-    prescriptionid = details.['prescriptionid']
+    prescriptionid = details['prescriptionid']
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
     user = prescription['username']
     if verifyContentRequest(user, ""):
@@ -1445,7 +1445,7 @@ def checkStockLevel(prescription, count):
 
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
-    prescriptionid = details.['prescriptionid']
+    prescriptionid = details['prescriptionid']
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
     user = prescription['username']
     if verifyContentRequest(user, ""):
