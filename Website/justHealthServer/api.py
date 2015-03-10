@@ -19,6 +19,7 @@ import time
 import smtplib
 import json
 import random
+import base64
 
 auth = HTTPBasicAuth()
 
@@ -31,6 +32,44 @@ def verify_password(username,password):
         return sha256_crypt.verify(plaintextPassword, hashedPassword)
     except:
         return False
+
+@app.route("/api/test", methods=["POST"])
+@auth.login_required
+def verifyContentRequest():
+    return verifyContentRequest("carer", "")
+
+def getUsernameFromHeader():
+    #Gets the HTTP Basic header, decodes it and gets the username
+    authHeader = str(request.headers.get('Authorization'))
+    authHeader = authHeader.replace("Basic ", "")
+    decodedAuthHeader = base64.b64decode(authHeader)
+    authUsername = decodedAuthHeader.split(':')[0]
+    return authUsername
+
+def verifyContentRequest(username, targetUsername):
+    authUsername = getUsernameFromHeader()
+    if targetUsername == "":
+        return verifySelf(authUsername, username)
+    elif verifySelf(authUsername, username):
+        return verifyCarer(username, targetUsername)
+    else:
+        return abort(401)
+
+def verifySelf(authUsername, methodUsername):
+    if authUsername == methodUsername:
+        return True
+    else:
+        return abort(401)
+
+def verifyCarer(username, targetUsername):
+    accountInfo = json.loads(getAccountInfo(username))
+    if accountInfo['accounttype'] == "Carer":
+        if getConnectionStatus(username, targetUsername) == "Already Connected":
+            return True
+        else:
+            return abort(401)
+    else:
+        return abort(401)
 
 @app.route("/api/encryptPassword", methods=["POST"])
 def encryptPassword():
@@ -194,7 +233,8 @@ def authenticate():
 @app.route('/api/deactivateaccount', methods=['POST'])
 @auth.login_required
 def deactivateAccount():
-    return deactivateAccount(request.form)
+    if verifyContentRequest(request.form['username'], ""):
+        return deactivateAccount(request.form)
 
 def deactivateAccount(details):
     """Form validation for account deactivation"""
@@ -301,7 +341,8 @@ def getProfilePictureAPI(filename):
 @app.route('/api/getAccountInfo', methods=['POST'])
 @auth.login_required
 def getAccountInfo():
-    return getAccountInfo(request.form['username'])
+    if verifyContentRequest(request.form['username'], ""):
+        return getAccountInfo(request.form['username']) 
 
 def getAccountInfo(username):
     """Get Account information from client and patient/carer table"""
@@ -349,7 +390,8 @@ def setProfilePicture(details):
 @app.route('/api/editProfile', methods=['POST'])
 @auth.login_required
 def editProfile():
-    return editProfile(request.form, request.files)
+    if verifyContentRequest(request.form['username'], ""):
+        return editProfile(request.form, request.files)
 
 def editProfile(profile, picture):
     user = None
@@ -394,7 +436,8 @@ def editProfile(profile, picture):
 @app.route('/api/changePassword', methods=['POST'])
 @auth.login_required
 def changePasswordAPI():
-    return changePasswordAPI(request.form)
+    if verifyContentRequest(request.form['username'], ""):
+        return changePasswordAPI(request.form)
 
 def changePasswordAPI(details):
     """Allows a user to change their password. POST [username, oldpassword, newpassword, confirmnewpassword]"""
@@ -551,7 +594,8 @@ def sendContactUs(details):
 @auth.login_required
 def searchPatientCarer():
     """Searches database for a user that can be connected to. POST [username, searchterm]"""
-    return searchPatientCarer(request.form['username'], request.form['searchterm'])
+    if verifyContentRequest(request.form['username'], ""):
+        return searchPatientCarer(request.form['username'], request.form['searchterm'])
 
 def searchPatientCarer(username, searchterm):
     #get username, firstname and surname of current user
@@ -608,7 +652,10 @@ def getConnectionStatus(username, target):
 @app.route('/api/createConnection', methods=['POST', 'GET'])
 @auth.login_required
 def createConnection():
-    return createConnection(request.form)
+    #although this is for a patient and a carer we only need to check the patient 
+    # because they aren't yet connected
+    if verifyContentRequest(request.form['username'], ""):
+        return createConnection(request.form)
 
 def createConnection(details):
     """Creates an initial connection between two users. POST [username, target]"""
@@ -648,7 +695,10 @@ def createConnection(details):
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 @auth.login_required
 def completeConnection():
-    return completeConnection(request.form)
+    #The patient and carer are yet to be connected so therefore we only need to check
+    # the account of the user that is making the request
+    if verifyContentRequest(request.form['username'], ""):
+        return completeConnection(request.form)
 
 def completeConnection(details):
     """Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
@@ -696,7 +746,10 @@ def completeConnection(details):
 @auth.login_required
 def deleteConnection():
     """Deletes connection between a patient and carer POST[user, connection]"""
-    return deleteConnection(request.form)
+    #We only need to check the user and not the carer's authenticity
+    # as no information about the patient is being returned.
+    if verifyContentRequest(request.form['user'], ""):
+        return deleteConnection(request.form)
 
 def deleteConnection(details):
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
@@ -717,7 +770,8 @@ def deleteConnection(details):
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
 def cancelRequest():
-    return cancelRequest(request.form)
+    if verifyContentRequest(request.form['user'], ""):
+        return cancelRequest(request.form)
 
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
@@ -736,7 +790,10 @@ def cancelRequest(details):
 @app.route('/api/getConnections', methods=['POST'])
 @auth.login_required
 def getConnections():
-    return getConnections(request.form['username'])
+    #Any authenticated user is entitled to retrieve their connections
+    # we do not need to check the persons that they are connected too.
+    if verifyContentRequest(request.form['username'], ""):
+        return getConnections(request.form['username'])
 
 def getConnections(username):
     """Gets the valid connections between two users"""
@@ -812,7 +869,8 @@ def getConnections(username):
 @app.route('/api/addPatientAppointment', methods=['POST'])
 @auth.login_required
 def addPatientAppointment():
-  return addPatientAppointment(request.form)
+    if verifyContentRequest(request.form['creator'], ""):
+        return addPatientAppointment(request.form)
 
 #allows a all self appointments to be added 
 #Note originally there was going to be a seperate method for carers, however this is no longer the case. 
@@ -844,7 +902,10 @@ def addPatientAppointment(details):
 @app.route('/api/addInviteeAppointment', methods=['POST'])
 @auth.login_required
 def addInviteeAppointment():
-  return addInviteeAppointment(request.form)
+    #The creator will always be a carer, therefore we have to check that they are connected
+    # to the patient that they are making the appointment with
+    if verifyContentRequest(request.form['creator'], request.form['username']):
+        return addInviteeAppointment(request.form)
 
 def addInviteeAppointment(details):
   #Build insert user query
@@ -873,7 +934,8 @@ def addInviteeAppointment(details):
 @app.route('/api/getAllAppointments', methods=['POST'])
 @auth.login_required
 def getAllAppointments():
-  return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
+    if verifyContentRequest(request.form['loggedInUser'], request.form['targetUser']):
+        return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
 
 #gets the appointments from the database
 def getAllAppointments(loggedInUser, targetUser):
@@ -930,7 +992,8 @@ def getAllAppointments(loggedInUser, targetUser):
 @app.route('/api/deleteAppointment', methods=['POST'])
 @auth.login_required
 def deleteAppointment():
-  return deleteAppointment(request.form['username'], request.form['appid'])
+    if verifyContentRequest(request.form['username'], ""):
+        return deleteAppointment(request.form['username'], request.form['appid'])
 
 def deleteAppointment(user, appid):
   isCreator = Appointments.select().where(Appointments.appid == appid).get()
@@ -948,7 +1011,8 @@ def deleteAppointment(user, appid):
 @app.route('/api/getUpdateAppointment', methods=['POST'])
 @auth.login_required
 def getUpdateAppointment():
-  return updateAppointment(request.form['username'], request.form['appid'])
+    if verifyContentRequest(request.form['username'], ""):
+        return updateAppointment(request.form['username'], request.form['appid'])
 
 def getUpdateAppointment(user, appid):
   isCreator = Appointments.select().where(Appointments.appid == appid).get()
@@ -978,7 +1042,11 @@ def getUpdateAppointment(user, appid):
 @app.route('/api/updateAppointment', methods=['POST'])
 @auth.login_required
 def updateAppointment():
-  return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
+    #username isn't sent with the request, so here we need to get the creator of the appointment from the database.
+    appointment = Appointments.select().where(Appointments.appid == request.form['appid']).get()
+    user = appointment.creator.username
+    if verifyContentRequest(user, ""):
+        return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
   if private == "False":
@@ -1013,7 +1081,8 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
 @app.route('/api/getAppointment', methods=['POST'])
 @auth.login_required
 def getAppointment():
-    return getAppointment(request.form['user'], request.form['appid'])
+    if verifyContentRequest(request.form['user'], ""):
+        return getAppointment(request.form['user'], request.form['appid'])
 
 def getAppointment(user, appid):
   isRelated = Appointments.select().where(Appointments.appid == appid).get()
@@ -1039,7 +1108,8 @@ def getAppointment(user, appid):
 @app.route('/api/acceptDeclineAppointment', methods=['POST'])
 @auth.login_required
 def acceptDeclineAppointment():
-    return acceptDeclineAppointment(request.form['username'], request.form['action'], request.form['appid'])
+    if verifyContentRequest(request.form['username'], ""):
+        return acceptDeclineAppointment(request.form['username'], request.form['action'], request.form['appid'])
 
 def acceptDeclineAppointment(user, action, appointmentId): 
     appointment = Appointments.select().where(Appointments.appid == appointmentId).get()
@@ -1062,13 +1132,6 @@ def acceptDeclineAppointment(user, action, appointmentId):
         return "Failed"
     return "You have not been invited to this appointment."
 
-
-
-@app.route('/api/addMedication', methods=['POST'])
-@auth.login_required
-def addMedication():
-    return addMedication(request.form['medicationname'])
-
 def addMedication(medicationName):
     insertMedication = Medication.insert(
         name = medicationName
@@ -1080,11 +1143,6 @@ def addMedication(medicationName):
         except IntegrityError:
             return medicationName + " already exists"
     return "False"
-
-@app.route('/api/deleteMedication', methods=['POST'])
-@auth.login_required
-def deleteMedication():
-    return deleteMedication(request.form['medicationname'])
 
 def deleteMedication(medicationName):
     try:
@@ -1110,7 +1168,9 @@ def getMedications():
 @app.route('/api/addPrescription', methods=['POST'])
 @auth.login_required
 def addPrescription():
-    return addPrescription(request.form)
+    username = getUsernameFromHeader()
+    if verifyContentRequest(username, request.form['user']):
+        return addPrescription(request.form)
 
 def addPrescription(details):
     Monday = True;
@@ -1186,7 +1246,9 @@ def addPrescription(details):
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
 def editPrescription():
-    return editPrescription(request.form)
+    username = getUsernameFromHeader()
+    if verifyContentRequest(username, request.form['username']):
+        return editPrescription(request.form)
 
 def editPrescription(details):
     updatePrescription = Prescription.update(
@@ -1213,7 +1275,11 @@ def editPrescription(details):
 @app.route('/api/deletePrescription', methods=['POST'])
 @auth.login_required
 def deletePrescription():
-    return deletePrescription(request.form['prescriptionid'])
+    prescription = Prescription.select().where(Prescription.prescriptionid == request.form['prescriptionid']).get()
+    patient = prescription.username.username
+    username = getUsernameFromHeader()
+    if verifyContentRequest(username, patient):
+        return deletePrescription(request.form['prescriptionid'])
 
 def deletePrescription(prescriptionid):
     try:
@@ -1227,7 +1293,13 @@ def deletePrescription(prescriptionid):
 @app.route('/api/getPrescriptions', methods=['POST'])
 @auth.login_required
 def getPrescriptions():
-    return getPrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getPrescriptions(request.form['username'])
 
 def getPrescriptions(username):
     accountType = json.loads(getAccountInfo(username))['accounttype']
@@ -1244,10 +1316,17 @@ def getPrescriptions(username):
     else:
         return "Must have Patient account type"
 
+#UpToHere
 @app.route('/api/getActivePrescriptions', methods=['POST'])
 @auth.login_required
 def getActivePrescriptions():
-    return getActivePrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getActivePrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getActivePrescriptions(request.form['username'])
 
 def getActivePrescriptions(username):
     allPrescriptions = json.loads(getPrescriptions(username))
@@ -1256,7 +1335,13 @@ def getActivePrescriptions(username):
 @app.route('/api/getUpcomingPrescriptions', methods=['POST'])
 @auth.login_required
 def getUpcomingPrescriptions():
-    return getUpcomingPrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getUpcomingPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getUpcomingPrescriptions(request.form['username'])
 
 def getUpcomingPrescriptions(username):
     allPrescriptions = json.loads(getPrescriptions(username))
@@ -1265,16 +1350,29 @@ def getUpcomingPrescriptions(username):
 @app.route('/api/getExpiredPrescriptions', methods=['POST'])
 @auth.login_required
 def getExpiredPrescriptions():
-    return getExpiredPrescriptions(request.form['username'])
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getExpiredPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getExpiredPrescriptions(request.form['username'])
 
 def getExpiredPrescriptions(username):
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
 
+#upToHere
 @app.route('/api/getPrescription', methods=['POST'])
 @auth.login_required
 def getPrescription():
-    return getPrescription(request.form)
+    getAccountType = json.loads(getAccountInfo(getUsernameFromHeader()))['accounttype']
+    if getAccountType == "Carer":
+        if verifyContentRequest(getUsernameFromHeader(), request.form['username']):
+            return getExpiredPrescriptions(request.form['username'])
+    elif getAccountType == "Patient"
+        if verifyContentRequest(request.form['username'], ""):
+            return getPrescription(request.form)
 
 def getPrescription(details):
     prescriptionid = details['prescriptionid']
@@ -1285,7 +1383,11 @@ def getPrescription(details):
 
 @app.route('/api/takeprescription', methods=['POST'])
 def takePrescription():
-    return takePrescription(request.form)
+    prescriptionid = details.['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    user = prescription['username']
+    if verifyContentRequest(user, ""):
+        return takePrescription(request.form)
 
 def takePrescription(details):
     try:
@@ -1343,7 +1445,11 @@ def checkStockLevel(prescription, count):
 
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
-    return getPrescriptionCount(request.form)
+    prescriptionid = details.['prescriptionid']
+    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    user = prescription['username']
+    if verifyContentRequest(user, ""):
+        return getPrescriptionCount(request.form)
 
 def getPrescriptionCount(details):
     try:
@@ -1398,7 +1504,8 @@ def getAppointmentTypes():
 @app.route('/api/getCorrespondence', methods=['GET', 'POST'])
 @auth.login_required
 def getCorrespondence():
-    return getCorrespondence(request.form['carer'], request.form['patient'])
+    if verifyContentRequest(request.form['carer'], request.form['patient']):
+        return getCorrespondence(request.form['carer'], request.form['patient'])
 
 def getCorrespondence(carer, patient):
      allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
@@ -1418,7 +1525,8 @@ def getCorrespondence(carer, patient):
 @app.route('/api/getPatientNotes', methods=['GET', 'POST'])
 @auth.login_required
 def getPatientNotes():
-    return getPatientNotes(request.form)
+    if verifyContentRequest(request.form['username'], ""):
+        return getPatientNotes(request.form)
 
 def getPatientNotes(details):
      allNotes = Notes.select().where(Notes.patient == details['username'])
@@ -1438,7 +1546,8 @@ def getPatientNotes(details):
 
 @app.route('/api/addCorrespondence', methods=['POST'])
 def addCorrespondence():
-    return addCorrespondence(request.form)
+    if verifyContentRequest(request.form['carer'], request.form['patient']):
+        return addCorrespondence(request.form)
 
 def addCorrespondence(details):
     insert = Notes.insert(
@@ -1457,7 +1566,10 @@ def addCorrespondence(details):
 @app.route('/api/deleteNote', methods=['POST'])
 @auth.login_required
 def deleteNote():
-  return deleteNote(request.form['noteid'])
+    note = Notes.select().where(Notes.noteid == noteid).get()
+    patient = note.patient.username
+    if verifyContentRequest(getUsernameFromHeader(), patient):
+        return deleteNote(request.form['noteid'])
 
 def deleteNote(noteid):
     try:
@@ -1511,10 +1623,6 @@ def getReasons():
       result[reason.reason.reason] = a.select().where(Userdeactivatereason.reason == reason.reason).count()
     return json.dumps(result)
 
-@app.route('/api/getAllUsers', methods=['POST'])
-@auth.login_required
-def getAllUsers():
-    return getAllUsers()
 
 def getAllUsers():
     """Get All information from client and patient/carer/Admin table"""
@@ -1549,10 +1657,6 @@ def getAllUsers():
     return json.dumps(results)
 
 #Update user account settings in Admin Portal
-@app.route('/api/updateAccountSettings', methods=['POST'])
-def updateAccountSettings():
-    return updateAccountSettings(request.form)
-
 def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
     user = None
     # What type of user are we dealing with?
@@ -1588,13 +1692,7 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
         return "True"
     return "False"
 
-@app.route('/api/deleteAccount', methods=['POST'])
-@auth.login_required
-def deleteAccount():
-    return deleteAccount(request.form)
-
 def deleteAccount(username):
-
     try:
         instance = Client.select().where(Client.username == username).get()
     except:
@@ -1636,7 +1734,8 @@ def createNotificationRecord(user, notificationType, relatedObject):
 @app.route('/api/getNotifications', methods=['POST'])
 @auth.login_required
 def getNotifications():
-    return getNotifications(request.form['username'])
+    if verifyContentRequest(request.form['username']):
+        return getNotifications(request.form['username'])
 
 def getNotifications(username):
     """Returns all of the notifications that have been associated with a user that have not been dismissed"""
@@ -1654,7 +1753,8 @@ def getNotifications(username):
 @app.route('/api/getAllNotifications', methods=['POST'])
 @auth.login_required
 def getAllNotifications():
-    return getAllNotifications(request.form['username'])
+    if verifyContentRequest(request.form['username']):
+        return getAllNotifications(request.form['username'])
 
 def getAllNotifications(username):
     """Returns all of the notifications that have been associated with a user, whether or not they have been dismissed"""
@@ -1672,7 +1772,8 @@ def getAllNotifications(username):
 @app.route('/api/getDismissedNotifications', methods=['POST'])
 @auth.login_required
 def getDismissedNotifications():
-    return getDismissedNotifications(request.form['username'])
+    if verifyContentRequest(request.form['username']):
+        return getDismissedNotifications(request.form['username'])
 
 def getDismissedNotifications(username):
     """Returns all of the notifications that have been associated with a user that have not been dismissed"""
@@ -1837,7 +1938,10 @@ def getNotificationTypeClass(notification):
 @app.route('/api/dismissNotification', methods=['POST'])
 @auth.login_required
 def dismissNotification():
-    return dismissNotification(request.form['notificationid'])
+    notification = Notification.select().dicts().where(Notification.id == request.form['notificationid']).get()
+    user = notification['username']
+    if verifyContentRequest(user, ""):
+        return dismissNotification(request.form['notificationid'])
 
 def dismissNotification(notificationid):
     """This sets the dismiss boolean field in the database to true"""
@@ -2022,10 +2126,6 @@ def deleteReminders(username, now):
             with database.transaction():
                 reminder.delete_instance()
 
-@app.route('/test/getReminders')
-def getReminders():
-    return getReminders(session['username'])
-
 def getReminders(username):
     allReminders = Reminder.select().dicts().where(Reminder.username == username)
     reminders = []
@@ -2050,7 +2150,8 @@ def passwordExpiration(username):
 @app.route('/api/expiredResetPassword', methods=['POST'])
 @auth.login_required
 def expiredResetPassword():
-    return expiredResetPassword(request.form)
+    if verifyContentRequest(request.form['username'], ""):
+        return expiredResetPassword(request.form)
 
 def expiredResetPassword(request):
     """reset a password that has expired or is expiring"""
