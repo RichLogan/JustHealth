@@ -1179,7 +1179,7 @@ def addPrescription(details):
         with database.transaction():
             insertPrescription.save()
             createNotificationRecord(details['username'], "Prescription Added", int(insertPrescription.prescriptionid))
-            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
+        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
 
@@ -1792,10 +1792,10 @@ def getNotificationContent(notification):
 def getNotificationLink(notification):
     """gets the notification link that will make it clickable"""
     if notification['notificationtype'] == "Connection Request":
-        link = "/profile?go=connections"
+        link = "/?go=connections"
     
     if notification['notificationtype'] == "New Connection":
-        link = "/profile?go=connections"
+        link = "/?go=connections"
     
     if notification['notificationtype'] == "Prescription Added":
         link = "/prescriptions"

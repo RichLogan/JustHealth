@@ -584,7 +584,7 @@ def addPrescription_view():
     """Informs Carer that the prescription has been added to the selected patient"""
     result = addPrescription(request.form)
     username = request.form['username']
-    if result != "Could not add prescription":
+    if result != "Failed":
         flash(result, 'result')
         flash('success', 'class')
         flash(username, 'user')
