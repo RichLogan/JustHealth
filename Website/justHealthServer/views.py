@@ -154,7 +154,7 @@ def editDetails_view():
         flash(updated, 'danger')
     else:
         flash(updated, 'success')
-    return redirect(url_for('profile'))
+    return redirect('/')
 
 @app.route('/termsandconditions')
 def terms():
