@@ -33,13 +33,8 @@ def verify_password(username,password):
     except:
         return False
 
-@app.route("/api/test", methods=["POST"])
-@auth.login_required
-def verifyContentRequest():
-    return verifyContentRequest("carer", "")
-
 def getUsernameFromHeader():
-    #Gets the HTTP Basic header, decodes it and gets the username
+    """Method gets the HTTP Basic header, decodes it and gets the username"""
     authHeader = str(request.headers.get('Authorization'))
     authHeader = authHeader.replace("Basic ", "")
     decodedAuthHeader = base64.b64decode(authHeader)
@@ -47,6 +42,8 @@ def getUsernameFromHeader():
     return authUsername
 
 def verifyContentRequest(username, targetUsername):
+    """This co-ordinated the running of the other methods, depending on the parameters that are passed"""
+    """This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string"""
     authUsername = getUsernameFromHeader()
     if targetUsername == "":
         return verifySelf(authUsername, username)

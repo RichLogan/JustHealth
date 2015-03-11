@@ -52,7 +52,10 @@ Example of the code used to authenticate a user at login: ::
 
 
 --------------------------------
-API Authentication - HTTP Basic
+API Authentication
+--------------------------------
+
+HTTP Basic
 --------------------------------
 
 JustHealth acknowledge that both the web and the mobile application that they have developed use the API that was  simultaneously developed in the  Python programming language. This is achieved through the use of POST and GET requests, which without authentication makes user data vulnerable.  
@@ -140,6 +143,127 @@ java:type::
 
  
 It should also be noted that the following methods do not require any API authentication. These are methods that do not require a user to be logged in to run and none of them pose a direct threat to existing user data. 
+
+
+
+Manual Authentication
+--------------------------------
+
+As well HTTP Basic authentication to ensure that someone querying the API has a legitimate JustHealth user account, JustHealth have also ensured that users querying the API are only allowed to retrieve the information that they have permission to see. Permissions on the user accounts are as follows: 
+
+================  =================================================================================================================
+Account Type      Permissions
+================  =================================================================================================================
+Patient              * They are entitled to read/write information to and from their profile.
+                     * They are entitled to read/write 'self' appointments.
+                     * They are entitled to read and accept/decline appointments that are created with them.
+                     * They are entitled to read their own prescriptions.
+                     * They are entitled to read their notes/correspondence.
+                     * They are entitled to read and request to connect with other carers.
+
+Carer                * They are entitled to read/write information about themselves.
+                     * They are entitled to read/write prescriptions of only patients they are connected too.
+                     * They are entitled to read/write appointments that they have created with a patient that they are connected.
+                     * They are entitled to read/write correspondence with patients that they are connected too.
+                     * They are entitled to read when a patient that they are connected to has taken/missed medication.
+                     * They are entitled to read appointments that the patient they have connected too has not marked as private.
+                     * They are entitled to read and request to connect with other patient's.
+
+Administrator        * Methods are currently not accessible from the public API.
+================  =================================================================================================================
+
+This authentication has been implemented using several methods that check that the user who has authenticated through HTTP Basic has the permission to read and/or write for a given method. For example: 
+
+1. If a user is asking to read/write information about themselves, we check that the username that is sent and authenticated in the header of the request is the same user that is being read from or written too. 
+
+2. If a user (Currently, account type: Carer) is asking to read/write information about a patient, we check that the carer is connected to the patient. 
+
+If either of the above scenarios return False then the API will throw a HTTP 401 status code, not authenticated. 
+
+**The Code**
+
+The method below is the first that JustHealth wrote. This allows us to get the username from the HTTP request headers and this is what we are able to compare permissions too. 
+::
+    def getUsernameFromHeader():
+        """Method gets the HTTP Basic header, decodes it and gets the username"""
+        authHeader = str(request.headers.get('Authorization'))
+        authHeader = authHeader.replace("Basic ", "")
+        decodedAuthHeader = base64.b64decode(authHeader)
+        authUsername = decodedAuthHeader.split(':')[0]
+        return authUsername
+
+
+The following method co-ordinates what we should check for. If the method is to update something for themselves then the second parameter is passed as a blank string and therefore, we just need to check that the person authorised, through HTTP Basic is the same as the username that is going to be edited. These checks are done through the two methods below this co-ordinating method.
+::
+    def verifyContentRequest(username, targetUsername):
+    """This co-ordinated the running of the other methods, depending on the parameters that are passed"""
+    """This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string"""
+        authUsername = getUsernameFromHeader()
+        if targetUsername == "":
+            return verifySelf(authUsername, username)
+        elif verifySelf(authUsername, username):
+            return verifyCarer(username, targetUsername)
+        else:
+            return abort(401)
+
+
+This verifies that the record to be read/written of a particular user is the same user that has been authenticated through HTTP Basic.
+:: 
+    def verifySelf(authUsername, methodUsername):
+    """Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written"""
+        if authUsername == methodUsername:
+            return True
+        else:
+            return abort(401)
+
+
+This verifies that the record to be read/written for a particular user is a user that is connected to the user that has been authenticated through HTTP Basic.
+::
+    def verifyCarer(username, targetUsername):
+    """Checks that the user authenticated by HTTP Basic is connected to the user that is associated with the records being read/written"""
+        accountInfo = json.loads(getAccountInfo(username))
+        if accountInfo['accounttype'] == "Carer":
+            if getConnectionStatus(username, targetUsername) == "Already Connected":
+                return True
+            else:
+                return abort(401)
+        else:
+            return abort(401)
+
+
+All of the methods above are called in the publically accessible API function. The first method shows the call for a method that is retrieving records associated with the authenticated user. 
+::
+    @app.route('/api/getAppointment', methods=['POST'])
+    @auth.login_required
+    def getAppointment():
+        if verifyContentRequest(request.form['user'], ""):
+            return getAppointment(request.form['user'], request.form['appid'])
+
+
+The second method shows a call where the user making the request is different from the user associated with the records that are being requested.
+::
+    @app.route('/api/addCorrespondence', methods=['POST'])
+    def addCorrespondence():
+        if verifyContentRequest(request.form['carer'], request.form['patient']):
+            return addCorrespondence(request.form)
+
+
+Below shows a method where in order to get the associated user of the records that are being requested, the database has to be queried. This occurs when the target username is not sent in the post request.
+::
+    @app.route('/api/updateAppointment', methods=['POST'])
+    @auth.login_required
+    def updateAppointment():
+        #username isn't sent with the request, so here we need to get the creator of the appointment from the database.
+        appointment = Appointments.select().where(Appointments.appid == request.form['appid']).get()
+        user = appointment.creator.username
+        if verifyContentRequest(user, ""):
+            return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
+
+
+
+**Without this security**
+
+Without this manual security API implementation, anyone with valid credentials for the application would be able to query the API and read/write any information from or to the database. 
 
 
 ------------------------
