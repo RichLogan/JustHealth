@@ -53,12 +53,14 @@ def verifyContentRequest(username, targetUsername):
         return abort(401)
 
 def verifySelf(authUsername, methodUsername):
+    """Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written"""
     if authUsername == methodUsername:
         return True
     else:
         return abort(401)
 
 def verifyCarer(username, targetUsername):
+    """Checks that the user authenticated by HTTP Basic is connected to the user that is associated with the records being read/written"""
     accountInfo = json.loads(getAccountInfo(username))
     if accountInfo['accounttype'] == "Carer":
         if getConnectionStatus(username, targetUsername) == "Already Connected":
