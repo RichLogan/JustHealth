@@ -1910,6 +1910,26 @@ def checkMissedPrescriptions(username, currentDate):
                     for carer in getCarers(username):
                         createNotificationRecord(carer, "Carer Missed Prescription", i.takeid)
 
+def createTakePrescriptionInstances(username, currentDateTime):
+    listOfPrescriptions = Prescription.select().where(Prescription.username == username)
+    currentDay = currentDateTime.strftime("%A")
+    for p in listOfPrescriptions:
+        dateField = eval("p." + currentDay)
+        if dateField == True:
+            try:
+                TakePrescription.select().where(
+                    (TakePrescription.prescriptionid == p.prescriptionid) &
+                    (TakePrescription.currentdate == currentDateTime.date())
+                ).get()
+            except TakePrescription.DoesNotExist:
+                with database.transaction():
+                    insert = TakePrescription.insert(
+                                prescriptionid = p.prescriptionid,
+                                currentcount = 0,
+                                startingcount = p.stockleft,
+                                currentdate = currentDateTime.date())
+                    insert.execute()
+
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
     try:
@@ -1923,7 +1943,8 @@ def pingServer(sender, **extra):
         if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
             addReminders(loggedInUser, dt)
 
-        checkMissedPrescriptions(loggedInUser, datetime.datetime.now().date())
+        createTakePrescriptionInstances(loggedInUser, dt)
+        checkMissedPrescriptions(loggedInUser, dt.date())
 
     # No-one logged in
     except KeyError, e:
