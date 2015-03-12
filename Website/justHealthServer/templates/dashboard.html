@@ -26,7 +26,7 @@
 
     // Record taking prescription
     $.post(
-      "/api/takeprescription",
+      "/takePrescriptionWeb",
       {
         prescriptionid : String(prescriptionid),
         currentcount : count
@@ -39,7 +39,7 @@
     var checkBoxList = enclosingDiv.children();
     var count = 0;
     $(checkBoxList).each(function(index) {
-      if (count < checkCount) {
+      if (count <= checkCount) {
         $(this).prop('checked', true);
         count++;
       }
@@ -340,7 +340,7 @@
             {% endfor %}
             <script type="text/javascript">
               $.post(
-                '/api/getPrescriptionCount',
+                '/getPrescriptionCountWeb',
                 {prescriptionid : String({{reminder.relatedObject}})},
                 function(data) {
                   checkPrescriptionBoxes({{reminder.relatedObject}}, data);

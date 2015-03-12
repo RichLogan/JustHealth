@@ -1388,8 +1388,8 @@ def getPrescription(details):
 
 @app.route('/api/takeprescription', methods=['POST'])
 def takePrescription():
-    prescriptionid = details['prescriptionid']
-    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    prescriptionid = request.form['prescriptionid']
+    prescription = Prescription.select().dicts().where(Prescription.prescriptionid == prescriptionid).get()
     user = prescription['username']
     if verifyContentRequest(user, ""):
         return takePrescription(request.form)
@@ -1453,7 +1453,7 @@ def checkStockLevel(prescription, count):
 
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
-    prescriptionid = details['prescriptionid']
+    prescriptionid = request.form['prescriptionid']
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
     user = prescription['username']
     if verifyContentRequest(user, ""):
@@ -1468,7 +1468,6 @@ def getPrescriptionCount(details):
         return str(takeInstance.currentcount)
     except TakePrescription.DoesNotExist:
         return str(0)
-
 
 @app.route('/api/searchNHSDirectWebsite', methods=['POST'])
 @auth.login_required

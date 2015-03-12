@@ -616,6 +616,16 @@ def updatePrescription_view():
         flash(username, 'user')
         return redirect(url_for('myPatients'))
 
+@app.route('/takePrescriptionWeb', methods=['POST'])
+@needLogin
+def takePrescriptionWeb():
+    return takePrescription(request.form)
+
+@app.route('/getPrescriptionCountWeb', methods=['POST'])
+@needLogin
+def getPrescriptionCountWeb():
+    return getPrescriptionCount(request.form)
+
 @app.route('/carerAppointments', methods=['POST', 'GET'])
 @needLogin
 def carerappointments():
