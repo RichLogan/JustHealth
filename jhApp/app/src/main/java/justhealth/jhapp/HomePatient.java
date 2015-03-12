@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.IconTextView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 public class HomePatient extends Activity {
     /**
@@ -86,7 +84,7 @@ public class HomePatient extends Activity {
         medication.setOnClickListener(
             new Button.OnClickListener() {
                 public void onClick(View view) {
-                    startActivity(new Intent(HomePatient.this, PatientMedication.class));
+                    startActivity(new Intent(HomePatient.this, PatientPrescription.class));
                 }
             }
         );

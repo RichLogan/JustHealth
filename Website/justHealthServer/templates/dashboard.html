@@ -16,7 +16,8 @@
     var count = 0;
     var enclosingDiv = $('#prescriptionCount' + String(prescriptionid));
     var checkBoxList = enclosingDiv.children();
-    // 0 to 4
+    
+    // Check checkboxes that should be
     $(checkBoxList).each(function(index) {
       if ($(this).prop('checked')) {
         count++;
@@ -326,21 +327,25 @@
   <div class="col-md-9 dashPanel">
     <!-- Reminders (Cannot be hidden) -->
     {% for reminder in reminders %}
-      <div class="alert alert-{{reminder.reminderClass}}" role="alert">
-        <a href=""><strong>{{reminder.relatedObjectTable}}</strong></a>
+      <div class="alert alert-{{reminder.reminderClass}}" style="font-size:1.25em;" role="alert">
+        <a href="" style="font-size: 1.5em;"><strong>{{reminder.relatedObjectTable}} Due</strong></a>
         <br />
         {{reminder.content}}
         {% if reminder.relatedObjectTable == "Prescription" %}
           <br />
           <div id="prescriptionCount{{reminder.relatedObject}}">
-            Record your intake here:
+            Check each time you take your prescription:<br />
             {% for x in range(reminder.extraFrequency) %}
               <input type="checkbox" onclick="recordPrescription({{reminder.relatedObject}});">
             {% endfor %}
             <script type="text/javascript">
-              $.post('/api/getPrescriptionCount', { prescriptionid : String({{reminder.relatedObject}}) }, function(data) {
-                checkPrescriptionBoxes({{reminder.relatedObject}}, data);
-              });
+              $.post(
+                '/api/getPrescriptionCount',
+                {prescriptionid : String({{reminder.relatedObject}})},
+                function(data) {
+                  checkPrescriptionBoxes({{reminder.relatedObject}}, data);
+                }
+              );
             </script>
           </div>
         {% endif %}
@@ -388,7 +393,7 @@
             <div class="panel-heading myPatientsTab" role="tab" id="headingpre{{prescription.prescriptionid}}">
               <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapsepre{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapsepre{{prescription.prescriptionid}}">
-                  <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} ({{prescription.frequency}} times today)
+                  <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}}(s) ({{prescription.frequency}} times a day)
                 </a>
               </h4>
             </div>
@@ -397,9 +402,10 @@
                 <div class="row">
                   <h5>
                     <ul>
+                      <li>Stock Left: {{prescription.stockleft}}</li>
                       <li>Start Date: {{prescription.startdate}}</li>
                       <li>End Date: {{prescription.enddate}}</li>
-                      <li>Extra Info: {{prescription.prerequisite}}</li>
+                      <li>Extra Info / Comments: {{prescription.prerequisite}}</li>
                     </ul>
                   </h5>
                 </div>
