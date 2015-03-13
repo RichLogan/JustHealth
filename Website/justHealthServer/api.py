@@ -1219,8 +1219,31 @@ def addPrescription(details):
         request.form['Sunday']
     except KeyError, e:
         Sunday = False;
+
+    try:
+      prescription = {}
+      prescription['username'] = request.form['username']
+      prescription['medication'] = request.form['medication']
+      prescription['dosage'] = request.form['dosage']
+      prescription['frequency'] = request.form['frequency']
+      prescription['quantity'] = request.form['quantity']
+      prescription['dosageunit'] = request.form['dosageunit']
+      prescription['startdate'] = request.form['startdate']
+      prescription['enddate'] = request.form['enddate']
+      prescription['stockleft'] = request.form['stockleft']
+      prescription['prerequisite'] = request.form['prerequisite']
+      prescription['dosageform'] = request.form['dosageform']
+      prescription['Monday'] = request.form['Monday']
+      prescription['Tuesday'] = request.form['Tuesday']
+      prescription['Wednesday'] = request.form['Wednesday']
+      prescription['Thursday'] = request.form['Thursday']
+      prescription['Friday'] = request.form['Friday']
+      prescription['Saturday'] = request.form['Saturday']
+      prescription['Sunday'] = request.form['Sunday']
+    except KeyError, e:
+      return "All fields must be filled out"
     
-    insertPrescription = Prescription.create(
+    insertPrescription = Prescription.insert(
         username = details['username'],
         medication = details['medication'],
         dosage = details['dosage'],
@@ -1240,6 +1263,7 @@ def addPrescription(details):
         Saturday = Saturday,
         Sunday  = Sunday)
 
+
     try:
         with database.transaction():
             insertPrescription.save()
@@ -1247,6 +1271,8 @@ def addPrescription(details):
         return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
+
+
 
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
