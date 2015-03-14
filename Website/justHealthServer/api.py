@@ -797,8 +797,8 @@ def cancelRequest(details):
 def getConnections():
     #Any authenticated user is entitled to retrieve their connections
     # we do not need to check the persons that they are connected too.
-    # if verifyContentRequest(request.form['username'], ""):
-    return getConnections(request.form['username'])
+    if verifyContentRequest(request.form['username'], ""):
+        return getConnections(request.form['username'])
 
 def getConnections(username):
     """Gets the valid connections between two users"""
