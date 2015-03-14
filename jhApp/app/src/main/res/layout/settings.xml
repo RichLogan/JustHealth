@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/privacy"
-            android:text="privacy and FAQ's"
+            android:text="Privacy and FAQs"
             style="@style/primaryButton"
             android:layout_marginRight="10sp"
             android:layout_marginLeft="10sp"
