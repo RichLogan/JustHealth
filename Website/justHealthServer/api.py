@@ -997,15 +997,15 @@ def getAllAppointments(loggedInUser, targetUser):
 @app.route('/api/deleteAppointment', methods=['POST'])
 @auth.login_required
 def deleteAppointment():
-    if verifyContentRequest(request.form['username'], ""):
-        return deleteAppointment(request.form['username'], request.form['appid'])
+    #if verifyContentRequest(request.form['username'], ""):
+    return deleteAppointment(request.form['username'], request.form['appid'])
 
 def deleteAppointment(user, appid):
   isCreator = Appointments.select().where(Appointments.appid == appid).get()
 
   if isCreator.creator.username == user:
     with database.transaction():
-        if isCreator.invitee.username != None:
+        if isCreator.invitee != None:
             invitee = isCreator.invitee.username
             createNotificationRecord(invitee, "Appointment Cancelled", None)
         isCreator.delete_instance()
