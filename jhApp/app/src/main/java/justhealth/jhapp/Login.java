@@ -136,44 +136,45 @@ public class Login extends Activity implements SurfaceHolder.Callback {
 
         String response = Request.post("authenticate", loginInformation, getApplicationContext());
 
-        if (response.equals("Authenticated")) {
-            SharedPreferences account = getSharedPreferences("account", 0);
-            SharedPreferences.Editor edit = account.edit();
-            edit.putString("username", loginInformation.get("username"));
-            edit.putString("password", encryptedPassword);
-            edit.apply();
+        try {
+            if (response.equals("Authenticated")) {
+                SharedPreferences account = getSharedPreferences("account", 0);
+                SharedPreferences.Editor edit = account.edit();
+                edit.putString("username", loginInformation.get("username"));
+                edit.putString("password", encryptedPassword);
+                edit.apply();
 
-            String accountType = getAccountType(loginInformation.get("username"));
-            System.out.println("Account Type: " + accountType);
+                String accountType = getAccountType(loginInformation.get("username"));
+                System.out.println("Account Type: " + accountType);
 
-            SharedPreferences.Editor addAccountType = account.edit();
-            addAccountType.putString("accountType", accountType);
-            addAccountType.commit();
-            startActivity(new Intent(Login.this, Main.class));
-        }
-        else if (response.equals("Reset")) {
-            String expiredUsername = loginInformation.get("username");
-            String expiredPassword = encryptedPassword;
-            String expiredAccountType = getAccountType(expiredUsername);
+                SharedPreferences.Editor addAccountType = account.edit();
+                addAccountType.putString("accountType", accountType);
+                addAccountType.commit();
+                startActivity(new Intent(Login.this, Main.class));
+            } else if (response.equals("Reset")) {
+                String expiredUsername = loginInformation.get("username");
+                String expiredPassword = encryptedPassword;
+                String expiredAccountType = getAccountType(expiredUsername);
 
-            Intent reset = new Intent(Login.this, ExpiredPassword.class);
-            reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
-                    "JustHealth enforce this from time-to-time to ensure that your " +
-                    "privacy and security are maximised whilst using the website.");
-            reset.putExtra("username", expiredUsername);
-            reset.putExtra("password", expiredPassword);
-            reset.putExtra("accountType", expiredAccountType);
-            startActivity(reset);
-        }
-        else if (response.equals("<11")) {
-            String expiredUsername = loginInformation.get("username");
-            String expiredPassword = encryptedPassword;
-            String expiredAccountType = getAccountType(expiredUsername);
-            //options dialog
-            giveResetOptions(expiredUsername, expiredPassword, expiredAccountType);
-        }
-        else {
-            Feedback.toast(response, false, getApplicationContext());
+                Intent reset = new Intent(Login.this, ExpiredPassword.class);
+                reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
+                        "JustHealth enforce this from time-to-time to ensure that your " +
+                        "privacy and security are maximised whilst using the website.");
+                reset.putExtra("username", expiredUsername);
+                reset.putExtra("password", expiredPassword);
+                reset.putExtra("accountType", expiredAccountType);
+                startActivity(reset);
+            } else if (response.equals("<11")) {
+                String expiredUsername = loginInformation.get("username");
+                String expiredPassword = encryptedPassword;
+                String expiredAccountType = getAccountType(expiredUsername);
+                //options dialog
+                giveResetOptions(expiredUsername, expiredPassword, expiredAccountType);
+            } else {
+                Feedback.toast(response, false, getApplicationContext());
+            }
+        } catch (NullPointerException e) {
+            Feedback.toast(getString(R.string.connectionIssue), false, this);
         }
     }
 
