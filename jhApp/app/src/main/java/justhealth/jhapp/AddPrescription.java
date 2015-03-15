@@ -3,6 +3,7 @@ package justhealth.jhapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -112,12 +113,18 @@ public class AddPrescription extends Activity {
         details.put("Saturday", String.valueOf(((CheckBox) findViewById(R.id.saturday)).isChecked()));
         details.put("Sunday", String.valueOf(((CheckBox) findViewById(R.id.sunday)).isChecked()));
 
-        for (String name: details.keySet()){
-            System.out.println(name + " " + details.get(name));
-        }
-
+        // Execute and Show Result
         String response = Request.post("addPrescription", details, getApplicationContext());
-        System.out.println(response);
+
+        //Back to view all with response
+        Intent i = getIntent();
+        i.putExtra("response", response);
+        if (!response.equals("Failed")) {
+            setResult(1, i);
+        } else {
+            setResult(0, i);
+        }
+        finish();
     }
 
     /**
