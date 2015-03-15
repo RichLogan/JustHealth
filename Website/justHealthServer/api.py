@@ -668,9 +668,19 @@ def createConnection(details):
     currentUser = details['username']
     targetUser = details['target']
 
+    try:
+        currentUser = details['username']
+    except KeyError, e:
+        return "User does not exist"
+    try:
+        targetUser = details['username']
+    except KeyError, e:
+        return "target User doesNotExist"
+
     # Get user types
     currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
     targetUser_type = json.loads(getAccountInfo(targetUser))['accounttype']
+
 
     # Need to check if connection already exists, requested, or if they have requested for you.
     check = getConnectionStatus(currentUser, targetUser)
@@ -696,6 +706,8 @@ def createConnection(details):
         createNotificationRecord(targetUser, "Connection Request", int(newConnection.connectionid))
         return str(x)
     return "False"
+
+
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 @auth.login_required
@@ -760,17 +772,20 @@ def deleteConnection(details):
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
     connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
-    if (userType == "Patient" and connectionType == "Carer"):
+    try (userType == "Patient" and connectionType == "Carer"):
         instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
             return "True"
-    elif (userType == "Carer" and connectionType == "Patient"):
-        instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "True"
+        except Patient.DoesNotExist:    
+            try: (userType == "Carer" and connectionType == "Patient"):
+                instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
+                with database.transaction():
+                     instance.delete_instance()
+                return "True"
+            except: Carer.DoesNotExist:
     return "False"
+
 
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
@@ -780,6 +795,7 @@ def cancelRequest():
 
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
+
     try:
         instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
         with database.transaction():
