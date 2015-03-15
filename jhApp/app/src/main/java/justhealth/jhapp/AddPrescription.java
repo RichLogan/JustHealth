@@ -103,6 +103,19 @@ public class AddPrescription extends Activity {
         details.put("stockleft", ((EditText) findViewById(R.id.stockLeft)).getText().toString());
         details.put("prerequisite", ((EditText) findViewById(R.id.observations)).getText().toString());
 
+        // Days of the Week
+        details.put("Monday", String.valueOf(((CheckBox) findViewById(R.id.monday)).isChecked()));
+        details.put("Tuesday", String.valueOf(((CheckBox) findViewById(R.id.tuesday)).isChecked()));
+        details.put("Wednesday", String.valueOf(((CheckBox) findViewById(R.id.wednesday)).isChecked()));
+        details.put("Thursday", String.valueOf(((CheckBox) findViewById(R.id.thursday)).isChecked()));
+        details.put("Friday", String.valueOf(((CheckBox) findViewById(R.id.friday)).isChecked()));
+        details.put("Saturday", String.valueOf(((CheckBox) findViewById(R.id.saturday)).isChecked()));
+        details.put("Sunday", String.valueOf(((CheckBox) findViewById(R.id.sunday)).isChecked()));
+
+        for (String name: details.keySet()){
+            System.out.println(name + " " + details.get(name));
+        }
+
         String response = Request.post("addPrescription", details, getApplicationContext());
         System.out.println(response);
     }
