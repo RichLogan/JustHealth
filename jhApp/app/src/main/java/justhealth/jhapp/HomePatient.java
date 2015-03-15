@@ -29,6 +29,8 @@ public class HomePatient extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(username);
 
+        Request.serverCheck(this);
+
         //Settings page
         IconTextView settings = (IconTextView) findViewById(R.id.settings);
         settings.setOnClickListener(
@@ -88,6 +90,12 @@ public class HomePatient extends Activity {
                 }
             }
         );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Request.serverCheck(this);
     }
 
     @Override

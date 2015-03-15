@@ -2,6 +2,7 @@ package justhealth.jhapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,7 +16,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +31,11 @@ import java.util.Set;
  */
 public class Request {
 
-    // The URL and port of the JustHealth Server
-    private static String SERVER_URL = "http://raptor.kent.ac.uk:5000";
+    // JustHealth Server Address
+    private static String PROTOCOL = "http";
+    private static String HOST_NAME = "raptor.kent.ac.uk";
+    private static String PORT = "5000";
+    private static String SERVER_URL = PROTOCOL + "://" + HOST_NAME + ":" + PORT;
 
     /**
      * Method to get the active server's URL (protocol, host, port)
@@ -48,6 +54,9 @@ public class Request {
      * @return The result of the API call as a String. This is most often JSON but should be decoded by the calling functionality.
      */
     public static String post(String url, HashMap<String, String> parameters, Context context) {
+
+        serverCheck(context);
+
         // Create HTTP Objects
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(SERVER_URL + "/api/" + url);
@@ -70,7 +79,11 @@ public class Request {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpClient.execute(httppost);
 
-            return EntityUtils.toString(response.getEntity());
+            String finalResult =  EntityUtils.toString(response.getEntity());
+            if (finalResult == null) {
+                throw new NullPointerException(context.getString(R.string.connectionIssue));
+            }
+            return finalResult;
         }
         catch (Exception e) {
             Feedback.toast("Cannot connect to Server", false, context);
@@ -115,5 +128,31 @@ public class Request {
             //TODO Auto-generated catch block
         }
         return "Failed";
+    }
+
+    /**
+     * Checks to see if the JustHealthServer is reachable -
+     * @param c Application Context
+     */
+    public static void serverCheck(final Context c) {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            public Boolean doInBackground(Void... params) {
+                try {
+                    InetAddress raptor = InetAddress.getByName(HOST_NAME);
+                    return !raptor.equals("");
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            public void onPostExecute(Boolean result) {
+                System.out.println(result);
+                if (!result) {
+                    Feedback.toast(c.getString(R.string.connectionIssue), false, c);
+                }
+            }
+        }.execute();
     }
 }
