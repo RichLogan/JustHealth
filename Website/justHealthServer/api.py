@@ -1178,55 +1178,55 @@ def addPrescription():
         return addPrescription(request.form)
 
 def addPrescription(details):
-    Monday = True;
+    Monday = False;
     try:
-      if (request.form['Monday'] != True) and (request.form['Monday'] != "True") and (request.form['Monday'] != "true") and (request.form['Monday'] != "on"):
-        Monday = False
+      if (request.form['Monday'] == True) or (request.form['Monday'] == "True") or (request.form['Monday'] == "true") or (request.form['Monday'] == "on"):
+        Monday = True
     except KeyError, e:
       Monday = False
 
-    Tuesday = True;
+    Tuesday = False;
     try:
-      if (request.form['Tuesday'] != True) and (request.form['Tuesday'] != "True") and (request.form['Tuesday'] != "true") and (request.form['Tuesday'] != "on"):
-        Tuesday = False
+      if (request.form['Tuesday'] == True) or (request.form['Tuesday'] == "True") or (request.form['Tuesday'] == "true") or (request.form['Tuesday'] == "on"):
+        Tuesday = True
     except KeyError, e:
       Tuesday = False
 
-    Wednesday = True;
+    Wednesday = False;
     try:
-      if (request.form['Wednesday'] != True) and (request.form['Wednesday'] != "True") and (request.form['Wednesday'] != "true") and (request.form['Wednesday'] != "on"):
-        Wednesday = False
+      if (request.form['Wednesday'] == True) or (request.form['Wednesday'] == "True") or (request.form['Wednesday'] == "true") or (request.form['Wednesday'] == "on"):
+        Wednesday = True
     except KeyError, e:
       Wednesday = False
 
-    Thursday = True;
+    Thursday = False;
     try:
-      if (request.form['Thursday'] != True) and (request.form['Thursday'] != "True") and (request.form['Thursday'] != "true") and (request.form['Thursday'] != "on"):
-        Thursday = False
+      if (request.form['Thursday'] == True) or (request.form['Thursday'] == "True") or (request.form['Thursday'] == "true") or (request.form['Thursday'] == "on"):
+        Thursday = True
     except KeyError, e:
       Thursday = False
 
-    Friday = True;
+    Friday = False;
     try:
-      if (request.form['Friday'] != True) and (request.form['Friday'] != "True") and (request.form['Friday'] != "true") and (request.form['Friday'] != "on"):
-        Friday = False
+      if (request.form['Friday'] == True) or (request.form['Friday'] == "True") or (request.form['Friday'] == "true") or (request.form['Friday'] == "on"):
+        Friday = True
     except KeyError, e:
       Friday = False
 
-    Saturday = True;
+    Saturday = False;
     try:
-      if (request.form['Saturday'] != True) and (request.form['Saturday'] != "True") and (request.form['Saturday'] != "true") and (request.form['Saturday'] != "on"):
-        Saturday = False
+      if (request.form['Saturday'] == True) or (request.form['Saturday'] == "True") or (request.form['Saturday'] == "true") or (request.form['Saturday'] == "on"):
+        Saturday = True
     except KeyError, e:
       Saturday = False
 
-    Sunday = True;
+    Sunday = False;
     try:
-      if (request.form['Sunday'] != True) and (request.form['Sunday'] != "True") and (request.form['Sunday'] != "true") and (request.form['Sunday'] != "on"):
-        Sunday = False
+      if (request.form['Sunday'] == True) or (request.form['Sunday'] == "True") or (request.form['Sunday'] == "true") or (request.form['Sunday'] == "on"):
+        Sunday = True
     except KeyError, e:
       Sunday = False
-    
+
     insertPrescription = Prescription.create(
         username = details['username'],
         medication = details['medication'],
