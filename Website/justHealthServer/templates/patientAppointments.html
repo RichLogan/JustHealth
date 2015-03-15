@@ -61,7 +61,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="terms">Create New Appointment</h4>
+          <h4 class="modal-title" id="terms">Create a new appointment</h4>
         </div>
         <div class="modal-body">
           <form name="createAppointment" method="POST">
@@ -113,7 +113,7 @@
             <input type="checkbox" name="private" id="private">
           </div>
           <div class="modal-footer">
-            <input class="btn btn-success pull-right" type="submit" onclick="formcheck1(); return false" value="Add Appointment">
+            <input class="btn btn-success pull-right" type="submit" onclick="formcheck1()" value="Add Appointment">
           </div>
         </form>
           <br />
@@ -174,7 +174,7 @@
                           {% else %}
                             {% if appointment.invitee != none %}
                               {% if appointment.accepted == false %}
-                                <font color="red">[{{appointment.invitee}} Declined]</font>
+                                <font color="red">[{{appointment.invitee}} declined]</font>
                               {% endif %}
                             {% endif %}
                             </p>

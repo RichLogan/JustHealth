@@ -267,7 +267,6 @@ function formcheck1() {
   
   $.each(fields, function(i, field) {
     if (!field.value)
-      alert(field.name + ' is required');
-   }); 
-  console.log(fields);
+      alert('Please check the you have filled in the required fields');
+   });
 }
