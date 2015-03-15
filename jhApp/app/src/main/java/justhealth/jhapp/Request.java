@@ -15,6 +15,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,12 @@ public class Request {
      * @return The result of the API call as a String. This is most often JSON but should be decoded by the calling functionality.
      */
     public static String post(String url, HashMap<String, String> parameters, Context context) {
+
+        if (!serverAvailable()){
+            Feedback.toast(context.getResources().getString(R.string.connectionIssue), false, context);
+            return null;
+        }
+
         // Create HTTP Objects
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(SERVER_URL + "/api/" + url);
@@ -115,5 +122,15 @@ public class Request {
             //TODO Auto-generated catch block
         }
         return "Failed";
+    }
+
+    public static boolean serverAvailable() {
+        try {
+            InetAddress raptor = InetAddress.getByName(SERVER_URL);
+            return (!raptor.equals(""));
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+            return false;
+        }
     }
 }

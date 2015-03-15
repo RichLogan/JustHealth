@@ -92,6 +92,14 @@ public class HomeCarer extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (!Request.serverAvailable()) {
+            Feedback.toast(getString(R.string.connectionIssue), false, getApplicationContext());
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
