@@ -140,10 +140,7 @@ public class Request {
             public Boolean doInBackground(Void... params) {
                 try {
                     InetAddress raptor = InetAddress.getByName(HOST_NAME);
-                    if (!raptor.equals("")) {
-                        return false;
-                    }
-                    return true;
+                    return !raptor.equals("");
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                     return false;
@@ -151,6 +148,7 @@ public class Request {
             }
 
             public void onPostExecute(Boolean result) {
+                System.out.println(result);
                 if (!result) {
                     Feedback.toast(c.getString(R.string.connectionIssue), false, c);
                 }
