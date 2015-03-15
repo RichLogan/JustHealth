@@ -72,6 +72,7 @@ public class Main extends Activity {
     /**
      * Runs on reopen of application
      */
+    @Override
     protected void onResume() {
         super.onResume();
         if (!isLoggedIn()) {
