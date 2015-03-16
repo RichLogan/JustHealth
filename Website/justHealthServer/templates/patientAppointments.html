@@ -11,6 +11,13 @@
       searching:false,
     });
 
+  $('#createAppointmentForm').submit(function(e) {
+    if (!formcheck1()) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
 //  $('form').submit(function(e) {
 //    $("form :input").each(function(){
 //      if ($(this).val() == null || $(this).val() == "") {
@@ -64,7 +71,7 @@
           <h4 class="modal-title" id="terms">Create a new appointment</h4>
         </div>
         <div class="modal-body">
-          <form name="createAppointment" method="POST">
+          <form name="createAppointment" id="createAppointmentForm" method="POST">
           <div class="form-group appt-item-required">
             <label for="name">Appointment Title</label>
             <input class="form-control" type="text" name="name">
@@ -113,7 +120,7 @@
             <input type="checkbox" name="private" id="private">
           </div>
           <div class="modal-footer">
-            <input class="btn btn-success pull-right" type="submit" onclick="formcheck1()" value="Add Appointment">
+            <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
           </div>
         </form>
           <br />

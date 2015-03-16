@@ -262,22 +262,13 @@ function ValidateFormProfile(){
 }
 
 function formcheck1() {
-  var fields = $(".appt-item-required")
-        .find("select, textarea, input").serializeArray();
-  
-  $.each(fields, function(i, field) {
-    if (!field.value)
-      alert('Please check the you have filled in the required fields');
-   });
-}
-
-function formcheck2() {
-  var fields = $(".appt-item-required")
-        .find("select, textarea, input").serializeArray();
-  
-  $.each(fields, function(i, field) {
-    if (!field.value)
-      alert('Please check the you have filled in the required fields');
-      return false;
-   });
+    var fields = $(".appt-item-required").find("select, textarea, input").serializeArray();
+    var success = true;
+    $.each(fields, function(i, field) {
+        if (!field.value) {
+            alert('Please check the you have filled in the required fields');
+            success = false;
+        }
+    });
+    return success;
 }

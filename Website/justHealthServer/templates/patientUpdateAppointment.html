@@ -2,7 +2,17 @@
 
 {% block title %}Update Appointment{% endblock %}
 
-{% block scriptsAndStyles %}s
+{% block scriptsAndStyles %}
+<script>
+$(document).ready(function() {
+	$('#createAppointmentForm').submit(function(e) {
+		if (!formcheck1()) {
+			e.preventDefault();
+			return false;
+		}
+	});
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +22,7 @@
 <h4>Update Appointment</h4>
 <hr>
   <!--form to update appointments -->
-	<form name="createAppointment" method="POST" action="/patientUpdateAppointment">
+	<form name="createAppointment" method="POST" action="/patientUpdateAppointment" id="createAppointmentForm">
 		{% for app in request %}
 		<div class="form-group">
 			<input class="hidden" type="text" name="appid" value="{{app.appid}}" readonly="true">
@@ -63,7 +73,7 @@
     	</div>
     	<input class="hidden" value="{{previousLocation}}" name="whereFrom">
 	  	<div class="form-group">
-	   		<input class="btn btn-success pull-right" type="submit" onclick="formcheck2()" value="Update Appointment">
+	   		<input class="btn btn-success pull-right" type="submit" value="Update Appointment">
 	  	</div>
 
 	  {% endfor %}
