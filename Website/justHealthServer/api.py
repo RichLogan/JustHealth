@@ -939,6 +939,9 @@ def addInviteeAppointment(details):
 @app.route('/api/getAllAppointments', methods=['POST'])
 @auth.login_required
 def getAllAppointments():
+    if request.form['loggedInUser'] == request.form['targetUser']:
+        if verifyContentRequest(request.form['loggedInUser'], ""):
+            return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
     if verifyContentRequest(request.form['loggedInUser'], request.form['targetUser']):
         return getAllAppointments(request.form['loggedInUser'], request.form['targetUser'])
 
