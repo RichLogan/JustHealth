@@ -668,9 +668,21 @@ def createConnection(details):
     currentUser = details['username']
     targetUser = details['target']
 
+    # Test Users
+
+    try:
+        doesUserExist = Client.select().where(Client.username == currentUser).get()
+    except Client.DoesNotExist:
+        return "User does not exist"
+    try:
+        doesTargetExist = Client.select().where(Client.username == targetUser).get()
+    except Client.DoesNotExist:
+        return "Target does not exist"
+
     # Get user types
     currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
     targetUser_type = json.loads(getAccountInfo(targetUser))['accounttype']
+
 
     # Need to check if connection already exists, requested, or if they have requested for you.
     check = getConnectionStatus(currentUser, targetUser)
@@ -696,6 +708,8 @@ def createConnection(details):
         createNotificationRecord(targetUser, "Connection Request", int(newConnection.connectionid))
         return str(x)
     return "False"
+
+
 
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 @auth.login_required
@@ -760,16 +774,19 @@ def deleteConnection(details):
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
     connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
-    if (userType == "Patient" and connectionType == "Carer"):
+    try: 
         instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
             return "True"
-    elif (userType == "Carer" and connectionType == "Patient"):
-        instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "True"
+    except Patientcarer.DoesNotExist:
+        try:
+            instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
+            with database.transaction():
+                instance.delete_instance()
+                return "True"
+        except Patientcarer.DoesNotExist:
+            return "False"
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
@@ -780,16 +797,20 @@ def cancelRequest():
 
 def cancelRequest(details):
     """Cancels the user request to connect before completion"""
+
     try:
         instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
             return "True"
     except Relationship.DoesNotExist:
-        instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "True"
+        try:
+            instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
+            with database.transaction():
+                instance.delete_instance()
+                return "True"
+        except Relationship.DoesNotExist:
+            return "False"
     return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
@@ -1228,7 +1249,7 @@ def addPrescription(details):
       if (details['Sunday'] == True) or (details['Sunday'] == "True") or (details['Sunday'] == "true") or (details['Sunday'] == "on"):
         Sunday = True
     except KeyError, e:
-      Sunday = False
+        Sunday = False;
 
     insertPrescription = Prescription.create(
         username = details['username'],
@@ -1257,7 +1278,7 @@ def addPrescription(details):
         return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
-
+        
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
 def editPrescription():

@@ -27,6 +27,9 @@ a.modalheader:visited   {color:#000000; background-color:transparent}
 a.modalheader:hover .fa {color:#28E378; background-color:transparent}
 a.modalheader:active    {color:#000000; background-color:transparent}
 
+
+#completeConnectionModal .modal-dialog  {width:75%;}
+
 .smallLink {
   font-style: italic;
   font-size: 0.8em;

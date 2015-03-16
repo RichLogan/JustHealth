@@ -157,7 +157,7 @@
                   </div>
                   <div class="modal-body">
                     <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
-                    <form action="/api/deleteConnection" method="POST">
+                    <form action="/deleteConnectionWeb" method="POST">
                       <input type="hidden" name="user" value="{{session.username}}">
                       <input type="hidden" name="connection" value="{{connection.username}}">
                       <input type="submit" class="btn btn-danger pull-right" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')">
