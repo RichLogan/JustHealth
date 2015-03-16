@@ -60,7 +60,7 @@ public class CarerPrescriptions extends Activity{
             public void onClick(View view) {
                 Intent add = new Intent(CarerPrescriptions.this, AddPrescription.class);
                 add.putExtra("username", user);
-                startActivity(add);
+                startActivityForResult(add, 1);
             }
         });
 
@@ -69,6 +69,13 @@ public class CarerPrescriptions extends Activity{
         displayPrescriptions(getPrescriptions(username, "upcoming"), "upcoming");
         displayPrescriptions(getPrescriptions(username, "expired"), "expired");
     }
+
+//    @Override
+//    protected void onResume() {
+//        // Reload to get latest data
+//        finish();
+//        startActivity(getIntent());
+//    }
 
     /**
      * Retrieves the prescriptions for a given user.
@@ -197,14 +204,16 @@ public class CarerPrescriptions extends Activity{
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Something is breaking here if go back from edit without doing anything
         super.onActivityResult(requestCode, resultCode, data);
-        if(data.getExtras().containsKey("response")){
-            Boolean success = (resultCode == 1);
-            Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
-            finish();
-            startActivity(getIntent());
-        }
+        try {
+            if (data.getExtras().containsKey("response")) {
+                Boolean success = (resultCode == 1);
+                Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
+                finish();
+                startActivity(getIntent());
+            }
+        // Didn't Edit Anything, so nothing to do.
+        } catch (NullPointerException e) {}
     }
 
     /**

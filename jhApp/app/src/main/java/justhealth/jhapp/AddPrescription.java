@@ -3,6 +3,7 @@ package justhealth.jhapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -103,8 +104,27 @@ public class AddPrescription extends Activity {
         details.put("stockleft", ((EditText) findViewById(R.id.stockLeft)).getText().toString());
         details.put("prerequisite", ((EditText) findViewById(R.id.observations)).getText().toString());
 
+        // Days of the Week
+        details.put("Monday", String.valueOf(((CheckBox) findViewById(R.id.monday)).isChecked()));
+        details.put("Tuesday", String.valueOf(((CheckBox) findViewById(R.id.tuesday)).isChecked()));
+        details.put("Wednesday", String.valueOf(((CheckBox) findViewById(R.id.wednesday)).isChecked()));
+        details.put("Thursday", String.valueOf(((CheckBox) findViewById(R.id.thursday)).isChecked()));
+        details.put("Friday", String.valueOf(((CheckBox) findViewById(R.id.friday)).isChecked()));
+        details.put("Saturday", String.valueOf(((CheckBox) findViewById(R.id.saturday)).isChecked()));
+        details.put("Sunday", String.valueOf(((CheckBox) findViewById(R.id.sunday)).isChecked()));
+
+        // Execute and Show Result
         String response = Request.post("addPrescription", details, getApplicationContext());
-        System.out.println(response);
+
+        //Back to view all with response
+        Intent i = getIntent();
+        i.putExtra("response", response);
+        if (!response.equals("Failed")) {
+            setResult(1, i);
+        } else {
+            setResult(0, i);
+        }
+        finish();
     }
 
     /**
