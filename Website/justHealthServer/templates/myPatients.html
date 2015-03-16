@@ -48,15 +48,6 @@
 //    });
 //  });
 
-  //Shows confirm box on delete appointment
-  $(document).ready(function() {
-    $("#deleteapp").submit(function(e) {
-      if (!confirm('Are you sure you want to delete this appointment?')) {
-        e.preventDefault();
-      }
-    });
-  });
-
   </script>
 {% endblock %}
 
@@ -131,18 +122,13 @@
                         
                               <!--Add prescription form -->
                               <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
+                                <p><i>If the medication you are looking for is not here, please <a href="/contactUs">contact us</a></i></p>
                                 <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
                                   <input name="username" type="hidden" value="{{patient.username}}">
                                   <div class="row">
                                     <div class="col-md-6">
                                       <div class="form-group">
                                         <label for="{{patient.username}}_medication">Medication</label> 
-                                        <p>
-                                          <i>
-                                            If the medication you are looking for is not here, please email us at justhealthmedication@justhealth.co.uk
-                                          </i>
-                                        </p>
-                                        
                                         <select name="medication" class="form-control" id="{{patient.username}}_medication">
                                           {% for medication in medicationList %}
                                             <option>{{medication.name}}</option>
@@ -259,7 +245,7 @@
                                   <div role="tabpanel" class="tab-pane fade in active" id="{{patient.username}}active">
                                     <!-- Active Prescriptions go here -->
                                     {% for prescription in activePrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-success" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#activeModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-success btn-prescription" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#activeModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)
                                       </button>
@@ -371,7 +357,7 @@
                                   <div role="tabpanel" class="tab-pane fade" id="{{patient.username}}futureExpired">
                                     <h5>Upcoming</h5>
                                     {% for prescription in upcomingPrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-primary" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-primary btn-prescription" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                         Starts on: {{prescription.startdate}}
@@ -480,7 +466,7 @@
                                     
                                     <h5>Expired</h5>
                                     {% for prescription in expiredPrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-danger" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-danger btn-prescription" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                         Ended on: {{prescription.enddate}}
@@ -660,7 +646,7 @@
                                         <button class="btn btn-warning[disabled]" data-toggle="tooltip" data-placement="left" title="You did not create this appointment.">Update</button>
                                       </td>
                                       <td>
-                                        <button class="btn btn-danger[disabled]" data-toggle="tooltip" data-placement="right" title="You did not create this appointment.">Delete</button>
+                                        <button class="btn btn-danger[disabled] btn-sm" data-toggle="tooltip" data-placement="right" title="You did not create this appointment."><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
                                       </td> 
                                     {% else %}
                                       <td>
@@ -669,9 +655,9 @@
                                         </a>
                                       </td>
                                       <td>
-                                        <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                                        <form action="/deleteAppointment" method="GET">
                                           <input type="hidden" name="appid" value="{{appointment.appid}}">
-                                          <input type="submit" class="btn btn-danger" value="Delete">
+                                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this appointment?')"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
                                         </form>
                                       </td>
                                     {% endif %}

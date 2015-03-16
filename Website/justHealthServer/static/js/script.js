@@ -284,3 +284,15 @@ function formcheck2() {
     });
     return success;
 }
+
+function formcheck3() {
+    var fields = $(".pres-item-required").find("select, textarea, input").serializeArray();
+    var success = true;
+    $.each(fields, function(i, field) {
+        if (!field.value) {
+            alert('Please check the you have filled in the required fields');
+            success = false;
+        }
+    });
+    return success;
+}
