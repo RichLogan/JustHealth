@@ -270,3 +270,14 @@ function formcheck1() {
       alert('Please check the you have filled in the required fields');
    });
 }
+
+function formcheck2() {
+  var fields = $(".appt-item-required")
+        .find("select, textarea, input").serializeArray();
+  
+  $.each(fields, function(i, field) {
+    if (!field.value)
+      alert('Please check the you have filled in the required fields');
+      return false;
+   });
+}
