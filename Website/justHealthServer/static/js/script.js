@@ -268,10 +268,13 @@ function formcheck1() {
         if (!field.value) {
             alert('Please check the you have filled in the required fields');
             success = false;
+            return;
         }
     });
     return success;
 }
+
+
 
 function formcheck2() {
     var fields = $(".code-required").find("input").serializeArray();
@@ -280,6 +283,7 @@ function formcheck2() {
         if (!field.value) {
             alert('Please check the code is correct and try again');
             success = false;
+            return;
         }
     });
     return success;
@@ -292,6 +296,7 @@ function formcheck3() {
         if (!field.value) {
             alert('Please check the you have filled in the required fields');
             success = false;
+            return;
         }
     });
     return success;

@@ -56,13 +56,6 @@
       }
     });
 
-    $('#createAppointmentForm').submit(function(e) {
-      if (!formcheck1()) {
-        e.preventDefault();
-        return false;
-      }
-    });
-
     $('#addPrescriptionForm').submit(function(e) {
       if (!formcheck3()) {
         e.preventDefault();
@@ -423,7 +416,7 @@
                                   <div class="row">
                                     <div class="col-md-6">
                                       <div class="form-group pres-item-required">
-                                        <label for="{{patient.username}}_medication">Medication</label> 
+                                        <label for="{{patient.username}}_medication">Medication<sup style="color:red">*</sup></label> 
                                         <select name="medication" class="form-control" id="{{patient.username}}_medication">
                                           {% for medication in medicationList %}
                                             <option>{{medication.name}}</option>
@@ -432,24 +425,24 @@
                                       </div>
 
                                       <div class="form-group pres-item-required">
-                                        <label for="{{patient.username}}_dosage">Dosage</label>
+                                        <label for="{{patient.username}}_dosage">Dosage<sup style="color:red">*</sup></label>
                                         <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)" onkeypress="return isNumber(event)">
                                       </div>
 
                                       <div class="form-group pres-item-required">
-                                        <label for="{{patient.username}}_frequency">Frequency</label>
+                                        <label for="{{patient.username}}_frequency">Frequency<sup style="color:red">*</sup></label>
                                         <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)" onkeypress="return isNumber(event)" >
                                       </div>
                                     </div>
                               
                                     <div class="col-md-6">
                                       <div class="form-group pres-item-required">
-                                        <label for="{{patient.username}}_quantity">Quantity</label>
+                                        <label for="{{patient.username}}_quantity">Quantity<sup style="color:red">*</sup></label>
                                         <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="Quantity (To take at once)">
                                       </div>
 
                                       <div class="form-group pres-item-required">
-                                        <label for="{{patient.username}}_dosageUnit">Dosage Unit</label>
+                                        <label for="{{patient.username}}_dosageUnit">Dosage Unit<sup style="color:red">*</sup></label>
                                         <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
                                           <option>mg</option>
                                           <option>ml</option>
@@ -487,26 +480,26 @@
 
                                   <div class="row" style="margin: 0 auto;">
                                     <div class="form-group pres-item-required">
-                                      <label for="{{patient.username}}_dosageform">Type</label>
+                                      <label for="{{patient.username}}_dosageform">Type<sup style="color:red">*</sup></label>
                                       <input name="dosageform" type="text" class="form-control" id="{{patient.username}}_dosageform" placeholder="Dosage Form (e.g Tablet)">
                                     </div>
 
                                     <div class="col-md-6" style="margin: 0 auto;">
                                       <div class="form-group pres-item-required">
-                                        <label for="{{patient.username}}_startDate">Start Date</label>
+                                        <label for="{{patient.username}}_startDate">Start Date<sup style="color:red">*</sup></label>
                                         <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
                                   
                                     <div class="col-md-6 pres-item-required">
                                       <div class="form-group">
-                                        <label for="{{patient.username}}_endDate">End Date</label>
+                                        <label for="{{patient.username}}_endDate">End Date<sup style="color:red">*</sup></label>
                                         <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
 
                                     <div class="form-group pres-item-required">
-                                      <label for="{{patient.username}}_stockleft">Stock</label>
+                                      <label for="{{patient.username}}_stockleft">Stock<sup style="color:red">*</sup></label>
                                       <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Patient's current stock">
                                     </div>
 
@@ -967,13 +960,13 @@
                               <div class="row">
                                 <div class="panel panel-info">
                                   <div class="panel-body">
-                                    <form name="createAppointment" method="POST" action="/inviteeappointments">
+                                    <form name="createAppointment" method="POST" id="{{patient.username}}_createAppointmentForm" action="/inviteeappointments">
 
                                       <input name="username" type="hidden" value="{{patient.username}}">
                                       <input name="creator" type="hidden" value="{{session.username}}">
                                       
-                                      <div class="form-group">
-                                        <label for="name">Title</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="name">Title<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="text" name="name">
                                       </div>
                                       
@@ -981,34 +974,34 @@
                                         <input name="apptype" type="hidden" value="Carer">
                                       </div>
                                     
-                                      <div class="form-group">
-                                        <label for="addressnamenumber">Building Name/Number</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="addressnamenumber">Building Name/Number<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="text" name="addressnamenumber">
                                       </div>
                                       
-                                      <div class="form-group">
-                                        <label for="postcode">Postcode</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="postcode">Postcode<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="text" name="postcode">
                                       </div>
                               
-                                      <div class="form-group">
-                                        <label for="datefrom">Start Date</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="datefrom">Start Date<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="date" name="startdate" id="startdateappt">
                                         <span id="datevalidate1"></span>
                                       </div>
                       
-                                      <div class="form-group">
-                                        <label for="starttime">Start Time</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="starttime">Start Time<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="time" name="starttime" id="starttime">
                                       </div>
             
-                                      <div class="form-group">
-                                        <label for="dateto">End Date</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="dateto">End Date<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="date" name="enddate" id="dateto">
                                       </div>
       
-                                      <div class="form-group">
-                                        <label for="endtime">End Time</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="endtime">End Time<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="time" name="endtime" id="endtime">
                                       </div>
 
@@ -1020,6 +1013,34 @@
                                       <div class="form-group">
                                         <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
                                       </div>
+
+                                      <!--Form validation requires a unique class and form ID so the javascript has to be inserted here-->
+                                      <script>
+                                      $(document).ready(function() {
+
+                                      function formcheck1A() {
+                                        var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
+                                        var success = true;
+                                        $.each(fields, function(i, field) {
+                                          loop:
+                                          if (!field.value) {
+                                            alert('Please check the you have filled in the required fields');
+                                            success = false;
+                                            return;
+                                          }
+                                        });
+                                      return success;
+                                      }
+
+                                        $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
+                                          if (!formcheck1A()) {
+                                            e.preventDefault();
+                                            return false;
+                                          }
+                                        });
+                                      });
+                                      </script>
+
                                     </form>
                                   </div>
                                 </div>
