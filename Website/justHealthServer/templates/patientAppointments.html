@@ -11,23 +11,13 @@
       searching:false,
     });
 
+  //Prevent form submission if validation fails
   $('#createAppointmentForm').submit(function(e) {
     if (!formcheck1()) {
       e.preventDefault();
       return false;
     }
   });
-
-//  $('form').submit(function(e) {
-//    $("form :input").each(function(){
-//      if ($(this).val() == null || $(this).val() == "") {
-//        alert("All fields must be filled out");
-//        e.preventDefault();
-//        return false;
-//      }
-//    });
-//  });
-
 
     /*var allDates = $(document.getElementsByClassName('dateForJS'));
     var now = moment().format();

@@ -272,3 +272,15 @@ function formcheck1() {
     });
     return success;
 }
+
+function formcheck2() {
+    var fields = $(".code-required").find("input").serializeArray();
+    var success = true;
+    $.each(fields, function(i, field) {
+        if (!field.value) {
+            alert('Please check the code is correct and try again');
+            success = false;
+        }
+    });
+    return success;
+}
