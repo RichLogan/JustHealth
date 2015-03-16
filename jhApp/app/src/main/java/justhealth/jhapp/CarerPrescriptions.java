@@ -233,11 +233,15 @@ public class CarerPrescriptions extends Activity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        try {
             if (data.getExtras().containsKey("response")) {
                 Boolean success = (resultCode == 1);
-                loadPrescriptions();
+                finish();
+                startActivity(getIntent());
                 Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
             }
+        // Allows a user to exit without doing anything
+        } catch (NullPointerException e) {}
     }
 
     /**
