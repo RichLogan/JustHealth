@@ -683,10 +683,10 @@ def inviteeappointments():
 @app.route('/nhsSearch', methods=['POST', 'GET'])
 @needLogin
 def searchNHS():
-    """Posts the search term that the user enters straight to the NHS website and opens a new tab showing the results"""
-    if request.method == 'POST':
-        website = searchNHSDirect(request.form['searchterm'])
-        webbrowser.open(website,new=2)
+    """The POST request is no longer needed as this is done with JS"""
+    # if request.method == 'POST':
+    #     website = searchNHSDirect(request.form['searchterm'])
+    #     webbrowser.open(website,new=2)
     return render_template('searchNHSDirect.html')
 
 @app.route('/dismissNotification', methods=['POST', 'GET'])
