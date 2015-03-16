@@ -132,12 +132,18 @@ public class EditPrescription extends Activity {
 
             @Override
             protected void onPreExecute() {
-                progressDialog = ProgressDialog.show(EditPrescription.this, "Progress Dialog Title Text", "Process Description Text", true);
+                progressDialog = ProgressDialog.show(
+                    EditPrescription.this,
+                    "Loading...",
+                    "Updating " + parameters.get("medication") + " (" + parameters.get("quantity") + " x " + parameters.get("dosage") + parameters.get("dosageunit") + ")",
+                    true);
             }
 
             @Override
             protected String doInBackground(Void... params) {
-                return Request.post("editPrescription", parameters, getApplicationContext());
+                String r = Request.post("editPrescription", parameters, getApplicationContext());
+                System.out.println(r);
+                return r;
             }
 
             @Override

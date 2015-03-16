@@ -77,7 +77,7 @@ public class CarerPrescriptions extends Activity{
     private void loadPrescriptions() {
         final HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
-        loading = ProgressDialog.show(CarerPrescriptions.this, "Loading...", "Loading all of " + firstname + "'s prescriptions", true);
+        loading = ProgressDialog.show(CarerPrescriptions.this, "Loading...", "Loading " + firstname + "'s prescriptions", true);
         loadUpcomingPrescriptions(parameters);
         loadActivePrescriptions(parameters);
         loadExpiredPrescriptions(parameters);
@@ -235,8 +235,7 @@ public class CarerPrescriptions extends Activity{
         super.onActivityResult(requestCode, resultCode, data);
             if (data.getExtras().containsKey("response")) {
                 Boolean success = (resultCode == 1);
-                finish();
-                startActivity(getIntent());
+                loadPrescriptions();
                 Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
             }
     }
