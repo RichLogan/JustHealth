@@ -11,21 +11,50 @@
     <!-- Row 1 -->
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="45dip"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center">
+
         <IconTextView
-            android:layout_weight="1"
             android:id="@+id/profile"
             android:text="{fa-user}"
-            style="@style/homePageButton" />
+            style="@style/homePageButton"
+            android:layout_weight="1" />
+
         <IconTextView
-            android:layout_weight="1"
             android:id="@+id/search"
             android:text="{fa-search}"
-            style="@style/homePageButton" />
+            style="@style/homePageButton"
+            android:layout_weight="1" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center" >
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/profilelabel"
+            android:text="Profile"
+            style="@style/homePageLabel" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/searchlabel"
+            android:text="Search"
+            style="@style/homePageLabel" />
+    </LinearLayout>
+
 
     <!-- Row 2 -->
     <LinearLayout
@@ -34,16 +63,42 @@
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center" >
+
         <IconTextView
             android:layout_weight="1"
-            android:id="@+id/connections"
-            android:text="{fa-link}"
+            android:id="@+id/appointments"
+            android:text="{fa-calendar}"
             style="@style/homePageButton" />
+
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/medication"
             android:text="{fa-medkit}"
             style="@style/homePageButton" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/appointmentslabel"
+            android:text="Appointments"
+            style="@style/homePageLabel" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/medicationlabel"
+            android:text="Prescriptions"
+            style="@style/homePageLabel" />
     </LinearLayout>
 
     <!-- Row 3 -->
@@ -53,15 +108,42 @@
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center">
+
         <IconTextView
             android:layout_weight="1"
-            android:id="@+id/appointments"
-            android:text="{fa-calendar}"
+            android:id="@+id/connections"
+            android:text="{fa-link}"
             style="@style/homePageButton" />
+
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/settings"
             android:text="{fa-cog}"
             style="@style/homePageButton" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/connectionslabel"
+            android:text="Connections"
+            style="@style/homePageLabel" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/settingslabel"
+            android:text="Settings"
+            style="@style/homePageLabel" />
+    </LinearLayout>
+
 </LinearLayout>
