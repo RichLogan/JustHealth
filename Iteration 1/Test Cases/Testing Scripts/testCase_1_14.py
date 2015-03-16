@@ -10,10 +10,7 @@ testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDat
 class testCase_1_14(unittest.TestCase):
 
   def setUp(self):
-    deleteUsers = testDatabase.Client.delete()
-    deletePasswords = testDatabase.uq8LnAWi7D.delete()
-    deleteUsers.execute()
-    deletePasswords.execute()
+    testDatabase.createAll()
 
   def test_1_14_1(self):
     with testDatabase.database.transaction():
@@ -28,10 +25,7 @@ class testCase_1_14(unittest.TestCase):
       newUser.execute()
 
   def tearDown(self):
-    deleteUsers = testDatabase.Client.delete()
-    deletePasswords = testDatabase.uq8LnAWi7D.delete()
-    deleteUsers.execute()
-    deletePasswords.execute()
+    testDatabase.dropAll()
 
 if __name__ == '__main__':
     unittest.main()
