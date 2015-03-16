@@ -1070,7 +1070,7 @@
                               {% else %}
                                 {% if appointment.invitee != none %}
                                   {% if appointment.accepted == false %}
-                                    <font color="red">[{{appointment.invitee}} Declined]</font>
+                                    <font color="red">[{{appointment.invitee}} declined]</font>
                                   {% endif %}
                                 {% endif %}
                               {% endif %}
@@ -1123,9 +1123,9 @@
                           </div>
                           
                           <div class="col-md-2">
-                            <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                            <form action="/deleteAppointment" method="GET">
                               <input type="hidden" name="appid" value="{{appointment.appid}}">
-                              <input type="submit" class="btn btn-danger" value="Delete">
+                              <button type="submit" class="btn btn-danger btn-sm pull-right" onclick="return confirm('Are you sure you want to delete this appointment?')"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
                             </form>
                           </div>
                           <div class="col-md-8">
