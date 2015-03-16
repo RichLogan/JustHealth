@@ -176,7 +176,7 @@ class TakePrescription(BaseModel):
         db_table = 'takeprescription'
 
 class Notificationtype(BaseModel):
-    typename = CharField(max_length=25, primary_key=True)
+    typename = CharField(max_length=50, primary_key=True)
     typeclass = CharField(max_length=25)
 
     class Meta:
@@ -251,6 +251,8 @@ def dropAll():
         Relationship.drop_table(cascade=True)
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
+    if Appointmenttype.table_exists():
+        Appointmenttype.drop_table(cascade=True)
     if Appointments.table_exists():
         Appointments.drop_table(cascade=True)
     if Medication.table_exists():

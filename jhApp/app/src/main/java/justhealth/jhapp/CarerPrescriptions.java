@@ -3,9 +3,11 @@ package justhealth.jhapp;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -30,13 +33,17 @@ import java.util.HashMap;
  * Functionality to allow a carer to view all Prescriptions for any patient that they are connected to.
  */
 public class CarerPrescriptions extends Activity{
+
+    private String username;
+    private String firstname;
+    private int loadCounter = 3;
+    private ProgressDialog loading;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_prescriptions);
 
         //Get data passed from MyPatients
-        String firstname = "";
-        String username = "";
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("targetUsername");
@@ -64,49 +71,79 @@ public class CarerPrescriptions extends Activity{
             }
         });
 
-        //Display Prescriptions
-        displayPrescriptions(getPrescriptions(username, "active"), "active");
-        displayPrescriptions(getPrescriptions(username, "upcoming"), "upcoming");
-        displayPrescriptions(getPrescriptions(username, "expired"), "expired");
+        loadPrescriptions();
     }
 
-//    @Override
-//    protected void onResume() {
-//        // Reload to get latest data
-//        finish();
-//        startActivity(getIntent());
-//    }
-
-    /**
-     * Retrieves the prescriptions for a given user.
-     * @param username The patient whose prescriptions should be retrieved
-     * @param type The type of prescription you are looking at. One of 'active', 'upcoming', 'expired'
-     * @return A JSON array of all prescriptions
-     */
-    private JSONArray getPrescriptions(String username, String type) {
-        HashMap<String, String> parameters = new HashMap<String, String>();
+    private void loadPrescriptions() {
+        final HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
+        loading = ProgressDialog.show(CarerPrescriptions.this, "Loading...", "Loading " + firstname + "'s prescriptions", true);
+        loadUpcomingPrescriptions(parameters);
+        loadActivePrescriptions(parameters);
+        loadExpiredPrescriptions(parameters);
+    }
 
-        String url = "getPrescriptions";
-        if (type.equals("active")) {
-            url = "getActivePrescriptions";
-        }
-        else if (type.equals("upcoming")) {
-            url = "getUpcomingPrescriptions";
-        }
-        else if (type.equals("expired")) {
-            url = "getExpiredPrescriptions";
-        }
+    private void loadActivePrescriptions(final HashMap<String, String> parameters) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                return Request.post("getActivePrescriptions", parameters, getApplicationContext());
+            }
 
-        String response = Request.post(url, parameters, getApplicationContext());
-        try {
-            JSONArray result = new JSONArray(response);
-            return result;
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                try {
+                    displayPrescriptions(new JSONArray(result), "active");
+                } catch (JSONException e) {System.out.println("Failed");}
+                loadCounter--;
+                if (loadCounter <= 0) {
+                    loading.dismiss();
+                }
+            }
+        }.execute();
+    }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    private void loadUpcomingPrescriptions(final HashMap<String, String> parameters) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                return Request.post("getUpcomingPrescriptions", parameters, getApplicationContext());
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                try {
+                    displayPrescriptions(new JSONArray(result), "upcoming");
+                } catch (JSONException e) {System.out.println("Failed");}
+                loadCounter--;
+                if (loadCounter <= 0) {
+                    loading.dismiss();
+                }
+            }
+        }.execute();
+    }
+
+    private void loadExpiredPrescriptions(final HashMap<String, String> parameters) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                return Request.post("getExpiredPrescriptions", parameters, getApplicationContext());
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                try {
+                    displayPrescriptions(new JSONArray(result), "expired");
+                } catch (JSONException e) {System.out.println("Failed");}
+                loadCounter--;
+                if (loadCounter <= 0) {
+                    loading.dismiss();
+                }
+            }
+        }.execute();
     }
 
     /**
@@ -137,7 +174,6 @@ public class CarerPrescriptions extends Activity{
                 prescriptionButton.setText(prescriptionString);
 
                 //Add button to view
-
                 int layout = R.id.prescriptionButtons;
                 if (type.equals("active")) {
                     layout = R.id.activePrescriptionButtons;
@@ -149,13 +185,6 @@ public class CarerPrescriptions extends Activity{
                     layout = R.id.expiredPrescriptionButtons;
                 }
 
-//                LinearLayout ll = (LinearLayout)findViewById(layout);
-//                ll.addView(prescriptionButton,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-//
-//                LinearLayout.LayoutParams center = (LinearLayout.LayoutParams)prescriptionButton.getLayoutParams();
-//                center.gravity = Gravity.CENTER;
-//                prescriptionButton.setLayoutParams(center);
-
                 Style.styleButton(prescriptionButton, "primary", (LinearLayout)findViewById(layout), getApplicationContext());
 
                 prescriptionButton.setOnClickListener(new View.OnClickListener() {
@@ -166,8 +195,7 @@ public class CarerPrescriptions extends Activity{
                         alert.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Intent intent = new Intent(getBaseContext(), EditPrescription.class);
-                                intent.putExtra("prescriptionid", prescriptionid);
-                                intent.putExtra("targetUsername", username);
+                                intent.putExtra("prescription", prescription.toString());
                                 startActivityForResult(intent, 1);
                             }
                         });
@@ -198,7 +226,7 @@ public class CarerPrescriptions extends Activity{
 
     /**
      * Informs the calling activity whether the action was successful for not.
-     * @param requestCode Internal used, autopopulated
+     * @param requestCode Internally used, autopopulated
      * @param resultCode 1 for success, 0 for failure
      * @param data Internally used, autopopulated
      */
@@ -208,11 +236,11 @@ public class CarerPrescriptions extends Activity{
         try {
             if (data.getExtras().containsKey("response")) {
                 Boolean success = (resultCode == 1);
-                Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
                 finish();
                 startActivity(getIntent());
+                Feedback.toast(data.getStringExtra("response"), success, getApplicationContext());
             }
-        // Didn't Edit Anything, so nothing to do.
+        // Allows a user to exit without doing anything
         } catch (NullPointerException e) {}
     }
 

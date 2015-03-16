@@ -669,7 +669,6 @@ def createConnection(details):
     targetUser = details['target']
 
     # Test Users
-
     try:
         doesUserExist = Client.select().where(Client.username == currentUser).get()
     except Client.DoesNotExist:
