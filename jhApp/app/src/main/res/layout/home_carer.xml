@@ -9,6 +9,10 @@
     <!-- Row 1 -->
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="45dip"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dip"
         android:orientation="horizontal"
         android:layout_weight="1"
@@ -26,6 +30,30 @@
             style="@style/homePageButton" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/profilelabel"
+            android:text="Profile"
+            style="@style/homePageLabel" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/searchlabel"
+            android:text="Search"
+            style="@style/homePageLabel" />
+    </LinearLayout>
+
     <!-- Row 2 -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,16 +61,42 @@
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center" >
+
         <IconTextView
             android:layout_weight="1"
-            android:id="@+id/connections"
-            android:text="{fa-link}"
-            style="@style/homePageButton"/>
+            android:id="@+id/myAppointments"
+            android:text="{fa-calendar}"
+            style="@style/homePageButton" />
+
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/mypatients"
             android:text="{fa-users}"
             style="@style/homePageButton"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/appointmentslabel"
+            android:text="Appointments"
+            style="@style/homePageLabel" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/mypatientslabel"
+            android:text="My Patients"
+            style="@style/homePageLabel" />
     </LinearLayout>
 
     <!-- Row 3 -->
@@ -52,15 +106,42 @@
         android:orientation="horizontal"
         android:layout_weight="1"
         android:layout_gravity="center" >
+
         <IconTextView
             android:layout_weight="1"
-            android:id="@+id/myAppointments"
-            android:text="{fa-calendar}"
-            style="@style/homePageButton" />
+            android:id="@+id/connections"
+            android:text="{fa-link}"
+            style="@style/homePageButton"/>
+
         <IconTextView
             android:layout_weight="1"
             android:id="@+id/settings"
             android:text="{fa-cog}"
             style="@style/homePageButton" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/connectionslabel"
+            android:text="Connections"
+            style="@style/homePageLabel" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/settingslabel"
+            android:text="Settings"
+            style="@style/homePageLabel" />
+    </LinearLayout>
+
 </LinearLayout>

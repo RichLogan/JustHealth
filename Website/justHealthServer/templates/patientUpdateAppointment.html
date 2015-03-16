@@ -2,7 +2,17 @@
 
 {% block title %}Update Appointment{% endblock %}
 
-{% block scriptsAndStyles %}s
+{% block scriptsAndStyles %}
+<script>
+$(document).ready(function() {
+	$('#createAppointmentForm').submit(function(e) {
+		if (!formcheck1()) {
+			e.preventDefault();
+			return false;
+		}
+	});
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -12,16 +22,16 @@
 <h4>Update Appointment</h4>
 <hr>
   <!--form to update appointments -->
-	<form name="createAppointment" method="POST" action="/patientUpdateAppointment">
+	<form name="createAppointment" method="POST" action="/patientUpdateAppointment" id="createAppointmentForm">
 		{% for app in request %}
 		<div class="form-group">
 			<input class="hidden" type="text" name="appid" value="{{app.appid}}" readonly="true">
 		</div>
-	   	<div class="form-group">
-	        <label for="name">Name</label>
+	   	<div class="form-group appt-item-required">
+	        <label for="name">Appointment Title</label>
     		<input class="form-control input-sm" type="text" name="name" value="{{app.name}}">
     	</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="type">Appointment Type</label>
 			  <select name="type" class="form-control input-sm">
 				<option class="placeholder" selected> {{app.apptype}}</option>
@@ -30,27 +40,27 @@
 	      	{% endfor %}
 		 		</select>
 		</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="nameNumber">Building Name/Number</label>
 			<input class="form-control input-sm" type="text" name="nameNumber" value="{{app.addressnamenumber}}">
 		</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="postcode">Postcode</label>
 			<input class="form-control input-sm" type="text" name="postcode" value="{{app.postcode}}">
 		</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="dateFrom">Start Date</label>
 			<input class="form-control input-sm" type="date" name="dateFrom" id="dateFrom" value="{{app.startdate}}">
 		</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="startTime">Start Time</label>
 			<input class="form-control input-sm" type="time" name="startTime" id="startTime" value="{{app.starttime}}">
 		</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="dateTo">End Date</label>
 			<input class="form-control input-sm" type="date" name="dateTo" id="dateTo" value="{{app.enddate}}">
 		</div>
-		<div class="form-group">
+		<div class="form-group appt-item-required">
 			<label for="endTime">End Time</label>
 			<input class="form-control input-sm" type="time" name="endTime" id="endTime" value="{{app.endtime}}">
 		</div>
