@@ -3,10 +3,11 @@ package justhealth.jhapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,9 +21,6 @@ import java.util.HashMap;
 public class MyPatients extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_patients);
 
@@ -30,24 +28,42 @@ public class MyPatients extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Patients");
 
-        String username = getSharedPreferences("account", 0).getString("username", null);
-        displayPatients(getPatients(username));
+        loadPatients();
     }
 
-    private JSONArray getPatients(String username) {
-        HashMap<String, String> parameters = new HashMap<String, String>();
-        parameters.put("username", username);
+    private void loadPatients() {
+        final HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("username", getSharedPreferences("account", 0).getString("username", null));
 
-        String response = Request.post("getConnections", parameters, getApplicationContext());
-        try {
-            JSONObject allConnections = new JSONObject(response);
-            String completed = allConnections.getString("completed");
-            JSONArray completedConnections = new JSONArray(completed);
-            return completedConnections;
-        } catch (JSONException e) {
-            System.out.println(e.getStackTrace());
-        }
-        return null;
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(MyPatients.this, "Loading...", "Loading your patients", true);
+            }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    String response = Request.post("getConnections", parameters, getApplicationContext());
+                    return new JSONArray(new JSONObject(response).getString("completed"));
+                } catch (JSONException e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray result) {
+                try {
+                    super.onPostExecute(result);
+                    displayPatients(result);
+                    progressDialog.dismiss();
+                } catch (NullPointerException e) {
+                    Feedback.toast("Could not load your patients", false, getApplicationContext());
+                }
+            }
+        }.execute();
     }
 
     private void displayPatients(JSONArray patients) {
