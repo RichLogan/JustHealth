@@ -211,7 +211,6 @@ def getAndroidNotificationContent(notification):
         with database.transaction():
           doesNotExist.delete_instance()
           return "DoesNotExist"
-    
 
     if notification['notificationtype'] == "Carer Missed Prescription":
       try:
