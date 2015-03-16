@@ -66,23 +66,23 @@ function runTests {
 
   echo "Iteration 4"
   echo "--"
-    echo "Search Patient Carer"
-    python -m unittest discover Iteration\ 4/Test\ Cases/ testSearchPatientCarer.py
+    # echo "Search Patient Carer"
+    # python -m unittest discover Iteration\ 4/Test\ Cases/ testSearchPatientCarer.py
   
     echo "Create Connection"
     python -m unittest discover Iteration\ 4/Test\ Cases/ testCreateConnection.py
     
-    echo "Complete Connection"
-    python -m unittest discover Iteration\ 4/Test\ Cases/ testCompleteConnection.py
+    # echo "Complete Connection"
+    # python -m unittest discover Iteration\ 4/Test\ Cases/ testCompleteConnection.py
     
-    echo "Delete Connection"
-    python -m unittest discover Iteration\ 4/Test\ Cases/ testDeleteConnection.py
+    # echo "Delete Connection"
+    # python -m unittest discover Iteration\ 4/Test\ Cases/ testDeleteConnection.py
     
-    echo "Cancel Connection"
-    python -m unittest discover Iteration\ 4/Test\ Cases/ testCancelConnection.py
+    # echo "Cancel Connection"
+    # python -m unittest discover Iteration\ 4/Test\ Cases/ testCancelConnection.py
     
-    echo "Get Connections"
-    python -m unittest discover Iteration\ 4/Test\ Cases/ testGetConnections.py
+    # echo "Get Connections"
+    # python -m unittest discover Iteration\ 4/Test\ Cases/ testGetConnections.py
   echo -e "\n"
 
   # echo "Iteration 5"
