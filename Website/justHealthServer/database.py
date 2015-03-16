@@ -176,7 +176,7 @@ class TakePrescription(BaseModel):
         db_table = 'takeprescription'
 
 class Notificationtype(BaseModel):
-    typename = CharField(max_length=25, primary_key=True)
+    typename = CharField(max_length=50, primary_key=True)
     typeclass = CharField(max_length=25)
 
     class Meta:

@@ -43,15 +43,13 @@
             </RelativeLayout>
 
         </LinearLayout>
-         <Button
-             android:text="@string/searchNHS"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginRight="15sp"
-             android:layout_marginLeft="15sp"
-             android:id="@+id/search"
-             android:layout_marginTop="35dp"
-             style="@style/primaryButton"  />
+
+        <Button
+            android:text="Search"
+            android:id="@+id/search"
+            android:layout_marginTop="35sp"
+            style="@style/primaryButton" />
+        
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>

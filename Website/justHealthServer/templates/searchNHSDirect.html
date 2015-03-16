@@ -3,8 +3,27 @@
 {% block title %}Search NHS Direct{% endblock %}
 
 {% block scriptsAndStyles %}
+<script type="text/javascript">
 
+  function search() {
+    var request = document.getElementById('searchterm').value;
+    var edited = "";
+    for(var i = 0; i < request.length; i++) {
+      var newLetter;
+      if (request.charAt(i) == " ") {
+         newLetter = "+";
+      }
+      else {
+        newLetter = request.charAt(i);
+      }
+      edited = edited.concat(newLetter);
+    }
+    website = "http://www.nhs.uk/Search/Pages/Results.aspx?___JSSniffer=true&q="
+    searchTerm = website.concat(edited);
+    window.open(searchTerm, '_blank');
+  }
 
+</script>
 {% endblock %}
 
 {% block content %}
@@ -14,15 +33,15 @@
   <hr>
 <!--Search NHS website -->
   <fieldset class="register-inner">
-    <form action="/nhsSearch" method="POST">
+    <form onsubmit="search()">
       <div class="form-group">
 
         <h5> Do you have something that you would like to search the NHS for directly?</h5>
         <h5> Enter it into the search below and we'll take you straight to their website!</h5>
         <label for="searchTerms"></label>
-        <input class="form-control input-sm" type="text" name="searchterm">
+        <input class="form-control input-sm" type="text" name="searchterm" id="searchterm">
       </div>
-      <input class="form-control" type="hidden" name="searchTerms" value='{{searchTerms}}'>
+      <input class="form-control" type="hidden" name="searchTerms" id="searchTerms" value='{{searchTerms}}'>
       <button type="submit" class="btn btn-success pull-right">Search</button>
     </form>
   </fieldset>
