@@ -668,14 +668,16 @@ def createConnection(details):
     currentUser = details['username']
     targetUser = details['target']
 
+    # Test Users
+
     try:
-        currentUser = details['username']
-    except KeyError, e:
+        doesUserExist = Client.select().where(Client.username == currentUser).get()
+    except Client.DoesNotExist:
         return "User does not exist"
     try:
-        targetUser = details['username']
-    except KeyError, e:
-        return "target User doesNotExist"
+        doesTargetExist = Client.select().where(Client.username == targetUser).get()
+    except Client.DoesNotExist:
+        return "Target does not exist"
 
     # Get user types
     currentUser_type = json.loads(getAccountInfo(currentUser))['accounttype']
@@ -772,20 +774,20 @@ def deleteConnection(details):
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
     connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
-    try (userType == "Patient" and connectionType == "Carer"):
+    try: 
         instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
         with database.transaction():
             instance.delete_instance()
             return "True"
-        except Patient.DoesNotExist:    
-            try: (userType == "Carer" and connectionType == "Patient"):
-                instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
-                with database.transaction():
-                     instance.delete_instance()
+    except Patientcarer.DoesNotExist:
+        try:
+            instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
+            with database.transaction():
+                instance.delete_instance()
                 return "True"
-            except: Carer.DoesNotExist:
+        except Patientcarer.DoesNotExist:
+            return "False"
     return "False"
-
 
 @app.route('/api/cancelConnection', methods=['POST'])
 @auth.login_required
@@ -802,10 +804,13 @@ def cancelRequest(details):
             instance.delete_instance()
             return "True"
     except Relationship.DoesNotExist:
-        instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "True"
+        try:
+            instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
+            with database.transaction():
+                instance.delete_instance()
+                return "True"
+        except Relationship.DoesNotExist:
+            return "False"
     return "False"
 
 @app.route('/api/getConnections', methods=['POST'])
