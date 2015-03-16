@@ -270,6 +270,11 @@ public class SelfAppointments extends Activity {
                                 startActivity(intent);
                             } else if (which == 1) {
                                 //Edit appointment
+                                Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
+                                intent.putExtra("appointmentDetails", appointmentDetails);
+                                startActivity(intent);
+                            } else if (which == 2) {
+                                //Edit appointment
                                 HashMap<String, String> details = new HashMap<String, String>();
                                 details.put("username", appointmentDetails.get("invitee"));
                                 details.put("action", "Accept");
@@ -282,7 +287,7 @@ public class SelfAppointments extends Activity {
                                 else {
                                     Feedback.toast("Somethings gone wrong", false, getApplicationContext());
                                 }
-                            } else if (which == 2) {
+                            } else if (which == 3) {
                                 HashMap<String, String> details = new HashMap<String, String>();
                                 details.put("username", appointmentDetails.get("invitee"));
                                 details.put("action", "Decline");
