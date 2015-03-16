@@ -259,6 +259,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ViewAppointment"
+            android:label="ViewAppointment">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SelfAppointments" />
+        </activity>
+
     </application>
 
 </manifest>

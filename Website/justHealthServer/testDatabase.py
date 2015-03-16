@@ -20,6 +20,8 @@ class Client(BaseModel):
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
+    profilepicture = CharField(max_length=100, null=True)
+    telephonenumber = CharField(max_length=100, null=True)
     verified = BooleanField()
 
     class Meta:
@@ -43,6 +45,15 @@ class Patient(BaseModel):
 
     class Meta:
         db_table = 'patient'
+
+class Admin(BaseModel):
+    firstname = CharField(max_length=100)
+    ismale = BooleanField()
+    surname = CharField(max_length=100)
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
+
+    class Meta:
+        db_table = 'admin'
 
 class uq8LnAWi7D(BaseModel):
     expirydate = DateField(null=True)
@@ -107,6 +118,7 @@ class Appointments(BaseModel):
     description = CharField(max_length=5000, null=True)
     private = BooleanField()
     androideventid = IntegerField(null=True)
+    accepted = BooleanField(null=True)
 
     class Meta:
         db_table = 'appointments'
@@ -123,9 +135,6 @@ class Prescription(BaseModel):
     medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
     dosage = IntegerField(null=True)
     dosageunit = CharField(null=True)
-    quantity = IntegerField(null=True)
-    startdate = DateField(null=True)
-    enddate = DateField(null=True)
     stockleft = IntegerField(null=True)
     prerequisite = CharField(null=True)
     dosageform = CharField(null=True)
@@ -144,6 +153,27 @@ class Prescription(BaseModel):
 
     class Meta:
         db_table = 'prescription'
+
+class Notes(BaseModel):
+    noteid = PrimaryKeyField()
+    carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carernotes')
+    patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patientnotes')
+    notes = CharField(null=True)
+    title = CharField(null=True)
+    datetime = DateField()
+
+    class Meta:
+        db_table = 'notes'
+
+class TakePrescription(BaseModel):
+    takeid  = PrimaryKeyField()
+    prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid')
+    currentcount = IntegerField()
+    startingcount = IntegerField()
+    currentdate = DateField()
+
+    class Meta:
+        db_table = 'takeprescription'
 
 class Notificationtype(BaseModel):
     typename = CharField(max_length=25, primary_key=True)
@@ -173,10 +203,15 @@ class Reminder(BaseModel):
     extraDate = CharField(null=True)
     extraFrequency = IntegerField(null=True, default=None)
 
+class Androidregistration(BaseModel):
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
+    registrationid = CharField(unique=True)
+
     class Meta:
-        db_table = 'reminder'            
+        db_table = 'androidregistration'
 
 def createAll():
+    """Creates all tables, dropping old instances if they exist"""
     dropAll()
     Client.create_table()
     Carer.create_table()
@@ -190,52 +225,49 @@ def createAll():
     Appointments.create_table()
     Medication.create_table()
     Prescription.create_table()
+    Notes.create_table()
+    TakePrescription.create_table()
     Notificationtype.create_table()
     Notification.create_table()
     Reminder.create_table()
-
+    Androidregistration.create_table()
+    Admin.create_table()
+    
 def dropAll():
+    """Drops all tables providing that they exists"""
     if Client.table_exists():
         Client.drop_table(cascade=True)
-
     if Patient.table_exists():
         Patient.drop_table(cascade=True)
-    
     if Carer.table_exists():
         Carer.drop_table(cascade=True)
-
     if uq8LnAWi7D.table_exists():
         uq8LnAWi7D.drop_table(cascade=True)
-
     if Deactivatereason.table_exists():
         Deactivatereason.drop_table(cascade=True)
-
     if Userdeactivatereason.table_exists():
         Userdeactivatereason.drop_table(cascade=True)
-
     if Relationship.table_exists():
         Relationship.drop_table(cascade=True)
-
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
-
-    if Appointmenttype.table_exists():
-        Appointmenttype.drop_table(cascade=True)
-
     if Appointments.table_exists():
         Appointments.drop_table(cascade=True)
-
     if Medication.table_exists():
         Medication.drop_table(cascade=True)
-
     if Prescription.table_exists():
         Prescription.drop_table(cascade=True)
-
+    if Notes.table_exists():
+        Notes.drop_table(cascade=True)
+    if TakePrescription.table_exists():
+        TakePrescription.drop_table(cascade=True)
     if Notificationtype.table_exists():
         Notificationtype.drop_table(cascade=True)
-
     if Notification.table_exists():
         Notification.drop_table(cascade=True)
-
     if Reminder.table_exists():
         Reminder.drop_table(cascade=True)
+    if Androidregistration.table_exists():
+        Androidregistration.drop_table(cascade=True)
+    if Admin.table_exists():
+        Admin.drop_table(cascade=True)

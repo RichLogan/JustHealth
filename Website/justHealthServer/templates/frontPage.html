@@ -50,24 +50,28 @@
   </head>
 
   <body class="clear">
+    <button id="register" class="btn btn-success" onclick="javascript:location.href='/register'">Sign up now!</button>
     <div id="loginForm">
       <form class="form-inline" method="POST" action="/login">
-        <div class="form-group">
+        <div class="form-group" style="margin">
           <label class="sr-only" for="username">Username</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+          <input type="text" class="form-control input-sm" id="username" name="username" placeholder="Username">
         </div>
         <div class="form-group">
           <label class="sr-only" for="password">Password</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          <input type="password" class="form-control input-sm" id="password" name="password" placeholder="Password">
         </div>
-        <button type="submit" class="btn btn-trans"><i class="fa fa-sign-in" style="font-size: 2em;"></i></button>
+        <div class="form-group">
+          <button type="submit" class="btn btn-trans btn-xs"><i class="fa fa-angle-double-right" style="font-size: 2em;"></i></button>
+        </div>
       </form>
     </div>
 
     <div id="landing">
       <div id="mainTitle">
-        <h1>JustHealth</h1>
+        <img id="logo" src="/static/images/frontlogotrans.png" style="margin-left:5%;"></img>
         <span class="fa-stack" id="toAbout" style="font-size: 50px;">
+
           <i class="fa fa-angle-double-down" style="padding-top: 25%;padding-left: 33%;"></i>
           <i class="fa fa-circle-thin fa-stack-2x"></i>
         </span>

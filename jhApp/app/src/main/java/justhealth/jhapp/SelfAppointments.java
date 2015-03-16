@@ -124,69 +124,70 @@ public class SelfAppointments extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.println(getApps);
+        if (getApps != null) {
+            for (int i = 0; i < getApps.length(); i++) {
+                try {
+                    JSONObject obj = getApps.getJSONObject(i);
+                    final String creator = obj.getString("creator");
+                    final String invitee = obj.getString("invitee");
+                    final String appid = obj.getString("appid");
+                    final String name = obj.getString("name");
+                    final String appType = obj.getString("apptype");
+                    final String startDate = obj.getString("startdate");
+                    final String startTime = obj.getString("starttime");
+                    final String endDate = obj.getString("enddate");
+                    final String endTime = obj.getString("endtime");
+                    final String address = obj.getString("addressnamenumber");
+                    final String postcode = obj.getString("postcode");
+                    final String description = obj.getString("description");
+                    final String isPrivate = obj.getString("private");
+                    final String androidId = obj.getString("androideventid");
 
+                    final HashMap<String, String> appDetails = new HashMap<>();
+                    appDetails.put("creator", creator);
+                    appDetails.put("invitee", invitee);
+                    appDetails.put("appid", appid);
+                    appDetails.put("name", name);
+                    appDetails.put("appType", appType);
+                    appDetails.put("startDate", startDate);
+                    appDetails.put("startTime", startTime);
+                    appDetails.put("endDate", endDate);
+                    appDetails.put("endTime", endTime);
+                    appDetails.put("addressNameNumber", address);
+                    appDetails.put("postcode", postcode);
+                    appDetails.put("details", description);
+                    appDetails.put("private", isPrivate);
+                    appDetails.put("androidId", androidId);
 
-        for (int i = 0; i < getApps.length(); i++) {
-            try {
-                JSONObject obj = getApps.getJSONObject(i);
-                final String creator = obj.getString("creator");
-                final String invitee = obj.getString("invitee");
-                final String appid = obj.getString("appid");
-                final String name = obj.getString("name");
-                final String appType = obj.getString("apptype");
-                final String startDate = obj.getString("startdate");
-                final String startTime = obj.getString("starttime");
-                final String endDate = obj.getString("enddate");
-                final String endTime = obj.getString("endtime");
-                final String address = obj.getString("addressnamenumber");
-                final String postcode = obj.getString("postcode");
-                final String description = obj.getString("description");
-                final String isPrivate = obj.getString("private");
-                final String androidId = obj.getString("androideventid");
+                    Date appDateTime = getDateTimeObject(startDate, startTime);
+                    Date now = new Date();
+                    if (appDateTime.after(now)) {
 
-                final HashMap<String, String> appDetails = new HashMap<>();
-                appDetails.put("creator", creator);
-                appDetails.put("invitee", invitee);
-                appDetails.put("appid", appid);
-                appDetails.put("name", name);
-                appDetails.put("appType", appType);
-                appDetails.put("startDate", startDate);
-                appDetails.put("startTime", startTime);
-                appDetails.put("endDate", endDate);
-                appDetails.put("endTime", endTime);
-                appDetails.put("addressNameNumber", address);
-                appDetails.put("postcode", postcode);
-                appDetails.put("details", description);
-                appDetails.put("private", isPrivate);
-                appDetails.put("androidId", androidId);
+                        ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
+                        Button app = new Button(newContext);
+                        app.setBackgroundColor(Color.rgb(51, 122, 185));
+                        app.setText(name + " " + startDate + " " + startTime);
+                        LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
 
-                Date appDateTime = getDateTimeObject(startDate, startTime);
-                Date now = new Date();
-                if (appDateTime.after(now)) {
+                        layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
-                    Button app = new Button(newContext);
-                    app.setBackgroundColor(Color.rgb(51, 122, 185));
-                    app.setText(name + " " + startDate + " " + startTime);
-                    LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+                        LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
+                        center.setMargins(0, 30, 0, 0);
+                        center.gravity = Gravity.CENTER;
+                        app.setLayoutParams(center);
 
-                    layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        System.out.println("onclick listener applied");
+                        app.setOnClickListener(new Button.OnClickListener() {
+                            public void onClick(View view) {
+                                appointmentAction(appDetails);
+                            }
+                        });
+                    }
 
-                    LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
-                    center.setMargins(0,30,0,0);
-                    center.gravity = Gravity.CENTER;
-                    app.setLayoutParams(center);
-
-                    System.out.println("onclick listener applied");
-                    app.setOnClickListener(new Button.OnClickListener() {
-                        public void onClick(View view) {
-                            appointmentAction(appDetails);
-                        }
-                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -215,11 +216,15 @@ public class SelfAppointments extends Activity {
                                         .setData(builder.build());
                                 startActivity(intent);
                             } else if (which == 1) {
+                                Intent intent = new Intent(SelfAppointments.this, ViewAppointment.class);
+                                intent.putExtra("appointmentDetails", appointmentDetails);
+                                startActivity(intent);
+                            } else if (which == 2) {
                                 //Edit appointment
                                 Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
                                 intent.putExtra("appointmentDetails", appointmentDetails);
                                 startActivity(intent);
-                            } else if (which == 2) {
+                            } else if (which == 3) {
                                 //Delete appointment
                                 AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
 
@@ -265,6 +270,11 @@ public class SelfAppointments extends Activity {
                                 startActivity(intent);
                             } else if (which == 1) {
                                 //Edit appointment
+                                Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
+                                intent.putExtra("appointmentDetails", appointmentDetails);
+                                startActivity(intent);
+                            } else if (which == 2) {
+                                //Edit appointment
                                 HashMap<String, String> details = new HashMap<String, String>();
                                 details.put("username", appointmentDetails.get("invitee"));
                                 details.put("action", "Accept");
@@ -277,7 +287,7 @@ public class SelfAppointments extends Activity {
                                 else {
                                     Feedback.toast("Somethings gone wrong", false, getApplicationContext());
                                 }
-                            } else if (which == 2) {
+                            } else if (which == 3) {
                                 HashMap<String, String> details = new HashMap<String, String>();
                                 details.put("username", appointmentDetails.get("invitee"));
                                 details.put("action", "Decline");
@@ -305,7 +315,6 @@ public class SelfAppointments extends Activity {
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void deleteAppointment(HashMap<String, String> appointmentDetails) {
         //The API takes the username and AppID
-        appointmentDetails.get("appid");
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
 

@@ -13,13 +13,13 @@ import android.widget.Button;
 import android.widget.IconTextView;
 
 public class HomeCarer extends Activity {
+
     /**
      * Creates the action bar items for the home carer page
      * @param savedInstanceState The options menu in which the items are placed
      * @return True must be returned in order for the terms and conditions page to be displayed
      * This page displays 6 buttons for a user to access all settings options
      */
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_carer);
@@ -29,6 +29,10 @@ public class HomeCarer extends Activity {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(username);
+
+        System.out.println("Ping");
+        Request.serverCheck(this);
+        System.out.println("Completed");
 
         // Settings button
         IconTextView settings = (IconTextView) findViewById(R.id.settings);
@@ -89,6 +93,12 @@ public class HomeCarer extends Activity {
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Request.serverCheck(this);
     }
 
     @Override
