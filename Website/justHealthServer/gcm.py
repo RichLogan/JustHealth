@@ -205,22 +205,23 @@ def getAndroidNotificationContent(notification):
       try:
         takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
         prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
+        content = "You only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
       except Prescription.DoesNotExist:
         doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
         with database.transaction():
           doesNotExist.delete_instance()
           return "DoesNotExist"
-    content = "You only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+    
 
     if notification['notificationtype'] == "Carer Missed Prescription":
       try:
         takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
         prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
+        content = "Your patient " + str(prescription.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
       except Prescription.DoesNotExist:
         doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
         with database.transaction():
           doesNotExist.delete_instance()
           return "DoesNotExist"
-    content = "Your patient " + str(prescription.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
     
     return content
