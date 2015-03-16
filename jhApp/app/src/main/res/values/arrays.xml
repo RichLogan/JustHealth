@@ -28,12 +28,14 @@
 
     <string-array name="patient_appointments_options">
         <item>View In Calendar</item>
+        <item>View Details</item>
         <item>Edit Appointment</item>
         <item>Delete Appointment</item>
     </string-array>
 
     <string-array name="patient_invitee_appointments_options">
         <item>View In Calendar</item>
+        <item>View Details</item>
         <item>Accept Appointment</item>
         <item>Decline Appointment</item>
     </string-array>

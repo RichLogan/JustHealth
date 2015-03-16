@@ -151,51 +151,53 @@ public class CarerPatientAppointments extends Activity {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < getApps.length(); i++) {
-            try {
-                JSONObject obj = getApps.getJSONObject(i);
-                final String appid = obj.getString("appid");
-                final String creator = obj.getString("creator");
-                final String name = obj.getString("name");
-                final String appType = obj.getString("apptype");
-                final String startDate = obj.getString("startdate");
-                final String startTime = obj.getString("starttime");
-                final String endDate = obj.getString("enddate");
-                final String endTime = obj.getString("endtime");
-                final String address = obj.getString("addressnamenumber");
-                final String postcode = obj.getString("postcode");
-                final String description = obj.getString("description");
-                final String isPrivate = obj.getString("private");
-                final String androidId = obj.getString("androideventid");
+        if (getApps != null) {
+            for (int i = 0; i < getApps.length(); i++) {
+                try {
+                    JSONObject obj = getApps.getJSONObject(i);
+                    final String appid = obj.getString("appid");
+                    final String creator = obj.getString("creator");
+                    final String name = obj.getString("name");
+                    final String appType = obj.getString("apptype");
+                    final String startDate = obj.getString("startdate");
+                    final String startTime = obj.getString("starttime");
+                    final String endDate = obj.getString("enddate");
+                    final String endTime = obj.getString("endtime");
+                    final String address = obj.getString("addressnamenumber");
+                    final String postcode = obj.getString("postcode");
+                    final String description = obj.getString("description");
+                    final String isPrivate = obj.getString("private");
+                    final String androidId = obj.getString("androideventid");
 
-                final HashMap<String, String> appDetails = new HashMap<>();
-                appDetails.put("appid", appid);
-                appDetails.put("name", name);
-                appDetails.put("appType", appType);
-                appDetails.put("startDate", startDate);
-                appDetails.put("startTime", startTime);
-                appDetails.put("endDate", endDate);
-                appDetails.put("endTime", endTime);
-                appDetails.put("addressNameNumber", address);
-                appDetails.put("postcode", postcode);
-                appDetails.put("details", description);
-                appDetails.put("private", isPrivate);
-                appDetails.put("androidId", androidId);
-                appDetails.put("creator", creator);
+                    final HashMap<String, String> appDetails = new HashMap<>();
+                    appDetails.put("appid", appid);
+                    appDetails.put("name", name);
+                    appDetails.put("appType", appType);
+                    appDetails.put("startDate", startDate);
+                    appDetails.put("startTime", startTime);
+                    appDetails.put("endDate", endDate);
+                    appDetails.put("endTime", endTime);
+                    appDetails.put("addressNameNumber", address);
+                    appDetails.put("postcode", postcode);
+                    appDetails.put("details", description);
+                    appDetails.put("private", isPrivate);
+                    appDetails.put("androidId", androidId);
+                    appDetails.put("creator", creator);
 
-                if (filter.equals("PatientsOnly")) {
-                    if (creator.equals(targetUsername)) {
+                    if (filter.equals("PatientsOnly")) {
+                        if (creator.equals(targetUsername)) {
+                            addToView(appDetails);
+                        }
+                    } else if (filter.equals("CarerPatient")) {
+                        if (creator.equals(carerUsername)) {
+                            addToView(appDetails);
+                        }
+                    } else {
                         addToView(appDetails);
                     }
-                } else if (filter.equals("CarerPatient")) {
-                    if (creator.equals(carerUsername)) {
-                        addToView(appDetails);
-                    }
-                } else {
-                    addToView(appDetails);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
     }

@@ -23,6 +23,15 @@ video#background {
   text-align: center;
 }
 
+#register {
+  position: fixed;
+  margin-left: 0.9%;
+  margin-top: 0.9%;
+  z-index: 3;
+  background-color:#2272EB;
+  font-style: bold;
+}
+
 .btn-trans {
   background-color: transparent;
   color: #FFFFFF;
@@ -39,9 +48,9 @@ video#background {
 
 #loginForm {
   position: fixed;
-  margin-left: 87em;
+  margin-left: 70%;
   margin-top: 0.9%;
-  z-index: 2;
+  z-index: 3;
 }
 
 #loginForm input {
@@ -73,8 +82,8 @@ video#background {
 }
 
 .segmentText {
-  font-size: 3em;
-  margin-top: 3em;"
+  font-size: 2.3em;
+  margin-top: 3.5em;"
 }
 
 .segmentImage {

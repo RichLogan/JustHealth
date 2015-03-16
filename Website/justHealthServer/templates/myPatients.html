@@ -81,12 +81,12 @@
               <div id="collapse{{patient.username}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{patient.username}}">
                 <div class="panel-body">
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       
                       <!-- View Prescriptions -->
-                      <a onclick='$("#prescription{{patient.username}}").modal("toggle")'>
+                      <a href="#" onclick='$("#prescription{{patient.username}}").modal("toggle")'>
                         <div style="height:25px;">
-                          <p style="line-height: 20px;font-size: 20px;">
+                          <p style="line-height: 20px;font-size: 17px;">
                             <i class="fa fa-medkit"></i> Prescriptions
                           </p>
                         </div>
@@ -598,11 +598,11 @@
                       </div>
                     </div>
                     
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <!-- View Appointments -->
-                      <a onclick='$("#appointments{{patient.username}}").modal("toggle")'>
+                      <a href="#" onclick='$("#appointments{{patient.username}}").modal("toggle")'>
                         <div style="height:25px;">
-                          <p style="line-height: 20px;font-size: 20px;">
+                          <p style="line-height: 20px;font-size: 17px;">
                             <i class="fa fa-calendar"></i> Appointments
                           </p>
                         </div>
@@ -747,19 +747,16 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
+                  
+                    <div class="col-md-4">
                       <!-- Notes -->
                       <a href="/notes?user={{patient.username}}">
                         <div style="height:25px;">
-                          <p style="line-height:20px;font-size:20px;">
+                          <p style="line-height:20px;font-size:17px;">
                             <i class="fa fa-pencil"></i> Notes
                           </p>
                         </div>
                       </a>
-                    </div>
-                    <div class="col-md-6">
                     </div>
                   </div>
                 </div>
