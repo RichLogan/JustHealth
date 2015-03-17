@@ -255,7 +255,7 @@ def registration():
 def logout():
     """Terminates user session"""
     session.pop('username', None)
-    return redirect(url_for('index'))
+    return redirect('/')
 
 @app.route('/users/activate/<payload>')
 def verifyUser(payload):

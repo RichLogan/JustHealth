@@ -429,3 +429,7 @@ fieldset.form-admin {
 }
 
 .double_column_list li {float: left; width: 15%;}
+
+.btn-prescription {
+  margin-bottom: 2px;
+}
