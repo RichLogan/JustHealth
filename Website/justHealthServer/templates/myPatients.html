@@ -116,99 +116,119 @@
                                 <p><i>If the medication you are looking for is not here, please <a href="/contactUs">contact us</a></i></p>
                                 <form action="/addPrescription" method="POST" class="form-horizontal" id="{{patient.username}}_addPrescriptionForm" role="form" >
                                   <input name="username" type="hidden" value="{{patient.username}}">
-                                  <div class="row">
-                                    <div class="col-md-6">
+
+                                  <div class="row" style="margin: 0 auto;">
+                                    <div class="col-md-5">
                                       <div class="form-group {{patient.username}}_pres-item-required">
-                                        <label for="{{patient.username}}_medication">Medication<sup style="color:red">*</sup></label> 
+                                        <label for="{{patient.username}}_medication">Name<sup style="color:red">*</sup></label> 
                                         <select name="medication" class="form-control" id="{{patient.username}}_medication">
+                                          <option class="placeholder" disabled selected>-- Please select medication --</option>
                                           {% for medication in medicationList %}
                                             <option>{{medication.name}}</option>
                                           {% endfor %}
                                         </select>
                                       </div>
-
-                                      <div class="form-group {{patient.username}}_pres-item-required">
-                                        <label for="{{patient.username}}_dosage">Dosage<sup style="color:red">*</sup></label>
-                                        <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)" onkeypress="return isNumber(event)">
-                                      </div>
-
-                                      <div class="form-group {{patient.username}}_pres-item-required">
-                                        <label for="{{patient.username}}_frequency">Frequency<sup style="color:red">*</sup></label>
-                                        <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)" onkeypress="return isNumber(event)" >
-                                      </div>
                                     </div>
-                              
-                                    <div class="col-md-6">
+                                  
+                                    <div class="col-md-5 col-md-offset-1">
                                       <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_quantity">Quantity<sup style="color:red">*</sup></label>
-                                        <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="Quantity (To take at once)">
+                                        <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="How many to take each time?">
                                       </div>
+                                    </div>
+                                  </div>
 
+                                  <div class="row input-append" style="margin: 0 auto;">
+                                    <div class="col-md-3">
                                       <div class="form-group {{patient.username}}_pres-item-required">
-                                        <label for="{{patient.username}}_dosageUnit">Dosage Unit<sup style="color:red">*</sup></label>
+                                        <label for="{{patient.username}}_dosage">Dosage<sup style="color:red">*</sup> <span style="color:gray">(e.g 200)</span></label>
+                                        <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Weight of medication" onkeypress="return isNumber(event)">
+                                      </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_dosageUnit"><span style="color:white">.</span></label>
                                         <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
                                           <option>mg</option>
                                           <option>ml</option>
                                           <option>puffs</option>
                                         </select>
                                       </div>
+                                    </div>
 
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}">Days to take the medication</label>
-                                        <br />
-                                        <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Monday" id="{{patient.username}}_Monday"><strong>Monday</strong>
-                                        </label> 
-                                        <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Tuesday"id="{{patient.username}}_Tuesday"><strong>Tuesday</strong>
-                                        </label>
-                                        <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Wednesday" id="{{patient.username}}_Wednesday"><strong>Wednesday</strong>
-                                        </label>
-                                        <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Thursday"id="{{patient.username}}_Thursday"><strong>Thursday</strong>
-                                        </label><br />
-                                        <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Friday" id="{{patient.username}}_Friday"><strong>Friday</strong>
-                                        </label>
-                                        <label class="checkbox-inline">
-                                           <input type="checkbox" value="" name="Saturday" id="{{patient.username}}_Saturday"><strong>Saturday</strong>
-                                        </label>
-                                        <label class="checkbox-inline">
-                                           <input type="checkbox" value="" name="Sunday" id="{{patient.username}}_Sunday"><strong>Sunday</strong>
-                                        </label>
+                                    <div class="col-md-5 col-md-offset-1">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_frequency">Frequency<sup style="color:red">*</sup></label>
+                                        <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="How many times a day?" onkeypress="return isNumber(event)" >
                                       </div>
                                     </div>
                                   </div>
 
                                   <div class="row" style="margin: 0 auto;">
-                                    <div class="form-group {{patient.username}}_pres-item-required">
-                                      <label for="{{patient.username}}_dosageform">Type<sup style="color:red">*</sup></label>
-                                      <input name="dosageform" type="text" class="form-control" id="{{patient.username}}_dosageform" placeholder="Dosage Form (e.g Tablet)">
+                                    <div class="col-md-6">
+                                      <div class="form-group">
+                                        <label for="{{patient.username}}">Days to take the prescription:</label>
+                                        </br>
+                                        <label class="checkbox-inline">
+                                          <input type="checkbox" value="" name="Monday" id="{{patient.username}}_Monday"><strong>Monday</strong>
+                                        </label></br>
+                                        <label class="checkbox-inline">
+                                          <input type="checkbox" value="" name="Tuesday"id="{{patient.username}}_Tuesday"><strong>Tuesday</strong>
+                                        </label></br>
+                                        <label class="checkbox-inline">
+                                          <input type="checkbox" value="" name="Wednesday" id="{{patient.username}}_Wednesday"><strong>Wednesday</strong>
+                                        </label></br>
+                                        <label class="checkbox-inline">
+                                          <input type="checkbox" value="" name="Thursday"id="{{patient.username}}_Thursday"><strong>Thursday</strong>
+                                        </label></br>
+                                        <label class="checkbox-inline">
+                                          <input type="checkbox" value="" name="Friday" id="{{patient.username}}_Friday"><strong>Friday</strong>
+                                        </label></br>
+                                        <label class="checkbox-inline">
+                                           <input type="checkbox" value="" name="Saturday" id="{{patient.username}}_Saturday"><strong>Saturday</strong>
+                                        </label></br>
+                                        <label class="checkbox-inline">
+                                           <input type="checkbox" value="" name="Sunday" id="{{patient.username}}_Sunday"><strong>Sunday</strong>
+                                        </label>
+                                      </div>
                                     </div>
 
-                                    <div class="col-md-6" style="margin: 0 auto;">
+                                    <div class="col-md-5">
                                       <div class="form-group {{patient.username}}_pres-item-required">
-                                        <label for="{{patient.username}}_startDate">Start Date<sup style="color:red">*</sup></label>
+                                        <label for="{{patient.username}}_dosageform">Type<sup style="color:red">*</sup> <span style="color:gray">(e.g capsule)</span></label>
+                                        <input name="dosageform" type="text" class="form-control" id="{{patient.username}}_dosageform" placeholder="Type of medication?">
+                                      </div>
+
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_stockleft">Supply<sup style="color:red">*</sup> <span style="color:gray">(e.g 21)</span></label>
+                                        <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Supply of medication">
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="row" style="margin: 0 auto;">
+                                    <div class="col-md-5">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_startDate">Start Date<sup style="color:red">*</sup> <span style="color:gray">(dd/mm/yyyy)</span></label>
                                         <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
                                   
-                                    <div class="col-md-6 pres-item-required">
-                                      <div class="form-{{patient.username}}_group">
-                                        <label for="{{patient.username}}_endDate">End Date<sup style="color:red">*</sup></label>
+                                    <div class="col-md-5 col-md-offset-1">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_endDate">End Date<sup style="color:red">*</sup> <span style="color:gray">(dd/mm/yyyy)</span></label>
                                         <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
+                                  </div>
 
-                                    <div class="form-group {{patient.username}}_pres-item-required">
-                                      <label for="{{patient.username}}_stockleft">Stock<sup style="color:red">*</sup></label>
-                                      <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Patient's current stock">
-                                    </div>
-
-                                    <div class="form-group">
-                                      <label for="{{patient.username}}_prerequisite">Observations</label>
-                                      <textarea class="form-control" name="prerequisite" id="{{patient.username}}_prerequisite"></textarea>
+                                  <div class="row" style="margin: 0 auto;">
+                                    <div class="col-md-11">
+                                      <div class="form-group">
+                                        <label for="{{patient.username}}_prerequisite">Guidance notes</label>
+                                        <textarea class="form-control" name="prerequisite" id="{{patient.username}}_prerequisite"></textarea>
+                                      </div>
                                     </div>
                                   </div>
                                   
