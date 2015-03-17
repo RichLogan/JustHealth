@@ -200,6 +200,11 @@ public class CarerPatientAppointments extends Activity {
                 }
             }
         }
+        else {
+            Button app = new Button(this);
+            app.setText("No appointments to show.");
+            Style.styleButton(app, "primary", (LinearLayout) findViewById(R.id.appointments), getApplicationContext());
+        }
     }
 
     /**

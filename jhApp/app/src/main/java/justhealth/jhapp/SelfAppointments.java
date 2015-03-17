@@ -103,10 +103,31 @@ public class SelfAppointments extends Activity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+
+        final HashMap<String, String> params = new HashMap<String, String>();
+
+        params.put("loggedInUser", username);
+        params.put("targetUser", username);
+        String postRequest = Request.post("getAllAppointments", params, getApplicationContext());
+
+        try {
+            getApps = new JSONArray(postRequest);
+            printUpcomingAppointments();
+        }
+        catch (Exception e) {
+            Feedback.toast("Unable to refresh appointments", false, getApplicationContext());
+        }
+
+    }
+
     private void getUpcomingAppointments() {
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
         final HashMap<String, String> details = new HashMap<String, String>();
 
@@ -216,6 +237,15 @@ public class SelfAppointments extends Activity {
                     e.printStackTrace();
                 }
             }
+        }
+        else {
+            ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
+            Button app = new Button(newContext);
+            app.setBackgroundColor(Color.rgb(51, 122, 185));
+            app.setText("No appointments to display.");
+            LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+
+            layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         }
     }
     /**
@@ -427,7 +457,6 @@ public class SelfAppointments extends Activity {
      * @param time the string of the time
      * @return a Date object of the combined date and time strings
      */
-
     private Date getDateTimeObject(String date, String time) {
         String dateTime = date + " " + time;
         System.out.println("string: " + dateTime);

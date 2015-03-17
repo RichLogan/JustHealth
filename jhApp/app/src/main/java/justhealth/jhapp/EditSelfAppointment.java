@@ -237,6 +237,7 @@ public class EditSelfAppointment extends Activity {
         System.out.println(androidAppId);
         if (androidAppId.equals("null")) {
             finish();
+            getIntent();
         }
         else {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -254,6 +255,7 @@ public class EditSelfAppointment extends Activity {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     // Cancelled.
                     finish();
+                    getIntent();
                 }
             });
 
@@ -308,6 +310,7 @@ public class EditSelfAppointment extends Activity {
             toast.show();
         }
         finish();
+        getIntent();
     }
 
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
