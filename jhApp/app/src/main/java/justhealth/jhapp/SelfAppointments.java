@@ -117,6 +117,8 @@ public class SelfAppointments extends Activity {
 
         try {
             getApps = new JSONArray(postRequest);
+            LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+            layout.removeAllViewsInLayout();
             printUpcomingAppointments();
         }
         catch (Exception e) {
@@ -157,6 +159,8 @@ public class SelfAppointments extends Activity {
                 try {
                     super.onPostExecute(result);
                     getApps = result;
+                    LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+                    layout.removeAllViewsInLayout();
                     printUpcomingAppointments();
                     progressDialog.dismiss();
                 } catch (NullPointerException e) {

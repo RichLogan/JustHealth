@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -67,7 +68,6 @@ public class CarerPatientAppointments extends Activity {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(firstname + "'s Appointments");
-
         Button filter = (Button) findViewById(R.id.filter);
         filter.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View view) {
@@ -128,6 +128,12 @@ public class CarerPatientAppointments extends Activity {
         }
     }
 
+    protected void onResume() {
+        super.onResume();
+        appointmentHolder.removeAllViews();
+        getAppointments(patient);
+    }
+
     private void getAppointments(final String targetUsername) {
         SharedPreferences account = getSharedPreferences("account", 0);
         carerUsername = account.getString("username", null);
@@ -137,6 +143,8 @@ public class CarerPatientAppointments extends Activity {
         //Text Boxes
         details.put("loggedInUser", carerUsername);
         details.put("targetUser", targetUsername);
+
+        System.out.println("Logged in user: " + carerUsername + "    targetUser: " + targetUsername);
 
         new AsyncTask<Void, Void, JSONArray>() {
             ProgressDialog progressDialog;
@@ -150,6 +158,7 @@ public class CarerPatientAppointments extends Activity {
             protected JSONArray doInBackground(Void... params) {
                 try {
                     String postRequest = Request.post("getAllAppointments", details, getApplicationContext());
+                    System.out.println(postRequest);
                     return new JSONArray(postRequest);
                 } catch (Exception e) {
                     return null;
@@ -161,6 +170,8 @@ public class CarerPatientAppointments extends Activity {
                 try {
                     super.onPostExecute(result);
                     getApps = result;
+                    LinearLayout layout = (LinearLayout) findViewById(R.id.appointments);
+                    layout.removeAllViewsInLayout();
                     assignAppointments(targetUsername);
                     progressDialog.dismiss();
                 } catch (NullPointerException e) {
@@ -178,6 +189,13 @@ public class CarerPatientAppointments extends Activity {
      * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for
      */
     private void assignAppointments(String targetUsername) {
+        //This is the default text.
+        appointmentHolder.removeAllViews();
+        Button defaultText = new Button(getApplicationContext());
+        defaultText.setId(R.id.defaultCarerPatientAppointmentMessage);
+        defaultText.setText("There are no appointments to display. " + firstname + " may have set some personal appointments to private, which would prevent you from seeing them.");
+        defaultText.setBackgroundColor(Color.rgb(51, 122, 185));
+        appointmentHolder.addView(defaultText);
 
         if (getApps != null) {
             for (int i = 0; i < getApps.length(); i++) {
@@ -241,6 +259,7 @@ public class CarerPatientAppointments extends Activity {
      * @param appointment This is a HashMap containing all of the details of a specific appointment. This is the appointment that will be printed.
      */
     private void addToView(final HashMap<String, String> appointment) {
+        removeDefault();
         String startDate = appointment.get("startDate");
         String startTime = appointment.get("startTime");
         String name = appointment.get("name");
@@ -269,23 +288,36 @@ public class CarerPatientAppointments extends Activity {
                     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) {
+                            appointmentHolder.removeAllViews();
                             filter = "None";
                             appointmentHolder.removeAllViews();
-                            getAppointments(patient);
+                            assignAppointments(patient);
                         } else if (which == 1) {
+                            appointmentHolder.removeAllViews();
                             filter = "PatientsOnly";
                             appointmentHolder.removeAllViews();
-                            getAppointments(patient);
+                            assignAppointments(patient);
                         } else if (which == 2) {
                             appointmentHolder.removeAllViews();
+                            appointmentHolder.removeAllViews();
                             filter = "CarerPatient";
-                            getAppointments(patient);
+                            assignAppointments(patient);
                         }
                     }
 
 
                 });
         alert.show();
+    }
+
+    private void removeDefault() {
+        try {
+            Button defaultText = (Button) findViewById(R.id.defaultCarerPatientAppointmentMessage);
+            appointmentHolder.removeView(defaultText);
+            System.out.println("removed view");
+        }catch (NullPointerException e) {
+            //do nothing
+        }
     }
 
     /**
