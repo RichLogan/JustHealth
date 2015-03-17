@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -100,30 +102,55 @@ public class SelfAppointments extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    /**
-     * This method makes a post request to the JustHealth API to retrieve all of the appointments for a given user.
-     * It then loops through the JSON Array that is returned from the server and adds them all to a HashMap.
-     */
 
     private void getUpcomingAppointments() {
-        //this will not work when API authentication is put in place
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
         String password = account.getString("password", null);
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        final HashMap<String, String> details = new HashMap<String, String>();
 
-        //Text Boxes
         details.put("loggedInUser", username);
         details.put("targetUser", username);
-        String postRequest = Request.post("getAllAppointments", details, this);
 
-        try {
-            getApps = new JSONArray(postRequest);
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(SelfAppointments.this, "Loading...", "Loading your appointments", true);
+            }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    String postRequest = Request.post("getAllAppointments", details, getApplicationContext());
+                    return new JSONArray(postRequest);
+                } catch (JSONException e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray result) {
+                try {
+                    super.onPostExecute(result);
+                    getApps = result;
+                    printUpcomingAppointments();
+                    progressDialog.dismiss();
+                } catch (NullPointerException e) {
+                    Feedback.toast("Could not load your appointments", false, getApplicationContext());
+                }
+            }
+        }.execute();
+    }
+
+    /**
+     * This method makes a post request to the JustHealth API to retrieve all of the appointments for a given user.
+     * It then loops through the JSON Array that is returned from the server and adds them all to a HashMap.
+     */
+    private void printUpcomingAppointments() {
+
         System.out.println(getApps);
         if (getApps != null) {
             for (int i = 0; i < getApps.length(); i++) {
