@@ -94,8 +94,9 @@ public class ConnectionsMain extends Activity {
                     outgoing = new JSONArray(result.getString("outgoing"));
                     incoming = new JSONArray(result.getString("incoming"));
                     completed = new JSONArray(result.getString("completed"));
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    Feedback.toast("Unable to get your connections", false, getApplicationContext());
                 }
                 return null;
             }

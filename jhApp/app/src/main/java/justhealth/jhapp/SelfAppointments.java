@@ -147,7 +147,7 @@ public class SelfAppointments extends Activity {
                 try {
                     String postRequest = Request.post("getAllAppointments", details, getApplicationContext());
                     return new JSONArray(postRequest);
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     return null;
                 }
             }

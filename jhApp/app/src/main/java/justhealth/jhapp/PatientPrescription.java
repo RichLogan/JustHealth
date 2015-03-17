@@ -44,7 +44,7 @@ public class PatientPrescription extends Activity {
             System.out.println(result);
             return result;
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

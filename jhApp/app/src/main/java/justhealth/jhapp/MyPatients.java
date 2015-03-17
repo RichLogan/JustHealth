@@ -48,7 +48,7 @@ public class MyPatients extends Activity {
                 try {
                     String response = Request.post("getConnections", parameters, getApplicationContext());
                     return new JSONArray(new JSONObject(response).getString("completed"));
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     return null;
                 }
             }
@@ -61,6 +61,7 @@ public class MyPatients extends Activity {
                     progressDialog.dismiss();
                 } catch (NullPointerException e) {
                     Feedback.toast("Could not load your patients", false, getApplicationContext());
+                    progressDialog.dismiss();
                 }
             }
         }.execute();

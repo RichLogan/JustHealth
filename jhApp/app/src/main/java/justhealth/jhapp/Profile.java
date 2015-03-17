@@ -87,8 +87,9 @@ public class Profile extends Activity {
                                 }
                             }
                     );
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    Feedback.toast("Unable to connect to the server", false, getApplicationContext());
                 }
             }
         }.execute();
