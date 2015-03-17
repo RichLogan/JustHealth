@@ -64,15 +64,6 @@
       }
     });
 
-//    $('form').submit(function(e) {
-//      $("form :input").each(function(){
-//        if ($(this).val() == null || $(this).val() == "") {
-//          alert("All fields must be filled out");
-//          e.preventDefault();
-//          return false;
-//        }
-//      });
-//    });
 
     //Check if date is in the past
     $('#startdate').focusout(function() {
@@ -90,6 +81,14 @@
       if (selectedDate < now) {
         // selected date is in the past
         $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+      }
+    });
+
+    //Prevent form submission if validation fails
+    $('#codeForm').submit(function(e) {
+      if (!formcheck2()) {
+        e.preventDefault();
+        return false;
       }
     });
 
@@ -266,11 +265,11 @@
                                 </div>
                                 <div class="modal-body">
                                   <h4>Please enter the verification code given by the requestor</h1>
-                                  <form role="form" action="/completeConnectionWeb" method="POST">
+                                  <form role="form" action="/completeConnectionWeb" id="codeForm" method="POST">
                                     <div style="width: 70%;margin: 0 auto;">
                                       <input name="requestor" type="hidden" value="{{connection.username}}">
                                       <input name="username" type="hidden" value="{{session.username}}">
-                                      <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                      <div class="form-group code-required" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
                                       <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
                                     </div>
                                   </form>

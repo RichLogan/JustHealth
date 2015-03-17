@@ -78,6 +78,11 @@ Rich
 4. I will have to go in and decide whether it should actually say Steve or Rich and replace all of that (all lines and arrows) with what I want (Just Steve or Rich or both or something completely different), then re-add/commit/push. Re-adding a file marks that commit as fixed.
 
 ## Users
-Account Type    Username    Password
-Carer           emma123     hello
-Patient         chutchinson hello1
+
+Account Type        Username            Password
+
+Carer               emma123             hello
+
+Patient             chutchinson         hello
+
+Patient             sophie14            hello

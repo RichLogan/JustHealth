@@ -29,16 +29,6 @@
       $('#connections').modal('toggle');
     }
 
-    // $('form').submit(function(e) {
-    //   $("form :input").each(function(){
-    //     if ($(this).val() == null || $(this).val() == "") {
-    //       alert("All fields must be filled out");
-    //       e.preventDefault();
-    //       return false;
-    //     }
-    //   });
-    // });
-
     //Check if date is in the past
     $('#startdateappt').focusout(function() {
       var selectedDate = $('#startdateappt').val();
@@ -57,6 +47,15 @@
         $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
       }
     });
+
+    //Prevent form submission if validation fails
+    $('#codeForm').submit(function(e) {
+      if (!formcheck2()) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
 
     /*var allDates = $(document.getElementsByClassName('dateForJS'));
     var now = moment().format();
@@ -246,7 +245,7 @@
                                 </div>
                                 <div class="modal-body">
                                   <h4>Please enter the verification code given by the requestor</h4>
-                                  <form role="form" action="/completeConnectionWeb" method="POST">
+                                  <form role="form" action="/completeConnectionWeb" id="codeForm" method="POST">
                                     <div style="width: 70%;margin: 0 auto;">
                                       <input name="requestor" type="hidden" value="{{connection.username}}">
                                       <input name="username" type="hidden" value="{{session.username}}">
@@ -404,18 +403,13 @@
                         
                               <!--Add prescription form -->
                               <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
-                                <form action="/addPrescription" method="POST" class="form-horizontal" role="form" >
+                                <p><i>If the medication you are looking for is not here, please <a href="/contactUs">contact us</a></i></p>
+                                <form action="/addPrescription" method="POST" class="form-horizontal" id="{{patient.username}}_addPrescriptionForm" role="form" >
                                   <input name="username" type="hidden" value="{{patient.username}}">
                                   <div class="row">
                                     <div class="col-md-6">
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_medication">Medication</label> 
-                                        <p>
-                                          <i>
-                                            If the medication you are looking for is not here, please email us at justhealthmedication@justhealth.co.uk
-                                          </i>
-                                        </p>
-                                        
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_medication">Medication<sup style="color:red">*</sup></label> 
                                         <select name="medication" class="form-control" id="{{patient.username}}_medication">
                                           {% for medication in medicationList %}
                                             <option>{{medication.name}}</option>
@@ -423,31 +417,32 @@
                                         </select>
                                       </div>
 
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_dosage">Dosage</label>
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_dosage">Dosage<sup style="color:red">*</sup></label>
                                         <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)" onkeypress="return isNumber(event)">
                                       </div>
 
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_frequency">Frequency</label>
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_frequency">Frequency<sup style="color:red">*</sup></label>
                                         <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)" onkeypress="return isNumber(event)" >
                                       </div>
                                     </div>
                               
                                     <div class="col-md-6">
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_quantity">Quantity</label>
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_quantity">Quantity<sup style="color:red">*</sup></label>
                                         <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="Quantity (To take at once)">
                                       </div>
 
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_dosageUnit">Dosage Unit</label>
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_dosageUnit">Dosage Unit<sup style="color:red">*</sup></label>
                                         <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
                                           <option>mg</option>
                                           <option>ml</option>
                                           <option>puffs</option>
                                         </select>
                                       </div>
+
                                       <div class="form-group">
                                         <label for="{{patient.username}}">Days to take the medication</label>
                                         <br />
@@ -477,27 +472,27 @@
                                   </div>
 
                                   <div class="row" style="margin: 0 auto;">
-                                    <div class="form-group">
-                                      <label for="{{patient.username}}_dosageform">Type</label>
+                                    <div class="form-group {{patient.username}}_pres-item-required">
+                                      <label for="{{patient.username}}_dosageform">Type<sup style="color:red">*</sup></label>
                                       <input name="dosageform" type="text" class="form-control" id="{{patient.username}}_dosageform" placeholder="Dosage Form (e.g Tablet)">
                                     </div>
 
                                     <div class="col-md-6" style="margin: 0 auto;">
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_startDate">Start Date</label>
+                                      <div class="form-group {{patient.username}}_pres-item-required">
+                                        <label for="{{patient.username}}_startDate">Start Date<sup style="color:red">*</sup></label>
                                         <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
                                   
-                                    <div class="col-md-6">
-                                      <div class="form-group">
-                                        <label for="{{patient.username}}_endDate">End Date</label>
+                                    <div class="col-md-6 pres-item-required">
+                                      <div class="form-{{patient.username}}_group">
+                                        <label for="{{patient.username}}_endDate">End Date<sup style="color:red">*</sup></label>
                                         <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
 
-                                    <div class="form-group">
-                                      <label for="{{patient.username}}_stockleft">Stock</label>
+                                    <div class="form-group {{patient.username}}_pres-item-required">
+                                      <label for="{{patient.username}}_stockleft">Stock<sup style="color:red">*</sup></label>
                                       <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Patient's current stock">
                                     </div>
 
@@ -510,10 +505,35 @@
                                   <div>
                                     <input class="btn btn-success pull-right" type="submit" value="Add prescription" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                                   </div>
+                                  <!--Form validation requires a unique class and form ID so the javascript has to be inserted here-->
+                                  <script>
+                                  $(document).ready(function() {
+
+                                    function formcheck3() {
+                                      var fields = $(".{{patient.username}}_pres-item-required").find("select, textarea, input").serializeArray();
+                                      var success = true;
+                                      $.each(fields, function(i, field) {
+                                        if (!field.value && success==true) {
+                                          alert('Please check the you have filled in the required fields');
+                                          success = false;
+                                          return;                                            
+                                        }
+                                      });
+                                    return success;
+                                    }
+
+                                    $('#{{patient.username}}_addPrescriptionForm').submit(function(e) {
+                                      if (!formcheck3()) {
+                                        e.preventDefault();
+                                        return false;
+                                      }
+                                    });
+                                  });
+                                  </script>
                                 </form>
                                 <button class="btn btn-danger pull-right" style="margin-right:5px;" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
-                                
                               <!--End form -->
+
                                 <br />
                                 <hr />
                               </div>
@@ -532,7 +552,7 @@
                                   <div role="tabpanel" class="tab-pane fade in active" id="{{patient.username}}active">
                                     <!-- Active Prescriptions go here -->
                                     {% for prescription in activePrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-success" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#activeModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-success btn-prescription" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#activeModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)
                                       </button>
@@ -644,7 +664,7 @@
                                   <div role="tabpanel" class="tab-pane fade" id="{{patient.username}}futureExpired">
                                     <h5>Upcoming</h5>
                                     {% for prescription in upcomingPrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-primary" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-primary btn-prescription" style="height: 100px; width: 250px;  margin-bottom: 5px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                         Starts on: {{prescription.startdate}}
@@ -753,13 +773,13 @@
                                     
                                     <h5>Expired</h5>
                                     {% for prescription in expiredPrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-danger" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-danger btn-prescription" style="height: 100px; width: 250px; margin-bottom: 5px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                         Ended on: {{prescription.enddate}}
                                       </button>
 
-                                      <!-- Upcoming Prescription Modal -->
+                                      <!-- Expired Prescription Modal -->
                                       <div class="modal fade" id="expiredModal{{prescription.prescriptionid}}" tabindex="-1" role="dialog" aria-labelledby="expiredModal{{prescription.prescriptionid}}label" aria-hidden="true" data-backdrop="static">
                                         <div class="modal-dialog modal-lg">
                                           <div class="modal-content">
@@ -852,7 +872,7 @@
                                             </div>
                                             <div class="modal-footer">
                                               <button type="button" class="btn btn-default" onclick="$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                              <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
+                                              
                                             </div>
                                           </div>
                                         </div>
@@ -958,13 +978,13 @@
                               <div class="row">
                                 <div class="panel panel-info">
                                   <div class="panel-body">
-                                    <form name="createAppointment" method="POST" action="/inviteeappointments">
+                                    <form name="createAppointment" method="POST" id="{{patient.username}}_createAppointmentForm" action="/inviteeappointments">
 
                                       <input name="username" type="hidden" value="{{patient.username}}">
                                       <input name="creator" type="hidden" value="{{session.username}}">
                                       
-                                      <div class="form-group">
-                                        <label for="name">Title</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="name">Title<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="text" name="name">
                                       </div>
                                       
@@ -972,34 +992,34 @@
                                         <input name="apptype" type="hidden" value="Carer">
                                       </div>
                                     
-                                      <div class="form-group">
-                                        <label for="addressnamenumber">Building Name/Number</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="addressnamenumber">Building Name/Number<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="text" name="addressnamenumber">
                                       </div>
                                       
-                                      <div class="form-group">
-                                        <label for="postcode">Postcode</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="postcode">Postcode<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="text" name="postcode">
                                       </div>
                               
-                                      <div class="form-group">
-                                        <label for="datefrom">Start Date</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="datefrom">Start Date<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="date" name="startdate" id="startdateappt">
                                         <span id="datevalidate1"></span>
                                       </div>
                       
-                                      <div class="form-group">
-                                        <label for="starttime">Start Time</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="starttime">Start Time<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="time" name="starttime" id="starttime">
                                       </div>
             
-                                      <div class="form-group">
-                                        <label for="dateto">End Date</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="dateto">End Date<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="date" name="enddate" id="dateto">
                                       </div>
       
-                                      <div class="form-group">
-                                        <label for="endtime">End Time</label>
+                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                        <label for="endtime">End Time<sup style="color:red">*</sup></label>
                                         <input class="form-control" type="time" name="endtime" id="endtime">
                                       </div>
 
@@ -1011,6 +1031,33 @@
                                       <div class="form-group">
                                         <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
                                       </div>
+
+                                      <!--Form validation requires a unique class and form ID so the javascript has to be inserted here-->
+                                      <script>
+                                      $(document).ready(function() {
+
+                                        function formcheck1A() {
+                                          var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
+                                          var success = true;
+                                          $.each(fields, function(i, field) {
+                                            if (!field.value && success==true) {
+                                              alert('Please check the you have filled in the required fields');
+                                              success = false;
+                                              return;                                            
+                                            }
+                                          });
+                                        return success;
+                                        }
+
+                                        $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
+                                          if (!formcheck1A()) {
+                                            e.preventDefault();
+                                            return false;
+                                          }
+                                        });
+                                      });
+                                      </script>
+
                                     </form>
                                   </div>
                                 </div>
@@ -1125,7 +1172,7 @@
                           <div class="col-md-2">
                             <form action="/deleteAppointment" method="GET">
                               <input type="hidden" name="appid" value="{{appointment.appid}}">
-                              <button type="submit" class="btn btn-danger btn-sm pull-right" onclick="return confirm('Are you sure you want to delete this appointment?')"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
+                              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this appointment?')"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
                             </form>
                           </div>
                           <div class="col-md-8">
