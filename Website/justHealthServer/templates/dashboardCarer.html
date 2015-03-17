@@ -56,13 +56,6 @@
       }
     });
 
-    $('#addPrescriptionForm').submit(function(e) {
-      if (!formcheck3()) {
-        e.preventDefault();
-        return false;
-      }
-    });
-
 
     /*var allDates = $(document.getElementsByClassName('dateForJS'));
     var now = moment().format();
@@ -411,11 +404,11 @@
                               <!--Add prescription form -->
                               <div id="{{patient.username}}_addPrescription" style="width: 90%;margin: 0 auto;display:none">
                                 <p><i>If the medication you are looking for is not here, please <a href="/contactUs">contact us</a></i></p>
-                                <form action="/addPrescription" method="POST" class="form-horizontal" id="addPrescriptionForm" role="form" >
+                                <form action="/addPrescription" method="POST" class="form-horizontal" id="{{patient.username}}_addPrescriptionForm" role="form" >
                                   <input name="username" type="hidden" value="{{patient.username}}">
                                   <div class="row">
                                     <div class="col-md-6">
-                                      <div class="form-group pres-item-required">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_medication">Medication<sup style="color:red">*</sup></label> 
                                         <select name="medication" class="form-control" id="{{patient.username}}_medication">
                                           {% for medication in medicationList %}
@@ -424,24 +417,24 @@
                                         </select>
                                       </div>
 
-                                      <div class="form-group pres-item-required">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_dosage">Dosage<sup style="color:red">*</sup></label>
                                         <input name="dosage" type="number" class="form-control" id="{{patient.username}}_dosage" placeholder="Dosage Value (e.g 100)" onkeypress="return isNumber(event)">
                                       </div>
 
-                                      <div class="form-group pres-item-required">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_frequency">Frequency<sup style="color:red">*</sup></label>
                                         <input name="frequency" type="number" class="form-control" id="{{patient.username}}_frequency" placeholder="Frequency (e.g 1)" onkeypress="return isNumber(event)" >
                                       </div>
                                     </div>
                               
                                     <div class="col-md-6">
-                                      <div class="form-group pres-item-required">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_quantity">Quantity<sup style="color:red">*</sup></label>
                                         <input name="quantity" type="text" class="form-control" id="{{patient.username}}_quantity" placeholder="Quantity (To take at once)">
                                       </div>
 
-                                      <div class="form-group pres-item-required">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_dosageUnit">Dosage Unit<sup style="color:red">*</sup></label>
                                         <select name="dosageunit" class="form-control" id="{{patient.username}}_dosage">
                                           <option>mg</option>
@@ -479,26 +472,26 @@
                                   </div>
 
                                   <div class="row" style="margin: 0 auto;">
-                                    <div class="form-group pres-item-required">
+                                    <div class="form-group {{patient.username}}_pres-item-required">
                                       <label for="{{patient.username}}_dosageform">Type<sup style="color:red">*</sup></label>
                                       <input name="dosageform" type="text" class="form-control" id="{{patient.username}}_dosageform" placeholder="Dosage Form (e.g Tablet)">
                                     </div>
 
                                     <div class="col-md-6" style="margin: 0 auto;">
-                                      <div class="form-group pres-item-required">
+                                      <div class="form-group {{patient.username}}_pres-item-required">
                                         <label for="{{patient.username}}_startDate">Start Date<sup style="color:red">*</sup></label>
                                         <input name="startdate" type="date" class="form-control" id="{{patient.username}}_startDate" placeholder="dd/mm/yyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
                                   
                                     <div class="col-md-6 pres-item-required">
-                                      <div class="form-group">
+                                      <div class="form-{{patient.username}}_group">
                                         <label for="{{patient.username}}_endDate">End Date<sup style="color:red">*</sup></label>
                                         <input name="enddate" type="date" class="form-control" id="{{patient.username}}_endDate" placeholder="dd/mm/yyyy" onkeypress="return isNumber(event)">
                                       </div>
                                     </div>
 
-                                    <div class="form-group pres-item-required">
+                                    <div class="form-group {{patient.username}}_pres-item-required">
                                       <label for="{{patient.username}}_stockleft">Stock<sup style="color:red">*</sup></label>
                                       <input name="stockleft" type="text" class="form-control" id="{{patient.username}}_stockleft" placeholder="Patient's current stock">
                                     </div>
@@ -512,10 +505,35 @@
                                   <div>
                                     <input class="btn btn-success pull-right" type="submit" value="Add prescription" style="width:150px;" onclick="return confirm('Are you sure you want to add this prescription?')">
                                   </div>
+                                  <!--Form validation requires a unique class and form ID so the javascript has to be inserted here-->
+                                  <script>
+                                  $(document).ready(function() {
+
+                                    function formcheck3() {
+                                      var fields = $(".{{patient.username}}_pres-item-required").find("select, textarea, input").serializeArray();
+                                      var success = true;
+                                      $.each(fields, function(i, field) {
+                                        if (!field.value && success==true) {
+                                          alert('Please check the you have filled in the required fields');
+                                          success = false;
+                                          return;                                            
+                                        }
+                                      });
+                                    return success;
+                                    }
+
+                                    $('#{{patient.username}}_addPrescriptionForm').submit(function(e) {
+                                      if (!formcheck3()) {
+                                        e.preventDefault();
+                                        return false;
+                                      }
+                                    });
+                                  });
+                                  </script>
                                 </form>
                                 <button class="btn btn-danger pull-right" style="margin-right:5px;" onclick='$("#{{patient.username}}_addPrescription").toggle("slow");'>Cancel</button>
-                                
                               <!--End form -->
+
                                 <br />
                                 <hr />
                               </div>
@@ -1018,19 +1036,18 @@
                                       <script>
                                       $(document).ready(function() {
 
-                                      function formcheck1A() {
-                                        var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
-                                        var success = true;
-                                        $.each(fields, function(i, field) {
-                                          loop:
-                                          if (!field.value) {
-                                            alert('Please check the you have filled in the required fields');
-                                            success = false;
-                                            return;
-                                          }
-                                        });
-                                      return success;
-                                      }
+                                        function formcheck1A() {
+                                          var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
+                                          var success = true;
+                                          $.each(fields, function(i, field) {
+                                            if (!field.value && success==true) {
+                                              alert('Please check the you have filled in the required fields');
+                                              success = false;
+                                              return;                                            
+                                            }
+                                          });
+                                        return success;
+                                        }
 
                                         $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
                                           if (!formcheck1A()) {

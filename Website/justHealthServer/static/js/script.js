@@ -265,7 +265,7 @@ function formcheck1() {
     var fields = $(".appt-item-required").find("select, textarea, input").serializeArray();
     var success = true;
     $.each(fields, function(i, field) {
-        if (!field.value) {
+        if (!field.value && success==true) {
             alert('Please check the you have filled in the required fields');
             success = false;
             return;
@@ -273,28 +273,13 @@ function formcheck1() {
     });
     return success;
 }
-
-
 
 function formcheck2() {
     var fields = $(".code-required").find("input").serializeArray();
     var success = true;
     $.each(fields, function(i, field) {
-        if (!field.value) {
+        if (!field.value && success==true) {
             alert('Please check the code is correct and try again');
-            success = false;
-            return;
-        }
-    });
-    return success;
-}
-
-function formcheck3() {
-    var fields = $(".pres-item-required").find("select, textarea, input").serializeArray();
-    var success = true;
-    $.each(fields, function(i, field) {
-        if (!field.value) {
-            alert('Please check the you have filled in the required fields');
             success = false;
             return;
         }
