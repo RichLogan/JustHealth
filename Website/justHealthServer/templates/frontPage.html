@@ -38,6 +38,27 @@
           );
         });
 
+        $('#toPrescriptions').click(function() {
+          $('html,body').animate({
+            scrollTop: $("#prescriptions").offset().top},
+            1250
+          );
+        });
+
+        $('#toAppts').click(function() {
+          $('html,body').animate({
+            scrollTop: $("#appts").offset().top},
+            1250
+          );
+        });
+
+        $('#toTop').click(function() {
+          $('html,body').animate({
+            scrollTop: $("#landing").offset().top},
+            1250
+          );
+        });
+
         $('#menuButton').click(function() {
           $('#loginForm').toggle();
         })
@@ -50,8 +71,10 @@
   </head>
 
   <body class="clear">
+    <!--Register button -->
     <button id="register" class="btn btn-success" onclick="javascript:location.href='/register'">Sign up now!</button>
     <div id="loginForm">
+      <!--Login form -->
       <form class="form-inline" method="POST" action="/login">
         <div class="form-group" style="margin">
           <label class="sr-only" for="username">Username</label>
@@ -71,34 +94,58 @@
       <div id="mainTitle">
         <img id="logo" src="/static/images/frontlogotrans.png" style="margin-left:5%;"></img>
         <span class="fa-stack" id="toAbout" style="font-size: 50px;">
-
           <i class="fa fa-angle-double-down" style="padding-top: 25%;padding-left: 33%;"></i>
           <i class="fa fa-circle-thin fa-stack-2x"></i>
         </span>
       </div>
+      <!--Video -->
       <video autoplay loop muted id="background">
         <source src="/static/videos/phone.webm" type="video/webm">
       </video>
     </div>
-
+    <!--Information about the webiste -->
     <div class="segment" id="about">
       <div class="row" class="clear" style="margin: 0;">
-          <div class="col-md-6 segmentImage" style="font-size: 30em;">
-          <i class="fa fa-mobile"></i>
+          <div class="col-md-6 segmentImage" style="font-size: 15em;margin-top: 0.5em;">
+          <i class="fa fa-users"></i>
         </div>
         <div class="col-md-6 segmentText">
-          <p>JustHealth helps you track your medication <strong>anytime</strong>, <strong>anywhere</strong></p>
+            <p>Patients can connect with their carers</p></br>
+            <p>Simple, easy-to-use application</p></br>
+            <p><strong>JustHealth</strong> is also now on Android!</p>
         </div>
-      </div>
+      </div>      
+      <span class="fa-stack" id="toPrescriptions" style="font-size: 50px;position:relative;top:-3.5em;">
+        <i class="fa fa-angle-double-down" style="padding-top: 25%;"></i>
+        <i class="fa fa-circle-thin fa-stack-2x"></i>
+      </span>
     </div>
 
-    <div class="segment" style="background-color: #2272EB;">
+    <div class="segment" style="background-color: #2272EB;" id="prescriptions">
       <div class="row" class="clear" style="margin: 0;">
         <div class="col-md-6 segmentText">
-          Patients can connect with <strong>Carers</strong>, <strong>Doctors</strong> and <strong>Friends / Family</strong>
+          <p>Personalised <strong>prescription</strong> reminders</p></br>
+          <p>Add all your prescriptions</p></br>
+          <p>Keep track of your medication supplies</p>
         </div>
         <div class="col-md-6 segmentImage" style="font-size: 15em;margin-top: 0.5em;">
-          <i class="fa fa-users"></i>
+          <i class="fa fa-medkit"></i>
+        </div>
+      </div>
+      <span class="fa-stack" id="toAppts" style="font-size: 50px;position:relative;top:-3.5em;">
+        <i class="fa fa-angle-double-down" style="padding-top: 25%;"></i>
+        <i class="fa fa-circle-thin fa-stack-2x"></i>
+      </span>
+    </div>
+
+    <div class="segment" id="appts">
+      <div class="row" class="clear" style="margin: 0;">
+        <div class="col-md-6 segmentImage" style="font-size: 15em;margin-top: 0.4em;">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <div class="col-md-6 segmentText" style="margin-top: 3.5em;">
+            <p>Add appointments, everything in <strong>one</strong> place</p></br>
+            <p>Personalised <strong>appointment</strong> alerts</p></br>
         </div>
       </div>
     </div>

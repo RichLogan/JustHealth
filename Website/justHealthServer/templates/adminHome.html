@@ -6,6 +6,7 @@
 <!--Load the AJAX API-->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
+//Google graph to show the reasons users have deactivated
   google.load("visualization", "1", {packages:["corechart"]});
   google.setOnLoadCallback(drawChart);
   function drawChart() {
@@ -30,6 +31,7 @@
 </script>
 <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
 <script type="text/javascript">
+//Google graph to show how many patients and carers registers on the application
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
 
@@ -95,7 +97,8 @@
 
 <div class="row">
   <div class="col-md-2">
-    <fieldset class="style" style="margin: 0 auto; padding: 5px;">  
+    <fieldset class="style" style="margin: 0 auto; padding: 5px;"> 
+    <!--Navigation menu --> 
       <div role="tabpanel">
       </br>
         <ul class="nav nav-pills nav-stacked" role="tablist">
@@ -153,6 +156,7 @@
             <p>Remember to use responsibly, any misuse of portal access will be subject to disciplinary measures.</p>
           </div>
         </div>
+        <!--End of home tab -->
       
         <!--Tab for user accounts -->
         <div role="tabpanel" class="tab-pane fade in container" id="users" style="width: 100%">
@@ -304,6 +308,7 @@
             </div>
           </div>
         </div>
+        <!--End of users tab -->
 
         <!--Tab for current medication -->
         <div role="tabpanel" class="tab-pane fade in container" id="currentMedication" style="width: 90%">
@@ -352,6 +357,9 @@
                 </div>
               </div>
             </div>
+
+            <!--end of medication tab -->
+
 
         <!--Tab for deactivation reasons -->
         <div role="tabpanel" class="tab-pane fade in container" id="deactivateReasons" style="width: 100%">
