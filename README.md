@@ -79,10 +79,10 @@ Rich
 
 ## Users
 
-Account Type    Username    Password
+Account Type        Username            Password
 
-Carer           emma123     hello
+Carer               emma123             hello
 
-Patient         chutchinson hello
+Patient             chutchinson         hello
 
-Patient         sophie14    hello
+Patient             sophie14            hello
