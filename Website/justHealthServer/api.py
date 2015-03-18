@@ -1327,11 +1327,13 @@ def deletePrescription():
 def deletePrescription(prescriptionid):
     try:
         instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "Deleted"
-    except:
+    except Prescription.DoesNotExist:
         return "Failed"
+    with database.transaction():
+        instance.delete_instance(recursive=True)
+        return "Deleted"
+    return "Failed"
+
 
 @app.route('/api/getPrescriptions', methods=['POST'])
 @auth.login_required
