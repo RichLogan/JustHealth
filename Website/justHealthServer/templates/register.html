@@ -74,6 +74,7 @@
         if ($(this).val() == null || $(this).val() == "") {
           alert("All fields must be filled out");
           e.preventDefault();
+          return false;
         }
       });
       if (!usernameCheck || !emailCheck || !confirmPasswordCheck || !dateOfBirthCheck) {
