@@ -85,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Start Date"
+                        android:hint="Start Date YYYY-MM-DD"
                         android:inputType="date"
                         android:textColor="@color/header"
                         android:id="@+id/startDate"
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="End Date"
+                        android:hint="End Date YYYY-MM-DD"
                         android:inputType="date"
                         android:textColor="@color/header"
                         android:id="@+id/endDate"
