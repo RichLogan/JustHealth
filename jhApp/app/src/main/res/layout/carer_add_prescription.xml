@@ -27,11 +27,13 @@
                     <Spinner
                         android:id="@+id/medication"
                         android:hint="Medication Name"
+                        android:spinnerMode="dialog"
                         style="@style/spinnerWithIcon"/>
                     <IconTextView
                         android:text="{fa-medkit}"
                         style="@style/inputIcon" />
                 </RelativeLayout>
+
 
                 <!-- Quantity -->
                 <RelativeLayout
@@ -40,6 +42,7 @@
                     <EditText
                         android:hint="Quantity (How many to take each time)"
                         android:id="@+id/quantity"
+                        android:inputType="time"
                         style="@style/inputWithIcon"/>
                     <IconTextView
                         android:text="{fa-medkit}"
@@ -53,6 +56,7 @@
                     <EditText
                         android:hint="Weight of medication (e.g. 200)"
                         android:id="@+id/dosageValue"
+                        android:inputType="time"
                         style="@style/inputWithIcon"/>
                     <IconTextView
                         android:text="{fa-medkit}"
