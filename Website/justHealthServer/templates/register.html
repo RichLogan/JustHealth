@@ -8,10 +8,10 @@
   var emailCheck;
   var confirmPasswordCheck;
   var usernameCheck;
-  var dobCheck;
+  var dateOfBirthCheck;
 
   function dobCheck() {
-    dobCheck = checkDateOfBirth($('#dob'));
+    dateOfBirthCheck = checkDateOfBirth($('#dob'));
   }
 
   function validateEmailCheck() {
@@ -76,7 +76,7 @@
           e.preventDefault();
           return false;
         }
-        if (!usernameCheck || !emailCheck || !confirmPasswordCheck || !dobCheck) {
+        if (!usernameCheck || !emailCheck || !confirmPasswordCheck || !dateOfBirthCheck) {
           alert("Please check the form for errors");
           e.preventDefault();
           return false;
