@@ -730,7 +730,7 @@ def completeConnection(details):
     attemptedCode = int(details['codeattempt'])
 
     # get record
-    instance = Relationship.select().where(Relationship.requestor == requestor and Relationship.target == target).get()
+    instance = Relationship.select().where(Relationship.requestor == requestor & Relationship.target == target).get()
     if instance.code == attemptedCode:
         # Correct attempt, establish relationship in correct table
         # TODO place into relationship table
@@ -777,19 +777,23 @@ def deleteConnection(details):
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
     connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
-    try: 
-        instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
+    try:
+        instance = Patientcarer.select().where((Patientcarer.patient == details['user']) & (Patientcarer.carer == details['connection'])).get()
+    except Patientcarer.DoesNotExist:
+        return "False"
+        
+    with database.transaction():
+        instance.delete_instance()
+        return "True"
+        
+        try:
+            instance = Patientcarer.select().where((Patientcarer.patient == details['connection']) & (Patientcarer.carer == details['user'])).get()
+        except Patientcarer.DoesNotExist:
+            return "False"
+            
         with database.transaction():
             instance.delete_instance()
             return "True"
-    except Patientcarer.DoesNotExist:
-        try:
-            instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
-            with database.transaction():
-                instance.delete_instance()
-                return "True"
-        except Patientcarer.DoesNotExist:
-            return "False"
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
@@ -802,13 +806,13 @@ def cancelRequest(details):
     """Cancels the user request to connect before completion"""
 
     try:
-        instance = Relationship.select().where(Relationship.requestor == details['user'] and Relationship.target == details['connection']).get()
+        instance = Relationship.select().where((Relationship.requestor == details['user']) & (Relationship.target == details['connection'])).get()
         with database.transaction():
             instance.delete_instance()
             return "True"
     except Relationship.DoesNotExist:
         try:
-            instance = Relationship.select().where(Relationship.target == details['user'] and Relationship.requestor == details['connection']).get()
+            instance = Relationship.select().where((Relationship.target == details['user'] & Relationship.requestor == details['connection'])).get()
             with database.transaction():
                 instance.delete_instance()
                 return "True"
@@ -1962,7 +1966,7 @@ def getNotificationContent(notification):
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
         except:
-            doesNotExist = Notification.get(Notification.notificationid == notification['notificationId'])
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
