@@ -775,19 +775,25 @@ def deleteConnection(details):
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
     connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
-    try: 
+    instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
+
+    try:
         instance = Patientcarer.select().where(Patientcarer.patient == details['user'] and Patientcarer.carer == details['connection']).get()
+    except Patientcarer.DoesNotExist:
+        return request.form
+        
+    with database.transaction():
+        instance.delete_instance()
+        return "True"
+        
+        try:
+            instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
+        except Patientcarer.DoesNotExist:
+            return "False"
+            
         with database.transaction():
             instance.delete_instance()
             return "True"
-    except Patientcarer.DoesNotExist:
-        try:
-            instance = Patientcarer.select().where(Patientcarer.patient == details['connection'] and Patientcarer.carer == details['user']).get()
-            with database.transaction():
-                instance.delete_instance()
-                return "True"
-        except Patientcarer.DoesNotExist:
-            return "False"
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
