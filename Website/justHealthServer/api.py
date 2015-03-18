@@ -1671,32 +1671,32 @@ def getAllUsers():
     """Get All information from client and patient/carer/Admin table"""
     results = []
     for u in Client.select(Client.username):
-      userDetails = {}
-      try:
-        user = Patient.select().join(Client).where(Client.username==u.username).get()
-        userDetails['accounttype'] = "Patient"
-      except Patient.DoesNotExist:
+        userDetails = {}
         try:
-            user = Carer.select().join(Client).where(Client.username==u.username).get()
-            userDetails['accounttype'] = "Carer"
-        except Carer.DoesNotExist:
             user = Admin.select().join(Client).where(Client.username==u.username).get()
             userDetails['accounttype'] = "Admin"
-
-        userDetails['firstname'] = user.firstname
-        userDetails['surname'] = user.surname
-        userDetails['username'] = user.username.username
-        userDetails['email'] = user.username.email
-        userDetails['dob'] = str(user.username.dob)
-        userDetails['accountdeactivated'] = user.username.accountdeactivated
-        userDetails['accountlocked'] = user.username.accountlocked
-        userDetails['loginattempts'] = user.username.loginattempts
-        userDetails['verified'] = user.username.verified
-        if user.ismale:
-            userDetails['gender'] = 'Male'
-        else:
-            userDetails['gender'] ='Female'
-        results.append(userDetails)
+        except Admin.DoesNotExist:
+            try:
+                user = Carer.select().join(Client).where(Client.username==u.username).get()
+                userDetails['accounttype'] = "Carer"
+            except Carer.DoesNotExist:
+                user = Patient.select().join(Client).where(Client.username==u.username).get()
+                userDetails['accounttype'] = "Patient"
+    
+            userDetails['firstname'] = user.firstname
+            userDetails['surname'] = user.surname
+            userDetails['username'] = user.username.username
+            userDetails['email'] = user.username.email
+            userDetails['dob'] = str(user.username.dob)
+            userDetails['accountdeactivated'] = user.username.accountdeactivated
+            userDetails['accountlocked'] = user.username.accountlocked
+            userDetails['loginattempts'] = user.username.loginattempts
+            userDetails['verified'] = user.username.verified
+            if user.ismale:
+                userDetails['gender'] = 'Male'
+            else:
+                userDetails['gender'] ='Female'
+            results.append(userDetails)
     return json.dumps(results)
 
 #Update user account settings in Admin Portal
@@ -1704,9 +1704,13 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
     user = None
     # What type of user are we dealing with?
     try:
-        user = Patient.select().join(Client).where(Client.username==settings['username']).get()
+        user = Admin.select().join(Client).where(Client.username==settings['username']).get()
+        
     except Patient.DoesNotExist:
-        user = Carer.select().join(Client).where(Client.username==settings['username']).get()
+        try:
+            user = Carer.select().join(Client).where(Client.username==settings['username']).get()
+        except Carer.DoesNotExist:
+            user = Patient.select().join(Client).where(Client.username==settings['username']).get()
 
     # Access to their corresponding Client entry
     clientObject = Client.select().where(Client.username == user.username).get()
@@ -1838,7 +1842,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Connection Request":
         try: 
             requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
-        except Relationship.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1851,7 +1855,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Added":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1861,7 +1865,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Updated":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1871,7 +1875,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Invite":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1881,7 +1885,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Updated":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1897,7 +1901,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Accepted":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1907,7 +1911,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Declined":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1917,7 +1921,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Medication Low":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1927,7 +1931,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Patient Medication Low":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1938,7 +1942,7 @@ def getNotificationContent(notification):
         try:
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1951,7 +1955,7 @@ def getNotificationContent(notification):
         try:
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
             with database.transaction():
                 doesNotExist.delete_instance()
