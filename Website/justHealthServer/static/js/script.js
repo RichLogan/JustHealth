@@ -26,25 +26,50 @@ function checkDate(element, type) {
     
     // Show response
     if (date == "Invalid Date") {
-      $(element).siblings("label").html(message + ' is not a valid date');
-      $(element).parent().removeClass('has-warning');
-      $(element).parent().removeClass('has-success');
-      $(element).parent().addClass('has-error');
-      return false;
+        $(element).siblings("label").html(message + ' is not a valid date');
+        $(element).parent().removeClass('has-warning');
+        $(element).parent().removeClass('has-success');
+        $(element).parent().addClass('has-error');
+        return false;
     }
     else if (date < now) {
-      $(element).siblings("label").html(message + ' is in the past');
-      $(element).parent().removeClass('has-error');
-      $(element).parent().removeClass('has-success');
-      $(element).parent().addClass('has-warning');
+        $(element).siblings("label").html(message + ' is in the past');
+        $(element).parent().removeClass('has-error');
+        $(element).parent().removeClass('has-success');
+        $(element).parent().addClass('has-warning');
     }
     else {
-      $(element).siblings("label").html(message);
-      $(element).parent().removeClass('has-error');
-      $(element).parent().removeClass('has-warning');
-      $(element).parent().addClass('has-success');
+        $(element).siblings("label").html(message);
+        $(element).parent().removeClass('has-error');
+        $(element).parent().removeClass('has-warning');
+        $(element).parent().addClass('has-success');
     }
-  }
+}
+
+function checkDateOfBirth(element) {
+    message = "Date Of Birth<sup style='color:red'>*</sup>";
+    // Attempt to convert to date
+    var date = new Date($(element).val());
+    var now = new Date();
+
+    if (date == "Invalid Date") {
+        $(element).siblings("label").html(message + ' is not a valid date');
+        $(element).parent().removeClass('has-success');
+        $(element).parent().addClass('has-error');
+        return false;
+    }
+    else if (date > now) {
+        $(element).siblings("label").html(message + ' cannot be in the future');
+        $(element).parent().addClass('has-error');
+        return false;
+    }
+    else {
+        $(element).siblings("label").html(message);
+        $(element).parent().removeClass('has-error');
+        $(element).parent().addClass('has-success');
+        return true;
+    }
+}
 
   function checkTime(element, type) {
     // Set Original Message
