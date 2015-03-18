@@ -1,7 +1,25 @@
 {% extends "template.html" %}
 {% block title %}Home{% endblock %}
 {% block scriptsAndStyles %}
+
 <script type="text/javascript">
+
+  var startCheck = true;
+  var endCheck = true;
+  var timeTravelCheck = true;
+
+  function checkTimeTravel(start, end, type) {
+    timeTravelCheck = checkStartEnd(start, end, type);
+    alert(timeTravelCheck);
+  }
+
+  function checkAppointmentDate(element, type) {
+    appointmentFailure = checkDate(element, type);
+  }
+  function checkAppointmentTime(element, type) {
+    appointmentFailure = checkTime(element, type);
+  }
+
   nextAngle = 0;
   function addAngle(deg) {
     // Thanks to: 
@@ -1042,24 +1060,23 @@
                                       </div>
                               
                                       <div class="form-group {{patient.username}}_appt-item-required">
-                                        <label for="datefrom">Start Date<sup style="color:red">*</sup> <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                        <input class="form-control" type="date" name="startdate" id="startdateappt">
-                                        <span id="datevalidate1"></span>
+                                        <label class="control-label" for="datefrom">Start Date<sup style="color:red">*</sup></label>
+                                        <input id="{{patient.username}}startDate" class="form-control" type="date" name="startdate" onkeyup='checkAppointmentDate($(this), "Start");'>
                                       </div>
                       
                                       <div class="form-group {{patient.username}}_appt-item-required">
-                                        <label for="starttime">Start Time<sup style="color:red">*</sup></label>
-                                        <input class="form-control" type="time" name="starttime" id="starttime">
+                                        <label class="control-label" for="starttime">Start Time<sup style="color:red">*</sup></label>
+                                        <input class="form-control" type="time" name="starttime" id="starttime" onkeyup='checkAppointmentTime($(this), "Start");'>
                                       </div>
             
                                       <div class="form-group {{patient.username}}_appt-item-required">
-                                        <label for="dateto">End Date<sup style="color:red">*</sup> <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                        <input class="form-control" type="date" name="enddate" id="dateto">
+                                        <label class="control-label" for="dateto">End Date<sup style="color:red">*</sup></label>
+                                        <input class="form-control" type="date" name="enddate" id="dateto" onkeyup='checkAppointmentDate($(this), "End");checkTimeTravel($(this), $("#{{patient.username}}startDate"), "Appointment");'>
                                       </div>
       
                                       <div class="form-group {{patient.username}}_appt-item-required">
-                                        <label for="endtime">End Time<sup style="color:red">*</sup></label>
-                                        <input class="form-control" type="time" name="endtime" id="endtime">
+                                        <label class="control-label" for="endtime">End Time<sup style="color:red">*</sup></label>
+                                        <input class="form-control" type="time" name="endtime" id="endtime" onkeyup='checkAppointmentTime($(this), "End");'>
                                       </div>
 
                                       <div class="form-group">
@@ -1089,12 +1106,17 @@
                                         }
 
                                         $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
-                                          if (!formcheck1A()) {
-                                            e.preventDefault();
-                                            return false;
-                                          }
+                                            if (!formcheck1A()) {
+                                              e.preventDefault();
+                                              return false;
+                                            }
+                                            if (startCheck && endCheck && timeTravelCheck) {
+                                              e.preventDefault();
+                                              alert("Please check the form for errors");
+                                              return false;
+                                            }
+                                          });
                                         });
-                                      });
                                       </script>
 
                                     </form>

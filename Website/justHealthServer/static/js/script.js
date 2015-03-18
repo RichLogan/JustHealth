@@ -4,6 +4,75 @@
 //    }
 //);
 
+function checkStartEnd(start, end, type) {
+    var startDate = new Date($(start).val());
+    var endDate = new Date($(end).val());
+    if (endDate < startDate) {
+        $(end).siblings("label").html("The " + type + " cannot end before it begins!");
+        $(end).parent().removeClass('has-warning');
+        $(end).parent().removeClass('has-success');
+        $(end).parent().addClass('has-error');
+        return false;
+    }
+}
+
+function checkDate(element, type) {
+    // Set Original Message
+    message = type + " Date<sup style='color:red'>*</sup>"
+    
+    // Attempt to convert to date
+    var date = new Date($(element).val());
+    var now = new Date()
+    
+    // Show response
+    if (date == "Invalid Date") {
+      $(element).siblings("label").html(message + ' is not a valid date');
+      $(element).parent().removeClass('has-warning');
+      $(element).parent().removeClass('has-success');
+      $(element).parent().addClass('has-error');
+      return false;
+    }
+    else if (date < now) {
+      $(element).siblings("label").html(message + ' is in the past');
+      $(element).parent().removeClass('has-error');
+      $(element).parent().removeClass('has-success');
+      $(element).parent().addClass('has-warning');
+    }
+    else {
+      $(element).siblings("label").html(message);
+      $(element).parent().removeClass('has-error');
+      $(element).parent().removeClass('has-warning');
+      $(element).parent().addClass('has-success');
+    }
+  }
+
+  function checkTime(element, type) {
+    // Set Original Message
+    message = type + " Time<sup style='color:red'>*</sup>"
+    
+    // Check validity of 
+    timeStr = $(element).val();
+
+    var time = timeStr.match(/([01]?[0-9]|2[0-3]):[0-5][0-9]/);
+      
+    // Show Response
+    if (!time) {
+      // Not a real Time
+      $(element).siblings("label").html(message + ' is not a valid time');
+      $(element).parent().removeClass('has-warning');
+      $(element).parent().removeClass('has-success');
+      $(element).parent().addClass('has-error');
+      return false;
+    }
+    else {
+      $(element).siblings("label").html(message);
+      $(element).parent().removeClass('has-error');
+      $(element).parent().removeClass('has-warning');
+      $(element).parent().addClass('has-success');
+    }
+}
+
+
 // Inspired By http://stackoverflow.com/questions/9776015/jquery-animate-a-rotating-div
 function flip(id, degrees) {
   $(id).animate({

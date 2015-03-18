@@ -948,12 +948,13 @@ def addInviteeAppointment(details):
     description = details['description'],
     private = False,
     accepted = None
-    )
+  )
 
-  appId = str(appointmentInsert.execute())
-  createNotificationRecord(details['username'], "Appointment Invite", appId)
-  
-  return appId
+  with database.transaction():
+    appId = str(appointmentInsert.execute())
+    createNotificationRecord(details['username'], "Appointment Invite", appId)
+    return appId
+  return"False"
 
 #receives the request from android to allow a user to view their upcoming appointments
 @app.route('/api/getAllAppointments', methods=['POST'])
@@ -1077,10 +1078,15 @@ def updateAppointment():
         return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
-  if private == "False":
+  checkInvitee = Appointments.select().where(Appointments.appid == appid).get()
+  #This stops the appointment from being marked as private when it is an invitee appointment
+  if checkInvitee.invitee != None:
     isPrivate = False
-  else: 
-    isPrivate = True
+  else:
+    if private == "False":
+      isPrivate = False
+    else: 
+      isPrivate = True
 
   updateAppointment = Appointments.update(
     name = name,

@@ -157,12 +157,15 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                 try {
                     switch (response) {
                         case "Authenticated":
-                            String accountType = getAccountType(loginInformation.get("username"));
+
 
                             SharedPreferences account = getSharedPreferences("account", 0);
                             SharedPreferences.Editor edit = account.edit();
                             edit.putString("username", loginInformation.get("username"));
                             edit.putString("password", encryptedPassword);
+                            edit.apply();
+
+                            String accountType = getAccountType(loginInformation.get("username"));
                             edit.putString("accountType", accountType);
                             edit.apply();
 
@@ -218,6 +221,8 @@ public class Login extends Activity implements SurfaceHolder.Callback {
     private String getEncryptedPassword(String plaintextPassword) {
         HashMap<String, String> ptPassword = new HashMap<String, String>();
         ptPassword.put("password", plaintextPassword);
+
+
         return Request.post("encryptPassword", ptPassword, getApplicationContext());
     }
 
