@@ -245,10 +245,12 @@ def registration():
     if request.method == 'POST':
         result = registerUser()
         if result == "True":
-            return render_template('login.html', type="success",  message="Thanks for registering! Please check your email for a verification link")
+            flash("Thanks for registering! Please check your email for a verification link", "success")
+            return (url_for('login'))
         else:
-            return render_template('register.html', type="danger", message = result)
+            flash(result, "danger")
     return render_template('register.html')
+
 
 @app.route('/logout')
 @needLogin
