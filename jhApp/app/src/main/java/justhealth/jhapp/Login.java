@@ -5,12 +5,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -125,57 +127,77 @@ public class Login extends Activity implements SurfaceHolder.Callback {
     }
 
     private void requestLogin() {
-        HashMap<String, String> loginInformation = new HashMap<String, String>();
-        loginInformation.put("username", ((EditText) findViewById(R.id.loginUsername)).getText().toString());
+        final HashMap<String, String> loginInformation = new HashMap<String, String>();
+        final String username =  ((EditText) findViewById(R.id.loginUsername)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
 
-        String password = ((EditText) findViewById(R.id.loginPassword)).getText().toString();
+        loginInformation.put("username", username);
         loginInformation.put("password", password);
 
-        String encryptedPassword = getEncryptedPassword(password);
-        System.out.println("This is the encrypted password: " + encryptedPassword);
+        new AsyncTask<Void, Void, Void>() {
 
-        String response = Request.post("authenticate", loginInformation, getApplicationContext());
+            String encryptedPassword;
+            String response;
+            ProgressDialog progressDialog;
 
-        try {
-            if (response.equals("Authenticated")) {
-                SharedPreferences account = getSharedPreferences("account", 0);
-                SharedPreferences.Editor edit = account.edit();
-                edit.putString("username", loginInformation.get("username"));
-                edit.putString("password", encryptedPassword);
-                edit.apply();
-
-                String accountType = getAccountType(loginInformation.get("username"));
-                System.out.println("Account Type: " + accountType);
-
-                SharedPreferences.Editor addAccountType = account.edit();
-                addAccountType.putString("accountType", accountType);
-                addAccountType.commit();
-                startActivity(new Intent(Login.this, Main.class));
-            } else if (response.equals("Reset")) {
-                String expiredUsername = loginInformation.get("username");
-                String expiredPassword = encryptedPassword;
-                String expiredAccountType = getAccountType(expiredUsername);
-
-                Intent reset = new Intent(Login.this, ExpiredPassword.class);
-                reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
-                        "JustHealth enforce this from time-to-time to ensure that your " +
-                        "privacy and security are maximised whilst using the website.");
-                reset.putExtra("username", expiredUsername);
-                reset.putExtra("password", expiredPassword);
-                reset.putExtra("accountType", expiredAccountType);
-                startActivity(reset);
-            } else if (response.equals("<11")) {
-                String expiredUsername = loginInformation.get("username");
-                String expiredPassword = encryptedPassword;
-                String expiredAccountType = getAccountType(expiredUsername);
-                //options dialog
-                giveResetOptions(expiredUsername, expiredPassword, expiredAccountType);
-            } else {
-                Feedback.toast(response, false, getApplicationContext());
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(Login.this,"Loading...", "Logging you in",true);
             }
-        } catch (NullPointerException e) {
-            Feedback.toast(getString(R.string.connectionIssue), false, this);
-        }
+
+            @Override
+            protected Void doInBackground(Void... v) {
+                encryptedPassword = getEncryptedPassword(password);
+                response = Request.post("authenticate", loginInformation, getApplicationContext());
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+                try {
+                    switch (response) {
+                        case "Authenticated":
+                            String accountType = getAccountType(loginInformation.get("username"));
+
+                            SharedPreferences account = getSharedPreferences("account", 0);
+                            SharedPreferences.Editor edit = account.edit();
+                            edit.putString("username", loginInformation.get("username"));
+                            edit.putString("password", encryptedPassword);
+                            edit.putString("accountType", accountType);
+                            edit.apply();
+
+                            startActivity(new Intent(Login.this, Main.class));
+                            break;
+                        case "Reset":
+                            String expiredUsername = loginInformation.get("username");
+                            String expiredPassword = encryptedPassword;
+                            String expiredAccountType = getAccountType(expiredUsername);
+
+                            Intent reset = new Intent(Login.this, ExpiredPassword.class);
+                            reset.putExtra("message", "Your password has expired and needs to be reset before you will be able to log in. " +
+                                    "JustHealth enforce this from time-to-time to ensure that your " +
+                                    "privacy and security are maximised whilst using the website.");
+                            reset.putExtra("username", expiredUsername);
+                            reset.putExtra("password", expiredPassword);
+                            reset.putExtra("accountType", expiredAccountType);
+                            startActivity(reset);
+                            break;
+
+                        case "<11":
+                            expiredUsername = loginInformation.get("username");
+                            expiredAccountType = getAccountType(expiredUsername);
+                            giveResetOptions(expiredUsername, encryptedPassword, expiredAccountType);
+                            break;
+                        default:
+                            Feedback.toast(response, false, getApplicationContext());
+                            break;
+                    }
+                } catch (NullPointerException e) {
+                    Feedback.toast(getString(R.string.connectionIssue), false, getApplicationContext());
+                }
+                progressDialog.dismiss();
+            }
+        }.execute();
     }
 
     private String getAccountType(String username) {
@@ -185,10 +207,7 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         String response = Request.post("getAccountInfo", parameters, getApplicationContext());
         try {
             JSONObject accountDetails = new JSONObject(response);
-            String accountType  = accountDetails.getString("accounttype");
-            System.out.println("whole array after the get : " + accountDetails);
-            System.out.println("Account type after the get : " + accountDetails);
-            return accountType;
+            return accountDetails.getString("accounttype");
         }
         catch (JSONException e) {
             System.out.println(e.getStackTrace());
@@ -199,8 +218,7 @@ public class Login extends Activity implements SurfaceHolder.Callback {
     private String getEncryptedPassword(String plaintextPassword) {
         HashMap<String, String> ptPassword = new HashMap<String, String>();
         ptPassword.put("password", plaintextPassword);
-        String response = Request.post("encryptPassword", ptPassword, getApplicationContext());
-        return response;
+        return Request.post("encryptPassword", ptPassword, getApplicationContext());
     }
 
     private void giveResetOptions(final String expiredUsername, final String expiredPassword, final String expiredAccountType) {

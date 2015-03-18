@@ -1,6 +1,7 @@
 package justhealth.jhapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 /**
  * JustHealth main application. The user will never see this, but it acts as the primary activity
  * and mainly handles setup required for Google Cloud Messaging (Push notifications).
- *
+ * <p/>
  * It also checks whether a user is logged in and their account type in order to present them
  * with the correct activity.
  */
@@ -39,34 +40,33 @@ public class Main extends Activity {
         account = getSharedPreferences("account", 0);
         //account.edit().clear().commit();
 
-         if (!isLoggedIn()) {
+        if (!isLoggedIn()) {
             System.out.println("Logged out");
             finish();
             startActivity(new Intent(Main.this, Login.class));
+        } else {
+
+            System.out.println("Logged In");
+            System.out.println(account.getString("username", null));
+
+            context = getApplicationContext();
+
+            // Check for GooglePlayServices support
+            if (checkPlayServices()) {
+                System.out.println("Check google play services");
+                gcm = GoogleCloudMessaging.getInstance(this);
+                regid = getRegistrationId();
+
+                if (regid.isEmpty()) {
+                    registerInBackground();
+                }
+
+                //Redirect where they need to go.
+                redirect();
+            } else {
+                Feedback.toast("No valid Google Play Services APK found.", false, context);
+            }
         }
-        else {
-
-             System.out.println("Logged In");
-             System.out.println(account.getString("username", null));
-
-             context = getApplicationContext();
-
-             // Check for GooglePlayServices support
-             if (checkPlayServices()) {
-                 System.out.println("Check google play services");
-                 gcm = GoogleCloudMessaging.getInstance(this);
-                 regid = getRegistrationId();
-
-                 if (regid.isEmpty()) {
-                     registerInBackground();
-                 }
-
-                 //Redirect where they need to go.
-                 redirect();
-             } else {
-                 Feedback.toast("No valid Google Play Services APK found.", false, context);
-             }
-         }
     }
 
     /**
@@ -79,8 +79,7 @@ public class Main extends Activity {
             System.out.println("Logged out");
             finish();
             startActivity(new Intent(Main.this, Login.class));
-        }
-        else {
+        } else {
             System.out.println("Logged in");
             System.out.println(account.getString("username", null));
             checkPlayServices();
@@ -110,22 +109,18 @@ public class Main extends Activity {
             // Need to login
             finish();
             startActivity(new Intent(Main.this, Login.class));
-        }
-        else if (accountType.equals("Patient")) {
+        } else if (accountType.equals("Patient")) {
             // Found logged in Patient
             finish();
             startActivity(new Intent(Main.this, HomePatient.class));
-        }
-        else if (accountType.equals("Carer")) {
+        } else if (accountType.equals("Carer")) {
             // Found logged in Carer
             finish();
             startActivity(new Intent(Main.this, HomeCarer.class));
-        }
-        else if (accountType.equals("Admin")) {
+        } else if (accountType.equals("Admin")) {
             // Found admin
-            Feedback.toast("Administrators cannot yet use the Android Application", false , context);
-        }
-        else {
+            Feedback.toast("Administrators cannot yet use the Android Application", false, context);
+        } else {
             // Should never happen
             finish();
             Feedback.toast("Something somewhere has broken. Please try again", false, context);
@@ -189,9 +184,9 @@ public class Main extends Activity {
     }
 
     private void registerInBackground() {
-        new AsyncTask() {
+        new AsyncTask<Void, Void, String>() {
             @Override
-            protected Object doInBackground(Object[] params) {
+            protected String doInBackground(Void... params) {
                 String msg = "";
                 try {
                     if (gcm == null) {
@@ -209,10 +204,10 @@ public class Main extends Activity {
             }
 
             @Override
-            protected void onPostExecute(Object result) {
+            protected void onPostExecute(String result) {
                 System.out.println(result);
             }
-        }.execute(null, null, null);
+        }.execute();
     }
 
     /**
@@ -222,16 +217,31 @@ public class Main extends Activity {
      * using the 'from' address in the message.
      */
     private void sendRegistrationIdToBackend(String regid) {
-        System.out.println("sending regid to backend API");
         String username = account.getString("username", null);
-        HashMap<String, String> params = new HashMap<String, String>();
+        final HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", username);
         params.put("registrationid", regid);
-        String response = Request.post("saveAndroidRegistrationID", params, context);
-        System.out.println(response);
-        if (response.equals("False")) {
-            System.out.println("Could not register device");
-        }
+        new AsyncTask<Void, Void, String>() {
+            ProgressDialog pd;
+
+            @Override
+            protected void onPreExecute() {
+                pd = ProgressDialog.show(Main.this, "Loading...", "Registering your android device", true);
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                return Request.post("saveAndroidRegistrationID", params, context);
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                pd.dismiss();
+                if (response.equals("False")) {
+                    Feedback.toast("Could not register device", false, getApplicationContext());
+                }
+            }
+        }.execute();
     }
 
     /**

@@ -1937,7 +1937,9 @@ def getNotificationContent(notification):
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
-        content = "You only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+        content = "You only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + \
+                    " of " + str(prescription.medication.name) + " " + prescription.dosageform + "(s) " + \
+                    " on " + str(takeInstance.currentdate)
 
     if notification['notificationtype'] == "Carer Missed Prescription":
         try:
@@ -1948,7 +1950,10 @@ def getNotificationContent(notification):
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
-        content = "Your patient " + str(prescription.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+        content = "Your patient " + str(prescription.username) + \
+                    " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + \
+                    " of " + str(prescription.medication.name) + " " + prescription.dosageform + "(s) " + \
+                    " on " + str(takeInstance.currentdate)
 
     return content
 
