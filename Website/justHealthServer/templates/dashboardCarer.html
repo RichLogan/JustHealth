@@ -373,7 +373,7 @@
         <hr />
         
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-          {% for patient in patients %}
+          {% for patient in patients|sort(attribute='username') %}
             <div class="panel panel-default">
               <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{patient.username}}">
                 <h4 class="panel-title">
