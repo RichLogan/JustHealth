@@ -131,7 +131,7 @@
                     <h4 class="modal-title" id="{{connection.username}}"><span class= "bold"> Username: </span>{{connection.username}}</h4>
                   </div>
                   <div class="modal-body">
-                    <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
+                     <img alt="Profile Picture" src="/images/{{connection.profilepicture}}" class="img-circle nav-profile-img pull-left">
                     <form action="/deleteConnectionWeb" method="POST">
                       <input type="hidden" name="user" value="{{session.username}}">
                       <input type="hidden" name="connection" value="{{connection.username}}">
