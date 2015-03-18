@@ -3,10 +3,12 @@ package justhealth.jhapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -62,6 +65,13 @@ public class DeactivateAccount extends Activity {
                 popUpDeactivate();
             }
         });
+
+        TextView whyKeepData = (TextView) findViewById(R.id.linkKeepYourData);
+        whyKeepData.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(DeactivateAccount.this, whyKeepData.class));
+            }
+        });
     }
 
     private void populateSpinner() {
@@ -94,7 +104,7 @@ public class DeactivateAccount extends Activity {
      * Once complete, it returns the appropriate message to the user.
      */
     private void popUpDeactivate() {
-        HashMap<String, String> reasons = new HashMap<String, String>();
+        final HashMap<String, String> reasons = new HashMap<String, String>();
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
@@ -122,39 +132,60 @@ public class DeactivateAccount extends Activity {
         final String reason = String.valueOf(spinnerReason.getSelectedItem());
         reasons.put("reason", reason);
 
-        String response = Request.post("deactivateaccount", reasons, this);
-        if(response.equals("Deleted")) {
-            getSharedPreferences("account", 0).edit().clear().commit();
+        new AsyncTask<Void, Void, String>() {
 
-            //show the alert to say it is successful
-            Context context = getApplicationContext();
-            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated and all associated information with it has been deleted.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
-            finish();
+            ProgressDialog progressDialog;
+            String response;
 
-            Intent goToStart = new Intent(this, Login.class);
-            startActivity(goToStart);
-        }
-        else if(response.equals("Kept")) {
-            //show the alert to say it is successful
-            Context context = getApplicationContext();
-            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated. However, if you want to come back we have kept all of your details on file; it'll be quick and easy to reactivate.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(DeactivateAccount.this, "Loading...", "Deactivating your JustHealth account", true);
+                System.out.println(reasons);
+            }
 
-            finish();
-            Intent goToStart = new Intent(this, Login.class);
-            startActivity(goToStart);
-        }
+            @Override
+            protected String doInBackground(Void... v) {
+                response = Request.post("deactivateaccount", reasons, getApplicationContext());
+                return response;
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+
+                if (response.equals("Deleted")) {
+                    getSharedPreferences("account", 0).edit().clear().apply();
+                    //show the alert to say it is successful
+                    Context context = getApplicationContext();
+                    CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated and all associated information with it has been deleted.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    progressDialog.dismiss();
+                    toast.show();
+                    finish();
+
+                    Intent goToStart = new Intent(DeactivateAccount.this, Login.class);
+                    startActivity(goToStart);
+                } else if (response.equals("Kept")) {
+                    //show the alert to say it is successful
+                    Context context = getApplicationContext();
+                    CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated. However, if you want to come back we have kept all of your details on file; it'll be quick and easy to reactivate.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    progressDialog.dismiss();
+                    toast.show();
+
+                    finish();
+                    Intent goToStart = new Intent(DeactivateAccount.this, Login.class);
+                    startActivity(goToStart);
+                }
+            }
+        }.execute();
     }
 
 

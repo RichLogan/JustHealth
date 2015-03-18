@@ -4,20 +4,35 @@
 
 <script type="text/javascript">
 
-  var startCheck = true;
-  var endCheck = true;
-  var timeTravelCheck = true;
-
-  function checkTimeTravel(start, end, type) {
-    timeTravelCheck = checkStartEnd(start, end, type);
-    alert(timeTravelCheck);
-  }
-
+  // true = Pass, false = Fail
+  var validationPass = true;
+ 
   function checkAppointmentDate(element, type) {
-    appointmentFailure = checkDate(element, type);
+    result = checkDate(element, type);
+    if (validationPass && !result) {
+      validationPass = result;
+    }
   }
+
+  function checkAppointmentStartEnd(start, end, appointment) {
+    result = checkStartEnd(start,end,'Appointment');
+    if (validationPass && !result) {
+      validationPass = result;
+    }
+  }
+
   function checkAppointmentTime(element, type) {
-    appointmentFailure = checkTime(element, type);
+    result = checkTime(element, type);
+    if (validationPass && !result) {
+      validationPass = result;
+    }
+  }
+
+  function enddatefunction(element) {
+    var elementId = $(element).parent().attr('id');
+    var divname = (elementId.split('_'))[0];
+    checkAppointmentDate($('#' + divname + 'dateTo'), "End");
+    checkAppointmentStartEnd($('#' + divname + 'dateFrom'), $('#' + divname + 'dateTo'), "Appointment");
   }
 
   nextAngle = 0;
@@ -1061,7 +1076,7 @@
                               
                                       <div class="form-group {{patient.username}}_appt-item-required">
                                         <label class="control-label" for="datefrom">Start Date<sup style="color:red">*</sup></label>
-                                        <input id="{{patient.username}}startDate" class="form-control" type="date" name="startdate" onkeyup='checkAppointmentDate($(this), "Start");'>
+                                        <input id="{{patient.username}}dateFrom" class="form-control" type="date" name="startdate" onkeyup='checkAppointmentDate($(this), "Start");'>
                                       </div>
                       
                                       <div class="form-group {{patient.username}}_appt-item-required">
@@ -1069,9 +1084,9 @@
                                         <input class="form-control" type="time" name="starttime" id="starttime" onkeyup='checkAppointmentTime($(this), "Start");'>
                                       </div>
             
-                                      <div class="form-group {{patient.username}}_appt-item-required">
+                                      <div class="form-group {{patient.username}}_appt-item-required" id="{{patient.username}}_dateTo">
                                         <label class="control-label" for="dateto">End Date<sup style="color:red">*</sup></label>
-                                        <input class="form-control" type="date" name="enddate" id="dateto" onkeyup='checkAppointmentDate($(this), "End");checkTimeTravel($(this), $("#{{patient.username}}startDate"), "Appointment");'>
+                                        <input class="form-control" type="date" name="enddate" id="{{patient.username}}dateTo" onkeyup='enddatefunction($(this));'>
                                       </div>
       
                                       <div class="form-group {{patient.username}}_appt-item-required">
@@ -1090,27 +1105,26 @@
 
                                       <!--Form validation requires a unique class and form ID so the javascript has to be inserted here-->
                                       <script>
-                                      $(document).ready(function() {
+                                        $(document).ready(function() {
+                                          function formcheck1A() {
+                                            var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
+                                            var success = true;
+                                            $.each(fields, function(i, field) {
+                                              if (!field.value && success==true) {
+                                                alert('Please check the you have filled in the required fields');
+                                                success = false;
+                                                return;                                            
+                                              }
+                                            });
+                                            return success;
+                                          }
 
-                                        function formcheck1A() {
-                                          var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
-                                          var success = true;
-                                          $.each(fields, function(i, field) {
-                                            if (!field.value && success==true) {
-                                              alert('Please check the you have filled in the required fields');
-                                              success = false;
-                                              return;                                            
-                                            }
-                                          });
-                                        return success;
-                                        }
-
-                                        $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
+                                          $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
                                             if (!formcheck1A()) {
                                               e.preventDefault();
                                               return false;
                                             }
-                                            if (startCheck && endCheck && timeTravelCheck) {
+                                            if (!validationPass) {
                                               e.preventDefault();
                                               alert("Please check the form for errors");
                                               return false;
@@ -1118,7 +1132,6 @@
                                           });
                                         });
                                       </script>
-
                                     </form>
                                   </div>
                                 </div>
