@@ -293,7 +293,20 @@
                                           <div class="modal-content">
                                             <div class="modal-header">
                                               <button type="button" class="close" onclick="$('#activeModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                              <h4 class="modal-title" id="activeModal{{prescription.prescriptionid}}label">{{patient.username}}'s {{prescription.medication}} ({{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}})</h4>
+                                              <h4 class="modal-title pull-left" id="activeModal{{prescription.prescriptionid}}label">{{patient.username}}'s {{prescription.medication}} ({{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}})</h4>
+                                              <button type="submit" class="btn btn-danger btn-sm pull-right" id="{{prescription.prescriptionid}}delete" onclick="deleteListener()" style="margin:0 10px 0 0; position:relative; top:-7px"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
+
+                                              <!--Script has to be called here to get the correct prescription ID-->
+                                              <script type="text/javascript">
+                                                function deleteListener() {
+                                                  if (confirm("Are you sure you want to delete this prescription?")) {
+                                                      location.href='/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}&username={{patient.username}}';
+                                                  }
+                                                }
+                                              </script>
+
+                                              <button type="button" class="btn btn-warning btn-sm pull-right" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();$('#{{prescription.prescriptionid}}back').toggle();$('#{{prescription.prescriptionid}}back2').toggle();" style="margin:0 5px 0 0; position:relative; top:-7px"><i class="fa fa-pencil" style="font-size: 1.7em;"></i></button>
+                                              </br>
                                             </div>
                                           
                                             <div class="modal-body" style="height: 650px;">
@@ -307,84 +320,82 @@
                                                   
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Medication</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.medication}}" name="medication">
+                                                    <div class="col-sm-5">
+                                                      <select name="medication" class="form-control" id="{{patient.username}}_medication">
+                                                      <option class="placeholder" selected>{{prescription.medication}}</option>
+                                                      {% for medication in medicationList %}
+                                                        <option>{{medication.name}}</option>
+                                                      {% endfor %}
+                                                    </select>
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Dosage</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                                     </div>
-                                                  </div>
-
-                                                  <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Dosage Unit</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-2">
                                                       <input type="text" class="form-control" value="{{prescription.dosageunit}}" name="dosageunit">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Quantity</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.quantity}}" name="quantity">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Frequency</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.frequency}}" name="frequency">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Start Date <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
+                                                    <label class="col-sm-2 control-label">Type</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.dosageform}}" name="dosageform">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">End Date <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
-                                                    </div>
-                                                  </div>
-
-                                                  <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Stock Left</label>
-                                                    <div class="col-sm-10">
+                                                    <label class="col-sm-2 control-label">Supply</label>
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.stockleft}}" name="stockleft">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Notes</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.prerequisite}}" name="prerequisite">
+                                                    <label class="col-sm-2 control-label">Start Date</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Dosage Form</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.dosageform}}" name="dosageform">
+                                                    <label class="col-sm-2 control-label">End Date</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
                                                     </div>
                                                   </div>
 
-                                                  <input class="btn btn-success" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
-                                                  <a class="btn btn-danger" style="display:none;" id="{{prescription.prescriptionid}}delete" href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}&username={{patient.username}}" onclick="return confirm('Are you sure you want to delete this prescription?')">Delete</a>
+                                                  <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Guidance notes</label>
+                                                    <div class="col-sm-8">
+                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
+                                                    </div>
+                                                  </div>
+
+                                                  <input class="btn btn-success pull-right" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
+                                                  <button type="button" class="btn btn-default pull-right" id="{{prescription.prescriptionid}}back" onclick="$('#activeModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');" style="margin-right:5px;display:none;">Back</button>
                                                 </fieldset>
+                                                <button type="button" class="btn btn-default pull-right" id="{{prescription.prescriptionid}}back2" onclick="$('#activeModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
                                               </form>
-                                            </div>
-                                          
-                                            <div class="modal-footer">
-                                              <button type="button" class="btn btn-default" onclick="$('#activeModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                              <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
-                                            </div>
+
+                                            </div>                  
                                           </div>
                                         </div>
                                       </div>
@@ -394,7 +405,7 @@
                                   <div role="tabpanel" class="tab-pane fade" id="{{patient.username}}futureExpired">
                                     <h5>Upcoming</h5>
                                     {% for prescription in upcomingPrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-primary btn-prescription" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-primary btn-prescription" style="height: 100px; width: 250px;  margin-bottom: 5px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                         Starts on: {{prescription.startdate}}
@@ -406,7 +417,21 @@
                                           <div class="modal-content">
                                             <div class="modal-header">
                                               <button type="button" class="close" onclick="$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                              <h4 class="modal-title" id="upcomingModal{{prescription.prescriptionid}}label">{{patient.username}}'s {{prescription.medication}} ({{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}})</h4>
+                                              <h4 class="modal-title pull-left" id="upcomingModal{{prescription.prescriptionid}}label">{{patient.username}}'s {{prescription.medication}} ({{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}})</h4>
+
+                                              <button type="submit" class="btn btn-danger btn-sm pull-right" id="{{prescription.prescriptionid}}delete" onclick="deleteListener()" style="margin:0 10px 0 0; position:relative; top:-7px"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
+
+                                              <!--Script has to be called here to get the correct prescription ID-->
+                                              <script type="text/javascript">
+                                                function deleteListener() {
+                                                  if (confirm("Are you sure you want to delete this prescription?")) {
+                                                      location.href='/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}&username={{patient.username}}';
+                                                  }
+                                                }
+                                              </script>
+
+                                              <button type="button" class="btn btn-warning btn-sm pull-right" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();$('#{{prescription.prescriptionid}}back').toggle();$('#{{prescription.prescriptionid}}back2').toggle();" style="margin:0 5px 0 0; position:relative; top:-7px"><i class="fa fa-pencil" style="font-size: 1.7em;"></i></button>
+                                              </br>
                                             </div>
                                             
                                             <div class="modal-body" style="height: 650px;">
@@ -419,83 +444,83 @@
                                                   
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Medication</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.medication}}" name="medication">
+                                                    <div class="col-sm-5">
+                                                      <select name="medication" class="form-control" id="{{patient.username}}_medication">
+                                                        <option class="placeholder" selected>{{prescription.medication}}</option>
+                                                        {% for medication in medicationList %}
+                                                          <option>{{medication.name}}</option>
+                                                        {% endfor %}
+                                                      </select>
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Dosage</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                                     </div>
-                                                  </div>
-
-                                                  <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Dosage Unit</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-2">
                                                       <input type="text" class="form-control" value="{{prescription.dosageunit}}" name="dosageunit">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Quantity</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.quantity}}" name="quantity">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Frequency</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.frequency}}" name="frequency">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Start Date <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
+                                                    <label class="col-sm-2 control-label">Type</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.dosageform}}" name="dosageform">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">End Date <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
-                                                    </div>
-                                                  </div>
-
-                                                  <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Stock Left</label>
-                                                    <div class="col-sm-10">
+                                                    <label class="col-sm-2 control-label">Supply</label>
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.stockleft}}" name="stockleft">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Notes</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.prerequisite}}" name="prerequisite">
+                                                    <label class="col-sm-2 control-label">Start Date</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Dosage Form</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.dosageform}}" name="dosageform">
+                                                    <label class="col-sm-2 control-label">End Date</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
                                                     </div>
                                                   </div>
 
-                                                  <input class="btn btn-success" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
+                                                  <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Guidance notes</label>
+                                                    <div class="col-sm-8">
+                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
+                                                    </div>
+                                                  </div>
+
+                                                  <input class="btn btn-success pull-right" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
                                                   <a class="btn btn-danger" style="display:none;" id="{{prescription.prescriptionid}}delete" href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}" onclick="return confirm('Are you sure you want to delete this prescription?')">Delete</a>
+                                                  <button type="button" class="btn btn-default pull-right" id="{{prescription.prescriptionid}}back" onclick="$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');" style="margin-right:5px;display:none;">Back</button>
                                                 </fieldset>
+                                                <button type="button" class="btn btn-default pull-right" id="{{prescription.prescriptionid}}back2" onclick="$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
                                               </form>
                                             </div>
-                                            <div class="modal-footer">
-                                              <button type="button" class="btn btn-default" onclick="$('#upcomingModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                              <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
-                                            </div>
+                                          
                                           </div>
                                         </div>
                                       </div>
@@ -503,13 +528,13 @@
                                     
                                     <h5>Expired</h5>
                                     {% for prescription in expiredPrescriptions[patient.username] %}
-                                      <button type="button" class="btn btn-danger btn-prescription" style="height: 100px; width: 250px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
+                                      <button type="button" class="btn btn-danger btn-prescription" style="height: 100px; width: 250px; margin-bottom: 5px;" onclick="$('#prescription{{patient.username}}body').css('height', '650');$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');">
                                         {{prescription.medication}} <br />
                                         {{prescription.quantity}} x {{prescription.dosage}}{{prescription.dosageunit}} ({{prescription.frequency}} times a day)<br />
                                         Ended on: {{prescription.enddate}}
                                       </button>
 
-                                      <!-- Upcoming Prescription Modal -->
+                                      <!-- Expired Prescription Modal -->
                                       <div class="modal fade" id="expiredModal{{prescription.prescriptionid}}" tabindex="-1" role="dialog" aria-labelledby="expiredModal{{prescription.prescriptionid}}label" aria-hidden="true" data-backdrop="static">
                                         <div class="modal-dialog modal-lg">
                                           <div class="modal-content">
@@ -527,83 +552,77 @@
                                                   
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Medication</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.medication}}" name="medication">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Dosage</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.dosage}}" name="dosage">
                                                     </div>
-                                                  </div>
-
-                                                  <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Dosage Unit</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-2">
                                                       <input type="text" class="form-control" value="{{prescription.dosageunit}}" name="dosageunit">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Quantity</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.quantity}}" name="quantity">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Frequency</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.frequency}}" name="frequency">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Start Date <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
+                                                    <label class="col-sm-2 control-label">Type</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.dosageform}}" name="dosageform">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">End Date <span style="color:gray">(dd/mm/yyyy)</span></label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
-                                                    </div>
-                                                  </div>
-
-                                                  <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Stock Left</label>
-                                                    <div class="col-sm-10">
+                                                    <label class="col-sm-2 control-label">Supply</label>
+                                                    <div class="col-sm-5">
                                                       <input type="text" class="form-control" value="{{prescription.stockleft}}" name="stockleft">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Notes</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.prerequisite}}" name="prerequisite">
+                                                    <label class="col-sm-2 control-label">Start Date</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.startdate}}" name="startdate">
                                                     </div>
                                                   </div>
 
                                                   <div class="form-group">
-                                                    <label class="col-sm-2 control-label">Dosage Form</label>
-                                                    <div class="col-sm-10">
-                                                      <input type="text" class="form-control" value="{{prescription.dosageform}}" name="dosageform">
+                                                    <label class="col-sm-2 control-label">End Date</label>
+                                                    <div class="col-sm-5">
+                                                      <input type="text" class="form-control" value="{{prescription.enddate}}" name="enddate">
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Guidance notes</label>
+                                                    <div class="col-sm-8">
+                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
                                                     </div>
                                                   </div>
 
                                                   <input class="btn btn-success" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
                                                   <a class="btn btn-danger" style="display:none;" id="{{prescription.prescriptionid}}delete" href="/deletePrescription?id={{prescription.prescriptionid}}&username={{patient.username}}" onclick="return confirm('Are you sure you want to delete this prescription?')">Delete</a>
                                                 </fieldset>
+                                                <button type="button" class="btn btn-default pull-right" id="{{prescription.prescriptionid}}back2" onclick="$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
                                               </form>
                                             </div>
-                                            <div class="modal-footer">
-                                              <button type="button" class="btn btn-default" onclick="$('#expiredModal{{prescription.prescriptionid}}').modal('toggle');$('#prescription{{patient.username}}body').css('height', 'auto');">Back</button>
-                                              <button type="button" class="btn btn-warning" onclick="$('#fieldset{{prescription.prescriptionid}}').prop('disabled', function(i, v) { return !v; });$('#{{prescription.prescriptionid}}update').toggle();$('#{{prescription.prescriptionid}}delete').toggle();">Edit</button>
-                                            </div>
+                              
                                           </div>
                                         </div>
                                       </div>
