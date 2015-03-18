@@ -246,7 +246,7 @@ def registration():
         result = registerUser()
         if result == "True":
             flash("Thanks for registering! Please check your email for a verification link", "success")
-            return (url_for('login'))
+            return redirect('/login')
         else:
             flash(result, "danger")
     return render_template('register.html')
