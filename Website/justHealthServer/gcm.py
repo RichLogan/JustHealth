@@ -73,7 +73,10 @@ def sendPushNotification(username, title, message):
   r = requests.post('https://android.googleapis.com/gcm/send', data=json.dumps(payload), headers=headers)
 
   # Check result
-  result = json.loads(r.text)
+  try:
+    result = json.loads(r.text)
+  except Exception:
+    return "False"
   if (result['success'] == 1) and (result['failure'] == 0):
     return "True"
   return "False"

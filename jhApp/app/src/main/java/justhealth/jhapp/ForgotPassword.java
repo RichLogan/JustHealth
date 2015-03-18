@@ -2,6 +2,9 @@ package justhealth.jhapp;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -44,11 +47,37 @@ public class ForgotPassword extends Activity {
         post(details);
     }
 
-    public void post(HashMap<String, String> details) {
-        String response = Request.post("resetPassword", details, getApplicationContext());
+    public void post(final HashMap<String, String> details) {
+        new AsyncTask<Void, Void, String>() {
 
-        if (!response.equals("True")) {
-            Feedback.toast(response, false, getApplicationContext());
-        }
+            ProgressDialog progressDialog;
+            String responseString;
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(ForgotPassword.this, "Loading...", "Just resetting your password", true);
+                System.out.println(details);
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                responseString = Request.post("resetpassword", details, getApplicationContext());
+                return responseString;
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                progressDialog.dismiss();
+
+
+                if (!response.equals("True")) {
+                    Feedback.toast(response, false, getApplicationContext());
+                } else {
+                    Feedback.toast("Your password has been successfully reset", true, getApplicationContext());
+                    finish();
+                    startActivity(new Intent(ForgotPassword.this, Login.class));
+                }
+            }
+        }.execute();
     }
 }

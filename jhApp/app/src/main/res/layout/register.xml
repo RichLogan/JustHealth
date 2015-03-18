@@ -89,7 +89,7 @@
                         android:inputType="date"
                         android:ems="10"
                         android:id="@+id/dob"
-                        android:hint="DOB"
+                        android:hint="DOB YYYY-MM-DD"
                         style="@style/inputWithIcon" />
                     <IconTextView
                         android:text="{fa-calendar}"
