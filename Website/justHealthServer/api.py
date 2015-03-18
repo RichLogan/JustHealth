@@ -925,7 +925,7 @@ def addPatientAppointment(details):
   return appId
 
 @app.route('/api/addInviteeAppointment', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def addInviteeAppointment():
     #The creator will always be a carer, therefore we have to check that they are connected
     # to the patient that they are making the appointment with
@@ -948,12 +948,13 @@ def addInviteeAppointment(details):
     description = details['description'],
     private = False,
     accepted = None
-    )
+  )
 
-  appId = str(appointmentInsert.execute())
-  createNotificationRecord(details['username'], "Appointment Invite", appId)
-  
-  return appId
+  with database.transaction():
+    appId = str(appointmentInsert.execute())
+    createNotificationRecord(details['username'], "Appointment Invite", appId)
+    return appId
+  return"False"
 
 #receives the request from android to allow a user to view their upcoming appointments
 @app.route('/api/getAllAppointments', methods=['POST'])
