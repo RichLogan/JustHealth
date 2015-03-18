@@ -1960,7 +1960,7 @@ def getNotificationContent(notification):
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
         except:
-            doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationId'])
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
