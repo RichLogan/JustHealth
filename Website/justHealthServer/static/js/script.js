@@ -58,7 +58,7 @@ function checkDateOfBirth(element) {
         $(element).parent().addClass('has-error');
         return false;
     }
-    else if (date > now) {
+    else if (date >= now) {
         $(element).siblings("label").html(message + ' cannot be in the future');
         $(element).parent().addClass('has-error');
         return false;
