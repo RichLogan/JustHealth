@@ -222,11 +222,13 @@ public class Main extends Activity {
         params.put("username", username);
         params.put("registrationid", regid);
         new AsyncTask<Void, Void, String>() {
-            ProgressDialog pd;
+            //The progress dialog cannot be used on this page as it crashes the application
+            //Think that this may be because of it not being able to display on a page that runs in the background
+            //ProgressDialog pd;
 
             @Override
             protected void onPreExecute() {
-                pd = ProgressDialog.show(Main.this, "Loading...", "Registering your android device", true);
+                //pd = ProgressDialog.show(Main.this, "Loading...", "Registering your android device", true);
             }
 
             @Override
@@ -236,7 +238,7 @@ public class Main extends Activity {
 
             @Override
             protected void onPostExecute(String response) {
-                pd.dismiss();
+                //pd.dismiss();
                 if (response.equals("False")) {
                     Feedback.toast("Could not register device", false, getApplicationContext());
                 }
