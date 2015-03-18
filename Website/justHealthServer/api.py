@@ -925,7 +925,7 @@ def addPatientAppointment(details):
   return appId
 
 @app.route('/api/addInviteeAppointment', methods=['POST'])
-# @auth.login_required
+@auth.login_required
 def addInviteeAppointment():
     #The creator will always be a carer, therefore we have to check that they are connected
     # to the patient that they are making the appointment with
