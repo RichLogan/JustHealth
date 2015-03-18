@@ -170,7 +170,7 @@ public class CarerPrescriptions extends Activity{
 
                 //Create a button
                 Button prescriptionButton = new Button(this);
-                String prescriptionString = medication + ":\n" + "Take " + quantity + " x " + dosage + " " + dosageunit + " " + dosageform + "(s)\n" + frequency + " x " + "a day";
+                String prescriptionString = medication + ":\n" + "Take " + quantity + " x " + dosage + " " + dosageunit + " " + dosageform + "(s)\n" + frequency + " times " + "a day";
                 prescriptionButton.setText(prescriptionString);
 
                 //Add button to view

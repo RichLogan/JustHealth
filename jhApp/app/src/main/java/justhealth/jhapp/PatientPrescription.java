@@ -70,7 +70,7 @@ public class PatientPrescription extends Activity {
                 Button prescriptionButton = new Button(this);
                 String prescriptionString = medication + ":\n"
                         + "Take " + quantity + " x " + dosage + " " + dosageunit + " "
-                        + dosageform + "(s)\n" + frequency + " x " + "a day";
+                        + dosageform + "(s)\n" + frequency + " times " + "a day";
                 prescriptionButton.setText(prescriptionString);
 
                 // Can't set styles, so have to do it manually
