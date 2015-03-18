@@ -271,8 +271,10 @@ def deactivateAccount(details):
 
     if delete:
         # Delete User
+        deleteAppointments = Appointments.delete().where(Appointments.invitee == request.form['username'])
         deletedUser = Client.get(Client.username == request.form['username'])
         with database.transaction():
+            deleteAppointments.execute()
             deletedUser.delete_instance(recursive=True)
         return "Deleted"
     else:
