@@ -1838,7 +1838,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Connection Request":
         try: 
             requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
-        except Relationship.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1851,7 +1851,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Added":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1861,7 +1861,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Updated":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1871,7 +1871,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Invite":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1881,7 +1881,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Updated":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1897,7 +1897,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Accepted":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1907,7 +1907,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Declined":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1917,7 +1917,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Medication Low":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1927,7 +1927,7 @@ def getNotificationContent(notification):
     if notification['notificationtype'] == "Patient Medication Low":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1938,7 +1938,7 @@ def getNotificationContent(notification):
         try:
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -1951,7 +1951,7 @@ def getNotificationContent(notification):
         try:
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
             with database.transaction():
                 doesNotExist.delete_instance()
