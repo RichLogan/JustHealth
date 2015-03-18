@@ -4,6 +4,18 @@
 //    }
 //);
 
+function checkStartEnd(start, end, type) {
+    var startDate = new Date($(start).val());
+    var endDate = new Date($(end).val());
+    if (endDate < startDate) {
+        $(end).siblings("label").html("The " + type + " cannot end before it begins!");
+        $(end).parent().removeClass('has-warning');
+        $(end).parent().removeClass('has-success');
+        $(end).parent().addClass('has-error');
+        return false;
+    }
+}
+
 function checkDate(element, type) {
     // Set Original Message
     message = type + " Date<sup style='color:red'>*</sup>"
@@ -46,7 +58,7 @@ function checkDate(element, type) {
     // Show Response
     if (!time) {
       // Not a real Time
-      $(element).siblings("label").html(message + ' is not a valid date');
+      $(element).siblings("label").html(message + ' is not a valid time');
       $(element).parent().removeClass('has-warning');
       $(element).parent().removeClass('has-success');
       $(element).parent().addClass('has-error');
