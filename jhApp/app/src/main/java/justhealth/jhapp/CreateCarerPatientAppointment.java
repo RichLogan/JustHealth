@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -90,9 +92,8 @@ public class CreateCarerPatientAppointment extends Activity {
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        final HashMap<String, String> details = new HashMap<String, String>();
 
         //Text Boxes
         details.put("creator", username);
@@ -107,32 +108,51 @@ public class CreateCarerPatientAppointment extends Activity {
         details.put("description", ((EditText) findViewById(R.id.details)).getText().toString());
         details.put("apptype", "Carer Visit");
 
-        String responseString = Request.post("addInviteeAppointment", details, this);
-        int id = Integer.parseInt(responseString);
-        System.out.println(responseString);
+        new AsyncTask<Void, Void, String>() {
 
-        if (id > 0) {
-            //show the alert to say it is successful
-            Context context = getApplicationContext();
-            CharSequence text = "Appointment Added.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
-            addToCalendarQuestion(details, id);
-        }
-        else {
-            Context context = getApplicationContext();
-            CharSequence text = "Oops, something went wrong. Please try again.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
-        }
+            ProgressDialog progressDialog;
+            String responseString;
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(CreateCarerPatientAppointment.this, "Loading...", "Creating appointment", true);
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                responseString = Request.post("addInviteeAppointment", details, getApplicationContext());
+                return responseString;
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                progressDialog.dismiss();
+                int id = Integer.parseInt(responseString);
+                System.out.println(responseString);
+
+                if (id > 0) {
+                    //show the alert to say it is successful
+                    Context context = getApplicationContext();
+                    CharSequence text = "Appointment Added.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    toast.show();
+                    addToCalendarQuestion(details, id);
+                } else {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Oops, something went wrong. Please try again.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    toast.show();
+                }
+            }
+        }.execute();
     }
 
 
