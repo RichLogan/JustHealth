@@ -70,25 +70,25 @@
   $(document).ready(function() {
     //Check all fields are filled in
     $('form').submit(function(e) {
-      $("form :input").each(function(){
+      $("form :input").each(function() {
         if ($(this).val() == null || $(this).val() == "") {
           alert("All fields must be filled out");
           e.preventDefault();
-          return false;
-        }
-        if (!usernameCheck || !emailCheck || !confirmPasswordCheck || !dateOfBirthCheck) {
-          alert("Please check the form for errors");
-          e.preventDefault();
-          return false;
-        }
-        var terms = $('#terms').prop('checked');
-        if (!terms) {
-          alert("Please accept the Terms and Conditions");
-          e.preventDefault();
-          return false;
         }
       });
+      if (!usernameCheck || !emailCheck || !confirmPasswordCheck || !dateOfBirthCheck) {
+        alert("Please check the form for errors");
+        e.preventDefault();
+        return false;
+      }
+      var terms = $('#terms').prop('checked');
+      if (!terms) {
+        alert("Please accept the Terms and Conditions");
+        e.preventDefault();
+        return false;
+      }
     });
+  
 
     $('#usernameInput').keyup(function() {
       content = $('#usernameInput').val();
