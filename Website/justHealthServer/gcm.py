@@ -50,12 +50,12 @@ def createPushNotification(notificationid):
 
 def pushNotificationPrescription(username, takePrescriptionId):
   try: 
-    take = TakePrescription.select().where(TakePrescription.takeid == takePrescriptionId).get()
+    take = Reminder.select().where(Reminder.reminder == takePrescriptionId).get()
   except TakePrescription.DoesNotExist:
     return None
 
   try:  
-    prescription = Prescription.select().dicts().where(Prescription.prescriptionid == take.prescriptionid).get()
+    prescription = Prescription.select().dicts().where(Prescription.prescriptionid == take.relatedObject).get()
   except Prescription.DoesNotExist:
     return None
 
