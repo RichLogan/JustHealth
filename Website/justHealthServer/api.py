@@ -101,6 +101,7 @@ def registerUser():
       profile['password'] = request.form['password']
       profile['confirmpassword'] = request.form['confirmpassword']
       accountType = request.form['accounttype']
+      profile['profilepicture'] = "default.png"
     except KeyError, e:
       return "All fields must be filled out"
     try:
@@ -149,7 +150,8 @@ def registerUser():
       accountdeactivated = False,
       accountlocked = False,
       loginattempts = 0,
-      verified  = False
+      verified  = False,
+      profilepicture = profile['profilepicture']
     )
 
     if accountType == "patient":
