@@ -267,6 +267,14 @@
                 android:value=".SelfAppointments" />
         </activity>
 
+        <activity
+            android:name=".ExpiredPassword"
+            android:label="ExpiredPassword">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
     </application>
 
 </manifest>
