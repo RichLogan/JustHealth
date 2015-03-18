@@ -139,7 +139,7 @@
       <div>
         <h5><i class="fa fa-link sideIcons" ></i> Connections </h5>
         {% if connections %}
-          {% for connection in completed %} 
+          {% for connection in completed|sort(attribute='username') %} 
             <a data-toggle="modal" data-target="#{{connection.username}}"></a>
             <hr class="dashboard">
             <a class="modalheader" data-toggle="modal" data-target="#{{connection.username}}">
