@@ -101,6 +101,7 @@ def registerUser():
       profile['password'] = request.form['password']
       profile['confirmpassword'] = request.form['confirmpassword']
       accountType = request.form['accounttype']
+      profile['profilepicture'] = "default.png"
     except KeyError, e:
       return "All fields must be filled out"
     try:
@@ -149,7 +150,8 @@ def registerUser():
       accountdeactivated = False,
       accountlocked = False,
       loginattempts = 0,
-      verified  = False
+      verified  = False,
+      profilepicture = profile['profilepicture']
     )
 
     if accountType == "patient":
@@ -1325,11 +1327,13 @@ def deletePrescription():
 def deletePrescription(prescriptionid):
     try:
         instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
-        with database.transaction():
-            instance.delete_instance()
-            return "Deleted"
-    except:
+    except Prescription.DoesNotExist:
         return "Failed"
+    with database.transaction():
+        instance.delete_instance(recursive=True)
+        return "Deleted"
+    return "Failed"
+
 
 @app.route('/api/getPrescriptions', methods=['POST'])
 @auth.login_required

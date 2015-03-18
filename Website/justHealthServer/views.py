@@ -560,10 +560,11 @@ def prescriptions():
 @needLogin
 def deletePrescription_view():
     """Informs Carer that the prescription has been deleted from the selected patient"""
-    prescriptionid = request.args.get('id', '')
+    prescriptionid = request.args.get('id')
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
-    username = request.args.get('username', '')
+    username = request.args.get('username')
     result = deletePrescription(prescriptionid)
+
     if result != "Failed":
         result = "Deleted " + prescription.medication.name + " (" + str(prescription.quantity) + "x" + str(prescription.dosage) + ") " + prescription.dosageunit + " for " + username
         flash(result, 'result')
