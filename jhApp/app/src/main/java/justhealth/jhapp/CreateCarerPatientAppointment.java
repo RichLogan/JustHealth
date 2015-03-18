@@ -106,7 +106,7 @@ public class CreateCarerPatientAppointment extends Activity {
         details.put("enddate", ((EditText) findViewById(R.id.endDate)).getText().toString());
         details.put("endtime", ((EditText) findViewById(R.id.endTime)).getText().toString());
         details.put("description", ((EditText) findViewById(R.id.details)).getText().toString());
-        details.put("apptype", "Carer Visit");
+        details.put("apptype", "Carer");
 
         new AsyncTask<Void, Void, String>() {
 
@@ -116,6 +116,7 @@ public class CreateCarerPatientAppointment extends Activity {
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(CreateCarerPatientAppointment.this, "Loading...", "Creating appointment", true);
+                System.out.println(details);
             }
 
             @Override
