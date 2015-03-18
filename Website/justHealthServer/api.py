@@ -1953,7 +1953,7 @@ def getNotificationContent(notification):
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
         except:
-            doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
@@ -1966,7 +1966,7 @@ def getNotificationContent(notification):
             takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
             prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
         except:
-            doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+            doesNotExist = Notification.get(Notification.notificationid == notification['notificationId'])
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
@@ -2128,7 +2128,8 @@ def createTakePrescriptionInstances(username, currentDateTime):
                                 currentcount = 0,
                                 startingcount = p.stockleft,
                                 currentdate = currentDateTime.date())
-                    insert.execute()
+                    takePrescriptionId = insert.execute()
+                    pushNotificationPrescription(username, takePrescriptionId)
 
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
