@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Quantity (How many per dose)"
+                        android:hint="Quantity (How many to take each time)"
                         android:id="@+id/quantity"
                         style="@style/inputWithIcon"/>
                     <IconTextView
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Dosage Value (e.g. 100)"
+                        android:hint="Weight of medication (e.g. 200)"
                         android:id="@+id/dosageValue"
                         style="@style/inputWithIcon"/>
                     <IconTextView
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Frequency (e.g. 1)"
+                        android:hint="How many times a day? (e.g. 1)"
                         android:inputType="time"
                         android:id="@+id/frequency"
                         style="@style/inputWithIcon"/>
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Dosage Form (e.g. Tablet)"
+                        android:hint="Type of medication (e.g. Tablet)"
                         android:id="@+id/type"
                         style="@style/inputWithIcon"/>
                     <IconTextView
@@ -132,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Patient's Current Stock"
+                        android:hint="Patient's Current Supply of medication"
                         android:id="@+id/stockLeft"
                         style="@style/inputWithIcon"/>
                     <IconTextView
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Observations"
+                        android:hint="Guidence Notes"
                         android:id="@+id/observations"
                         style="@style/inputWithIcon"/>
                     <IconTextView
