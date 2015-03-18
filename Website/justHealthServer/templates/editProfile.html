@@ -26,6 +26,8 @@
     }
 
     $(document).ready(function() {
+        dobCheck();
+        validateEmailCheck();
         //Check all fields are filled in
         $('form').submit(function(e) {
             $(".check").each(function(){
@@ -87,7 +89,7 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label class="control-label" for="email">Email</label>
                     <input class="form-control input-sm" type="text" name="email" id="validateEmail" value="{{request.email}}" onkeyup="validateEmailCheck();">
                 </div>
                 <div class="form-group">
