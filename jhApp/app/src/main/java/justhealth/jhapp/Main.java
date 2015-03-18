@@ -186,6 +186,11 @@ public class Main extends Activity {
     private void registerInBackground() {
         new AsyncTask<Void, Void, String>() {
             @Override
+            protected void onPreExecute() {
+                //pd = ProgressDialog.show(Main.this, "Loading...", "Registering your android device", true);
+            }
+
+            @Override
             protected String doInBackground(Void... params) {
                 String msg = "";
                 try {
