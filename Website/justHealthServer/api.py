@@ -2123,7 +2123,6 @@ def createTakePrescriptionInstances(username, currentDateTime):
                                 startingcount = p.stockleft,
                                 currentdate = currentDateTime.date())
                     takePrescriptionId = insert.execute()
-                    pushNotificationPrescription(username, takePrescriptionId)
 
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
@@ -2226,7 +2225,8 @@ def addReminders(username, now):
                 relatedObject = p['prescriptionid'],
                 extraFrequency = int(p['frequency']))
             with database.transaction():
-                insertReminder.execute()
+                reminderId = str(insertReminder.execute())
+                pushNotificationPrescription(username, reminderId)
 
 def deleteReminders(username, now):
     """Deletes any reminders that have expired"""
