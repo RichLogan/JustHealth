@@ -47,6 +47,11 @@
   }
 
   $(document).ready(function() {
+    //Opens the connections modal on load if a connection has just been requested
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').toggle();
+    }
+
     // Handles Spinning of Notification Arrow
     $("#notificationsBar").click(function() {
       deg = addAngle(180);

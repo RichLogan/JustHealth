@@ -119,8 +119,6 @@ def index():
             expiredPrescriptions = expiredPrescriptions,
             appType=Appointmenttype.select(),
             medicationList = Medication.select())
-    
-
 
 @app.route('/profile')
 @needLogin
@@ -391,10 +389,9 @@ def createConnectionWeb():
     result = createConnection(request.form)
     if result != "Connection already established":
         flash(result, 'success')
-        return redirect('/?go=connections')
     else:
         flash(result, 'danger')
-    return redirect('/?go=connections')
+    return redirect('/home?go=connections')
 
 @app.route('/completeConnectionWeb', methods=['POST', 'GET'])
 def completeConnectionWeb():
@@ -404,7 +401,7 @@ def completeConnectionWeb():
         flash(result, 'danger')
     else:
         flash(result, 'success')
-    return redirect('/?go=connections')
+    return redirect('/home?go=connections')
 
 @app.route('/deleteConnectionWeb', methods=['POST', 'GET'])
 def deleteConnectionWeb():
@@ -412,10 +409,9 @@ def deleteConnectionWeb():
     result = deleteConnection(request.form)
     if result == "True":
         flash("Delete successful", 'success')
-        return redirect('/?go=connections')
     else:
         flash("Delete failed. Please try again or contact an administrator", 'danger')
-    return redirect('/?go=connections')
+    return redirect('/home?go=connections')
 
 @app.route('/cancelConnectionWeb', methods=['POST', 'GET'])
 def cancelConnectionWeb():
@@ -425,7 +421,7 @@ def cancelConnectionWeb():
         flash("Cancellation successful", 'success')
     else:
         flash("Cancellation failed. Please try again or contact an administrator", 'danger')
-    return redirect('/?go=connections')
+    return redirect('/home?go=connections')
 
 @app.route('/appointments', methods=['POST', 'GET'])
 @needLogin
