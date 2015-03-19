@@ -1553,7 +1553,7 @@ def checkStockLevel(prescription, count):
                     Notification.username == patient.username,
                     Notification.notificationtype == "Medication Low",
                     Notification.relatedObject == thisPrescription.prescriptionid,
-                    Notification.dimissed == False,
+                    Notification.dismissed == False,
                     Notification.relatedObjectTable == "Prescription"
                 ).get()
         except Notification.DoesNotExist:
@@ -1564,7 +1564,7 @@ def checkStockLevel(prescription, count):
                     Notification.username == carer.username,
                     Notification.notificationtype == "Patient Medication Low",
                     Notification.relatedObject == thisPrescription.prescriptionid,
-                    Notification.dimissed == False,
+                    Notification.dismissed == False,
                     Notification.relatedObjectTable == "Prescription"
                 ).get()
         except Notification.DoesNotExist:
