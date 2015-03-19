@@ -2177,6 +2177,8 @@ def createTakePrescriptionInstances(username, currentDateTime):
                     (TakePrescription.currentdate == currentDateTime.date())
                 ).get()
             except TakePrescription.DoesNotExist:
+                content = "You are due to take " + str(p.quantity) + " " + str(p.dosageform) + "(s) of " + p.medication.name + " " + str(p.frequency) + " time(s) today."
+                sendPushNotification(username, "Prescription Due Today", content)
                 with database.transaction():
                     insert = TakePrescription.insert(
                                 prescriptionid = p.prescriptionid,
@@ -2279,7 +2281,6 @@ def addReminders(username, now):
             r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
         except Reminder.DoesNotExist:
             content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today."
-            sendPushNotification(username, "Prescription Due Today", content)
 
             insertReminder = Reminder.insert(
                 username = username,
