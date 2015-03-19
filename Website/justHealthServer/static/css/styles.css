@@ -76,14 +76,6 @@ header {
   margin-top: 40px;
 }
 
-#profPictureContainer {
-  width: 14em; max-height: 14em; overflow: hidden;
-}
-
-#profPictureContainer img {
-  width:100%;
-}
-
 footer {
   position:absolute;
   bottom:0;
