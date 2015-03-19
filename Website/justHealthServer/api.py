@@ -1283,14 +1283,11 @@ def addPrescription(details):
         Saturday = Saturday,
         Sunday  = Sunday
     )
-    
-    try:
-        with database.transaction():
-            insertPrescription.execute()
-            createNotificationRecord(details['username'], "Prescription Added", int(insertPrescription.prescriptionid))
-            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
-    except:
-        return "Failed"
+
+    with database.transaction():
+        result = insertPrescription.execute()
+        createNotificationRecord(details['username'], "Prescription Added", int(result))
+        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
         
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
