@@ -730,7 +730,7 @@ def completeConnection(details):
     attemptedCode = int(details['codeattempt'])
 
     # get record
-    instance = Relationship.select().where(Relationship.requestor == requestor & Relationship.target == target).get()
+    instance = Relationship.select().where((Relationship.requestor == requestor) & (Relationship.target == target)).get()
     if instance.code == attemptedCode:
         # Correct attempt, establish relationship in correct table
         # TODO place into relationship table
