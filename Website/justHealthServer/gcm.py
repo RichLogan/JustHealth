@@ -219,7 +219,7 @@ def getAndroidNotificationContent(notification):
       try:
         takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
         prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
-        content = "Your patient " + str(prescription.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+        content = "Your patient " + str(prescription.username.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
       except:
         doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
         with database.transaction():
