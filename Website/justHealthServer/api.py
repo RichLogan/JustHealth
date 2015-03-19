@@ -1768,8 +1768,7 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
     # What type of user are we dealing with?
     try:
         user = Admin.select().join(Client).where(Client.username==settings['username']).get()
-        
-    except Patient.DoesNotExist:
+    except Admin.DoesNotExist:
         try:
             user = Carer.select().join(Client).where(Client.username==settings['username']).get()
         except Carer.DoesNotExist:
