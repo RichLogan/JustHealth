@@ -38,8 +38,6 @@
   }
 
   function deletePrescription(prescriptionid, username) {
-    alert(prescriptionid);
-    alert(username);
     if (confirm("Are you sure you want to delete this prescription?")) {
       location.href='/deletePrescription?id=' + prescriptionid + '&username=' + username;
     }
