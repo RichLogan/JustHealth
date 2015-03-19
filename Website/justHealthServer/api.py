@@ -1263,25 +1263,28 @@ def addPrescription(details):
     except KeyError, e:
         Sunday = False;
 
-    insertPrescription = Prescription.create(
-        username = details['username'],
-        medication = details['medication'],
-        dosage = details['dosage'],
-        frequency = details['frequency'],
-        quantity = details['quantity'],
-        dosageunit = details['dosageunit'],
-        startdate = details['startdate'],
-        enddate = details['enddate'],
-        stockleft = details['stockleft'],
-        prerequisite = details['prerequisite'],
-        dosageform = details['dosageform'],
-        Monday = Monday,
-        Tuesday = Tuesday,
-        Wednesday = Wednesday,
-        Thursday = Thursday,
-        Friday = Friday,
-        Saturday = Saturday,
-        Sunday  = Sunday)
+    try:
+        insertPrescription = Prescription.create(
+            username = details['username'],
+            medication = details['medication'],
+            dosage = details['dosage'],
+            frequency = details['frequency'],
+            quantity = details['quantity'],
+            dosageunit = details['dosageunit'],
+            startdate = details['startdate'],
+            enddate = details['enddate'],
+            stockleft = details['stockleft'],
+            prerequisite = details['prerequisite'],
+            dosageform = details['dosageform'],
+            Monday = Monday,
+            Tuesday = Tuesday,
+            Wednesday = Wednesday,
+            Thursday = Thursday,
+            Friday = Friday,
+            Saturday = Saturday,
+            Sunday  = Sunday)
+    except:
+        return "Data is in the wrong format"
 
     try:
         with database.transaction():
@@ -2194,7 +2197,7 @@ def pingServer(sender, **extra):
         loggedInUser = session['username']
         dt = datetime.datetime.now()
         
-        if Appointments.select().count() != 0:
+        if Reminder.select().count() != 0:
             deleteReminders(loggedInUser, dt)
 
         if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):

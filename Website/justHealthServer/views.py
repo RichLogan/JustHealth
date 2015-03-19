@@ -589,6 +589,12 @@ def addPrescription_view():
         flash(username, 'user')
         flash('prescription', 'type')
         return redirect(url_for('myPatients'))
+    elif result == "Data is in the wrong format":
+        flash('prescription', 'type')
+        flash('danger', 'class')
+        flash(result, 'result')
+        flash(username, 'user')
+        return redirect(url_for('myPatients'))
     else:
         flash('prescription', 'type')
         flash('danger', 'class')
