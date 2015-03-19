@@ -779,21 +779,20 @@ def deleteConnection(details):
 
     try:
         instance = Patientcarer.select().where((Patientcarer.patient == details['user']) & (Patientcarer.carer == details['connection'])).get()
-    except Patientcarer.DoesNotExist:
-        return "False"
-        
-    with database.transaction():
-        instance.delete_instance()
-        return "True"
-        
-        try:
-            instance = Patientcarer.select().where((Patientcarer.patient == details['connection']) & (Patientcarer.carer == details['user'])).get()
-        except Patientcarer.DoesNotExist:
-            return "False"
-            
         with database.transaction():
             instance.delete_instance()
             return "True"
+    except Patientcarer.DoesNotExist:
+        try:
+            instance = Patientcarer.select().where((Patientcarer.patient == details['connection']) & (Patientcarer.carer == details['user'])).get()
+            with database.transaction():
+                instance.delete_instance()
+                return "True"
+        
+        except Patientcarer.DoesNotExist:
+            return "False"
+            
+        
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
