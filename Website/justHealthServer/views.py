@@ -853,3 +853,7 @@ def addNewMedication():
     else:   
        return render_template('adminHome.html')
 
+import datetime
+@app.route('/test', methods=['POST', 'GET'])
+def test():
+    return str(addReminders('sophie15', datetime.datetime.now()))
