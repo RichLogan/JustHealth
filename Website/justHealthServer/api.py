@@ -2224,6 +2224,8 @@ def addReminders(username, now):
             r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
         except Reminder.DoesNotExist:
             content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today."
+            sendPushNotification(username, "Prescription Due Today", content)
+
             insertReminder = Reminder.insert(
                 username = username,
                 content = content,
@@ -2231,15 +2233,9 @@ def addReminders(username, now):
                 relatedObjectTable = "Prescription",
                 relatedObject = p['prescriptionid'],
                 extraFrequency = int(p['frequency']))
-            
-            
-            sendPushNotification(username, "Prescription Due Today", content)
 
             with database.transaction():
                 insertReminder.execute()
-            
-
-            
 
 def deleteReminders(username, now):
     """Deletes any reminders that have expired"""
