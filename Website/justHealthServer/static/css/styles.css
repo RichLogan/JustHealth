@@ -76,6 +76,10 @@ header {
   margin-top: 40px;
 }
 
+#profPictureContainer {
+  width: 14em; max-height: 14em; overflow: hidden;
+}
+
 footer {
   position:absolute;
   bottom:0;
@@ -278,7 +282,7 @@ hr.notes {
 }
 
 .nav-profile-img {
-  height: 40px;
+  height: 45px;
   padding:5px 10px 0px 10px;
 }
 
