@@ -1263,34 +1263,32 @@ def addPrescription(details):
     except KeyError, e:
         Sunday = False;
 
-    try:
-        insertPrescription = Prescription.create(
-            username = details['username'],
-            medication = details['medication'],
-            dosage = details['dosage'],
-            frequency = details['frequency'],
-            quantity = details['quantity'],
-            dosageunit = details['dosageunit'],
-            startdate = details['startdate'],
-            enddate = details['enddate'],
-            stockleft = details['stockleft'],
-            prerequisite = details['prerequisite'],
-            dosageform = details['dosageform'],
-            Monday = Monday,
-            Tuesday = Tuesday,
-            Wednesday = Wednesday,
-            Thursday = Thursday,
-            Friday = Friday,
-            Saturday = Saturday,
-            Sunday  = Sunday)
-    except:
-        return "Data is in the wrong format"
-
+    insertPrescription = Prescription.insert(
+        username = details['username'],
+        medication = details['medication'],
+        dosage = details['dosage'],
+        frequency = details['frequency'],
+        quantity = details['quantity'],
+        dosageunit = details['dosageunit'],
+        startdate = details['startdate'],
+        enddate = details['enddate'],
+        stockleft = details['stockleft'],
+        prerequisite = details['prerequisite'],
+        dosageform = details['dosageform'],
+        Monday = Monday,
+        Tuesday = Tuesday,
+        Wednesday = Wednesday,
+        Thursday = Thursday,
+        Friday = Friday,
+        Saturday = Saturday,
+        Sunday  = Sunday
+    )
+    
     try:
         with database.transaction():
-            insertPrescription.save()
+            insertPrescription.execute()
             createNotificationRecord(details['username'], "Prescription Added", int(insertPrescription.prescriptionid))
-        return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
+            return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
     except:
         return "Failed"
         
@@ -2193,15 +2191,13 @@ def createTakePrescriptionInstances(username, currentDateTime):
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
     try:
-        loggedInUser = getUsernameFromHeader()
+        loggedInUser = session['username']
         dt = datetime.datetime.now()
 
-        with database.transaction():
-            deleteReminders(loggedInUser, dt)
+        deleteReminders(loggedInUser, dt)
 
-        with database.transaction():
-            if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
-                addReminders(loggedInUser, dt)
+        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
+            addReminders(loggedInUser, dt)
 
         createTakePrescriptionInstances(loggedInUser, dt)
         checkMissedPrescriptions(loggedInUser, dt.date())
@@ -2304,24 +2300,26 @@ def deleteReminders(username, now):
     # Appointments
     # Need to remove all reminders that are no longer immediately happening / 15mins. 
     appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
-    allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
-    for reminder in appointmentReminders:
-        appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
-        appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
-        if appointmentEndDateTime < now:
-            with database.transaction():
-                reminder.delete_instance()
+    if appointmentReminders.count() !=0:
+        allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
+        for reminder in appointmentReminders:
+            appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
+            appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
+            if appointmentEndDateTime < now:
+                with database.transaction():
+                    reminder.delete_instance()
 
     # Prescriptions
     # Need to remove all prescriptions that are not on the current day or start date > now or end date < now. 
     prescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
-    allPrescriptions = Prescription.select().where(Prescription.username == username)
-    currentDay = now.strftime("%A")
-    for reminder in prescriptionReminders:
-        prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
-        if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
-            with database.transaction():
-                reminder.delete_instance()
+    if appointmentReminders.count() !=0:
+        allPrescriptions = Prescription.select().where(Prescription.username == username)
+        currentDay = now.strftime("%A")
+        for reminder in prescriptionReminders:
+            prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
+            if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
+                with database.transaction():
+                    reminder.delete_instance()
 
 def getReminders(username):
     allReminders = Reminder.select().dicts().where(Reminder.username == username)
