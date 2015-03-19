@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,12 +23,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.zip.CheckedOutputStream;
 
 public class EditPrescription extends Activity {
 
     JSONObject prescription;
 
     protected void onCreate(Bundle savedInstanceState) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_edit_prescription);
@@ -102,6 +107,13 @@ public class EditPrescription extends Activity {
             ((EditText) findViewById(R.id.endDate)).setText(prescription.getString("enddate"), TextView.BufferType.EDITABLE);
             ((EditText) findViewById(R.id.stockLeft)).setText(prescription.getString("stockleft"), TextView.BufferType.EDITABLE);
             ((EditText) findViewById(R.id.observations)).setText(prescription.getString("prerequisite"), TextView.BufferType.EDITABLE);
+            ((CheckBox) findViewById(R.id.monday)).setChecked(prescription.getBoolean("Monday"));
+            ((CheckBox) findViewById(R.id.tuesday)).setChecked(prescription.getBoolean("Tuesday"));
+            ((CheckBox) findViewById(R.id.wednesday)).setChecked(prescription.getBoolean("Wednesday"));
+            ((CheckBox) findViewById(R.id.thursday)).setChecked(prescription.getBoolean("Thursday"));
+            ((CheckBox) findViewById(R.id.friday)).setChecked(prescription.getBoolean("Friday"));
+            ((CheckBox) findViewById(R.id.saturday)).setChecked(prescription.getBoolean("Saturday"));
+            ((CheckBox) findViewById(R.id.sunday)).setChecked(prescription.getBoolean("Sunday"));
         } catch (JSONException e) {
             exit(false, "Prescription is malformed, please try again");
         }
@@ -116,6 +128,7 @@ public class EditPrescription extends Activity {
         } catch (JSONException e) {
             exit(false, "Prescription is malformed, please try again");
         }
+
         parameters.put("medication", ((Spinner) findViewById(R.id.medication)).getSelectedItem().toString());
         parameters.put("quantity", ((EditText) findViewById(R.id.quantity)).getText().toString());
         parameters.put("dosage", ((EditText) findViewById(R.id.dosageValue)).getText().toString());
@@ -126,6 +139,15 @@ public class EditPrescription extends Activity {
         parameters.put("enddate", ((EditText) findViewById(R.id.endDate)).getText().toString());
         parameters.put("stockleft", ((EditText) findViewById(R.id.stockLeft)).getText().toString());
         parameters.put("prerequisite", ((EditText) findViewById(R.id.observations)).getText().toString());
+        parameters.put("Monday", String.valueOf(((CheckBox) findViewById(R.id.monday)).isChecked()));
+        parameters.put("Tuesday", String.valueOf(((CheckBox) findViewById(R.id.tuesday)).isChecked()));
+        parameters.put("Wednesday", String.valueOf(((CheckBox) findViewById(R.id.wednesday)).isChecked()));
+        parameters.put("Thursday", String.valueOf(((CheckBox) findViewById(R.id.thursday)).isChecked()));
+        parameters.put("Friday", String.valueOf(((CheckBox) findViewById(R.id.friday)).isChecked()));
+        parameters.put("Saturday", String.valueOf(((CheckBox) findViewById(R.id.saturday)).isChecked()));
+        parameters.put("Sunday", String.valueOf(((CheckBox) findViewById(R.id.sunday)).isChecked()));
+
+        System.out.print(parameters);
 
         new AsyncTask<Void, Void, String>() {
             ProgressDialog progressDialog;
