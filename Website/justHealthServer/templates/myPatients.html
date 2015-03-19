@@ -176,25 +176,25 @@
                                         <label for="{{patient.username}}">Days to take the prescription:</label>
                                         </br>
                                         <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Monday" id="{{patient.username}}_Monday"><strong>Monday</strong>
+                                          <input type="checkbox" name="Monday" id="{{patient.username}}_Monday"><strong>Monday</strong>
                                         </label></br>
                                         <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Tuesday"id="{{patient.username}}_Tuesday"><strong>Tuesday</strong>
+                                          <input type="checkbox" name="Tuesday"id="{{patient.username}}_Tuesday"><strong>Tuesday</strong>
                                         </label></br>
                                         <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Wednesday" id="{{patient.username}}_Wednesday"><strong>Wednesday</strong>
+                                          <input type="checkbox" name="Wednesday" id="{{patient.username}}_Wednesday"><strong>Wednesday</strong>
                                         </label></br>
                                         <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Thursday"id="{{patient.username}}_Thursday"><strong>Thursday</strong>
+                                          <input type="checkbox" name="Thursday"id="{{patient.username}}_Thursday"><strong>Thursday</strong>
                                         </label></br>
                                         <label class="checkbox-inline">
-                                          <input type="checkbox" value="" name="Friday" id="{{patient.username}}_Friday"><strong>Friday</strong>
+                                          <input type="checkbox" name="Friday" id="{{patient.username}}_Friday"><strong>Friday</strong>
                                         </label></br>
                                         <label class="checkbox-inline">
-                                           <input type="checkbox" value="" name="Saturday" id="{{patient.username}}_Saturday"><strong>Saturday</strong>
+                                           <input type="checkbox" name="Saturday" id="{{patient.username}}_Saturday"><strong>Saturday</strong>
                                         </label></br>
                                         <label class="checkbox-inline">
-                                           <input type="checkbox" value="" name="Sunday" id="{{patient.username}}_Sunday"><strong>Sunday</strong>
+                                           <input type="checkbox" name="Sunday" id="{{patient.username}}_Sunday"><strong>Sunday</strong>
                                         </label>
                                       </div>
                                     </div>
@@ -379,9 +379,56 @@
                                                   </div>
 
                                                   <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Days to Take</label>
+                                                    <div class="col-sm-5">
+                                                      <div class="row" style="padding-left: 1.5em;">
+                                                        <input type="checkbox" name="Monday" id="{{prescription.prescriptionid}}Monday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Tuesday" id="{{prescription.prescriptionid}}Tuesday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Wednesday" id="{{prescription.prescriptionid}}Wednesday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Thursday" id="{{prescription.prescriptionid}}Thursday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Friday" id="{{prescription.prescriptionid}}Friday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Saturday" id="{{prescription.prescriptionid}}Saturday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Sunday" id="{{prescription.prescriptionid}}Sunday" style="margin-right: 1em">
+                                                      </div>
+                                                      <script type="text/javascript">
+                                                        if ("{{prescription.Monday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Monday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Tuesday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Tuesday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Wednesday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Wednesday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Thursday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Thursday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Friday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Friday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Saturday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Saturday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Sunday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Sunday').prop('checked', true);
+                                                        }
+                                                      </script>
+                                                      <div class="row" style="padding-left: 1.5em;">
+                                                        <span style="margin-right: 1.35em">M</span>
+                                                        <span style="margin-right: 1.35em">T</span>
+                                                        <span style="margin-right: 1.35em">W</span>
+                                                        <span style="margin-right: 1.35em">T</span>
+                                                        <span style="margin-right: 1.35em">F</span>
+                                                        <span style="margin-right: 1.35em">S</span>
+                                                        <span style="margin-right: 1.35em">S</span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="form-group">
                                                     <label class="col-sm-2 control-label">Guidance notes</label>
                                                     <div class="col-sm-8">
-                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
+                                                      <textarea class="form-control" name="prerequisite">{{prescription.prerequisite}}</textarea>
                                                     </div>
                                                   </div>
 
@@ -494,9 +541,56 @@
                                                   </div>
 
                                                   <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Days to Take</label>
+                                                    <div class="col-sm-5">
+                                                      <div class="row" style="padding-left: 1.5em;">
+                                                        <input type="checkbox" name="Monday" id="{{prescription.prescriptionid}}Monday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Tuesday" id="{{prescription.prescriptionid}}Tuesday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Wednesday" id="{{prescription.prescriptionid}}Wednesday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Thursday" id="{{prescription.prescriptionid}}Thursday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Friday" id="{{prescription.prescriptionid}}Friday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Saturday" id="{{prescription.prescriptionid}}Saturday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Sunday" id="{{prescription.prescriptionid}}Sunday" style="margin-right: 1em">
+                                                      </div>
+                                                      <script type="text/javascript">
+                                                        if ("{{prescription.Monday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Monday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Tuesday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Tuesday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Wednesday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Wednesday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Thursday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Thursday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Friday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Friday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Saturday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Saturday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Sunday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Sunday').prop('checked', true);
+                                                        }
+                                                      </script>
+                                                      <div class="row" style="padding-left: 1.5em;">
+                                                        <span style="margin-right: 1.35em">M</span>
+                                                        <span style="margin-right: 1.35em">T</span>
+                                                        <span style="margin-right: 1.35em">W</span>
+                                                        <span style="margin-right: 1.35em">T</span>
+                                                        <span style="margin-right: 1.35em">F</span>
+                                                        <span style="margin-right: 1.35em">S</span>
+                                                        <span style="margin-right: 1.35em">S</span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="form-group">
                                                     <label class="col-sm-2 control-label">Guidance notes</label>
                                                     <div class="col-sm-8">
-                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
+                                                      <textarea class="form-control" name="prerequisite">{{prescription.prerequisite}}</textarea>
                                                     </div>
                                                   </div>
 
@@ -597,9 +691,56 @@
                                                   </div>
 
                                                   <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Days to Take</label>
+                                                    <div class="col-sm-5">
+                                                      <div class="row" style="padding-left: 1.5em;">
+                                                        <input type="checkbox" name="Monday" id="{{prescription.prescriptionid}}Monday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Tuesday" id="{{prescription.prescriptionid}}Tuesday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Wednesday" id="{{prescription.prescriptionid}}Wednesday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Thursday" id="{{prescription.prescriptionid}}Thursday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Friday" id="{{prescription.prescriptionid}}Friday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Saturday" id="{{prescription.prescriptionid}}Saturday" style="margin-right: 1em">
+                                                        <input type="checkbox" name="Sunday" id="{{prescription.prescriptionid}}Sunday" style="margin-right: 1em">
+                                                      </div>
+                                                      <script type="text/javascript">
+                                                        if ("{{prescription.Monday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Monday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Tuesday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Tuesday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Wednesday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Wednesday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Thursday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Thursday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Friday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Friday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Saturday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Saturday').prop('checked', true);
+                                                        }
+                                                        if ("{{prescription.Sunday}}" == "True") {
+                                                          $('#{{prescription.prescriptionid}}Sunday').prop('checked', true);
+                                                        }
+                                                      </script>
+                                                      <div class="row" style="padding-left: 1.5em;">
+                                                        <span style="margin-right: 1.35em">M</span>
+                                                        <span style="margin-right: 1.35em">T</span>
+                                                        <span style="margin-right: 1.35em">W</span>
+                                                        <span style="margin-right: 1.35em">T</span>
+                                                        <span style="margin-right: 1.35em">F</span>
+                                                        <span style="margin-right: 1.35em">S</span>
+                                                        <span style="margin-right: 1.35em">S</span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="form-group">
                                                     <label class="col-sm-2 control-label">Guidance notes</label>
                                                     <div class="col-sm-8">
-                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
+                                                      <textarea class="form-control" name="prerequisite">{{prescription.prerequisite}}</textarea>
                                                     </div>
                                                   </div>
 
