@@ -30,8 +30,8 @@ public class Profile extends Activity {
         // Load in saved Profile Information
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        ((TextView) findViewById(R.id.profileUsername)).setText(username);
-        ((TextView) findViewById(R.id.profileAccount)).setText(account.getString("accountType", null));
+        ((TextView) findViewById(R.id.profileUsername)).setText("Username: " + username);
+        ((TextView) findViewById(R.id.profileAccount)).setText("Account Type: " + account.getString("accountType", null));
 
         // Get all Profile Information
         loadProfile(username);
@@ -66,7 +66,7 @@ public class Profile extends Activity {
                     //Populate TextViews
                     username.setText("Username: " + profileInfo.getString("username"));
                     name.setText("Name: " + profileInfo.getString("firstname") + " " + profileInfo.getString("surname"));
-                    dob.setText("D.O.B: " + profileInfo.getString("dob"));
+                    dob.setText("Date of Birth: " + profileInfo.getString("dob"));
                     gender.setText("Gender: " + profileInfo.getString("gender"));
                     accountType.setText("Account Type: " + profileInfo.getString("accounttype"));
                     email.setText("Email: " + profileInfo.getString("email"));

@@ -3,10 +3,12 @@ package justhealth.jhapp;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -79,47 +81,62 @@ public class CarerPatientCorrespondence extends Activity  {
         }
     }
 
-    /**
-     * Runs when the page resumes. For instance after a note is added.
-     */
-    protected void onResume() {
-        super.onResume();
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.correspondenceView);
-        linearLayout.removeAllViewsInLayout();
-        getNotes();
-    }
-
     private void getNotes() {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.correspondenceView);
+        linearLayout.removeAllViews();
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        final HashMap<String, String> details = new HashMap<String, String>();
 
         //Text Boxes
         details.put("carer", username);
         details.put("patient", patientUsername);
 
-        String response = Request.post("getCorrespondence", details, getApplicationContext());
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
 
-        try {
-            notes = new JSONArray(response);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        for (int i = 0; i < notes.length(); i++) {
-            try {
-                JSONObject obj = notes.getJSONObject(i);
-                final String title = obj.getString("title");
-                final String date = obj.getString("datetime");
-                final String content = obj.getString("notes");
-                addToView(title, date, content);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(CarerPatientCorrespondence.this, "Loading...", "Loading notes", true);
             }
-        }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    String response = Request.post("getCorrespondence", details, getApplicationContext());
+                    return new JSONArray(response);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray response) {
+                try {
+                    super.onPostExecute(response);
+
+                    notes = response;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                for (int i = 0; i < notes.length(); i++) {
+                    try {
+                        JSONObject obj = notes.getJSONObject(i);
+                        final String title = obj.getString("title");
+                        final String date = obj.getString("datetime");
+                        final String content = obj.getString("notes");
+                        addToView(title, date, content);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                progressDialog.dismiss();
+            }
+        }.execute();
     }
 
     private void addToView(String title, String date, String content) {

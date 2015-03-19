@@ -3,8 +3,10 @@ package justhealth.jhapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -30,24 +32,46 @@ public class PatientPrescription extends Activity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Your Prescriptions");
 
-        displayPrescriptions(getPrescriptions());
+        getPrescriptions();
     }
 
-    private JSONArray getPrescriptions() {
-        HashMap<String, String> parameters = new HashMap<String, String>();
+    private void getPrescriptions() {
+        final HashMap<String, String> parameters = new HashMap<String, String>();
         String username = getSharedPreferences("account", 0).getString("username", null);
         parameters.put("username", username);
 
-        String response = Request.post("getPrescriptions", parameters, getApplicationContext());
-        try {
-            JSONArray result = new JSONArray(response);
-            System.out.println(result);
-            return result;
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(PatientPrescription.this, "Loading...", "Loading your prescriptions", true);
+            }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    String response = Request.post("getPrescriptions", parameters, getApplicationContext());
+                    return new JSONArray(response);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray response) {
+                try {
+                    super.onPostExecute(response);
+                    JSONArray prescriptionList = response;
+                    displayPrescriptions(prescriptionList);
+                    progressDialog.dismiss();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
+
     }
 
     private void displayPrescriptions(JSONArray prescriptionList) {

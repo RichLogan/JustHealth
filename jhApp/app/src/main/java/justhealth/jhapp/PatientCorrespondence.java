@@ -3,9 +3,11 @@ package justhealth.jhapp;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -54,32 +56,55 @@ public class PatientCorrespondence extends Activity {
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        final HashMap<String, String> details = new HashMap<String, String>();
 
         //Text Boxes
         details.put("username", username);
 
-        String response = Request.post("getPatientNotes", details, getApplicationContext());
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
 
-        try {
-            notes = new JSONArray(response);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        for (int i = 0; i < notes.length(); i++) {
-            try {
-                JSONObject obj = notes.getJSONObject(i);
-                final String title = obj.getString("title");
-                final String date = obj.getString("datetime");
-                final String content = obj.getString("notes");
-                addToView(title, date, content);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(PatientCorrespondence.this, "Loading...", "Loading your notes", true);
             }
-        }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    String response = Request.post("getPatientNotes", details, getApplicationContext());
+                    return new JSONArray(response);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray response) {
+                try {
+                    super.onPostExecute(response);
+                    notes = response;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+
+                if (notes != null) {
+                    for (int i = 0; i < notes.length(); i++) {
+                        try {
+                            JSONObject obj = notes.getJSONObject(i);
+                            final String title = obj.getString("title");
+                            final String date = obj.getString("datetime");
+                            final String content = obj.getString("notes");
+                            addToView(title, date, content);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }.execute();
     }
     /**
      * This prints out the button for each of the appointments that are passed to the method.

@@ -106,25 +106,7 @@ public class SelfAppointments extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-
-        final HashMap<String, String> params = new HashMap<String, String>();
-
-        params.put("loggedInUser", username);
-        params.put("targetUser", username);
-        String postRequest = Request.post("getAllAppointments", params, getApplicationContext());
-
-        try {
-            getApps = new JSONArray(postRequest);
-            LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
-            layout.removeAllViewsInLayout();
-            printUpcomingAppointments();
-        }
-        catch (Exception e) {
-            Feedback.toast("Unable to refresh appointments", false, getApplicationContext());
-        }
-
+        getUpcomingAppointments();
     }
 
     private void getUpcomingAppointments() {
