@@ -2398,7 +2398,7 @@ def generation():
         createTakePrescriptionInstances(user.username, dt)
         checkMissedPrescriptions(user.username, dt.date())
     endReminderCount = Reminder.select().count()
-    return "Generated " + (startReminderCount - endReminderCount) + " reminders"
+    return "Generated " + str((startReminderCount - endReminderCount)) + " reminders"
 ##
 # Signalling
 ##
