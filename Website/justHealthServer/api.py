@@ -2223,7 +2223,7 @@ def addReminders(username, now):
         try:
             r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
         except Reminder.DoesNotExist:
-            content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today.",
+            content = str("You are due to take " + p['quantity']) + " " + p['dosageform'] + "(s) of " + p['medication'] + " " + p['frequency'] + " time(s) today.")
             insertReminder = Reminder.insert(
                 username = username,
                 content = content,
