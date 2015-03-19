@@ -852,3 +852,4 @@ def addNewMedication():
         else: render_template('adminHome.html',type="warning", message = 'Update failed')
     else:   
        return render_template('adminHome.html')
+

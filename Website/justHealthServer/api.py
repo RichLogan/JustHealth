@@ -1970,7 +1970,7 @@ def getNotificationContent(notification):
             with database.transaction():
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
-        content = "Your patient " + str(prescription.username) + \
+        content = "Your patient " + str(prescription.username.username) + \
                     " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + \
                     " of " + str(prescription.medication.name) + " " + prescription.dosageform + "(s) " + \
                     " on " + str(takeInstance.currentdate)
@@ -2223,16 +2223,19 @@ def addReminders(username, now):
         try:
             r = allReminders.select().where((Reminder.relatedObjectTable == "Prescription") & (Reminder.relatedObject == p['prescriptionid'])).get()
         except Reminder.DoesNotExist:
+            content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today.",
             insertReminder = Reminder.insert(
                 username = username,
-                content = "You are due to take " + str(p['quantity']) + " " + str(p['dosageform']) + "(s) of " + p['medication'] + " " + str(p['frequency']) + " time(s) today.",
+                content = content,
                 reminderClass = "info",
                 relatedObjectTable = "Prescription",
                 relatedObject = p['prescriptionid'],
                 extraFrequency = int(p['frequency']))
+            
+            sendPushNotification(username, "Prescription Due Today", content)
+
             with database.transaction():
-                reminderId = str(insertReminder.execute())
-                pushNotificationPrescription(username, reminderId)
+                insertReminder.execute()
 
 def deleteReminders(username, now):
     """Deletes any reminders that have expired"""
