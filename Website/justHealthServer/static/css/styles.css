@@ -80,6 +80,10 @@ header {
   width: 14em; max-height: 14em; overflow: hidden;
 }
 
+#profPictureContainer img {
+  width:100%;
+}
+
 footer {
   position:absolute;
   bottom:0;
