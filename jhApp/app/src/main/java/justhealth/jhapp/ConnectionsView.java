@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -352,7 +353,7 @@ public class ConnectionsView extends Activity {
         if(response.equals(expectedResponse)) {
             Feedback.toast(expectedResponse, true, getApplicationContext());
             finish();
-            startActivity(getIntent());
+            startActivity(new Intent(ConnectionsView.this, ConnectionsMain.class));
         }
         else {
             enterCode(requestor, "An incorrect code was entered. Please try again.");
