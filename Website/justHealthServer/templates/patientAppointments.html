@@ -5,43 +5,52 @@
 {% block scriptsAndStyles %}
 <script>
   // true = Pass, false = Fail
-  var validationPass = true;
+  var checkStartDate = true;
+  var checkStartTime = true;
+  var checkEndDate = true;
+  var checkEndTime = true;
+  var timeTravelCheck = true;
+
+  function startDate() {
+    checkStartDate = checkDate($('#dateFrom'), "Start");
+  }
+
+  function endDate() {
+    checkEndDate = checkDate($('#dateTo'), "End");
+  }
+
+  function startTime() {
+    checkStartTime = checkTime($('#starttime'), "Start");
+  }
+
+  function endTime() {
+    checkEndTime = checkTime($('#endtime'), "End");
+  }
+
+  function timeTravel() {
+    timeTravelCheck = checkStartEnd($('#dateFrom'), $('#dateTo'), "Appointment");
+  }
  
-  function checkAppointmentDate(element, type) {
-    result = checkDate(element, type);
-    if (validationPass && !result) {
-      validationPass = result;
-    }
-  }
-
-  function checkAppointmentStartEnd(start, end, appointment) {
-    result = checkStartEnd($('#dateFrom'),$('#dateTo'),'Appointment');
-    if (validationPass && !result) {
-      validationPass = result;
-    }
-  }
-
-  function checkAppointmentTime(element, type) {
-    result = checkTime(element, type);
-    if (validationPass && !result) {
-      validationPass = result;
-    }
-  }
-
-  function enddatefunction() {
-    checkAppointmentDate($('#dateTo'), "End");
-    checkAppointmentStartEnd($('#dateFrom'), $('dateTo'), "Appointment");
-  }
-
   $(document).ready(function() {
     $('#createAppointmentForm').submit(function(e) {
       if (!formcheck1()) {
         e.preventDefault();
         return false;
       }
-      if (!validationPass) {
+      startDate();
+      endDate();
+      startTime();
+      endTime();
+      timeTravel();
+
+      alert("Start date: " + checkStartDate);
+      alert("Start time: " + checkStartTime);
+      alert("End date: " + checkEndDate);
+      alert("End time: " + checkEndTime);
+
+      if (!checkStartDate || !checkStartTime || !checkEndDate || !checkEndTime || !timeTravelCheck) {
         e.preventDefault();
-        alert('Please check the form for errors');
+        alert("Please check the form for errors");
         return false;
       }
     });
@@ -100,19 +109,19 @@
           </div>
           <div class="form-group appt-item-required">
             <label class="control-label" for="startdate">Start Date<sup style="color:red">*</sup></label>
-            <input class="form-control" type="date" name="startdate" id="dateFrom" onkeyup="checkAppointmentDate($(this), 'Start');">
+            <input class="form-control" type="date" name="startdate" id="dateFrom" onkeyup="startDate();">
           </div>
           <div class="form-group appt-item-required">
             <label class="control-label" for="starttime">Start Time<sup style="color:red">*</sup></label>
-            <input class="form-control" type="time" name="starttime" id="starttime" onkeyup="checkAppointmentTime($(this), 'Start');">
+            <input class="form-control" type="time" name="starttime" id="starttime" onkeyup="startTime();">
           </div>
           <div class="form-group appt-item-required">
             <label class="control-label" for="enddate">End Date<sup style="color:red">*</sup></label>
-            <input class="form-control" type="date" name="enddate" id="dateTo" onkeyup="enddatefunction();">
+            <input class="form-control" type="date" name="enddate" id="dateTo" onkeyup="endDate();timeTravel();">
           </div>
           <div class="form-group appt-item-required">
             <label class="control-label" for="endtime">End Time<sup style="color:red">*</sup></label>
-            <input class="form-control" type="time" name="endtime" id="endtime" onkeyup="checkAppointmentTime($(this), 'End');">
+            <input class="form-control" type="time" name="endtime" id="endtime" onkeyup="endTime();">
           </div>
           <div class="form-group">
             <label for="description">Details</label>
