@@ -151,7 +151,7 @@ def editDetails_view():
     if updated == "Failed":
         flash(updated, 'danger')
     else:
-      nameresult = json.loads(getAccountInfo(session['username']))
+        nameresult = json.loads(getAccountInfo(session['username']))
         session['profilepicture'] = nameresult['profilepicture']
         flash(updated, 'success')
     return redirect('/')
