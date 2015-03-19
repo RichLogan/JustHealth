@@ -1299,6 +1299,55 @@ def editPrescription():
         return editPrescription(request.form)
 
 def editPrescription(details):
+    Monday = False;
+    try:
+      if (details['Monday'] == True) or (details['Monday'] == "True") or (details['Monday'] == "true") or (details['Monday'] == "on"):
+        Monday = True
+    except KeyError, e:
+      Monday = False
+
+    Tuesday = False;
+    try:
+      if (details['Tuesday'] == True) or (details['Tuesday'] == "True") or (details['Tuesday'] == "true") or (details['Tuesday'] == "on"):
+        Tuesday = True
+    except KeyError, e:
+      Tuesday = False
+
+    Wednesday = False;
+    try:
+      if (details['Wednesday'] == True) or (details['Wednesday'] == "True") or (details['Wednesday'] == "true") or (details['Wednesday'] == "on"):
+        Wednesday = True
+    except KeyError, e:
+      Wednesday = False
+
+    Thursday = False;
+    try:
+      if (details['Thursday'] == True) or (details['Thursday'] == "True") or (details['Thursday'] == "true") or (details['Thursday'] == "on"):
+        Thursday = True
+    except KeyError, e:
+      Thursday = False
+
+    Friday = False;
+    try:
+      if (details['Friday'] == True) or (details['Friday'] == "True") or (details['Friday'] == "true") or (details['Friday'] == "on"):
+        Friday = True
+    except KeyError, e:
+      Friday = False
+
+    Saturday = False;
+    try:
+      if (details['Saturday'] == True) or (details['Saturday'] == "True") or (details['Saturday'] == "true") or (details['Saturday'] == "on"):
+        Saturday = True
+    except KeyError, e:
+      Saturday = False
+
+    Sunday = False;
+    try:
+      if (details['Sunday'] == True) or (details['Sunday'] == "True") or (details['Sunday'] == "true") or (details['Sunday'] == "on"):
+        Sunday = True
+    except KeyError, e:
+        Sunday = False;
+
     updatePrescription = Prescription.update(
         medication = details['medication'],
         dosage = details['dosage'],
@@ -1309,7 +1358,14 @@ def editPrescription(details):
         enddate = details['enddate'],
         stockleft = details['stockleft'],
         prerequisite = details['prerequisite'],
-        dosageform = details['dosageform']).where(Prescription.prescriptionid == details['prescriptionid'])
+        dosageform = details['dosageform'],
+        Monday = Monday,
+        Tuesday = Tuesday,
+        Wednesday = Wednesday,
+        Thursday = Thursday,
+        Friday = Friday,
+        Saturday = Saturday,
+        Sunday = Sunday).where(Prescription.prescriptionid == details['prescriptionid'])
 
     try:
         updatePrescription.execute()
