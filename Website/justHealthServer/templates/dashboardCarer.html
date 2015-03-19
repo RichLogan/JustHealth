@@ -384,7 +384,11 @@
               <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{patient.username}}">
                 <h4 class="panel-title">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{patient.username}}" aria-expanded="true" aria-controls="collapse{{patient.username}}" id="myPatientsPatientName">
-                    <i class="fa fa-caret-right"></i> {{patient.firstname}} {{patient.surname}} ({{patient.username}})
+                    <i class="fa fa-caret-right"></i>
+                    {{patient.firstname}} {{patient.surname}} ({{patient.username}})
+                    <span class="pull-right">
+                      <img class="img-circle" src="/images/{{patient.profilepicture}}" style="width: 1.5em;max-height: 1.5em;margin-top: -0.4em;">
+                    </span>
                   </a>
                 </h4>
               </div>
