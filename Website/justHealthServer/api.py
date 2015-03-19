@@ -709,7 +709,7 @@ def createConnection(details):
     with database.transaction():
         newConnection.save()
         createNotificationRecord(targetUser, "Connection Request", int(newConnection.connectionid))
-        return str(x)
+        return "Give the code '" + str(x) + "' to " + targetUser + " so they can accept your request"
     return "False"
 
 
