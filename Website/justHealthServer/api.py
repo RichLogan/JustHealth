@@ -2387,8 +2387,18 @@ def expiredResetPassword(request):
 #             if Notification.select().where((Notification.username == username) & (Notification.dismissed == False) & (Notification.notificationtype == "Medication Low") & (Notification.relatedObject == prescription['prescriptionid'])).count() == 0:
 #                 createNotificationRecord(username, "Medication Low", prescription['prescriptionid'])
 
-
-
+@app.route('/api/generate')
+def generation():
+    """Cleans up all Notifications / Reminders"""
+    startReminderCount = Reminder.select().count()
+    dt = datetime.datetime.now()
+    for user in Client.select():
+        deleteReminders(user.username, dt)
+        addReminders(user.username, dt)
+        createTakePrescriptionInstances(user.username, dt)
+        checkMissedPrescriptions(user.username, dt.date())
+    endReminderCount = Reminder.select().count()
+    return "Generated " + (startReminderCount - endReminderCount) + " reminders"
 ##
 # Signalling
 ##
