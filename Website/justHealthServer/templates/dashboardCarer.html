@@ -384,7 +384,11 @@
               <div class="panel-heading" id="myPatientsTab" role="tab" id="heading{{patient.username}}">
                 <h4 class="panel-title">
                   <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{patient.username}}" aria-expanded="true" aria-controls="collapse{{patient.username}}" id="myPatientsPatientName">
-                    <i class="fa fa-caret-right"></i> {{patient.firstname}} {{patient.surname}} ({{patient.username}})
+                    <i class="fa fa-caret-right"></i>
+                    {{patient.firstname}} {{patient.surname}} ({{patient.username}})
+                    <span class="pull-right">
+                      <img class="img-circle" src="/images/{{patient.profilepicture}}" style="width: 1.5em;max-height: 1.5em;margin-top: -0.4em;">
+                    </span>
                   </a>
                 </h4>
               </div>
@@ -714,8 +718,41 @@
                                                   <div class="form-group">
                                                     <label class="col-sm-2 control-label">Guidance notes</label>
                                                     <div class="col-sm-8">
-                                                      <textarea class="form-control" value="{{prescription.prerequisite}}" name="prerequisite"></textarea>
+                                                      <textarea class="form-control" name="prerequisite">{{prescription.prerequisite}}</textarea>
                                                     </div>
+                                                  </div>
+
+                                                  <!-- Prescription Days -->
+                                                  <div class="form-group">
+                                                    <label for="{{patient.username}}">Days to take the prescription:</label>
+                                                    <br />
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Monday" id="{{patient.username}}_Monday"><strong>M</strong>
+                                                    </label>
+                                                    <br />
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Tuesday"id="{{patient.username}}_Tuesday"><strong>T</strong>
+                                                    </label>
+                                                    <br />
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Wednesday" id="{{patient.username}}_Wednesday"><strong>W</strong>
+                                                    </label>
+                                                    <br />
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Thursday"id="{{patient.username}}_Thursday"><strong>T</strong>
+                                                    </label>
+                                                    </br>
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Friday" id="{{patient.username}}_Friday"><strong>F</strong>
+                                                    </label>
+                                                    </br>
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Saturday" id="{{patient.username}}_Saturday"><strong>Saturday</strong>
+                                                    </label>
+                                                    </br>
+                                                    <label class="checkbox-inline">
+                                                      <input type="checkbox" name="Sunday" id="{{patient.username}}_Sunday"><strong>Sunday</strong>
+                                                    </label>
                                                   </div>
 
                                                   <input class="btn btn-success pull-right" type="Submit" style="display:none;" value="Update" id="{{prescription.prescriptionid}}update" onclick="return confirm('Are you sure you want to update this prescription?')">
@@ -1207,7 +1244,7 @@
                           </div>
                         </div>
                       </a>
-                    </h4>
+                    </h4></div>
                     
                     <div id="collapse{{appointment.appid}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{appointment.appid}}">
                       <div class="panel-body">
@@ -1235,7 +1272,7 @@
                           <div class="col-md-6">
                             <p><b>Where:</b> {{appointment.addressnamenumber}}, {{appointment.postcode}}</p>
                             <br />
-                            <iframe width="200" height="200" frameborder="0" style="border:0"
+                            <iframe frameborder="0" style="border:0;width:25em;height:25em;"
                             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyARU2N1Scb1Skv2Zz1fh9yHBw5awp2S0og&zoom=14&q={{appointment.postcode}}">
                             </iframe>
                           </div>
