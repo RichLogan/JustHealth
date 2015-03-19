@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -18,7 +19,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
  * Created by Stephen on 26/02/15.
  */
 public class GcmIntentService extends IntentService {
-    public static final int NOTIFICATION_ID = 1;
+    public static int NOTIFICATION_ID = 0;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
@@ -91,9 +92,21 @@ public class GcmIntentService extends IntentService {
                                 .bigText(message))
                         .setContentText(message);
 
+
         Uri notify = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         mBuilder.setSound(notify);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        notificationInteger(NOTIFICATION_ID);
+    }
+
+    private void notificationInteger(int count) {
+        if (count < 10) {
+            count += 1;
+            NOTIFICATION_ID = count;
+        }
+        else {
+            NOTIFICATION_ID = 0;
+        }
     }
 }
