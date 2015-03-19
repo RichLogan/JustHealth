@@ -536,7 +536,7 @@ def sendForgotPasswordEmail(username):
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
     subject = "JustHealth: Forgot Password"
-    message = "Please reset your JustHealth account password here: " + str(resetLink)
+    message = "Please reset your JustHealth account password here:\n" + str(resetLink) + " \n \n(Please do not use Internet Explorer to open this link)"
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
     # Send
     server.sendmail(sender, recipient, m+message)

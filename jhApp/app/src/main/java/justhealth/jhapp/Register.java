@@ -148,17 +148,6 @@ public class Register extends Activity {
         AlertDialog.Builder alert = new AlertDialog.Builder(Register.this);
         alert.setTitle("Registration Successful!");
         alert.setMessage("Please check your email for a verification link. ");
-        alert.setNegativeButton("Go to email", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                Intent emailLauncher = new Intent(Intent.ACTION_VIEW);
-                emailLauncher.setType("message/rfc822");
-                try{
-                    startActivity(Intent.createChooser(emailLauncher, ""));
-                } catch(ActivityNotFoundException e){
-                    Feedback.toast("No email client found", false, getApplicationContext());
-                }
-            }
-        });
         alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 startActivity(new Intent(Register.this, Login.class));
