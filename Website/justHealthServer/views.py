@@ -153,7 +153,7 @@ def editDetails_view():
     else:
         nameresult = json.loads(getAccountInfo(session['username']))
         session['profilepicture'] = nameresult['profilepicture']
-        flash(updated, 'success')
+        flash(session, 'success')
     return redirect('/')
 
 @app.route('/termsandconditions')
