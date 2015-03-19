@@ -2190,15 +2190,16 @@ def createTakePrescriptionInstances(username, currentDateTime):
 def pingServer(sender, **extra):
     """Checks to see if there are any reminders to create/delete"""
     try:
-        #loggedInUser = getUsernameFromHeader()
-        loggedInUser = session['username']
+        loggedInUser = getUsernameFromHeader()
         dt = datetime.datetime.now()
         
-        if Appointments.select().count() != 0:
-            deleteReminders(loggedInUser, dt)
+        with database.transaction():
+            if Appointments.select().count() != 0:
+                deleteReminders(loggedInUser, dt)
 
-        if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
-            addReminders(loggedInUser, dt)
+        with database.transaction():
+            if (len(getAppointmentsDueIn30(loggedInUser, dt)) != 0) or (len(getAppointmentsDueNow(loggedInUser, dt)) != 0) or (len(getPrescriptionsDueToday(loggedInUser, dt)) != 0):
+                addReminders(loggedInUser, dt)
 
         createTakePrescriptionInstances(loggedInUser, dt)
         checkMissedPrescriptions(loggedInUser, dt.date())
