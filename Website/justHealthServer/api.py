@@ -709,7 +709,7 @@ def createConnection(details):
     with database.transaction():
         newConnection.save()
         createNotificationRecord(targetUser, "Connection Request", int(newConnection.connectionid))
-        return str(x)
+        return "Give the code '" + str(x) + "' to " + targetUser + " so they can accept your request"
     return "False"
 
 
@@ -730,7 +730,7 @@ def completeConnection(details):
     attemptedCode = int(details['codeattempt'])
 
     # get record
-    instance = Relationship.select().where(Relationship.requestor == requestor & Relationship.target == target).get()
+    instance = Relationship.select().where((Relationship.requestor == requestor) & (Relationship.target == target)).get()
     if instance.code == attemptedCode:
         # Correct attempt, establish relationship in correct table
         # TODO place into relationship table
@@ -779,21 +779,20 @@ def deleteConnection(details):
 
     try:
         instance = Patientcarer.select().where((Patientcarer.patient == details['user']) & (Patientcarer.carer == details['connection'])).get()
-    except Patientcarer.DoesNotExist:
-        return "False"
-        
-    with database.transaction():
-        instance.delete_instance()
-        return "True"
-        
-        try:
-            instance = Patientcarer.select().where((Patientcarer.patient == details['connection']) & (Patientcarer.carer == details['user'])).get()
-        except Patientcarer.DoesNotExist:
-            return "False"
-            
         with database.transaction():
             instance.delete_instance()
             return "True"
+    except Patientcarer.DoesNotExist:
+        try:
+            instance = Patientcarer.select().where((Patientcarer.patient == details['connection']) & (Patientcarer.carer == details['user'])).get()
+            with database.transaction():
+                instance.delete_instance()
+                return "True"
+        
+        except Patientcarer.DoesNotExist:
+            return "False"
+            
+        
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])

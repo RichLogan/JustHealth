@@ -47,6 +47,11 @@
   }
 
   $(document).ready(function() {
+    //Opens the connections modal on load if a connection has just been requested
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').toggle();
+    }
+
     // Handles Spinning of Notification Arrow
     $("#notificationsBar").click(function() {
       deg = addAngle(180);
@@ -261,10 +266,11 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                  <button class="btn btn-default btn-sm pull-right" style="margin-right:5px; position:relative; top:-5px" onclick="goBack()">Back</button>
                                   <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
                                 </div>
                                 <div class="modal-body">
-                                  <h4>Please enter the verification code given by the requestor</h1>
+                                  <h5 style="text-align:center">Please enter the verification code given by the requestor</h5>
                                   <form role="form" action="/completeConnectionWeb" id="codeForm" method="POST">
                                     <div style="width: 70%;margin: 0 auto;">
                                       <input name="requestor" type="hidden" value="{{connection.username}}">
