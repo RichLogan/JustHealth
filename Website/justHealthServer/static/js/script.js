@@ -14,6 +14,7 @@ function checkStartEnd(start, end, type) {
         $(end).parent().addClass('has-error');
         return false;
     }
+    return true;
 }
 
 function checkDate(element, type) {
@@ -37,12 +38,14 @@ function checkDate(element, type) {
         $(element).parent().removeClass('has-error');
         $(element).parent().removeClass('has-success');
         $(element).parent().addClass('has-warning');
+        return true;
     }
     else {
         $(element).siblings("label").html(message);
         $(element).parent().removeClass('has-error');
         $(element).parent().removeClass('has-warning');
         $(element).parent().addClass('has-success');
+        return true;
     }
 }
 
@@ -94,6 +97,7 @@ function checkDateOfBirth(element) {
       $(element).parent().removeClass('has-error');
       $(element).parent().removeClass('has-warning');
       $(element).parent().addClass('has-success');
+      return true;
     }
 }
 

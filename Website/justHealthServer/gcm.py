@@ -48,20 +48,6 @@ def createPushNotification(notificationid):
   else:
     sendPushNotification(username, title, content)
 
-def pushNotificationPrescription(username, takePrescriptionId):
-  try: 
-    take = Reminder.select().where(Reminder.reminder == takePrescriptionId).get()
-  except TakePrescription.DoesNotExist:
-    return None
-
-  try:  
-    prescription = Prescription.select().dicts().where(Prescription.prescriptionid == take.relatedObject).get()
-  except Prescription.DoesNotExist:
-    return None
-
-
-  sendPushNotification(username, "Prescription Due", "You are due to take " + prescription['medication'] + " today.")
-
 def sendPushNotification(username, title, message):
   """Sends a push notification to the users Android device with the specified title and message"""
   # Get Registration ID
