@@ -736,7 +736,7 @@ def deleteNote_view():
 def patientNotes():
     if request.method == "GET":
         try:
-            notes = json.loads(getPatientNotes(session['username']))
+            notes = json.loads(getPatientNotes(session))
             return render_template('patientNotes.html', notes=notes)
         except Patientcarer.DoesNotExist:
             return render_template('patientNotes.html')
