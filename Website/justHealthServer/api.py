@@ -2319,9 +2319,13 @@ def deleteReminders(username, now):
     if appointmentReminders.count() !=0:
         allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
         for reminder in appointmentReminders:
-            appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
-            appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
-            if appointmentEndDateTime < now:
+            try:
+                appointment = allAppointments.select(Appointments.enddate, Appointments.endtime).where(Appointments.appid == reminder.relatedObject).get()
+                appointmentEndDateTime = datetime.datetime.combine(appointment.enddate, appointment.endtime)
+                if appointmentEndDateTime < now:
+                    with database.transaction():
+                        reminder.delete_instance()
+            except Appointments.DoesNotExist:
                 with database.transaction():
                     reminder.delete_instance()
 
@@ -2332,8 +2336,12 @@ def deleteReminders(username, now):
         allPrescriptions = Prescription.select().where(Prescription.username == username)
         currentDay = now.strftime("%A")
         for reminder in prescriptionReminders:
-            prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
-            if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
+            try:
+                prescription = allPrescriptions.select().where(Prescription.prescriptionid == reminder.relatedObject).get()
+                if ((eval("prescription." + currentDay) == False) or (Prescription.startdate > now.date()) or (Prescription.enddate < now.date())):
+                    with database.transaction():
+                        reminder.delete_instance()
+            except Prescription.DoesNotExist:
                 with database.transaction():
                     reminder.delete_instance()
 
