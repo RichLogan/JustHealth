@@ -233,7 +233,8 @@ def getAndroidNotificationContent(notification):
 #######
 ##This is a test just for project fair
 #######
-@app.route('/gcm/push', methods=['POST'])
+@app.route('/gcm/push', methods=['POST', 'GET'])
 def testPushNotification():
   for user in Androidregistration.select():
     sendPushNotification(user.username, "Test Push", "This is a test push notification that has been sent manually by the JustHealth team. This is for demonstration only")
+    return "You should have recieved a push notification!"
