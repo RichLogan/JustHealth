@@ -1186,6 +1186,69 @@
                               <div class="row">
                                 <div class="panel panel-info">
                                   <div class="panel-body">
+
+                                    <script type="text/javascript">
+                                      var {{patient.username}}CheckStartDate;
+                                      var {{patient.username}}CheckStartTime;
+                                      var {{patient.username}}CheckEndDate;
+                                      var {{patient.username}}CheckEndTime;
+                                      var {{patient.username}}CheckTimeTravel;
+
+                                      function {{patient.username}}StartDate() {
+                                         {{patient.username}}CheckStartDate = checkDate($('#{{patient.username}}dateFrom'), "Start");
+                                      }
+
+                                      function {{patient.username}}EndDate() {
+                                        {{patient.username}}CheckEndDate = checkDate($('#{{patient.username}}dateTo'), "End");
+                                      }
+
+                                      function {{patient.username}}StartTime() {
+                                        {{patient.username}}CheckStartTime = checkTime($('#{{patient.username}}starttime'), "Start");
+                                      }
+
+                                      function {{patient.username}}EndTime() {
+                                        {{patient.username}}CheckEndTime = checkTime($('#{{patient.username}}endtime'), "End");
+                                      }
+
+                                      function {{patient.username}}TimeTravel() {
+                                        {{patient.username}}CheckTimeTravel = checkStartEnd($('#{{patient.username}}dateFrom'), $('#{{patient.username}}dateTo'), "Appointment");
+                                      }
+
+                                      $(document).ready(function() {
+                                          function formcheck1A() {
+                                            var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
+                                            var success = true;
+                                            $.each(fields, function(i, field) {
+                                              if (!field.value && success==true) {
+                                                alert('Please check the you have filled in the required fields');
+                                                success = false;
+                                                return;                                            
+                                              }
+                                            });
+                                            return success;
+                                          }
+
+                                          $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
+                                            if (!formcheck1A()) {
+                                              e.preventDefault();
+                                              return false;
+                                            }
+
+                                            {{patient.username}}TimeTravel();
+                                            {{patient.username}}StartDate();
+                                            {{patient.username}}EndDate();
+                                            {{patient.username}}StartTime();
+                                            {{patient.username}}EndTime();
+
+                                            if (!{{patient.username}}CheckStartDate || !{{patient.username}}CheckStartTime || !{{patient.username}}CheckEndDate || !{{patient.username}}CheckEndTime || !{{patient.username}}CheckTimeTravel) {
+                                              e.preventDefault();
+                                              alert("Please check the form for errors");
+                                              return false;
+                                            }
+                                          });
+                                        });
+                                    </script>
+
                                     <form name="createAppointment" method="POST" id="{{patient.username}}_createAppointmentForm" action="/inviteeappointments">
 
                                       <input name="username" type="hidden" value="{{patient.username}}">
@@ -1212,22 +1275,22 @@
                               
                                       <div class="form-group {{patient.username}}_appt-item-required">
                                         <label class="control-label" for="datefrom">Start Date<sup style="color:red">*</sup></label>
-                                        <input id="{{patient.username}}dateFrom" class="form-control" type="date" name="startdate" onkeyup='checkAppointmentDate($(this), "Start");'>
+                                        <input id="{{patient.username}}dateFrom" class="form-control" type="date" name="startdate" onkeyup='{{patient.username}}StartDate();'>
                                       </div>
                       
                                       <div class="form-group {{patient.username}}_appt-item-required">
                                         <label class="control-label" for="starttime">Start Time<sup style="color:red">*</sup></label>
-                                        <input class="form-control" type="time" name="starttime" id="starttime" onkeyup='checkAppointmentTime($(this), "Start");'>
+                                        <input class="form-control" type="time" name="starttime" id="{{patient.username}}starttime" onkeyup='{{patient.username}}StartTime();'>
                                       </div>
             
                                       <div class="form-group {{patient.username}}_appt-item-required" id="{{patient.username}}_dateTo">
                                         <label class="control-label" for="dateto">End Date<sup style="color:red">*</sup></label>
-                                        <input class="form-control" type="date" name="enddate" id="{{patient.username}}dateTo" onkeyup='enddatefunction($(this));'>
+                                        <input class="form-control" type="date" name="enddate" id="{{patient.username}}dateTo" onkeyup='{{patient.username}}EndDate();{{patient.username}}TimeTravel();'>
                                       </div>
       
                                       <div class="form-group {{patient.username}}_appt-item-required">
                                         <label class="control-label" for="endtime">End Time<sup style="color:red">*</sup></label>
-                                        <input class="form-control" type="time" name="endtime" id="endtime" onkeyup='checkAppointmentTime($(this), "End");'>
+                                        <input class="form-control" type="time" name="endtime" id="{{patient.username}}endtime" onkeyup='{{patient.username}}EndTime();'>
                                       </div>
 
                                       <div class="form-group">
@@ -1238,36 +1301,6 @@
                                       <div class="form-group">
                                         <input class="btn btn-success pull-right" type="submit" value="Add Appointment">
                                       </div>
-
-                                      <!--Form validation requires a unique class and form ID so the javascript has to be inserted here-->
-                                      <script>
-                                        $(document).ready(function() {
-                                          function formcheck1A() {
-                                            var fields = $(".{{patient.username}}_appt-item-required").find("select, textarea, input").serializeArray();
-                                            var success = true;
-                                            $.each(fields, function(i, field) {
-                                              if (!field.value && success==true) {
-                                                alert('Please check the you have filled in the required fields');
-                                                success = false;
-                                                return;                                            
-                                              }
-                                            });
-                                            return success;
-                                          }
-
-                                          $('#{{patient.username}}_createAppointmentForm').submit(function(e) {
-                                            if (!formcheck1A()) {
-                                              e.preventDefault();
-                                              return false;
-                                            }
-                                            if (!validationPass) {
-                                              e.preventDefault();
-                                              alert("Please check the form for errors");
-                                              return false;
-                                            }
-                                          });
-                                        });
-                                      </script>
                                     </form>
                                   </div>
                                 </div>
