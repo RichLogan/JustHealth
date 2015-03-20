@@ -59,7 +59,7 @@
 
   <div class="container">
     <!--This contains a for loop listing all the notes the carer has recorded from the corresponding patient visit -->
-    {% for note in notes %}
+    {% for note in notes|sort(reverse=True) %}
     <div class="row">
       <div class="col-sm-1">
         <div class="thumbnail">
