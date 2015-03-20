@@ -237,4 +237,4 @@ def getAndroidNotificationContent(notification):
 def testPushNotification():
   for user in Androidregistration.select():
     sendPushNotification(user.username, "Test Push", "This is a test push notification that has been sent manually by the JustHealth team. This is for demonstration only")
-    print "You should have recieved a push notification!"
+  return "You should have recieved a push notification!"
