@@ -44,11 +44,21 @@ import java.util.HashMap;
 
 /**
  * Created by Stephen on 06/01/15.
+ * Allows a carer to create an appointment between themselves and a patient
  */
 public class CreateCarerPatientAppointment extends Activity {
 
+    //username of the patient
     private String patient;
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the action bar.
+     * Sets the action bar of the page and has an onclickListener applied to the create appointment
+     * button.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -113,18 +123,35 @@ public class CreateCarerPatientAppointment extends Activity {
             ProgressDialog progressDialog;
             String responseString;
 
+            /**
+             * Ensures the the progress dialog is displayed on the screen to notify the user that
+             * the appointment is being added to the JustHealth database.
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(CreateCarerPatientAppointment.this, "Loading...", "Creating appointment", true);
                 System.out.println(details);
             }
 
+            /**
+             * This makes the post request to the JustHealth API, and completes it off of the
+             * main thread.
+             * @param v shows that there are no parameters to the method
+             * @return A string which is the response from the JustHealth API
+             */
             @Override
             protected String doInBackground(Void... v) {
                 responseString = Request.post("addInviteeAppointment", details, getApplicationContext());
                 return responseString;
             }
 
+            /**
+             * Checks that it has successfully returned the primary key of the record that has been
+             * added to the database. This then toasts this to the user and runs the method to ask them
+             * if they want it to be added to the native calendar.
+             * Otherwise it toasts saying that something has gone wrong.
+             * @param response the response from the JustHealth API.
+             */
             @Override
             protected void onPostExecute(String response) {
                 progressDialog.dismiss();

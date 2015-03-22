@@ -15,8 +15,18 @@ import java.util.HashMap;
 
 public class CarerAddPatientCorrespondence extends Activity {
 
+    //variables that a global in the class, store the patient's username and First Name.
     String patientUsername;
     String patientFirstName;
+
+    /**
+     *
+     * This runs when the page is first loaded. It also sets the correct xml layout to
+     * display. Following this, it sets the action bar, which uses the patients first name.
+     * It has an onClickListener to check when the add note button has been pressed.
+     * When pressed it runs the add note method.
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

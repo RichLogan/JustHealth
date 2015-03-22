@@ -44,13 +44,25 @@ public class CarerPatientAppointments extends Activity {
 
     //LinearLayout that holds all of the buttons
     LinearLayout appointmentHolder;
+    //Holds the JSON array of CarerPatient Appointments
     private JSONArray getApps;
+    //Sets the value of the filter, on page load this is set to the default value All
     private String filter = "All";
+    //Stores the username, firstname and surname of the patient
     private String patient = "";
     private String firstname = "";
     private String surname = "";
+    //Stores the carers username
     private String carerUsername = "";
 
+    /**
+     * This runs when the page is first loaded. It also sets the correct xml layout to
+     * display. Following this, it sets the action bar, which uses the patients first name.
+     * It has an onClickListener to check when the filter button is pressed. When pressed the
+     * filter options method is run and this is used to bring up a menu option of the different filters.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_patient_appointments);
@@ -68,6 +80,7 @@ public class CarerPatientAppointments extends Activity {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(firstname + "'s Appointments");
+
         Button filter = (Button) findViewById(R.id.filter);
         filter.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View view) {
@@ -128,12 +141,24 @@ public class CarerPatientAppointments extends Activity {
         }
     }
 
+    /**
+     * This runs when the page is reloaded, it ensures that the page is reloaded so that
+     * an appointment that has been added is retrieved from the database and displayed.
+     */
     protected void onResume() {
         super.onResume();
         appointmentHolder.removeAllViews();
         getAppointments(patient);
     }
 
+    /**
+     * This is the method that gets the queries the JustHealth API and runs the method to print
+     * them out. This loads the appointments off of the main thread, also showing a loading spinner
+     * to inform the user that something is happening. Once the JSON encoded appointments are received
+     * this is assigned to a JSON array. The method is then called to print them out.
+     *
+     * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for.
+     */
     private void getAppointments(final String targetUsername) {
         SharedPreferences account = getSharedPreferences("account", 0);
         carerUsername = account.getString("username", null);
@@ -151,14 +176,17 @@ public class CarerPatientAppointments extends Activity {
 
             @Override
             protected void onPreExecute() {
+                //shows the spinner
                 progressDialog = ProgressDialog.show(CarerPatientAppointments.this, "Loading...", "Loading appointments", true);
             }
 
             @Override
             protected JSONArray doInBackground(Void... params) {
                 try {
+                    //Post requests the API
                     String postRequest = Request.post("getAllAppointments", details, getApplicationContext());
                     System.out.println(postRequest);
+                    //Assigns to a JSON array
                     return new JSONArray(postRequest);
                 } catch (Exception e) {
                     return null;
@@ -169,10 +197,14 @@ public class CarerPatientAppointments extends Activity {
             protected void onPostExecute(JSONArray result) {
                 try {
                     super.onPostExecute(result);
+                    //assigns the JSON array to the class variable
                     getApps = result;
+                    //removes any existing views from the LinearLayout where the appointments are
+                    //going to be printed.
                     LinearLayout layout = (LinearLayout) findViewById(R.id.appointments);
                     layout.removeAllViewsInLayout();
                     assignAppointments(targetUsername);
+                    //removes the dialog spinner
                     progressDialog.dismiss();
                 } catch (NullPointerException e) {
                     Feedback.toast("Unable to load appointments", false, getApplicationContext());
@@ -182,8 +214,7 @@ public class CarerPatientAppointments extends Activity {
     }
 
     /**
-     * This method makes a post request to the JustHealth API to retrieve all of the appointments for a given user.
-     * It then loops through the JSON Array that is returned from the server and adds them all to a HashMap.
+     * This method loops through the JSON Array that is returned from the server and adds them all to a HashMap.
      * Depending on the Filter that is selected it then checks who the creator of the appointment is and runs the addToView method.
      *
      * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for
@@ -310,6 +341,10 @@ public class CarerPatientAppointments extends Activity {
         alert.show();
     }
 
+    /**
+     * This method checks whether there are any views where the appointments are about to be printed
+     * and removes them all.
+     */
     private void removeDefault() {
         try {
             Button defaultText = (Button) findViewById(R.id.defaultCarerPatientAppointmentMessage);

@@ -31,11 +31,18 @@ import java.util.HashMap;
  */
 public class CarerPatientCorrespondence extends Activity  {
 
+    //JSONArray of the notes about a patient
     JSONArray notes;
+    //Patients username, first name and surname
     String patientUsername;
     String patientFirstName;
     String patientSurname;
 
+    /**
+     * Runs when  the page is first loaded. This sets the correct XML layout for the page and sets
+     * the action bar. Runs the method to retrieve the notes from the JustHealth API.
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -58,6 +65,11 @@ public class CarerPatientCorrespondence extends Activity  {
 
     }
 
+    /**
+     * This creates the action bar menu items
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed; if you return false it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -66,6 +78,11 @@ public class CarerPatientCorrespondence extends Activity  {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This method defines the actions when the menu items are pressed
+     * @param item The item that has been pressed
+     * @return returns true if the action has been executed.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -81,6 +98,11 @@ public class CarerPatientCorrespondence extends Activity  {
         }
     }
 
+    /**
+     * This makes a post request to the JustHealth API to retrieve the notes from the database
+     * for a given patient. Also, must pass the carer username to the API as part of the security
+     * check.
+     */
     private void getNotes() {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.correspondenceView);
         linearLayout.removeAllViews();
@@ -96,11 +118,20 @@ public class CarerPatientCorrespondence extends Activity  {
         new AsyncTask<Void, Void, JSONArray>() {
             ProgressDialog progressDialog;
 
+            /**
+             * This displays the loading dialog to the user.
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(CarerPatientCorrespondence.this, "Loading...", "Loading notes", true);
             }
 
+            /**
+             * This makes the post request (off of the main thread) to the JustHealth API to get the notes
+             * of a patient.
+             * @param params Shows that there are no parameters to the method
+             * @return returns a JSONArray of the patient notes
+             */
             @Override
             protected JSONArray doInBackground(Void... params) {
                 try {
@@ -111,6 +142,12 @@ public class CarerPatientCorrespondence extends Activity  {
                 }
             }
 
+            /**
+             * Assigns the notes that are returned from the JustHealth API and assigns them to the
+             * class wide variable. Loops through the array and sends each note to the method addToView.
+             * Dismisses the spinning dialog (loading)
+             * @param response the JSONArray of the patient notes.
+             */
             @Override
             protected void onPostExecute(JSONArray response) {
                 try {
@@ -139,6 +176,14 @@ public class CarerPatientCorrespondence extends Activity  {
         }.execute();
     }
 
+    /**
+     * Adds each of the notes to the view and styles each part (i.e. the title, date and content)
+     * accordingly.
+     *
+     * @param title the title of the note
+     * @param date the date that the note was added
+     * @param content the note itself
+     */
     private void addToView(String title, String date, String content) {
 
         TextView textViewTitle = new TextView(this);

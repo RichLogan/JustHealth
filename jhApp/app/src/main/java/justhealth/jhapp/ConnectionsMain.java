@@ -26,6 +26,14 @@ public class ConnectionsMain extends Activity {
     JSONArray outgoing = null;
     JSONArray completed = null;
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the action bar. It has action listeners
+     * for the incoming/outgoing and completed buttons (the type of connections).
+     * The getConnections method is also run.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connections_main);
@@ -36,7 +44,7 @@ public class ConnectionsMain extends Activity {
 
         // Assign Button Actions
 
-        //Incoming
+        //Incoming button
         RelativeLayout incomingButton = (RelativeLayout) findViewById(R.id.incomingButton);
         incomingButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -48,7 +56,7 @@ public class ConnectionsMain extends Activity {
             }
         );
 
-        // Outgoing
+        // Outgoing button
         RelativeLayout outgoingButton = (RelativeLayout) findViewById(R.id.outgoingButton);
         outgoingButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -60,7 +68,7 @@ public class ConnectionsMain extends Activity {
             }
         );
 
-        // Completed
+        // Completed button
         RelativeLayout completedButton = (RelativeLayout) findViewById(R.id.completedButton);
         completedButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -78,6 +86,7 @@ public class ConnectionsMain extends Activity {
 
     /**
      * Retrieves ALL connections from the database in order for counts to be calculated and displayed via loadBadges()
+     * This is done asynchronously, off of the main thread.
      */
     private void getConnections() {
         final HashMap<String, String> getConnectionsInfo = new HashMap<String, String>();

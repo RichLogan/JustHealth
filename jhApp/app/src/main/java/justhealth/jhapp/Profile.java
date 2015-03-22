@@ -69,7 +69,7 @@ public class Profile extends Activity {
                     dob.setText("Date of Birth: " + profileInfo.getString("dob"));
                     gender.setText("Gender: " + profileInfo.getString("gender"));
                     accountType.setText("Account Type: " + profileInfo.getString("accounttype"));
-                    email.setText("Email: " + profileInfo.getString("email"));
+                    email.setText(profileInfo.getString("email"));
 
                     // Display Profile Picture
                     String filepath = LoadImage.getProfilePictureURL(profileInfo.getString("profilepicture"));

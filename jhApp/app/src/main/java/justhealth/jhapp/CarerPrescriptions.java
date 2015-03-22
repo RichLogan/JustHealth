@@ -34,11 +34,22 @@ import java.util.HashMap;
  */
 public class CarerPrescriptions extends Activity{
 
+    //username and first name of the patient
     private String username;
     private String firstname;
+
+    //progress dialog to show to the user
     private int loadCounter = 3;
     private ProgressDialog loading;
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the custom action bar. Because of the use
+     * of a custom action bar the action listeners have to be applied manually here too. The loadPrescriptions
+     * method is then run from here.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_prescriptions);
@@ -52,13 +63,14 @@ public class CarerPrescriptions extends Activity{
 
         final String user = username;
 
-        // Action Bar
+        // Custom Action Bar
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(firstname + "'s Prescriptions");
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.action_bar_carer_prescriptions);
 
+        //On click listener for add prescription that is on the custom action bar.
         final Button addPrescription = (Button) findViewById(R.id.addPrescriptionActionBar);
         addPrescription.setText("{fa-plus}");
         addPrescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
@@ -74,6 +86,11 @@ public class CarerPrescriptions extends Activity{
         loadPrescriptions();
     }
 
+    /**
+     * This shows the loading spinner dialog and runs three further methods to load the
+     * different types of prescriptions. Passes a hashmap to the methods containing the
+     * patients username.
+     */
     private void loadPrescriptions() {
         final HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
@@ -83,6 +100,11 @@ public class CarerPrescriptions extends Activity{
         loadExpiredPrescriptions(parameters);
     }
 
+    /**
+     * This requests the active prescriptions from the JustHealth API.
+     * @param parameters A HashMap containing the target patients username, this is to be
+     *                   sent to the server.
+     */
     private void loadActivePrescriptions(final HashMap<String, String> parameters) {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -104,6 +126,12 @@ public class CarerPrescriptions extends Activity{
         }.execute();
     }
 
+    /**
+     * This requests the upcoming prescriptions from the JustHealth API. Upcoming prescriptions
+     * are prescriptions that have been added but where the start date is in the future.
+     * @param parameters A HashMap containing the target patients username, this is to be
+     *                   sent to the server.
+     */
     private void loadUpcomingPrescriptions(final HashMap<String, String> parameters) {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -125,6 +153,12 @@ public class CarerPrescriptions extends Activity{
         }.execute();
     }
 
+    /**
+     * This requests the expired prescriptions from the JustHealth API. Expired prescriptions are
+     * prescriptions that have been added but where the end date is in the past.
+     * @param parameters A HashMap containing the target patients username, this is to be
+     *                   sent to the server.
+     */
     private void loadExpiredPrescriptions(final HashMap<String, String> parameters) {
         new AsyncTask<Void, Void, String>() {
             @Override

@@ -39,6 +39,13 @@ public class ConnectionsView extends Activity {
     String type;
     Boolean ignoreChange = true;
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the action bar.
+     * The print connections method is also run.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connections_view);
