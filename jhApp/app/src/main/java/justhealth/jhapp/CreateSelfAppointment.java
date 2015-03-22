@@ -42,9 +42,19 @@ import java.util.HashMap;
 
 /**
  * Created by Stephen on 05/01/15.
+ * Enables a patient or a carer to create a calendar entry for themselves
  */
 public class CreateSelfAppointment extends Activity {
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the action bar.
+     * Sets the action bar of the page and has an onclickListener applied to the create appointment
+     * button.
+     * Also populates the spinner that determines the type of the appointment, i.e. carer, hospital, doctor etc.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -73,8 +83,9 @@ public class CreateSelfAppointment extends Activity {
     }
 
     /**
-     * This makes a post request to the database to get the appointment types and populates the
-     * spinner with these.
+     * This makes a post request to the JustHealth to get the appointment types and populates the
+     * spinner with these. These are stored in a table in the JustHealth database to ensure
+     * extensibility.
      */
     private void populateSpinner() {
         System.out.println("populateSpinner");
@@ -215,7 +226,11 @@ public class CreateSelfAppointment extends Activity {
         alert.show();
     }
 
-    //Calendar example
+    /**
+     * This adds the calendar event to the native android calendar.
+     * @param details A HashMap of the appointment details.
+     * @param id The primary key of the appointment record in the JustHealth database.
+     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void addToCalendar(HashMap<String, String> details, int id) {
         String appName = details.get("name");
@@ -239,6 +254,9 @@ public class CreateSelfAppointment extends Activity {
         Calendar end = Calendar.getInstance();
         end.set(appEnd.get("year"), appEnd.get("month"), appEnd.get("day"), appEnd.get("hour"), appEnd.get("minute"));
 
+        /*Adding to the native calendar through an intent. This requires user input and we are unable
+        to get the ID to refer to it in the future. For this reason we have used the content resolver
+        as seen below*/
         /*Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.getTimeInMillis())
@@ -251,6 +269,7 @@ public class CreateSelfAppointment extends Activity {
         Intent intent1 = getIntent();
         System.out.println(intent1.getStringExtra(CalendarContract.Events.CONTENT_URI.toString()));*/
 
+        //to add the appointment to the native calendar and get the unique ID of that event
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, start.getTimeInMillis());

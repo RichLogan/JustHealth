@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         JustHealth {
-            keyAlias 'JustHealthKey'
+            keyAlias 'JustHealth'
             keyPassword 'mbMr3Rbofsi8AU'
             storeFile file('/Users/Stephen/Documents/University/Co600/JustHealth/jhApp/AndroidKey/JustHealth.jks')
             storePassword 'mbMr3Rbofsi8AU'
@@ -14,14 +14,15 @@ android {
         applicationId "justhealth.jhapp"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.JustHealth
+
         }
     }
 }

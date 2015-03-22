@@ -4,6 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * This class defines how the android device that is running the application
+ * is able to get its registration ID. RegistrationID of the device is subsequently
+ * used for push notifications.
+ */
 public class C2DMRegistrationReceiver extends BroadcastReceiver {
 
     @Override

@@ -49,7 +49,7 @@
                     android:textColor="@color/primary"
                     android:id="@+id/profileUsername"
                     android:layout_marginTop="25sp"
-                    android:layout_marginLeft="80sp"
+                    android:layout_gravity="center"
                     />
 
                 <TextView
@@ -61,7 +61,7 @@
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileUsername"
                     android:layout_marginTop="10sp"
-                    android:layout_marginLeft="80sp"
+                    android:layout_gravity="center"
                     />
 
                 <TextView
@@ -73,7 +73,7 @@
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileName"
                     android:layout_marginTop="10sp"
-                    android:layout_marginLeft="80sp" />
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,10 +81,10 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Gender: "
                     android:id="@+id/profileGender"
-                    android:layout_marginLeft="80sp"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileDOB"
-                    android:layout_marginTop="10sp" />
+                    android:layout_marginTop="10sp"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,22 +92,21 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Account Type: "
                     android:id="@+id/profileAccount"
-                    android:layout_marginLeft="80sp"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileGender"
                     android:layout_marginTop="10sp"
+                    android:layout_gravity="center"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Email: "
+                    android:textSize="20sp"
                     android:id="@+id/profileEmail"
-                    android:layout_marginLeft="80sp"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileAccount"
-                    android:layout_marginTop="10sp"/>
+                    android:layout_marginTop="10sp"
+                    android:layout_gravity="center" />
 
                 <Button
                     android:text="Edit Profile"

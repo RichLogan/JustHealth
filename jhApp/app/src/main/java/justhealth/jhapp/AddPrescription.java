@@ -31,6 +31,14 @@ Provides functionality to add a prescription to a patient's account
  */
 public class AddPrescription extends Activity {
 
+    /**
+     * This runs when the page is first loaded. It also sets the correct xml layout to
+     * display. Following this, it sets the action bar and runs the function to populate
+     * the spinner containing the medication names. Has an onClickListener to check when the
+     * add prescription button has been pressed. When pressed it first validates the form and then
+     * runs the add prescription method.
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
