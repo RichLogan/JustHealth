@@ -1822,6 +1822,14 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
     return "False"
 
 def deleteAccount(username):
+    """
+    Deletes a user's account. 
+
+    :param username: The username who's account should be deleted. 
+    :type username: str. 
+
+    :returns: str -- 'Deleted' if successful, else 'Failed'. 
+    """
     try:
         instance = Client.select().where(Client.username == username).get()
     except:
@@ -1832,7 +1840,21 @@ def deleteAccount(username):
     return "Failed"
 
 def createNotificationRecord(user, notificationType, relatedObject):
-    #dictionary mapping notificationType to referencing table
+    """
+    Creates a notification on the JustHealth platform. 
+
+    :param user: The user the notification belongs to. 
+    :type user: str. 
+
+    :param notificationType: The type of notification to be created
+    :type notificationType: str. 
+
+    :param relatedObject: The resource a notification pertains to, if any. 
+    :type relatedObject: int. 
+
+    :returns: str -- 'True' if successful, else 'False'
+    """
+    # Dictionary mapping notificationType to referencing table
     notificationTypeTable = {}
     notificationTypeTable['Connection Request'] = "Relationship"
     notificationTypeTable['New Connection'] = ""
@@ -1869,7 +1891,14 @@ def getNotifications():
         return getNotifications(request.form['username'])
 
 def getNotifications(username):
-    """Returns all of the notifications that have been associated with a user that have not been dismissed"""
+    """
+    Returns all of the notifications that have been associated with a user that have not been dismissed
+
+    :param username: The username to get dismissed notifications for. 
+    :type username: str.
+
+    :returns: json -- The list of notifications each as a json dictionary. 
+    """
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
     notificationList = []
     for notification in notifications:
@@ -1888,7 +1917,14 @@ def getAllNotifications():
         return getAllNotifications(request.form['username'])
 
 def getAllNotifications(username):
-    """Returns all of the notifications that have been associated with a user, whether or not they have been dismissed"""
+    """
+    Returns all of the notifications that have been associated with a user, whether or not they have been dismissed
+
+    :param username: The username to get dismissed notifications for. 
+    :type username: str.
+
+    :returns: json -- The list of notifications each as a json dictionary. 
+    """
     notifications = Notification.select().dicts().where(Notification.username == username)
     notificationList = [] 
     for notification in notifications:
@@ -1907,7 +1943,14 @@ def getDismissedNotifications():
         return getDismissedNotifications(request.form['username'])
 
 def getDismissedNotifications(username):
-    """Returns all of the notifications that have been associated with a user that have not been dismissed"""
+    """
+    Returns all of the notifications that have been dismissed for a username
+
+    :param username: The username to get dismissed notifications for. 
+    :type username: str.
+
+    :returns: json -- The list of notifications each as a json dictionary. 
+    """
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == True))
     notificationList = []
     for notification in notifications:
@@ -1920,7 +1963,14 @@ def getDismissedNotifications(username):
     return json.dumps(notificationList)
 
 def getNotificationContent(notification):
-    """gets the body/content of the notification"""
+    """
+    Gets the body/content of the notification depending on its type. 
+
+    :param notification: Dictionary containing [notificationtype] element listing the type being queried. 
+    :type notification: dict.
+
+    :returns: str -- The content of the notification or 'DoesNotExist' if the queried object no longer exists.
+    """
     if notification['notificationtype'] == "Connection Request":
         try: 
             requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
@@ -2050,7 +2100,14 @@ def getNotificationContent(notification):
     return content
 
 def getNotificationLink(notification):
-    """gets the notification link that will make it clickable"""
+    """
+    Returns the link that a specific notification type will link to for web usage. 
+
+    :param notification: Dictionary containing [notificationtype] element listing the type being queried. 
+    :type notification: dict.
+
+    :returns: str -- The web address of the notification subject for JustHealth Web Application. 
+    """
     if notification['notificationtype'] == "Connection Request":
         link = "/?go=connections"
     
@@ -2096,7 +2153,14 @@ def getNotificationLink(notification):
     return link
 
 def getNotificationTypeClass(notification):
-    """gets the class which in turn will decide the background colour of the notification"""
+    """
+    Returns the 'class' of a notification type, used to identify importance / meaning. 
+
+    :param notification: Dictionary containing [notificationtype] element listing the type being queried. 
+    :type notification: dict.
+
+    :returns: str -- One of 'danger', 'warning', 'success', 'info'. 
+    """
     notificationClass = Notificationtype.select().where(Notificationtype.typename == notification['notificationtype']).get()
     return notificationClass.typeclass
 
@@ -2109,7 +2173,14 @@ def dismissNotification():
         return dismissNotification(request.form['notificationid'])
 
 def dismissNotification(notificationid):
-    """This sets the dismiss boolean field in the database to true"""
+    """
+    Dismisses a notification to hide from the user's immediate view. 
+
+    :param notificationid: The id of the notification to dismiss. 
+    :type notificationid: int.
+
+    :returns: str -- 'True' if successful, 'False' if not. 
+    """
     dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
 
     with database.transaction():
@@ -2122,10 +2193,31 @@ def dismissNotification(notificationid):
 ##
 
 def getMinutesDifference(dateTimeOne,dateTimeTwo):
-    """Difference found my timeOne - timeTwo in minutes"""
+    """
+    Returns the difference found by dateTimeOne - dateTimeTwo in minutes.
+
+    :param dateTimeOne: The first datetime.
+    :type dateTimeOne: datetime. 
+    
+    :param dateTimeTwo: The second datetime.
+    :type dateTimeTwo: datetime. 
+
+    :returns: int -- The number of minutes between the two times. 
+    """
     return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
 
 def getAppointmentsDueIn30(username, currentTime):
+    """
+    Returns a list of appointments that are due in 30 minutes or less. 
+    
+    :param username: The username to check for. 
+    :type username: str. 
+    
+    :param currentTime: The current datetime. 
+    :type currentTime: datetime.
+
+    :returns: list -- A list of appointments represented by dicts. 
+    """
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
     result = []
     for appointment in select:
@@ -2136,7 +2228,17 @@ def getAppointmentsDueIn30(username, currentTime):
     return result
 
 def getAppointmentsDueNow(username, currentTime):
-    """Search for appointments due now"""
+    """
+    Returns a list of appointments that are due now or are in progress. 
+    
+    :param username: The username to check for. 
+    :type username: str. 
+    
+    :param currentTime: The current datetime. 
+    :type currentTime: datetime.
+
+    :returns: list -- A list of appointments represented by dicts. 
+    """
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
     result = []
     for appointment in select:
@@ -2149,7 +2251,17 @@ def getAppointmentsDueNow(username, currentTime):
     return result
 
 def getPrescriptionsDueToday(username, currentDateTime):
-    """Seach for prescriptions due now"""
+    """
+    Returns a list of prescriptions that are due today. 
+    
+    :param username: The username to check for. 
+    :type username: str. 
+    
+    :param currentDateTime: The current datetime. 
+    :type currentDateTime: datetime.
+
+    :returns: list -- A list of prescriptions represented by dicts. 
+    """
     currentDate = currentDateTime.date()
     currentDay = currentDateTime.strftime("%A")
 
@@ -2166,6 +2278,16 @@ def getPrescriptionsDueToday(username, currentDateTime):
     return results
 
 def checkMissedPrescriptions(username, currentDate):
+    """
+    Checks to see if a patient has missed any prescriptions
+    and creates notifications if so. 
+
+    :param username: The username to check for.
+    :type username: str. 
+
+    :param currentDate: The current datetime. 
+    :type currentDate: datetime. 
+    """
     listOfPrescriptions = Prescription.select().where(Prescription.username == username)
     for x in listOfPrescriptions:
         takeInstance = TakePrescription.select().where(TakePrescription.prescriptionid == x)
@@ -2183,6 +2305,15 @@ def checkMissedPrescriptions(username, currentDate):
                         createNotificationRecord(carer, "Carer Missed Prescription", i.takeid)
 
 def createTakePrescriptionInstances(username, currentDateTime):
+    """
+    Creates all TakePrescription instances for any prescription that needs to be taken today. 
+
+    :param username: The username to check for. 
+    :type username: str. 
+    
+    :param currentDateTime: The current datetime. 
+    :type currentDateTime: datetime.
+    """
     listOfPrescriptions = Prescription.select().where(Prescription.username == username)
     currentDay = currentDateTime.strftime("%A")
     for p in listOfPrescriptions:
@@ -2205,7 +2336,11 @@ def createTakePrescriptionInstances(username, currentDateTime):
                     takePrescriptionId = insert.execute()
 
 def pingServer(sender, **extra):
-    """Checks to see if there are any reminders to create/delete"""
+    """
+    Checks to see if there are any reminders to create/delete, runs on every request.
+
+    Also called by a scheduled task for all users. See :func:`generation`. 
+    """
     try:
         loggedInUser = session['username']
         dt = datetime.datetime.now()
@@ -2223,7 +2358,15 @@ def pingServer(sender, **extra):
         return
 
 def addReminders(username, now):
-    """Adds reminders to the Reminder table"""
+    """
+    Add all new reminders to the Reminder table.
+
+    :param username: The username to add reminders for.
+    :type username: str.
+
+    :param now: The current datetime.
+    :type now: datetime. 
+    """
     # Get All Reminders (Saving on performance hits later)
     allReminders = Reminder.select().where(Reminder.username == username)
 
@@ -2309,7 +2452,16 @@ def addReminders(username, now):
                 insertReminder.execute()
 
 def deleteReminders(username, now):
-    """Deletes any reminders that have expired"""
+    """
+    Deletes any reminders for appointments or prescriptions
+    that have expired or are no longer current. 
+
+    :param username: The username to check.
+    :type username: str.
+
+    :param now: The current datetime
+    :type now: datetime.
+    """
     # Get all Reminders
     allReminders = Reminder.select().where(Reminder.username == username)
 
@@ -2346,6 +2498,12 @@ def deleteReminders(username, now):
                     reminder.delete_instance()
 
 def getReminders(username):
+    """
+    Returns all reminders for a specific user.
+
+    :param username: The username to get reminders for.
+    :type username: str. 
+    """
     allReminders = Reminder.select().dicts().where(Reminder.username == username)
     reminders = []
     for r in allReminders:
@@ -2353,7 +2511,14 @@ def getReminders(username):
     return json.dumps(reminders)
 
 def passwordExpiration(username):
-    """This checks whether the password that the user is using is about to expire"""
+    """
+    This checks whether the password that the user is using is about to expire.
+
+    :param username: The username to check password for. 
+    :type username: str. 
+
+    :returns: result -- Whether the password is valid, expiring soon or needs to be reset. 
+    """
     passwordDetails = uq8LnAWi7D.select().where((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).get()
     expirationDate = passwordDetails.expirydate
     today = datetime.datetime.now().date()
@@ -2373,14 +2538,21 @@ def expiredResetPassword():
         return expiredResetPassword(request.form)
 
 def expiredResetPassword(request):
-    """reset a password that has expired or is expiring"""
+    """
+    Resets a password that has expired or is expiring. 
+    
+    :param request: Dictionary of user and password details [username, newpassword, confirmnewpassword]. 
+    :type request: dict. 
+    
+    :returns: str -- True if successful, False if not. 
+    """
     user = request['username']
     if request['confirmnewpassword'] != request['newpassword']:
         return "Unmatched"
         
     newPassword = sha256_crypt.encrypt(request['newpassword'])
 
-    #set existing passwords to not current
+    # Set existing passwords to not current
     notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == user)
     
     #check its not the same as old passwords - this does not work as passwords hash as something different each time due to the different salt used.
@@ -2416,7 +2588,11 @@ def expiredResetPassword(request):
 
 @app.route('/api/generate')
 def generation():
-    """Cleans up all Notifications / Reminders"""
+    """
+    Cleans up all Notifications / Reminders for all users, run via a scheduled task on the server. 
+    
+    :returns: str -- The number of reminders created/deleted. 
+    """
     startReminderCount = Reminder.select().count()
     dt = datetime.datetime.now()
     for user in Client.select():
@@ -2426,9 +2602,10 @@ def generation():
         checkMissedPrescriptions(user.username, dt.date())
     endReminderCount = Reminder.select().count()
     return "Generated " + str((startReminderCount - endReminderCount)) + " reminders"
+
 ##
 # Signalling
 ##
 
-# Causes the reminder ping to execute every time a request is started.
+# Causes the reminder ping to execute every time the server recieves a request.
 request_started.connect(pingServer, app)
