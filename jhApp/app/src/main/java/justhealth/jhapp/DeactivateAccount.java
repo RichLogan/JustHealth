@@ -46,6 +46,15 @@ import java.util.Set;
  * Created by stephentate on 04/11/14.
  */
 public class DeactivateAccount extends Activity {
+
+    /**
+     * This runs when the page is first loaded.
+     * This shows the action bar and runs the populate spinner method.
+     * There are then two action listeners for the deactivate button and the link to show the
+     * reasons why we should keep the data.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -74,6 +83,10 @@ public class DeactivateAccount extends Activity {
         });
     }
 
+    /**
+     * This makes a post request to the JustHealth API to retrieve the reasons that one may
+     * deactivate their JustHealth account. It then adds these to the spinner.
+     */
     private void populateSpinner() {
 
         System.out.println("populateSpinner");
@@ -99,8 +112,8 @@ public class DeactivateAccount extends Activity {
     }
 
     /**
-     * This method makes a post request to the API to deactivate an account. It adds all of the
-     * parameters to a HashMap.
+     * This method makes a post request to the JustHealth API to deactivate an account.
+     * It adds all of the parameters to a HashMap.
      * Once complete, it returns the appropriate message to the user.
      */
     private void popUpDeactivate() {
@@ -137,18 +150,33 @@ public class DeactivateAccount extends Activity {
             ProgressDialog progressDialog;
             String response;
 
+            /**
+             * This shows the spinner when the post request is made to deactivate the users account.
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(DeactivateAccount.this, "Loading...", "Deactivating your JustHealth account", true);
                 System.out.println(reasons);
             }
 
+            /**
+             * This makes the post request to the JustHealth API off of the main thread.
+             * @param v this shows that the method takes no parameters
+             * @return a string with the response from the JustHealth API
+             */
             @Override
             protected String doInBackground(Void... v) {
                 response = Request.post("deactivateaccount", reasons, getApplicationContext());
                 return response;
             }
 
+            /**
+             * Once the post request is complete a relevant message is then displayed to the user.
+             * This changes depending whether they have chosen to delete their information or not.
+             *
+             * @param response a string containing the response to the post request made to the
+             *                 JustHealth API.
+             */
             @Override
             protected void onPostExecute(String response) {
 
