@@ -18,7 +18,15 @@ Web Application
 
 1. Click on the appointments link on the home page
 
+.. image:: /images/appointment4.png
+
+
 2. On the appointment page click the create appointment
+
+.. image:: /images/appointment5.png
+
+.. image:: /images/appointment6.png
+
 
 3. To create an appointment you are required to fill in the fields:
   - Title- name of the appointment (text)
@@ -48,11 +56,20 @@ Web Application
 
 1. Either click on the 'my patients' link on the home page drop down menu or click on the name of the patient you wish to add the appointment for.
 
+.. image:: /images/appointment1.png
+
+
 2. Click on 'Appointments'
 
 3. Click the green button 'Add new appointment'
 
+.. image:: /images/appointment3.png
+
+.. image:: /images/appointment2.png
+
+
 4. To create an appointment you are required to fill in the fields:
+
   - Title- name of the appointment (text)
 
   - Appointment type- select from the drop down list
@@ -77,7 +94,14 @@ Web Application
 
 1. Click on the appointment link on the home page
 
+.. image:: /images/appointment4.png
+
+
 2. On the appointment page click the 'create' tab
+
+.. image:: /images/appointment5.png
+
+.. image:: /images/appointment6.png
 
 3. To create an appointment you are required to fill in the fields:
   - Title- name of the appointment (text)
@@ -118,7 +142,12 @@ Web Application
 
 2. Find the appointment you wish to edit and click on it.
 
+.. image:: /images/appointment7.png
+
 3. Click update and fill in the details you wish to change
+
+.. image:: /images/appointmnet9.png
+
 
 4. Click update
 
@@ -128,7 +157,13 @@ Web Application
 
 2. Find the patient that you want to edit the appointment for and click on their name
 
+.. image:: /images/appointment1.png
+
+
 3. Click on appointments
+
+.. image:: /images/appointment3.png
+
 
 4. Click edit and fill in the details you wish to change
 
@@ -142,7 +177,13 @@ Web Application
 
 2. Find the appointment you wish to edit and click on it.
 
+.. image:: /images/appointment7.png
+
+
 3. Click update and fill in the details you wish to change
+
+.. image:: /images/appointmnet9.png
+
 
 4. Click update
 
@@ -159,6 +200,9 @@ To delete a personal appointment
 
 2. Find the appointment you wish to delete
 
+.. image:: /images/appointmnet8.png
+
+
 3. Click the delete icon
 
 4. Click 'Ok' to the pop up confirming the delete
@@ -173,6 +217,9 @@ To delete a patients appointment you created
 3. Click on appointments
 
 4. Click delete
+
+.. image:: /images/appointmnet8.png
+
 
 5. Click 'Ok' to the pop up confirming the delete
 
@@ -221,6 +268,9 @@ To delete a patients appointment you created
 
 4. Here lists all non private appointments from the patient
 
+.. image:: /images/appointment3.png
+
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 6.0 Accepting and declining an appointment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -230,7 +280,11 @@ To delete a patients appointment you created
 
 2. Click on the notification and the appointment will be shown
 
-3. To accept click the 'accept' button to decline click the 'decline' button
+3. To accept click the 'accept/ decline' button 
+
+.. image:: /images/appointment10.png
+
+4. On the new screen click the action you wish to take
 
 --------------------
 Mobile Application

@@ -16,11 +16,17 @@ Web Application
 
 1. All active prescriptions can be viewed on the home page under the prescriptions heading
 
+.. image:: /images/prescription1.png
+
+
 2. This lists all the prescriptions you are currently taking
 
 3. To find out more click on the name of the drug
 
 4. This then shows further details about your prescription
+
+.. image:: /images/prescription2.png
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2.0 Adding a prescription
@@ -33,7 +39,16 @@ Web Application
 
 3. Click 'Prescriptions'
 
+.. image:: /images/prescription3.png
+
+
 4. Click the green button on the bottom right on the new screen saying 'Add new Prescription'
+
+.. image:: /images/prescription4.png
+
+.. image:: /images/prescription5.png
+
+
 
 5. Enter in the form details this requires:
 
@@ -83,7 +98,9 @@ Web Application
 
 6. In the new window that appears edit the fields you wish to change
 
-7. Click 'edit'
+.. image:: /images/prescription6.png
+
+7. Click 'update'
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -97,7 +114,13 @@ Web Application
 
 3. Click 'Prescriptions'
 
+.. image:: /images/prescription3.png
+
+
 4. Here there are two tabs 'Active' and 'Upcoming & Expired'
+
+.. image:: /images/prescription4.png
+
 
 5. The Active tab lists all the patients current prescriptions in green
 

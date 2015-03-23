@@ -14,6 +14,8 @@ On the left hand side at the top there is basic user information which shows the
 
 To navigate around the site click on different links on the home page or click on the navigation button in the top right hand side of the page which gives you a list of options.  
 
+.. image:: /images/homepatient.png
+
 **Carer**
 
 
@@ -22,6 +24,8 @@ The home page on the web consists of 5 sections. Right at the top of the page th
 On the left hand side at the top there is basic user information which shows the current users username, firstname and surname. In the top right hand side of this there is a icon which symbolises edit profile. Below the profile section there is a box which shows all completed connections and a link to view all connections information. Underneath this there are 2 more options: Search (for a user), Settings and NHS Search. 
 
 To navigate around the site click on different links on the home page or click on the navigation button in the top right hand side of the page which gives you a list of options.  
+
+.. image:: /images/homecarer.png
 
 --------------------
 Mobile Application

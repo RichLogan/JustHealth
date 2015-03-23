@@ -16,6 +16,8 @@ Web Application
 
 4. Click login
 
+.. image:: /images/loginweb.png
+
 -----------------------
 Mobile Application
 -----------------------

@@ -17,23 +17,32 @@ Web Application
 
 1. First click on the 'Search' link on the left hand side of the home page.
 
-#. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
+2. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
 
-#. Click 'submit'
+.. image:: /images/connect1.png
 
-#. The results of your search will then be displayed in a table underneath the search bar.
 
-#. Once you have found the right user click the connect button located at the end of the row.
+3. Click 'submit'
 
-#. After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.
+4. The results of your search will then be displayed in a table underneath the search bar.
 
-#. You have now made the connection request, the final step is for the person you have requested to accept the request.
+5. Once you have found the right user click the connect button located at the end of the row.
+
+6. After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.
+
+.. image:: /images/connect2.png
+
+
+7. You have now made the connection request, the final step is for the person you have requested to accept the request.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2.0 Accepting a connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. To accept a connection you will receive a notification at the top of your home page. Or you can click on the 'View connections' link of the left hand side of the home page.
+1. To accept a connection you will receive a notification at the top of your home page. Or you can click on the 'Pending connections' link of the left hand side of the home page.
+
+.. image:: /images/connect3.png
+
 
 #. Under the heading incoming you will see the request made.
 
@@ -41,7 +50,13 @@ Web Application
 
 #. Finally you will be asked to enter the 4 digit code the requester was sent. The reason for this is to ensure safe and secure connections.
 
+.. image:: /images/connect4.png
+
+
 #. On clicking complete the connection will be established.
+
+.. image:: /images/connect5.png
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3.0 Canceling a connection
@@ -50,6 +65,9 @@ Web Application
 1. If you wish to cancel a request, please navigate to the home page, the click on the 'Pending requests' link.
 
 #. Under the heading outgoing you will see the connection pending, to cancel simply click the cancel button at the end of the row.
+
+.. image:: /images/connect2.png
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4.0 Rejecting a connection
@@ -60,6 +78,9 @@ Web Application
 #. Under the heading incoming you will see the request made.
 
 #. To reject the connection click the red 'Reject' button.
+
+.. image:: /images/connect3.png
+
 
 
 ---------------------
