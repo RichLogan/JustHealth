@@ -27,8 +27,17 @@ import java.util.zip.CheckedOutputStream;
 
 public class EditPrescription extends Activity {
 
+    //The details of the prescription
     JSONObject prescription;
 
+    /**
+     * This sets the correct xml layout.
+     * It gets the prescription JSON object that was passed with the intent and assigns it to the
+     * class variable.
+     * OnClickListener for the update button, displays an are you sure... dialog.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -71,6 +80,12 @@ public class EditPrescription extends Activity {
         }
     }
 
+    /**
+     * Makes a post request to the JustHealth API to be able to populates the spinner with the
+     * names of the available medication.
+     *
+     * @param target The name of the current medication that should be selected by default.
+     */
     private void populateSpinner(String target) {
         ArrayList<String> populateSpinner = new ArrayList<String>();
         String getMedications = Request.get("getMedications", getApplicationContext());
@@ -95,6 +110,10 @@ public class EditPrescription extends Activity {
         }
     }
 
+    /**
+     * Displays the current prescription in the Edit Texts. Runs the populateSpinner method in
+     * order to set the spinner to the current medication and get the other available options.
+     */
     private void displayPrescription() {
         try {
             populateSpinner(prescription.getString("medication"));
@@ -119,6 +138,10 @@ public class EditPrescription extends Activity {
         }
     }
 
+    /**
+     * This method runs when the user updates the prescription. Adds the items to the HashMap
+     * and makes an async post request to the JustHealth API.
+     */
     private void editPrescription() {
         final HashMap<String, String> parameters = new HashMap<String, String>();
 
@@ -152,6 +175,9 @@ public class EditPrescription extends Activity {
         new AsyncTask<Void, Void, String>() {
             ProgressDialog progressDialog;
 
+            /**
+             * Load the dialog to inform the user that the prescription is being updated.
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(
@@ -161,6 +187,11 @@ public class EditPrescription extends Activity {
                     true);
             }
 
+            /**
+             * Makes the post request to the JustHealth API
+             * @param params shows that there are no parameters being passed to the method
+             * @return The response from the JustHealth API
+             */
             @Override
             protected String doInBackground(Void... params) {
                 String r = Request.post("editPrescription", parameters, getApplicationContext());
@@ -168,6 +199,10 @@ public class EditPrescription extends Activity {
                 return r;
             }
 
+            /**
+             * Dismisses the loading dialog and outputs a response to the user.
+             * @param result The response from the JustHealth API.
+             */
             @Override
             protected void onPostExecute(String result) {
                 super.onPostExecute(result);
@@ -181,6 +216,12 @@ public class EditPrescription extends Activity {
         }.execute();
     }
 
+    /**
+     * When the user updates and leaves the page.
+     * @param success Boolean whether the update was successful, or not.
+     * @param response The response from the PostRequest, if successful or a message stating
+     *                 reason for failure otherwise.
+     */
     private void exit(Boolean success, String response) {
         Intent i = getIntent();
         i.putExtra("response", response);

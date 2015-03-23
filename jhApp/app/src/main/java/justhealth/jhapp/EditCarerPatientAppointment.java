@@ -46,12 +46,18 @@ import java.util.HashMap;
  * Created by Stephen on 07/01/15.
  */
 public class EditCarerPatientAppointment extends Activity {
-    //id of the appointment being edited
+    //id of the appointment being edited (Database)
     private String appId;
+    //id of the appointment being edited (Android)
     private String androidAppId;
-    private String appType;
 
-
+    /**
+     * This runs when the page is first loaded.
+     * The xml layout is assigned and the action bar is set
+     * Action listener added to the update button.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -80,6 +86,12 @@ public class EditCarerPatientAppointment extends Activity {
         String surname = intent.getStringExtra("surname");
     }
 
+    /**
+     * This gets the current details, these are sent in a HashMap with the intent.
+     * Each value from the HashMap is then assigned to the EditText layout.
+     *
+     * @param intent The intent that contains the HashMap.
+     */
     private void setCurrentDetails(Intent intent) {
         HashMap<String, String> appointment = (HashMap<String, String>) intent.getSerializableExtra("appointmentDetails");
         appId = appointment.get("appid");
@@ -118,6 +130,10 @@ public class EditCarerPatientAppointment extends Activity {
         appDetails.setText(details);
     }
 
+    /**
+     * This is run when the update button is pressed. It gathers the text from the EditText boxes
+     * and makes a post request to the JustHealth API, which updates the appointment in the database.
+     */
     private void updateAppointment() {
 
         SharedPreferences account = getSharedPreferences("account", 0);
@@ -157,6 +173,12 @@ public class EditCarerPatientAppointment extends Activity {
         }
     }
 
+    /**
+     * This asks the user whether they want to update the appointment in their phones native
+     * android calendar.
+     *
+     * @param details A HashMap that contains the updated details of the appointment
+     */
     private void updateNativeCalendarQuestion(final HashMap<String, String> details) {
         if (androidAppId.equals("null")) {
             finish();
@@ -185,6 +207,13 @@ public class EditCarerPatientAppointment extends Activity {
         }
     }
 
+    /**
+     * This updates the appointment in the native android calendar. Using the androidEventId that
+     * is stored in the database. Once complete it displays a toast notifying the user. Also runs
+     * finish() to close the intent.
+     *
+     * @param details A HashMap that contains the updated details of the appointment
+     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void updateCalendar(HashMap<String, String> details) {
         long appointmentID = Long.parseLong(androidAppId);
@@ -234,6 +263,14 @@ public class EditCarerPatientAppointment extends Activity {
         finish();
     }
 
+    /**
+     * This method takes the date and time of the appointment and adds each part to a HashMap.
+     * This is needed when adding the appointment to the native android calendar.
+     *
+     * @param date the date of the appointment to be added to the android calendar
+     * @param time the time of the appointment to be added to the android calendar
+     * @return a HashMap of the date and time of the appointment
+     */
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
         HashMap<String, Integer> formattedDateTime = new HashMap<>();
 

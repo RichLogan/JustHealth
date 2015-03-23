@@ -15,6 +15,13 @@ import java.util.HashMap;
 
 public class ForgotPassword extends Activity {
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout and sets the action bar.
+     * OnClickListener on the submit button of the page, runs the getDetails method.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -37,6 +44,9 @@ public class ForgotPassword extends Activity {
         );
     }
 
+    /**
+     * Gets the details from the EditText boxes and assigns them to a HashMap.
+     */
     private void getDetails() {
         HashMap<String, String> details = new HashMap<String, String>();
         details.put("username", ((EditText) findViewById(R.id.loginUsername)).getText().toString());
@@ -53,18 +63,30 @@ public class ForgotPassword extends Activity {
             ProgressDialog progressDialog;
             String responseString;
 
+            /**
+             * Sets the loading spinner to display to the user
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(ForgotPassword.this, "Loading...", "Just resetting your password", true);
                 System.out.println(details);
             }
 
+            /**
+             * Makes the post request to the JustHealth API
+             * @param v Shows that no parameters are being passed to the method.
+             * @return The response from the JustHealth API after the post request.
+             */
             @Override
             protected String doInBackground(Void... v) {
                 responseString = Request.post("resetpassword", details, getApplicationContext());
                 return responseString;
             }
 
+            /**
+             * Feedback the response to the user, using a toast.
+             * @param response The response from the JustHealth API.
+             */
             @Override
             protected void onPostExecute(String response) {
                 progressDialog.dismiss();

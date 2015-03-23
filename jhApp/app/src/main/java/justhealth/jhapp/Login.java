@@ -41,6 +41,14 @@ public class Login extends Activity implements SurfaceHolder.Callback {
     SurfaceView surfaceView = null;
     SurfaceHolder surfaceHolder = null;
 
+    /**
+     * Runs when the login page is first loaded. Attempts to load the video that is on the home page
+     * of the web. Please not that this does not yet work.
+     * Loads the action bar.
+     * Add onClickListeners for the login, register and forgot password buttons on the page.
+     *
+     * @param savedInstanceState  a bundle if the state of the application was to be saved.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -85,6 +93,11 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         );
     }
 
+    /**
+     * Attempt in order to display the video, this currently runs the exception
+     *
+     * @param holder The placeholder for the video.
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // Thanks to: http://stackoverflow.com/questions/8830111/integrating-video-file-in-android-app-as-app-background
@@ -103,6 +116,12 @@ public class Login extends Activity implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder h, int a, int b, int c) {System.out.println("1");}
 
+    /**
+     * Creates the action bar items for the Login page
+     *
+     * @param menu The options menu in which the items are placed
+     * @return True must be returned in order for the options menu to be displayed
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -111,6 +130,12 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This method is called when any action from the action bar is selected
+     *
+     * @param item The menu item that was selected
+     * @return in order for the method to work, true should be returned here
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
@@ -126,6 +151,10 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * This makes the async request to login, authentication and receiving the encrypted password
+     * back from the JustHealth API.
+     */
     private void requestLogin() {
         final HashMap<String, String> loginInformation = new HashMap<String, String>();
         final String username =  ((EditText) findViewById(R.id.loginUsername)).getText().toString();
@@ -140,11 +169,22 @@ public class Login extends Activity implements SurfaceHolder.Callback {
             String response;
             ProgressDialog progressDialog;
 
+            /**
+             * Loads the progress dialog
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(Login.this,"Loading...", "Logging you in",true);
             }
 
+            /**
+             * Runs the getEncryptedPassword method
+             * Makes the post request to the JustHealth API in order to authenticate.
+             *
+             * @param v shows that there are no parameters passed to the method that runs off of the
+             *          main thread.
+             * @return null
+             */
             @Override
             protected Void doInBackground(Void... v) {
                 encryptedPassword = getEncryptedPassword(password);
@@ -152,13 +192,20 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                 return null;
             }
 
+            /**
+             * Gets different responses from the server and decides what to do next.
+             * i.e. authenticates, forces a password change, asks the user about the password change
+             * feedback wrong password etc.
+             *
+             * @param v shows that there are no parameters passed to the method that runs off of the
+             *          main thread.
+             */
             @Override
             protected void onPostExecute(Void v) {
                 try {
                     switch (response) {
+
                         case "Authenticated":
-
-
                             SharedPreferences account = getSharedPreferences("account", 0);
                             SharedPreferences.Editor edit = account.edit();
                             edit.putString("username", loginInformation.get("username"));
@@ -171,6 +218,7 @@ public class Login extends Activity implements SurfaceHolder.Callback {
 
                             startActivity(new Intent(Login.this, Main.class));
                             break;
+
                         case "Reset":
                             String expiredUsername = loginInformation.get("username");
                             String expiredPassword = encryptedPassword;
@@ -191,6 +239,7 @@ public class Login extends Activity implements SurfaceHolder.Callback {
                             expiredAccountType = getAccountType(expiredUsername);
                             giveResetOptions(expiredUsername, encryptedPassword, expiredAccountType);
                             break;
+
                         default:
                             Feedback.toast(response, false, getApplicationContext());
                             break;
@@ -203,6 +252,12 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         }.execute();
     }
 
+    /**
+     * Makes a post request to the JustHealth API and get the account type of the user.
+     *
+     * @param username The username of the user that has logged in.
+     * @return The account type of the user
+     */
     private String getAccountType(String username) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
@@ -218,6 +273,12 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         return null;
     }
 
+    /**
+     * Makes a post request to the JustHealth API to get the encrypted password of the user.
+     *
+     * @param plaintextPassword the plaintext password the user has typed to login.
+     * @return the encrypted password
+     */
     private String getEncryptedPassword(String plaintextPassword) {
         HashMap<String, String> ptPassword = new HashMap<String, String>();
         ptPassword.put("password", plaintextPassword);
@@ -226,6 +287,16 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         return Request.post("encryptPassword", ptPassword, getApplicationContext());
     }
 
+    /**
+     * Run when the users password is due to expire in the next 11 days. Gives the user the option to
+     * change their password not or later. Depending on the response they are taken to the reset
+     * password page or their relevant home page.
+     *
+     * @param expiredUsername The username of the user
+     * @param expiredPassword The password that they have used to login.
+     *                        (The one that needs to be changed)
+     * @param expiredAccountType The account type of the user.
+     */
     private void giveResetOptions(final String expiredUsername, final String expiredPassword, final String expiredAccountType) {
         AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
         alert.setTitle("Password Expiring")
@@ -258,6 +329,10 @@ public class Login extends Activity implements SurfaceHolder.Callback {
         alert.show();
     }
 
+    /**
+     * This method is not used. Was trial and error with the android notifications!
+     * 
+     */
     public void registerWithServer() {
         Intent intent = new Intent("com.google.android.c2dm.intent.REGISTER");
         intent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
