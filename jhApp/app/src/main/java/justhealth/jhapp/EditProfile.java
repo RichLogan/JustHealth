@@ -25,6 +25,13 @@ public class EditProfile extends Activity {
 
     //TODO: Date Picker
 
+    /**
+     * Sets the correct xml layout for the page and loads the action bar.
+     * Sets an onClickListener on the update button and runs the method to load the existing
+     * profile information.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile);
@@ -56,6 +63,10 @@ public class EditProfile extends Activity {
         loadProfile();
     }
 
+    /**
+     * Method not in use, was used to control the male/female spinner but figured that the user
+     * will not be able to update this.
+     */
     private void initSpinners() {
         // Gender Spinner
         final Spinner genderSpinner = (Spinner) findViewById(R.id.editGender);
@@ -79,6 +90,10 @@ public class EditProfile extends Activity {
         });
     }
 
+    /**
+     * Loads the existing profile information that was passed with the intent. Assigns the
+     * information to TextViews on the page.
+     */
     private void loadProfile() {
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -106,6 +121,11 @@ public class EditProfile extends Activity {
         }
     }
 
+    /**
+     * Executed when the profile is edited. Gets the inputs from the EditTexts and makes a post
+     * request to the JustHealth API. Feedback the result to the user and return to the previous
+     * page.
+     */
     private void editProfile() {
         HashMap<String, String> parameters = new HashMap<String, String>();
 
