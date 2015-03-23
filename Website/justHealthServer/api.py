@@ -25,7 +25,17 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username,password):
-    """Checks if the password entered is the current password for that account"""
+    """
+    Checks if a supplied password is correct for a specific user. 
+
+    :param username: The username submitting the request. 
+    :type username: str. 
+
+    :param password: The encrypted password. 
+    :type password: str. 
+
+    :returns: boolean -- Success
+    """
     plaintextPassword = decryptPassword(password)
     try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).password
@@ -34,7 +44,11 @@ def verify_password(username,password):
         return False
 
 def getUsernameFromHeader():
-    """Method gets the HTTP Basic header, decodes it and gets the username"""
+    """
+    Method gets the HTTP Basic header, decodes it and retrieves the username
+
+    :returns: str -- Username submitting the request. 
+    """
     authHeader = str(request.headers.get('Authorization'))
     authHeader = authHeader.replace("Basic ", "")
     decodedAuthHeader = base64.b64decode(authHeader)
@@ -42,8 +56,20 @@ def getUsernameFromHeader():
     return authUsername
 
 def verifyContentRequest(username, targetUsername):
-    """This co-ordinated the running of the other methods, depending on the parameters that are passed"""
-    """This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string"""
+    """
+    This co-ordinates the running of the other methods, depending on the parameters that are passed. 
+    
+    This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string
+
+    :param username: The username of the request originator. 
+    :type username: str. 
+
+    :param targetUsername: The username owning the resource being accessed, if any. 
+    :type targetUsername: str. 
+
+    :returns: boolean -- Success. 
+    :raises: HTTP 401.
+    """
     authUsername = getUsernameFromHeader()
     if targetUsername == "":
         return verifySelf(authUsername, username)
@@ -53,7 +79,18 @@ def verifyContentRequest(username, targetUsername):
         return abort(401)
 
 def verifySelf(authUsername, methodUsername):
-    """Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written"""
+    """
+    Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written
+
+    :param authUsername: username from HTTP header. 
+    :type authUsername: str. 
+
+    :param methodUsername: The username being password to the method. 
+    :type methodUsername: str. 
+
+    :returns: boolean -- success. 
+    :raises: HTTP 401. 
+    """
     if authUsername == methodUsername:
         return True
     else:
@@ -72,15 +109,29 @@ def verifyCarer(username, targetUsername):
 
 @app.route("/api/encryptPassword", methods=["POST"])
 def encryptPassword():
-    """Encrypts the users password and returns it to them"""
-    #used so that we are able to store the encrypted users password in android SharedPreferences
+    """
+    Encrypts the users password and returns it to them
+
+    :param request.form: POST request containing plaintext [password]. 
+    :type request.form: dict. 
+
+    :returns: str -- Encrypted password. 
+    """
+    # Used so that we are able to store the encrypted users password in android SharedPreferences
     plaintext = request.form['password']
     cipherText = encrypt(app.secret_key, plaintext)
     stringCipher = binascii.hexlify(cipherText)
     return stringCipher
 
 def decryptPassword(cipherText):
-    """Decrypts the users password and returns it so that we are able to authenticate them"""
+    """
+    Decrypts the users password and returns it so that we are able to authenticate them.
+
+    :param cipherText: Encrypted password. 
+    :type cipherText: str. 
+
+    :returns: str -- Plaintext password. 
+    """
     #used so that we are able to store the encrypted users password in android SharedPreferences
     bytesCipher = binascii.unhexlify(cipherText)
     plaintext = decrypt(app.secret_key, bytesCipher)
@@ -188,12 +239,26 @@ def registerUser():
 
 @app.route('/api/usernameCheck', methods=['POST'])
 def usernameCheck():
-    """Returns True if a username has already been taken"""
+    """
+    Checks to see if a username has already been taken
+
+    :param request.form: The [username] to check. 
+    :type request.form: dict. 
+
+    :returns: boolean - If username is available or not. 
+    """
     return str(Client.select().where(Client.username == request.form['username']).count() != 0)
 
 @app.route('/api/authenticate', methods=['POST'])
 def authenticate():
-    """Authenticates a username and password and returns the result of the authentication check"""
+    """
+    Authenticates a username and password and returns the result of the authentication check. 
+
+    :param request.form: [username, password]. 
+    :type request.form: dict. 
+
+    :returns: str -- Result message of authentication attempt. 
+    """
     try:
         attempted = Client.get(username=request.form['username'])
     except Client.DoesNotExist:
@@ -1126,25 +1191,35 @@ def getAppointment():
         return getAppointment(request.form['user'], request.form['appid'])
 
 def getAppointment(user, appid):
-  isRelated = Appointments.select().where(Appointments.appid == appid).get()
+    """
+    Returns details of an appointment
 
-  if (isRelated.creator.username == user) or (isRelated.invitee.username):
+    :param user: The user submitting the request. 
+    :type user: str. 
 
-    appointment = {}
-    appointment['appid'] = isRelated.appid
-    appointment['creator'] = isRelated.creator.username
-    appointment['name'] = isRelated.name
-    appointment['apptype'] = str(isRelated.apptype.type)
-    appointment['addressnamenumber'] = isRelated.addressnamenumber
-    appointment['postcode'] = isRelated.postcode
-    appointment['startdate'] = str(isRelated.startdate)
-    appointment['starttime'] = str(isRelated.starttime)
-    appointment['enddate'] = str(isRelated.enddate)
-    appointment['endtime'] = str(isRelated.endtime)
-    appointment['description'] = isRelated.description
-    appointment['private'] = isRelated.private
+    :param appid: The id of the appointment. 
+    :type appid: int. 
 
-    return json.dumps(appointment)
+    :returns: json -- Details of the appointment. 
+    """
+    isRelated = Appointments.select().where(Appointments.appid == appid).get()
+
+    if (isRelated.creator.username == user) or (isRelated.invitee.username):
+        appointment = {}
+        appointment['appid'] = isRelated.appid
+        appointment['creator'] = isRelated.creator.username
+        appointment['name'] = isRelated.name
+        appointment['apptype'] = str(isRelated.apptype.type)
+        appointment['addressnamenumber'] = isRelated.addressnamenumber
+        appointment['postcode'] = isRelated.postcode
+        appointment['startdate'] = str(isRelated.startdate)
+        appointment['starttime'] = str(isRelated.starttime)
+        appointment['enddate'] = str(isRelated.enddate)
+        appointment['endtime'] = str(isRelated.endtime)
+        appointment['description'] = isRelated.description
+        appointment['private'] = isRelated.private
+
+        return json.dumps(appointment)
 
 @app.route('/api/acceptDeclineAppointment', methods=['POST'])
 @auth.login_required
@@ -1152,7 +1227,19 @@ def acceptDeclineAppointment():
     if verifyContentRequest(request.form['username'], ""):
         return acceptDeclineAppointment(request.form['username'], request.form['action'], request.form['appid'])
 
-def acceptDeclineAppointment(user, action, appointmentId): 
+def acceptDeclineAppointment(user, action, appointmentId):
+    """
+    Allows an appointment to be accepted or declined.
+
+    :param user: The user submitting the action. 
+    :type user: str. 
+
+    :param action: "Accept" to accept or anything else to "Decline".
+    :type action: str. 
+
+    :param appointmentId: The id of the appointment to accept / decline. 
+    :type appointmentId: int. 
+    """
     appointment = Appointments.select().where(Appointments.appid == appointmentId).get()
     if user == appointment.invitee.username:
         if action == "Accept": 
@@ -1174,6 +1261,14 @@ def acceptDeclineAppointment(user, action, appointmentId):
     return "You have not been invited to this appointment."
 
 def addMedication(medicationName):
+    """
+    Allows a medication to be added from the system. 
+
+    :param medicationName: The name of the medication to added. 
+    :type medicationName: str. 
+
+    :returns: "Added" or "Already Exists" or "False" for other error. 
+    """
     insertMedication = Medication.insert(
         name = medicationName
     )
@@ -1186,6 +1281,14 @@ def addMedication(medicationName):
     return "False"
 
 def deleteMedication(medicationName):
+    """
+    Allows a medication to be removed from the system. 
+
+    :param medicationName: The name of the medication to remove. 
+    :type medicationName: str. 
+
+    :returns: "Deleted" or "Not Found". 
+    """
     try:
         instance = Medication.select().where(Medication.name == medicationName).get()
         with database.transaction():
@@ -1200,6 +1303,11 @@ def getMedications():
     return getMedications()
 
 def getMedications():
+    """
+    Returns list of all medications in JustHealth system. 
+
+    :returns: json -- List of medication names. 
+    """
     medicationList = []
     result = Medication.select()
     for x in result:
@@ -1214,6 +1322,32 @@ def addPrescription():
         return addPrescription(request.form)
 
 def addPrescription(details):
+    """
+    Allows creation of a prescription
+
+    :param details: Dictionary containing:
+        [prescriptionid]
+        [Monday],
+        [Tuesday],
+        [Wednesday],
+        [Thursday],
+        [Friday],
+        [Saturday],
+        [Sunday],
+        [medication],
+        [dosage],
+        [frequency],
+        [quantity],
+        [dosageunit],
+        [startdate],
+        [enddate],
+        [stockleft],
+        [prerequisite],
+        [dosageform]
+    :type details: dict. 
+
+    :returns: str -- Failed or details of success. 
+    """
     Monday = False;
     try:
       if (details['Monday'] == True) or (details['Monday'] == "True") or (details['Monday'] == "true") or (details['Monday'] == "on"):
@@ -1297,6 +1431,32 @@ def editPrescription():
         return editPrescription(request.form)
 
 def editPrescription(details):
+    """
+    Allows facility to edit a prescription.
+
+    :param details: Dictionary containing:
+        [prescriptionid]
+        [Monday],
+        [Tuesday],
+        [Wednesday],
+        [Thursday],
+        [Friday],
+        [Saturday],
+        [Sunday],
+        [medication],
+        [dosage],
+        [frequency],
+        [quantity],
+        [dosageunit],
+        [startdate],
+        [enddate],
+        [stockleft],
+        [prerequisite],
+        [dosageform]
+    :type details: dict. 
+
+    :returns: str -- Failed or updated details. 
+    """
     Monday = False;
     try:
       if (details['Monday'] == True) or (details['Monday'] == "True") or (details['Monday'] == "true") or (details['Monday'] == "on"):
