@@ -37,10 +37,7 @@ public class GcmIntentService extends IntentService {
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
             /*
-             * Filter messages based on message type. Since it is likely that GCM
-             * will be extended in the future with new message types, just ignore
-             * any message types you're not interested in, or that you don't
-             * recognize.
+             * Filter messages based on message type.
              */
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
@@ -73,9 +70,11 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
+    /**
+     * Adds the GCM message to a notification that can be displayed in the notification bar.
+     * @param title The title of the notification
+     * @param message The message of the notification
+     */
     private void sendNotification(String title, String message) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -100,6 +99,12 @@ public class GcmIntentService extends IntentService {
         notificationInteger(NOTIFICATION_ID);
     }
 
+    /**
+     * Sets the notification ID between 0 and 9, allows 10 notifications from Justhealth to be
+     * displayed before they cancel each other out.
+     *
+     * @param count the current ID of the notification
+     */
     private void notificationInteger(int count) {
         if (count < 10) {
             count += 1;
