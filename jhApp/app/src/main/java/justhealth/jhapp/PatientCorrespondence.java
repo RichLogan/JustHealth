@@ -30,7 +30,16 @@ import java.util.HashMap;
 
 public class PatientCorrespondence extends Activity {
 
+    //The notes associated with the patients
     JSONArray notes;
+
+    /**
+     * This method is initiated when the page is first loaded. It sets the correct xml layout and
+     * displays the action bar.
+     * Invokes the method, getNotes.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -108,6 +117,7 @@ public class PatientCorrespondence extends Activity {
     }
     /**
      * This prints out the button for each of the appointments that are passed to the method.
+     *
      * @param title the title of the created
      * @param date the date of the note created
      * @param content the content in the note created.

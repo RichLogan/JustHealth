@@ -331,7 +331,7 @@ public class Login extends Activity implements SurfaceHolder.Callback {
 
     /**
      * This method is not used. Was trial and error with the android notifications!
-     * 
+     *
      */
     public void registerWithServer() {
         Intent intent = new Intent("com.google.android.c2dm.intent.REGISTER");

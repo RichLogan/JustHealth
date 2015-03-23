@@ -216,10 +216,8 @@ public class Main extends Activity {
     }
 
     /**
-     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
-     * or CCS to send messages to your app. Not needed for this demo since the
-     * device sends upstream messages to a server that echoes back the message
-     * using the 'from' address in the message.
+     * Sends the registration ID to JustHealth server over HTTP, so it can use GCM/HTTP to push
+     * notifications.
      */
     private void sendRegistrationIdToBackend(String regid) {
         String username = account.getString("username", null);
