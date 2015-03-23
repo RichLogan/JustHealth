@@ -1384,6 +1384,14 @@ def deletePrescription():
         return deletePrescription(request.form['prescriptionid'])
 
 def deletePrescription(prescriptionid):
+    """
+    Deletes a specified prescriptions. 
+
+    :param prescriptionid: The id of the prescription to delete. 
+    :type prescriptionid: int. 
+
+    :returns: str -- 'Deleted' or 'Failed'. 
+    """
     try:
         instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
     except Prescription.DoesNotExist:
@@ -1406,6 +1414,14 @@ def getPrescriptions():
             return getPrescriptions(request.form['username'])
 
 def getPrescriptions(username):
+    """
+    Returns all (active, upcoming and expired) prescriptions for a specified user. 
+
+    :param username: The user to check for. 
+    :type username: str. 
+
+    :returns: json -- The list of prescriptions. 
+    """
     accountType = json.loads(getAccountInfo(username))['accounttype']
     user = Client.select().where(Client.username == username).get()
 
@@ -1433,6 +1449,14 @@ def getActivePrescriptions():
             return getActivePrescriptions(request.form['username'])
 
 def getActivePrescriptions(username):
+    """
+    Returns all active prescriptions for a specified user. 
+
+    :param username: The specified user. 
+    :type username: str. 
+
+    :returns: json -- List of prescriptions. 
+    """
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
 
@@ -1448,6 +1472,14 @@ def getUpcomingPrescriptions():
             return getUpcomingPrescriptions(request.form['username'])
 
 def getUpcomingPrescriptions(username):
+    """
+    Returns all upcoming prescriptions for a specified user. 
+
+    :param username: The username to check for. 
+    :type username: str.
+
+    :returns: json -- List of prescriptions. 
+    """
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
 
@@ -1463,10 +1495,17 @@ def getExpiredPrescriptions():
             return getExpiredPrescriptions(request.form['username'])
 
 def getExpiredPrescriptions(username):
+    """
+    Returns all expired prescriptions for a specified user. 
+
+    :param username: The username to check for. 
+    :type username: str. 
+
+    :returns: json -- List of expired prescriptions. 
+    """
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
 
-#upToHere
 @app.route('/api/getPrescription', methods=['POST'])
 @auth.login_required
 def getPrescription():
@@ -1479,6 +1518,14 @@ def getPrescription():
             return getPrescription(request.form)
 
 def getPrescription(details):
+    """
+    Returns the details of a specified prescription. 
+
+    :param details: Dictionary containing [prescriptionid]. 
+    :type details: dict. 
+
+    :returns: json -- Details of prescription. 
+    """
     prescriptionid = details['prescriptionid']
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
     prescription['startdate'] = str(prescription['startdate'])
@@ -1494,6 +1541,13 @@ def takePrescription():
         return takePrescription(request.form)
 
 def takePrescription(details):
+    """Allows a prescription to be taken. 
+
+    :param details: Dictionary containing [currentcount] (number taken today), [prescriptionid].
+    :type details: dict. 
+
+    :returns: True for success or 'Invalid current count'
+    """
     try:
         currentCount = int(details['currentcount'])
         # If a record already exists for this day, update
@@ -1524,6 +1578,16 @@ def takePrescription(details):
     return "False"
 
 def checkStockLevel(prescription, count):
+    """
+    Returns the stock level of a prescription after taking.
+    Creates a notification is appropriate. 
+
+    :param prescription: The id of the prescription. 
+    :type prescription: int. 
+
+    :param count: The amount just taken.
+    :type count: int. 
+    """
     thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
     takeInstance = TakePrescription.select().where(
         (TakePrescription.prescriptionid == prescription) &
@@ -1579,6 +1643,14 @@ def getPrescriptionCount():
         return getPrescriptionCount(request.form)
 
 def getPrescriptionCount(details):
+    """
+    Returns the number of times a user has taken a prescription on the current day.
+
+    :param details: Dictionary containing [prescriptionid].
+    :type details: dict. 
+
+    :returns: int -- The count. 
+    """
     try:
         takeInstance = TakePrescription.select().where(
                 (TakePrescription.prescriptionid == details['prescriptionid']) &
@@ -1594,6 +1666,14 @@ def searchNHSDirect():
     return searchNHSDirect(request.form['searchterms'])
 
 def searchNHSDirect(search):
+    """
+    Allows a search term to be passed to the NHS website. 
+
+    :param search: The search term. 
+    :type search: str. 
+
+    :returns: str -- The url of the website. 
+    """
     newTerm = search.replace(" ", "+")
     website = "http://www.nhs.uk/Search/Pages/Results.aspx?___JSSniffer=true&q="
     searchWeb = website + newTerm
@@ -1605,7 +1685,11 @@ def getDeactivateReasons():
     return getDeactivateReasons()
 
 def getDeactivateReasons():
-    """Returns a JSON list of possible reasons a user can deactivate"""
+    """
+    Returns a list of possible reasons a user can deactivate
+
+    :returns: json -- List of possible reasons.
+    """
     reasons = Deactivatereason.select()
     reasonList = []
     for reason in reasons:
@@ -1619,7 +1703,11 @@ def getAppointmentTypes():
     return getAppointmentTypes()
 
 def getAppointmentTypes():
-    """Returns a JSON list of possible appointment types"""
+    """
+    Returns a list of possible appointment types
+
+    :returns: json -- List of appointment types
+    """
     types = Appointmenttype.select()
     typeList = []
     for appType in types:
@@ -1634,10 +1722,22 @@ def getCorrespondence():
         return getCorrespondence(request.form['carer'], request.form['patient'])
 
 def getCorrespondence(carer, patient):
-     allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
+    """
+    Returns all notes for a patient/carer relationship. 
+    
+    :param carer: The username of the carer. 
+    :type carer: str.
+
+    :param patient: The username of the patient. 
+    :type patient: str. 
+
+    :returns: json -- List of notes. 
+    """
+
+    allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
      
-     results = []
-     for n in allNotes:
+    results = []
+    for n in allNotes:
         note = {}
         note['noteid'] = n.noteid
         note['carer'] = n.carer.username
@@ -1646,7 +1746,7 @@ def getCorrespondence(carer, patient):
         note['title'] = n.title
         note['datetime'] = str(n.datetime)
         results.append(note)
-     return json.dumps(results)
+    return json.dumps(results)
 
 @app.route('/api/getPatientNotes', methods=['GET', 'POST'])
 @auth.login_required
@@ -1655,10 +1755,18 @@ def getPatientNotes():
         return getPatientNotes(request.form)
 
 def getPatientNotes(details):
-     allNotes = Notes.select().where(Notes.patient == details['username'])
+    """
+    Returns all notes for a specific patient. 
+
+    :param details: Dictionary containing [username] of target patient. 
+    :type details: dict. 
+
+    :returns: json -- List of notes
+    """
+    allNotes = Notes.select().where(Notes.patient == details['username'])
      
-     results = []
-     for n in allNotes:
+    results = []
+    for n in allNotes:
         note = {}
         note['noteid'] = n.noteid
         note['carer'] = n.carer.username
@@ -1667,8 +1775,7 @@ def getPatientNotes(details):
         note['title'] = n.title
         note['datetime'] = str(n.datetime)
         results.append(note)
-     return json.dumps(results)
-
+    return json.dumps(results)
 
 @app.route('/api/addCorrespondence', methods=['POST'])
 def addCorrespondence():
@@ -1676,6 +1783,14 @@ def addCorrespondence():
         return addCorrespondence(request.form)
 
 def addCorrespondence(details):
+    """
+    Adds a note for a patient. 
+
+    :param details: Dictionary containing [carer], [patient], [notes] (note content), [title]. 
+    :type details: dict. 
+
+    :returns: str -- True or False for success. 
+    """
     insert = Notes.insert(
         carer = details['carer'],
         patient = details['patient'],
@@ -1698,6 +1813,14 @@ def deleteNote():
         return deleteNote(request.form['noteid'])
 
 def deleteNote(noteid):
+    """
+    Delete a specific note
+
+    :param noteid: The id of the note to delete. 
+    :type noteid: int. 
+
+    :returns: str - Either 'Deleted' or 'Failed'. 
+    """
     try:
         instance = Notes.select().where(Notes.noteid == noteid).get()
         with database.transaction():
@@ -1709,13 +1832,31 @@ def deleteNote(noteid):
 @app.route('/api/addAndroidEventId', methods=['POST'])
 @auth.login_required
 def addAndroidEventId():
-  dbId = request.form['dbid']
-  androidId = request.form['androidid']
-  addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
-  return "Android ID added to database"
+    """
+    Allows an android event id of a calendar event to be stored. 
 
-  #Admin Portal Pages
+    :param request.form: POST request containing [dbid](id of event) and [androidid](the android event id). 
+    :type request.form: dict. 
+
+    :returns: str -- Success message
+    """
+    dbId = request.form['dbid']
+    androidId = request.form['androidid']
+    addAndroidId = Appointments.update(androideventid=androidId).where(Appointments.appid==dbId).execute()
+    return "Android ID added to database"
+
+##
+#Admin Portal Pages
+##
 def addDeactivate(reason):
+    """
+    Allows a new add deactivate reasons to be added to the database. 
+
+    :param reason: The reason to add. 
+    :type reason: str. 
+
+    :returns: str -- True or False for success. 
+    """
     insert = Deactivatereason.insert(
         reason = request.form['reason']
     )
@@ -1726,6 +1867,14 @@ def addDeactivate(reason):
     return "False"
 
 def newMedication(medication):
+    """
+    Allows a new medication to be inserted into the database. 
+
+    :param medication: The name of the medication to add. 
+    :type medication: str.
+
+    :returns: str -- True or False. 
+    """
     insert = Medication.insert(
         name = request.form['medication']
     )
@@ -1741,7 +1890,11 @@ def getReasons():
     return getReasons()
 
 def getReasons():
-    """Get all the reasons from the deactivate table"""
+    """
+    Returns all pre-set reasons to deactivate.
+
+    :returns: json -- List of reasons. 
+    """
     result = {}
     a = Userdeactivatereason.select()
     reasons = Userdeactivatereason.select(Userdeactivatereason.reason).distinct()
@@ -1751,7 +1904,11 @@ def getReasons():
 
 
 def getAllUsers():
-    """Get All information from client and patient/carer/Admin table"""
+    """
+    Returns information about all users. 
+
+    :returns: json -- List containing dictionaries representing all users. 
+    """
     results = []
     for u in Client.select(Client.username):
         userDetails = {}
@@ -1784,6 +1941,19 @@ def getAllUsers():
 
 #Update user account settings in Admin Portal
 def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
+    """
+    Allows an admin to alter a user's account settings. 
+
+    :param settings: Dictionary of users settings [username, ismale, firstname, surname, email, dob,
+                    accounttype, loginattempts]. 
+    :type settings: dict. 
+
+    :param accountlocked: Whether the account should be locked or not. 
+    :type accountlocked: boolean. 
+
+    :param verified: Whether the account is verified. 
+    :type verified: boolean.
+    """
     user = None
     # What type of user are we dealing with?
     try:
