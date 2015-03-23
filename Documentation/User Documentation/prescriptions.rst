@@ -27,19 +27,19 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients link
+1. On the home screen click on the my patients link or on the name of the patient on the home screen
 
 2. Click on the patient you wish to add a prescription for
 
 3. Click 'Prescriptions'
 
-4.Click the green button on the bottom right on the new screen saying 'Add new Prescription'
+4. Click the green button on the bottom right on the new screen saying 'Add new Prescription'
 
 5. Enter in the form details this requires:
 
     - Medication- the name of the Drug (Select from the drop down list)
 
-    - Dosage- The amount of the drug beint taken (e.g. 100)
+    - Dosage- The amount of the drug being taken (e.g. 100)
 
     - Frequency- How many the patient should take (e.g. 1)
 
@@ -60,6 +60,8 @@ Web Application
     - Stock- The patients current stock
 
     - Observations- Any extra details the patient should know about taking the medication
+
+    - Days of the week- Check the check boxes on the days the patient should take the medication
 
 6. The click 'Add Medication'
 
@@ -157,6 +159,8 @@ Mobile Application
     - Stock- The patients current stock
 
     - Observations- Any extra details the patient should know about taking the medication
+
+    - Days of the week- Check the check boxes on the days the patient should take the medication
 
 6. The click 'Add Medication'
 

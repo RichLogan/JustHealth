@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to JustHealth's User documentation!
-======================================
+=============================================
 
 JustHealth is a healthcare app designed to support carers for patients with chronic health conditions and their patients.
 
@@ -14,14 +14,12 @@ The application has a number of different types of users, including:
 
 1. Patients
 2. Carers
-3. Relatives
-4. Medical Professionals
 
 Under each functionality heading I will list the features for the respective user.
 
 
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 10
 
    registration
    login
@@ -34,3 +32,6 @@ Under each functionality heading I will list the features for the respective use
    prescriptions
    medication
    searchnhs
+   notes
+   changePassword
+   contacUs

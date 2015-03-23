@@ -8,7 +8,7 @@ Logging In
 Web Application
 ------------------
 
-1. From clicking the verification email to complete registration this will take you to the `login page <http://127.0.0.1:9999/login>`_.
+1. From clicking the verification email to complete registration this will take you to the login page. It can also be accessed at raptor.kent.ac.uk/5000
 
 2. Enter in the username you registered with in the username box
 
@@ -20,7 +20,7 @@ Web Application
 Mobile Application
 -----------------------
 
-1. From clicking the verification email to complete registration this will take you to the `login page <http://127.0.0.1:9999/login>`_. However, to continue as we mobile user, please re open the mobile application.
+1. From clicking the verification email to complete registration this will take you to the login page. However, to continue as we mobile user, please re open the mobile application.
 
 2. Enter in the username you registered with in the username box
 

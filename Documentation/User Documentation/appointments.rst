@@ -12,13 +12,13 @@ Web Application
 1.0 Adding an appointment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
-*A carer can add both personal appointments and appointments to visit a patient*
+*A carer can add both personal appointments and appointments with a patient*
 
 *Creating personal appointment*
 
 1. Click on the appointments link on the home page
 
-2. On the appointment page click the create appointment 
+2. On the appointment page click the create appointment
 
 3. To create an appointment you are required to fill in the fields:
   - Title- name of the appointment (text)
@@ -31,11 +31,11 @@ Web Application
 
   - Postcode- (text and numbers)
 
-  - Start date- date of the appointment (date)
+  - Start date- date of the appointment (YYYY-MM-DD)
 
   - Start time- time the appointment starts (xx:xx)
 
-  - End date- date the appointment is scheduled to finished (date)
+  - End date- date the appointment is scheduled to finished (YYYY-MM-DD)
 
   - End time- time the appointment is scheduled to finish (xx:xx)
 
@@ -46,15 +46,13 @@ Web Application
 
 *Creating a patients appointment*
 
-1. Click on the 'my patients' link on the home page
+1. Either click on the 'my patients' link on the home page drop down menu or click on the name of the patient you wish to add the appointment for.
 
-2. Click on the patients name which you want to create and appointment for
+2. Click on 'Appointments'
 
-3. Click on 'Appointments'
+3. Click the green button 'Add new appointment'
 
-4. Click the green button 'Add new appointment'
-
-5. To create an appointment you are required to fill in the fields:
+4. To create an appointment you are required to fill in the fields:
   - Title- name of the appointment (text)
 
   - Appointment type- select from the drop down list
@@ -65,15 +63,15 @@ Web Application
 
   - Postcode- (text and numbers)
 
-  - Start date- date of the appointment (date)
+  - Start date- date of the appointment (YYYY-MM-DD)
 
   - Start time- time the appointment starts (xx:xx)
 
-  - End date- date the appointment is scheduled to finished (date)
+  - End date- date the appointment is scheduled to finished (YYYY-MM-DD)
 
   - End time- time the appointment is scheduled to finish (xx:xx)
 
-6. Click 'Add Appointment'
+5. Click 'Add Appointment'
 
 **Patient:**
 
@@ -92,11 +90,11 @@ Web Application
 
   - Postcode- (text and numbers)
 
-  - Start date- date of the appointment (date)
+  - Start date- date of the appointment (YYYY-MM-DD)
 
   - Start time- time the appointment starts (xx:xx)
 
-  - End date- date the appointment is scheduled to finished (date)
+  - End date- date the appointment is scheduled to finished (YYYY-MM-DD)
 
   - End time- time the appointment is scheduled to finish (xx:xx)
 
@@ -116,7 +114,7 @@ Web Application
 
 *Edit a personal appointment*
 
-1. Click on the link 'view appointments' on the home screen.
+1. Click on the link 'Appointments' on the home screen.
 
 2. Find the appointment you wish to edit and click on it.
 
@@ -132,7 +130,7 @@ Web Application
 
 3. Click on appointments
 
-4. Click edit (the green pencil) and fill in the details you wish to change
+4. Click edit and fill in the details you wish to change
 
 5. Click update
 
@@ -140,7 +138,7 @@ Web Application
 **Patient:**
 *A patient can only edit their own appointments*
 
-1. Click on the calendar icon on the home screen.
+1. Click on the 'your appointments' link on the home screen.
 
 2. Find the appointment you wish to edit and click on it.
 
@@ -157,7 +155,7 @@ Web Application
 
 To delete a personal appointment
 
-1. Click on the calendar icon on the home screen.
+1. Click on the 'your appointments' link on the home screen.
 
 2. Find the appointment you wish to delete
 
@@ -182,7 +180,7 @@ To delete a patients appointment you created
 **Patient:**
 *A patient can only edit their own appointments*
 
-1. Click on the 'view all appointments' link on the home page
+1. Click on the 'your appointments' link on the home screen.
 
 2. Find the appointment you wish to delete and click on it
 
@@ -223,6 +221,16 @@ To delete a patients appointment you created
 
 4. Here lists all non private appointments from the patient
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6.0 Accepting and declining an appointment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Carer and Patient**
+
+1. When someone has added an appointment with you, you will received a notification at the top of your home screen.
+
+2. Click on the notification and the appointment will be shown
+
+3. To accept click the 'accept' button to decline click the 'decline' button
 
 --------------------
 Mobile Application
@@ -251,11 +259,11 @@ Mobile Application
 
   - Postcode- (text and numbers)
 
-  - Start date- date of the appointment (date)
+  - Start date- date of the appointment (YYYY-MM-DD)
 
   - Start time- time the appointment starts (xx:xx)
 
-  - End date- date the appointment is scheduled to finished (date)
+  - End date- date the appointment is scheduled to finished (YYYY-MM-DD)
 
   - End time- time the appointment is scheduled to finish (xx:xx)
 
@@ -319,11 +327,11 @@ Mobile Application
 
   - Postcode- (text and numbers)
 
-  - Start date- date of the appointment (date)
+  - Start date- date of the appointment (YYYY-MM-DD)
 
   - Start time- time the appointment starts (xx:xx)
 
-  - End date- date the appointment is scheduled to finished (date)
+  - End date- date the appointment is scheduled to finished (YYYY-MM-DD)
 
   - End time- time the appointment is scheduled to finish (xx:xx)
 
