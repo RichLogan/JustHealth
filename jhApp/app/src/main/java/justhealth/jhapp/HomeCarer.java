@@ -95,12 +95,21 @@ public class HomeCarer extends Activity {
         );
     }
 
+    /**
+     * When the page is loaded after the first time this method is run.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         Request.serverCheck(this);
     }
 
+    /**
+     * Creates the action bar items for the Carer Home page
+     *
+     * @param menu The options menu in which the items are placed
+     * @return True must be returned in order for the options menu to be displayed
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -109,6 +118,12 @@ public class HomeCarer extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This method is called when any action from the action bar is selected
+     *
+     * @param item The menu item that was selected
+     * @return in order for the method to work, true should be returned here
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items

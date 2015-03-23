@@ -9,7 +9,9 @@ Web Application
 ---------------
 
 1. To register to be a user of JustHealth you need to fill in the registration form.
-This can be found by navigating here from the front page or clicking `this link <http://127.0.0.1:9999/register>`_.
+This can be found by navigating here from the front page at raptor.ac.uk/5000
+
+.. image:: /images/registerweb.png
 
 2. The form requires:
 
@@ -31,7 +33,7 @@ This can be found by navigating here from the front page or clicking `this link 
 
   - Confirm password: please type in the same password you type in the box above
 
-3. You then need to click you accept the terms and conditions to be able to continue with the process. To view these they can be found by clicking the link by the button, or following `this link <http://127.0.0.1:9999/termsandconditions>`_.
+3. You then need to click you accept the terms and conditions to be able to continue with the process. To view these they can be found by clicking the link by the button.
 
 4. Next click register
 
@@ -40,6 +42,7 @@ This can be found by navigating here from the front page or clicking `this link 
 6. After clicking on the link you will be taken to the sign in page, where it will say 'Thank you for verifying your account'
 
 7. You are now a registered user of JustHealth!
+
 
 
 -------------------

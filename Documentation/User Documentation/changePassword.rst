@@ -11,6 +11,12 @@ Web Application
 
 2. Click on the 'change password' link
 
+.. image:: /images/changepass3.png
+
+
 3. Fill in the form with your current password, new password and confirmed new password.
+
+.. image:: /images/changepass2.png
+
 
 4. Click update

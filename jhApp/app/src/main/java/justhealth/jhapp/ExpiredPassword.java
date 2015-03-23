@@ -23,10 +23,20 @@ import java.util.HashMap;
  */
 public class ExpiredPassword extends Activity {
 
+    //The username of the user that has tried to login
     private String username;
+    //The password that the have logged in with
     private String expiredPassword;
+    //The account type of the user that has logged in (Patient/Carer)
     private String accountType;
 
+    /**
+     * This method is invoked when the page is first loaded. Sets the correct xml layout and shows
+     * the action bar. Assigns the class variables from what is passed with the intent. OnclickListener
+     * for the password reset button.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +67,11 @@ public class ExpiredPassword extends Activity {
 
     }
 
+    /**
+     * Adds the newpassword and confirmnewpassword to a HashMap and makes the post request to the
+     * JustHealth API.
+     * Subsequently, resets the SharedPreferences values and feedbacks to the user.
+     */
     private void sendResetExpiredPassword() {
         final HashMap<String, String> details = new HashMap<String, String>();
 
@@ -92,17 +107,30 @@ public class ExpiredPassword extends Activity {
             ProgressDialog progressDialog;
             String response;
 
+            /**
+             * Shows the loading dialog
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(ExpiredPassword.this, "Loading...", "Resetting your password", true);
             }
 
+            /**
+             * Makes the post request to the JustHealth API off of the main thread
+             * @param v Shows that there are no parameters passed to the method
+             * @return Returns the response from the JustHealth API
+             */
             @Override
             protected String doInBackground(Void... v) {
                 response = Request.post("expiredResetPassword", details, getApplicationContext());
                 return response;
             }
 
+            /**
+             * Dismisses the loading dialog.
+             * Sets SharedPreferences and redirects  the user to the correct home page.
+             * @param response
+             */
             @Override
             protected void onPostExecute(String response) {
                 progressDialog.dismiss();
@@ -147,6 +175,11 @@ public class ExpiredPassword extends Activity {
         }.execute();
     }
 
+    /**
+     * Queries the JustHealth API to retrieve the encrypted password
+     * @param plaintextPassword The plaintext password that the user types into the reset box
+     * @return The encrypted password
+     */
     private String getEncryptedPassword(String plaintextPassword) {
         HashMap<String, String> ptPassword = new HashMap<String, String>();
         ptPassword.put("password", plaintextPassword);

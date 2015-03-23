@@ -233,6 +233,25 @@ Return values:
   Failed
     - My Patients page with appointment form is shown for user to try again.
 
+Accept/Decline Appointments
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.appointmentAcceptDecline_view
+
+  :URL: /appointmentDetails
+  :HTTP_METHOD: POST, GET
+
+  :param action: Handles the accept or decline option that the invited user chooses, shows the appropriate notification to the user depending on action 
+
+Return values:
+  Accept
+    - Notification type: "Success"
+  Reject
+    - Notification type: "Danger"
+  You have not been invited to this appointment
+    - Notification type: "Failed"
+
+
 Update Appointment
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -411,6 +430,52 @@ Return values:
     - Shows notification to inform the user of the result
 
 ------------------------
+Notes
+------------------------
+
+Correspondence
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.notes
+
+  :URL: /notes
+  :HTTP_METHOD: POST, GET
+
+Return values:
+  Success
+    - Return the correspondence page
+  Failed
+    - Return the appropriate dashboard
+
+Add Correspondence
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.addNote
+
+  :URL: /addNote
+  :HTTP_METHOD: POST, GET
+
+Return values:
+  Success
+    - "Note successfully added"
+  Failed
+    - "Note could not be added"
+
+Delete Correspondence
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.deleteNote_view
+
+  :URL: /deleteNote
+  :HTTP_METHOD: POST
+
+Return values:
+  Success
+    - "Note successfully deleted"
+  Failed
+    - "Note could not be deleted"
+
+------------------------
 Contact Us
 ------------------------
 
@@ -458,6 +523,20 @@ Admin Portal Home
 Return values:
   adminHome.html
     - Shows the page with all tabs and content loaded for user accounts
+
+Delete User Account
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: justHealthServer.views.deleteAccount_view
+
+  :URL: /deleteAccount
+  :HTTP_METHOD: POST
+
+Return values:
+  adminHome.html, "Success"
+    - "User successfully deleted"
+  adminHome.html, "Failed"
+    - "User could not be deleted"
 
 New Deactivation Reason
 ^^^^^^^^^^^^^^^^^^^^^^^^

@@ -11,7 +11,13 @@ Web Application
 ---------------
 1. To deactivate your account you will need to navigate from the home screen to the deactivate page. This can be done by clicking on the 'settings' button on the left hand side of the home page. Once you are on the settings page you will need to click on the 'Deactivate Account' link. 
 
+.. image:: /images/deac.png
+
+
 2. On the deactivate page select a reason you wish to deactivate your account.
+
+.. image:: /images/deac1.png
+
 
 3. If you have any extra comments please type these in the space below the reason you chose.
 

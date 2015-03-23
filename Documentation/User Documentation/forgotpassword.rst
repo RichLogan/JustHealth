@@ -7,13 +7,23 @@ Forgotten Password
 ---------------
 Web Application
 ---------------
-1. On the `login page <http://127.0.0.1:9999/login>`_. click on the link at the bottom which says 'forgot password'
+1. On the login page click on the link at the bottom which says 'forgot password'
+
+.. image:: /images/forgotpass1.png
 
 2. A popup window will then appear and ask you to fill in your email address you are registered with.
 
+.. image:: /images/forgotpass2.png
+
 3. On doing this you will then be sent an email from JustHealth with the subject line 'Forgot you password'
 
+.. image:: /images/forgotpass4.png
+
+
 4. Click on the link provided in the email to take you to the reset password page
+
+.. image:: /images/forgotpass3.png
+
 
 5. Fill in the form with you:
 
@@ -24,14 +34,14 @@ Web Application
 
 6. Then click submit
 
-7. On clicking submit this will take you back to the `login page <http://127.0.0.1:9999/login>`_.
+7. On clicking submit this will take you back to the login page
 
 8. Here enter your username and your new password to log in.
 
 
----------------
+--------------------
 Mobile Application
----------------
+--------------------
 1. On the login page click on the link at the bottom which says 'forgot password'
 
 2. A popup window will then appear and ask you to fill in your email address you are registered with.
@@ -49,6 +59,6 @@ Mobile Application
 
 6. Then click submit
 
-7. On clicking submit this will take you back to the `login page <http://127.0.0.1:9999/login>`_. However, to continue back as  mobile user reopen the app.
+7. On clicking submit this will take you back to the login page. However, to continue back as  mobile user reopen the app.
 
 8. Here enter your username and your new password to log in.
