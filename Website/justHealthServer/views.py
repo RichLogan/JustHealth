@@ -22,6 +22,7 @@ def needAdmin(f):
     @wraps(f)
     def needAdmin(*args, **kwargs):
         if session['accounttype'] != "Admin":
+            # If the URL for admin portal is attempted, check for authorisation.
             return render_template('401Unauthorised.html'), 401
         return f(*args, **kwargs)
     return needAdmin
@@ -29,11 +30,12 @@ def needAdmin(f):
 @app.route('/images/<filename>')
 @needLogin
 def getProfilePicture(filename):
-    """Gets the user's profile picture from the JustHealth images folder"""
+    """Gets the user's profile picture from the JustHealth images folder on the server"""
     return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/')
 def frontPage():
+    # Checks if a user session is set, if not kick to the front page, instead of dashboard
     try:
         session['username']
         return redirect(url_for('index'))
@@ -44,12 +46,14 @@ def frontPage():
 @needLogin
 def index():
     """Sends user to a dashboard according to account type if session is active, it shows their profile and connections. A patient will be able to see their notifications, prescriptions and appointments. A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments"""
-    ## set common functionality
+    ## set common functionality for all account types
     accountInfo = json.loads(getAccountInfo(session['username']))
 
     if accountInfo['accounttype'] == "Admin":
+        # direct user to the admin portal
         return redirect(url_for('adminPortal'))
 
+    # common functionality for patient and carer
     connections = json.loads(getConnections(session['username']))
     appointments = json.loads(getAllAppointments(session['username'], session['username']))
     outgoingConnections = json.loads(connections['outgoing'])
@@ -123,6 +127,7 @@ def index():
 @app.route('/profile')
 @needLogin
 def profile():
+    # Redundant function as the profile page is no longer in use 
     """Profile page to display all current users details"""
     profileDetails = json.loads(getAccountInfo(session['username']))
 
@@ -151,13 +156,16 @@ def editDetails_view():
     if updated == "Failed":
         flash(updated, 'danger')
     else:
+        # sets the profile picture in the session variable so that it updates on submit
         nameresult = json.loads(getAccountInfo(session['username']))
         session['profilepicture'] = nameresult['profilepicture']
+
         flash(updated, 'success')
     return redirect('/')
 
 @app.route('/termsandconditions')
 def terms():
+    # Redundant page: content is now in a modal
     """JustHealth terms and conditions reference page for all users"""
     return render_template('termsandconditions.html')
 
@@ -167,16 +175,19 @@ def corpus():
 
 @app.route('/legal')
 def legal():
+    # Redundant page: content is now in a modal
     """This page hold 4 tiles each a link onto the respective legal page"""
     return render_template('legal.html')
 
 @app.route('/privacypolicy')
 def privacy():
+    # Redundant page: content is now in a modal
     """JustHealth privacy policy and data protection reference page"""
     return render_template('privacypolicy.html')
 
 @app.route('/references')
 def references():
+    # Redundant page: content is now in a modal
     return render_template('references.html')
 
 @app.route('/faq')
@@ -187,6 +198,7 @@ def faq():
 @app.route('/sitemap')
 @needLogin
 def sitemap():
+    # Redundant page: content is now in a modal
     return render_template('sitemap.html')
 
 @app.route('/contactUs', methods=['POST', 'GET'])
@@ -212,7 +224,7 @@ def settings():
 @app.route('/search', methods=['POST', 'GET'])
 @needLogin
 def search():
-    """Search to find a different user's profile"""
+    """Search to find a different user, potentially so a connection can then be requested"""
     if request.method =='POST':
         result = searchPatientCarer(request.form['username'], request.form['searchterm'])
         if result == "No users found":
@@ -229,12 +241,15 @@ def deactivate():
     if request.method == 'POST':
         result = deactivateAccount(request.form)
         if result == "Deleted":
+            # if the checkbox is ticked, we delete their data and their account is completely deleted
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deleted")
         elif result == "Kept":
+            # if the checkbox is left unchecked, we keep their data but mark their account as deactivated
             session.pop('username', None)
             return render_template('login.html', type="success", message = "Your account has been deactivated")
         else:
+            # deactive attempt failed
             return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'], type="danger", message = result)
     return render_template('deactivate.html', reasons = Deactivatereason.select(), user = session['username'])
 
@@ -251,11 +266,10 @@ def registration():
             flash(result, "danger")
     return render_template('register.html')
 
-
 @app.route('/logout')
 @needLogin
 def logout():
-    """Terminates user session"""
+    """Terminates user session and redirects to the front page"""
     session.pop('username', None)
     return redirect('/')
 
@@ -287,6 +301,7 @@ def changePassword():
 
 @app.route('/users/activate/<payload>')
 def passwordReset(payload):
+    # forced password reset, if password is expiring etc.
     s = getSerializer()
     try:
         retrievedUsername = s.loads(payload)
@@ -310,7 +325,7 @@ def loadPasswordReset(payload):
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    """Gets username from login in order to authenticate session"""
+    """Gets the username from login in order to authenticate session, log the user in and redirects to index function"""
     if request.method == 'POST':
         result = authenticate()
         if result == "Authenticated":
@@ -324,7 +339,7 @@ def login():
             fullname = session['firstname'] + session['surname']
 
             return redirect(url_for('index'))
-        #expired password here
+        # Expired password here
         elif result == "Reset":
             return render_template('expiredpassword.html', user=request.form['username'], message="Your password has expired and needs to be reset before you will be able to log in.", submessage="JustHealth enforce this from time-to-time to ensure that your privacy and security are maximised whilst using the website.")
         elif result == "<11":
@@ -345,15 +360,18 @@ def login():
 
 @app.route('/expiredpassword', methods=['POST', 'GET'])
 def expiredpassword():
+    """This forces the user to the expired password page, and checks the password reset"""
     if request.method == 'POST':
         reset = expiredResetPassword(request.form)
         if reset == "True":
             session['username'] = request.form['username']
             return redirect(url_for('index'))
-        #does not work, see API comments for details
+        # does not work, see API comments for details
         # elif reset == "Exists":
         #      return render_template('expiredpassword.html', user=session['username'], error="The password that you have tried to use has already been used as one of your last five passwords. Please try again.", errortype="danger")
+        
         elif reset == "Unmatched":
+            # handles the attempted password reset
             return render_template('expiredpassword.html', user=request.form['username'], error="The two passwords you entered did not match, please try again.", errortype="danger")
         else: 
             return render_template('expiredpassword.html', user=session['username'], error="Oops, something went wrong. Please try again.", errortype="danger")
@@ -482,7 +500,7 @@ def getUpdateAppointment_view():
 @app.route('/patientUpdateAppointment', methods=['POST'])
 @needLogin
 def updateAppointment_view():
-    """If the privacy option isn't selected, the field isn't sent with the form, so it is caught and handled here"""
+    """If the privacy option isn't selected, the field isn't sent with the form, so it is caught and handled in this function"""
     if request.method == 'POST':
         #The tick box is not sent if it isn't ticked, so we have to catch it here.
         try:
@@ -500,6 +518,7 @@ def updateAppointment_view():
 @app.route('/appointmentDetails', methods=['GET', 'POST'])
 @needLogin
 def appointmentAcceptDecline_view():
+    """Gets the correct appointment to show the patient, handles the accept or decline option on appointments that they have been invited to by their carer"""
     if request.method == 'GET':
         appid = request.args.get('id')
         getApp = json.loads(getAppointment(session['username'], appid))
@@ -690,7 +709,7 @@ def inviteeappointments():
 @app.route('/nhsSearch', methods=['POST', 'GET'])
 @needLogin
 def searchNHS():
-    """The POST request is no longer needed as this is done with JS"""
+    """The POST request is no longer needed as this is done with Javascript"""
     # if request.method == 'POST':
     #     website = searchNHSDirect(request.form['searchterm'])
     #     webbrowser.open(website,new=2)
@@ -699,7 +718,7 @@ def searchNHS():
 @app.route('/dismissNotification', methods=['POST', 'GET'])
 @needLogin
 def dismissNotifications():
-    """dismiss the notification by running a method from the API"""
+    """Dismiss the notification by running a method from the API"""
     if request.method == 'POST':
         notificationDismiss = dismissNotification(request.form['notificationid'])
         return notificationDismiss 
@@ -707,19 +726,22 @@ def dismissNotifications():
 
 @app.route('/notes',methods=['POST', 'GET'])
 def notes():
-    """JustHealth correspondence"""
+    """JustHealth correspondence, shows notes between a patient and their carer"""
     connections = json.loads(getConnections(session['username']))    
     if request.method == "GET":
         try:
+            # Get the notes for the patient and carer that are connected
             patient = request.args.get('user', '')
             Patientcarer.select().where((Patientcarer.carer == session['username']) & (Patientcarer.patient == patient)).get()
             correspondence = json.loads(getCorrespondence(session['username'], patient))
             return render_template('correspondence.html', notes=correspondence, patient=patient)
         except Patientcarer.DoesNotExist:
+            # Patient/Carer relationship that's requested does not exist
             return redirect(url_for('index'))
 
 @app.route('/addNote',methods=['POST', 'GET'])
 def addNote():
+    """Correspondence page, handles the form POST request to store a note between patient and carer"""
     patient = request.form['patient']
     if request.method == "POST":
         result = addCorrespondence(request.form)
@@ -731,6 +753,7 @@ def addNote():
 
 @app.route('/deleteNote', methods=['POST'])
 def deleteNote_view():
+    """Correspondence page, handles the POST request from the delete button to remove the correct note from the database"""
     patient = request.form['patient']
     noteid = request.form['noteid']
     deleted = deleteNote(noteid)
@@ -823,6 +846,7 @@ def updateAccountSettings_view():
 @needLogin
 @needAdmin
 def deleteAccount_view():
+    """Submits the form for an administrator to delete a user account from the management portal"""
     username = request.form['username']
     deleted = deleteAccount(username)
     if deleted == "Deleted":
