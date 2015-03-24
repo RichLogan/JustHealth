@@ -26,6 +26,9 @@ Mobile Application
 
 2. Enter in the username you registered with in the username box
 
+.. image:: /android/login.png
+
+
 3. Enter the password you registered with in the password field
 
 4. Click login

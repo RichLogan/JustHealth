@@ -51,11 +51,17 @@ Mobile Application
 1.0 Carer to view, create and delete patient notes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Click on my patients and select the patient you wish to add a note for
+1. Click on my patients and select the patient you wish to add a note for.
+
+.. image:: /android/mypatientsoptions.png
+
 
 2. Click on 'Notes'
 
 3. Enter in the title of the note in the title box and the note in the comment box.
+
+.. image:: /android/addnote.png
+
 
 4. Click submit
 
@@ -70,3 +76,6 @@ Mobile Application
 2. Select 'Your Notes'
 
 3. On this page you can view all the notes your carer has added.
+
+.. image:: /android/patientnotes.png
+

@@ -92,17 +92,32 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1. First click on the tile with a magnifying glass on named search.
 
+.. image:: /android/homecarer.png
+
+
 #. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
+
+.. image:: /android/search.png
+
 
 #. Click 'submit'
 
 #. The results of your search will then be displayed in a table underneath the search bar.
 
+.. image:: /android/search2.png
+
+
 #. Once you have found the right user click the connect button located at the end of the row.
 
 #. After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.
 
+.. image:: /android/search3.png
+
+.. image:: /android/search4.png
+
+
 #. You have now made the connection request, the final step is for the person you have requested to accept the request.
+
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -110,6 +125,9 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. To accept a connection you need to click on the connections tile and on the 'incoming' tab.
+
+.. image:: /android/connections5.png
+
 
 #. Under the heading incoming you will see the request made.
 
@@ -125,6 +143,9 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. If you wish to cancel a request, click on the connections tile and on the 'outgoing' tab.
+
+.. image:: /android/connections3.png
+
 
 #. Under the heading outgoing you will see the connection pending, to cancel simply click the cancel button at the end of the row.
 

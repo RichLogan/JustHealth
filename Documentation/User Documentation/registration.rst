@@ -49,7 +49,12 @@ This can be found by navigating here from the front page at raptor.ac.uk/5000
 Android Application
 -------------------
 
-1. To register on the Mobile application you have to navigate from the login screen, by clicking on 'new to just health register here'
+1. To register on the Mobile application you have to navigate from the login screen to the 'Register' page
+
+.. image:: /android/login.png
+
+
+.. image:: /android/register.png
 
 2. This will take you to another page with a form identical to the web application where you will be required to fill in
 

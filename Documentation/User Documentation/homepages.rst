@@ -32,3 +32,14 @@ Mobile Application
 --------------------
 
 The mobile application follows a tile patterns which once clicked on will open up the respective pages. All tiles are clearly labeled with a picture and a icon.
+
+**Patient Home Screen:**
+
+
+.. image:: /android/patienthome.png
+
+
+**Carer Home Screen:**
+
+.. image:: /android/homecarer.png
+
