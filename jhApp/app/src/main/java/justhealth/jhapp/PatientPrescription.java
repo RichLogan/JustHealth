@@ -21,6 +21,13 @@ import java.util.HashMap;
 
 public class PatientPrescription extends Activity {
 
+    /**
+     * The onCreate method is run when the page is first loaded. The correct xml layout is set and
+     * the action bar is loaded.
+     * The getPrescriptions method is invoked.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -35,6 +42,10 @@ public class PatientPrescription extends Activity {
         getPrescriptions();
     }
 
+    /**
+     * This makes a post request to the JustHealth API to get the prescriptions that are associated
+     * with the user (patient) that is logged in.
+     */
     private void getPrescriptions() {
         final HashMap<String, String> parameters = new HashMap<String, String>();
         String username = getSharedPreferences("account", 0).getString("username", null);
@@ -43,11 +54,22 @@ public class PatientPrescription extends Activity {
         new AsyncTask<Void, Void, JSONArray>() {
             ProgressDialog progressDialog;
 
+            /**
+             * Displays the loading dialog to the user
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(PatientPrescription.this, "Loading...", "Loading your prescriptions", true);
             }
 
+            /**
+             * Makes a post request to the JustHealth API to get the prescriptions for the given user,
+             * the patient that is logged in.
+             *
+             * @param params Shows that no parameters are passed to this method.
+             * @return The response from the JustHealth API as a JSONArray or if something went wrong,
+             *          null.
+             */
             @Override
             protected JSONArray doInBackground(Void... params) {
                 try {
@@ -58,6 +80,12 @@ public class PatientPrescription extends Activity {
                 }
             }
 
+            /**
+             * Invokes the method display prescriptions
+             * Dismisses the progress dialog.
+             *
+             * @param response JSONArray of the response from the server.
+             */
             @Override
             protected void onPostExecute(JSONArray response) {
                 try {
@@ -74,6 +102,13 @@ public class PatientPrescription extends Activity {
 
     }
 
+    /**
+     * Loops through the prescriptions in the JSONArray returned from the server and prints
+     * them out onto buttons. Adds an onClickListener to the buttons which opens a dialog with the
+     * options for the prescriptions in.
+     *
+     * @param prescriptionList JSONArray of the prescriptions for the given patient.
+     */
     private void displayPrescriptions(JSONArray prescriptionList) {
         for (int x = 0; x < prescriptionList.length(); x++) {
             try {
