@@ -31,7 +31,14 @@ Mobile Application
 ---------------
 1. To deactivate your account you will need to navigate from the home screen to the deactivate page. This can be done by clicking on the 'settings' button on the bottom right then selecting 'Deactivate'
 
+.. image:: /android/settings.png
+
+
 2. On the deactivate page select a reason you wish to deactivate your account.
+
+
+.. image:: /android/deactivate.png
+
 
 3. If you have any extra comments please type these in the space below the reason you chose.
 

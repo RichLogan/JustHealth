@@ -20,6 +20,12 @@ import java.util.HashMap;
 
 public class MyPatients extends Activity {
 
+    /**
+     * Run when the page first loads, assigns the correct xml layout and displays the action bar.
+     * Invokes loadPatients()
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_patients);
@@ -31,6 +37,9 @@ public class MyPatients extends Activity {
         loadPatients();
     }
 
+    /**
+     * Makes a post request off of the main thread to get the patients that a carer is connected to.
+     */
     private void loadPatients() {
         final HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", getSharedPreferences("account", 0).getString("username", null));
@@ -38,11 +47,21 @@ public class MyPatients extends Activity {
         new AsyncTask<Void, Void, JSONArray>() {
             ProgressDialog progressDialog;
 
+            /**
+             * Shows the dialog to the user
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(MyPatients.this, "Loading...", "Loading your patients", true);
             }
 
+            /**
+             * Sends a post request to the JustHealth API and get the patients that the carer is
+             * connected too.
+             * @param params Shows that there are no parameters passed to this method
+             * @return JSONArray of the patients that the carer is connected too or null if the server
+             *          is unable to respond.
+             */
             @Override
             protected JSONArray doInBackground(Void... params) {
                 try {
@@ -53,6 +72,11 @@ public class MyPatients extends Activity {
                 }
             }
 
+            /**
+             * Invokes the display patients method and dismisses the dialog
+             * @param result the JSONArray that is returned from the JustHealth server as part of the
+             *               post request.
+             */
             @Override
             protected void onPostExecute(JSONArray result) {
                 try {
@@ -67,6 +91,13 @@ public class MyPatients extends Activity {
         }.execute();
     }
 
+    /**
+     * Loops through the JSONArray of connected patients and prints them as buttons.
+     * Associates the onClickListener with them which when initiated displays an options menu.
+     * When one of the options are clicked the user is taken to the relevant page.
+     *
+     * @param patients The JSONArray of patients that the carer is connected too.
+     */
     private void displayPatients(JSONArray patients) {
         for (int x = 0; x < patients.length(); x++) {
             try {

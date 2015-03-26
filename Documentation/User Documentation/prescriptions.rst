@@ -140,9 +140,15 @@ Mobile Application
 
 2. This page then lists all the prescriptions you are currently taking
 
+.. image:: /android/prescription.png
+
+
 3. To find out more click on the name of the drug
 
 4. This shows further details about your prescription
+
+.. image:: /android/prescription2.png
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2.0 Adding a prescription
@@ -155,7 +161,13 @@ Mobile Application
 
 3. Click 'Prescriptions'
 
+.. image:: /android/mypatientoptions.png
+
+
 4. Click the button saying 'Add new Prescription'
+
+.. image:: /android/addprescription.png
+
 
 5. Enter in the form details this requires:
 
@@ -220,6 +232,9 @@ Mobile Application
 3. Click 'Prescriptions'
 
 4. Here there are two sections 'Active' and 'Upcoming & Expired'
+
+.. image:: /android/prescriptionsmypatients.png
+
 
 5. The Active tab lists all the patients current prescriptions
 

@@ -28,9 +28,15 @@ Mobile Application
 
 1. On the home page click on the three dots in the top right hand corner
 
+.. image:: /android/nhsnotes.png
+
+
 2. Select 'Search NHS Direct'
 
 3. In the search box type in what you want to search
+
+.. image:: /android/searchnhs.png
+
 
 4. Click search
 
