@@ -93,30 +93,45 @@ Mobile Application
 1. First click on the tile with a magnifying glass on named search.
 
 .. image:: /android/homecarer.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
-#. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
+2. Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note Carers can not connect to another carer and a patient cannot connect to another patient.
 
 .. image:: /android/search.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
-#. Click 'submit'
+3. Click 'submit'
 
-#. The results of your search will then be displayed in a table underneath the search bar.
+4. The results of your search will then be displayed in a table underneath the search bar.
 
 .. image:: /android/search2.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
-#. Once you have found the right user click the connect button located at the end of the row.
+5. Once you have found the right user click the connect button located at the end of the row.
 
-#. After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.
+6. After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.
 
 .. image:: /android/search3.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 .. image:: /android/search4.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
-#. You have now made the connection request, the final step is for the person you have requested to accept the request.
+7. You have now made the connection request, the final step is for the person you have requested to accept the request.
 
 
 
@@ -127,15 +142,18 @@ Mobile Application
 1. To accept a connection you need to click on the connections tile and on the 'incoming' tab.
 
 .. image:: /android/connections5.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
-#. Under the heading incoming you will see the request made.
+2. Under the heading incoming you will see the request made.
 
-#. To complete the connection click the green 'Accept'button.
+3. To complete the connection click the green 'Accept'button.
 
-#. Finally you will be asked to enter the 4 digit code the requester was sent. The reason for this is to ensure safe and secure connections.
+4. Finally you will be asked to enter the 4 digit code the requester was sent. The reason for this is to ensure safe and secure connections.
 
-#. On clicking complete the connection will be established.
+5. On clicking complete the connection will be established.
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,9 +163,12 @@ Mobile Application
 1. If you wish to cancel a request, click on the connections tile and on the 'outgoing' tab.
 
 .. image:: /android/connections3.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
-#. Under the heading outgoing you will see the connection pending, to cancel simply click the cancel button at the end of the row.
+2. Under the heading outgoing you will see the connection pending, to cancel simply click the cancel button at the end of the row.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4.0 Rejecting a connection
@@ -155,6 +176,6 @@ Mobile Application
 
 1. If you wish to reject a request, click on the connections tile and on the 'incoming' tab.
 
-#. Under the heading incoming you will see the request made.
+2. Under the heading incoming you will see the request made.
 
-#. To reject the connection click the red 'Reject' button.
+3. To reject the connection click the red 'Reject' button.

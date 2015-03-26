@@ -45,6 +45,9 @@ Mobile Application
 1. On the login page click on the link at the bottom which says 'forgot password'
 
 .. image:: /android/forgotpass.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
 2. Fill in the form with you:
