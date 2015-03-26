@@ -17,6 +17,7 @@ Web Application
 .. image:: /images/notes1.png
 
 
+
 3. Enter in the title of the note in the title box and the note in the comment box.
 
 .. image:: /images/notes2.png
@@ -54,6 +55,9 @@ Mobile Application
 1. Click on my patients and select the patient you wish to add a note for.
 
 .. image:: /android/mypatientsoptions.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
 2. Click on 'Notes'
@@ -61,6 +65,9 @@ Mobile Application
 3. Enter in the title of the note in the title box and the note in the comment box.
 
 .. image:: /android/addnote.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
 4. Click submit
@@ -78,4 +85,7 @@ Mobile Application
 3. On this page you can view all the notes your carer has added.
 
 .. image:: /android/patientnotes.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 

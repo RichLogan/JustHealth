@@ -37,9 +37,15 @@ The mobile application follows a tile patterns which once clicked on will open u
 
 
 .. image:: /android/patienthome.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
 **Carer Home Screen:**
 
 .. image:: /android/homecarer.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 

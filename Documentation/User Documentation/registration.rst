@@ -52,9 +52,14 @@ Android Application
 1. To register on the Mobile application you have to navigate from the login screen to the 'Register' page
 
 .. image:: /android/login.png
-
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 .. image:: /android/register.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 2. This will take you to another page with a form identical to the web application where you will be required to fill in
 

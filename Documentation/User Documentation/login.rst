@@ -27,6 +27,9 @@ Mobile Application
 2. Enter in the username you registered with in the username box
 
 .. image:: /android/login.png
+   :height: 100px
+   :width: 200 px
+   :scale: 70 %
 
 
 3. Enter the password you registered with in the password field
