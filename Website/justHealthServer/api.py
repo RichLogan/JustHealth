@@ -26,13 +26,13 @@ auth = HTTPBasicAuth()
 @auth.verify_password
 def verify_password(username,password):
     """
-    Checks if a supplied password is correct for a specific user. 
+    Checks if a supplied password is correct for a specific user.
 
-    :param username: The username submitting the request. 
-    :type username: str. 
+    :param username: The username submitting the request.
+    :type username: str.
 
-    :param password: The encrypted password. 
-    :type password: str. 
+    :param password: The encrypted password.
+    :type password: str.
 
     :returns: boolean -- Success
     """
@@ -47,7 +47,7 @@ def getUsernameFromHeader():
     """
     Method gets the HTTP Basic header, decodes it and retrieves the username
 
-    :returns: str -- Username submitting the request. 
+    :returns: str -- Username submitting the request.
     """
     authHeader = str(request.headers.get('Authorization'))
     authHeader = authHeader.replace("Basic ", "")
@@ -57,17 +57,17 @@ def getUsernameFromHeader():
 
 def verifyContentRequest(username, targetUsername):
     """
-    This co-ordinates the running of the other methods, depending on the parameters that are passed. 
-    
+    This co-ordinates the running of the other methods, depending on the parameters that are passed.
+
     This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string
 
-    :param username: The username of the request originator. 
-    :type username: str. 
+    :param username: The username of the request originator.
+    :type username: str.
 
-    :param targetUsername: The username owning the resource being accessed, if any. 
-    :type targetUsername: str. 
+    :param targetUsername: The username owning the resource being accessed, if any.
+    :type targetUsername: str.
 
-    :returns: boolean -- Success. 
+    :returns: boolean -- Success.
     :raises: HTTP 401.
     """
     authUsername = getUsernameFromHeader()
@@ -82,14 +82,14 @@ def verifySelf(authUsername, methodUsername):
     """
     Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written
 
-    :param authUsername: username from HTTP header. 
-    :type authUsername: str. 
+    :param authUsername: username from HTTP header.
+    :type authUsername: str.
 
-    :param methodUsername: The username being password to the method. 
-    :type methodUsername: str. 
+    :param methodUsername: The username being password to the method.
+    :type methodUsername: str.
 
-    :returns: boolean -- success. 
-    :raises: HTTP 401. 
+    :returns: boolean -- success.
+    :raises: HTTP 401.
     """
     if authUsername == methodUsername:
         return True
@@ -112,10 +112,10 @@ def encryptPassword():
     """
     Encrypts the users password and returns it to them
 
-    :param request.form: POST request containing plaintext [password]. 
-    :type request.form: dict. 
+    :param request.form: POST request containing plaintext [password].
+    :type request.form: dict.
 
-    :returns: str -- Encrypted password. 
+    :returns: str -- Encrypted password.
     """
     # Used so that we are able to store the encrypted users password in android SharedPreferences
     plaintext = request.form['password']
@@ -127,10 +127,10 @@ def decryptPassword(cipherText):
     """
     Decrypts the users password and returns it so that we are able to authenticate them.
 
-    :param cipherText: Encrypted password. 
-    :type cipherText: str. 
+    :param cipherText: Encrypted password.
+    :type cipherText: str.
 
-    :returns: str -- Plaintext password. 
+    :returns: str -- Plaintext password.
     """
     #used so that we are able to store the encrypted users password in android SharedPreferences
     bytesCipher = binascii.unhexlify(cipherText)
@@ -242,22 +242,22 @@ def usernameCheck():
     """
     Checks to see if a username has already been taken
 
-    :param request.form: The [username] to check. 
-    :type request.form: dict. 
+    :param request.form: The [username] to check.
+    :type request.form: dict.
 
-    :returns: boolean - If username is available or not. 
+    :returns: boolean - If username is available or not.
     """
     return str(Client.select().where(Client.username == request.form['username']).count() != 0)
 
 @app.route('/api/authenticate', methods=['POST'])
 def authenticate():
     """
-    Authenticates a username and password and returns the result of the authentication check. 
+    Authenticates a username and password and returns the result of the authentication check.
 
-    :param request.form: [username, password]. 
-    :type request.form: dict. 
+    :param request.form: [username, password].
+    :type request.form: dict.
 
-    :returns: str -- Result message of authentication attempt. 
+    :returns: str -- Result message of authentication attempt.
     """
     try:
         attempted = Client.get(username=request.form['username'])
@@ -265,7 +265,7 @@ def authenticate():
         return "Incorrect username/password"
 
     # Check Password
-    try: 
+    try:
         hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) & (uq8LnAWi7D.iscurrent==True)).password.strip()
     except uq8LnAWi7D.DoesNotExist:
         return "There is no current password for this username. Please use the forgot password link to reset your account."
@@ -303,7 +303,14 @@ def deactivateAccount():
         return deactivateAccount(request.form)
 
 def deactivateAccount(details):
-    """Form validation for account deactivation"""
+    """
+    Ability to deactivate an account. A user can choose to have their data deleted or kept. 
+
+    :param details: Dictionary of [username], [comments], [reason]. 
+    :type details: dict. 
+
+    :returns: str -- Deleted, Kept or an error message. 
+    """
     try:
         username = details['username']
     except KeyError, e:
@@ -336,8 +343,8 @@ def deactivateAccount(details):
 
     if delete:
         # Delete User
-        deleteAppointments = Appointments.delete().where(Appointments.invitee == request.form['username'])
-        deletedUser = Client.get(Client.username == request.form['username'])
+        deleteAppointments = Appointments.delete().where(Appointments.invitee == username)
+        deletedUser = Client.get(Client.username == username)
         with database.transaction():
             deleteAppointments.execute()
             deletedUser.delete_instance(recursive=True)
@@ -353,26 +360,36 @@ def deactivateAccount(details):
 
 @app.route('/api/resetpassword', methods=['POST'])
 def resetPassword():
-    """Form validation and database checks for user when they forget a password (overrides the old password)"""
+    return resetPassword(request.form)
+
+def resetPassword(details):
+    """
+    Ability to reset a password if one is forgotton.
+
+    :param details: Dictionary of profile and password details [username], [confirmemail], [newpassword], [confirmnewpassword], [confirmdob].
+    :type details: dict.
+
+    :returns: str -- 'True' is successful. 
+    """
     try:
         profile = {}
-        profile['username'] = request.form['username']
-        profile['confirmemail'] = request.form['confirmemail']
-        profile['newpassword'] = request.form['newpassword']
-        profile['confirmnewpassword'] = request.form['confirmnewpassword']
-        profile['confirmdob'] = request.form['confirmdob']
+        profile['username'] = details['username']
+        profile['confirmemail'] = details['confirmemail']
+        profile['newpassword'] = details['newpassword']
+        profile['confirmnewpassword'] = details['confirmnewpassword']
+        profile['confirmdob'] = details['confirmdob']
     except KeyError, e:
         return "All fields must be filled out"
 
     getEmail = Client.get(username=profile['username']).email.strip()
     getDob = str(Client.get(username=profile['username']).dob)
 
-    if getEmail==profile['confirmemail'] and getDob==profile['confirmdob']:
-        #set the old password to iscurrent = false
+    if (getEmail == profile['confirmemail']) and (getDob == profile['confirmdob']):
+        # Set the old password to iscurrent = false
         notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == profile['username'])
         notVerified = Client.update(verified = False).where(Client.username == profile['username'])
 
-        #encrypt the password
+        # Encrypt the password
         profile['newpassword'] = sha256_crypt.encrypt(profile['newpassword'])
 
         # Build insert password query
@@ -404,16 +421,35 @@ def resetPassword():
 @app.route('/api/images/<filename>')
 @auth.login_required
 def getProfilePictureAPI(filename):
+    """
+    Returns profile picture with the specified filename. 
+
+    :link: /api/images/<filename>
+
+    :param filename: The name of the file to return. 
+    :type filename: str. 
+
+    :returns: file -- Image requested. 
+    """
     return send_from_directory(app.config['PROFILE_PICTURE'], filename)
 
 @app.route('/api/getAccountInfo', methods=['POST'])
 @auth.login_required
 def getAccountInfo():
     if verifyContentRequest(request.form['username'], ""):
-        return getAccountInfo(request.form['username']) 
+        return getAccountInfo(request.form['username'])
 
 def getAccountInfo(username):
-    """Get Account information from client and patient/carer table"""
+    """
+    Returns all information about a user. 
+
+    :link: /api/getAccountInfo
+    
+    :param username: The username whose details are desired. 
+    :type username: str. 
+
+    :returns: json -- Dictionary of user's details. 
+    """
     result = {}
     try:
       user = Patient.select().join(Client).where(Client.username==str(username)).get()
@@ -440,6 +476,14 @@ def getAccountInfo(username):
     return json.dumps(result)
 
 def getCarers(username):
+    """
+    Returns all carers connected to a patient. 
+
+    :param username: The patient whose carers should be retrieved. 
+    :type username: str. 
+
+    :returns: list -- List of carers usernames. 
+    """
     results = []
     for c in Patientcarer.select().where(Patientcarer.patient == username):
         results.append(c.carer.username)
@@ -468,6 +512,19 @@ def editProfile():
         return editProfile(request.form, request.files)
 
 def editProfile(profile, picture):
+    """
+    Allows a user to edit their profile details. 
+
+    :link: /api/editProfile
+
+    :param profile: Dictionary of profile details. 
+    :type profile: dict. 
+
+    :param picture: Optional profile picture to update. 
+    :type picture: file. 
+
+    :returns: str -- Message. 
+    """
     user = None
     # What type of user are we dealing with?
     try:
@@ -514,8 +571,15 @@ def changePasswordAPI():
         return changePasswordAPI(request.form)
 
 def changePasswordAPI(details):
-    """Allows a user to change their password. POST [username, oldpassword, newpassword, confirmnewpassword]"""
-    if request.form['newpassword'] != request.form['confirmnewpassword']:
+    """
+    Allows a user to change their password.
+
+    :param details: Details of the user [username, oldpassword, newpassword, confirmnewpassword]. 
+    :type details: dict. 
+
+    :returns: str -- Success/Failure message. 
+    """
+    if details['newpassword'] != details['confirmnewpassword']:
         return "Passwords do not match"
     try:
         currentPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == details['username']) & (uq8LnAWi7D.iscurrent==True))
@@ -523,7 +587,7 @@ def changePasswordAPI(details):
         if sha256_crypt.verify(details['oldpassword'], currentPassword.password):
             # Invalidate Old Password
             currentPassword.iscurrent = False
-        
+
             # Insert New Password
             newPassword = uq8LnAWi7D.insert(
                 username = details['username'],
@@ -546,7 +610,12 @@ def changePasswordAPI(details):
 ####
 
 def lockAccount(username):
-    """Emails the user if their account gets locked"""
+    """
+    Locks a user's account and sends an unlock email.  
+
+    :param username: The username of the account to lock. 
+    :type username: str. 
+    """
     lockAccount = Client.update(accountlocked = True).where(Client.username == username)
     with database.transaction():
         lockAccount.execute()
@@ -556,32 +625,54 @@ def lockAccount(username):
 # Email Functions
 ####
 def getSerializer(secret_key=None):
-    """Converts a username into a random key, in order to create a unique link"""
+    """
+    Converts a username into a random key, in order to create a unique link
+
+    :param secret_key: The secret key to use. Defaults to the applications secret key. 
+    :type secret_key: str. 
+
+    :returns: str -- Serialized username. 
+    """
     if secret_key is None:
         secret_key = app.secret_key
     return URLSafeSerializer(secret_key)
 
 def sendVerificationEmail(username):
-    """Sends email to the user after registration asking for account verification"""
+    """
+    Sends email to the user after registration asking for account verification
+
+    :param username: The username to send the email to. 
+    :type username: str. 
+    """
     # Generate Verification Link
     s = getSerializer()
     payload = s.dumps(username)
     verifyLink = url_for('verifyUser', payload=payload, _external=True)
+    
     # Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")
+    
     # Build message
     sender = "'JustHealth' <justhealth@richlogan.co.uk>"
     recipient = Client.get(username = username).email
     subject = "JustHealth Verification"
     message = "Thanks for registering! Please verify your account here: " + str(verifyLink)
     m = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (sender, recipient, subject)
+    
     # Send
     server.sendmail(sender, recipient, m+message)
     server.quit()
 
 def getUserFromEmail(email):
-    """Get username from the database for a valid email address"""
+    """
+    Returns the username an email address belongs to. 
+
+    :param email: The email whose owner should be returned. 
+    :type email: str. 
+
+    :returns: str -- The username or 'Failed'. 
+    """
     try:
       username = Client.select(Client.username).where(Client.email == email).get()
       return username.username
@@ -692,7 +783,7 @@ def searchPatientCarer(username, searchterm):
         for connection in json.loads(currentConnections['outgoing']):
             if connection['username'] == result['username']:
                 result['message'] = "Already Requested"
-        
+
         for connection in json.loads(currentConnections['incoming']):
             if connection['username'] == result['username']:
                 result['message'] = "Request Waiting"
@@ -710,7 +801,7 @@ def getConnectionStatus(username, target):
     for connection in json.loads(currentConnections['outgoing']):
         if connection['username'] == target:
             return "Already Requested"
-    
+
     for connection in json.loads(currentConnections['incoming']):
         if connection['username'] == target:
             return "Request Waiting"
@@ -726,7 +817,7 @@ def getConnectionStatus(username, target):
 @app.route('/api/createConnection', methods=['POST', 'GET'])
 @auth.login_required
 def createConnection():
-    #although this is for a patient and a carer we only need to check the patient 
+    #although this is for a patient and a carer we only need to check the patient
     # because they aren't yet connected
     if verifyContentRequest(request.form['username'], ""):
         return createConnection(request.form)
@@ -820,7 +911,7 @@ def completeConnection(details):
         # Delete this Relationship instance
         with database.transaction():
             instance.delete_instance()
-            
+
             #creates the notification to inform the original requestor
             createNotificationRecord(requestor, "New Connection", None)
 
@@ -853,11 +944,11 @@ def deleteConnection(details):
             with database.transaction():
                 instance.delete_instance()
                 return "True"
-        
+
         except Patientcarer.DoesNotExist:
             return "False"
-            
-        
+
+
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
@@ -969,13 +1060,13 @@ def addPatientAppointment():
     if verifyContentRequest(request.form['creator'], ""):
         return addPatientAppointment(request.form)
 
-#allows a all self appointments to be added 
-#Note originally there was going to be a seperate method for carers, however this is no longer the case. 
+#allows a all self appointments to be added
+#Note originally there was going to be a seperate method for carers, however this is no longer the case.
 def addPatientAppointment(details):
 # Build insert user query
   if details['private'] == "False":
     isPrivate = False
-  else: 
+  else:
     isPrivate = True
 
   appointmentInsert = Appointments.insert(
@@ -993,7 +1084,7 @@ def addPatientAppointment(details):
   )
 
   appId = str(appointmentInsert.execute())
-  
+
   return appId
 
 @app.route('/api/addInviteeAppointment', methods=['POST'])
@@ -1040,7 +1131,7 @@ def getAllAppointments():
 
 #gets the appointments from the database
 def getAllAppointments(loggedInUser, targetUser):
-  #get user account type 
+  #get user account type
   currentUser_type = json.loads(getAccountInfo(loggedInUser))['accounttype']
 
   if currentUser_type == "Carer":
@@ -1050,7 +1141,7 @@ def getAllAppointments(loggedInUser, targetUser):
       appointments = Appointments.select().where(((Appointments.creator == targetUser) & (Appointments.private == False)) | ((Appointments.invitee == targetUser) & (Appointments.private == False))).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
   elif currentUser_type == "Patient":
     appointments = Appointments.select().where((Appointments.creator == targetUser) | (Appointments.invitee == targetUser)).order_by(Appointments.startdate.asc(), Appointments.starttime.asc())
-  
+
   appointments.execute()
 
   currentDateTime = datetime.datetime.now()
@@ -1076,7 +1167,7 @@ def getAllAppointments(loggedInUser, targetUser):
     appointment['private'] = app.private
     appointment['androideventid'] = app.androideventid
     appointment['accepted'] = app.accepted
-    
+
     dateTime = str(app.enddate) + " " + str(app.endtime)
     dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%d %H:%M:%S")
 
@@ -1157,7 +1248,7 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
   else:
     if private == "False":
       isPrivate = False
-    else: 
+    else:
       isPrivate = True
 
   updateAppointment = Appointments.update(
@@ -1194,13 +1285,13 @@ def getAppointment(user, appid):
     """
     Returns details of an appointment
 
-    :param user: The user submitting the request. 
-    :type user: str. 
+    :param user: The user submitting the request.
+    :type user: str.
 
-    :param appid: The id of the appointment. 
-    :type appid: int. 
+    :param appid: The id of the appointment.
+    :type appid: int.
 
-    :returns: json -- Details of the appointment. 
+    :returns: json -- Details of the appointment.
     """
     isRelated = Appointments.select().where(Appointments.appid == appid).get()
 
@@ -1231,18 +1322,18 @@ def acceptDeclineAppointment(user, action, appointmentId):
     """
     Allows an appointment to be accepted or declined.
 
-    :param user: The user submitting the action. 
-    :type user: str. 
+    :param user: The user submitting the action.
+    :type user: str.
 
     :param action: "Accept" to accept or anything else to "Decline".
-    :type action: str. 
+    :type action: str.
 
-    :param appointmentId: The id of the appointment to accept / decline. 
-    :type appointmentId: int. 
+    :param appointmentId: The id of the appointment to accept / decline.
+    :type appointmentId: int.
     """
     appointment = Appointments.select().where(Appointments.appid == appointmentId).get()
     if user == appointment.invitee.username:
-        if action == "Accept": 
+        if action == "Accept":
             accepted = True
             notificationType = "Appointment Accepted"
             result = "You have accepted this appointment."
@@ -1256,18 +1347,18 @@ def acceptDeclineAppointment(user, action, appointmentId):
             submitAction.execute()
             createNotificationRecord(appointment.creator.username, notificationType, appointmentId)
             return result
-        
+
         return "Failed"
     return "You have not been invited to this appointment."
 
 def addMedication(medicationName):
     """
-    Allows a medication to be added from the system. 
+    Allows a medication to be added from the system.
 
-    :param medicationName: The name of the medication to added. 
-    :type medicationName: str. 
+    :param medicationName: The name of the medication to added.
+    :type medicationName: str.
 
-    :returns: "Added" or "Already Exists" or "False" for other error. 
+    :returns: "Added" or "Already Exists" or "False" for other error.
     """
     insertMedication = Medication.insert(
         name = medicationName
@@ -1282,12 +1373,12 @@ def addMedication(medicationName):
 
 def deleteMedication(medicationName):
     """
-    Allows a medication to be removed from the system. 
+    Allows a medication to be removed from the system.
 
-    :param medicationName: The name of the medication to remove. 
-    :type medicationName: str. 
+    :param medicationName: The name of the medication to remove.
+    :type medicationName: str.
 
-    :returns: "Deleted" or "Not Found". 
+    :returns: "Deleted" or "Not Found".
     """
     try:
         instance = Medication.select().where(Medication.name == medicationName).get()
@@ -1304,9 +1395,9 @@ def getMedications():
 
 def getMedications():
     """
-    Returns list of all medications in JustHealth system. 
+    Returns list of all medications in JustHealth system.
 
-    :returns: json -- List of medication names. 
+    :returns: json -- List of medication names.
     """
     medicationList = []
     result = Medication.select()
@@ -1344,9 +1435,9 @@ def addPrescription(details):
         [stockleft],
         [prerequisite],
         [dosageform]
-    :type details: dict. 
+    :type details: dict.
 
-    :returns: str -- Failed or details of success. 
+    :returns: str -- Failed or details of success.
     """
     Monday = False;
     try:
@@ -1422,7 +1513,7 @@ def addPrescription(details):
         result = insertPrescription.execute()
         createNotificationRecord(details['username'], "Prescription Added", int(result))
         return details['medication'] + " " + details['dosage'] + details['dosageunit'] + "  added for " + details['username']
-        
+
 @app.route('/api/editPrescription', methods=['POST'])
 @auth.login_required
 def editPrescription():
@@ -1453,9 +1544,9 @@ def editPrescription(details):
         [stockleft],
         [prerequisite],
         [dosageform]
-    :type details: dict. 
+    :type details: dict.
 
-    :returns: str -- Failed or updated details. 
+    :returns: str -- Failed or updated details.
     """
     Monday = False;
     try:
@@ -1545,12 +1636,12 @@ def deletePrescription():
 
 def deletePrescription(prescriptionid):
     """
-    Deletes a specified prescriptions. 
+    Deletes a specified prescriptions.
 
-    :param prescriptionid: The id of the prescription to delete. 
-    :type prescriptionid: int. 
+    :param prescriptionid: The id of the prescription to delete.
+    :type prescriptionid: int.
 
-    :returns: str -- 'Deleted' or 'Failed'. 
+    :returns: str -- 'Deleted' or 'Failed'.
     """
     try:
         instance = Prescription.select().where(Prescription.prescriptionid == prescriptionid).get()
@@ -1575,12 +1666,12 @@ def getPrescriptions():
 
 def getPrescriptions(username):
     """
-    Returns all (active, upcoming and expired) prescriptions for a specified user. 
+    Returns all (active, upcoming and expired) prescriptions for a specified user.
 
-    :param username: The user to check for. 
-    :type username: str. 
+    :param username: The user to check for.
+    :type username: str.
 
-    :returns: json -- The list of prescriptions. 
+    :returns: json -- The list of prescriptions.
     """
     accountType = json.loads(getAccountInfo(username))['accounttype']
     user = Client.select().where(Client.username == username).get()
@@ -1610,12 +1701,12 @@ def getActivePrescriptions():
 
 def getActivePrescriptions(username):
     """
-    Returns all active prescriptions for a specified user. 
+    Returns all active prescriptions for a specified user.
 
-    :param username: The specified user. 
-    :type username: str. 
+    :param username: The specified user.
+    :type username: str.
 
-    :returns: json -- List of prescriptions. 
+    :returns: json -- List of prescriptions.
     """
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") < datetime.datetime.now() and datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") > datetime.datetime.now())])
@@ -1633,12 +1724,12 @@ def getUpcomingPrescriptions():
 
 def getUpcomingPrescriptions(username):
     """
-    Returns all upcoming prescriptions for a specified user. 
+    Returns all upcoming prescriptions for a specified user.
 
-    :param username: The username to check for. 
+    :param username: The username to check for.
     :type username: str.
 
-    :returns: json -- List of prescriptions. 
+    :returns: json -- List of prescriptions.
     """
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['startdate'], "%Y-%m-%d") >= datetime.datetime.now())])
@@ -1656,12 +1747,12 @@ def getExpiredPrescriptions():
 
 def getExpiredPrescriptions(username):
     """
-    Returns all expired prescriptions for a specified user. 
+    Returns all expired prescriptions for a specified user.
 
-    :param username: The username to check for. 
-    :type username: str. 
+    :param username: The username to check for.
+    :type username: str.
 
-    :returns: json -- List of expired prescriptions. 
+    :returns: json -- List of expired prescriptions.
     """
     allPrescriptions = json.loads(getPrescriptions(username))
     return json.dumps([prescription for prescription in allPrescriptions if (datetime.datetime.strptime(prescription['enddate'], "%Y-%m-%d") < datetime.datetime.now())])
@@ -1679,12 +1770,12 @@ def getPrescription():
 
 def getPrescription(details):
     """
-    Returns the details of a specified prescription. 
+    Returns the details of a specified prescription.
 
-    :param details: Dictionary containing [prescriptionid]. 
-    :type details: dict. 
+    :param details: Dictionary containing [prescriptionid].
+    :type details: dict.
 
-    :returns: json -- Details of prescription. 
+    :returns: json -- Details of prescription.
     """
     prescriptionid = details['prescriptionid']
     prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
@@ -1701,10 +1792,10 @@ def takePrescription():
         return takePrescription(request.form)
 
 def takePrescription(details):
-    """Allows a prescription to be taken. 
+    """Allows a prescription to be taken.
 
     :param details: Dictionary containing [currentcount] (number taken today), [prescriptionid].
-    :type details: dict. 
+    :type details: dict.
 
     :returns: True for success or 'Invalid current count'
     """
@@ -1740,30 +1831,30 @@ def takePrescription(details):
 def checkStockLevel(prescription, count):
     """
     Returns the stock level of a prescription after taking.
-    Creates a notification is appropriate. 
+    Creates a notification is appropriate.
 
-    :param prescription: The id of the prescription. 
-    :type prescription: int. 
+    :param prescription: The id of the prescription.
+    :type prescription: int.
 
     :param count: The amount just taken.
-    :type count: int. 
+    :type count: int.
     """
     thisPrescription = Prescription.get(Prescription.prescriptionid == prescription)
     takeInstance = TakePrescription.select().where(
         (TakePrescription.prescriptionid == prescription) &
         (TakePrescription.currentdate == datetime.datetime.now().date())
     ).get()
-    
+
     # Level to decrease stock by is number of times taken today * number of tablets etc. taken each time
     levelToDecrease = (count * thisPrescription.quantity)
-    
+
     # If they have increased their stock, reflect that change
     if thisPrescription.stockleft > takeInstance.startingcount:
         takeInstance.startingcount = thisPrescription.stockleft
-    
+
     # Remove the amount taken today from stock
     thisPrescription.stockleft = (takeInstance.startingcount - levelToDecrease)
-    
+
     # Commit all changes
     thisPrescription.save()
 
@@ -1782,7 +1873,7 @@ def checkStockLevel(prescription, count):
                 ).get()
         except Notification.DoesNotExist:
             createNotificationRecord(patient.username, "Medication Low", thisPrescription.prescriptionid)
-        
+
         try:
             n = Notification.select().where(
                     Notification.username == carer.username,
@@ -1807,9 +1898,9 @@ def getPrescriptionCount(details):
     Returns the number of times a user has taken a prescription on the current day.
 
     :param details: Dictionary containing [prescriptionid].
-    :type details: dict. 
+    :type details: dict.
 
-    :returns: int -- The count. 
+    :returns: int -- The count.
     """
     try:
         takeInstance = TakePrescription.select().where(
@@ -1827,12 +1918,12 @@ def searchNHSDirect():
 
 def searchNHSDirect(search):
     """
-    Allows a search term to be passed to the NHS website. 
+    Allows a search term to be passed to the NHS website.
 
-    :param search: The search term. 
-    :type search: str. 
+    :param search: The search term.
+    :type search: str.
 
-    :returns: str -- The url of the website. 
+    :returns: str -- The url of the website.
     """
     newTerm = search.replace(" ", "+")
     website = "http://www.nhs.uk/Search/Pages/Results.aspx?___JSSniffer=true&q="
@@ -1883,19 +1974,19 @@ def getCorrespondence():
 
 def getCorrespondence(carer, patient):
     """
-    Returns all notes for a patient/carer relationship. 
-    
-    :param carer: The username of the carer. 
+    Returns all notes for a patient/carer relationship.
+
+    :param carer: The username of the carer.
     :type carer: str.
 
-    :param patient: The username of the patient. 
-    :type patient: str. 
+    :param patient: The username of the patient.
+    :type patient: str.
 
-    :returns: json -- List of notes. 
+    :returns: json -- List of notes.
     """
 
     allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
-     
+
     results = []
     for n in allNotes:
         note = {}
@@ -1916,15 +2007,15 @@ def getPatientNotes():
 
 def getPatientNotes(details):
     """
-    Returns all notes for a specific patient. 
+    Returns all notes for a specific patient.
 
-    :param details: Dictionary containing [username] of target patient. 
-    :type details: dict. 
+    :param details: Dictionary containing [username] of target patient.
+    :type details: dict.
 
     :returns: json -- List of notes
     """
     allNotes = Notes.select().where(Notes.patient == details['username'])
-     
+
     results = []
     for n in allNotes:
         note = {}
@@ -1944,12 +2035,12 @@ def addCorrespondence():
 
 def addCorrespondence(details):
     """
-    Adds a note for a patient. 
+    Adds a note for a patient.
 
-    :param details: Dictionary containing [carer], [patient], [notes] (note content), [title]. 
-    :type details: dict. 
+    :param details: Dictionary containing [carer], [patient], [notes] (note content), [title].
+    :type details: dict.
 
-    :returns: str -- True or False for success. 
+    :returns: str -- True or False for success.
     """
     insert = Notes.insert(
         carer = details['carer'],
@@ -1958,7 +2049,7 @@ def addCorrespondence(details):
         title = details['title'],
         datetime = datetime.datetime.now()
     )
-    
+
     with database.transaction():
         insert.execute()
         return "True"
@@ -1976,10 +2067,10 @@ def deleteNote(noteid):
     """
     Delete a specific note
 
-    :param noteid: The id of the note to delete. 
-    :type noteid: int. 
+    :param noteid: The id of the note to delete.
+    :type noteid: int.
 
-    :returns: str - Either 'Deleted' or 'Failed'. 
+    :returns: str - Either 'Deleted' or 'Failed'.
     """
     try:
         instance = Notes.select().where(Notes.noteid == noteid).get()
@@ -1993,10 +2084,10 @@ def deleteNote(noteid):
 @auth.login_required
 def addAndroidEventId():
     """
-    Allows an android event id of a calendar event to be stored. 
+    Allows an android event id of a calendar event to be stored.
 
-    :param request.form: POST request containing [dbid](id of event) and [androidid](the android event id). 
-    :type request.form: dict. 
+    :param request.form: POST request containing [dbid](id of event) and [androidid](the android event id).
+    :type request.form: dict.
 
     :returns: str -- Success message
     """
@@ -2010,17 +2101,17 @@ def addAndroidEventId():
 ##
 def addDeactivate(reason):
     """
-    Allows a new add deactivate reasons to be added to the database. 
+    Allows a new add deactivate reasons to be added to the database.
 
-    :param reason: The reason to add. 
-    :type reason: str. 
+    :param reason: The reason to add.
+    :type reason: str.
 
-    :returns: str -- True or False for success. 
+    :returns: str -- True or False for success.
     """
     insert = Deactivatereason.insert(
         reason = request.form['reason']
     )
-    
+
     with database.transaction():
         insert.execute()
         return "True"
@@ -2028,17 +2119,17 @@ def addDeactivate(reason):
 
 def newMedication(medication):
     """
-    Allows a new medication to be inserted into the database. 
+    Allows a new medication to be inserted into the database.
 
-    :param medication: The name of the medication to add. 
+    :param medication: The name of the medication to add.
     :type medication: str.
 
-    :returns: str -- True or False. 
+    :returns: str -- True or False.
     """
     insert = Medication.insert(
         name = request.form['medication']
     )
-    
+
     with database.transaction():
         insert.execute()
         return "True"
@@ -2053,7 +2144,7 @@ def getReasons():
     """
     Returns all pre-set reasons to deactivate.
 
-    :returns: json -- List of reasons. 
+    :returns: json -- List of reasons.
     """
     result = {}
     a = Userdeactivatereason.select()
@@ -2065,9 +2156,9 @@ def getReasons():
 
 def getAllUsers():
     """
-    Returns information about all users. 
+    Returns information about all users.
 
-    :returns: json -- List containing dictionaries representing all users. 
+    :returns: json -- List containing dictionaries representing all users.
     """
     results = []
     for u in Client.select(Client.username):
@@ -2082,7 +2173,7 @@ def getAllUsers():
             except Carer.DoesNotExist:
                 user = Patient.select().join(Client).where(Client.username==u.username).get()
                 userDetails['accounttype'] = "Patient"
-    
+
             userDetails['firstname'] = user.firstname
             userDetails['surname'] = user.surname
             userDetails['username'] = user.username.username
@@ -2102,16 +2193,16 @@ def getAllUsers():
 #Update user account settings in Admin Portal
 def updateAccountSettings(settings, accountlocked, accountdeactivated, verified):
     """
-    Allows an admin to alter a user's account settings. 
+    Allows an admin to alter a user's account settings.
 
     :param settings: Dictionary of users settings [username, ismale, firstname, surname, email, dob,
-                    accounttype, loginattempts]. 
-    :type settings: dict. 
+                    accounttype, loginattempts].
+    :type settings: dict.
 
-    :param accountlocked: Whether the account should be locked or not. 
-    :type accountlocked: boolean. 
+    :param accountlocked: Whether the account should be locked or not.
+    :type accountlocked: boolean.
 
-    :param verified: Whether the account is verified. 
+    :param verified: Whether the account is verified.
     :type verified: boolean.
     """
     user = None
@@ -2153,12 +2244,12 @@ def updateAccountSettings(settings, accountlocked, accountdeactivated, verified)
 
 def deleteAccount(username):
     """
-    Deletes a user's account. 
+    Deletes a user's account.
 
-    :param username: The username who's account should be deleted. 
-    :type username: str. 
+    :param username: The username who's account should be deleted.
+    :type username: str.
 
-    :returns: str -- 'Deleted' if successful, else 'Failed'. 
+    :returns: str -- 'Deleted' if successful, else 'Failed'.
     """
     try:
         instance = Client.select().where(Client.username == username).get()
@@ -2171,16 +2262,16 @@ def deleteAccount(username):
 
 def createNotificationRecord(user, notificationType, relatedObject):
     """
-    Creates a notification on the JustHealth platform. 
+    Creates a notification on the JustHealth platform.
 
-    :param user: The user the notification belongs to. 
-    :type user: str. 
+    :param user: The user the notification belongs to.
+    :type user: str.
 
     :param notificationType: The type of notification to be created
-    :type notificationType: str. 
+    :type notificationType: str.
 
-    :param relatedObject: The resource a notification pertains to, if any. 
-    :type relatedObject: int. 
+    :param relatedObject: The resource a notification pertains to, if any.
+    :type relatedObject: int.
 
     :returns: str -- 'True' if successful, else 'False'
     """
@@ -2204,7 +2295,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
     createNotification = Notification.insert(
         username = user,
         notificationtype = notificationType,
-        relatedObjectTable = notificationTypeTable[notificationType], 
+        relatedObjectTable = notificationTypeTable[notificationType],
         relatedObject = relatedObject
     )
 
@@ -2224,10 +2315,10 @@ def getNotifications(username):
     """
     Returns all of the notifications that have been associated with a user that have not been dismissed
 
-    :param username: The username to get dismissed notifications for. 
+    :param username: The username to get dismissed notifications for.
     :type username: str.
 
-    :returns: json -- The list of notifications each as a json dictionary. 
+    :returns: json -- The list of notifications each as a json dictionary.
     """
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
     notificationList = []
@@ -2250,13 +2341,13 @@ def getAllNotifications(username):
     """
     Returns all of the notifications that have been associated with a user, whether or not they have been dismissed
 
-    :param username: The username to get dismissed notifications for. 
+    :param username: The username to get dismissed notifications for.
     :type username: str.
 
-    :returns: json -- The list of notifications each as a json dictionary. 
+    :returns: json -- The list of notifications each as a json dictionary.
     """
     notifications = Notification.select().dicts().where(Notification.username == username)
-    notificationList = [] 
+    notificationList = []
     for notification in notifications:
         notification['content'] = getNotificationContent(notification)
         notification['link'] = getNotificationLink(notification)
@@ -2276,10 +2367,10 @@ def getDismissedNotifications(username):
     """
     Returns all of the notifications that have been dismissed for a username
 
-    :param username: The username to get dismissed notifications for. 
+    :param username: The username to get dismissed notifications for.
     :type username: str.
 
-    :returns: json -- The list of notifications each as a json dictionary. 
+    :returns: json -- The list of notifications each as a json dictionary.
     """
     notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == True))
     notificationList = []
@@ -2294,15 +2385,15 @@ def getDismissedNotifications(username):
 
 def getNotificationContent(notification):
     """
-    Gets the body/content of the notification depending on its type. 
+    Gets the body/content of the notification depending on its type.
 
-    :param notification: Dictionary containing [notificationtype] element listing the type being queried. 
+    :param notification: Dictionary containing [notificationtype] element listing the type being queried.
     :type notification: dict.
 
     :returns: str -- The content of the notification or 'DoesNotExist' if the queried object no longer exists.
     """
     if notification['notificationtype'] == "Connection Request":
-        try: 
+        try:
             requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
         except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
@@ -2310,10 +2401,10 @@ def getNotificationContent(notification):
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
         content = "You have a new connection request from " + requestor.requestor.username
-    
+
     if notification['notificationtype'] == "New Connection":
         content = "You have a new connection, click above to view."
-    
+
     if notification['notificationtype'] == "Prescription Added":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
@@ -2333,7 +2424,7 @@ def getNotificationContent(notification):
                 doesNotExist.delete_instance()
                 return "DoesNotExist"
         content = "Your prescription for " + prescription.medication.name + " has been updated."
-    
+
     if notification['notificationtype'] == "Appointment Invite":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
@@ -2431,25 +2522,25 @@ def getNotificationContent(notification):
 
 def getNotificationLink(notification):
     """
-    Returns the link that a specific notification type will link to for web usage. 
+    Returns the link that a specific notification type will link to for web usage.
 
-    :param notification: Dictionary containing [notificationtype] element listing the type being queried. 
+    :param notification: Dictionary containing [notificationtype] element listing the type being queried.
     :type notification: dict.
 
-    :returns: str -- The web address of the notification subject for JustHealth Web Application. 
+    :returns: str -- The web address of the notification subject for JustHealth Web Application.
     """
     if notification['notificationtype'] == "Connection Request":
         link = "/?go=connections"
-    
+
     if notification['notificationtype'] == "New Connection":
         link = "/?go=connections"
-    
+
     if notification['notificationtype'] == "Prescription Added":
         link = "/prescriptions"
 
     if notification['notificationtype'] == "Prescription Updated":
         link = "/prescriptions"
-    
+
     if notification['notificationtype'] == "Appointment Invite":
         link = "/appointmentDetails?id=" + str(notification['relatedObject'])
 
@@ -2479,17 +2570,17 @@ def getNotificationLink(notification):
 
     if notification['notificationtype'] == "Carer Missed Prescription":
         link = "/"
-    
+
     return link
 
 def getNotificationTypeClass(notification):
     """
-    Returns the 'class' of a notification type, used to identify importance / meaning. 
+    Returns the 'class' of a notification type, used to identify importance / meaning.
 
-    :param notification: Dictionary containing [notificationtype] element listing the type being queried. 
+    :param notification: Dictionary containing [notificationtype] element listing the type being queried.
     :type notification: dict.
 
-    :returns: str -- One of 'danger', 'warning', 'success', 'info'. 
+    :returns: str -- One of 'danger', 'warning', 'success', 'info'.
     """
     notificationClass = Notificationtype.select().where(Notificationtype.typename == notification['notificationtype']).get()
     return notificationClass.typeclass
@@ -2504,12 +2595,12 @@ def dismissNotification():
 
 def dismissNotification(notificationid):
     """
-    Dismisses a notification to hide from the user's immediate view. 
+    Dismisses a notification to hide from the user's immediate view.
 
-    :param notificationid: The id of the notification to dismiss. 
+    :param notificationid: The id of the notification to dismiss.
     :type notificationid: int.
 
-    :returns: str -- 'True' if successful, 'False' if not. 
+    :returns: str -- 'True' if successful, 'False' if not.
     """
     dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
 
@@ -2527,26 +2618,26 @@ def getMinutesDifference(dateTimeOne,dateTimeTwo):
     Returns the difference found by dateTimeOne - dateTimeTwo in minutes.
 
     :param dateTimeOne: The first datetime.
-    :type dateTimeOne: datetime. 
-    
-    :param dateTimeTwo: The second datetime.
-    :type dateTimeTwo: datetime. 
+    :type dateTimeOne: datetime.
 
-    :returns: int -- The number of minutes between the two times. 
+    :param dateTimeTwo: The second datetime.
+    :type dateTimeTwo: datetime.
+
+    :returns: int -- The number of minutes between the two times.
     """
     return int((dateTimeOne - dateTimeTwo).total_seconds()/60)
 
 def getAppointmentsDueIn30(username, currentTime):
     """
-    Returns a list of appointments that are due in 30 minutes or less. 
-    
-    :param username: The username to check for. 
-    :type username: str. 
-    
-    :param currentTime: The current datetime. 
+    Returns a list of appointments that are due in 30 minutes or less.
+
+    :param username: The username to check for.
+    :type username: str.
+
+    :param currentTime: The current datetime.
     :type currentTime: datetime.
 
-    :returns: list -- A list of appointments represented by dicts. 
+    :returns: list -- A list of appointments represented by dicts.
     """
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
     result = []
@@ -2559,15 +2650,15 @@ def getAppointmentsDueIn30(username, currentTime):
 
 def getAppointmentsDueNow(username, currentTime):
     """
-    Returns a list of appointments that are due now or are in progress. 
-    
-    :param username: The username to check for. 
-    :type username: str. 
-    
-    :param currentTime: The current datetime. 
+    Returns a list of appointments that are due now or are in progress.
+
+    :param username: The username to check for.
+    :type username: str.
+
+    :param currentTime: The current datetime.
     :type currentTime: datetime.
 
-    :returns: list -- A list of appointments represented by dicts. 
+    :returns: list -- A list of appointments represented by dicts.
     """
     select = Appointments.select().dicts().where((Appointments.creator == username) | (Appointments.invitee == username))
     result = []
@@ -2582,15 +2673,15 @@ def getAppointmentsDueNow(username, currentTime):
 
 def getPrescriptionsDueToday(username, currentDateTime):
     """
-    Returns a list of prescriptions that are due today. 
-    
-    :param username: The username to check for. 
-    :type username: str. 
-    
-    :param currentDateTime: The current datetime. 
+    Returns a list of prescriptions that are due today.
+
+    :param username: The username to check for.
+    :type username: str.
+
+    :param currentDateTime: The current datetime.
     :type currentDateTime: datetime.
 
-    :returns: list -- A list of prescriptions represented by dicts. 
+    :returns: list -- A list of prescriptions represented by dicts.
     """
     currentDate = currentDateTime.date()
     currentDay = currentDateTime.strftime("%A")
@@ -2610,13 +2701,13 @@ def getPrescriptionsDueToday(username, currentDateTime):
 def checkMissedPrescriptions(username, currentDate):
     """
     Checks to see if a patient has missed any prescriptions
-    and creates notifications if so. 
+    and creates notifications if so.
 
     :param username: The username to check for.
-    :type username: str. 
+    :type username: str.
 
-    :param currentDate: The current datetime. 
-    :type currentDate: datetime. 
+    :param currentDate: The current datetime.
+    :type currentDate: datetime.
     """
     listOfPrescriptions = Prescription.select().where(Prescription.username == username)
     for x in listOfPrescriptions:
@@ -2636,12 +2727,12 @@ def checkMissedPrescriptions(username, currentDate):
 
 def createTakePrescriptionInstances(username, currentDateTime):
     """
-    Creates all TakePrescription instances for any prescription that needs to be taken today. 
+    Creates all TakePrescription instances for any prescription that needs to be taken today.
 
-    :param username: The username to check for. 
-    :type username: str. 
-    
-    :param currentDateTime: The current datetime. 
+    :param username: The username to check for.
+    :type username: str.
+
+    :param currentDateTime: The current datetime.
     :type currentDateTime: datetime.
     """
     listOfPrescriptions = Prescription.select().where(Prescription.username == username)
@@ -2669,7 +2760,7 @@ def pingServer(sender, **extra):
     """
     Checks to see if there are any reminders to create/delete, runs on every request.
 
-    Also called by a scheduled task for all users. See :func:`generation`. 
+    Also called by a scheduled task for all users. See :func:`generation`.
     """
     try:
         loggedInUser = session['username']
@@ -2695,7 +2786,7 @@ def addReminders(username, now):
     :type username: str.
 
     :param now: The current datetime.
-    :type now: datetime. 
+    :type now: datetime.
     """
     # Get All Reminders (Saving on performance hits later)
     allReminders = Reminder.select().where(Reminder.username == username)
@@ -2719,7 +2810,7 @@ def addReminders(username, now):
                 insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
             else:
                 insertContent = "Your " + a['apptype'] + " appointment with " + withUser + " starts at " + str(a['starttime'])
-            
+
             # Create the reminder
             insertReminder = Reminder.insert(
                 username = username,
@@ -2744,7 +2835,7 @@ def addReminders(username, now):
                     r.delete_instance()
                 raise Reminder.DoesNotExist
         except Reminder.DoesNotExist:
-            
+
             # Is the appointment with another user?
             if withUser == None:
                 insertContent = "Your " + a['apptype'] + " appointment starts at " + str(a['starttime'])
@@ -2784,7 +2875,7 @@ def addReminders(username, now):
 def deleteReminders(username, now):
     """
     Deletes any reminders for appointments or prescriptions
-    that have expired or are no longer current. 
+    that have expired or are no longer current.
 
     :param username: The username to check.
     :type username: str.
@@ -2796,7 +2887,7 @@ def deleteReminders(username, now):
     allReminders = Reminder.select().where(Reminder.username == username)
 
     # Appointments
-    # Need to remove all reminders that are no longer immediately happening / 15mins. 
+    # Need to remove all reminders that are no longer immediately happening / 15mins.
     appointmentReminders = allReminders.where(Reminder.relatedObjectTable == "Appointments")
     if appointmentReminders.count() !=0:
         allAppointments = Appointments.select().where((Appointments.creator == username) | (Appointments.invitee == username))
@@ -2812,7 +2903,7 @@ def deleteReminders(username, now):
                     reminder.delete_instance()
 
     # Prescriptions
-    # Need to remove all prescriptions that are not on the current day or start date > now or end date < now. 
+    # Need to remove all prescriptions that are not on the current day or start date > now or end date < now.
     prescriptionReminders = allReminders.where(Reminder.relatedObjectTable == "Prescription")
     if appointmentReminders.count() !=0:
         allPrescriptions = Prescription.select().where(Prescription.username == username)
@@ -2832,7 +2923,7 @@ def getReminders(username):
     Returns all reminders for a specific user.
 
     :param username: The username to get reminders for.
-    :type username: str. 
+    :type username: str.
     """
     allReminders = Reminder.select().dicts().where(Reminder.username == username)
     reminders = []
@@ -2844,10 +2935,10 @@ def passwordExpiration(username):
     """
     This checks whether the password that the user is using is about to expire.
 
-    :param username: The username to check password for. 
-    :type username: str. 
+    :param username: The username to check password for.
+    :type username: str.
 
-    :returns: result -- Whether the password is valid, expiring soon or needs to be reset. 
+    :returns: result -- Whether the password is valid, expiring soon or needs to be reset.
     """
     passwordDetails = uq8LnAWi7D.select().where((uq8LnAWi7D.username == username) & (uq8LnAWi7D.iscurrent==True)).get()
     expirationDate = passwordDetails.expirydate
@@ -2856,7 +2947,7 @@ def passwordExpiration(username):
     #check the number of days until expiration
     if int(remainingDays) < 1:
         return "Reset"
-    elif int(remainingDays) < 11: 
+    elif int(remainingDays) < 11:
         return "<11"
     else:
         return "Authenticated"
@@ -2869,22 +2960,22 @@ def expiredResetPassword():
 
 def expiredResetPassword(request):
     """
-    Resets a password that has expired or is expiring. 
-    
-    :param request: Dictionary of user and password details [username, newpassword, confirmnewpassword]. 
-    :type request: dict. 
-    
-    :returns: str -- True if successful, False if not. 
+    Resets a password that has expired or is expiring.
+
+    :param request: Dictionary of user and password details [username, newpassword, confirmnewpassword].
+    :type request: dict.
+
+    :returns: str -- True if successful, False if not.
     """
     user = request['username']
     if request['confirmnewpassword'] != request['newpassword']:
         return "Unmatched"
-        
+
     newPassword = sha256_crypt.encrypt(request['newpassword'])
 
     # Set existing passwords to not current
     notCurrent = uq8LnAWi7D.update(iscurrent = False).where(uq8LnAWi7D.username == user)
-    
+
     #check its not the same as old passwords - this does not work as passwords hash as something different each time due to the different salt used.
     # oldPasswords = uq8LnAWi7D.select(uq8LnAWi7D.password).dicts().where(uq8LnAWi7D.username == user).order_by(uq8LnAWi7D.expirydate.desc()).limit(5)
     # oldPasswords.execute()
@@ -2894,7 +2985,7 @@ def expiredResetPassword(request):
 
     # Build insert password query
     newCredentials = uq8LnAWi7D.insert(
-      username = user,  
+      username = user,
       password = newPassword,
       iscurrent = True,
       expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
@@ -2919,9 +3010,9 @@ def expiredResetPassword(request):
 @app.route('/api/generate')
 def generation():
     """
-    Cleans up all Notifications / Reminders for all users, run via a scheduled task on the server. 
-    
-    :returns: str -- The number of reminders created/deleted. 
+    Cleans up all Notifications / Reminders for all users, run via a scheduled task on the server.
+
+    :returns: str -- The number of reminders created/deleted.
     """
     startReminderCount = Reminder.select().count()
     dt = datetime.datetime.now()
