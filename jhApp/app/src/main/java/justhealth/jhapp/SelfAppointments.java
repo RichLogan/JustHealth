@@ -49,6 +49,12 @@ public class SelfAppointments extends Activity {
     //Hold all of the appointments
     JSONArray getApps = null;
 
+    /**
+     * This method runs when the page is first loaded. Sets the correct xml layout and sets the
+     * correct custom action bar. Runs the getUpcomingAppointments method.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -103,12 +109,21 @@ public class SelfAppointments extends Activity {
         }
     }
 
+    /**
+     * This is run when the page has been previously loaded and the user has navigated back
+     * to it.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         getUpcomingAppointments();
     }
 
+    /**
+     * This gets the upcoming appointments by querying the JustHealth API. First, the HashMap of the
+     * request parameters is built and then the post request made. Then runs the print method to
+     * display the appointments on the screen.
+     */
     private void getUpcomingAppointments() {
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
@@ -121,11 +136,21 @@ public class SelfAppointments extends Activity {
         new AsyncTask<Void, Void, JSONArray>() {
             ProgressDialog progressDialog;
 
+            /**
+             * Loads the progress dialog to demonstrate to the user that something is happening.
+             */
             @Override
             protected void onPreExecute() {
                 progressDialog = ProgressDialog.show(SelfAppointments.this, "Loading...", "Loading your appointments", true);
             }
 
+            /**
+             * Makes the post request to the JustHealth API to get the upcoming appointments.
+             * This is run off of the main application thread.
+             *
+             * @param params HashMap containing the request parameters.
+             * @return JSONArray of the appointments.
+             */
             @Override
             protected JSONArray doInBackground(Void... params) {
                 try {
@@ -136,6 +161,12 @@ public class SelfAppointments extends Activity {
                 }
             }
 
+            /**
+             * Removes any current views on the page and invokes the printUpcomingAppointments method.
+             * Dismisses the dialog.
+             *
+             * @param result JSONArray of the appointments returned from the API.
+             */
             @Override
             protected void onPostExecute(JSONArray result) {
                 try {

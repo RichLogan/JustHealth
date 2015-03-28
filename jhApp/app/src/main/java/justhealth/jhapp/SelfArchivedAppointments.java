@@ -44,6 +44,13 @@ import java.util.HashMap;
  * Created by Stephen on 06/01/15.
  */
 public class SelfArchivedAppointments extends Activity {
+
+    /**
+     * This method runs when the page is first loaded. Sets the correct xml layout and sets the
+     * correct custom action bar. Runs the printArchivedAppointments method.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -69,10 +76,10 @@ public class SelfArchivedAppointments extends Activity {
 
     /**
      * Creates the action bar items for the SelfArchived Appointments page
+     *
      * @param menu The options menu in which the items are placed
      * @return True must be returned in order for the options menu to be displayed
      */
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -83,6 +90,7 @@ public class SelfArchivedAppointments extends Activity {
 
     /**
      * This method is called when any action from the action bar is selected
+     *
      * @param item The menu item that was selected
      * @return in order for the method to work, true should be returned here
      */
@@ -106,7 +114,6 @@ public class SelfArchivedAppointments extends Activity {
      * This method loops through the Array that passed with the Intent and adds them all to a HashMap.
      * Depending on the Filter that is selected it then checks who the creator of the appointment is and runs the addToView method.
      */
-
     private void printArchivedAppointments() {
         Bundle intentExtras = getIntent().getExtras();
         String appointments = intentExtras.getString("appointments");
@@ -177,11 +184,12 @@ public class SelfArchivedAppointments extends Activity {
             }
         }
     }
+
     /**
      * This method creates the dialog box when an appointment is clicked.
+     *
      * @param appointmentDetails this is the HashMap of the appointment that has been pressed
      */
-
     private void appointmentAction(final HashMap<String, String> appointmentDetails) {
         System.out.println("method running");
         AlertDialog.Builder alert = new AlertDialog.Builder(SelfArchivedAppointments.this);
@@ -237,6 +245,7 @@ public class SelfArchivedAppointments extends Activity {
      * This is run when the user selects to delete the appointment.
      * It checks whether the appointment has been added to the users calendar. If so this is deleted.
      * A post request is also made to the API which subsequently removes the event from the calendar.
+     *
      * @param appointmentDetails A HashMap of the appointment to be deleted
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -296,11 +305,11 @@ public class SelfArchivedAppointments extends Activity {
     /**
      * This method takes the date and time from the JustHealth database and adds each part to a HashMap.
      * This is needed when adding the appointment to the native android calendar.
+     *
      * @param date the date of the appointment to be added to the android calendar
      * @param time the time of the appointment to be added to the android calendar
      * @return a HashMap of the date and time of the appointment
      */
-
     private HashMap<String, Integer> getDateTimeFormat(String date, String time) {
         HashMap<String, Integer> formattedDateTime = new HashMap<>();
 
@@ -323,11 +332,11 @@ public class SelfArchivedAppointments extends Activity {
 
     /**
      * This method takes the date and time as a string, concatenates it and returns it as an android date/time format.
+     *
      * @param date the string of the date
      * @param time the string of the time
      * @return a Date object of the combined date and time strings
      */
-
     private Date getDateTimeObject(String date, String time) {
         String dateTime = date + " " + time;
         System.out.println("string: " + dateTime);
