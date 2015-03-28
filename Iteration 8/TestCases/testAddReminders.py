@@ -13,15 +13,15 @@ sys.path.insert(0, 'Website')
 import justHealthServer
 from justHealthServer import api
 
-class testGetAppointmentsDueNow(unittest.TestCase):
-	"""Testing the getAppointmentsDueNow API method"""
+class testCreateReminder(unittest.TestCase):
+    """Testing the createReminder API method"""
 
-	def setUp(self):
-		"""Create all the tables that are needed"""
-		testDatabase.createAll()
+    def setUp(self):
+        """Create all the tables that are needed"""
+        testDatabase.createAll()
 
-		#create test user 1
-		patientClient = testDatabase.Client.insert(
+        #create test user 1
+        patientClient = testDatabase.Client.insert(
             username = "patient",
             email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",
@@ -45,6 +45,25 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             username = "patient")
         patientPassword.execute()
 
+        appointmentType = Appointmentype.insert(
+        	type = "Doctors")
+        appointmentType.execute()
+
+        appointmentInsert = Appointments.insert(
+		    creator = "patient",
+		    name = "test",
+		    apptype = "Doctors",
+		    addressnamenumber = "11",
+		    postcode = "SS17 9AY",
+		    startdate = datetime.datetime.now().date(),
+		    starttime = (datetime.datetime.now() + datetime.timedelta(minutes = 20)).time(),
+		    enddate = datetime.datetime.now().date() + timedelta(days=3),
+		    endtime = datetime.datetime.now().time(),
+		    description = "",
+		    private = True
+		)
+		appointmentInsert.execute()
+
         testMedication = testDatabase.Medication.insert(
             name = "test")
         testMedication.execute()
@@ -55,7 +74,7 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             dosage = 1,
             dosageunit = "test",
             quantity = 1,
-            startdate = datetime.datetime.now().date() - datetime.timedelta(days=1),
+            startdate = datetime.datetime.now().date(),
             enddate = '01/01/2020',
             stockleft = 100,
             prerequisite = "test",
@@ -71,18 +90,10 @@ class testGetAppointmentsDueNow(unittest.TestCase):
         )
         testPrescription.execute()
 
-        takePrescription = testDatabase.TakePrescription.insert(
-            prescriptionid = int(testPrescription),
-            currentcount = 0,
-            startingcount = 100,
-            currentdate = datetime.datetime.now().date() - datetime.timedelta(days=1))
-        )
-        takePrescription.execute()
-
         #create test user 2
         patientClient2 = testDatabase.Client.insert(
             username = "patient2",
-            email = "justhealth123@sjtate.co.uk",
+            email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",
             verified = True,
             accountlocked = False,
@@ -104,15 +115,38 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             username = "patient2")
         patientPassword2.execute()
 
+        appointmentType2 = Appointmentype.insert(
+            type = "Doctors")
+        appointmentType2.execute()
+
+        appointmentInsert2 = Appointments.insert(
+            creator = "patient2",
+            name = "test",
+            apptype = "Doctors",
+            addressnamenumber = "11",
+            postcode = "SS17 9AY",
+            startdate = datetime.datetime.now().date(),
+            starttime = (datetime.datetime.now() + datetime.timedelta(minutes = 20)).time(),
+            enddate = datetime.datetime.now().date() + timedelta(days=3),
+            endtime = datetime.datetime.now().time(),
+            description = "",
+            private = True
+        )
+        appointmentInsert2.execute()
+
+        testMedication2 = testDatabase.Medication.insert(
+            name = "test")
+        testMedication2.execute()
+
         testPrescription2 = testDatabase.Prescription.insert(
             username = "patient2",  
             medication = "test",
             dosage = 1,
             dosageunit = "test",
             quantity = 1,
-            startdate = datetime.datetime.now().date() + datetime.timedelta(days = 3),
+            startdate = datetime.datetime.now().date() + datetime.timedelta(days=3),
             enddate = '01/01/2020',
-            stockleft = 1,
+            stockleft = 100,
             prerequisite = "test",
             dosageform = "test",
             frequency = 1,
@@ -123,22 +157,22 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             Friday = True, 
             Saturday = True,
             Sunday = True
-            )
+        )
         testPrescription2.execute()
 
-    def testLegitimate(self):
-        """Attempt to check an prescription that is due to be taken today"""
-        api.checkMissedPrescriptions('patient', datetime.datetime.now())
+        def testLegitimate(self):
+        """Attempt to create a reminder"""
+        api.addReminders('patient', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username = 'patient').count(),1)
+        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username = 'patient').count(),2)
 
-    def testNotToday(self):
-        """Attempt to check a prescription that is not due to be taken today"""
-        api.checkMissedPrescriptions('patient2', datetime.datetime.now())
+        def testNotToday(self):
+        """Attempt to create a reminder when one should not be created"""
+        api.addReminders('patient2', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username = 'patient2').count(),0)
+        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username = 'patient2').count(),0)
 
-    def tearDown(self):
+        def tearDown(self):
         """Delete all tables"""
         testDatabase.dropAll()
 

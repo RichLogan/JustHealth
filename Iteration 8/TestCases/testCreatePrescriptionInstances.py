@@ -102,7 +102,7 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             dosage = 1,
             dosageunit = "test",
             quantity = 1,
-            startdate = datetime.datetime.now().date() + timedelta(days = 3),
+            startdate = datetime.datetime.now().date() + datetime.timedelta(days = 3),
             enddate = '01/01/2020',
             stockleft = 1,
             prerequisite = "test",
