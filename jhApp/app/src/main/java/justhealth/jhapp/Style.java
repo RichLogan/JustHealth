@@ -10,9 +10,11 @@ import android.widget.LinearLayout;
  * Android doesn't have a method to programmatically apply styles, so rolled our own
  */
 public class Style {
+
     /**
      * Most of the time we're programmatically generating buttons, so this allows use to apply
      * our primary/success/warning/danger styles.
+     *
      * @param b The button to style
      * @param type The style to apply (primary/success/warning/danger)
      * @param ll The linear layout the button will be applied to
