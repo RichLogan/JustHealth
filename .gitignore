@@ -53,3 +53,6 @@ Documentation/Technical\ Documentation/_templates
 Documentation/User\ Documentation/_build
 Documentation/User\ Documentation/_static
 Documentation/User\ Documentation/_templates
+
+# Profile Pictures
+Website/justHealthServer/static/images/profilePictures
