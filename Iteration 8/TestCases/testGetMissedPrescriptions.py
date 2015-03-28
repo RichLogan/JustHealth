@@ -14,14 +14,14 @@ import justHealthServer
 from justHealthServer import api
 
 class testGetAppointmentsDueNow(unittest.TestCase):
-	"""Testing the getAppointmentsDueNow API method"""
+    """Testing the getAppointmentsDueNow API method"""
 
-	def setUp(self):
-		"""Create all the tables that are needed"""
-		testDatabase.createAll()
+    def setUp(self):
+        """Create all the tables that are needed"""
+        testDatabase.createAll()
 
-		#create test user 1
-		patientClient = testDatabase.Client.insert(
+        #create test user 1
+        patientClient = testDatabase.Client.insert(
             username = "patient",
             email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",
@@ -76,7 +76,6 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             currentcount = 0,
             startingcount = 100,
             currentdate = datetime.datetime.now().date() - datetime.timedelta(days=1))
-        )
         takePrescription.execute()
 
         #create test user 2
@@ -130,13 +129,13 @@ class testGetAppointmentsDueNow(unittest.TestCase):
         """Attempt to check an prescription that is due to be taken today"""
         api.checkMissedPrescriptions('patient', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username = 'patient').count(),1)
+        self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username == 'patient').count(),1)
 
     def testNotToday(self):
         """Attempt to check a prescription that is not due to be taken today"""
         api.checkMissedPrescriptions('patient2', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username = 'patient2').count(),0)
+        self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username == 'patient2').count(),0)
 
     def tearDown(self):
         """Delete all tables"""

@@ -14,14 +14,14 @@ import justHealthServer
 from justHealthServer import api
 
 class testGetAppointmentsDueNow(unittest.TestCase):
-	"""Testing the getAppointmentsDueNow API method"""
+    """Testing the getAppointmentsDueNow API method"""
 
-	def setUp(self):
-		"""Create all the tables that are needed"""
-		testDatabase.createAll()
+    def setUp(self):
+        """Create all the tables that are needed"""
+        testDatabase.createAll()
 
-		#create test user 1
-		patientClient = testDatabase.Client.insert(
+        #create test user 1
+        patientClient = testDatabase.Client.insert(
             username = "patient",
             email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",
@@ -176,20 +176,20 @@ class testGetAppointmentsDueNow(unittest.TestCase):
     def testLegitimate(self):
         """Attempt to check an prescription that is due to be taken today"""
         api.createTakePrescriptionInstances('patient', datetime.datetime.now())
-
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username = 'patient').count(),1)
+        
+        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username == 'patient').count(),1)
 
     def testNotToday(self):
         """Attempt to check a prescription that is not due to be taken today"""
         api.createTakePrescriptionInstances('patient2', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username = 'patient2').count(),0)
+        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username == 'patient2').count(),0)
 
     def testAlreadyCreated(self):
         """Attempt to create another take prescription instances after already created"""
         api.createTakePrescriptionInstances('patient3', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username = 'patient3').count(),1)
+        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username == 'patient3').count(),1)
 
     def tearDown(self):
         """Delete all tables"""

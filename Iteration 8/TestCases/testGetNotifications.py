@@ -4,12 +4,12 @@ testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDat
 
 class testGetNotifications(unittest.TestCase):
 
-		def setUp(self):
-		"""Create all the tables that are needed"""
-		testDatabase.createAll()
+    def setUp(self):
+        """Create all the tables that are needed"""
+        testDatabase.createAll()
 
-		#create a test user
-		patientClient = testDatabase.Client.insert(
+        #create a test user
+        patientClient = testDatabase.Client.insert(
             username = "patient",
             email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",
@@ -105,100 +105,100 @@ class testGetNotifications(unittest.TestCase):
 
         #create notification type
         connectionRequestNotification = testDatabase.Notificationtype.insert(
-        	typename = "Connection Request",
-        	typeclass = "info"
-        	)
-       	connectionRequestNotification.execute()
+            typename = "Connection Request",
+            typeclass = "info"
+            )
+        connectionRequestNotification.execute()
 
-       	notificationNormal = testDatabase.Notification.insert(
-       		username = "patient",
-       		notificationtype = "Connection Request",
-       		dismissed = False,
-       		relatedobject = 1	
-       		)
-       	notification.execute()
+        notificationNormal = testDatabase.Notification.insert(
+            username = "patient",
+            notificationtype = "Connection Request",
+            dismissed = False,
+            relatedobject = 1
+            )
+        notification.execute()
 
-       	notificationDismissed = testDatabase.Notification.insert(
-       		username = "patient",
-       		notificationtype = "Connection Request",
-       		dismissed = True,
-       		relatedobject = 2
-       		)
-		notificationDismissed.execute()
+        notificationDismissed = testDatabase.Notification.insert(
+            username = "patient",
+            notificationtype = "Connection Request",
+            dismissed = True,
+            relatedobject = 2
+            )
+        notificationDismissed.execute()
 
-	def testGetAll(self):
-		"""Attempt to get all of the notifications for a user"""
-		payload = { 
-			"username" : "patient"
-		}
+    def testGetAll(self):
+        """Attempt to get all of the notifications for a user"""
+        payload = { 
+            "username" : "patient"
+        }
 
-		expectedResult = {
-			'[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 1, "content": "You have a new connection request from carer1", "link": "/profile?go=connections", "dismissed": false, "notificationid": 1, "type": "info"}, {"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 2, "content": "You have a new connection request from carer2", "link": "/profile?go=connections", "dismissed": true, "notificationid": 2, "type": "info"}]'
-		}
+        expectedResult = {
+            '[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 1, "content": "You have a new connection request from carer1", "link": "/profile?go=connections", "dismissed": false, "notificationid": 1, "type": "info"}, {"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 2, "content": "You have a new connection request from carer2", "link": "/profile?go=connections", "dismissed": true, "notificationid": 2, "type": "info"}]'
+        }
 
-		getNotification = request.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload)
-		getNotification = json.loads(getNotification.text)
-		self.assertEqual(getNotification, expectedResult)
-
-
-	def testGetDismissed(self):
-		"""Attempt to get all of the Dismissed notifications for a user || where dismissed==True"""
-		payload = { 
-			"username" : "patient"
-		}
-
-		expectedResult = {
-			'[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 2, "content": "You have a new connection request from carer2", "link": "/profile?go=connections", "dismissed": true, "notificationid": 2, "type": "info"}]'
-		}
-
-		getNotification = request.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload)
-		getNotification = json.loads(getNotification.text)
-		self.assertEqual(getNotification, expectedResult)
+        getNotification = request.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload)
+        getNotification = json.loads(getNotification.text)
+        self.assertEqual(getNotification, expectedResult)
 
 
-	def testGetNotDismissed(self):
-		"""Attempt to get all of the undismissed notifications for a user || where dismissed==False"""
-			payload = { 
-			"username" : "patient"
-		}
+    def testGetDismissed(self):
+        """Attempt to get all of the Dismissed notifications for a user || where dismissed==True"""
+        payload = { 
+            "username" : "patient"
+        }
 
-		expectedResult = {
-			'[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 1, "content": "You have a new connection request from carer1", "link": "/profile?go=connections", "dismissed": false, "notificationid": 1, "type": "info"}]'
-		}
+        expectedResult = {
+            '[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 2, "content": "You have a new connection request from carer2", "link": "/profile?go=connections", "dismissed": true, "notificationid": 2, "type": "info"}]'
+        }
 
-		getNotification = request.post("http://127.0.0.1:9999/api/getNotifications", data=payload)
-		getNotification = json.loads(getNotification.text)
-		self.assertEqual(getNotification, expectedResult)
-
-
-	def testGetAllInvalidUser(self): 
-		"""Attempt to get notifications for an invalid user"""
-		payload = { 
-			"username" : "DoesNotExist"
-		}
-
-		getNotification = request.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload)
-		self.assertEqual(getNotification.text, "Invalid Username")
+        getNotification = request.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload)
+        getNotification = json.loads(getNotification.text)
+        self.assertEqual(getNotification, expectedResult)
 
 
-	def testGetDismissedInvalidUser(self): 
-		"""Attempt to get notifications for an invalid user where dismissed==True"""
-				payload = { 
-			"username" : "DoesNotExist"
-		}
+    def testGetNotDismissed(self):
+        """Attempt to get all of the undismissed notifications for a user || where dismissed==False"""
+        payload = { 
+            "username" : "patient"
+        }
 
-		getNotification = request.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload)
-		self.assertEqual(getNotification.text, "Invalid Username")
+        expectedResult = {
+            '[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": "Relationship", "relatedObject": 1, "content": "You have a new connection request from carer1", "link": "/profile?go=connections", "dismissed": false, "notificationid": 1, "type": "info"}]'
+        }
+
+        getNotification = request.post("http://127.0.0.1:9999/api/getNotifications", data=payload)
+        getNotification = json.loads(getNotification.text)
+        self.assertEqual(getNotification, expectedResult)
 
 
-	def testGetNotDismissedInvalidUser(self): 
-		"""Attempt to get notifications for an invalid user where dismissed==False"""
-		payload = { 
-			"username" : "DoesNotExist"
-		}
+    def testGetAllInvalidUser(self): 
+        """Attempt to get notifications for an invalid user"""
+        payload = { 
+            "username" : "DoesNotExist"
+        }
 
-		getNotification = request.post("http://127.0.0.1:9999/api/getNotifications", data=payload)
-		self.assertEqual(getNotification.text, "Invalid Username")
+        getNotification = request.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload)
+        self.assertEqual(getNotification.text, "Invalid Username")
+
+
+    def testGetDismissedInvalidUser(self): 
+        """Attempt to get notifications for an invalid user where dismissed==True"""
+        payload = { 
+            "username" : "DoesNotExist"
+        }
+
+        getNotification = request.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload)
+        self.assertEqual(getNotification.text, "Invalid Username")
+
+
+    def testGetNotDismissedInvalidUser(self): 
+        """Attempt to get notifications for an invalid user where dismissed==False"""
+        payload = { 
+            "username" : "DoesNotExist"
+        }
+
+        getNotification = request.post("http://127.0.0.1:9999/api/getNotifications", data=payload)
+        self.assertEqual(getNotification.text, "Invalid Username")
 
     def tearDown(self):
         """Delete all tables"""

@@ -16,7 +16,7 @@ from justHealthServer import api
 class testGetMinutesDifference(unittest.TestCase):
 	"""Testing the getMinutesDifference API method"""
 
-		def getMinutesDifference(self):
+	def getMinutesDifference(self):
 		"""Attempt to check that the correct number of minutes is returned"""
 		timeOne = datetime.datetime.now().time()
 		timeTwo = (datetime.datetime.now() + datetime.timedelta(minutes = 20)).time()

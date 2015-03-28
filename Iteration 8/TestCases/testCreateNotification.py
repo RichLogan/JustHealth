@@ -92,7 +92,7 @@ class testCreateNotificationRecord(unittest.TestCase):
 		self.assertEqual(testDatabase.Notifications.select().where((testDatabase.Notifications.username == "patient") & (testDatabase.Notifications.notificationtype == "Does Not Exist")).count(), 0)
 
 	def tearDown(self):
-        """Delete all tables"""
+		"""Delete all tables"""
         testDatabase.dropAll()
 
 if __name__ == '__main__':

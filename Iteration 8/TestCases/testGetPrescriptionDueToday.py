@@ -14,14 +14,14 @@ import justHealthServer
 from justHealthServer import api
 
 class testGetAppointmentsDueNow(unittest.TestCase):
-	"""Testing the getAppointmentsDueNow API method"""
+    """Testing the getAppointmentsDueNow API method"""
 
-	def setUp(self):
-		"""Create all the tables that are needed"""
-		testDatabase.createAll()
+    def setUp(self):
+        """Create all the tables that are needed"""
+        testDatabase.createAll()
 
-		#create test user 1
-		patientClient = testDatabase.Client.insert(
+        #create test user 1
+        patientClient = testDatabase.Client.insert(
             username = "patient",
             email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",

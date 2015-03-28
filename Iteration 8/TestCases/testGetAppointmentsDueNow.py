@@ -14,14 +14,14 @@ import justHealthServer
 from justHealthServer import api
 
 class testGetAppointmentsDueNow(unittest.TestCase):
-	"""Testing the getAppointmentsDueNow API method"""
+    """Testing the getAppointmentsDueNow API method"""
 
-	def setUp(self):
-		"""Create all the tables that are needed"""
-		testDatabase.createAll()
+    def setUp(self):
+        """Create all the tables that are needed"""
+        testDatabase.createAll()
 
-		#create test user 1
-		patientClient = testDatabase.Client.insert(
+        #create test user 1
+        patientClient = testDatabase.Client.insert(
             username = "patient",
             email = "justhealth123@richlogan.co.uk",
             dob = "03/03/1993",
@@ -46,23 +46,22 @@ class testGetAppointmentsDueNow(unittest.TestCase):
         patientPassword.execute()
 
         appointmentType = Appointmentype.insert(
-        	type = "Doctors")
+            type = "Doctors")
         appointmentType.execute()
 
         appointmentInsert = Appointments.insert(
-		    creator = "patient",
-		    name = "test",
-		    apptype = "Doctors",
-		    addressnamenumber = "11",
-		    postcode = "SS17 9AY",
-		    startdate = datetime.datetime.now().date(),
-		    starttime = datetime.datetime.now().time(),
-		    enddate = datetime.datetime.now().date() + timedelta(days=3),
-		    endtime = datetime.datetime.now().time(),
-		    description = "",
-		    private = True
-		)
-		appointmentInsert.execute()
+            creator = "patient",
+            name = "test",
+            apptype = "Doctors",
+            addressnamenumber = "11",
+            postcode = "SS17 9AY",
+            startdate = datetime.datetime.now().date(),
+            starttime = datetime.datetime.now().time(),
+            enddate = datetime.datetime.now().date() + timedelta(days=3),
+            endtime = datetime.datetime.now().time(),
+            description = "",
+            private = True)
+        appointmentInsert.execute()
 
         #create test user 2
         carerClient = testDatabase.Client.insert(
@@ -91,19 +90,19 @@ class testGetAppointmentsDueNow(unittest.TestCase):
         carerPassword.execute()
 
         appointmentInsert = Appointments.insert(
-		    creator = "carer1",
-		    name = "test",
-		    apptype = "Doctors",
-		    addressnamenumber = "11",
-		    postcode = "SS17 9AY",
-		    startdate = datetime.datetime.now().date(),
-		    starttime = (datetime.datetime.now() + datetime.timedelta(minutes = 45)).time(),
-		    enddate = datetime.datetime.now().date() + timedelta(days=3),
-		    endtime = datetime.datetime.now().time(),
-		    description = "",
-		    private = False
-		)
-		appointmentInsert.execute()
+            creator = "carer1",
+            name = "test",
+            apptype = "Doctors",
+            addressnamenumber = "11",
+            postcode = "SS17 9AY",
+            startdate = datetime.datetime.now().date(),
+            starttime = (datetime.datetime.now() + datetime.timedelta(minutes = 45)).time(),
+            enddate = datetime.datetime.now().date() + timedelta(days=3),
+            endtime = datetime.datetime.now().time(),
+            description = "",
+            private = False
+        )
+        appointmentInsert.execute()
 
     def testLegitimate(self):
         """Attempt to check an appointment that is due now"""

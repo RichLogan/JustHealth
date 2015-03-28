@@ -46,31 +46,30 @@ class testCreateReminder(unittest.TestCase):
         patientPassword.execute()
 
         appointmentType = testDatabase.Appointmentype.insert(
-        	type = "Doctors")
+            type = "Doctors")
         appointmentType.execute()
 
         appointmentInsert = testDatabase.Appointments.insert(
-		    creator = "patient",
-		    name = "test",
-		    apptype = "Doctors",
-		    addressnamenumber = "11",
-		    postcode = "SS17 9AY",
-		    startdate = datetime.datetime.now().date(),
-		    starttime = (datetime.datetime.now() - datetime.timedelta(minutes = 20)).time(),
-		    enddate = datetime.datetime.now().date(),
-		    endtime = (datetime.datetime.now().time() - datetime.timedelta(minutes = 10)).time(),
-		    description = "",
-		    private = True
-		)
-		appointmentInsert.execute()
+            creator = "patient",
+            name = "test",
+            apptype = "Doctors",
+            addressnamenumber = "11",
+            postcode = "SS17 9AY",
+            startdate = datetime.datetime.now().date(),
+            starttime = (datetime.datetime.now() - datetime.timedelta(minutes = 20)).time(),
+            enddate = datetime.datetime.now().date(),
+            endtime = (datetime.datetime.now().time() - datetime.timedelta(minutes = 10)).time(),
+            description = "",
+            private = True)
+        appointmentInsert.execute()
 
         reminderInsert = testDatabase.Reminder.insert(
             username = 'patient',
             content = 'test',
             reminderClass = 'info',
             relatedObject = int(appointmentInsert),
-            relatedObjectTable = 'Appointments'
-            extraDate = datetime.datetime.now().time() - datetime.timedelta(minutes = 10)
+            relatedObjectTable = 'Appointments',
+            extraDate = datetime.datetime.now() - datetime.timedelta(minutes=10)
         )
         reminderInsert.execute()
 
@@ -123,24 +122,24 @@ class testCreateReminder(unittest.TestCase):
             content = 'test',
             reminderClass = 'info',
             relatedObject = int(appointmentInsert2),
-            relatedObjectTable = 'Appointments'
+            relatedObjectTable = 'Appointments',
             extraDate = datetime.datetime.now().date() + timedelta(days=3)
         )
         reminderInsert.execute()
 
-        def testLegitimate(self):
+    def testLegitimate(self):
         """Attempt to delete a reminder"""
         api.deleteReminders('patient', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username = 'patient').count(),0)
+        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username == 'patient').count(),0)
 
-        def testNotDelete(self):
+    def testNotDelete(self):
         """Attempt to delete a reminder when it should not be deleted"""
         api.deleteReminders('patient2', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username = 'patient2').count(),1)
+        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username == 'patient2').count(),1)
 
-        def tearDown(self):
+    def tearDown(self):
         """Delete all tables"""
         testDatabase.dropAll()
 

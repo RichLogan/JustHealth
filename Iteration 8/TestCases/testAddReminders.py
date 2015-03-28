@@ -45,11 +45,11 @@ class testCreateReminder(unittest.TestCase):
             username = "patient")
         patientPassword.execute()
 
-        appointmentType = Appointmentype.insert(
+        appointmentType = testDatabase.Appointmentype.insert(
         	type = "Doctors")
         appointmentType.execute()
 
-        appointmentInsert = Appointments.insert(
+        appointmentInsert = testDatabase.Appointments.insert(
 		    creator = "patient",
 		    name = "test",
 		    apptype = "Doctors",
@@ -60,9 +60,8 @@ class testCreateReminder(unittest.TestCase):
 		    enddate = datetime.datetime.now().date() + timedelta(days=3),
 		    endtime = datetime.datetime.now().time(),
 		    description = "",
-		    private = True
-		)
-		appointmentInsert.execute()
+		    private = True)
+        appointmentInsert.execute()
 
         testMedication = testDatabase.Medication.insert(
             name = "test")
@@ -115,11 +114,11 @@ class testCreateReminder(unittest.TestCase):
             username = "patient2")
         patientPassword2.execute()
 
-        appointmentType2 = Appointmentype.insert(
+        appointmentType2 = testDatabase.Appointmentype.insert(
             type = "Doctors")
         appointmentType2.execute()
 
-        appointmentInsert2 = Appointments.insert(
+        appointmentInsert2 = testDatabase.Appointments.insert(
             creator = "patient2",
             name = "test",
             apptype = "Doctors",
@@ -160,19 +159,19 @@ class testCreateReminder(unittest.TestCase):
         )
         testPrescription2.execute()
 
-        def testLegitimate(self):
+    def testLegitimate(self):
         """Attempt to create a reminder"""
         api.addReminders('patient', datetime.datetime.now())
+        
+        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username == 'patient').count(),2)
 
-        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username = 'patient').count(),2)
-
-        def testNotToday(self):
+    def testNotToday(self):
         """Attempt to create a reminder when one should not be created"""
         api.addReminders('patient2', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username = 'patient2').count(),0)
+        self.assertEqual(testDatabase.Reminder.select().where(testDatabase.Reminder.username == 'patient2').count(),0)
 
-        def tearDown(self):
+    def tearDown(self):
         """Delete all tables"""
         testDatabase.dropAll()
 

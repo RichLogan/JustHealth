@@ -50,9 +50,9 @@ class testCreateReminder(unittest.TestCase):
             content = 'test',
             reminderClass = 'info',
             relatedObject = int(appointmentInsert),
-            relatedObjectTable = 'Appointments'
+            relatedObjectTable = 'Appointments',
             extraDate = datetime.datetime.now().time() - datetime.timedelta(minutes = 10)
-        )
+            )
         reminderInsert.execute()
 
         #create test user 2
@@ -80,7 +80,7 @@ class testCreateReminder(unittest.TestCase):
             username = "patient2")
         patientPassword2.execute()
 
-        def testLegitimate(self):
+    def testLegitimate(self):
         """Attempt to get a reminder"""
         expectedResult = {
             '[{"username": "patient", "content": "test", "reminderClass": "info", "relatedObject": 1, "relatedObjectTable": "Appointments"}]'
@@ -90,7 +90,7 @@ class testCreateReminder(unittest.TestCase):
 
         self.assertEqual(response, expectedResult)
 
-        def testNotDelete(self):
+    def testNotDelete(self):
         """Attempt to get reminders that don't exist"""
         expectedResult = {
             '[]'
@@ -100,7 +100,7 @@ class testCreateReminder(unittest.TestCase):
 
         self.assertEqual(response, expectedResult)
 
-        def tearDown(self):
+    def tearDown(self):
         """Delete all tables"""
         testDatabase.dropAll()
 
