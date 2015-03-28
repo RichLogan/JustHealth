@@ -110,7 +110,7 @@ class testGetNotifications(unittest.TestCase):
         	)
        	connectionRequestNotification.execute()
 
-       	notificationNormal = testDatabase.Notifications.insert(
+       	notificationNormal = testDatabase.Notification.insert(
        		username = "patient",
        		notificationtype = "Connection Request",
        		dismissed = False,
@@ -118,7 +118,7 @@ class testGetNotifications(unittest.TestCase):
        		)
        	notification.execute()
 
-       	notificationDismissed = testDatabase.Notifications.insert(
+       	notificationDismissed = testDatabase.Notification.insert(
        		username = "patient",
        		notificationtype = "Connection Request",
        		dismissed = True,
