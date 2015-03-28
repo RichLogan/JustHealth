@@ -18,6 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Profile extends Activity {
+
+    /**
+     * This sets the correct xml layout and displays the action bar.
+     * Sets profile username and account type in the relevant text views.
+     * Runs the load profile method.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +45,24 @@ public class Profile extends Activity {
         loadProfile(username);
     }
 
+    /**
+     * This gets all of the profile information using a POST request.
+     *
+     * @param username The username of the user that is logged in.
+     * @return String of the json encoded profile information.
+     */
     private String getProfile(String username) {
         HashMap<String, String> profileInfo = new HashMap<String, String>();
         profileInfo.put("username", username);
         return Request.post("getAccountInfo", profileInfo, getApplicationContext());
     }
 
+    /**
+     * This gets all of the profile information using a POST request. Sets the profile details
+     * in the TextViews once the information has been retrieved.
+     *
+     * @param username The username of the user that is logged in.
+     */
     private void loadProfile(final String username) {
 
         new AsyncTask<Void, Void, String>() {
@@ -87,7 +107,8 @@ public class Profile extends Activity {
                                 }
                             }
                     );
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                     Feedback.toast("Unable to connect to the server", false, getApplicationContext());
                 }
@@ -95,6 +116,19 @@ public class Profile extends Activity {
         }.execute();
     }
 
+    /**
+     * Runs when the profile activity exits giving you the requestCode you started it with, the
+     * resultCode it returned, and any additional data from it.
+     * The resultCode will be RESULT_CANCELED if the activity explicitly returned that, didn't
+     * return any result, or crashed during its operation.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its
+     *                   setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be
+     *             attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,6 +145,9 @@ public class Profile extends Activity {
                 startActivity(getIntent());
             }
         // They didn't change anything so data is null, no need to reload.
-        } catch (NullPointerException e) {}
+        }
+        catch (NullPointerException e) {
+            //Do nothing
+        }
     }
 }
