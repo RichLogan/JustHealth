@@ -13,6 +13,12 @@ import android.widget.Button;
 
 public class Settings extends Activity {
 
+    /**
+     * This runs when the page is first loaded, it sets the correct xml layout and loads the action
+     * bar. Has a number of onClickListeners for each of the buttons on the page.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
