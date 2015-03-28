@@ -254,8 +254,10 @@ def authenticate():
     """
     Authenticates a username and password and returns the result of the authentication check.
 
-    :param request.form: [username, password].
-    :type request.form: dict.
+    :link: /api/authenticate
+
+    :param request.form: [username, password]. 
+    :type request.form: dict. 
 
     :returns: str -- Result message of authentication attempt.
     """
@@ -930,6 +932,16 @@ def deleteConnection():
         return deleteConnection(request.form)
 
 def deleteConnection(details):
+    """
+    Delete an existing connection
+
+    :link: /api/deleteConnection
+
+    :param details: The dictionary of connection details: [user] (The deletion request), [connection] (The username of the connection delete). 
+    :type details: dict. 
+
+    :returns: str -- 'True' or 'False' for success. 
+    """
     userType = json.loads(getAccountInfo(details['user']))['accounttype']
     connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
 
@@ -947,8 +959,6 @@ def deleteConnection(details):
 
         except Patientcarer.DoesNotExist:
             return "False"
-
-
     return "False"
 
 @app.route('/api/cancelConnection', methods=['POST'])
@@ -958,8 +968,16 @@ def cancelRequest():
         return cancelRequest(request.form)
 
 def cancelRequest(details):
-    """Cancels the user request to connect before completion"""
+    """
+    Cancels a request before it is established. 
 
+    :link: /api/cancelConnection
+
+    :param details: Dictionary giving [user]: The username of the cancelling party, [connection] The username user is connecting to. 
+    :type details: dict. 
+
+    :returns: str -- 'True' or 'False' for success. 
+    """
     try:
         instance = Relationship.select().where((Relationship.requestor == details['user']) & (Relationship.target == details['connection'])).get()
         with database.transaction():
@@ -984,7 +1002,14 @@ def getConnections():
         return getConnections(request.form['username'])
 
 def getConnections(username):
-    """Gets the valid connections between two users"""
+    """
+    Gets all connections for a specific user. 
+
+    :param username: The username of the user to check. 
+    :type username: str. 
+
+    :returns: json -- Dictionary of incoming, outgoing, completed connections. Each value is a list of dictionaries representing each connection. 
+    """
     accountType = json.loads(getAccountInfo(username))['accounttype']
     user = Client.select().where(Client.username==username).get()
 
@@ -1271,8 +1296,6 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
     appointment = Appointments.select().where(Appointments.appid == appid).get()
     if appointment.invitee != None:
         createNotificationRecord(appointment.invitee.username, "Appointment Updated", appid)
-
-
   return "Appointment Updated"
 
 @app.route('/api/getAppointment', methods=['POST'])
@@ -1321,6 +1344,8 @@ def acceptDeclineAppointment():
 def acceptDeclineAppointment(user, action, appointmentId):
     """
     Allows an appointment to be accepted or declined.
+
+    :link: /api/acceptDeclineAppointment    
 
     :param user: The user submitting the action.
     :type user: str.
