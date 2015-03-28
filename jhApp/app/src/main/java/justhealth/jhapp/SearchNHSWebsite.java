@@ -15,6 +15,12 @@ import java.util.HashMap;
 
 public class SearchNHSWebsite extends Activity {
 
+    /**
+     * This method runs when the page is first loaded. Sets the correct xml layout and sets the
+     * correct action bar. Onclick listener for the search button.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -54,6 +60,7 @@ public class SearchNHSWebsite extends Activity {
 
     /**
      * The method ensure a new browser is opened when a user searches the NHS website
+     *
      * @param website that will be passed in order for the browser to open
      */
     private void openBrowser(String website) {
