@@ -22,6 +22,17 @@ public class TakePrescription extends Activity {
 
     JSONObject prescription;
 
+    /**
+     * This runs when the page is first loaded and all of the prescription taking is controlled from
+     * here. The correct xml layout is set and the action bar is loaded.
+     *
+     * All of the parameters of the prescription are already passed with the intent. Firstly, the
+     * display is set correctly and dynamically depending on what is set in the prescription JSONObject.
+     * After this any boxes that are ticked a post request is made asynchronously to the JustHealth
+     * API to ensure that the taking of the medication is recorded on the backend too.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
