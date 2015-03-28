@@ -28,6 +28,12 @@ import java.util.HashMap;
 
 public class Search extends Activity {
 
+    /**
+     * This method runs when the page is first loaded. Sets the correct xml layout and sets the
+     * correct action bar. Onclick listener for the search button.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -50,6 +56,13 @@ public class Search extends Activity {
         );
     }
 
+    /**
+     * This makes a post request to the JustHealth API in order to be able to search for other
+     * users. Gets the logged in user from shared preferences and the search term from the
+     * JustHealth API.
+     * If the json return is null then toasts nothing found, otherwise runs the printTable method,
+     * to print the results to the page.
+     */
     private void searchName() {
         HashMap<String, String> searchInformation = new HashMap<String, String>();
 
@@ -76,7 +89,12 @@ public class Search extends Activity {
     }
 
 
-
+    /**
+     * Prints out the results (people to connect too) into a table.
+     *
+     * @param array JSONArray, the result of the post request, the people that the user may
+     *              connect too.
+     */
     private void printTable(JSONArray array) {
         TableLayout searchTable = (TableLayout) findViewById(R.id.searchTable);
         searchTable.removeAllViews();
@@ -195,7 +213,7 @@ public class Search extends Activity {
      * This method is the action listener that is applied to the Connect button to create a new connection after searching for a user.
      * It runs the connect method, gives you the option to cancel or connect and changes the text on the button and stops the button being clicked again.
      *
-     * @param button           the button that the onclick listener is applied too
+     * @param button the button that the onclick listener is applied too
      * @param targetUsername the username of the person that they want to remove as a connection
      */
 
