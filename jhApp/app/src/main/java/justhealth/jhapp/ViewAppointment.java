@@ -20,6 +20,15 @@ import java.util.HashMap;
  * Created by Stephen on 16/03/15.
  */
 public class ViewAppointment extends Activity {
+
+    /**
+     * This runs when the page is first loaded, it sets the correct xml layout and loads the action
+     * bar. Has a number of onClickListeners for the update button on the page, when this is pressed
+     * the user is redirected to the edit page.
+     * The display method is also run to display the appointment and all details.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -48,6 +57,13 @@ public class ViewAppointment extends Activity {
         display(getIntent());
     }
 
+    /**
+     * This method gets the appointment (HashMap) from the intent and displays the details on the
+     * page to the user.
+     *
+     * @param intent Intent, the HashMap of the appointment details was passed as a serializable
+     *               object within this intent.
+     */
     private void display(Intent intent) {
         HashMap<String, String> appointment = (HashMap<String, String>) intent.getSerializableExtra("appointmentDetails");
         String appId = appointment.get("appid");
