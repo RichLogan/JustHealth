@@ -1916,7 +1916,7 @@ def getPrescriptionCount():
     try:
         prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
     except Prescription.DoesNotExist:
-        break
+        return "Prescription does not exist"
     user = prescription['username']
     if verifyContentRequest(user, ""):
         return getPrescriptionCount(request.form)
