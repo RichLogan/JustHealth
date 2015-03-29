@@ -53,10 +53,35 @@ We also had a mirror of this database to run our tests against, and a third data
 The Web application
 --------------------
 
+The Web application is considered a client of the server, much like the Android application. However, from a technical perspective it is integrated as part of the same Flask application as the API server, just for ease of creation and management. This also allows us to call the API methods from the Web Application internally, meaning we do not have to pass requests across the Internet, and avoiding the possiblility of problems arising from violating the Same-Origin policy. 
+
 ------------------------
 The Android application
 ------------------------
 
+JustHealth had decided to build its mobile application on the Android platform as opposed to any other as their research showed that this was the most widely used system and therefore, would allow us to be able to target as many users as possible. 
+
+The Android application relies heavily on the API, accessing that functionality via HTTP POST request. 
+
+In addition to calling and displaying API results, the main extra functionality of the Android application was:
+
+1. Push Notifications using Google’s Cloud Messaging Service (GCM)
+2. Integration with Android’s Native Calendar
+3. Asynchronous Processing
+
+Push Notifications involved working with Google's Cloud Messaging Service in order to push data to Android devices through the OS, the standard practise for applications requiring to alert their users. 
+
+The native calender integration involved working with android on a lower level, and also working with version related issues that came into play depending on how evolved calendar interaction was on a specific Android SDK version. 
+
+Asynchronous Processing and Thread Management was also used in order to ensure that the Android application was never waiting for requests to finish, and would not appear to freeze to the user. This meant loading in data quietly after a user loaded a page, or displaying a loading icon where the former would not make sense. 
+
 -------------
 Documentation
 -------------
+
+Comprehensive documentation can be found in a number places depending on the content:
+
+Examiner's Guide: Accessible from the left pane. 
+User Documentation: Accessible from: 
+Technical Documentation: Accessible from the left pane. 
+Corpus Index: Accessible from: 
