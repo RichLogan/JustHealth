@@ -6,7 +6,7 @@ The authors have developed a platform for facilitating the connection between pa
 
 Comprehensive documentation can be found at the following places:
 
-- Examiners Guide
+- Examiner's Guide
 - User Documentation
 - Technical Documentation
 - Corpus Index
