@@ -2341,7 +2341,7 @@ def createNotificationRecord(user, notificationType, relatedObject):
 @app.route('/api/getNotifications', methods=['POST'])
 @auth.login_required
 def getNotifications():
-    if verifyContentRequest(request.form['username']):
+    if verifyContentRequest(request.form['username'], ""):
         return getNotifications(request.form['username'])
 
 def getNotifications(username):
@@ -2353,7 +2353,7 @@ def getNotifications(username):
 
     :returns: json -- The list of notifications each as a json dictionary.
     """
-    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))
+    notifications = Notification.select().dicts().where((Notification.username == username) & (Notification.dismissed == False))    
     notificationList = []
     for notification in notifications:
         notification['content'] = getNotificationContent(notification)
@@ -2367,7 +2367,7 @@ def getNotifications(username):
 @app.route('/api/getAllNotifications', methods=['POST'])
 @auth.login_required
 def getAllNotifications():
-    if verifyContentRequest(request.form['username']):
+    if verifyContentRequest(request.form['username'], ""):
         return getAllNotifications(request.form['username'])
 
 def getAllNotifications(username):
@@ -2393,7 +2393,7 @@ def getAllNotifications(username):
 @app.route('/api/getDismissedNotifications', methods=['POST'])
 @auth.login_required
 def getDismissedNotifications():
-    if verifyContentRequest(request.form['username']):
+    if verifyContentRequest(request.form['username'], ""):
         return getDismissedNotifications(request.form['username'])
 
 def getDismissedNotifications(username):
