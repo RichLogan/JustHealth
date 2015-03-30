@@ -273,6 +273,8 @@ def dropAll():
         Relationship.drop_table(cascade=True)
     if Patientcarer.table_exists():
         Patientcarer.drop_table(cascade=True)
+    if Appointmenttype.table_exists():
+        Appointmenttype.drop_table(cascade=True)
     if Appointments.table_exists():
         Appointments.drop_table(cascade=True)
     if Medication.table_exists():

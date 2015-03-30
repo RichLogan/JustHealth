@@ -45,7 +45,7 @@ def verify_password(username,password):
 
 def getUsernameFromHeader():
     """
-    Method gets the HTTP Basic header, decodes it and retrieves the username
+    Decodes the HTTP Basic header and retrieves the username. 
 
     :returns: str -- Username submitting the request.
     """
@@ -97,7 +97,18 @@ def verifySelf(authUsername, methodUsername):
         return abort(401)
 
 def verifyCarer(username, targetUsername):
-    """Checks that the user authenticated by HTTP Basic is connected to the user that is associated with the records being read/written"""
+    """
+    Checks that the user authenticated by HTTP Basic is connected to the user that is associated with the records being read/written
+
+    :param username: Username of user sending the request. 
+    :type username: str. 
+
+    :param targetUsername: Username of the owner of the requested resource. 
+    :type targetUsername: str. 
+
+    :returns: True if successful, else HTTP 401 Unauthorized. 
+
+    """
     accountInfo = json.loads(getAccountInfo(username))
     if accountInfo['accounttype'] == "Carer":
         if getConnectionStatus(username, targetUsername) == "Already Connected":
@@ -111,6 +122,8 @@ def verifyCarer(username, targetUsername):
 def encryptPassword():
     """
     Encrypts the users password and returns it to them
+
+    :link: /api/encryptPassword
 
     :param request.form: POST request containing plaintext [password].
     :type request.form: dict.
@@ -139,24 +152,36 @@ def decryptPassword(cipherText):
 
 @app.route("/api/registerUser", methods=["POST"])
 def registerUser():
-    """Builds the user profile using the information input in the form"""
+    return registerUser(request.form)
+
+def registerUser(details):
+    """
+    Allows registration of an account. 
+
+    :link: /api/registerUser
+
+    :param details: The dictionary of user details. Includes[username], [firstname], [surname], [dob], [ismale], [email], [password], [confirmpassword], [accounttype], [terms]
+    :type details: dict. 
+
+    :returns: str -- Success as String
+    """
     # Build User Registration
     try:
       profile = {}
-      profile['username'] = request.form['username']
-      profile['firstname'] = request.form['firstname']
-      profile['surname'] = request.form['surname']
-      profile['dob'] = request.form['dob']
-      profile['ismale'] = request.form['ismale']
-      profile['email'] = request.form['email']
-      profile['password'] = request.form['password']
-      profile['confirmpassword'] = request.form['confirmpassword']
-      accountType = request.form['accounttype']
+      profile['username'] = details['username']
+      profile['firstname'] = details['firstname']
+      profile['surname'] = details['surname']
+      profile['dob'] = details['dob']
+      profile['ismale'] = details['ismale']
+      profile['email'] = details['email']
+      profile['password'] = details['password']
+      profile['confirmpassword'] = details['confirmpassword']
+      accountType = details['accounttype']
       profile['profilepicture'] = "default.png"
     except KeyError, e:
       return "All fields must be filled out"
     try:
-      profile['terms'] = request.form['terms']
+      profile['terms'] = details['terms']
     except KeyError, e:
       return "Terms and Conditions must be accepted"
 
@@ -227,7 +252,6 @@ def registerUser():
       expirydate = str(datetime.date.today() + datetime.timedelta(days=90))
     )
 
-
     # Execute Queries
     with database.transaction():
         userInsert.execute()
@@ -241,6 +265,8 @@ def registerUser():
 def usernameCheck():
     """
     Checks to see if a username has already been taken
+
+    :link: /api/usernameCheck
 
     :param request.form: The [username] to check.
     :type request.form: dict.
@@ -308,6 +334,8 @@ def deactivateAccount(details):
     """
     Ability to deactivate an account. A user can choose to have their data deleted or kept. 
 
+    :link: /api/deactivateaccount
+
     :param details: Dictionary of [username], [comments], [reason]. 
     :type details: dict. 
 
@@ -367,6 +395,8 @@ def resetPassword():
 def resetPassword(details):
     """
     Ability to reset a password if one is forgotton.
+
+    :link: /api/resetpassword
 
     :param details: Dictionary of profile and password details [username], [confirmemail], [newpassword], [confirmnewpassword], [confirmdob].
     :type details: dict.
@@ -496,6 +526,16 @@ def setProfilePicture():
     return setProfilePicture(request.files)
 
 def setProfilePicture(details):
+    """
+    Sets a profile picture for a user
+
+    :link: /api/setProfilePicture
+
+    :param details: Files to upload, although only accepts one file of key [image], is retained as a dictionary due to request standards. 
+    :type details: dict. 
+
+    :returns: Filename/path of newly uploaded file, or False. 
+    """
     dest = "/static/images/profilePictures"
     allowedExtension = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'svg'])
 
@@ -575,6 +615,8 @@ def changePasswordAPI():
 def changePasswordAPI(details):
     """
     Allows a user to change their password.
+
+    :link: /api/changePassword
 
     :param details: Details of the user [username, oldpassword, newpassword, confirmnewpassword]. 
     :type details: dict. 
@@ -682,7 +724,12 @@ def getUserFromEmail(email):
       return "False"
 
 def sendForgotPasswordEmail(username):
-    """Sends email to the user on completion of reset password form"""
+    """
+    Sends email when password is forgotton. 
+
+    :param username: Username to send email to.
+    :type username: str. 
+    """
     #Generate reset password Link
     s = getSerializer()
     payload = s.dumps(username)
@@ -701,7 +748,12 @@ def sendForgotPasswordEmail(username):
     server.quit()
 
 def sendUnlockEmail(username):
-    """Sends email to a user when account is locked due to too many unsuccessful attempts"""
+    """
+    Sends email to a user when account is locked due to too many unsuccessful attempts
+
+    :param username: Username to send email to.
+    :type username: str. 
+    """
     # Login to mail server
     s = getSerializer()
     payload = s.dumps(username)
@@ -720,7 +772,12 @@ def sendUnlockEmail(username):
     server.quit()
 
 def sendPasswordResetEmail(username):
-    """Sends user email confirming password reset"""
+    """
+    Sends user email confirming password reset
+
+    :param username: Username to send email to.
+    :type username: str. 
+    """
     s = getSerializer()
     payload = s.dumps(username)
     verifyLink = url_for('passwordReset', payload=payload, _external=True)
@@ -739,7 +796,12 @@ def sendPasswordResetEmail(username):
     server.quit()
 
 def sendContactUs(details):
-    """Sends email to justhealth when a user has a question"""
+    """
+    Sends email to justhealth when a user has a question
+
+    :param details: Contains the [message] and [username] who asked the question. 
+    :type details: dict. 
+    """
     #Login to mail server
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     server.login('justhealth@richlogan.co.uk', "justhealth")
@@ -760,11 +822,23 @@ def sendContactUs(details):
 @app.route('/api/searchPatientCarer', methods=['POST','GET'])
 @auth.login_required
 def searchPatientCarer():
-    """Searches database for a user that can be connected to. POST [username, searchterm]"""
     if verifyContentRequest(request.form['username'], ""):
         return searchPatientCarer(request.form['username'], request.form['searchterm'])
 
 def searchPatientCarer(username, searchterm):
+    """
+    Allows users to search for other users. 
+
+    :link: /api/searchPatientCarer
+
+    :param username: The username who has submitted the search. 
+    :type username: str. 
+
+    :param searchterm: The search term the user has submitted. 
+    :type searchterm: str. 
+
+    :returns: str/json -- The resultant message or list of search results. 
+    """
     #get username, firstname and surname of current user
     results = {}
     searchterm = "%" + searchterm + "%"
@@ -798,6 +872,18 @@ def searchPatientCarer(username, searchterm):
     return json.dumps(jsonResult)
 
 def getConnectionStatus(username, target):
+    """
+    Returns the connection status between the two users. 
+    Helper method for search. 
+
+    :param username: The first username. 
+    :type username: str. 
+
+    :param target: The second username:
+    :type target: str. 
+
+    :returns: str -- The connection status. 
+    """
     currentConnections = json.loads(getConnections(username))
 
     for connection in json.loads(currentConnections['outgoing']):
@@ -825,7 +911,16 @@ def createConnection():
         return createConnection(request.form)
 
 def createConnection(details):
-    """Creates an initial connection between two users. POST [username, target]"""
+    """
+    Creates an initial connection between two users.
+
+    :link: /api/createConnection
+
+    :param details: The two usernames as [username] and [target]. 
+    :type details: dict. 
+
+    :returns: str -- Result message. 
+    """
     # Get users
     currentUser = details['username']
     targetUser = details['target']
@@ -870,8 +965,6 @@ def createConnection(details):
         return "Give the code '" + str(x) + "' to " + targetUser + " so they can accept your request"
     return "False"
 
-
-
 @app.route('/api/completeConnection', methods=['POST', 'GET'])
 @auth.login_required
 def completeConnection():
@@ -881,7 +974,16 @@ def completeConnection():
         return completeConnection(request.form)
 
 def completeConnection(details):
-    """Verify a code on input to allow the completion of an attempted connection. POST[ username, requestor, codeattempt] """
+    """
+    Verifies the connection code to allow the completion of an attempted connection.
+
+    :link: /api/completeConnection
+
+    :param details: A [codeattempt] to connect [username] with [requestor]. 
+    :type details: dict. 
+
+    :returns: str -- Result message. 
+    """
     #Take attempted code, match with a entry where they are target
     target = details['username']
     requestor = details['requestor']
@@ -925,7 +1027,6 @@ def completeConnection(details):
 @app.route('/api/deleteConnection', methods=['POST'])
 @auth.login_required
 def deleteConnection():
-    """Deletes connection between a patient and carer POST[user, connection]"""
     #We only need to check the user and not the carer's authenticity
     # as no information about the patient is being returned.
     if verifyContentRequest(request.form['user'], ""):
@@ -1004,6 +1105,8 @@ def getConnections():
 def getConnections(username):
     """
     Gets all connections for a specific user. 
+
+    :link: /api/getConnections
 
     :param username: The username of the user to check. 
     :type username: str. 
@@ -1088,7 +1191,28 @@ def addPatientAppointment():
 #allows a all self appointments to be added
 #Note originally there was going to be a seperate method for carers, however this is no longer the case.
 def addPatientAppointment(details):
-# Build insert user query
+  """
+  Allows a patient to add their own appointment
+
+  :link: /api/addPatientAppointment
+
+  :param details: Details of the appointment. 
+    [creator]
+    [name]
+    [apptype]
+    [addressnamenumber]
+    [postcode]
+    [startdate]
+    [starttime]
+    [enddate]
+    [endtime]
+    [description]
+    [private]
+  :type details: dict. 
+
+  :returns: str -- The id of the newly created appointment. 
+  """
+  # Build insert user query
   if details['private'] == "False":
     isPrivate = False
   else:
@@ -1121,6 +1245,26 @@ def addInviteeAppointment():
         return addInviteeAppointment(request.form)
 
 def addInviteeAppointment(details):
+  """
+  Allows a carer to create an appointment with their patient
+
+  :link: /api/addInviteeAppointment
+
+  :param details: Details of appointment. 
+    [creator]
+    [name]
+    [apptype]
+    [addressnamenumber]
+    [postcode]
+    [startdate]
+    [starttime]
+    [enddate]
+    [endtime]
+    [description]
+  :type details: dict. 
+
+  :returns: str -- The id of the appointment. 
+  """
   #Build insert user query
   appointmentInsert = Appointments.insert(
     creator = details['creator'],
@@ -1156,6 +1300,19 @@ def getAllAppointments():
 
 #gets the appointments from the database
 def getAllAppointments(loggedInUser, targetUser):
+  """
+  Returns all appointments for a user. 
+
+  :link: /api/getAllAppointments
+
+  :param loggedInUser: The user requesting. 
+  :type loggedInUser: str. 
+
+  :param targetUser: The user whose appointments are being requested. 
+  :type targetUser: str. 
+
+  :returns: json -- List of appointments.
+  """
   #get user account type
   currentUser_type = json.loads(getAccountInfo(loggedInUser))['accounttype']
 
@@ -1213,6 +1370,19 @@ def deleteAppointment():
     return deleteAppointment(request.form['username'], request.form['appid'])
 
 def deleteAppointment(user, appid):
+  """
+  Allows an appointment to be deleted. 
+
+  :link: /api/deleteAppointment
+
+  :param user: The username of the user attempting to delete. 
+  :type user: str. 
+
+  :param appid: The id of the appointment to deleted. 
+  :type appid: int. 
+
+  :returns: str -- Success message. 
+  """
   isCreator = Appointments.select().where(Appointments.appid == appid).get()
 
   if isCreator.creator.username == user:
@@ -1232,6 +1402,19 @@ def getUpdateAppointment():
         return updateAppointment(request.form['username'], request.form['appid'])
 
 def getUpdateAppointment(user, appid):
+  """
+  Returns the details of the specified appointment. 
+
+  :link: /api/getUpdateAppointment
+
+  :param user: The user requesting the resource. 
+  :type user: str. 
+
+  :param appid: The id of the requested appointment. 
+  :type appid: int. 
+
+  :returns: json -- Details of the appointment. 
+  """
   isCreator = Appointments.select().where(Appointments.appid == appid).get()
 
   if isCreator.creator.username == user:
@@ -1266,6 +1449,46 @@ def updateAppointment():
         return updateAppointment(request.form['appid'], request.form['name'], request.form['apptype'], request.form['addressnamenumber'], request.form['postcode'], request.form['startdate'], request.form['starttime'], request.form['enddate'], request.form['endtime'], request.form['other'], request.form['private'])
 
 def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDate, startTime, endDate, endTime, description, private):
+  """
+  Updates a specified appointment. 
+
+  :link: /api/updateAppointment
+
+  :param appid: The id of the appointment to update. 
+  :type appid: int. 
+  
+  :param name: Appointment name. 
+  :type name: str. 
+  
+  :param apptype: Appointment type. 
+  :type apptype: str. 
+  
+  :param addressnamenumber: Address. 
+  :type addressnamenumber: str. 
+  
+  :param postcode: Postcode. 
+  :type postcode: str. 
+  
+  :param startDate: Start Date. 
+  :type startDate: date. 
+  
+  :param startTime: Start Time. 
+  :type startTime: time. 
+  
+  :param endDate: End Date. 
+  :type endDate: date. 
+  
+  :param endTime: End Time. 
+  :type endTime: time. 
+  
+  :param description: Description. 
+  :type description: str. 
+  
+  :param private: If the appointment is private or not. 
+  :type private: boolean. 
+
+  :returns: str -- Success message. 
+  """
   checkInvitee = Appointments.select().where(Appointments.appid == appid).get()
   #This stops the appointment from being marked as private when it is an invitee appointment
   if checkInvitee.invitee != None:
@@ -1299,14 +1522,16 @@ def updateAppointment(appid, name, apptype, addressnamenumber, postcode, startDa
   return "Appointment Updated"
 
 @app.route('/api/getAppointment', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def getAppointment():
-    if verifyContentRequest(request.form['user'], ""):
-        return getAppointment(request.form['user'], request.form['appid'])
+    # if verifyContentRequest(request.form['user'], ""):
+    return getAppointment(request.form['user'], request.form['appid'])
 
 def getAppointment(user, appid):
     """
     Returns details of an appointment
+
+    :link: /api/getAppointment
 
     :param user: The user submitting the request.
     :type user: str.
@@ -1378,9 +1603,9 @@ def acceptDeclineAppointment(user, action, appointmentId):
 
 def addMedication(medicationName):
     """
-    Allows a medication to be added from the system.
+    Allows a medication to be added to the system.
 
-    :param medicationName: The name of the medication to added.
+    :param medicationName: The name of the medication to be added.
     :type medicationName: str.
 
     :returns: "Added" or "Already Exists" or "False" for other error.
@@ -1422,6 +1647,8 @@ def getMedications():
     """
     Returns list of all medications in JustHealth system.
 
+    :link: /api/getMedications
+
     :returns: json -- List of medication names.
     """
     medicationList = []
@@ -1440,6 +1667,8 @@ def addPrescription():
 def addPrescription(details):
     """
     Allows creation of a prescription
+
+    :link: /api/getPrescription
 
     :param details: Dictionary containing:
         [prescriptionid]
@@ -1549,6 +1778,8 @@ def editPrescription():
 def editPrescription(details):
     """
     Allows facility to edit a prescription.
+
+    :link: /api/editPrescription
 
     :param details: Dictionary containing:
         [prescriptionid]
@@ -1663,6 +1894,8 @@ def deletePrescription(prescriptionid):
     """
     Deletes a specified prescriptions.
 
+    :link: /api/deletePrescription
+
     :param prescriptionid: The id of the prescription to delete.
     :type prescriptionid: int.
 
@@ -1692,6 +1925,8 @@ def getPrescriptions():
 def getPrescriptions(username):
     """
     Returns all (active, upcoming and expired) prescriptions for a specified user.
+
+    :link: /api/getPrescriptions
 
     :param username: The user to check for.
     :type username: str.
@@ -1728,6 +1963,8 @@ def getActivePrescriptions(username):
     """
     Returns all active prescriptions for a specified user.
 
+    :link: /api/getActivePrescriptions
+
     :param username: The specified user.
     :type username: str.
 
@@ -1750,6 +1987,8 @@ def getUpcomingPrescriptions():
 def getUpcomingPrescriptions(username):
     """
     Returns all upcoming prescriptions for a specified user.
+
+    :link: /api/getUpcomingPrescriptions
 
     :param username: The username to check for.
     :type username: str.
@@ -1774,6 +2013,8 @@ def getExpiredPrescriptions(username):
     """
     Returns all expired prescriptions for a specified user.
 
+    :link: /api/getExpiredPrescriptions
+
     :param username: The username to check for.
     :type username: str.
 
@@ -1797,6 +2038,8 @@ def getPrescription(details):
     """
     Returns the details of a specified prescription.
 
+    :link: /api/getPrescription
+
     :param details: Dictionary containing [prescriptionid].
     :type details: dict.
 
@@ -1811,13 +2054,19 @@ def getPrescription(details):
 @app.route('/api/takeprescription', methods=['POST'])
 def takePrescription():
     prescriptionid = request.form['prescriptionid']
-    prescription = Prescription.select().dicts().where(Prescription.prescriptionid == prescriptionid).get()
-    user = prescription['username']
-    if verifyContentRequest(user, ""):
-        return takePrescription(request.form)
+    try:
+        prescription = Prescription.select().dicts().where(Prescription.prescriptionid == prescriptionid).get()
+        user = prescription['username']
+        if verifyContentRequest(user, ""):
+            return takePrescription(request.form)
+    except Prescription.DoesNotExist:
+        return "Specified prescription does not exist"
 
 def takePrescription(details):
-    """Allows a prescription to be taken.
+    """
+    Allows a prescription to be taken.
+
+    :link: /api/takeprescription
 
     :param details: Dictionary containing [currentcount] (number taken today), [prescriptionid].
     :type details: dict.
@@ -1930,6 +2179,8 @@ def getPrescriptionCount(details):
     """
     Returns the number of times a user has taken a prescription on the current day.
 
+    :link: /api/getPrescriptionCount
+
     :param details: Dictionary containing [prescriptionid].
     :type details: dict.
 
@@ -1953,6 +2204,8 @@ def searchNHSDirect(search):
     """
     Allows a search term to be passed to the NHS website.
 
+    :link: /api/searchNHSDirectWebsite
+
     :param search: The search term.
     :type search: str.
 
@@ -1972,6 +2225,8 @@ def getDeactivateReasons():
     """
     Returns a list of possible reasons a user can deactivate
 
+    :link: /api/getDeactivateReasons
+
     :returns: json -- List of possible reasons.
     """
     reasons = Deactivatereason.select()
@@ -1989,6 +2244,8 @@ def getAppointmentTypes():
 def getAppointmentTypes():
     """
     Returns a list of possible appointment types
+
+    :link: /api/getAppointmentTypes
 
     :returns: json -- List of appointment types
     """
@@ -2009,6 +2266,8 @@ def getCorrespondence(carer, patient):
     """
     Returns all notes for a patient/carer relationship.
 
+    :link: /api/getCorrespondence
+
     :param carer: The username of the carer.
     :type carer: str.
 
@@ -2017,7 +2276,6 @@ def getCorrespondence(carer, patient):
 
     :returns: json -- List of notes.
     """
-
     allNotes = Notes.select().where((Notes.carer == carer) & (Notes.patient == patient))
 
     results = []
@@ -2041,6 +2299,8 @@ def getPatientNotes():
 def getPatientNotes(details):
     """
     Returns all notes for a specific patient.
+
+    :link: getPatientNotes
 
     :param details: Dictionary containing [username] of target patient.
     :type details: dict.
@@ -2069,6 +2329,8 @@ def addCorrespondence():
 def addCorrespondence(details):
     """
     Adds a note for a patient.
+
+    :link: /api/addCorrespondence
 
     :param details: Dictionary containing [carer], [patient], [notes] (note content), [title].
     :type details: dict.
@@ -2100,6 +2362,8 @@ def deleteNote(noteid):
     """
     Delete a specific note
 
+    :link: /api/deleteNote
+
     :param noteid: The id of the note to delete.
     :type noteid: int.
 
@@ -2118,6 +2382,8 @@ def deleteNote(noteid):
 def addAndroidEventId():
     """
     Allows an android event id of a calendar event to be stored.
+
+    :link: /api/addAndroidEventId
 
     :param request.form: POST request containing [dbid](id of event) and [androidid](the android event id).
     :type request.form: dict.
@@ -2177,6 +2443,8 @@ def getReasons():
     """
     Returns all pre-set reasons to deactivate.
 
+    :link: /api/getReasons
+
     :returns: json -- List of reasons.
     """
     result = {}
@@ -2185,7 +2453,6 @@ def getReasons():
     for reason in reasons:
       result[reason.reason.reason] = a.select().where(Userdeactivatereason.reason == reason.reason).count()
     return json.dumps(result)
-
 
 def getAllUsers():
     """
@@ -2346,7 +2613,9 @@ def getNotifications():
 
 def getNotifications(username):
     """
-    Returns all of the notifications that have been associated with a user that have not been dismissed
+    Returns all of the notifications that have been associated with a user that have not been dismissed. 
+
+    :link: /api/getNotifications
 
     :param username: The username to get dismissed notifications for.
     :type username: str.
@@ -2374,6 +2643,8 @@ def getAllNotifications(username):
     """
     Returns all of the notifications that have been associated with a user, whether or not they have been dismissed
 
+    :link: /api/getAllNotifications
+
     :param username: The username to get dismissed notifications for.
     :type username: str.
 
@@ -2399,6 +2670,8 @@ def getDismissedNotifications():
 def getDismissedNotifications(username):
     """
     Returns all of the notifications that have been dismissed for a username
+
+    :link: /api/getDismissedNotifications
 
     :param username: The username to get dismissed notifications for.
     :type username: str.
@@ -2629,6 +2902,8 @@ def dismissNotification():
 def dismissNotification(notificationid):
     """
     Dismisses a notification to hide from the user's immediate view.
+
+    :link: /api/dismissNotification
 
     :param notificationid: The id of the notification to dismiss.
     :type notificationid: int.
@@ -2995,6 +3270,8 @@ def expiredResetPassword(request):
     """
     Resets a password that has expired or is expiring.
 
+    :link: /api/expiredResetPassword
+
     :param request: Dictionary of user and password details [username, newpassword, confirmnewpassword].
     :type request: dict.
 
@@ -3044,6 +3321,8 @@ def expiredResetPassword(request):
 def generation():
     """
     Cleans up all Notifications / Reminders for all users, run via a scheduled task on the server.
+
+    :link: /api/generate
 
     :returns: str -- The number of reminders created/deleted.
     """
