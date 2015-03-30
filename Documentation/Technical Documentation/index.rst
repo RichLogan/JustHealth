@@ -14,7 +14,6 @@ Welcome to JustHealth's documentation!
    development
    api
    views
-   users
    database
    html
    security
