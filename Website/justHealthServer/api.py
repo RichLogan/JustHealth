@@ -1918,7 +1918,10 @@ def checkStockLevel(prescription, count):
 @app.route('/api/getPrescriptionCount', methods=['POST'])
 def getPrescriptionCount():
     prescriptionid = request.form['prescriptionid']
-    prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    try:
+        prescription = Prescription.select().where(Prescription.prescriptionid == prescriptionid).dicts().get()
+    except Prescription.DoesNotExist:
+        return "Prescription does not exist"
     user = prescription['username']
     if verifyContentRequest(user, ""):
         return getPrescriptionCount(request.form)
