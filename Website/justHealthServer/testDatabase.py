@@ -4,11 +4,8 @@ from peewee import *
 
 database = PostgresqlDatabase('justhealthtest', **{'host': 'penguin.kent.ac.uk', 'password': 'rded$or', 'port': 5432, 'user': 'justhealthtest'})
 
-class UnknownField(object):
-    pass
-
 class BaseModel(Model):
-    """Base Model"""
+    """Base Model with Database Object"""
     class Meta:
         database = database
 
@@ -20,7 +17,7 @@ class Client(BaseModel):
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    profilepicture = CharField(max_length=100, null=True)
+    profilepicture = TextField()
     telephonenumber = CharField(max_length=100, null=True)
     verified = BooleanField()
 
@@ -28,61 +25,75 @@ class Client(BaseModel):
         db_table = 'client'
 
 class Carer(BaseModel):
+    """Represents a carer account"""
+    # Foreign Key to Client
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
     firstname = CharField(max_length=100)
     ismale = BooleanField()
     nhscarer = BooleanField(null=True)
     surname = CharField(max_length=100)
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
 
     class Meta:
         db_table = 'carer'
 
 class Patient(BaseModel):
+    """Represents a patient account"""
+    # Foreign Key to Client
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
     firstname = CharField(max_length=100)
     ismale = BooleanField()
     surname = CharField(max_length=100)
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
-
+    
     class Meta:
         db_table = 'patient'
 
 class Admin(BaseModel):
+    """Represents an administrative account"""
+    # Foreign Key to Client
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
     firstname = CharField(max_length=100)
     ismale = BooleanField()
     surname = CharField(max_length=100)
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username', primary_key='username')
 
     class Meta:
         db_table = 'admin'
 
 class uq8LnAWi7D(BaseModel):
+    """A pasword for a user"""
+    # Foreign Key to Client
+    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
     expirydate = DateField(null=True)
     iscurrent = BooleanField(null=True)
     password = CharField(max_length=255)
-    username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
-
+    
     class Meta:
         primary_key = CompositeKey('password', 'username')
         db_table = 'uq8lnawi7d'
 
 class Deactivatereason(BaseModel):
+    """Represents a reason an account can be deactivated for"""
     reason = CharField(max_length=255, primary_key=True)
 
     class Meta:
         db_table = 'deactivatereason'
 
 class Userdeactivatereason(BaseModel):
-    comments = CharField(max_length=1000, null=True)
+    """Represents a user deactivating their account with reason and comments"""
+    # Foreign Key to Deactivate Reason
     reason = ForeignKeyField(db_column='reason', null=True, rel_model=Deactivatereason, to_field='reason')
+    comments = CharField(max_length=1000, null=True)
 
     class Meta:
         db_table = 'userdeactivatereason'
 
 class Relationship(BaseModel):
+    """Represents a non-complete relationship between two users"""
     code = IntegerField(null=True)
     connectionid = PrimaryKeyField()
+    # Client Object
     requestor = ForeignKeyField(db_column='requestor', null=True, rel_model=Client, to_field='username', related_name = 'requestor')
     requestortype = CharField(max_length=50, null=True)
+    # Client Object
     target = ForeignKeyField(db_column='target', null=True, rel_model=Client, to_field='username', related_name='target')
     targettype = CharField(max_length=50, null=True)
 
@@ -90,6 +101,7 @@ class Relationship(BaseModel):
         db_table = 'relationship'
 
 class Patientcarer(BaseModel):
+    """A completed Patient/Carer connection"""
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carer')
     patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patient')
 
@@ -98,12 +110,14 @@ class Patientcarer(BaseModel):
         db_table = 'patientcarer'
 
 class Appointmenttype(BaseModel):
+    """A possible appointment type"""
     type = CharField(max_length=25, primary_key=True)
 
     class Meta:
         db_table = 'appointmenttype'
 
 class Appointments(BaseModel):
+    """Represents an Appoinment"""
     appid = PrimaryKeyField()
     creator = ForeignKeyField(db_column='creator', rel_model=Client, to_field='username', related_name='creator')
     invitee = ForeignKeyField(db_column='invitee', rel_model=Client, to_field='username', null=True, related_name='invitee')
@@ -124,12 +138,14 @@ class Appointments(BaseModel):
         db_table = 'appointments'
 
 class Medication(BaseModel):
+    """A medication/drug supported by the applications"""
     name = CharField(primary_key=True)
 
     class Meta:
         db_table = 'medication'
 
 class Prescription(BaseModel):
+    """A prescription assigned to a patient"""
     prescriptionid = PrimaryKeyField()
     username = ForeignKeyField(db_column='username', rel_model=Client, to_field='username')
     medication = ForeignKeyField(db_column='name', rel_model=Medication, to_field='name')
@@ -139,8 +155,8 @@ class Prescription(BaseModel):
     prerequisite = CharField(null=True)
     dosageform = CharField(null=True)
     quantity = IntegerField(null=True)
-    # Frequency, days, dates.
     frequency = IntegerField(null=True)
+    # Booleans to represent what days a prescription should be taken.
     Monday = BooleanField(default=False)
     Tuesday = BooleanField(default=False)
     Wednesday = BooleanField(default=False)
@@ -155,6 +171,7 @@ class Prescription(BaseModel):
         db_table = 'prescription'
 
 class Notes(BaseModel):
+    """A note left by a patient or carer"""
     noteid = PrimaryKeyField()
     carer = ForeignKeyField(db_column='carer', rel_model=Client, to_field='username', related_name='carernotes')
     patient = ForeignKeyField(db_column='patient', rel_model=Client, to_field='username', related_name='patientnotes')
@@ -166,6 +183,7 @@ class Notes(BaseModel):
         db_table = 'notes'
 
 class TakePrescription(BaseModel):
+    """An instance of a patient taking their prescription"""
     takeid  = PrimaryKeyField()
     prescriptionid = ForeignKeyField(db_column='prescriptionid', rel_model=Prescription,to_field='prescriptionid')
     currentcount = IntegerField()
@@ -176,6 +194,7 @@ class TakePrescription(BaseModel):
         db_table = 'takeprescription'
 
 class Notificationtype(BaseModel):
+    """Possible Notification type with class of (danger/warning/success/info)"""
     typename = CharField(max_length=50, primary_key=True)
     typeclass = CharField(max_length=25)
 
@@ -183,6 +202,7 @@ class Notificationtype(BaseModel):
         db_table = 'notificationtype'
 
 class Notification(BaseModel):
+    """A notification to alert an account to something"""
     notificationid = PrimaryKeyField()
     username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
     notificationtype = ForeignKeyField(db_column='notificationtype', rel_model=Notificationtype, to_field="typename")
@@ -194,6 +214,7 @@ class Notification(BaseModel):
         db_table = 'notification'
 
 class Reminder(BaseModel):
+    """A non-dismissable time based notification"""
     reminder = PrimaryKeyField()
     username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
     content = CharField(max_length=100)
@@ -204,6 +225,7 @@ class Reminder(BaseModel):
     extraFrequency = IntegerField(null=True, default=None)
 
 class Androidregistration(BaseModel):
+    """Connects an account with an Android device for Push Notifications"""
     username = ForeignKeyField(db_column='username', rel_model=Client, to_field="username")
     registrationid = CharField(unique=True)
 
@@ -234,7 +256,7 @@ def createAll():
     Admin.create_table()
     
 def dropAll():
-    """Drops all tables providing that they exists"""
+    """Drops all tables providing that they exist"""
     if Client.table_exists():
         Client.drop_table(cascade=True)
     if Patient.table_exists():
