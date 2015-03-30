@@ -63,7 +63,7 @@ def index():
     if accountInfo['accounttype'] == "Patient":
         # Patient Functionality
         notifications = json.loads(getNotifications(session['username']))
-        prescriptions = json.loads(getPrescriptions(session['username']))
+        prescriptions = json.loads(getActivePrescriptions(session['username']))
         reminders = json.loads(getReminders(session['username']))
         return render_template(
             'dashboard.html',
