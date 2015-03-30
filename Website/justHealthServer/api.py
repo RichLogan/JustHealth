@@ -1825,6 +1825,11 @@ def takePrescription(details):
     :returns: True for success or 'Invalid current count'
     """
     try:
+        prescription = Prescription.get(Prescription.prescriptionid == details['prescriptionid'])
+    except Prescription.DoesNotExist:
+        return "Specified prescription does not exist"
+
+    try:
         currentCount = int(details['currentcount'])
         # If a record already exists for this day, update
         takeInstance = TakePrescription.select().where((TakePrescription.prescriptionid == details['prescriptionid']) & (TakePrescription.currentdate == datetime.datetime.now().date())).get()
@@ -1843,7 +1848,7 @@ def takePrescription(details):
         takeInstance = TakePrescription.insert(
             prescriptionid = details['prescriptionid'],
             currentcount = details['currentcount'],
-            startingcount = Prescription.get(Prescription.prescriptionid == details['prescriptionid']).stockleft,
+            startingcount = prescription.stockleft,
             currentdate = datetime.datetime.now().date())
         with database.transaction():
             takeInstance.execute()
