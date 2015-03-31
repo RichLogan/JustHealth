@@ -104,7 +104,7 @@ class testDeleteConnection(unittest.TestCase):
         self.assertEqual(result.text, "True")
 
     def testInvalidDelete(self):
-        """Attempt to delete a connection that does not exists"""
+        """Attempt to delete a connection that does not exist"""
         payload = {
             "user" : "patient",
             "connection" : "1234",
@@ -116,10 +116,8 @@ class testDeleteConnection(unittest.TestCase):
             "user" : "carer",
             "connection" : "1234",
         }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload,  auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
-        self.assertEqual(result.text, "Connections does not exist")
-
- 
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload,  auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        self.assertEqual(result.text, "Connection does not exist")
     
     def tearDown(self):
         """Delete all tables"""
