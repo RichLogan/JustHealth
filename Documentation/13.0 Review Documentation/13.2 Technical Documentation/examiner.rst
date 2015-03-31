@@ -10,16 +10,16 @@ The Website, and JustHealth's API server can be found running at: http://raptor.
 
 Whilst you are welcome to create your own account, the following are provided with example data to get a feel for how the application would look. 
 
-+------------+------------+ 
-| Username   | Password   | 
-+============+============+ 
-| username   | password   | 
-+------------+------------+ 
-| username2  | password2  | 
-+------------+------------+ 
++--------------------+------------+------------+ 
+| Account Type       | Username   | Password   | 
++====================+============+============+ 
+| Carer              | emma19     | hello123   | 
++--------------------+------------+------------+ 
+| Patient            | andydavis  | hello123   | 
++--------------------+------------+------------+ 
 
 **Please note:**
-There may be a large amount of notifications present, depending on how long the application has remained inactive. 
+There may be a large amount of notifications present on these accounts, depending on how long the application has remained inactive. 
 
 If you desire, you can also query the API directly. For functions and parameters required, please consult the API document. You can send requests to these functions in many ways, but methods we can endorse are:
 
