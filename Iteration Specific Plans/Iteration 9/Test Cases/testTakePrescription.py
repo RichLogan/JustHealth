@@ -5,6 +5,7 @@ import imp
 import sys
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
@@ -93,8 +94,9 @@ class testTakePrescription(unittest.TestCase):
             "prescriptionid" : "1",
             "currentcount" : "3"
         }
-        takePrescription = api.takePrescription(payload)
-        self.assertEqual(takePrescription, "True")
+        
+        takePrescription = requests.post("http://127.0.0.1:9999/api/takeprescription", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        self.assertEqual(takePrescription.text, "True")
 
     def testTakePrescriptionDoesNotExist(self):
         """Attept to take a prescription that does not exist"""
@@ -102,8 +104,8 @@ class testTakePrescription(unittest.TestCase):
             "prescriptionid" : "10",
             "currentcount" : "3"
         }
-        takePrescription = api.takePrescription(payload)
-        self.assertEqual(takePrescription, "Specified prescription does not exist")
+        takePrescription = requests.post("http://127.0.0.1:9999/api/takeprescription", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        self.assertEqual(takePrescription.text, "Specified prescription does not exist")
 
     def tearDown(self):
         """Delete all tables"""
