@@ -1,6 +1,7 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
 import json
@@ -169,14 +170,26 @@ class testGetConnections(unittest.TestCase):
         result = json.loads(result.text)
 
         expectedJSON = {
-            'outgoing' : '[{"username": "carer2", "code": "1234", "surname": "carer", "accounttype": "Carer", "firstname": "carer"}]',
-            'incoming' : '[{"username": "carer1", "connectionid": "1", "surname": "carer", "accounttype": "Carer", "firstname": "carer"}]',
-            'completed' : '[{"username": "carer3", "surname": "carer", "accounttype": "Carer", "firstname": "carer"}]'
+            "outgoing": '[{"username": "carer2", "code": "1234", "surname": "carer", "firstname": "carer", "accounttype": "Carer", "profilepicture": "default.png"}]',
+            "incoming": '[{"username": "carer1", "surname": "carer", "firstname": "carer", "connectionid": "1", "accounttype": "Carer", "profilepicture": "default.png"}]',
+            "completed": '[{"username": "carer3", "telephonenumber": null, "surname": "carer", "firstname": "carer", "profilepicture": "default.png", "accounttype": "Carer", "email": "carer3@richlogan.co.uk"}]'
         }
-
         self.assertEqual(result, expectedJSON)
 
-    
+    def testGetAllCarer(self):
+        """Attempt to get all connections for carer"""
+        payload = {
+            "username" : "carer1",
+        }
+        result = requests.post("http://127.0.0.1:9999/api/getConnections", data=payload, auth=('carer1', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        result = json.loads(result.text)
+
+        expectedJSON = {
+            "outgoing": '[{"username": "patient", "code": "1234", "surname": "patient", "firstname": "patient", "accounttype": "Patient", "profilepicture": "default.png"}]',
+            "incoming": '[]',
+            "completed": '[]'
+        }
+        self.assertEqual(result, expectedJSON)
 
     def tearDown(self):
         """Delete all tables"""

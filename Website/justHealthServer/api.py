@@ -1690,7 +1690,7 @@ def addPrescription(details):
     """
     Allows creation of a prescription
 
-    :link: /api/getPrescription
+    :link: /api/addPrescription
 
     :param details: Dictionary containing:
         [prescriptionid]
