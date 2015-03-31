@@ -4,6 +4,7 @@ import datetime
 import imp
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
@@ -86,22 +87,30 @@ class testGetPrescriptionCount(unittest.TestCase):
             Sunday = True).execute()
         
         payload = {
-            "prescriptionid" : "1",
+            "prescriptionid" : 1,
             "currentcount" : "3"
         }
-        takePrescription = requests.post("http://127.0.0.1:9999/api/takePrescription", data=payload)
+        takePrescription = requests.post("http://127.0.0.1:9999/api/takeprescription", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
 
     def testGetPrescriptionCountLegitimate(self):
         """Attempt to get the prescription count"""
         payload = { "prescriptionid" : "1" }
         expectedResult = '3'
     
-        getPrescriptionCount = requests.post("http://127.0.0.1:9999/api/getPrescriptionCount", data=payload)
+        getPrescriptionCount = requests.post("http://127.0.0.1:9999/api/getPrescriptionCount", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        self.assertEqual(getPrescriptionCount.text, expectedResult)
+
+    def testGetPrescriptionCountDoesNotExist(self):
+        """Attempt to get the prescription count"""
+        payload = { "prescriptionid" : "100" }
+        expectedResult = 'Prescription does not exist'
+    
+        getPrescriptionCount = requests.post("http://127.0.0.1:9999/api/getPrescriptionCount", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(getPrescriptionCount.text, expectedResult)
 
     def tearDown(self):
         """Delete all tables"""
-        #testDatabase.dropAll()
+        # testDatabase.dropAll()
 
 if __name__ == '__main__':
     unittest.main()
