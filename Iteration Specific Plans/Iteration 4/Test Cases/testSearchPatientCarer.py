@@ -1,6 +1,7 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
 import json
@@ -71,7 +72,7 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "carer"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('patient','test'))
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         result = json.loads(result.text)
         
         self.assertEqual(result[0]['username'], 'carer')
@@ -88,7 +89,7 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "c"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('patient','test'))
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         result = json.loads(result.text)
         
         self.assertEqual(result[0]['username'], 'carer')
@@ -105,7 +106,7 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "C"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('patient','test'))
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         result = json.loads(result.text)
         
         self.assertEqual(result[0]['username'], 'carer')
@@ -122,7 +123,7 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "patient"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('carer','test'))
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         result = json.loads(result.text)
         
         self.assertEqual(result[0]['username'], 'patient')
@@ -138,7 +139,7 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "p"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('carer','test'))
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         result = json.loads(result.text)
         
         self.assertEqual(result[0]['username'], 'patient')
@@ -154,7 +155,7 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "P"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('carer','test'))
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         result = json.loads(result.text)
         
         self.assertEqual(result[0]['username'], 'patient')
@@ -170,11 +171,9 @@ class testSearchPatientCarer(unittest.TestCase):
             "searchterm" : "rich"
         }
 
-        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=('carer','test'))
-
-        result = json.loads(result.text)
+        result = requests.post("http://127.0.0.1:9999/api/searchPatientCarer", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         
-        self.assertEqual(len(result), 0)
+        self.assertEqual(result.text, "No users found")
 
     def tearDown(self):
         """Delete all tables"""
