@@ -81,7 +81,10 @@ Documentation
 
 Comprehensive documentation can be found in a number places depending on the content:
 
-Examiner's Guide: Accessible from the left pane. 
-User Documentation: Accessible from: 
-Technical Documentation: Accessible from the left pane. 
-Corpus Index: Accessible from: 
+**Examiner's Guide:** Accessible from the left pane.
+
+**User Documentation:** Available at: 
+
+**Technical Documentation:** Accessible from the left pane. 
+
+**Corpus Index:** Available at: 

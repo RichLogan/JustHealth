@@ -10,7 +10,7 @@ All of the pages have the standard header and footer from the template page and 
 ------------------------
 frontpage.html
 ------------------------
-This is the websites front page and can be accessed from raptor.kent.ac.uk/5000. The page has two input boxes fora user to login with their username and password. There is also a button for a new user to click to register a new account.
+This is the front page of the web application and is available at: **http://raptor.kent.ac.uk:5000**. The page has two input boxes for a user to login with their username and password. There is also a button for a new user to click to register a new account.
 The page also has a video demonstration of the application working and details about what the applciation can offer.
 
 ------------------------
@@ -34,9 +34,9 @@ dashboard.html
 ------------------------
 *This page is only for patients.*
 
-Our website has two home pages, one for patients and one for carers. They are both follow the same style where notifications and reminders appear at the top of the page, their profile picture, username and option to edit their profile in the top left. Also down the side is the connections model, a search option to search other users, a search box to search the NHS website and a settings link to the settings page.
+Our website has two home pages, one for patients and one for carers. They are both follow the same style where notifications and reminders appear at the top of the page, their profile picture, username and option to edit their profile in the top left. Also down the side is the connections modal, a search option to search other users, a search box to search the NHS website and a settings link to the settings page.
 
-The connections model, shows in tables all the incoming, outgoing and completed connection. You have the ability to delete current connections or cancel incoming and outgoing ones. To complete an incoming connection a user is required to enter in a 4 digit code provided by the connector in the model.
+The connections modal, shows in tables all the incoming, outgoing and completed connection. You have the ability to delete current connections or cancel incoming and outgoing ones. To complete an incoming connection a user is required to enter in a 4 digit code provided by the connector in the modal.
 
 Underneath the notifications on the this page is all the active patients prescriptions and upcoming appointments.
 
@@ -49,7 +49,7 @@ dashboardCarer.html
 ------------------------
 *This page is only for carers.*
 
-As mentioned above, it follows exactly the same format and the only difference is instead of showing the active prescriptions it shows all the carers current patients.
+As mentioned above, it follows exactly the same format and the only difference is instead of showing the active prescriptions it shows all the carer's current patients.
 
 ------------------------
 editProfile.html
@@ -101,13 +101,13 @@ myPatients.html
 
 My Patients is a page that only carers can view. It shows every patient they are connect to in a list.
 
-If you click on each patient a model drops down to list two options: Prescription and Appointments.
-Click on the Prescriptions link and it will open up another model showing two tabs: 'Active' prescriptions for the respective patient and 'Upcoming & Expired' prescriptions for the patient.
+If you click on each patient a modal drops down to list two options: Prescription and Appointments.
+Click on the Prescriptions link and it will open up another modal showing two tabs: 'Active' prescriptions for the respective patient and 'Upcoming & Expired' prescriptions for the patient.
 Active prescriptions will show green, upcoming blue and expired red.
 
-If you click on either of tab boxes showing the appointment details, it will open up another model giving you the option to edit the details.
+If you click on either of tab boxes showing the appointment details, it will open up another modal giving you the option to edit the details.
 
-If you click on the 'Appointments' tab this will open up another model listing all that patients non private appointments.
+If you click on the 'Appointments' tab this will open up another modal listing all that patients non private appointments.
 There are options here to update and delete current appointments.
 On the top left had side there is also the option to add new appointments for that patient.
 
@@ -116,7 +116,7 @@ carerAppointments.html
 ------------------------
 *This page is only for carers.*
 
-This page can be found from a carers home page by click on the calendar. This page list all the carers personal appointments.
+This page can be found from a carer's home page by click on the calendar. This page list all the carer's personal appointments.
 It is broken into two tabs: Upcoming and Create Appointment.
 Clicking on an appointment within the Upcoming tab will allow you to see all the details, delete or edit them if needed.
 Clicking on Create Appointment will open a new tab listing a form with the respective fields to fill in to create a new appointment.
@@ -186,7 +186,7 @@ This page holds a list of questions with on click toggles displaying the answers
 ------------------------
 template.html
 ------------------------
-Template.html is the design behind every other page, this page creates the header, footer, container and links jQuery, Font Awesome, DataTables plugin and Our resources.
+Template.html is the design used to structure every other page, this page creates the header, footer, container and links jQuery, Font Awesome, DataTables plugin and Our resources.
 Inside the footer there are modals to the terms and conditions, site map, references and the privacy policy.
 
 ------------------------
@@ -197,12 +197,12 @@ This page has a form with a search box which sends a POST request to the NHS web
 ------------------------
 settings.html
 ------------------------
-This page holds basic details on the users and has links in a table for the user to change their password, deativate their account and to connect JustHealth. These are all links which will take the user to a seperate pages.
+This page holds basic details on the users and has links in a table for the user to change their password, deactivate their account and to connect JustHealth. These are all links which will take the user to a seperate pages.
 
 ------------------------
 error pages
 ------------------------
-All the error pages below have the same style just different text indicating what the error is.
+All the error pages below have the same image and style, however they contain different text indicating to the user which error has been caused.
 
 400- Request Malformed page
 
@@ -223,11 +223,11 @@ Home tab- general content about the admin portal describing the features.
 
 Users- A list of all the active users registered on the database. On this page you are able to delete and edit users accounts.
 
-Medication- This tab lists all the current medication on the system, you can also add new medication.
+Medication- This tab lists all the current medication on the system, you can also add new names of medication is they aren't found in the list.
 
-Deactivation- Tab to list the current deactivate reasons and to be able to add a new deactivation reason.
+Deactivation- Tab to list the current reasons for user deactivation and to be able to add a new deactivation reason to the list of options.
 
-Statistics- This tab has a pie chart of deactivate reasons and a bar chart of the amount of carers and patients registered on the system.
+Statistics- This tab has a pie chart of the different deactivation reasons and a bar chart of the total number of carers and patients registered on the system.
 
 Twitter- A list of all tweets @JustHealthSupport has been mentioned in and where #JustHealth has been mentioned.
 
