@@ -3050,7 +3050,7 @@ def createTakePrescriptionInstances(username, currentDateTime):
     currentDay = currentDateTime.strftime("%A")
     for p in listOfPrescriptions:
         dateField = eval("p." + currentDay)
-        if dateField == True:
+        if (dateField == True) and (p.startdate <= currentDateTime.date()):
             try:
                 TakePrescription.select().where(
                     (TakePrescription.prescriptionid == p.prescriptionid) &
