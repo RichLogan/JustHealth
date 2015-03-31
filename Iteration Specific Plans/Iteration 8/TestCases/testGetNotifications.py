@@ -166,7 +166,7 @@ class testGetNotifications(unittest.TestCase):
 
         expectedResult = '[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": null, "relatedObject": 2, "content": "You have a new connection request from carer2", "link": "/?go=connections", "dismissed": true, "notificationid": 2, "type": "info"}, {"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": null, "relatedObject": 1, "content": "You have a new connection request from carer1", "link": "/?go=connections", "dismissed": false, "notificationid": 1, "type": "info"}]'
 
-        getNotification = requests.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        getNotification = requests.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload, auth=HTTPBasicAuth('patient', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
         # getNotification = json.loads(getNotification.text)
         self.assertEqual(getNotification.text, expectedResult)
 
@@ -179,7 +179,7 @@ class testGetNotifications(unittest.TestCase):
 
         expectedResult = '[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": null, "relatedObject": 2, "content": "You have a new connection request from carer2", "link": "/?go=connections", "dismissed": true, "notificationid": 2, "type": "info"}]'
 
-        getNotification = requests.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        getNotification = requests.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload, auth=HTTPBasicAuth('patient', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
         self.assertEqual(getNotification.text, expectedResult)
 
 
@@ -191,7 +191,7 @@ class testGetNotifications(unittest.TestCase):
 
         expectedResult = '[{"username": "patient", "notificationtype": "Connection Request", "relatedObjectTable": null, "relatedObject": 1, "content": "You have a new connection request from carer1", "link": "/?go=connections", "dismissed": false, "notificationid": 1, "type": "info"}]'
 
-        getNotification = requests.post("http://127.0.0.1:9999/api/getNotifications", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        getNotification = requests.post("http://127.0.0.1:9999/api/getNotifications", data=payload, auth=HTTPBasicAuth('patient', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
         self.assertEqual(getNotification.text, expectedResult)
 
 
@@ -201,7 +201,7 @@ class testGetNotifications(unittest.TestCase):
             "username" : "DoesNotExist"
         }
 
-        getNotification = requests.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload, auth=HTTPBasicAuth('DoesNotExist', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        getNotification = requests.post("http://127.0.0.1:9999/api/getAllNotifications", data=payload, auth=HTTPBasicAuth('DoesNotExist', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
         self.assertEqual(getNotification.text, '[]')
 
 
@@ -211,7 +211,7 @@ class testGetNotifications(unittest.TestCase):
             "username" : "DoesNotExist"
         }
 
-        getNotification = requests.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload, auth=HTTPBasicAuth('DoesNotExist', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        getNotification = requests.post("http://127.0.0.1:9999/api/getDismissedNotifications", data=payload, auth=HTTPBasicAuth('DoesNotExist', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
         self.assertEqual(getNotification.text, '[]')
 
 
@@ -221,7 +221,7 @@ class testGetNotifications(unittest.TestCase):
             "username" : "DoesNotExist"
         }
 
-        getNotification = requests.post("http://127.0.0.1:9999/api/getNotifications", data=payload, auth=HTTPBasicAuth('DoesNotExist', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        getNotification = requests.post("http://127.0.0.1:9999/api/getNotifications", data=payload, auth=HTTPBasicAuth('DoesNotExist', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
         self.assertEqual(getNotification.text, '[]')
 
     def tearDown(self):

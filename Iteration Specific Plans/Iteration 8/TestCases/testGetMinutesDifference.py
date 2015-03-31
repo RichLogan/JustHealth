@@ -1,6 +1,5 @@
 from peewee import *
 from datetime import timedelta
-import requests
 import unittest
 import imp
 import datetime

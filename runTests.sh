@@ -120,7 +120,42 @@ function runTests {
   # echo -e "\n"
   
   echo "Iteration 8"
-  echo "--"
-    echo "Test Get Notifications"
-    python -m unittest discover Iteration\ 8/TestCases/ testGetNotifications.py -v
+  echo "--"    
+
+    echo "Get Notifications"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetNotifications.py
+
+    echo "Add Reminders"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testAddReminders.py
+
+    echo "Create Notification"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testCreateNotification.py
+    
+    echo "Create Prescription Instances"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testCreatePrescriptionInstances.py
+    
+    echo "Delete Reminders"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testDeleteReminders.py
+
+    echo "Dismiss Notifications"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testDimissNotification.py
+
+    echo "Get appointments due in 30 minutes"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetAppointmentsDueIn30.py
+
+    echo "Get appointments due now"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetAppointmentsDueNow.py
+
+    echo "Get minutes difference"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetMinutesDifference.py  
+
+    echo "Get Missed Prescriptions"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetMissedPrescriptions.py    
+
+    echo "Get Prescriptions Due Today"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetPrescriptionDueToday.py 
+
+    echo "Get Reminders"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetReminders.py    
+
 }

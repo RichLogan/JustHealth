@@ -2901,7 +2901,10 @@ def getNotificationTypeClass(notification):
 @app.route('/api/dismissNotification', methods=['POST'])
 @auth.login_required
 def dismissNotification():
-    notification = Notification.select().dicts().where(Notification.id == request.form['notificationid']).get()
+    try: 
+        notification = Notification.select().dicts().where(Notification.notificationid == request.form['notificationid']).get()
+    except Notification.DoesNotExist:
+        "Notification Does Not Exist"
     user = notification['username']
     if verifyContentRequest(user, ""):
         return dismissNotification(request.form['notificationid'])
@@ -2917,7 +2920,10 @@ def dismissNotification(notificationid):
 
     :returns: str -- 'True' if successful, 'False' if not.
     """
-    dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
+    try:
+        dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
+    except Notification.DoesNotExist:
+        "Notification Does Not Exist"
 
     with database.transaction():
         dismiss.execute()

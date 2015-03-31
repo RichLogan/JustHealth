@@ -1,9 +1,9 @@
 from peewee import *
+from passlib.hash import sha256_crypt
+import datetime
 from datetime import timedelta
-import requests
 import unittest
 import imp
-import datetime
 import sys
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
@@ -13,8 +13,8 @@ sys.path.insert(0, 'Website')
 import justHealthServer
 from justHealthServer import api
 
-class testCreateReminder(unittest.TestCase):
-    """Testing the createReminder API method"""
+class testAddReminder(unittest.TestCase):
+    """Testing the createReminder API"""
 
     def setUp(self):
         """Create all the tables that are needed"""
@@ -45,7 +45,7 @@ class testCreateReminder(unittest.TestCase):
             username = "patient")
         patientPassword.execute()
 
-        appointmentType = testDatabase.Appointmentype.insert(
+        appointmentType = testDatabase.Appointmenttype.insert(
         	type = "Doctors")
         appointmentType.execute()
 
@@ -114,17 +114,13 @@ class testCreateReminder(unittest.TestCase):
             username = "patient2")
         patientPassword2.execute()
 
-        appointmentType2 = testDatabase.Appointmentype.insert(
-            type = "Doctors")
-        appointmentType2.execute()
-
         appointmentInsert2 = testDatabase.Appointments.insert(
             creator = "patient2",
             name = "test",
             apptype = "Doctors",
             addressnamenumber = "11",
             postcode = "SS17 9AY",
-            startdate = datetime.datetime.now().date(),
+            startdate = datetime.datetime.now().date() + datetime.timedelta(days=3),
             starttime = (datetime.datetime.now() + datetime.timedelta(minutes = 20)).time(),
             enddate = datetime.datetime.now().date() + timedelta(days=3),
             endtime = datetime.datetime.now().time(),
@@ -132,10 +128,6 @@ class testCreateReminder(unittest.TestCase):
             private = True
         )
         appointmentInsert2.execute()
-
-        testMedication2 = testDatabase.Medication.insert(
-            name = "test")
-        testMedication2.execute()
 
         testPrescription2 = testDatabase.Prescription.insert(
             username = "patient2",  
