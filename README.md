@@ -1,6 +1,6 @@
 # JustHealth
 
-JustHealth is University of Kent Final Year Project (CO600). 
+JustHealth is a University of Kent Final Year Project (CO600). 
 
 The authors have developed a platform for facilitating the connection between patients with long term health conditions, and their carers. 
 
