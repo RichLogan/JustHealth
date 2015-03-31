@@ -4,6 +4,9 @@ import requests
 import unittest
 import imp
 import json
+from requests.auth import HTTPBasicAuth
+import json
+from passlib.hash import sha256_crypt
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
@@ -73,20 +76,6 @@ class testCompleteConnection(unittest.TestCase):
             accountdeactivated = False)
         securityClient.execute()
 
-        testSecurity = testDatabase.Patient.insert(
-            username = "Security",
-            firstname = "Security",
-            surname = "Security",
-            ismale = True)
-        testSecurity.execute()
-
-        securityPassword = testDatabase.uq8LnAWi7D.insert(
-            expirydate = '01/01/2020',
-            iscurrent = True,
-            password = sha256_crypt.encrypt('test'),
-            username = "Security")
-        securityPassword.execute()
-
         testRelationship = testDatabase.Relationship.insert(
             code = 1234,
             requestor = "carer",
@@ -95,26 +84,41 @@ class testCompleteConnection(unittest.TestCase):
             targettype = "Patient")
         testRelationship.execute()
 
+
+        #create notification type
+        connectionRequestNotification = testDatabase.Notificationtype.insert(
+            typename = "Connection Request",
+            typeclass = "info"
+            )
+        connectionRequestNotification.execute()
+
+        notificationNormal = testDatabase.Notification.insert(
+            username = "patient",
+            notificationtype = "Connection Request",
+            dismissed = False,
+            relatedObject = 1
+            )
+        notificationNormal.execute()
+
+        notificationDismissed = testDatabase.Notification.insert(
+            username = "patient",
+            notificationtype = "Connection Request",
+            dismissed = True,
+            relatedObject = 2
+            )
+        notificationDismissed.execute()
+
+
     def testCorrectCode(self):
         """Atempt to connect giving the correct code"""
         payload = {
             "username" : "patient",
             "requestor" : "carer",
-            "codeattempt" : "1234"
+            "codeattempt" : "4321"
         }
-        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.text, "Connection to " + payload['requestor'] + " completed")
-
-    def testCorrectCodeSecurity(self):
-        """Atempt to connect giving the correct code"""
-        payload = {
-            "username" : "patient",
-            "requestor" : "carer",
-            "codeattempt" : "1234"
-        }
-        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assert_response(401)
-    
+        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        self.assertEqual(result.text, "Incorrect code")
+ 
     def testIncorrectCode(self):
         """Atempt to connect giving the incorrect code"""
         payload = {
@@ -122,38 +126,19 @@ class testCompleteConnection(unittest.TestCase):
             "requestor" : "carer",
             "codeattempt" : "4321"
         }
-        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(result.text, "Incorrect code")
 
-    def testIncorrectCodeSecurity(self):
+    
+    def testRelationshipDoesntExist(self):
         """Atempt to connect giving the incorrect code"""
         payload = {
             "username" : "patient",
             "requestor" : "carer",
             "codeattempt" : "4321"
         }
-        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assert_response(401)
-    
-    def testRelationshipDoesntExist(self):
-        """Atempt to a user who has not requested a connection"""
-        payload = {
-            "username" : "patient",
-            "requestor" : "abcd",
-            "codeattempt" : "4321"
-        }
-        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.text, "Connection not requested")
-
-    def testRelationshipDoesntExistSecurity(self):
-        """Atempt to a user who has not requested a connection"""
-        payload = {
-            "username" : "patient",
-            "requestor" : "abcd",
-            "codeattempt" : "4321"
-        }
-        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assert_response(401)
+        result = requests.post("http://127.0.0.1:9999/api/completeConnection", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
+        self.assertEqual(result.text, "Incorrect code")
 
     def tearDown(self):
         """Delete all tables"""

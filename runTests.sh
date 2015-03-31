@@ -119,8 +119,8 @@ function runTests {
   # python -m unittest discover Iteration\ 5/Test\ Cases/
   # echo -e "\n"
   
-  echo "Iteration 8"
+  echo "Iteration 4"
   echo "--"
-    echo "Test Get Notifications"
-    python -m unittest discover Iteration\ 8/TestCases/ testGetNotifications.py -v
+    echo "testAuthentication"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 4/Test\ Cases/ testCreateConnection.py -v
 }
