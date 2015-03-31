@@ -1,6 +1,7 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
 import json
@@ -15,7 +16,7 @@ class testGetPrescriptions(unittest.TestCase):
         testClient = testDatabase.Client.insert(
             username = "test",
             email = "justhealth@richlogan.co.uk",
-            dob = "03/03/1993",
+            dob = "1993-03-03",
             verified = True,
             accountlocked = False,
             loginattempts = 0,
@@ -30,7 +31,7 @@ class testGetPrescriptions(unittest.TestCase):
         testPatient.execute()
 
         testPassword = testDatabase.uq8LnAWi7D.insert(
-            expirydate = '01/01/2020',
+            expirydate = '2020-01-01',
             iscurrent = True,
             password = sha256_crypt.encrypt('test'),
             username = "test")
@@ -41,19 +42,25 @@ class testGetPrescriptions(unittest.TestCase):
         testMedication.execute()
 
         testPrescription = testDatabase.Prescription.insert(
-            username = "test",  
+            username = "test",
             medication = "test",
             dosage = 1,
             dosageunit = "test",
+            stockleft = 100,
+            prerequisite = "None",
+            dosageform = "Tablet",
+            quantity = 50,
             frequency = 1,
-            quantity = 1,
-            frequencyunit = "test",
-            startdate = '01/01/2020',
-            enddate = '01/01/2020',
-            repeat = "test",
-            stockleft = 1,
-            prerequisite = "test",
-            dosageform = "test")
+            Monday = True,
+            Tuesday = True,
+            Wednesday = True,
+            Thursday = True,
+            Friday = True,
+            Saturday = True,
+            Sunday = True,
+            startdate = "2020-01-01",
+            enddate = "2020-01-01"
+        )
         testPrescription.execute()
 
     def testLegitimate(self):
@@ -61,38 +68,28 @@ class testGetPrescriptions(unittest.TestCase):
             "username" : "test"
         }
 
-        prescription = requests.post("http://127.0.0.1:9999/api/getPrescriptions", data=payload)
+        prescription = requests.post("http://127.0.0.1:9999/api/getPrescriptions", data=payload, auth=('test', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
         prescription = json.loads(prescription.text)
         prescription = prescription[0]
+        
         self.assertEqual(prescription['username'], "test")
         self.assertEqual(prescription['medication'], "test")
         self.assertEqual(prescription['dosage'], 1)
         self.assertEqual(prescription['dosageunit'], "test")
+        self.assertEqual(prescription['stockleft'], 100)
+        self.assertEqual(prescription['prerequisite'], "None")
+        self.assertEqual(prescription['dosageform'], "Tablet")
+        self.assertEqual(prescription['quantity'], 50)
         self.assertEqual(prescription['frequency'], 1)
-        self.assertEqual(prescription['quantity'], 1)
-        self.assertEqual(prescription['frequencyunit'], "test")
-        self.assertEqual(prescription['startdate'], '01/01/2020')
-        self.assertEqual(prescription['enddate'], '01/01/2020')
-        self.assertEqual(prescription['repeat'], "test")
-        self.assertEqual(prescription['stockleft'], 1)
-        self.assertEqual(prescription['prerequisite'], "test")
-        self.assertEqual(prescription['dosageform'], "test")
-
-    def testNullValues(self):
-        payload = {
-            "username" : None
-        }
-        
-        prescription = requests.post("http://127.0.0.1:9999/api/getPrescriptions", data=payload)
-        self.assertEqual(prescription.text, "No username given")
-
-    def testInvalidUsername(self):
-        payload = {
-            "username" : "1234"
-        }
-
-        prescription = requests.post("http://127.0.0.1:9999/api/getPrescriptions", data=payload)
-        self.assertEqual(prescription.text, "Invalid username")
+        self.assertEqual(prescription['Monday'], True)
+        self.assertEqual(prescription['Tuesday'], True)
+        self.assertEqual(prescription['Wednesday'], True)
+        self.assertEqual(prescription['Thursday'], True)
+        self.assertEqual(prescription['Friday'], True)
+        self.assertEqual(prescription['Saturday'], True)
+        self.assertEqual(prescription['Sunday'] , True)
+        self.assertEqual(prescription['startdate'], "2020-01-01")
+        self.assertEqual(prescription['enddate'], "2020-01-01")
 
     def tearDown(self):
         testDatabase.dropAll()
