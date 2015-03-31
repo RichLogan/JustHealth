@@ -497,8 +497,11 @@ def getAccountInfo(username):
             user = Carer.select().join(Client).where(Client.username==str(username)).get()
             result['accounttype'] = "Carer"
         except Carer.DoesNotExist:
-            user = Admin.select().join(Client).where(Client.username==str(username)).get()
-            result['accounttype'] = "Admin"
+            try:
+                user = Admin.select().join(Client).where(Client.username==str(username)).get()
+                result['accounttype'] = "Admin"
+            except Admin.DoesNotExist:
+                return "User does not exist"
 
     result['firstname'] = user.firstname
     result['surname'] = user.surname
@@ -1049,8 +1052,11 @@ def deleteConnection(details):
 
     :returns: str -- 'True' or 'False' for success. 
     """
-    userType = json.loads(getAccountInfo(details['user']))['accounttype']
-    connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
+    try:
+        userType = json.loads(getAccountInfo(details['user']))['accounttype']
+        connectionType = json.loads(getAccountInfo(details['connection']))['accounttype']
+    except ValueError:
+        return "Connection does not exist"
 
     try:
         instance = Patientcarer.select().where((Patientcarer.patient == details['user']) & (Patientcarer.carer == details['connection'])).get()
