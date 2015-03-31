@@ -33,7 +33,7 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients link or on the name of the patient on the home screen
+1. On the home screen click on the 'My Patients' link or on the name of the patient on the home screen
 
 2. Click on the patient you wish to add a prescription for
 
@@ -72,7 +72,7 @@ Web Application
 
     - Repeat- Yes or No if it is a repeat prescription
 
-    - Stock- The patients current stock
+    - Stock- The patient's current stock
 
     - Observations- Any extra details the patient should know about taking the medication
 
@@ -86,7 +86,7 @@ Web Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients link
+1. On the home screen click on the 'My Patients' link
 
 2. Click on the patient you wish to add a prescription for
 
@@ -104,11 +104,11 @@ Web Application
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4.0 View a patients prescriptions
+4.0 View a patient's prescriptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients link
+1. On the home screen click on the 'My Patients' link
 
 2. Click on the patient you wish to add a prescription for
 
@@ -122,7 +122,7 @@ Web Application
 .. image:: /images/prescription4.png
 
 
-5. The Active tab lists all the patients current prescriptions in green
+5. The Active tab lists all the patient's current prescriptions in green
 
 6. Upcoming & Expired lists in blue the upcoming prescriptions which are due to start soon and in red the expired prescriptions
 
@@ -141,8 +141,8 @@ Mobile Application
 2. This page then lists all the prescriptions you are currently taking
 
 .. image:: /android/prescription.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -151,8 +151,8 @@ Mobile Application
 4. This shows further details about your prescription
 
 .. image:: /android/prescription2.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -161,23 +161,23 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients tile
+1. On the home screen click on the 'My Patients' tile
 
 2. Click on the patient you wish to add a prescription for
 
 3. Click 'Prescriptions'
 
-.. image:: /android/mypatientoptions.png
-   :height: 100px
-   :width: 200 px
+.. image:: /android/mypatientsoptions.png
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
 4. Click the button saying 'Add new Prescription'
 
 .. image:: /android/addprescription.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -203,7 +203,7 @@ Mobile Application
 
     - Repeat- Yes or No if it is a repeat prescription
 
-    - Stock- The patients current stock
+    - Stock- The patient's current stock
 
     - Observations- Any extra details the patient should know about taking the medication
 
@@ -217,7 +217,7 @@ Mobile Application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients tile
+1. On the home screen click on the 'My Patients' tile
 
 2. Click on the patient you wish to add a prescription for
 
@@ -233,11 +233,11 @@ Mobile Application
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4.0 View a patients prescriptions
+4.0 View a patient's prescriptions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. On the home screen click on the my patients tile
+1. On the home screen click on the 'My Patients' tile
 
 2. Click on the patient you wish to add a prescription for
 
@@ -246,11 +246,11 @@ Mobile Application
 4. Here there are two sections 'Active' and 'Upcoming & Expired'
 
 .. image:: /android/prescriptionsmypatients.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
-5. The Active tab lists all the patients current prescriptions
+5. The Active tab lists all the patient's current prescriptions
 
 6. Upcoming & Expired lists the upcoming prescriptions which are due to start soon and the expired prescriptions

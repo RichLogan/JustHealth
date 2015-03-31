@@ -5,7 +5,7 @@
 
 .. image:: /images/logo.png
    :height: 100px
-   :width: 500 px
+   :width: 500px
    :scale: 70 % 
    :align: center
 
