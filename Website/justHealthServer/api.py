@@ -1641,13 +1641,15 @@ def deleteMedication(medicationName):
 
     :returns: "Deleted" or "Not Found".
     """
-    try:
-        instance = Medication.select().where(Medication.name == medicationName).get()
-        with database.transaction():
-            instance.delete_instance()
-        return "Deleted " + medicationName
-    except:
-        return medicationName + "not found"
+    if medicationName != None:
+        try:
+            instance = Medication.select().where(Medication.name == medicationName).get()
+            with database.transaction():
+                instance.delete_instance()
+            return "Deleted " + medicationName
+        except:
+            return medicationName + " not found" 
+    return "Unable to accept none type"
 
 @app.route('/api/getMedications')
 @auth.login_required
@@ -1895,7 +1897,10 @@ def editPrescription(details):
 @app.route('/api/deletePrescription', methods=['POST'])
 @auth.login_required
 def deletePrescription():
-    prescription = Prescription.select().where(Prescription.prescriptionid == request.form['prescriptionid']).get()
+    try: 
+        prescription = Prescription.select().where(Prescription.prescriptionid == request.form['prescriptionid']).get()
+    except Prescription.DoesNotExist:
+        return "Failed"
     patient = prescription.username.username
     username = getUsernameFromHeader()
     if verifyContentRequest(username, patient):
