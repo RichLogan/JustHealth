@@ -121,6 +121,6 @@ function runTests {
   
   echo "Iteration 4"
   echo "--"
-    echo "testAuthentication"
-    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 4/Test\ Cases/ testCreateConnection.py -v
+    echo "testDeactivateAccount"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 4/Test\ Cases/ testDeactivateAccount.py -v
 }
