@@ -1,6 +1,6 @@
 from peewee import *
+from passlib.hash import sha256_crypt
 from datetime import timedelta
-import requests
 import unittest
 import imp
 import datetime
@@ -13,7 +13,7 @@ sys.path.insert(0, 'Website')
 import justHealthServer
 from justHealthServer import api
 
-class testGetAppointmentsDueNow(unittest.TestCase):
+class testCreatePrescriptionInstances(unittest.TestCase):
     """Testing the getAppointmentsDueNow API method"""
 
     def setUp(self):
@@ -97,6 +97,7 @@ class testGetAppointmentsDueNow(unittest.TestCase):
         patientPassword2.execute()
 
         testPrescription2 = testDatabase.Prescription.insert(
+            prescriptionid = 2,
             username = "patient2",  
             medication = "test",
             dosage = 1,
@@ -127,23 +128,24 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             accountlocked = False,
             loginattempts = 0,
             accountdeactivated = False)
-        patientClient.execute()
+        patientClient3.execute()
 
         testPatient3 = testDatabase.Patient.insert(
             username = "patient3",
             firstname = "patient",
             surname = "patient",
             ismale = True)
-        testPatient.execute()
+        testPatient3.execute()
 
         patientPassword3 = testDatabase.uq8LnAWi7D.insert(
             expirydate = '01/01/2020',
             iscurrent = True,
             password = sha256_crypt.encrypt('test'),
             username = "patient3")
-        patientPassword.execute()
+        patientPassword3.execute()
 
         testPrescription3 = testDatabase.Prescription.insert(
+            prescriptionid = 3,
             username = "patient3",  
             medication = "test",
             dosage = 1,
@@ -163,33 +165,33 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             Saturday = True,
             Sunday = True
         )
-        testPrescription.execute()
+        testPrescription3.execute()
 
-        takePrescription = testDatabase.TakePrescription.insert(
-            prescriptionid = int(testPrescription),
+        takePrescription3 = testDatabase.TakePrescription.insert(
+            prescriptionid = 3,
             currentcount = 0,
             startingcount = 100,
             currentdate = datetime.datetime.now().date()
         )
-        takePrescription.execute()
+        takePrescription3.execute()
 
     def testLegitimate(self):
         """Attempt to check an prescription that is due to be taken today"""
         api.createTakePrescriptionInstances('patient', datetime.datetime.now())
         
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username == 'patient').count(),1)
+        self.assertEqual(testDatabase.TakePrescription.select().count(),2)
 
     def testNotToday(self):
         """Attempt to check a prescription that is not due to be taken today"""
         api.createTakePrescriptionInstances('patient2', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username == 'patient2').count(),0)
+        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.prescriptionid == 2).get().currentdate, datetime.datetime.now().date() + datetime.timedelta(days = 3))
 
     def testAlreadyCreated(self):
         """Attempt to create another take prescription instances after already created"""
         api.createTakePrescriptionInstances('patient3', datetime.datetime.now())
 
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.username == 'patient3').count(),1)
+        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.prescriptionid == 3).count(),1)
 
     def tearDown(self):
         """Delete all tables"""
