@@ -6,16 +6,16 @@ Security Documentation
 Introduction
 ------------------------
 
-In order for JustHealth to be reputable, trusted and widely used it is necessary to ensure that patient confidentiality, data integrity and the availability of this data is exceptional. Therefore, JustHealth have adopted a strict security policy and implemented  security controls to ensure that JustHealth are able to meet customer expectation. 
+In order for JustHealth to be reputable, trusted and widely used it is necessary to ensure that patient confidentiality, data integrity and the availability of this data is exceptional. Therefore, JustHealth has implemented a strict security policy and implemented  security controls to ensure that the product meets customer expectation. 
 
 
 ------------------------
 HTTPS
 ------------------------
 
-JustHealth set out to implement HTTPS on the webserver that was hosting JustHealths application. This would have ensured that all of the communication between a client's browser and/or any android device that they may be running JustHealth’s Mobile application, would have been encrypted via SSL. JustHealth made the decision to utilise this protocol rather than standard HTTP as it ensures that user data is encrypted when being transmitted across the internet. This would have helped to ensure that the confidentiality of patient data is maintained.  
+JustHealth set out to implement HTTPS on the webserver that was hosting the application. This would have ensured that all of the communication between a client's browser and/or any Android device that they may be running the JustHealth mobile application would have been encrypted via SSL. JustHealth made the decision to utilise this protocol rather than standard HTTP as it ensures that user data is encrypted when being transmitted across the internet. This would have helped to ensure that the confidentiality of patient data is maintained.  
  
-JustHealth would have been able to have done this, if the application had been hosted on our own server. However, due to it being run on our own webserver on raptor we were unable to use signed certificates. Although, we were able to use self-signed certificates this was not supported with android without implementing several exceptions. Therefore, JustHealth have made the decision to not implement this on raptor although, below are the certificates that we generated in order to prove that we could have implemented this, had the application been deployed on our own server. 
+If the application had been hosted on our own server, this would have been implemented successfully. However, due to it being run on the University webserver (raptor) we were unable to use signed certificates. Despite using self-signed certificates, we found this was not supported with Android without implementing several exceptions. Therefore, the decision was made to not implement this. Although, below are the certificates that we have generated in order to prove that we the security could have been implemented on the web application providing we had deployed on our own server. 
 
 **The Key:**
 ::
@@ -368,7 +368,7 @@ python:type::
 
 
 
-**Without this security**
+**Why is this necessary?**
 
 Without this manual security API implementation, anyone with valid credentials for the application would be able to query the API and read/write any information from or to the database. 
 
@@ -377,4 +377,4 @@ Without this manual security API implementation, anyone with valid credentials f
 SQL Injection
 ------------------------
 
-JustHealth have adopted the use of an Object Relational Mapper (ORM) called peewee. All of the interactions that happen with JustHealth’s PostgreSQL database happen through the ORM. Not only is this quicker but it provides JustHealth with additional security enhancements; the biggest being the inability to inject SQL into the application. This is because of no direct SQL being run on the database and therefore, input data is placed into already waiting placeholders. If data is not in the correct format, it will simply be rejected by the ORM. 
+JustHealth have adopted the use of an Object Relational Mapper (ORM) called **peewee**. All of the interactions that happen with JustHealth’s PostgreSQL database happen through the ORM. Not only is this quicker but it provides JustHealth with additional security enhancements; the biggest being the inability to inject SQL into the application. This is because of no direct SQL being run on the database and therefore, input data is placed into already waiting placeholders. If data is not in the correct format, it will simply be rejected by the ORM. 
