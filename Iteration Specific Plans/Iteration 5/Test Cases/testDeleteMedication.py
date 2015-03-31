@@ -1,13 +1,20 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
+import sys
 import json
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
-class testDeleteMedication(unittest.TestCase):
+#import the api so we are able to run locally
+sys.path.insert(0, 'Website')
+import justHealthServer
+from justHealthServer import api
+
+class testAddMedication(unittest.TestCase):
 
     def setUp(self):
         testDatabase.createAll()
@@ -36,25 +43,27 @@ class testDeleteMedication(unittest.TestCase):
             username = "test")
         testPassword.execute()
 
-        testMedication = testDatabase.Medication.insert(
+        medication = testDatabase.Medication.insert(
             name = "test")
-        testMedication.execute()
+        medication.execute()
 
-    def deleteWorks(self):
-        payload = {
-            "name" : "test"
-        }
+    def testLegitimate(self):
+        request = api.deleteMedication("test")
 
-        prescription = requests.post("http://127.0.0.1:9999/api/testDeleteMedication", data=payload)
-        self.assertEqual(prescription.text, "Deleted")
+        self.assertEqual(request, "Deleted test")
+        self.assertEqual(testDatabase.Medication.select().count(), 0)
 
-    def deleteFailed(self):
-        payload = {
-            "name" : None
-        }
+    def testNullValue(self):
+        request = api.deleteMedication(None)
 
-        prescription = requests.post("http://127.0.0.1:9999/api/testDeleteMedication", data=payload)
-        self.assertEqual(prescription.text, "Failed")
+        self.assertEqual(testDatabase.Medication.select().count(), 1)
+        self.assertEqual(request, "Unable to accept none type")
+
+    def testNonExistent(self):
+        request = api.deleteMedication("doesNotExist")
+
+        self.assertEqual(testDatabase.Medication.select().count(), 1)
+        self.assertEqual(request, "doesNotExist not found")
 
     def tearDown(self):
         testDatabase.dropAll()

@@ -1556,7 +1556,10 @@ def getAppointment(user, appid):
 
     :returns: json -- Details of the appointment.
     """
-    isRelated = Appointments.select().where(Appointments.appid == appid).get()
+    try: 
+        isRelated = Appointments.select().where(Appointments.appid == appid).get()
+    except Appointments.DoesNotExist:
+        return "Appointment does not exist"
 
     if (isRelated.creator.username == user) or (isRelated.invitee.username):
         appointment = {}

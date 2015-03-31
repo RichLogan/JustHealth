@@ -1,6 +1,7 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
 import json
@@ -36,6 +37,10 @@ class testGetAppointments(unittest.TestCase):
             username = "test")
         testPassword.execute()
 
+        appointment = testDatabase.Appointmenttype.insert(
+            type = "test")
+        appointment.execute()
+
         testAppointment = testDatabase.Appointments.insert(
             creator = "test",
             invitee = "test",
@@ -53,57 +58,43 @@ class testGetAppointments(unittest.TestCase):
 
     def testLegitimate(self):
         payload = {
-            "creator" : "test",
-            "invitee" : "test",
+            "user" : "test",
+            "appid" : 1
+        }
+
+        expectedResult = {
+            "appid" : 1,
             "name" : "test",
             "apptype" : "test",
             "addressnamenumber" : "Test",
             "postcode" : "Test",
-            "startdate" : "01/01/2020",
-            "starttime" : "00:00",
-            "enddate" : "01/01/2020",
-            "endtime" : "00:00",
-            "description" : "Test",
-            "private" : True
         }
 
-        appointment = requests.post("http://127.0.0.1:9999/api/addPatientAppointment", data=payload)
-        self.assertEqual(appointment.text, "Appointment Added")
+        appointment = requests.post("http://127.0.0.1:9999/api/getAppointment", data=payload, auth=HTTPBasicAuth("test", '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
+        response = json.loads(appointment.text)
+        self.assertEqual(response['appid'], expectedResult['appid'])
+        self.assertEqual(response['name'], expectedResult['name'])
+        self.assertEqual(response['apptype'], expectedResult['apptype'])
+        self.assertEqual(response['addressnamenumber'], expectedResult['addressnamenumber'])
+        self.assertEqual(response['postcode'], expectedResult['postcode'])
 
     def testNullValues(self):
         payload = {
-            "creator" : "test",
-            "invitee" : "test",
-            "name" : "test",
-            "apptype" : "test",
-            "addressnamenumber" : "Test",
-            "postcode" : "Test",
-            "startdate" : "01/01/2020",
-            "starttime" : "00:00",
-            "enddate" : "01/01/2020",
-            "endtime" : "00:00",
-            "description" : "Test",
-            "private" : True
+            "user" : "test",
+            "appid" : None
         }
 
-        for key in payload:
-            payload = {
-                "creator" : "test",
-                "invitee" : "test",
-                "name" : "test",
-                "apptype" : "test",
-                "addressnamenumber" : "Test",
-                "postcode" : "Test",
-                "startdate" : "01/01/2020",
-                "starttime" : "00:00",
-                "enddate" : "01/01/2020",
-                "endtime" : "00:00",
-                "description" : "Test",
-                "private" : True
-            }
-            payload[key] = None
-            appointment = requests.post("http://127.0.0.1:9999/api/addPatientAppointment", data=payload)
-            self.assertEqual(testDatabase.Appointments.select().count(), 1)
+        appointment = requests.post("http://127.0.0.1:9999/api/getAppointment", data=payload, auth=HTTPBasicAuth("test", '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
+        self.assertEqual(appointment.text, "Your request appears to be malformed")
+
+    def testDoesNotExist(self):
+        payload = {
+            "user" : "test",
+            "appid" : 2
+        }
+
+        appointment = requests.post("http://127.0.0.1:9999/api/getAppointment", data=payload, auth=HTTPBasicAuth("test", '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
+        self.assertEqual(appointment.text, "Appointment does not exist")
 
     def tearDown(self):
         testDatabase.dropAll()

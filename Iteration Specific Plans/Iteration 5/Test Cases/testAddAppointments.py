@@ -1,6 +1,7 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
 import json
@@ -36,6 +37,9 @@ class testAddAppointment(unittest.TestCase):
             username = "test")
         testPassword.execute()
 
+        appType = testDatabase.Appointmenttype.insert(
+            type = "test").execute()
+
 
     def testLegitimate(self):
         payload = {
@@ -53,8 +57,8 @@ class testAddAppointment(unittest.TestCase):
             "private" : True           
         }
 
-        appointment = requests.post("http://127.0.0.1:9999/api/addPatientAppointment", data=payload)
-        self.assertEqual(appointment.text, "Appointment Added")
+        appointment = requests.post("http://127.0.0.1:9999/api/addPatientAppointment", data=payload, auth=HTTPBasicAuth('test', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
+        self.assertEqual(appointment.text, "1")
 
     def testNullValues(self):
         payload = {
@@ -88,7 +92,7 @@ class testAddAppointment(unittest.TestCase):
                 "private" : True
             }
             payload[key] = None
-            appointment = requests.post("http://127.0.0.1:9999/api/addPatientAppointment", data=payload)
+            appointment = requests.post("http://127.0.0.1:9999/api/addPatientAppointment", data=payload, auth=HTTPBasicAuth('test', '7363000274128bb03e7418d95d4dd26eeb00a86e7b4f06ad70f186f6948945a687c9f855cca6cafd8e72b2602aa48255ed2e2aabb7d6eafd5751761369049a8b3d34ffb4305b3b76'))
             self.assertEqual(testDatabase.Appointments.select().count(), 1)
 
     def tearDown(self):

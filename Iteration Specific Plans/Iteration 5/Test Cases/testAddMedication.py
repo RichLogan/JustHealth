@@ -1,11 +1,18 @@
 from peewee import *
 from passlib.hash import sha256_crypt
 import requests
+from requests.auth import HTTPBasicAuth
 import unittest
 import imp
+import sys
 import json
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
+
+#import the api so we are able to run locally
+sys.path.insert(0, 'Website')
+import justHealthServer
+from justHealthServer import api
 
 class testAddMedication(unittest.TestCase):
 
@@ -61,41 +68,16 @@ class testAddMedication(unittest.TestCase):
         securityPassword.execute()
 
     def testLegitimate(self):
-        payload = {
-            "name" : "test"
-        }
 
-        medication = requests.post("http://127.0.0.1:9999/api/deleteMedication", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        request = api.addMedication("test")
         #'name' should be 'medicationName' but it errors
-        self.assertEqual(medication.text, "Added " + payload["name"])
-
-
-    def testLegitimateSecurity(self):
-        payload = {
-            "name" : "test"
-        }
-
-        medication = requests.post("http://127.0.0.1:9999/api/deleteMedication", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        #'name' should be 'medicationName' but it errors
-        self.assert_response(401)
-
+        self.assertEqual(request, "Added test")
+        self.assertEqual(testDatabase.Medication.select().count(), 1)
 
     def testNullValue(self):
-        payload = {
-            "name" : None
-        }
 
-        prescription = requests.post("http://127.0.0.1:9999/api/deleteMedication", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        request = api.addMedication(None)
         self.assertEqual(testDatabase.Medication.select().count(), 0)
-
-    def testNullValueSecurity(self):
-        payload = {
-            "name" : None
-        }
-
-        prescription = requests.post("http://127.0.0.1:9999/api/deleteMedication", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assert_response(401)
-
 
     def tearDown(self):
         testDatabase.dropAll()
