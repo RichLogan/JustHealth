@@ -1,4 +1,9 @@
+from peewee import *
+from passlib.hash import sha256_crypt
 import unittest
+import imp
+import requests
+from requests.auth import HTTPBasicAuth
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
@@ -39,30 +44,32 @@ class testDismissNotification(unittest.TestCase):
       typeclass = "info")
     connectionRequestNotification.execute()
 
-    notification = testDatabase.Notifications.insert(
+    notification = testDatabase.Notification.insert(
       username = "patient",
       notificationtype = "Connection Request",
-      relatedobject = 1)
+      relatedObject = 1,
+      relatedObjectTable = "A Table")
     notification.execute()
 
   def testDismissLegitimate(self):
     """Attempt to dismiss a notification || check that API returns expected response and DB field is set correctly"""
     payload = { 
-      "notificationid" : "1"
-      }
+      "notificationid" : 1
+    }
+    passwordEncrypted = '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'
 
-    dismiss = requests.post("http://127.0.0.1:9999/api/dismissNotification", data=payload)
+    dismiss = requests.post("http://127.0.0.1:9999/api/dismissNotification", data=payload, auth=HTTPBasicAuth('patient', passwordEncrypted))
     self.assertEqual(dismiss.text, "True")
-    self.assertEqual(testDatabase.Notifications.select(testDatabase.Notifications.dismissed).where(testDatabase.Notifications.notificationid == 1), False)
+    self.assertEqual(testDatabase.Notification.select(testDatabase.Notification.dismissed).where(testDatabase.Notification.notificationid == 1), False)
 
   def testDismissInvalidId(self):
     """Attempt to dismiss a notification with an invalid notification ID || check that API returns expected response and DB not updated"""
     payload = {
-      "notificationid" : "2"
+      "notificationid" : 2
     }
 
     dismiss = requests.post("http://127.0.0.1:9999/api/dismissNotification", data=payload)
-    self.assertEqual(dismiss.text, "Invalid Notification Id")
+    self.assertEqual(dismiss.text, "Unauthorized Access")
 
   def tearDown(self):
     """Delete all tables"""

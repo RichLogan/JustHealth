@@ -1,6 +1,6 @@
 from peewee import *
 from datetime import timedelta
-import requests
+from passlib.hash import sha256_crypt
 import unittest
 import imp
 import datetime
@@ -69,10 +69,10 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             Saturday = True,
             Sunday = True
         )
-        testPrescription.execute()
+        prescriptionid = int(testPrescription.execute())
 
         takePrescription = testDatabase.TakePrescription.insert(
-            prescriptionid = int(testPrescription),
+            prescriptionid = prescriptionid,
             currentcount = 0,
             startingcount = 100,
             currentdate = datetime.datetime.now().date() - datetime.timedelta(days=1))
@@ -125,15 +125,19 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             )
         testPrescription2.execute()
 
+        notification = testDatabase.Notificationtype.insert(
+            typename = "Missed Prescription",
+            typeclass = "danger").execute()
+
     def testLegitimate(self):
         """Attempt to check an prescription that is due to be taken today"""
-        api.checkMissedPrescriptions('patient', datetime.datetime.now())
+        api.checkMissedPrescriptions('patient', datetime.datetime.now().date())
 
         self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username == 'patient').count(),1)
 
     def testNotToday(self):
         """Attempt to check a prescription that is not due to be taken today"""
-        api.checkMissedPrescriptions('patient2', datetime.datetime.now())
+        api.checkMissedPrescriptions('patient2', datetime.datetime.now().date())
 
         self.assertEqual(testDatabase.Notification.select().where(testDatabase.Notification.username == 'patient2').count(),0)
 
