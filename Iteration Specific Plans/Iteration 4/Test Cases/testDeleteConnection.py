@@ -3,7 +3,9 @@ from passlib.hash import sha256_crypt
 import requests
 import unittest
 import imp
+from requests.auth import HTTPBasicAuth
 import json
+from passlib.hash import sha256_crypt
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
@@ -98,17 +100,8 @@ class testDeleteConnection(unittest.TestCase):
             "user" : "patient",
             "connection" : "carer",
         }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload,  auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(result.text, "True")
-
-    def testValidDeleteSecurity(self):
-        """Atempt to delete a connection Security"""
-        payload = {
-            "user" : "patient",
-            "connection" : "carer",
-        }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.status_code, 401)
 
     def testInvalidDelete(self):
         """Attempt to delete a connection that does not exists"""
@@ -116,32 +109,17 @@ class testDeleteConnection(unittest.TestCase):
             "user" : "patient",
             "connection" : "1234",
         }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload,  auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(result.text, "Connection does not exist")
 
         payload = {
             "user" : "carer",
             "connection" : "1234",
         }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload,  auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(result.text, "Connections does not exist")
 
-    def testInvalidDeleteSecurity(self):
-        """Attempt to delete a connection that does not exists"""
-        payload = {
-            "user" : "patient",
-            "connection" : "1234",
-        }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.text, "Connection does not exist")
-
-        payload = {
-            "user" : "carer",
-            "connection" : "1234",
-        }
-        result = requests.post("http://127.0.0.1:9999/api/deleteConnection", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.status_code, 401)
-
+ 
     
     def tearDown(self):
         """Delete all tables"""

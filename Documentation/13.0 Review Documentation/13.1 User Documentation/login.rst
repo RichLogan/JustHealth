@@ -27,8 +27,8 @@ Mobile Application
 2. Enter in the username you registered with in the username box
 
 .. image:: /android/login.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 

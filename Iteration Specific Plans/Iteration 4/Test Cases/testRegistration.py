@@ -19,7 +19,7 @@ class testRegistration(unittest.TestCase):
             "username" : "testUsername",
             "firstname" : "testFirstname",
             "surname" : "testSurname",
-            "dob" : "03/03/1993",
+            "dob" : "1993-03-03",
             "ismale" : "true",
             "email" : "justhealth@richlogan.co.uk",
             "password" : "test",
@@ -38,7 +38,7 @@ class testRegistration(unittest.TestCase):
             "username" : "testUsername",
             "firstname" : "testFirstname",
             "surname" : "testSurname",
-            "dob" : "03/03/1993",
+            "dob" : "1993-03-03",
             "ismale" : "true",
             "email" : "justhealth@richlogan.co.uk",
             "password" : "test",
@@ -52,7 +52,7 @@ class testRegistration(unittest.TestCase):
                 "username" : "testUsername",
                 "firstname" : "testFirstname",
                 "surname" : "testSurname",
-                "dob" : "03/03/1993",
+                "dob" : "1993-03-03",
                 "ismale" : "true",
                 "email" : "justhealth@richlogan.co.uk",
                 "password" : "test",
@@ -76,7 +76,7 @@ class testRegistration(unittest.TestCase):
             "username" : "testUsername",
             "firstname" : "testFirstname",
             "surname" : "testSurname",
-            "dob" : "03/03/1993",
+            "dob" : "1993-03-03",
             "ismale" : "true",
             "email" : "justhealth@richlogan.co.uk",
             "password" : "test",
@@ -120,7 +120,7 @@ class testRegistration(unittest.TestCase):
             "username" : "testUsername",
             "firstname" : "testFirstname",
             "surname" : "testSurname",
-            "dob" : "03/03/1993",
+            "dob" : "1993-03-03",
             "ismale" : "true",
             "email" : "justhealth@richlogan.co.uk",
             "password" : "test",
@@ -133,7 +133,7 @@ class testRegistration(unittest.TestCase):
         payload['dob'] = "aaa" #Should be date format
         registration = requests.post("http://127.0.0.1:9999/api/registerUser", data=payload)
         # Produces Data Error
-        self.assertEqual(registration.text, "Incorrect data type")
+        self.assertEqual(registration.text, "Invalid date")
         self.assertEqual(testDatabase.Client.select().count(), 0)
         payload['dob'] = "01/01/1991"
 

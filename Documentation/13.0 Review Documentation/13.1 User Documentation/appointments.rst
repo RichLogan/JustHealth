@@ -52,9 +52,9 @@ Web Application
 5. Your appointment is now created
 
 
-*Creating a patients appointment*
+*Creating a patient's appointment*
 
-1. Either click on the 'my patients' link on the home page drop down menu or click on the name of the patient you wish to add the appointment for.
+1. Either click on the 'My Patients' link on the home page drop down menu or click on the name of the patient you wish to add the appointment for.
 
 .. image:: /images/appointment1.png
 
@@ -146,7 +146,7 @@ Web Application
 
 3. Click update and fill in the details you wish to change
 
-.. image:: /images/appointmnet9.png
+.. image:: /images/appointment9.png
 
 
 4. Click update
@@ -182,7 +182,7 @@ Web Application
 
 3. Click update and fill in the details you wish to change
 
-.. image:: /images/appointmnet9.png
+.. image:: /images/appointment9.png
 
 
 4. Click update
@@ -200,7 +200,7 @@ To delete a personal appointment
 
 2. Find the appointment you wish to delete
 
-.. image:: /images/appointmnet8.png
+.. image:: /images/appointment8.png
 
 
 3. Click the delete icon
@@ -260,7 +260,7 @@ To delete a patients appointment you created
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. Click on my patients page
+1. Click on 'My Patients' page
 
 2. Click on the patient you wish to views name
 
@@ -303,13 +303,13 @@ Mobile Application
 2. On the appointment page click create appointment
 
 .. image:: /android/appointments2.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 .. image:: /android/appointments3.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -335,8 +335,8 @@ Mobile Application
 4. Click add appointment
 
 .. image:: /android/appointments4.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -345,23 +345,23 @@ Mobile Application
 6. Click either Yes (you would like to add the appointment to your calendar) or No (you do not want the appointment added to your calendar)
 
 
-*Creating a patients appointment*
+*Creating a patient's appointment*
 
-1. Click on the 'my patients' tile on the home page
+1. Click on the 'My Patients' tile on the home page
 
-2. Click on the patients name which you want to create and appointment for
+2. Click on the patient's name which you want to create and appointment for
 
 .. image:: /android/mypatients.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
 3. Click on 'Appointments'
 
 .. image:: /android/mypatientsoptions.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -400,13 +400,13 @@ Mobile Application
 2. On the appointment page click  'create'
 
 .. image:: /android/appointments2.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 .. image:: /android/appointments3.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 3. To create an appointment you are required to fill in the fields:
@@ -453,9 +453,9 @@ Mobile Application
 
 4. Click update
 
-*Edit a patients appointment you created*
+*Edit a patient's appointment you created*
 
-1. Click on my patients page
+1. Click on 'My Patients' page
 
 2. Find the patient that you want to edit the appointment for and click on their name
 
@@ -495,9 +495,9 @@ To delete a personal appointment
 4. Click 'Ok' to the pop up confirming the delete
 
 
-To delete a patients appointment you created
+To delete a patient's appointment you created
 
-1. Click on my patients page
+1. Click on 'My Patients' page
 
 2. Find the patient that you want to delete the appointment for and click on their name
 
@@ -538,16 +538,16 @@ To delete a patients appointment you created
 1. A patient can view their personal appointments by clicking on the calendar icon on the home screen
 
 .. image:: /android/patientHome.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
 2. On the tab layout to view upcoming appointment click the upcoming tab
 
 .. image:: /android/filterappointments.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -556,15 +556,15 @@ To delete a patients appointment you created
 *You can also view the appointments you added to your native calendar on your tablet or phone*
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5.0 View a patients appointment
+5.0 View a patient's appointment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **Carer:**
 
-1. Click on my patients page
+1. Click on 'My Patients' page
 
 .. image:: /android/mypatients.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -575,8 +575,8 @@ To delete a patients appointment you created
 4. Here lists all non private appointments from the patient
 
 .. image:: /android/patientappointments.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 

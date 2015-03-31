@@ -71,14 +71,6 @@ class testGetAccountInfo(unittest.TestCase):
         getAccountInfo = requests.post("http://127.0.0.1:9999/api/getAccountInfo", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
         self.assertEqual(getAccountInfo.text, "User does not exist")
 
-    def testInvalidSecurity(self):
-        """Testing invalid username"""
-        payload = {
-            "username" : "test"
-        }
-
-        getAccountInfo = requests.post("http://127.0.0.1:9999/api/getAccountInfo", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.status_code, 401)
 
     # Not sure if this is actually needed. Obv causes a 400 but don't know if thats actually a fail? We'll just make a pretty bad request page?
     def testNull(self):
@@ -90,14 +82,6 @@ class testGetAccountInfo(unittest.TestCase):
         getAccountInfo = requests.post("http://127.0.0.1:9999/api/getAccountInfo", data=payload, auth=('patient', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
         self.assertEqual(getAccountInfo.text, "User does not exist")
 
-    def testNullSecurity(self):
-        """Testing null username"""
-        payload = {
-            "username" : None
-        }
-
-        getAccountInfo = requests.post("http://127.0.0.1:9999/api/getAccountInfo", data=payload, auth=('Security', '73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.status_code, 401)
 
     def tearDown(self):
         """Delete all tables"""

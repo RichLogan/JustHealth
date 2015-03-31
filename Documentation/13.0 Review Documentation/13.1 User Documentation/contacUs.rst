@@ -24,4 +24,4 @@ Web Application
 --------------------
 Mobile Application
 --------------------
-1. To contact us JustHealth please email us at justhealth@justhealth.co.uk or tweet @JustHealthHelp
+1. To contact us, please email us at justhealth@justhealth.co.uk or tweet @JustHealthHelp

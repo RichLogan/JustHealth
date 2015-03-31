@@ -189,6 +189,12 @@ def registerUser(details):
     for key, value in profile.iteritems():
       value = value.strip()
 
+    # Validate Dates
+    try:
+        profile['dob'] = datetime.datetime.strptime(profile['dob'], '%Y-%m-%d')
+    except ValueError:
+        return "Invalid date"
+
     # Validate username >25
     if len(profile['username']) > 25:
       return "Username can not be longer than 25 characters"
@@ -2358,10 +2364,14 @@ def addCorrespondence(details):
 @app.route('/api/deleteNote', methods=['POST'])
 @auth.login_required
 def deleteNote():
-    note = Notes.select().where(Notes.noteid == noteid).get()
-    patient = note.patient.username
-    if verifyContentRequest(getUsernameFromHeader(), patient):
-        return deleteNote(request.form['noteid'])
+    noteid = request.form['noteid']
+    try:
+        note = Notes.select().where(Notes.noteid == noteid).get()
+        patient = note.patient.username
+        if verifyContentRequest(getUsernameFromHeader(), patient):
+            return deleteNote(noteid)
+    except Notes.DoesNotExist:
+        return "Failed"    
 
 def deleteNote(noteid):
     """
@@ -2379,7 +2389,7 @@ def deleteNote(noteid):
         with database.transaction():
             instance.delete_instance()
             return "Deleted"
-    except:
+    except Notes.DoesNotExist:
         return "Failed"
 
 @app.route('/api/addAndroidEventId', methods=['POST'])
