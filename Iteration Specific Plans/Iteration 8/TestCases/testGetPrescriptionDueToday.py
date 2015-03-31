@@ -1,5 +1,6 @@
 from peewee import *
 from datetime import timedelta
+from passlib.hash import sha256_crypt
 import requests
 import unittest
 import imp
@@ -13,7 +14,7 @@ sys.path.insert(0, 'Website')
 import justHealthServer
 from justHealthServer import api
 
-class testGetAppointmentsDueNow(unittest.TestCase):
+class testGetAppointmentsDueToday(unittest.TestCase):
     """Testing the getAppointmentsDueNow API method"""
 
     def setUp(self):
@@ -123,23 +124,23 @@ class testGetAppointmentsDueNow(unittest.TestCase):
         response = api.getPrescriptionsDueToday('patient', datetime.datetime.now())
 
         result = {}
-        result['username'] = "patient",  
-        result['medication'] = "test",
-        result['dosage'] = 1,
-        result['dosageunit'] = "test",
-        result['quantity'] = 1,
-        result['startdate'] = datetime.datetime.now().date(),
-        result['enddate'] = '01/01/2020',
-        result['stockleft'] = 1,
-        result['prerequisite'] = "test",
-        result['dosageform'] = "test",
-        result['frequency'] = 1,
-        result['Monday'] = True,
-        result['Tuesday'] = True,
-        result['Wednesday'] = True,
-        result['Thursday'] = True, 
-        result['Friday'] = True, 
-        result['Saturday'] = True,
+        result['username'] = "patient"  
+        result['medication'] = "test"
+        result['dosage'] = 1
+        result['dosageunit'] = "test"
+        result['quantity'] = 1
+        result['startdate'] = datetime.datetime.now().date()
+        result['enddate'] = datetime.datetime(2020, 1, 1).date()
+        result['stockleft'] = 1
+        result['prerequisite'] = "test"
+        result['dosageform'] = "test"
+        result['frequency'] = 1
+        result['Monday'] = True
+        result['Tuesday'] = True
+        result['Wednesday'] = True
+        result['Thursday'] = True 
+        result['Friday'] = True
+        result['Saturday'] = True
         result['Sunday'] = True
 
         prescription = response[0]

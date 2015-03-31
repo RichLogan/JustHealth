@@ -1,6 +1,6 @@
 from peewee import *
+from passlib.hash import sha256_crypt
 from datetime import timedelta
-import requests
 import unittest
 import imp
 import datetime
@@ -45,7 +45,7 @@ class testCreateReminder(unittest.TestCase):
             username = "patient")
         patientPassword.execute()
 
-        appointmentType = testDatabase.Appointmentype.insert(
+        appointmentType = testDatabase.Appointmenttype.insert(
             type = "Doctors")
         appointmentType.execute()
 
@@ -58,16 +58,16 @@ class testCreateReminder(unittest.TestCase):
             startdate = datetime.datetime.now().date(),
             starttime = (datetime.datetime.now() - datetime.timedelta(minutes = 20)).time(),
             enddate = datetime.datetime.now().date(),
-            endtime = (datetime.datetime.now().time() - datetime.timedelta(minutes = 10)).time(),
+            endtime = (datetime.datetime.now() - datetime.timedelta(minutes = 10)).time(),
             description = "",
             private = True)
-        appointmentInsert.execute()
+        appointmentid = int(appointmentInsert.execute())
 
         reminderInsert = testDatabase.Reminder.insert(
             username = 'patient',
             content = 'test',
             reminderClass = 'info',
-            relatedObject = int(appointmentInsert),
+            relatedObject = appointmentid,
             relatedObjectTable = 'Appointments',
             extraDate = datetime.datetime.now() - datetime.timedelta(minutes=10)
         )
@@ -98,11 +98,7 @@ class testCreateReminder(unittest.TestCase):
             username = "patient2")
         patientPassword2.execute()
 
-        appointmentType2 = Appointmentype.insert(
-            type = "Doctors")
-        appointmentType2.execute()
-
-        appointmentInsert2 = Appointments.insert(
+        appointmentInsert2 = testDatabase.Appointments.insert(
             creator = "patient2",
             name = "test",
             apptype = "Doctors",
@@ -113,19 +109,18 @@ class testCreateReminder(unittest.TestCase):
             enddate = datetime.datetime.now().date() + timedelta(days=3),
             endtime = datetime.datetime.now().time(),
             description = "",
-            private = True
-        )
-        appointmentInsert2.execute()
+            private = True)
+        appointmentid2 = int(appointmentInsert2.execute())
 
-        reminderInsert = testDatabase.Reminder.insert(
+        reminderInsert2 = testDatabase.Reminder.insert(
             username = 'patient2',
             content = 'test',
             reminderClass = 'info',
-            relatedObject = int(appointmentInsert2),
+            relatedObject = appointmentid2,
             relatedObjectTable = 'Appointments',
             extraDate = datetime.datetime.now().date() + timedelta(days=3)
         )
-        reminderInsert.execute()
+        reminderInsert2.execute()
 
     def testLegitimate(self):
         """Attempt to delete a reminder"""

@@ -1,7 +1,8 @@
 from peewee import *
 from datetime import timedelta
-import requests
+from passlib.hash import sha256_crypt
 import unittest
+import json
 import imp
 import datetime
 import sys
@@ -49,10 +50,9 @@ class testCreateReminder(unittest.TestCase):
             username = 'patient',
             content = 'test',
             reminderClass = 'info',
-            relatedObject = int(appointmentInsert),
+            relatedObject = 1,
             relatedObjectTable = 'Appointments',
-            extraDate = datetime.datetime.now().time() - datetime.timedelta(minutes = 10)
-            )
+            extraDate = datetime.datetime.now() - datetime.timedelta(minutes = 10))
         reminderInsert.execute()
 
         #create test user 2
@@ -83,20 +83,27 @@ class testCreateReminder(unittest.TestCase):
     def testLegitimate(self):
         """Attempt to get a reminder"""
         expectedResult = {
-            '[{"username": "patient", "content": "test", "reminderClass": "info", "relatedObject": 1, "relatedObjectTable": "Appointments"}]'
+            "username": "patient", 
+            "content": "test", 
+            "reminderClass": "info", 
+            "relatedObject": 1,
+            "relatedObjectTable": "Appointments"
         }
         
-        response = api.getReminders('patient', datetime.datetime.now())
+        response = api.getReminders('patient')
+        jsonResponse = json.loads(response)
 
-        self.assertEqual(response, expectedResult)
+        self.assertEqual(jsonResponse[0]['username'], expectedResult['username'])
+        self.assertEqual(jsonResponse[0]['content'], expectedResult['content'])
+        self.assertEqual(jsonResponse[0]['reminderClass'], expectedResult['reminderClass'])
+        self.assertEqual(jsonResponse[0]['relatedObject'], expectedResult['relatedObject'])
+        self.assertEqual(jsonResponse[0]['relatedObjectTable'], expectedResult['relatedObjectTable'])
 
     def testNotDelete(self):
         """Attempt to get reminders that don't exist"""
-        expectedResult = {
-            '[]'
-        }
+        expectedResult = '[]'
         
-        response = api.getReminders('patient2', datetime.datetime.now())
+        response = api.getReminders('patient2')
 
         self.assertEqual(response, expectedResult)
 

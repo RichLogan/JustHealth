@@ -1,6 +1,6 @@
 from peewee import *
 from datetime import timedelta
-import requests
+from passlib.hash import sha256_crypt
 import unittest
 import imp
 import datetime
@@ -45,11 +45,11 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             username = "patient")
         patientPassword.execute()
 
-        appointmentType = Appointmentype.insert(
+        appointmentType = testDatabase.Appointmenttype.insert(
             type = "Doctors")
         appointmentType.execute()
 
-        appointmentInsert = Appointments.insert(
+        appointmentInsert = testDatabase.Appointments.insert(
             creator = "patient",
             name = "test",
             apptype = "Doctors",
@@ -89,7 +89,7 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             username = "carer1")
         carerPassword.execute()
 
-        appointmentInsert = Appointments.insert(
+        appointmentInsert2 = testDatabase.Appointments.insert(
             creator = "carer1",
             name = "test",
             apptype = "Doctors",
@@ -102,7 +102,7 @@ class testGetAppointmentsDueNow(unittest.TestCase):
             description = "",
             private = False
         )
-        appointmentInsert.execute()
+        appointmentInsert2.execute()
 
     def testLegitimate(self):
         """Attempt to check an appointment that is due now"""

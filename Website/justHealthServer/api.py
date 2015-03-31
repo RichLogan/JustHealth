@@ -2353,10 +2353,14 @@ def addCorrespondence(details):
 @app.route('/api/deleteNote', methods=['POST'])
 @auth.login_required
 def deleteNote():
-    note = Notes.select().where(Notes.noteid == noteid).get()
-    patient = note.patient.username
-    if verifyContentRequest(getUsernameFromHeader(), patient):
-        return deleteNote(request.form['noteid'])
+    noteid = request.form['noteid']
+    try:
+        note = Notes.select().where(Notes.noteid == noteid).get()
+        patient = note.patient.username
+        if verifyContentRequest(getUsernameFromHeader(), patient):
+            return deleteNote(noteid)
+    except Notes.DoesNotExist:
+        return "Failed"    
 
 def deleteNote(noteid):
     """
@@ -2374,7 +2378,7 @@ def deleteNote(noteid):
         with database.transaction():
             instance.delete_instance()
             return "Deleted"
-    except:
+    except Notes.DoesNotExist:
         return "Failed"
 
 @app.route('/api/addAndroidEventId', methods=['POST'])
@@ -2897,7 +2901,10 @@ def getNotificationTypeClass(notification):
 @app.route('/api/dismissNotification', methods=['POST'])
 @auth.login_required
 def dismissNotification():
-    notification = Notification.select().dicts().where(Notification.id == request.form['notificationid']).get()
+    try: 
+        notification = Notification.select().dicts().where(Notification.notificationid == request.form['notificationid']).get()
+    except Notification.DoesNotExist:
+        "Notification Does Not Exist"
     user = notification['username']
     if verifyContentRequest(user, ""):
         return dismissNotification(request.form['notificationid'])
@@ -2913,7 +2920,10 @@ def dismissNotification(notificationid):
 
     :returns: str -- 'True' if successful, 'False' if not.
     """
-    dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
+    try:
+        dismiss = Notification.update(dismissed=True).where(Notification.notificationid == notificationid)
+    except Notification.DoesNotExist:
+        "Notification Does Not Exist"
 
     with database.transaction():
         dismiss.execute()
