@@ -1,635 +1,0 @@
-ID,Story,Description,Checklist,Comments,Labels,Due Date,Members1,Organise GitHub,,,,Android,2014-10-06T11:00:00.000Z,2,QA Document,,,,"Android
-Completed",,3,High-level Design Document,,,,Android,2014-10-06T11:00:00.000Z,4,Purpose/Objectives,,,,"Android
-Completed",,5,Coversheet Template,,,,Android,2014-10-06T11:00:00.000Z,6,High-res Logo,,,,"Android
-Completed",,7,Tracking Document,,,,Completed,2014-10-06T11:00:00.000Z,Rich Logan8,DB Design,,,,"Completed
-Documentation",,Stephen Tate9,Usecases,,,,Completed,2014-10-06T11:00:00.000Z,Rich Logan10,Why Agile Methodologies,,,,Completed,2014-10-06T22:59:00.000Z,Rich Logan11,Network Diagram,,,,"Testing
-Completed",,Stephen Tate12,Legal Docs,,,,Testing,2014-10-06T11:00:00.000Z,Stephen Tate13,Requirements by User,,,,Testing,2014-10-06T11:00:00.000Z,Stephen Tate14,Test Cases/Test Plan,,,,Testing,2014-10-06T11:00:00.000Z,Stephen Tate15,Email Caroline,,,,Testing,2014-10-06T11:00:00.000Z,Stephen Tate16,Gantt Chart,,,,Database,2014-10-06T11:00:00.000Z,17,Questionnaire Results,,,,Completed,,Rich Logan18,Iteration 1 Plan,,,,Database,2014-10-06T11:00:00.000Z,Charlotte Hutchinson19,Role Documentation,,,,Database,2014-10-06T11:00:00.000Z,Charlotte Hutchinson20,Password Research,,,,Database,2014-10-06T11:00:00.000Z,Charlotte Hutchinson21,Feasibility Study,,,,Database,2014-10-06T11:00:00.000Z,Charlotte Hutchinson22,Test cases,,,,Testing,2014-10-06T08:00:00.000Z,Stephen Tate23,Questionnaires,,,,"Completed
-Documentation",,"Rich Logan
-Stephen Tate"24,Update research,,,,Documentation,,Rich Logan25,Fix JS link,,,,"Completed
-Web",,Rich Logan26,Initial Documentation,,,,Documentation,,Rich Logan27,Android Layout,,,,Android,,Rich Logan28,Commit Empty Android Project,,,,"Android
-Completed",,Rich Logan29,Update Gantt chart,,,,"Completed
-Documentation",,Stephen Tate30,Ajax on username,Inform the user on registration if a username is already taken as they type,"API Call https://github.com/RichLogan/JustHealth/commit/69f2c71f558cabe41239a4480792cb5c57a96fb2
-Ajax",,"Web
-Completed",,Rich Logan31,Complete iteration 1 testing,,,,"Testing
-Completed
-Web",,"Stephen Tate
-Rich Logan
-Charlotte Hutchinson"33,Technical Document,,,,Documentation,,Rich Logan34,Export Issues/Trello to CSV,https://github.com/RichLogan/trello-export works nicely for Trello -> CSV export. JSON export can be found from Trello Menu->Export->JSON,"Trello
-Github",,Documentation,,Rich Logan35,Add DB Design into plan,,,,"Completed
-Documentation",,"Rich Logan
-Stephen Tate"36,"Layout, input buttons, btn-success etc etc",,,,"Completed
-Web",,37,User and Maintenance Documentation,,,,"Documentation
-Android
-Database
-Web",,"Rich Logan
-Stephen Tate
-Ben McGregor
-Charlotte Hutchinson"38,GitHub: Low/Med/High Priority,,,,"Completed
-Documentation",,Rich Logan39,JS Date,,,,"Completed
-Web",,Ben McGregor40,Add Database design to Iteration 1 plan,,,,"Completed
-Documentation",,Stephen Tate41,CSS on reg and log in screen (web),,,,"Completed
-Web",,Ben McGregor42,Test Cases,,,,"Completed
-Documentation",,"Ben McGregor
-Stephen Tate"43,Home screen design update,,,,"Completed
-Web",,44,Android account locked,,,,"Completed
-Android",,Stephen Tate46,home screen web html,,"Patient
-Carer",,"Completed
-Web",,Ben McGregor47,Android Register,,"Core
-Validation
-Terms and conditions
-Check username is not already in the DB
-Account type list",,"Android
-Completed",,"Rich Logan
-Stephen Tate"48,Corpus stylings,,,,"Documentation
-Web
-Completed",,Rich Logan49,Restructure Flask,,,,"Completed
-Web",,Rich Logan50,Database exceptions,https://github.com/RichLogan/JustHealth/issues/58,,,"Android
-API
-Web
-Completed",,Stephen Tate51,Footer,,,,"Completed
-Web",,Rich Logan52,Link pages in android,,"Login -> Register
-Login -> Forgot Password
-Register -> Terms and Conditions",,"Android
-Completed",,Rich Logan53,Forgot Password,,,,"Android
-Completed",,Rich Logan54,Register option on login,,,,"Completed
-Web",,Charlotte Hutchinson55,Handle when app is not connected to the internet, http://stackoverflow.com/questions/9570237/android-check-internet-connection,,"@charlotte352 @richlogan Yes, need to just work out how to do, shouldn't be too hard though. With the Request.post() method it means we only have to do the update in one place.
-is this a case of an error message coming up saying you are offline? @richlogan @stephentate1","Android
-Completed",,"Stephen Tate
-Rich Logan"56,Separate Views and Models,,,,"Completed
-Android
-Web",,Rich Logan57,Releases,,,to be done 12th Jan,"Documentation
-Completed",2015-01-12T20:00:00.000Z,Stephen Tate58,Front end validation,,,,"Completed
-Android",,Charlotte Hutchinson59,QA Research,,,,"Documentation
-Completed",,Ben McGregor60,Design for deactivate account,,,,"Documentation
-Android
-Completed
-Web",,Ben McGregor61,Aims,,,,"Documentation
-Completed",,Charlotte Hutchinson62,Test Cases,,"Deactivate Account
-Home Screen
-Copy over Iteration 1/2 Web
-Database cases",,"Testing
-Completed",,Rich Logan63,Testing,,,,"Android
-Testing
-Completed
-Web",,Charlotte Hutchinson64,Use Cases,,,,"Documentation
-Completed",,Charlotte Hutchinson65,Account Type Spinner,,,,"Android
-Completed",,Rich Logan66,Network Diagram,,,,"Documentation
-Completed",,Stephen Tate67,update iteration 3 plan with assumptions for database,,,,"Documentation
-Completed",,Charlotte Hutchinson68,android deactivate account screen,,,,"Android
-Completed",,Charlotte Hutchinson69,"Register should have proper alerts, instead HTTP returns",,,,"Completed
-Web",,Rich Logan70,Raptor Token,"Username: Rich Logan
-Token: 6d28ded0e2419c220df712f7627cc11b085ade84",,,Completed,,71,Android- error messages,,Login,,"Android
-Completed",,Rich Logan72,Use case diagram,,,,"Documentation
-Completed",,Ben McGregor73,Network Diagram,,,,"Documentation
-Completed",,Stephen Tate74,Project Plan,,,,"Documentation
-Completed",,Charlotte Hutchinson75,Think of ways to connect users securely,,,,Completed,,"Charlotte Hutchinson
-Ben McGregor
-Rich Logan
-Stephen Tate"76,API Automated Testing,This is so long I think it's a christmas situation,"Registration (1)
-Authenticate (1)
-Deactivate
-Reset
-Get Account Info
-Lock Account
-Search Patient Carer (4)
-Create Connection (4)
-Complete Connection (4)
-Delete Connection (4)
-Cancel Connection (4)
-Get Connections (4)
-Rich to add Web and Android tests to portal",,"Documentation
-API
-Testing",,"Rich Logan
-Stephen Tate
-Ben McGregor
-Charlotte Hutchinson"77,Check root view mapping,,,,"Web
-Completed",,Rich Logan79,Front Page,,,,"Web
-Completed",,Ben McGregor80,Testing,,,,"Testing
-Completed",,"Stephen Tate
-Charlotte Hutchinson"81,Android search function,,,,"Android
-Completed",,Stephen Tate82,Https,,"Flask Dev Server HTTPS
-Gunicorn HTTPS
-Load all resources across HTTPS","Can't do this without Tim installing nginx for us on Raptor. And since Apache is used on Raptor not even sure if that's possible. Gonna wait until I can talk to Tim about this because if we have to use Apache I don't actually have a clue how to do it....
-
-On the plus side, I know exactly how to do it if/once nginx is installed...I think...","Android
-Web
-Completed",,Rich Logan83,Secure POST's authentication.,,,,"Android
-Web",,"Rich Logan
-Stephen Tate"84,Design,,"turn to pngs
-add to design doc
-add to iteration 4 plan doc
-add usecases to iteration 4 plan",,"Documentation
-Completed",,Ben McGregor85,Update database design,,,,"Database
-Documentation
-Completed",,Stephen Tate86,Profile,,,,"Web
-Completed",,Charlotte Hutchinson87,Update Test Plan (portal),,,,"Documentation
-Testing",,Stephen Tate88,Web search and connect function,,"Search
-Create Connection
-Complete Connection
-Delete Connection
-Cancel Connection
-Proper Responses https://trello.com/c/lSF0RfVU/154-proper-responses-connections","I converted the Proper Responses to a card here: https://trello.com/c/lSF0RfVU/154-proper-responses-connections 
-
-So not yet :D
-@richlogan @charlotte352 Should this be marked complete?","Web
-API
-Completed",,"Rich Logan
-Charlotte Hutchinson"89,Profile Android,,,,"Android
-Completed",,"Ben McGregor
-Stephen Tate"90,Testing Android and Web,,,,"Testing
-Completed",,"Charlotte Hutchinson
-Ben McGregor"91,Aims,,,,,,92,Plan,,"Aims
-Design
-Usecases
-Network diagram
-Database Update",,"Documentation
-Completed",,"Charlotte Hutchinson
-Ben McGregor
-Rich Logan
-Stephen Tate"93,Usecases,,,,,,94,Design,,,,,,95,Test Cases,,,,"Testing
-Documentation
-Completed",,Ben McGregor96,Android,,"Add medication details
-Add appointments
-Add reminder functionality",,,,97,Web,,"Add medication details
-Add appointments
-Add reminder functionality",,,,98,Testing,,"Android
-Web
-API","@stephentate1 @richlogan @benmcgregor 
- I have just written these tests and moved some over for our iteration 6 (remember we had that change) for web and android. I will test asap, maybe we could split it up, i dont mind doing the long android and web if someone else can just run the API tests? 
-
-Also Is the issue, all appointments marked as private fixed?
-@benmcgregor @charlotte352 @richlogan Is this definitely complete. I feel like test for privacy and read-only on patient/carer doesn't have test cases? 
-Also, who/when are we testing? This needs to be all complete before we can release and ask for feedback.
-@benmcgregor @charlotte352 @richlogan Is this definitely complete. I feel like test for privacy and read-only on patient/carer doesn't have test cases? 
-Also, who/when are we testing? This needs to be all complete before we can release and ask for feedback.",Testing,,99,Display results Web in a new tab on profile page,,,,"Web
-Completed",,Rich Logan100,Display results on android- on a button,,,,"Android
-Completed",,Stephen Tate101,Deactivate Web,,,,"Web
-Completed",,Rich Logan102,Deactivate android,,,,"Android
-Completed",,Stephen Tate103,Header android,,,Done in Android Design https://trello.com/c/xVU95CHR/165-design-android,"Android
-Completed",,Ben McGregor104,Comment all API,,,,"Documentation
-Completed",,Ben McGregor105,Header Web,,,,"Completed
-Web",,Charlotte Hutchinson106,Prescriptions,,"Add Prescription
-Edit Prescription
-Remove Prescription
-View Prescriptions Carer
-View Prescriptions Patient
-Front End Validation","Need to do Front End Validation for Add Prescription
-Unchecking Remove because no confirm. Will add now.","Web
-API",,"Rich Logan
-Charlotte Hutchinson"107,Prescriptions,,"Add Prescription
-Edit Prescription
-Remove Prescription
-View Prescriptions Carer
-View Prescriptions Patient","Deletion done:
-
-https://github.com/RichLogan/JustHealth/commit/c9ae662b2d955642dbabf09aa7c077cbf9a4845f
-Now broken down by Active/Upcoming/Expired 
-
-https://github.com/RichLogan/JustHealth/commit/562b05ebdcac41472435a653e351c4fda247a146
-You're right just an admin thing @richlogan when we add pharamsicts they will be able to do this
-Is 'Remove Medication' and 'Edit Medication' actually a thing? I thought it was an admin kind of thing @charlotte352","Android
-Completed",,"Rich Logan
-Charlotte Hutchinson"108,Appointments,,"Add
-Remove
-Update",,"Android
-Completed",,"Stephen Tate
-Ben McGregor"109,Appointments,,"Carer Add
-Carer Remove
-Carer Edit
-Patient Add
-Patient Delete
-Patient Edit
-Carer/Patient Add
-Carer/Patient Edit
-Carer/Patient Delete","@charlotte352 I have fixed this, will let you take a look/test and mark as complete if you are happy with it :) 
-The issue was that carers were able to update/delete appointments that they didn't create. I have disabled the update and delete buttons for the instances where the carer is not the appointment creator.
-@charlotte352 ah ok, will take a look at some point this weekend
-ah sorry, its on BenDesign Rich and I were looking yesterday and had no idea why we were getting the error
-@charlotte352 The button isn't implemented? When I click the update button it doesn't do anything? Is this on master?
-@stephentate1  Edit Carer/Patient appointment is partly there, currently getting a expected string or buffer error. but no idea why as it is the same as update appointment for carer or patient. @stephentate1 could you please have a look?
-the more i think about this i did carer display personal appointments and carer display patients appointments- @benmcgregor was this you carer add personal appointments with patients?
-@charlotte352 this is what need to be checked/implemented on web. Thing to remember is that q carer should only be able to update edit/delete view appointments that they have created. The non-private appointments that the patient makes they should have read-only access.","Web
-Completed",,"Stephen Tate
-Ben McGregor"110,Plan,,"Aims
-Requirements
-Design- Ben
-Use cases- Charlotte
-Database update- Steve
-Network Diagram- Steve",,"Documentation
-Completed",,"Charlotte Hutchinson
-Ben McGregor
-Stephen Tate"111,Test Cases,,"Android
-Web
-API",,"Testing
-Documentation",,"Rich Logan
-Stephen Tate"112,Notifications,,"connection request (green)
-connection complete (green)
-new prescription added for a patient (green)
-appointment added with you (green)
-password expiry 10 days before (yellow)
-password less than 1 day (red)",,"Android
-Completed",,113,Notifications,,"connection request (green)
-connection complete (green)
-new prescription added for a patient (green)
-appointment added with you (green)
-password expiry 10 days before (yellow)
-password less than 1 day (red)
-Appointment Updated
-Appointment Cancelled
-Prescription Updated
-Notify carer when patient is running low on medication",,"Web
-Completed",,"Rich Logan
-Stephen Tate"114,Reminders,,"Appointments- 30 mins before  (green)
-Medication- 15 mins before needs to be taken (green)
-Appointment- at the time  (green)
-medication at the time (green)
-See: https://trello.com/c/H3KSrPJj/182-display-medication-taken-to-carer
-Notify carer when running low",,Android,,Rich Logan115,Reminders,,"Appointments- 30 mins before  (green)
-Appointment- at the time  (green)
-Medication on the day it should be taken
-Track when medication is taken","Basic structure to check if there are appointments to add, and adding appointments is now in place. Automatic add for Appointments working, as does the getReminders method. 
-
-Needs to be done:
-- Reminder expiry / delete
-- Printing out (very small work)
-- Times for prescriptions
-
-I'm going to move on to the other things I've been assigned for this weekend now though.","Web
-Completed",,Rich Logan116,"Convert all existing long post requests to use PostRequest.post(url, parameters)",,"Prescriptions
-Appointments
-Master Backlog","@charlotte352 @richlogan I'm sure that these have all been converted now. Marking as complete.
-@charlotte352 Yes, I still think there are a few outstanding but apart from that we are dandy. I will check before closing.
-@stephentate1 has this been done in the process of your work on appointments?
-@richlogan Sure, will do. When I have fixed tabs I will pull from medication to appointments.
-Done for everything on the Medication branch. @stephentate1 I suggest you wait until we merge these branches until you do your bit perhaps.","Android
-Completed",,"Rich Logan
-Stephen Tate"117,Testing Portal,,,"Yeah :)
-Yeah we just want to have them as a pdf or something that they can look at I guess
-@charlotte352 We need to ensure that we can print each test followed by the results nicely :)
-@stephentate1 What is this one?",Testing,,Stephen Tate118,Test Plan,,,,"Testing
-Documentation
-Completed",,Stephen Tate119,Secure POST's authentication.,,,This is in the christmas list now. Archiving.,"Android
-Web",,"Rich Logan
-Stephen Tate"120,Implement HTTPS on production,,,Duplicate,API,,Rich Logan121,Implement API authentication,,,"@richlogan  Thought I had, will do it now. This has been completed and merged to master.
-Mark as complete? @stephentate1","API
-Completed",,Stephen Tate122,Why Agile Document,,,"design, test do
-Need to change the current document to talk about our approach, iterative, 2/3 meetings a week, stay in contact on days we dont meet etc, pair programming, test driven development.....","Documentation
-Completed",,Charlotte Hutchinson123,Legal,,"Privacy Policy
-T & C
-References/ acknowledgements
-Site Map?","If i have time I will change this to modals
-Site Map completed to the stage it can be at the moment. If have more time may change the design of it.
-Something extra which would be good to have","Documentation
-Completed",,"Ben McGregor
-Charlotte Hutchinson"124,Technical Document- Architecture,,"why python
-why peewee
-why bootstrap
-why Flask
-why Android
-why API/ POST etc
-Why postgres","https://github.com/RichLogan/JustHealth/pull/125
-
-I think that's a good example Pull Request if we want to use one :)
-Need to break this down into a checklist of everything that needs to be done for the general technical document, maintenance doc and security doc","Documentation
-Android",,Rich Logan125,QA all Documents,,,,Documentation,,Ben McGregor126,JH IM Portal,"All of this needs to be graphs!
-
-High charts, moment JS, chart JS, D3 JS","Usersname list
-charts on usage
-why deactivated- reason
-to be able to add medication name
-add and remove reasons to deactivate
-verify users account manually
-Add new medication
-Medication list
-Delete Accounts manually
-Admin account set up
-Design change for yang","I've added pages to cover what's on the checklist, home page is /adminPortal
-@benmcgregor to set up the web page and let everyone know when this is complete so we can work on parts of the checklist each
-Are we having a admin interface which shows:
-- users
-- and why people deactivate etc","Web
-Completed",,"Charlotte Hutchinson
-Ben McGregor"127,Design Web and Android,,,"@stephentate1 oh hype I'll steal it
-@richlogan believe I have implemented this in appointments :)
-Tiny idea for Android design. You know when in some apps and websites you scroll in a section and the heading stays? Might be nice for prescriptions if there's a lot you can always see what section you're in
-need to also add a back button on web","Android
-Web
-Completed",,"Stephen Tate
-Ben McGregor"128,User Doc,,"Introduction
-Registration
-Verify email
-login
-forgot password
-account locked
-deactivate account
-search and connect function
-appointments for carers and patients, add, edit, delete
-medication/ prescriptions for add, edit and delete
-Add since christmas","$ make HTML
-
-That will make a _build directory with the html in
-@richlogan how to i run my sphinx file? type $ sphinx-build into terminal? then what? how to i find the page?
-All of the above need to be done for web and android. Will discuss more next weeks meeting",Documentation,,Charlotte Hutchinson129,Site Map,,,Do we need this?,"Web
-Documentation",,130,Questionnaire,,,"Finished on google form, all ready to be sent out when released via this link 
-
-http://goo.gl/forms/hjc2VqckWT
-send out survey monkey test to people we have given the app / website to","Documentation
-Testing
-Completed",,Charlotte Hutchinson131,Deactivate Android,,"Deactivate android
-Test deactivate android","@charlotte352 Excellent :)
-@stephentate1 all finished, I also ran some new tests on the web to double check that still works :)
-@charlotte352 completed the implementation. This can be tested now. It has been merged to master.
-When complete @stephentate1 tell me and I will test","Testing
-Android
-Completed",,"Stephen Tate
-Charlotte Hutchinson"132,Edit profile web and android,,"Web @benmcgregor 
-Android @richlogan
-including add profile picture web
-including profile pic android
-Edit Profile API","Change of email should require verification, @richlogan can you set this up on android?","Android
-Web
-Completed",,"Ben McGregor
-Rich Logan"134,Display when connections already established in search,,"Web
-Android","@richlogan I have updated what I think is the related issue this evening too. https://github.com/RichLogan/JustHealth/issues/109
-Ajax","Web
-Android
-Completed",,Rich Logan135,back button web,,,,,,136,Corpus index update,,,,"Documentation
-Completed",,Charlotte Hutchinson137,Test iteration 4,,,This to be completed once the all the API tests are written,"Testing
-Completed",,138,Test iteration 5 & 6 ,,"Web
-Android
-Database
-API","There are no iteration 6 tests right?
-This was the one you replied to @richlogan :)  any news?
-I deleted any tests that were wrong but I think it was mainly 4. I'll look now
-@richlogan  I cant remember if you looked at these or not yet?
-@richlogan  please fix the API tests :) Thanks
-resolved the syntax errors but still cant seem to get them working. Will talk about this on Monday
-Both iterations are moved to one as we had the change of moving parts over",Testing,,Rich Logan139,Rich to add his research,,,,"Documentation
-Completed",,Rich Logan140,Database update,,,What exactly is this? @stephentate1,"Database
-Documentation
-Completed",,Stephen Tate141,Update Gantt chart,,,"Completed up to the end of iteration 8. Not going to do any more for the time begin incase iteration changes.
-@charlotte352 Lol, what's happened now?
-I hate project libre so much @stephentate1 haha
-You legend @stephentate1 yeah I will fill that all in tomorrow
-@charlotte352 the issue is with the completed field I think. I have corrected the ones that are wrong really quickly this evening and added a field called % complete. I think it is best if we just manually type when it is 100% complete. That way it will stop breaking it. Doing it the automated way doesn't add any real value anyway so I don't see as we lose anything. Added it as version 7.1 and will commit to master, are you ok to finish filling it in?
-@charlotte352 I will try to get round to this tomorrow. If not then the day after, will let you know.
-@stephentate1 I keep getting the same problem that i had on the last day of term. Nothing I am trying seems to be working, if you can (i know you are super busy) could you just have a look for five mins please?","Documentation
-Completed",,Charlotte Hutchinson142,Support Gravatar,,,"Don't have time for this
-Thinking about this:
-
-When loading profile:
-
-if picture in DB != NULL:
-   load picture
-else if has gravatar:
-   pass gravatar picture
-else:
-   load default picture","API
-Not Doing",,143,Add Date/Time pickers in android as opposed to text views,,,"http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-@charlotte352 thanks! :)
-@stephentate1 @richlogan I have put what i have done on a branch. Will try a bit more tomorrow and let you know
-@charlotte352 @richlogan Hmm typical Google documentation.. Is there not a way to resize it in xml? 
-Probably not important to functionality as such, but needs to be done and now is a good time I think. I will have a look later, maybe put what you have done on a branch and we can take a look then?
-@stephentate1 @richlogan 
-Im struggling with this at the moment, tired yesterday afternoon and for an hour this morning. I can get one in on the register page, but it just looks horrendous on a phone its just too big. Also the documentation doesn't seem to be completely true for whats online. 
-How important do is this at the moment?
-Android gradel not working at the moment, will try again later","Android
-Not Doing",,Charlotte Hutchinson144,Security Documentation (a part of the technical),,,,Documentation,,145,Handle Android Version related errors,,,has this been completed too? @richlogan @stephentate1,"Android
-Completed",,146,Testing,,"Android
-API
-Web",,Testing,,"Ben McGregor
-Charlotte Hutchinson"147,Technical Document- Security,,"API authentication
-HTTPS
-Password security 
-Database","Marking this as complete. HTTPS still is to be completed but need to do this once we have completed implementation. I have also added the javasphinx library to the Technical Documentation. 
-Obviously the Security section will need to be updated as we go. 
-FYI @charlotte352 @richlogan @benmcgregor
-Virtually completed, just need to add code examples that I am unable  to do on my iPad in my break at work. Will try to complete 100% either tonight or tomorrow. :)","Documentation
-Completed",,Stephen Tate148,Technical Document- Maintenance,,"API
-Web HTML
-Android
-Views","Unticking checklist as a lot has been updated since this was marked complete
-@charlotte352 yeah comment the code and maybe just generally talk about in sphinx? I'm not sure. Look in Documentation/technical there's a readme and examples
-@richlogan  how do you want me to do the HTML part, comment the code then? can this go into Spinx?
-also where are the current API.rst files so i can look at them for guidance.
-Stephen- Android
-Rich- API
-Ben- Views
-Charlotte- HTML",Documentation,,"Charlotte Hutchinson
-Ben McGregor
-Rich Logan
-Stephen Tate"149,Rich- to write a read me doc on how to do sphinx,,,,"Documentation
-Completed",,Rich Logan150,Profile Pictures,,,"Print in the search
-static website folder make a new folder call profile pictures
-
-uploads the file (their username) file name goes into the database
-
-select from the view to load","Web
-Android",,151,2 factor authentication ,,,No time!,Not Doing,,152,Keeping a user logged in on android,,,"onResume()
-@charlotte352 Yes, I think that this is along the right lines. Although, we would need to work out how to save the data in the app without the need to refresh. We could do this bit relatively easily I think.
-Would something like this work do you think @stephentate1
-
-http://stackoverflow.com/questions/12744337/how-to-keep-android-applications-always-be-logged-in-state
-
-Not a priority but was just looking into it today","Android
-Completed",,Stephen Tate153,Mid project review doc,,,,"Documentation
-Completed",,Charlotte Hutchinson154,Proper Responses (Connections),Parent: https://trello.com/c/FMOUfZRC/88-web-search-and-connect-function,Delete,https://github.com/RichLogan/JustHealth/pull/145,"Web
-Completed",,Rich Logan155,JS to stop people closing when forms are half filled in,"You know how most websites won't let you close a window if you have ""unsaved"" work? Probably one of those little things that is a good idea. 
-
-Just came to me",,"definitely a good idea as an added extra @richlogan
-Probably something like if any inputs.val != Null prevent default on window close","Web
-Testing",,156,Stop Android app going back to login screen,,,"Only pages that still do this are the both home pages
-has this been complete with the design update? @stephentate1 @richlogan
-Possibly to do with all the activities having Login as their parent?","Android
-Completed",,Rich Logan157,Settings page,,"Web
-Android",I have made progress on this for the web. All that is left to do it changing the deactivate api to be included in the settings views,"Web
-Android
-Completed",,Charlotte Hutchinson158,Iteration 5 Test Cases,,"API Test Cases - this includes medication, appointments and prescriptions
-Web Tests
-Android Tests","Including myPatients, carer only, patient only. Also testing for privacy of appointments etc.","Testing
-Completed",,Ben McGregor159,Need to be able to log out in the app,,,,"Android
-Completed",,160,Authenticating the specific user in the API calls,"At the moment as long as your credentials are valid you can do ANYTHING that requires credentials. That is, you can alter prescriptions/appointments/profiles etc that you do not belong to/have ownership.
-
-Very much the biggest thing that needs to be fixed at this time. ","Raise Risk
-Discuss a way forward
-Implementation
-Reference in the security documentation","Potentially a huge security flaw, I think it mainly affects medication, prescriptions, appointments.","API
-Completed",,Stephen Tate161,request.form,"Would be nice to change some of the views to request.form instead of split everything up. It's okay when we're just sending request.form['username'] but otherwise.
-
-So glad I realised you could do this!",,,API,,162,Plan,,"Aims
-Requirements
-Design
-Usecases
-Network diagram",,"Documentation
-Completed",,"Ben McGregor
-Charlotte Hutchinson"163,Test Cases,,,Re run all previous functionality tests,"Testing
-Documentation
-Completed",,164,Design Web,,"carer home
-patient home
-carer appointments
-deactivate
-legal
-login
-my patients
-patient appointments
-patient update appointment
-prescriptions
-privacy policy
-profile
-references
-register
-reset password
-search
-sitemap
-template
-terms and conditions
-Change create appointment button
-Change delete appointments to a bin
-FAQ
-Account Settings
-Contact",@stephentate1 why did you unmark login as complete?,"Web
-Completed",,"Ben McGregor
-Charlotte Hutchinson"165,Basic Android Design,,"Login
-Registration
-Forgot password
-Home carer
-Home patient
-carer add prescription
-carer edit prescription
-carer patient appointments
-carer personal appointments
-connections
-carer prescriptions
-create carer patient appointment
-create self appointent
-deactivate account
-edit profile
-my patients
-Patient Prescriptions
-privacy
-profile
-search
-self appointments
-self archive appointments
-settings
-T & C
-Need to be able to log out in the app",,"Android
-Completed",,Rich Logan166,Testing,,,,"Testing
-Completed",,167,Write up results of questionnaires,,,,"Documentation
-Completed",,Charlotte Hutchinson168,Flow charts of how the processes work etc.,,,,Documentation,,169,check requirements doc and scope,,,,Documentation,,Charlotte Hutchinson170,SASS?,"I guess at this stage it would be purely for marks but still haha.
-
-I'd like to learn it though
-
-http://sass-lang.com/",,Probably impossible to backwardly do all our CSS to SASS. Shame I didn't think from the start :cry:,"Web
-Not Doing",,171,AJAX,,"Register - Username
-Search
-Appointment Clash checking",,Web,,172,Java commenting,,"Add Prescriptions
-Calendar Appointments
-Carer Patient Appointments
-Carer Patient Archived appointments
-Carer Prescriptions
-Connections
-Create Carer Patient Appointment
-Create self appointment
-deactivate account
-edit carer patient appointment
-edit prescription
-edit profile
-edit self appointment
-feedback
-forgot password
-home carer
-home patient
-login
-mypatients
-patient medication
-privacy
-Request
-Search
-self appointments
-self archived appointments
-settings
-terms and conditions
-LoadImage
-Search NHS
-C2DMRegistrationsReceiver
-Connections Main
-Connections View
-Feedback
-GcmBroadcastReciver
-GcmIntentService
-Logout
-Main
-Register
-Request
-Profile
-Carer Add Correspondence
-Patient carer correspondence",,"Android
-Documentation",,"Charlotte Hutchinson
-Ben McGregor
-Rich Logan
-Stephen Tate"173,Restructure,Move all public facing API calls into another file,"application.py
-api.py",Tried to do templating on dashboard and it didn't work. More hassle than it's worth. Removing...,API,,174,Add telephone number,,,,"Database
-API
-Completed",,Rich Logan175,Link from connections to the connected persons profile,,,,"Web
-API
-Completed",,Charlotte Hutchinson178,Plan,,"Aims- Charlotte
-Requirements- Charlotte
-Design- Ben
-Use cases- Charlotte
-Database update- Steve
-Network Diagram- Steve",,"Documentation
-Completed",,"Charlotte Hutchinson
-Ben McGregor
-Stephen Tate"179,Test Cases,,"Search NHS- Web and android
-Patient carer correspondence
-Admin portal
-Track medication taken
-Stock Levels notify carer
-Notify carer when patient has not taken medication
-Automated Tests",@richlogan  it is just the automated tests left to do :) I have done all the others,"Testing
-Documentation",,"Rich Logan
-Stephen Tate
-Charlotte Hutchinson"180,Search NHS,,,,"Android
-Web
-Completed",,Stephen Tate181,Track patient carer correspondence,,,Web done,"Web
-Android
-Completed",,Charlotte Hutchinson182,Display medication taken to carer,,"Display AJAX boxes for patient to tick
-Decrease stock levels after taken
-notify carer when patient stock level drops below X
-Notify carer when patient hasn't taken medication
-Android",,"Android
-Web",,Rich Logan184,Testing,,"Web
-Android
-API",,Testing,,185,Appointments Accept/Decline,,,Completed Web,"Web
-Android
-Completed",,Stephen Tate186,Technical Report,,,https://moodle.kent.ac.uk/2014/mod/page/view.php?id=112433,Documentation,,187,Update Index Corpus,,,I feel this is upto date just need to link all the files now!,Documentation,,188,Validation,,,,"Android
-Web",,Ben McGregor189,View appointments android,,,,"Android
-Completed",,Stephen Tate190,Test Cases,,,"There are a lot (the majority) that will not work due to authentication and database changes. This is a bigger task than first thought.
-Check that all the automated test cases are working and that there are none missing.",Testing,,Ben McGregor191,Add onResume() to android pages - to dynamically reload,,Update appointments doesnt update unless you go out of appointments and back in,,"Android
-Completed",,"Stephen Tate
-Rich Logan
-Charlotte Hutchinson"192,Audit Tables (Triggers on the Database),,,"This is high priority, shows that we have thought outside the box too.","Database
-Not Doing",,194,Speed up the app,,"Passing through objects
-Async requests where possible
-packaging and zipalign (research this)",,"Android
-Completed",,"Rich Logan
-Stephen Tate"195,Re test everything,,,"All to test on Tuesday
-1,2,3,4,5 complete","Testing
-Completed",,"Stephen Tate
-Ben McGregor
-Charlotte Hutchinson
-Rich Logan"196,Test cases for security,,,,Testing,,"Stephen Tate
-Charlotte Hutchinson
-Rich Logan"197,Videos,,"1 Someone Registering on the app- just typing in fake details
-2a Carer starting on home screen-> clicking on a patient -> adding medication
-2b Patient getting the notification of prescription added-> going into view medication and seeing it there
-3a Adding an appointment and adding to the native calendar
-3b Getting a reminder of your appointment",,,,198,Add words to the tiles,,,,"Android
-Completed",,199,Adding test data,,,,Completed,,"Charlotte Hutchinson
-Ben McGregor
-Rich Logan
-Stephen Tate"200,Come up with our elevator pitch,,,#NAME?,Completed,,201,Re test all failed tests,,,,Testing,,202,Set to portrait,,,,"Android
-Completed",,203,Assync Correspondence,,,,"Android
-Completed",,204,Profile page?,,,,"Android
-Completed",,
