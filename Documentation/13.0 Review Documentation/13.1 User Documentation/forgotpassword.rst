@@ -15,7 +15,7 @@ Web Application
 
 .. image:: /images/forgotpass2.png
 
-3. On doing this you will then be sent an email from JustHealth with the subject line 'Forgot you password'
+3. On doing this you will then be sent an email from JustHealth with the subject line 'Forgot your password'
 
 .. image:: /images/forgotpass4.png
 
@@ -25,7 +25,7 @@ Web Application
 .. image:: /images/forgotpass3.png
 
 
-5. Fill in the form with you:
+5. Fill in the form with your:
 
   - Email address you registered with
   - Your new password
@@ -42,15 +42,15 @@ Web Application
 --------------------
 Mobile Application
 --------------------
-1. On the login page click on the link at the bottom which says 'forgot password'
+1. On the login page click on the button at the bottom which says 'forgot password'
 
 .. image:: /android/forgotpass.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
-2. Fill in the form with you:
+2. Fill in the form with your:
 
   - Email address you registered with
   - Your new password
@@ -59,6 +59,6 @@ Mobile Application
 
 3. Then click submit
 
-4. On clicking submit this will take you back to the login page. However, to continue back as  mobile user reopen the app.
+4. On clicking submit this will take you back to the login page.
 
 5. Here enter your username and your new password to log in.

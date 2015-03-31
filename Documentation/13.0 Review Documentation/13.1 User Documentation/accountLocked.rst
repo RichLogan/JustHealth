@@ -18,7 +18,7 @@ This can be done by following the steps below, it is the same process for both t
 .. image:: /images/accountlocked2.png
 
 
-3. Fill in the form with you:
+3. Fill in the form with your:
 
   - Email address you registered with
   - Your new password

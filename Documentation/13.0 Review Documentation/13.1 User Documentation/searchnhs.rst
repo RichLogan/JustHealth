@@ -29,8 +29,8 @@ Mobile Application
 1. On the home page click on the three dots in the top right hand corner
 
 .. image:: /android/nhsnotes.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
@@ -39,8 +39,8 @@ Mobile Application
 3. In the search box type in what you want to search
 
 .. image:: /android/searchnhs.png
-   :height: 100px
-   :width: 200 px
+   :height: 175px
+   :width: 350 px
    :scale: 70 %
 
 
