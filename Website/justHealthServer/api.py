@@ -1395,7 +1395,10 @@ def deleteAppointment(user, appid):
 
   :returns: str -- Success message. 
   """
-  isCreator = Appointments.select().where(Appointments.appid == appid).get()
+  try:
+    isCreator = Appointments.select().where(Appointments.appid == appid).get()
+  except Appointments.DoesNotExist:
+    return "Appointment does not exist"
 
   if isCreator.creator.username == user:
     with database.transaction():
@@ -1622,15 +1625,17 @@ def addMedication(medicationName):
 
     :returns: "Added" or "Already Exists" or "False" for other error.
     """
-    insertMedication = Medication.insert(
-        name = medicationName
-    )
-    with database.transaction():
-        try:
-            insertMedication.execute()
-            return "Added " + medicationName
-        except IntegrityError:
-            return medicationName + " already exists"
+    if medicationName != None:
+        insertMedication = Medication.insert(
+            name = medicationName
+        )
+        with database.transaction():
+            try:
+                insertMedication.execute()
+                return "Added " + medicationName
+            except IntegrityError:
+                return medicationName + " already exists"
+        return "False"
     return "False"
 
 def deleteMedication(medicationName):
