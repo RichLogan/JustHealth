@@ -189,6 +189,12 @@ def registerUser(details):
     for key, value in profile.iteritems():
       value = value.strip()
 
+    # Validate Dates
+    try:
+        profile['dob'] = datetime.datetime.strptime(profile['dob'], '%Y-%m-%d')
+    except ValueError:
+        return "Invalid date"
+
     # Validate username >25
     if len(profile['username']) > 25:
       return "Username can not be longer than 25 characters"
