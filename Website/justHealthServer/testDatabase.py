@@ -17,7 +17,7 @@ class Client(BaseModel):
     email = CharField(max_length=100)
     loginattempts = IntegerField()
     username = CharField(max_length=25, primary_key=True)
-    profilepicture = TextField()
+    profilepicture = TextField(default="default.png")
     telephonenumber = CharField(max_length=100, null=True)
     verified = BooleanField()
 
