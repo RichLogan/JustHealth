@@ -1098,7 +1098,7 @@ def cancelRequest(details):
             return "True"
     except Relationship.DoesNotExist:
         try:
-            instance = Relationship.select().where((Relationship.target == details['user'] & Relationship.requestor == details['connection'])).get()
+            instance = Relationship.select().where((Relationship.target == details['user']) & (Relationship.requestor == details['connection'])).get()
             with database.transaction():
                 instance.delete_instance()
                 return "True"
