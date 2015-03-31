@@ -2592,12 +2592,15 @@ def createNotificationRecord(user, notificationType, relatedObject):
     notificationTypeTable['Missed Prescription'] = "TakePrescription"
     notificationTypeTable['Carer Missed Prescription'] = "TakePrescription"
 
-    createNotification = Notification.insert(
-        username = user,
-        notificationtype = notificationType,
-        relatedObjectTable = notificationTypeTable[notificationType],
-        relatedObject = relatedObject
-    )
+    try:
+        createNotification = Notification.insert(
+            username = user,
+            notificationtype = notificationType,
+            relatedObjectTable = notificationTypeTable[notificationType],
+            relatedObject = relatedObject
+        )
+    except KeyError, e:
+        return "Invalid Notification Type"
 
     with database.transaction():
         notificationId = str(createNotification.execute())
