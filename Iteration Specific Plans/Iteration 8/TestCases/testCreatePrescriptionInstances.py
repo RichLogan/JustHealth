@@ -8,7 +8,7 @@ import sys
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
-#import the api so we are able to run locally
+# Import the api so we are able to run locally
 sys.path.insert(0, 'Website')
 import justHealthServer
 from justHealthServer import api
@@ -178,24 +178,22 @@ class testCreatePrescriptionInstances(unittest.TestCase):
     def testLegitimate(self):
         """Attempt to check an prescription that is due to be taken today"""
         api.createTakePrescriptionInstances('patient', datetime.datetime.now())
-        
         self.assertEqual(testDatabase.TakePrescription.select().count(),2)
 
     def testNotToday(self):
         """Attempt to check a prescription that is not due to be taken today"""
         api.createTakePrescriptionInstances('patient2', datetime.datetime.now())
-
-        self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.prescriptionid == 2).get().currentdate, datetime.datetime.now().date() + datetime.timedelta(days = 3))
+        with self.assertRaises(testDatabase.TakePrescription.DoesNotExist):
+            testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.currentdate == (datetime.datetime.now().date() + datetime.timedelta(days = 3))).get()
 
     def testAlreadyCreated(self):
         """Attempt to create another take prescription instances after already created"""
         api.createTakePrescriptionInstances('patient3', datetime.datetime.now())
-
         self.assertEqual(testDatabase.TakePrescription.select().where(testDatabase.TakePrescription.prescriptionid == 3).count(),1)
 
     def tearDown(self):
         """Delete all tables"""
-        testDatabase.dropAll()
+        # testDatabase.dropAll()
 
 if __name__ == '__main__':
     unittest.main()

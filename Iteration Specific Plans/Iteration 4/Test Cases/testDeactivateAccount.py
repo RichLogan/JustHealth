@@ -3,6 +3,10 @@ from passlib.hash import sha256_crypt
 import requests
 import unittest
 import imp
+from requests.auth import HTTPBasicAuth
+import unittest
+import imp
+import json
 
 testDatabase = imp.load_source('testDatabase', 'Website/justHealthServer/testDatabase.py')
 
@@ -76,24 +80,11 @@ class testDeactivateAccount(unittest.TestCase):
             "reason" : "A reason to deactivate"
         }
 
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload,  auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(deactivate.text, "Kept")
         self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 1)
         self.assertEqual(testDatabase.Userdeactivatereason.select().count(), 1)
 
-    def testLegitimateDeactivateSecurity(self):
-        """Legitimate Deactivate Attempt Security"""
-
-        payload = {
-            "username" : "test",
-            "comments" : "testComment",
-            "reason" : "A reason to deactivate"
-        }
-
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(deactivate.text, "Kept")
-        self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 1)
-        self.assertEqual(result.status_code, 401)
 
     def testLegitimateDeactivate_noComments(self):
         """Legitimate Deactivate Attempt with no comments"""
@@ -104,24 +95,11 @@ class testDeactivateAccount(unittest.TestCase):
             "reason" : "A reason to deactivate"
         }
 
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload,  auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(deactivate.text, "Kept")
         self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 1)
         self.assertEqual(testDatabase.Userdeactivatereason.select().count(), 1)
 
-    def testLegitimateDeactivate_noCommentsSecurity(self):
-        """Legitimate Deactivate Attempt with no comments Security"""
-
-        payload = {
-            "username" : "test",
-            "comments" : None,
-            "reason" : "A reason to deactivate"
-        }
-
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(deactivate.text, "Kept")
-        self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 1)
-        self.assertEqual(result.status_code, 401)
     
 
     def testLegitimateDelete(self):
@@ -134,25 +112,11 @@ class testDeactivateAccount(unittest.TestCase):
             "reason" : "A reason to deactivate"
         }
 
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload,  auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(deactivate.text, "Deleted")
         self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 0)
         self.assertEqual(testDatabase.Userdeactivatereason.select().count(), 1)
 
-    def testLegitimateDeleteSecurity(self):
-        """Legitimate Delete Attempt"""
-
-        payload = {
-            "username" : "test",
-            "comments" : "testComment",
-            "deletecheckbox" : "on",
-            "reason" : "A reason to deactivate"
-        }
-
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(deactivate.text, "Deleted")
-        self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 0)
-        self.assertEqual(result.status_code, 401)
 
     def testLegitimateDelete_noComments(self):
         """Legitimate Delete Attempt with no comments"""
@@ -164,25 +128,11 @@ class testDeactivateAccount(unittest.TestCase):
             "reason" : "A reason to deactivate"
         }
 
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload,  auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(deactivate.text, "Deleted")
         self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 0)
         self.assertEqual(testDatabase.Userdeactivatereason.select().count(), 1)
 
-    def testLegitimateDelete_noCommentsSecurity(self):
-        """Legitimate Delete Attempt with no comments"""
-
-        payload = {
-            "username" : "test",
-            "comments" : None,
-            "deletecheckbox" : "on",
-            "reason" : "A reason to deactivate"
-        }
-
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(deactivate.text, "Deleted")
-        self.assertEqual(testDatabase.Client.select().where(testDatabase.Client.username == "test").count(), 0)
-        self.assertEqual(result.status_code, 401)
 
     def testNulls(self):
         """Testing Nulls for Deactivate"""
@@ -193,7 +143,7 @@ class testDeactivateAccount(unittest.TestCase):
             "comments" : "testComment",
             "reason" : "A reason to deactivate"
         }
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(deactivate.text, "No username supplied")
 
         # Comments
@@ -202,7 +152,7 @@ class testDeactivateAccount(unittest.TestCase):
             "comments" : None,
             "reason" : "A reason to deactivate"
         }
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
 
         # Comments
         payload = {
@@ -210,38 +160,11 @@ class testDeactivateAccount(unittest.TestCase):
             "comments" : "test",
             "reason" : None
         }
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('patient','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
+        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(deactivate.text, "Please select a reason")
 
 
-    def testNullsSecurity(self):
-        """Testing Nulls for Deactivate"""
-
-        # Username
-        payload = {
-            "username" : None,
-            "comments" : "testComment",
-            "reason" : "A reason to deactivate"
-        }
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.status_code, 401)
-
-        # Comments
-        payload = {
-            "username" : "test",
-            "comments" : None,
-            "reason" : "A reason to deactivate"
-        }
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-
-        # Comments
-        payload = {
-            "username" : "test",
-            "comments" : "test",
-            "reason" : None
-        }
-        deactivate = requests.post("http://127.0.0.1:9999/api/deactivateaccount", data=payload, auth=('Security','73630002494546d52bdc16cf5874a41e720896b566cd8cb72afcf4f866d70570aa078832f3e953daaa2dca60aac7521a7b4633d12652519a2e2baee39e2b539c85ac5bdb82a9f237'))
-        self.assertEqual(result.status_code, 401)
+  
 
     def tearDown(self):
         """Delete all tables"""

@@ -157,4 +157,5 @@ function runTests {
 
     echo "Get Reminders"
     python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetReminders.py    
+
 }

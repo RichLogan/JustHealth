@@ -8,7 +8,7 @@ Website
 
 The Website, and JustHealth's API server can be found running at: http://raptor.kent.ac.uk:5000. 
 
-While you are welcome to create your own account, the following are provided with example data to get a feel for how the application would look. 
+Whilst you are welcome to create your own account, the following are provided with example data to get a feel for how the application would look. 
 
 +------------+------------+ 
 | Username   | Password   | 
@@ -18,7 +18,8 @@ While you are welcome to create your own account, the following are provided wit
 | username2  | password2  | 
 +------------+------------+ 
 
-One thing to note is that there may be a large amount of notifications present, depending on how long the application has remained inactive. 
+**Please note:**
+There may be a large amount of notifications present, depending on how long the application has remained inactive. 
 
 If you desire, you can also query the API directly. For functions and parameters required, please consult the API document. You can send requests to these functions in many ways, but methods we can endorse are:
 
@@ -41,7 +42,7 @@ In order to run the Android application, you have two choices:
 
 The easiest way, as the developers did, would be to load the /jhApp folder of the project into `Android Studio`_, and click run at the top. Wizards for creating virtual devices should be presented as part of the setup of Android Studio. 
 
-This will create the virtual device and load the JustHealth application. Please note that graphics quality and performance can be severly impacted by running on an emulated device, and a physical device will always give a better experience. 
+This will create the virtual device and load the JustHealth application. Please note that graphics quality and performance can be severely impacted by running on an emulated device, and a physical device will always give a better experience. 
 
 **Physical**
 
@@ -70,7 +71,7 @@ Other Links
 
 **GitHub**
 
-Our project was hosted on GitHub, and we used their Issue Tracking and other tools to help manage our project. You can view all of this information here: https://github.com/RichLogan/JustHealth
+Our project is hosted on GitHub, and we used their Issue Tracking and other tools to help manage our project. You can view all of this information here: https://github.com/RichLogan/JustHealth
 
 Issues, contributions, and all history can be viewed using the links on the right. 
 
