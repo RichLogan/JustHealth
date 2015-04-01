@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,17 +13,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,23 +38,31 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
-/**
- * Created by Stephen on 06/01/15.
- */
 public class CarerPatientAppointments extends Activity {
-
-    private JSONArray getApps;
-    private String filter = "All";
-    private String patient = "";
-    private String firstname = "";
-    private String surname = "";
-    private String carerUsername = "";
 
     //LinearLayout that holds all of the buttons
     LinearLayout appointmentHolder;
+    //Holds the JSON array of CarerPatient Appointments
+    private JSONArray getApps;
+    //Sets the value of the filter, on page load this is set to the default value All
+    private String filter = "All";
+    //Stores the username, firstname and surname of the patient
+    private String patient = "";
+    private String firstname = "";
+    private String surname = "";
+    //Stores the carers username
+    private String carerUsername = "";
 
-
+    /**
+     * This runs when the page is first loaded. It also sets the correct xml layout to
+     * display. Following this, it sets the action bar, which uses the patients first name.
+     * It has an onClickListener to check when the filter button is pressed. When pressed the
+     * filter options method is run and this is used to bring up a menu option of the different filters.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_patient_appointments);
@@ -75,13 +87,13 @@ public class CarerPatientAppointments extends Activity {
                 filterOptions();
             }
         });
-
+        appointmentHolder = (LinearLayout) findViewById(R.id.appointments);
         getAppointments(patient);
     }
 
-
     /**
      * Creates the action bar items for the CarerPatient Appointments page
+     *
      * @param menu The options menu in which the items are placed
      * @return True must be returned in order for the options menu to be displayed
      */
@@ -90,11 +102,18 @@ public class CarerPatientAppointments extends Activity {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_self_appointments, menu);
+        menu.findItem(R.id.add).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_plus)
+                        .actionBarSize());
+        menu.findItem(R.id.archived).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_archive)
+                        .actionBarSize());
         return super.onCreateOptionsMenu(menu);
     }
 
     /**
      * This method is called when any action from the action bar is selected
+     *
      * @param item The menu item that was selected
      * @return in order for the method to work, true should be returned here
      */
@@ -122,91 +141,156 @@ public class CarerPatientAppointments extends Activity {
         }
     }
 
+    /**
+     * This runs when the page is reloaded, it ensures that the page is reloaded so that
+     * an appointment that has been added is retrieved from the database and displayed.
+     */
+    protected void onResume() {
+        super.onResume();
+        appointmentHolder.removeAllViews();
+        getAppointments(patient);
+    }
 
     /**
-     * This method makes a post request to the JustHealth API to retrieve all of the appointments for a given user.
-     * It then loops through the JSON Array that is returned from the server and adds them all to a HashMap.
-     * Depending on the Filter that is selected it then checks who the creator of the appointment is and runs the addToView method.
-     * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for
+     * This is the method that gets the queries the JustHealth API and runs the method to print
+     * them out. This loads the appointments off of the main thread, also showing a loading spinner
+     * to inform the user that something is happening. Once the JSON encoded appointments are received
+     * this is assigned to a JSON array. The method is then called to print them out.
+     *
+     * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for.
      */
-    private void getAppointments(String targetUsername) {
+    private void getAppointments(final String targetUsername) {
         SharedPreferences account = getSharedPreferences("account", 0);
         carerUsername = account.getString("username", null);
-        String password = account.getString("password", null);
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        final HashMap<String, String> details = new HashMap<String, String>();
 
         //Text Boxes
         details.put("loggedInUser", carerUsername);
         details.put("targetUser", targetUsername);
-        String postRequest = Request.post("getAllAppointments", details, this);
 
-        try {
-            getApps = new JSONArray(postRequest);
+        System.out.println("Logged in user: " + carerUsername + "    targetUser: " + targetUsername);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
 
-
-        for (int i = 0; i < getApps.length(); i++) {
-            try {
-                JSONObject obj = getApps.getJSONObject(i);
-                final String appid = obj.getString("appid");
-                final String creator = obj.getString("creator");
-                final String name = obj.getString("name");
-                final String appType = obj.getString("apptype");
-                final String startDate = obj.getString("startdate");
-                final String startTime = obj.getString("starttime");
-                final String endDate = obj.getString("enddate");
-                final String endTime = obj.getString("endtime");
-                final String address = obj.getString("addressnamenumber");
-                final String postcode = obj.getString("postcode");
-                final String description = obj.getString("description");
-                final String isPrivate = obj.getString("private");
-                final String androidId = obj.getString("androideventid");
-
-                final HashMap<String, String> appDetails = new HashMap<>();
-                appDetails.put("appid", appid);
-                appDetails.put("name", name);
-                appDetails.put("appType", appType);
-                appDetails.put("startDate", startDate);
-                appDetails.put("startTime", startTime);
-                appDetails.put("endDate", endDate);
-                appDetails.put("endTime", endTime);
-                appDetails.put("addressNameNumber", address);
-                appDetails.put("postcode", postcode);
-                appDetails.put("details", description);
-                appDetails.put("private", isPrivate);
-                appDetails.put("androidId", androidId);
-                appDetails.put("creator", creator);
-
-                if(filter.equals("PatientsOnly")) {
-                    if(creator.equals(targetUsername)) {
-                        addToView(appDetails);
-                    }
-                }
-                else if(filter.equals("CarerPatient")) {
-                    if(creator.equals(carerUsername)) {
-                        addToView(appDetails);
-                    }
-                }
-                else {
-                    addToView(appDetails);
-                }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+            @Override
+            protected void onPreExecute() {
+                //shows the spinner
+                progressDialog = ProgressDialog.show(CarerPatientAppointments.this, "Loading...", "Loading appointments", true);
             }
+
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    //Post requests the API
+                    String postRequest = Request.post("getAllAppointments", details, getApplicationContext());
+                    System.out.println(postRequest);
+                    //Assigns to a JSON array
+                    return new JSONArray(postRequest);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray result) {
+                try {
+                    super.onPostExecute(result);
+                    //assigns the JSON array to the class variable
+                    getApps = result;
+                    //removes any existing views from the LinearLayout where the appointments are
+                    //going to be printed.
+                    LinearLayout layout = (LinearLayout) findViewById(R.id.appointments);
+                    layout.removeAllViewsInLayout();
+                    assignAppointments(targetUsername);
+                    //removes the dialog spinner
+                    progressDialog.dismiss();
+                } catch (NullPointerException e) {
+                    Feedback.toast("Unable to load appointments", false, getApplicationContext());
+                }
+            }
+        }.execute();
+    }
+
+    /**
+     * This method loops through the JSON Array that is returned from the server and adds them all to a HashMap.
+     * Depending on the Filter that is selected it then checks who the creator of the appointment is and runs the addToView method.
+     *
+     * @param targetUsername This is the username of the person (patient) that we want to get all of the appointments for
+     */
+    private void assignAppointments(String targetUsername) {
+        //This is the default text.
+        appointmentHolder.removeAllViews();
+        Button defaultText = new Button(getApplicationContext());
+        defaultText.setId(R.id.defaultCarerPatientAppointmentMessage);
+        defaultText.setText("There are no appointments to display. " + firstname + " may have set some personal appointments to private, which would prevent you from seeing them.");
+        defaultText.setBackgroundColor(Color.rgb(51, 122, 185));
+        appointmentHolder.addView(defaultText);
+
+        if (getApps != null) {
+            for (int i = 0; i < getApps.length(); i++) {
+                try {
+                    JSONObject obj = getApps.getJSONObject(i);
+                    final String appid = obj.getString("appid");
+                    final String creator = obj.getString("creator");
+                    final String name = obj.getString("name");
+                    final String appType = obj.getString("apptype");
+                    final String startDate = obj.getString("startdate");
+                    final String startTime = obj.getString("starttime");
+                    final String endDate = obj.getString("enddate");
+                    final String endTime = obj.getString("endtime");
+                    final String address = obj.getString("addressnamenumber");
+                    final String postcode = obj.getString("postcode");
+                    final String description = obj.getString("description");
+                    final String isPrivate = obj.getString("private");
+                    final String androidId = obj.getString("androideventid");
+
+                    final HashMap<String, String> appDetails = new HashMap<>();
+                    appDetails.put("appid", appid);
+                    appDetails.put("name", name);
+                    appDetails.put("appType", appType);
+                    appDetails.put("startDate", startDate);
+                    appDetails.put("startTime", startTime);
+                    appDetails.put("endDate", endDate);
+                    appDetails.put("endTime", endTime);
+                    appDetails.put("addressNameNumber", address);
+                    appDetails.put("postcode", postcode);
+                    appDetails.put("details", description);
+                    appDetails.put("private", isPrivate);
+                    appDetails.put("androidId", androidId);
+                    appDetails.put("creator", creator);
+
+                    if (filter.equals("PatientsOnly")) {
+                        if (creator.equals(targetUsername)) {
+                            addToView(appDetails);
+                        }
+                    } else if (filter.equals("CarerPatient")) {
+                        if (creator.equals(carerUsername)) {
+                            addToView(appDetails);
+                        }
+                    } else {
+                        addToView(appDetails);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
+            Button app = new Button(this);
+            app.setText("No appointments to show.");
+            Style.styleButton(app, "primary", (LinearLayout) findViewById(R.id.appointments), getApplicationContext());
         }
     }
 
     /**
      * This prints out the button for each of the appointments that are passed to the method.
+     *
      * @param appointment This is a HashMap containing all of the details of a specific appointment. This is the appointment that will be printed.
      */
     private void addToView(final HashMap<String, String> appointment) {
+        removeDefault();
         String startDate = appointment.get("startDate");
         String startTime = appointment.get("startTime");
         String name = appointment.get("name");
@@ -214,20 +298,9 @@ public class CarerPatientAppointments extends Activity {
         Date appDateTime = getDateTimeObject(startDate, startTime);
         Date now = new Date();
         if (appDateTime.after(now)) {
-            appointmentHolder = new LinearLayout(this);
-            ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
-            Button app = new Button(newContext);
-            app.setBackgroundColor(Color.rgb(51, 122, 185));
-            app.setText(name + " " + startDate + " " + startTime);
-            appointmentHolder = (LinearLayout) findViewById(R.id.appointments);
-            appointmentHolder.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-            LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
-            center.setMargins(0,30,0,0);
-            center.gravity = Gravity.CENTER;
-            app.setLayoutParams(center);
-
-            System.out.println("onclick listener applied");
+            Button app = new Button(this);
+            app.setText(name + "\n" + startDate + " " + startTime);
+            Style.styleButton(app, "primary", (LinearLayout) findViewById(R.id.appointments), getApplicationContext());
             app.setOnClickListener(new Button.OnClickListener() {
                 public void onClick(View view) {
                     appointmentAction(appointment);
@@ -246,17 +319,20 @@ public class CarerPatientAppointments extends Activity {
                     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) {
+                            appointmentHolder.removeAllViews();
                             filter = "None";
                             appointmentHolder.removeAllViews();
-                            getAppointments(patient);
+                            assignAppointments(patient);
                         } else if (which == 1) {
+                            appointmentHolder.removeAllViews();
                             filter = "PatientsOnly";
                             appointmentHolder.removeAllViews();
-                            getAppointments(patient);
+                            assignAppointments(patient);
                         } else if (which == 2) {
                             appointmentHolder.removeAllViews();
+                            appointmentHolder.removeAllViews();
                             filter = "CarerPatient";
-                            getAppointments(patient);
+                            assignAppointments(patient);
                         }
                     }
 
@@ -266,8 +342,23 @@ public class CarerPatientAppointments extends Activity {
     }
 
     /**
+     * This method checks whether there are any views where the appointments are about to be printed
+     * and removes them all.
+     */
+    private void removeDefault() {
+        try {
+            Button defaultText = (Button) findViewById(R.id.defaultCarerPatientAppointmentMessage);
+            appointmentHolder.removeView(defaultText);
+            System.out.println("removed view");
+        }catch (NullPointerException e) {
+            //do nothing
+        }
+    }
+
+    /**
      * This method creates the dialog box when an appointment is clicked.
      * It firstly checks that the carer (logged in) was the creator of the appointment before showing the available actions.
+     *
      * @param appointmentDetails this is the HashMap of the appointment that has been pressed
      */
     private void appointmentAction(final HashMap<String, String> appointmentDetails) {
@@ -288,14 +379,13 @@ public class CarerPatientAppointments extends Activity {
                                     .setData(builder.build());
                             startActivity(intent);
                         } else if (which == 1) {
-                            if(appointmentDetails.get("creator").equals(carerUsername)) {
+                            if (appointmentDetails.get("creator").equals(carerUsername)) {
                                 Intent intent = new Intent(CarerPatientAppointments.this, EditCarerPatientAppointment.class);
                                 intent.putExtra("appointmentDetails", appointmentDetails);
                                 intent.putExtra("firstName", firstname);
                                 intent.putExtra("surname", surname);
                                 startActivity(intent);
-                            }
-                            else {
+                            } else {
                                 Feedback.toast("Read Only Access Permitted", false, getApplicationContext());
                             }
                         } else if (which == 2) {
@@ -324,7 +414,6 @@ public class CarerPatientAppointments extends Activity {
                                 Feedback.toast("Read Only Access Permitted.", false, getApplicationContext());
                             }
                         }
-
                         //others to be added here
                     }
                 });
@@ -335,6 +424,7 @@ public class CarerPatientAppointments extends Activity {
      * This is run when the user selects to delete the appointment.
      * It checks whether the appointment has been added to the users calendar. If so this is deleted.
      * A post request is also made to the API which subsequently removes the event from the calendar.
+     *
      * @param appointmentDetails A HashMap of the appointment to be deleted
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -375,10 +465,10 @@ public class CarerPatientAppointments extends Activity {
         startActivity(getIntent());
     }
 
-
     /**
      * This method takes the date and time from the JustHealth database and adds each part to a HashMap.
      * This is needed when adding the appointment to the native android calendar.
+     *
      * @param date the date of the appointment to be added to the android calendar
      * @param time the time of the appointment to be added to the android calendar
      * @return a HashMap of the date and time of the appointment
@@ -403,17 +493,16 @@ public class CarerPatientAppointments extends Activity {
         return formattedDateTime;
     }
 
-
     /**
      * This method takes the date and time as a string, concatenates it and returns it as an android date/time format.
+     *
      * @param date the string of the date
      * @param time the string of the time
      * @return a Date object of the combined date and time strings
      */
     private Date getDateTimeObject(String date, String time) {
         String dateTime = date + " " + time;
-        System.out.println("string: " + dateTime);
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.UK);
         try {
             Date newDate = format.parse(dateTime);
             System.out.println("DateType: " + newDate);

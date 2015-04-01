@@ -36,12 +36,16 @@
 
         <activity
             android:name=".Login"
-            android:label="Login" >
+            android:label="Login"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".Register"
-            android:label="Register">
+            android:label="Register"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -49,7 +53,9 @@
 
         <activity
             android:name=".TermsAndConditions"
-            android:label="Terms and Conditions">
+            android:label="Terms and Conditions"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -57,7 +63,9 @@
 
         <activity
             android:name=".ForgotPassword"
-            android:label="Forgot Password">
+            android:label="Forgot Password"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -65,7 +73,9 @@
 
         <activity
             android:name=".HomePatient"
-            android:label="Home">
+            android:label="Home"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -73,7 +83,9 @@
 
         <activity
             android:name=".HomeCarer"
-            android:label="Home">
+            android:label="Home"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -81,7 +93,9 @@
 
         <activity
             android:name=".MyPatients"
-            android:label="My Patients">
+            android:label="My Patients"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -89,18 +103,27 @@
 
         <activity
             android:name=".CarerPrescriptions"
-            android:label="Prescriptions">
+            android:label="Prescriptions"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
         </activity>
 
-        <activity android:name=".AddPrescription" />
-        <activity android:name=".EditPrescription" />
+        <activity android:name=".AddPrescription"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".EditPrescription"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".Search"
-            android:label="Search">
+            android:label="Search"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -108,17 +131,23 @@
 
         <activity
             android:name=".Profile"
-            android:label="Profile">
+            android:label="Profile"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Settings" />
         </activity>
 
-        <activity android:name=".EditProfile" />
+        <activity android:name=".EditProfile"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".DeactivateAccount"
-            android:label="Deactivate Account">
+            android:label="Deactivate Account"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Settings" />
@@ -126,7 +155,9 @@
 
         <activity
             android:name=".Settings"
-            android:label="Settings">
+            android:label="Settings"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -134,7 +165,9 @@
 
         <activity
             android:name=".SelfAppointments"
-            android:label="Self Appointments">
+            android:label="Self Appointments"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -142,15 +175,19 @@
 
         <activity
             android:name=".SelfArchivedAppointments"
-            android:label="Archived Appointments">
+            android:label="Archived Appointments"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
         </activity>
 
         <activity
-            android:name=".PatientMedication"
-            android:label="Medication">
+            android:name=".PatientPrescription"
+            android:label="Medication"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
@@ -158,7 +195,9 @@
 
         <activity
             android:name=".CreateSelfAppointment"
-            android:label="Create Appointment">
+            android:label="Create Appointment"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SelfAppointments" />
@@ -166,7 +205,9 @@
 
         <activity
             android:name=".EditSelfAppointment"
-            android:label="Edit Appointment">
+            android:label="Edit Appointment"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SelfAppointments" />
@@ -174,7 +215,9 @@
 
         <activity
             android:name=".CarerPatientAppointments"
-            android:label="Appointments">
+            android:label="Appointments"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MyPatients" />
@@ -182,7 +225,9 @@
 
         <activity
             android:name=".CreateCarerPatientAppointment"
-            android:label="Create Appointment">
+            android:label="Create Appointment"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CarerPatientAppointments" />
@@ -190,7 +235,9 @@
 
         <activity
             android:name=".CarerPatientArchivedAppointments"
-            android:label="Archived Appointments">
+            android:label="Archived Appointments"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MyPatients" />
@@ -198,7 +245,9 @@
 
         <activity
             android:name=".EditCarerPatientAppointment"
-            android:label="Edit Appointment">
+            android:label="Edit Appointment"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MyPatients" />
@@ -206,22 +255,73 @@
 
         <activity
             android:name=".Privacy"
-            android:label="Privacy">
+            android:label="Privacy"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MyPatients" />
         </activity>
 
         <activity android:name=".Logout"
-            android:label="Logout">
+            android:label="Logout"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main" />
         </activity>
 
-        <activity android:name=".SearchNHSWebsite"/>
-        <activity android:name=".ConnectionsMain"/>
-        <activity android:name=".ConnectionsView"/>
+        <activity android:name=".SearchNHSWebsite"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ConnectionsMain"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ConnectionsView"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".PatientCorrespondence"
+            android:label="PatientCorrespondence"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
+        </activity>
+
+        <activity android:name=".CarerPatientCorrespondence"
+            android:label="CarerPatientCorrespondence"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
+        </activity>
+
+        <activity android:name=".CarerAddPatientCorrespondence"
+            android:label="CarerAddPatientCorrespondence"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CarerPatientCorrespondence"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait"/>
+        </activity>
+
+        <activity
+            android:name=".TakePrescription"
+            android:label="TakePrescription"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PatientPrescription" />
+        </activity>
 
         <activity android:name=".Main">
             <intent-filter>
@@ -230,6 +330,35 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ViewAppointment"
+            android:label="ViewAppointment"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SelfAppointments" />
+        </activity>
+
+        <activity
+            android:name=".ExpiredPassword"
+            android:label="ExpiredPassword"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
+
+        <activity
+            android:name=".whyKeepData"
+            android:label="WhyKeepData"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DeactivateAccount" />
+        </activity>
     </application>
 
 </manifest>

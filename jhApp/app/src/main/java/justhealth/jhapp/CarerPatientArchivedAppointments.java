@@ -41,17 +41,29 @@ import java.util.HashMap;
  */
 public class CarerPatientArchivedAppointments extends Activity {
 
+    //Holds the JSON array of CarerPatient Appointments
     private JSONArray getApps;
+    //Sets the value of the filter, on page load this is set to the default value All
     private String filter = "All";
+    //Stores the username, firstname and surname of the patient
     private String patient = "";
     private String firstname = "";
     private String surname = "";
+    //Stores the carers username
     private String carerUsername = "";
 
     //LinearLayout that holds all of the buttons
     LinearLayout appointmentHolder;
 
 
+    /**
+     * This runs when the page is first loaded. It also sets the correct xml layout to
+     * display. Following this, it sets the action bar and runs the method to get the past appointments.
+     * It has an onClickListener to check when the filter button is pressed. When pressed the
+     * filter options method is run and this is used to bring up a menu option of the different filters.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carer_patient_appointments);

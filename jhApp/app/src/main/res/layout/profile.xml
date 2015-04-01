@@ -35,8 +35,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profilePicture"
-                    android:layout_width="96sp"
-                    android:layout_height="96sp"
+                    android:layout_width="200sp"
+                    android:layout_height="200sp"
                     android:layout_gravity="center"
                     app:border_width="1sp"
                     app:border_color="#FF000000"/>
@@ -45,18 +45,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Username"
+                    android:text="Username: "
                     android:textColor="@color/primary"
                     android:id="@+id/profileUsername"
-                    android:layout_gravity="center"
                     android:layout_marginTop="25sp"
+                    android:layout_gravity="center"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Name"
+                    android:text="Name: "
                     android:id="@+id/profileName"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileUsername"
@@ -68,46 +68,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="D.O.B"
+                    android:text="Date of Birth: "
                     android:id="@+id/profileDOB"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileName"
                     android:layout_marginTop="10sp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Gender"
+                    android:text="Gender: "
                     android:id="@+id/profileGender"
-                    android:layout_gravity="center"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileDOB"
-                    android:layout_marginTop="10sp" />
+                    android:layout_marginTop="10sp"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Account Type"
+                    android:text="Account Type: "
                     android:id="@+id/profileAccount"
-                    android:layout_gravity="center"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileGender"
                     android:layout_marginTop="10sp"
+                    android:layout_gravity="center"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Email"
+                    android:textSize="20sp"
                     android:id="@+id/profileEmail"
-                    android:layout_gravity="center"
                     android:textColor="@color/primary"
                     android:layout_below="@id/profileAccount"
-                    android:layout_marginTop="10sp"/>
+                    android:layout_marginTop="10sp"
+                    android:layout_gravity="center" />
 
                 <Button
                     android:text="Edit Profile"

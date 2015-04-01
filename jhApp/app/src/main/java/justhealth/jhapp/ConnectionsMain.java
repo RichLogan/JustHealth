@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,14 @@ public class ConnectionsMain extends Activity {
     JSONArray outgoing = null;
     JSONArray completed = null;
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the action bar. It has action listeners
+     * for the incoming/outgoing and completed buttons (the type of connections).
+     * The getConnections method is also run.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.connections_main);
@@ -35,7 +44,7 @@ public class ConnectionsMain extends Activity {
 
         // Assign Button Actions
 
-        //Incoming
+        //Incoming button
         RelativeLayout incomingButton = (RelativeLayout) findViewById(R.id.incomingButton);
         incomingButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -47,7 +56,7 @@ public class ConnectionsMain extends Activity {
             }
         );
 
-        // Outgoing
+        // Outgoing button
         RelativeLayout outgoingButton = (RelativeLayout) findViewById(R.id.outgoingButton);
         outgoingButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -59,7 +68,7 @@ public class ConnectionsMain extends Activity {
             }
         );
 
-        // Completed
+        // Completed button
         RelativeLayout completedButton = (RelativeLayout) findViewById(R.id.completedButton);
         completedButton.setOnClickListener(
             new Button.OnClickListener() {
@@ -73,28 +82,38 @@ public class ConnectionsMain extends Activity {
 
         // Load Connections
         getConnections();
-        loadBadges();
     }
 
     /**
      * Retrieves ALL connections from the database in order for counts to be calculated and displayed via loadBadges()
+     * This is done asynchronously, off of the main thread.
      */
     private void getConnections() {
-        HashMap<String, String> getConnectionsInfo = new HashMap<String, String>();
+        final HashMap<String, String> getConnectionsInfo = new HashMap<String, String>();
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
         getConnectionsInfo.put("username", username);
 
-        String response = Request.post("getConnections", getConnectionsInfo, getApplicationContext());
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... v) {
+                String response = Request.post("getConnections", getConnectionsInfo, getApplicationContext());
+                try {
+                    JSONObject result = new JSONObject(response);
+                    outgoing = new JSONArray(result.getString("outgoing"));
+                    incoming = new JSONArray(result.getString("incoming"));
+                    completed = new JSONArray(result.getString("completed"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Feedback.toast("Unable to get your connections", false, getApplicationContext());
+                }
+                return null;
+            }
 
-        try {
-            JSONObject result = new JSONObject(response);
-            outgoing = new JSONArray(result.getString("outgoing"));
-            incoming = new JSONArray(result.getString("incoming"));
-            completed = new JSONArray(result.getString("completed"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            protected void onPostExecute(Void v) {
+                loadBadges();
+            }
+        }.execute();
     }
 
     /**

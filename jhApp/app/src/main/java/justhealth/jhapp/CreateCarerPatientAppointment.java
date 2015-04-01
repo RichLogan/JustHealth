@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -42,11 +44,21 @@ import java.util.HashMap;
 
 /**
  * Created by Stephen on 06/01/15.
+ * Allows a carer to create an appointment between themselves and a patient
  */
 public class CreateCarerPatientAppointment extends Activity {
 
+    //username of the patient
     private String patient;
 
+    /**
+     * This method runs when the page is first loaded.
+     * Sets the correct xml layout to be displayed and loads the action bar.
+     * Sets the action bar of the page and has an onclickListener applied to the create appointment
+     * button.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -90,9 +102,8 @@ public class CreateCarerPatientAppointment extends Activity {
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
-        String password = account.getString("password", null);
 
-        HashMap<String, String> details = new HashMap<String, String>();
+        final HashMap<String, String> details = new HashMap<String, String>();
 
         //Text Boxes
         details.put("creator", username);
@@ -105,34 +116,71 @@ public class CreateCarerPatientAppointment extends Activity {
         details.put("enddate", ((EditText) findViewById(R.id.endDate)).getText().toString());
         details.put("endtime", ((EditText) findViewById(R.id.endTime)).getText().toString());
         details.put("description", ((EditText) findViewById(R.id.details)).getText().toString());
-        details.put("apptype", "Carer Visit");
+        details.put("apptype", "Carer");
 
-        String responseString = Request.post("addInviteeAppointment", details, this);
-        int id = Integer.parseInt(responseString);
-        System.out.println(responseString);
+        new AsyncTask<Void, Void, String>() {
 
-        if (id > 0) {
-            //show the alert to say it is successful
-            Context context = getApplicationContext();
-            CharSequence text = "Appointment Added.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
-            addToCalendarQuestion(details, id);
-        }
-        else {
-            Context context = getApplicationContext();
-            CharSequence text = "Oops, something went wrong. Please try again.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
-        }
+            ProgressDialog progressDialog;
+            String responseString;
+
+            /**
+             * Ensures the the progress dialog is displayed on the screen to notify the user that
+             * the appointment is being added to the JustHealth database.
+             */
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(CreateCarerPatientAppointment.this, "Loading...", "Creating appointment", true);
+                System.out.println(details);
+            }
+
+            /**
+             * This makes the post request to the JustHealth API, and completes it off of the
+             * main thread.
+             * @param v shows that there are no parameters to the method
+             * @return A string which is the response from the JustHealth API
+             */
+            @Override
+            protected String doInBackground(Void... v) {
+                responseString = Request.post("addInviteeAppointment", details, getApplicationContext());
+                return responseString;
+            }
+
+            /**
+             * Checks that it has successfully returned the primary key of the record that has been
+             * added to the database. This then toasts this to the user and runs the method to ask them
+             * if they want it to be added to the native calendar.
+             * Otherwise it toasts saying that something has gone wrong.
+             * @param response the response from the JustHealth API.
+             */
+            @Override
+            protected void onPostExecute(String response) {
+                progressDialog.dismiss();
+                int id = Integer.parseInt(responseString);
+                System.out.println(responseString);
+
+                if (id > 0) {
+                    //show the alert to say it is successful
+                    Context context = getApplicationContext();
+                    CharSequence text = "Appointment Added.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    toast.show();
+                    addToCalendarQuestion(details, id);
+                } else {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Oops, something went wrong. Please try again.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    toast.show();
+                }
+            }
+        }.execute();
     }
 
 

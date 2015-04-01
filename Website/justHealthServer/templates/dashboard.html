@@ -16,7 +16,8 @@
     var count = 0;
     var enclosingDiv = $('#prescriptionCount' + String(prescriptionid));
     var checkBoxList = enclosingDiv.children();
-    // 0 to 4
+    
+    // Check checkboxes that should be
     $(checkBoxList).each(function(index) {
       if ($(this).prop('checked')) {
         count++;
@@ -25,20 +26,20 @@
 
     // Record taking prescription
     $.post(
-      "/api/takeprescription",
+      "/takePrescriptionWeb",
       {
         prescriptionid : String(prescriptionid),
         currentcount : count
       }
     );
   }
-
+  //Prescription validation
   function checkPrescriptionBoxes(prescriptionid, checkCount) {
     var enclosingDiv = $('#prescriptionCount' + String(prescriptionid));
     var checkBoxList = enclosingDiv.children();
     var count = 0;
     $(checkBoxList).each(function(index) {
-      if (count < checkCount) {
+      if (count <= checkCount) {
         $(this).prop('checked', true);
         count++;
       }
@@ -46,6 +47,11 @@
   }
 
   $(document).ready(function() {
+    //Opens the connections modal on load if a connection has just been requested
+    if (getUrlParameter('go') == "connections") {
+      $('#connections').toggle();
+    }
+
     // Handles Spinning of Notification Arrow
     $("#notificationsBar").click(function() {
       deg = addAngle(180);
@@ -63,15 +69,6 @@
       }
     });
 
-    $('form').submit(function(e) {
-      $("form :input").each(function(){
-        if ($(this).val() == null || $(this).val() == "") {
-          alert("All fields must be filled out");
-          e.preventDefault();
-          return false;
-        }
-      });
-    });
 
     //Check if date is in the past
     $('#startdate').focusout(function() {
@@ -89,6 +86,14 @@
       if (selectedDate < now) {
         // selected date is in the past
         $('#dateValidate2').html('<i class="fa fa-times"></i> This date is in the past').addClass('wrongInputs');
+      }
+    });
+
+    //Prevent form submission if validation fails
+    $('#codeForm').submit(function(e) {
+      if (!formcheck2()) {
+        e.preventDefault();
+        return false;
       }
     });
 
@@ -125,9 +130,9 @@
       <fieldset class="style center-element">
         <h4 style="text-align:left;" class="bold">{{session.username}}</h4>
         <a class"thumbnail" href="/editProfile"> 
-          <h5><i class="fa fa-pencil-square-o sideIcons pull-right" style="position: absolute; top: 5%; right: 5%;"></i></h5>
+          <i class="fa fa-pencil-square-o sideIcons pull-right" style="position: relative; top: -30px; right: -10px;"></i>
         </a>
-        <img alt="Profile Picture" src="/images/{{session.profilepicture}}" class="img-circle" style="position: relative; top: 0; left: 0;width: 10em;"></br></br>
+        <img class="img-circle" alt="Profile Picture" src="/images/{{session.profilepicture}}" style="position: relative; top: 0; left: 0;width: 14em;"></br></br>
         <p style="text-align:left;">{{accountInfo.firstname}} {{accountInfo.surname}}
         </br>
         {{accountInfo.email}}</p>
@@ -139,7 +144,7 @@
       <div>
         <h5><i class="fa fa-link sideIcons" ></i> Connections </h5>
         {% if connections %}
-          {% for connection in completed %} 
+          {% for connection in completed|sort(attribute='username') %} 
             <a data-toggle="modal" data-target="#{{connection.username}}"></a>
             <hr class="dashboard">
             <a class="modalheader" data-toggle="modal" data-target="#{{connection.username}}">
@@ -155,8 +160,8 @@
                     <h4 class="modal-title" id="{{connection.username}}"><span class= "bold"> Username: </span>{{connection.username}}</h4>
                   </div>
                   <div class="modal-body">
-                    <img alt="Profile Picture" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle nav-profileConnection-img pull-left">
-                    <form action="/api/deleteConnection" method="POST">
+                    <img alt="Profile Picture" src="/images/{{connection.profilepicture}}" class="img-circle nav-profile-img pull-left">
+                    <form action="/deleteConnectionWeb" method="POST">
                       <input type="hidden" name="user" value="{{session.username}}">
                       <input type="hidden" name="connection" value="{{connection.username}}">
                       <input type="submit" class="btn btn-danger pull-right" value="Delete" onclick="return confirm('Are you sure you want to delete this connection?')">
@@ -261,15 +266,16 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                  <button class="btn btn-default btn-sm pull-right" style="margin-right:5px; position:relative; top:-5px" onclick="goBack()">Back</button>
                                   <h4 class="modal-title" id="completeConnectionModalLabel">Complete Connection</h4>
                                 </div>
                                 <div class="modal-body">
-                                  <h4>Please enter the verification code given by the requestor</h1>
-                                  <form role="form" action="/completeConnectionWeb" method="POST">
+                                  <h5 style="text-align:center">Please enter the verification code given by the requestor</h5>
+                                  <form role="form" action="/completeConnectionWeb" id="codeForm" method="POST">
                                     <div style="width: 70%;margin: 0 auto;">
                                       <input name="requestor" type="hidden" value="{{connection.username}}">
                                       <input name="username" type="hidden" value="{{session.username}}">
-                                      <div class="form-group" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
+                                      <div class="form-group code-required" style="width:300px;margin:0 auto;"><input name="codeattempt" maxlength="4" size="4" class="form-control codeInput"></div>
                                       <div class="form-group" style="width:75px;margin:0 auto;margin-top:25px;"><input type="submit" class="btn btn-success" value="Connect"></div>
                                     </div>
                                   </form>
@@ -290,7 +296,7 @@
         </div>
       </div>
     </fieldset>
-
+    <!--Link to Visit notes -->
     <fieldset class="style">
       <div>
         <a class"thumbnail" href="/patientNotes"> 
@@ -298,7 +304,7 @@
       </div>
     </fieldset>
 
-
+    <!--Link to Search for users -->
     <fieldset class="style">
       <div id="dashConnections">  
         <a class"thumbnail" href="/search"> 
@@ -306,6 +312,7 @@
       </div>
     </fieldset>
 
+    <!--Link to search the NHS directly -->
     <fieldset class="style">
       <div>
         <a class"thumbnail" href="/nhsSearch">
@@ -313,7 +320,7 @@
       </div>
     </fieldset>
 
-
+    <!--Link to the settings page -->
     <fieldset class="style">
       <div>
         <a class"thumbnail" href="/settings"> 
@@ -326,21 +333,25 @@
   <div class="col-md-9 dashPanel">
     <!-- Reminders (Cannot be hidden) -->
     {% for reminder in reminders %}
-      <div class="alert alert-{{reminder.reminderClass}}" role="alert">
-        <a href=""><strong>{{reminder.relatedObjectTable}}</strong></a>
+      <div class="alert alert-{{reminder.reminderClass}}" style="font-size:1.25em;" role="alert">
+        <a href="" style="font-size: 1.5em;"><strong>{{reminder.relatedObjectTable}} Due</strong></a>
         <br />
         {{reminder.content}}
         {% if reminder.relatedObjectTable == "Prescription" %}
           <br />
           <div id="prescriptionCount{{reminder.relatedObject}}">
-            Record your intake here:
+            Check each time you take your prescription:<br />
             {% for x in range(reminder.extraFrequency) %}
               <input type="checkbox" onclick="recordPrescription({{reminder.relatedObject}});">
             {% endfor %}
             <script type="text/javascript">
-              $.post('/api/getPrescriptionCount', { prescriptionid : String({{reminder.relatedObject}}) }, function(data) {
-                checkPrescriptionBoxes({{reminder.relatedObject}}, data);
-              });
+              $.post(
+                '/getPrescriptionCountWeb',
+                {prescriptionid : String({{reminder.relatedObject}})},
+                function(data) {
+                  checkPrescriptionBoxes({{reminder.relatedObject}}, data);
+                }
+              );
             </script>
           </div>
         {% endif %}
@@ -388,7 +399,7 @@
             <div class="panel-heading myPatientsTab" role="tab" id="headingpre{{prescription.prescriptionid}}">
               <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapsepre{{prescription.prescriptionid}}" aria-expanded="true" aria-controls="collapsepre{{prescription.prescriptionid}}">
-                  <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}} ({{prescription.frequency}} times today)
+                  <h4> {{prescription.medication}}:</h4> Take {{prescription.quantity}} x {{prescription.dosage}} {{prescription.dosageunit}} {{prescription.dosageform}}(s) ({{prescription.frequency}} times a day)
                 </a>
               </h4>
             </div>
@@ -397,9 +408,10 @@
                 <div class="row">
                   <h5>
                     <ul>
+                      <li>Stock Left: {{prescription.stockleft}}</li>
                       <li>Start Date: {{prescription.startdate}}</li>
                       <li>End Date: {{prescription.enddate}}</li>
-                      <li>Extra Info: {{prescription.prerequisite}}</li>
+                      <li>Extra Info / Comments: {{prescription.prerequisite}}</li>
                     </ul>
                   </h5>
                 </div>
@@ -488,9 +500,9 @@
                           </a>
                         </div>
                         <div class="col-md-2">
-                          <form action="/deleteAppointment" method="GET" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                          <form action="/deleteAppointment" method="GET">
                             <input type="hidden" name="appid" value="{{appointment.appid}}">
-                            <input type="submit" class="btn btn-danger" value="Delete">
+                            <button type="submit" class="btn btn-danger btn-sm pull-right" onclick="return confirm('Are you sure you want to delete this appointment?')"><i class="fa fa-trash-o" style="font-size: 1.7em;"></i></button>
                           </form>
                         </div>
                         <div class="col-md-8">

@@ -73,7 +73,10 @@ def sendPushNotification(username, title, message):
   r = requests.post('https://android.googleapis.com/gcm/send', data=json.dumps(payload), headers=headers)
 
   # Check result
-  result = json.loads(r.text)
+  try:
+    result = json.loads(r.text)
+  except Exception:
+    return "False"
   if (result['success'] == 1) and (result['failure'] == 0):
     return "True"
   return "False"
@@ -95,7 +98,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Connection Request":
         try: 
             requestor = Relationship.select().where(Relationship.connectionid == notification['relatedObject']).get()
-        except Relationship.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -108,7 +111,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Added":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -118,7 +121,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Prescription Updated":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -128,7 +131,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Invite":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -138,7 +141,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Updated":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -154,7 +157,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Medication Low":
         try:
             prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-        except Prescription.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -164,7 +167,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Accepted":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -174,7 +177,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Appointment Declined":
         try:
             appointment = Appointments.select().where(Appointments.appid == notification['relatedObject']).get()
-        except Appointments.DoesNotExist:
+        except:
             doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
             with database.transaction():
                 doesNotExist.delete_instance()
@@ -184,7 +187,7 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Medication Low":
       try:
         prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-      except Prescription.DoesNotExist:
+      except:
         doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
         with database.transaction():
           doesNotExist.delete_instance()
@@ -194,11 +197,44 @@ def getAndroidNotificationContent(notification):
     if notification['notificationtype'] == "Patient Medication Low":
       try:
         prescription = Prescription.select().where(Prescription.prescriptionid == notification['relatedObject']).get()
-      except Prescription.DoesNotExist:
+      except:
         doesNotExist = Notification.get(Notification.notificationid == notification['notificationid'])
         with database.transaction():
           doesNotExist.delete_instance()
           return "DoesNotExist"
       content = prescription.username.username + " has less than 3 days stock of " + prescription.medication.name + " left."
+
+    if notification['notificationtype'] == "Missed Prescription":
+      try:
+        takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
+        prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
+        content = "You only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+      except:
+        doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+        with database.transaction():
+          doesNotExist.delete_instance()
+          return "DoesNotExist"
+
+    if notification['notificationtype'] == "Carer Missed Prescription":
+      try:
+        takeInstance = TakePrescription.select().where(TakePrescription.takeid == notification['relatedObject']).get()
+        prescription = Prescription.select().where(Prescription.prescriptionid == takeInstance.prescriptionid).get()
+        content = "Your patient " + str(prescription.username.username) + " only took " + str(takeInstance.currentcount) + " out of " + str(prescription.frequency) + " on " + str(takeInstance.currentdate)
+      except:
+        doesNotExist = Notification.get(Notification.notificationid == prescriptionid)
+        with database.transaction():
+          doesNotExist.delete_instance()
+          return "DoesNotExist"
     
     return content
+
+
+
+#######
+##This is a test just for project fair
+#######
+@app.route('/gcm/push', methods=['POST', 'GET'])
+def testPushNotification():
+  for user in Androidregistration.select():
+    sendPushNotification(user.username, "Test Push", "This is a test push notification that has been sent manually by the JustHealth team. This is for demonstration only")
+  return "You should have recieved a push notification!"

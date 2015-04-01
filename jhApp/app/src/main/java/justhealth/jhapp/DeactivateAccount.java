@@ -3,10 +3,12 @@ package justhealth.jhapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
@@ -18,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -43,6 +46,15 @@ import java.util.Set;
  * Created by stephentate on 04/11/14.
  */
 public class DeactivateAccount extends Activity {
+
+    /**
+     * This runs when the page is first loaded.
+     * This shows the action bar and runs the populate spinner method.
+     * There are then two action listeners for the deactivate button and the link to show the
+     * reasons why we should keep the data.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -62,8 +74,19 @@ public class DeactivateAccount extends Activity {
                 popUpDeactivate();
             }
         });
+
+        TextView whyKeepData = (TextView) findViewById(R.id.linkKeepYourData);
+        whyKeepData.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(DeactivateAccount.this, whyKeepData.class));
+            }
+        });
     }
 
+    /**
+     * This makes a post request to the JustHealth API to retrieve the reasons that one may
+     * deactivate their JustHealth account. It then adds these to the spinner.
+     */
     private void populateSpinner() {
 
         System.out.println("populateSpinner");
@@ -89,12 +112,12 @@ public class DeactivateAccount extends Activity {
     }
 
     /**
-     * This method makes a post request to the API to deactivate an account. It adds all of the
-     * parameters to a HashMap.
+     * This method makes a post request to the JustHealth API to deactivate an account.
+     * It adds all of the parameters to a HashMap.
      * Once complete, it returns the appropriate message to the user.
      */
     private void popUpDeactivate() {
-        HashMap<String, String> reasons = new HashMap<String, String>();
+        final HashMap<String, String> reasons = new HashMap<String, String>();
 
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
@@ -122,39 +145,75 @@ public class DeactivateAccount extends Activity {
         final String reason = String.valueOf(spinnerReason.getSelectedItem());
         reasons.put("reason", reason);
 
-        String response = Request.post("deactivateaccount", reasons, this);
-        if(response.equals("Deleted")) {
-            getSharedPreferences("account", 0).edit().clear().commit();
+        new AsyncTask<Void, Void, String>() {
 
-            //show the alert to say it is successful
-            Context context = getApplicationContext();
-            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated and all associated information with it has been deleted.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
-            finish();
+            ProgressDialog progressDialog;
+            String response;
 
-            Intent goToStart = new Intent(this, Login.class);
-            startActivity(goToStart);
-        }
-        else if(response.equals("Kept")) {
-            //show the alert to say it is successful
-            Context context = getApplicationContext();
-            CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated. However, if you want to come back we have kept all of your details on file; it'll be quick and easy to reactivate.";
-            //Length
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            //Position
-            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
-            toast.show();
+            /**
+             * This shows the spinner when the post request is made to deactivate the users account.
+             */
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(DeactivateAccount.this, "Loading...", "Deactivating your JustHealth account", true);
+                System.out.println(reasons);
+            }
 
-            finish();
-            Intent goToStart = new Intent(this, Login.class);
-            startActivity(goToStart);
-        }
+            /**
+             * This makes the post request to the JustHealth API off of the main thread.
+             * @param v this shows that the method takes no parameters
+             * @return a string with the response from the JustHealth API
+             */
+            @Override
+            protected String doInBackground(Void... v) {
+                response = Request.post("deactivateaccount", reasons, getApplicationContext());
+                return response;
+            }
+
+            /**
+             * Once the post request is complete a relevant message is then displayed to the user.
+             * This changes depending whether they have chosen to delete their information or not.
+             *
+             * @param response a string containing the response to the post request made to the
+             *                 JustHealth API.
+             */
+            @Override
+            protected void onPostExecute(String response) {
+
+                if (response.equals("Deleted")) {
+                    getSharedPreferences("account", 0).edit().clear().apply();
+                    //show the alert to say it is successful
+                    Context context = getApplicationContext();
+                    CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated and all associated information with it has been deleted.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    progressDialog.dismiss();
+                    toast.show();
+                    finish();
+
+                    Intent goToStart = new Intent(DeactivateAccount.this, Login.class);
+                    startActivity(goToStart);
+                } else if (response.equals("Kept")) {
+                    //show the alert to say it is successful
+                    Context context = getApplicationContext();
+                    CharSequence text = "Sorry to see your leaving. Please be assured that your account has been deactivated. However, if you want to come back we have kept all of your details on file; it'll be quick and easy to reactivate.";
+                    //Length
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    //Position
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+                    progressDialog.dismiss();
+                    toast.show();
+
+                    finish();
+                    Intent goToStart = new Intent(DeactivateAccount.this, Login.class);
+                    startActivity(goToStart);
+                }
+            }
+        }.execute();
     }
 
 

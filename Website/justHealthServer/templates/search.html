@@ -79,7 +79,7 @@
     <td>{{result.surname}}</td>
     <td>
       {% if result.message %}
-        <form action="/profile" method="GET">
+        <form action="/" method="GET">
           <input type="hidden" name="go" value="connections">
           <input type="submit" class="btn btn-primary" value="{{result.message}}">
         </form>

@@ -20,6 +20,13 @@ import java.util.HashMap;
 
 public class Register extends Activity {
 
+    /**
+     * This method runs when the page is first loaded. Sets the correct xml layout and sets the
+     * correct action bar. Onclick listener for the register button.
+     * runs the method that checks for a change of the spinners.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,10 @@ public class Register extends Activity {
         //TODO: Link to Terms and Conditions
     }
 
+    /**
+     * This checks for when the gender and account type spinners are changed. When they changed it
+     * changes the icon that is next to the SpinnerView.
+     */
     private void initSpinners() {
         // Gender Spinner
         final Spinner genderSpinner = (Spinner) findViewById(R.id.gender);
@@ -88,6 +99,12 @@ public class Register extends Activity {
         });
     }
 
+    /**
+     * This is executed when the register button is pressed. Gathers the information from all of the
+     * text boxes and checks that they are all filled out.
+     * Checks that the terms and conditions are checked and if so, runs the post method. If not,
+     * toasts back to the user.
+     */
     private void sendRegister() {
 
         HashMap<String, String> details = new HashMap<String, String>();
@@ -107,6 +124,7 @@ public class Register extends Activity {
             }
         }
 
+        //Sets the value of the spinner: gender
         String ismale = "false";
         Spinner gender = (Spinner)findViewById(R.id.gender);
         String genderValue = gender.getSelectedItem().toString();
@@ -135,6 +153,12 @@ public class Register extends Activity {
         }
     }
 
+    /**
+     * Makes the post request to the JustHealth API to register the user.
+     * If successful, alerts the user, and redirects them to the login page.
+     *
+     * @param details HashMap of the details of the user to be registered.
+     */
     public void post(HashMap<String, String> details) {
         String response  = Request.post("registerUser", details, getApplicationContext());
 
@@ -148,17 +172,6 @@ public class Register extends Activity {
         AlertDialog.Builder alert = new AlertDialog.Builder(Register.this);
         alert.setTitle("Registration Successful!");
         alert.setMessage("Please check your email for a verification link. ");
-        alert.setNegativeButton("Go to email", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                Intent emailLauncher = new Intent(Intent.ACTION_VIEW);
-                emailLauncher.setType("message/rfc822");
-                try{
-                    startActivity(Intent.createChooser(emailLauncher, ""));
-                } catch(ActivityNotFoundException e){
-                    Feedback.toast("No email client found", false, getApplicationContext());
-                }
-            }
-        });
         alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 startActivity(new Intent(Register.this, Login.class));
@@ -167,7 +180,16 @@ public class Register extends Activity {
         alert.show();
     }
 
-    //validation on password and confirm password
+    //
+
+    /**
+     * THIS METHOD IS NOT IN USE
+     * validation on password and confirm
+     * @param password the password
+     * @param confirmPassword the password in the confirm password field
+     *
+     * @return Boolean whether the two passwords match.
+     */
     public boolean isPasswordValid(String password, String confirmPassword) {
         boolean status = false;
         if (confirmPassword != null && password != null) {

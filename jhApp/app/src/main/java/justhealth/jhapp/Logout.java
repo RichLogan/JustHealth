@@ -9,11 +9,14 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
-/**
- * Created by Stephen on 28/01/15.
- */
 public class Logout extends Activity {
-
+    /**
+     * This is run when the user selects to logout the application.
+     * It checks whether the appointment has been added to the users calendar. If so this is deleted.
+     * A post request is also made to the API deleteAndroidRegistrationID which subsequently removes the users android ID details from the database.
+     *
+     * @param context A HashMap of the users username and registration id to logout
+     */
     public static void logout(Context context) {
         //redirect to login
         Intent it = new Intent(context, Login.class);

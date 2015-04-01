@@ -4,6 +4,104 @@
 //    }
 //);
 
+function checkStartEnd(start, end, type) {
+    var startDate = new Date($(start).val());
+    var endDate = new Date($(end).val());
+    if (endDate < startDate) {
+        $(end).siblings("label").html("The " + type + " cannot end before it begins!");
+        $(end).parent().removeClass('has-warning');
+        $(end).parent().removeClass('has-success');
+        $(end).parent().addClass('has-error');
+        return false;
+    }
+    return true;
+}
+
+function checkDate(element, type) {
+    // Set Original Message
+    message = type + " Date<sup style='color:red'>*</sup>"
+    
+    // Attempt to convert to date
+    var date = new Date($(element).val());
+    var now = new Date()
+    
+    // Show response
+    if (date == "Invalid Date") {
+        $(element).siblings("label").html(message + ' is not a valid date');
+        $(element).parent().removeClass('has-warning');
+        $(element).parent().removeClass('has-success');
+        $(element).parent().addClass('has-error');
+        return false;
+    }
+    else if (date < now) {
+        $(element).siblings("label").html(message + ' is in the past');
+        $(element).parent().removeClass('has-error');
+        $(element).parent().removeClass('has-success');
+        $(element).parent().addClass('has-warning');
+        return true;
+    }
+    else {
+        $(element).siblings("label").html(message);
+        $(element).parent().removeClass('has-error');
+        $(element).parent().removeClass('has-warning');
+        $(element).parent().addClass('has-success');
+        return true;
+    }
+}
+
+function checkDateOfBirth(element) {
+    message = "Date Of Birth<sup style='color:red'>*</sup>";
+    // Attempt to convert to date
+    var date = new Date($(element).val());
+    var now = new Date();
+
+    if (date == "Invalid Date") {
+        $(element).siblings("label").html(message + ' is not a valid date');
+        $(element).parent().removeClass('has-success');
+        $(element).parent().addClass('has-error');
+        return false;
+    }
+    else if (date >= now) {
+        $(element).siblings("label").html(message + ' cannot be in the future');
+        $(element).parent().addClass('has-error');
+        return false;
+    }
+    else {
+        $(element).siblings("label").html(message);
+        $(element).parent().removeClass('has-error');
+        $(element).parent().addClass('has-success');
+        return true;
+    }
+}
+
+  function checkTime(element, type) {
+    // Set Original Message
+    message = type + " Time<sup style='color:red'>*</sup>"
+    
+    // Check validity of 
+    timeStr = $(element).val();
+
+    var time = timeStr.match(/([01]?[0-9]|2[0-3]):[0-5][0-9]/);
+      
+    // Show Response
+    if (!time) {
+      // Not a real Time
+      $(element).siblings("label").html(message + ' is not a valid time');
+      $(element).parent().removeClass('has-warning');
+      $(element).parent().removeClass('has-success');
+      $(element).parent().addClass('has-error');
+      return false;
+    }
+    else {
+      $(element).siblings("label").html(message);
+      $(element).parent().removeClass('has-error');
+      $(element).parent().removeClass('has-warning');
+      $(element).parent().addClass('has-success');
+      return true;
+    }
+}
+
+
 // Inspired By http://stackoverflow.com/questions/9776015/jquery-animate-a-rotating-div
 function flip(id, degrees) {
   $(id).animate({
@@ -259,4 +357,30 @@ function ValidateFormProfile(){
         return false
     }
     return true
+}
+
+function formcheck1() {
+    var fields = $(".appt-item-required").find("select, textarea, input").serializeArray();
+    var success = true;
+    $.each(fields, function(i, field) {
+        if (!field.value && success==true) {
+            alert('Please check the you have filled in the required fields');
+            success = false;
+            return;
+        }
+    });
+    return success;
+}
+
+function formcheck2() {
+    var fields = $(".code-required").find("input").serializeArray();
+    var success = true;
+    $.each(fields, function(i, field) {
+        if (!field.value && success==true) {
+            alert('Please check the code is correct and try again');
+            success = false;
+            return;
+        }
+    });
+    return success;
 }

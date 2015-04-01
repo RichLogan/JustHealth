@@ -173,7 +173,7 @@ ADDED from AndroidManifest.xml:138:9
 		ADDED from AndroidManifest.xml:140:13
 	android:name
 		ADDED from AndroidManifest.xml:139:13
-activity#justhealth.jhapp.PatientMedication
+activity#justhealth.jhapp.PatientPrescription
 ADDED from AndroidManifest.xml:146:9
 	android:label
 		ADDED from AndroidManifest.xml:148:13

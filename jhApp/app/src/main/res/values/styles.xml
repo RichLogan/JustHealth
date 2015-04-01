@@ -90,6 +90,11 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_height">@dimen/defaultButtonHeight</item>
     </style>
+    <style name="warningButton" parent="@android:style/Widget.Holo.Button">
+        <item name="android:background">@drawable/warning_button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_height">@dimen/defaultButtonHeight</item>
+    </style>
     <style name="dangerButton" parent="@android:style/Widget.Holo.Button">
         <item name="android:background">@drawable/danger_button</item>
         <item name="android:textColor">@color/white</item>
@@ -134,22 +139,25 @@
     </style>
 
     <style name="homePageButton">
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0sp</item>
         <item name="android:gravity">center</item>
         <item name="android:shadowColor">#22000000</item>
         <item name="android:shadowDx">3</item>
         <item name="android:shadowDy">3</item>
         <item name="android:shadowRadius">1</item>
-        <item name="android:textSize">100sp</item>
+        <item name="android:textSize">65sp</item>
         <item name="android:textColor">@color/primary</item>
     </style>
 
     <style name="homePageLabel">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0sp</item>
+        <item name="android:gravity">center</item>
         <item name="android:textSize">25sp</item>
+        <item name="android:shadowColor">#22000000</item>
+        <item name="android:shadowDx">3</item>
+        <item name="android:shadowDy">3</item>
         <item name="android:textColor">@color/primary</item>
     </style>
 
@@ -183,5 +191,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">15sp</item>
         <item name="android:layout_marginTop">5sp</item>
+    </style>
+
+    <style name="notes" parent="@android:style/Widget.Holo.Button">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:layout_height">@dimen/defaultButtonHeight</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:bottom">@dimen/colorstrip</item>
     </style>
 </resources>

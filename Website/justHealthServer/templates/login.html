@@ -39,6 +39,18 @@
       {{message}}
     </div>
   {% endif %}
+  
+  <!-- Alerts -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            {{message}}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
     <fieldset class="login-outer">
         <h4 class="pull-left strong">JustHealth Login</h4>

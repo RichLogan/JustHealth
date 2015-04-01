@@ -1,4 +1,4 @@
-package justhealth.jhapp;
+//package justhealth.jhapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -14,14 +14,14 @@ import java.util.TimeZone;
 
 /**
  * Created by Stephen on 11/12/14.
- * Class for testing not in use.
+ * Class for testing NOT IN USE.
  */
-public class CalendarAppointments extends Activity {
+/*public class CalendarAppointments extends Activity {
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    public void addEvent(/*String title, String addressNameNumber, String postcode, String description, String startDate, String startTime, String endDate, String endTime*/) {
+    public void addEvent(String title, String addressNameNumber, String postcode, String description, String startDate, String startTime, String endDate, String endTime) {
         System.out.println("Method running");
-        /*Intent intent = new Intent(Intent.ACTION_EDIT);
+        Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra(CalendarContract.Events.TITLE, title);
 
@@ -37,7 +37,7 @@ public class CalendarAppointments extends Activity {
         String end = endDate + endTime;
         GregorianCalendar appEnd = new GregorianCalendar(TimeZone.getTimeZone(end));
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                appEnd.getTimeInMillis());*/
+                appEnd.getTimeInMillis());
 
 
 
@@ -47,3 +47,4 @@ public class CalendarAppointments extends Activity {
 
 
 }
+*/

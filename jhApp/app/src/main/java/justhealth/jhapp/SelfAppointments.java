@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -47,6 +49,12 @@ public class SelfAppointments extends Activity {
     //Hold all of the appointments
     JSONArray getApps = null;
 
+    /**
+     * This method runs when the page is first loaded. Sets the correct xml layout and sets the
+     * correct custom action bar. Runs the getUpcomingAppointments method.
+     *
+     * @param savedInstanceState a bundle if the state of the application was to be saved.
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -100,94 +108,161 @@ public class SelfAppointments extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * This is run when the page has been previously loaded and the user has navigated back
+     * to it.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUpcomingAppointments();
+    }
+
+    /**
+     * This gets the upcoming appointments by querying the JustHealth API. First, the HashMap of the
+     * request parameters is built and then the post request made. Then runs the print method to
+     * display the appointments on the screen.
+     */
+    private void getUpcomingAppointments() {
+        SharedPreferences account = getSharedPreferences("account", 0);
+        String username = account.getString("username", null);
+
+        final HashMap<String, String> details = new HashMap<String, String>();
+
+        details.put("loggedInUser", username);
+        details.put("targetUser", username);
+
+        new AsyncTask<Void, Void, JSONArray>() {
+            ProgressDialog progressDialog;
+
+            /**
+             * Loads the progress dialog to demonstrate to the user that something is happening.
+             */
+            @Override
+            protected void onPreExecute() {
+                progressDialog = ProgressDialog.show(SelfAppointments.this, "Loading...", "Loading your appointments", true);
+            }
+
+            /**
+             * Makes the post request to the JustHealth API to get the upcoming appointments.
+             * This is run off of the main application thread.
+             *
+             * @param params HashMap containing the request parameters.
+             * @return JSONArray of the appointments.
+             */
+            @Override
+            protected JSONArray doInBackground(Void... params) {
+                try {
+                    String postRequest = Request.post("getAllAppointments", details, getApplicationContext());
+                    return new JSONArray(postRequest);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            /**
+             * Removes any current views on the page and invokes the printUpcomingAppointments method.
+             * Dismisses the dialog.
+             *
+             * @param result JSONArray of the appointments returned from the API.
+             */
+            @Override
+            protected void onPostExecute(JSONArray result) {
+                try {
+                    super.onPostExecute(result);
+                    getApps = result;
+                    LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+                    layout.removeAllViewsInLayout();
+                    printUpcomingAppointments();
+                    progressDialog.dismiss();
+                } catch (NullPointerException e) {
+                    Feedback.toast("Could not load your appointments", false, getApplicationContext());
+                }
+            }
+        }.execute();
+    }
+
     /**
      * This method makes a post request to the JustHealth API to retrieve all of the appointments for a given user.
      * It then loops through the JSON Array that is returned from the server and adds them all to a HashMap.
      */
+    private void printUpcomingAppointments() {
 
-    private void getUpcomingAppointments() {
-        //this will not work when API authentication is put in place
-        SharedPreferences account = getSharedPreferences("account", 0);
-        String username = account.getString("username", null);
-        String password = account.getString("password", null);
+        System.out.println(getApps);
+        if (getApps != null) {
+            for (int i = 0; i < getApps.length(); i++) {
+                try {
+                    JSONObject obj = getApps.getJSONObject(i);
+                    final String creator = obj.getString("creator");
+                    final String invitee = obj.getString("invitee");
+                    final String appid = obj.getString("appid");
+                    final String name = obj.getString("name");
+                    final String appType = obj.getString("apptype");
+                    final String startDate = obj.getString("startdate");
+                    final String startTime = obj.getString("starttime");
+                    final String endDate = obj.getString("enddate");
+                    final String endTime = obj.getString("endtime");
+                    final String address = obj.getString("addressnamenumber");
+                    final String postcode = obj.getString("postcode");
+                    final String description = obj.getString("description");
+                    final String isPrivate = obj.getString("private");
+                    final String androidId = obj.getString("androideventid");
 
-        HashMap<String, String> details = new HashMap<String, String>();
+                    final HashMap<String, String> appDetails = new HashMap<>();
+                    appDetails.put("creator", creator);
+                    appDetails.put("invitee", invitee);
+                    appDetails.put("appid", appid);
+                    appDetails.put("name", name);
+                    appDetails.put("appType", appType);
+                    appDetails.put("startDate", startDate);
+                    appDetails.put("startTime", startTime);
+                    appDetails.put("endDate", endDate);
+                    appDetails.put("endTime", endTime);
+                    appDetails.put("addressNameNumber", address);
+                    appDetails.put("postcode", postcode);
+                    appDetails.put("details", description);
+                    appDetails.put("private", isPrivate);
+                    appDetails.put("androidId", androidId);
 
-        //Text Boxes
-        details.put("loggedInUser", username);
-        details.put("targetUser", username);
-        String postRequest = Request.post("getAllAppointments", details, this);
+                    Date appDateTime = getDateTimeObject(startDate, startTime);
+                    Date now = new Date();
+                    if (appDateTime.after(now)) {
 
-        try {
-            getApps = new JSONArray(postRequest);
+                        ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
+                        Button app = new Button(newContext);
+                        app.setBackgroundColor(Color.rgb(51, 122, 185));
+                        app.setText(name + " " + startDate + " " + startTime);
+                        LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                        layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
+                        LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
+                        center.setMargins(0, 30, 0, 0);
+                        center.gravity = Gravity.CENTER;
+                        app.setLayoutParams(center);
 
-        for (int i = 0; i < getApps.length(); i++) {
-            try {
-                JSONObject obj = getApps.getJSONObject(i);
-                final String creator = obj.getString("creator");
-                final String invitee = obj.getString("invitee");
-                final String appid = obj.getString("appid");
-                final String name = obj.getString("name");
-                final String appType = obj.getString("apptype");
-                final String startDate = obj.getString("startdate");
-                final String startTime = obj.getString("starttime");
-                final String endDate = obj.getString("enddate");
-                final String endTime = obj.getString("endtime");
-                final String address = obj.getString("addressnamenumber");
-                final String postcode = obj.getString("postcode");
-                final String description = obj.getString("description");
-                final String isPrivate = obj.getString("private");
-                final String androidId = obj.getString("androideventid");
+                        System.out.println("onclick listener applied");
+                        app.setOnClickListener(new Button.OnClickListener() {
+                            public void onClick(View view) {
+                                appointmentAction(appDetails);
+                            }
+                        });
+                    }
 
-                final HashMap<String, String> appDetails = new HashMap<>();
-                appDetails.put("creator", creator);
-                appDetails.put("invitee", invitee);
-                appDetails.put("appid", appid);
-                appDetails.put("name", name);
-                appDetails.put("appType", appType);
-                appDetails.put("startDate", startDate);
-                appDetails.put("startTime", startTime);
-                appDetails.put("endDate", endDate);
-                appDetails.put("endTime", endTime);
-                appDetails.put("addressNameNumber", address);
-                appDetails.put("postcode", postcode);
-                appDetails.put("details", description);
-                appDetails.put("private", isPrivate);
-                appDetails.put("androidId", androidId);
-
-                Date appDateTime = getDateTimeObject(startDate, startTime);
-                Date now = new Date();
-                if (appDateTime.after(now)) {
-
-                    ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
-                    Button app = new Button(newContext);
-                    app.setBackgroundColor(Color.rgb(51, 122, 185));
-                    app.setText(name + " " + startDate + " " + startTime);
-                    LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
-
-                    layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-                    LinearLayout.LayoutParams center = (LinearLayout.LayoutParams) app.getLayoutParams();
-                    center.setMargins(0,30,0,0);
-                    center.gravity = Gravity.CENTER;
-                    app.setLayoutParams(center);
-
-                    System.out.println("onclick listener applied");
-                    app.setOnClickListener(new Button.OnClickListener() {
-                        public void onClick(View view) {
-                            appointmentAction(appDetails);
-                        }
-                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        }
+        else {
+            ContextThemeWrapper newContext = new ContextThemeWrapper(getBaseContext(), R.style.primaryButton);
+            Button app = new Button(newContext);
+            app.setBackgroundColor(Color.rgb(51, 122, 185));
+            app.setText("No appointments to display.");
+            LinearLayout layout = (LinearLayout) findViewById(R.id.upcomingAppointmentView);
+
+            layout.addView(app, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         }
     }
     /**
@@ -215,11 +290,15 @@ public class SelfAppointments extends Activity {
                                         .setData(builder.build());
                                 startActivity(intent);
                             } else if (which == 1) {
+                                Intent intent = new Intent(SelfAppointments.this, ViewAppointment.class);
+                                intent.putExtra("appointmentDetails", appointmentDetails);
+                                startActivity(intent);
+                            } else if (which == 2) {
                                 //Edit appointment
                                 Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
                                 intent.putExtra("appointmentDetails", appointmentDetails);
                                 startActivity(intent);
-                            } else if (which == 2) {
+                            } else if (which == 3) {
                                 //Delete appointment
                                 AlertDialog.Builder alert = new AlertDialog.Builder(SelfAppointments.this);
 
@@ -265,6 +344,11 @@ public class SelfAppointments extends Activity {
                                 startActivity(intent);
                             } else if (which == 1) {
                                 //Edit appointment
+                                Intent intent = new Intent(SelfAppointments.this, EditSelfAppointment.class);
+                                intent.putExtra("appointmentDetails", appointmentDetails);
+                                startActivity(intent);
+                            } else if (which == 2) {
+                                //Edit appointment
                                 HashMap<String, String> details = new HashMap<String, String>();
                                 details.put("username", appointmentDetails.get("invitee"));
                                 details.put("action", "Accept");
@@ -277,7 +361,7 @@ public class SelfAppointments extends Activity {
                                 else {
                                     Feedback.toast("Somethings gone wrong", false, getApplicationContext());
                                 }
-                            } else if (which == 2) {
+                            } else if (which == 3) {
                                 HashMap<String, String> details = new HashMap<String, String>();
                                 details.put("username", appointmentDetails.get("invitee"));
                                 details.put("action", "Decline");
@@ -305,7 +389,6 @@ public class SelfAppointments extends Activity {
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void deleteAppointment(HashMap<String, String> appointmentDetails) {
         //The API takes the username and AppID
-        appointmentDetails.get("appid");
         SharedPreferences account = getSharedPreferences("account", 0);
         String username = account.getString("username", null);
 
@@ -391,7 +474,6 @@ public class SelfAppointments extends Activity {
      * @param time the string of the time
      * @return a Date object of the combined date and time strings
      */
-
     private Date getDateTimeObject(String date, String time) {
         String dateTime = date + " " + time;
         System.out.println("string: " + dateTime);

@@ -27,19 +27,22 @@
                     <Spinner
                         android:id="@+id/medication"
                         android:hint="Medication Name"
+                        android:spinnerMode="dialog"
                         style="@style/spinnerWithIcon"/>
                     <IconTextView
                         android:text="{fa-medkit}"
                         style="@style/inputIcon" />
                 </RelativeLayout>
 
+
                 <!-- Quantity -->
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Quantity (To Take at once)"
+                        android:hint="Quantity (How many to take each time)"
                         android:id="@+id/quantity"
+                        android:inputType="time"
                         style="@style/inputWithIcon"/>
                     <IconTextView
                         android:text="{fa-medkit}"
@@ -51,8 +54,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Dosage Value (e.g. 100)"
+                        android:hint="Weight of medication (e.g. 200)"
                         android:id="@+id/dosageValue"
+                        android:inputType="time"
                         style="@style/inputWithIcon"/>
                     <IconTextView
                         android:text="{fa-medkit}"
@@ -77,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Frequency (e.g. 1)"
+                        android:hint="How many times a day? (e.g. 1)"
                         android:inputType="time"
                         android:id="@+id/frequency"
                         style="@style/inputWithIcon"/>
@@ -91,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Dosage Form (e.g. Tablet)"
+                        android:hint="Type of medication (e.g. Tablet)"
                         android:id="@+id/type"
                         style="@style/inputWithIcon"/>
                     <IconTextView
@@ -132,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Patient's Current Stock"
+                        android:hint="Patient's Current Supply of medication"
                         android:id="@+id/stockLeft"
                         style="@style/inputWithIcon"/>
                     <IconTextView
@@ -145,13 +149,140 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <EditText
-                        android:hint="Observations"
+                        android:hint="Guidence Notes"
                         android:id="@+id/observations"
                         style="@style/inputWithIcon"/>
                     <IconTextView
                         android:text="{fa-question}"
                         style="@style/inputIcon" />
                 </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+
+                    <!-- Monday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/monday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="M"/>
+                    </LinearLayout>
+
+                    <!-- Tuesday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/tuesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="T"/>
+                    </LinearLayout>
+
+                    <!-- Wednesday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/wednesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="W"/>
+                    </LinearLayout>
+
+                    <!-- Thursday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/thursday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="T"/>
+                    </LinearLayout>
+
+                    <!-- Friday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/friday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="F"/>
+                    </LinearLayout>
+
+                    <!-- Saturday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/saturday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="S"/>
+                    </LinearLayout>
+
+                    <!-- Sunday -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/sunday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="S"/>
+                    </LinearLayout>
+                </LinearLayout>
 
                 <!-- Add -->
                 <Button

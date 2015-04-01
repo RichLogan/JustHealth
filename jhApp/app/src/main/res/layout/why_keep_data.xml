@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login"
+    android:background="@color/background">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/off_white"
+            android:layout_marginTop="0sp"
+            android:layout_marginBottom="0sp"
+            style="@style/defaultLinearForm">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:layout_marginBottom="20sp"
+                android:layout_marginTop="30sp"
+                android:text="We store your information in a completely secure database, if your personal information changes, you may correct or update it by making a change in Profile > Edit Profile." />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:layout_marginBottom="20sp"
+                android:text="If you wish to deactivate your JustHealth account, we will retain your information for as long as your account is active or is needed to provide you required functionality. We will retain and use your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements.
+If you wish, we can retain your information, there are benefits to doing so."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:layout_marginBottom="20sp"
+                android:text="If you are only temporarily leaving, we will be able to restore your account to the point you left it when you return."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:layout_marginBottom="20sp"
+                android:text="If you don’t want us to keep your data, you will have to completely re-register instead of reactivating your account.
+If you select to leave your information with us, you can contact us if you change your mind."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:text="We promise to notify you of any changes to our privacy policy or to the way your information is stored."/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

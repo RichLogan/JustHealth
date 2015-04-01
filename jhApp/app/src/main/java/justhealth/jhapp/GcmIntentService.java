@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -18,7 +19,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
  * Created by Stephen on 26/02/15.
  */
 public class GcmIntentService extends IntentService {
-    public static final int NOTIFICATION_ID = 1;
+    public static int NOTIFICATION_ID = 0;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
@@ -36,10 +37,7 @@ public class GcmIntentService extends IntentService {
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
             /*
-             * Filter messages based on message type. Since it is likely that GCM
-             * will be extended in the future with new message types, just ignore
-             * any message types you're not interested in, or that you don't
-             * recognize.
+             * Filter messages based on message type.
              */
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
@@ -72,9 +70,11 @@ public class GcmIntentService extends IntentService {
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
+    /**
+     * Adds the GCM message to a notification that can be displayed in the notification bar.
+     * @param title The title of the notification
+     * @param message The message of the notification
+     */
     private void sendNotification(String title, String message) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -91,9 +91,27 @@ public class GcmIntentService extends IntentService {
                                 .bigText(message))
                         .setContentText(message);
 
+
         Uri notify = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         mBuilder.setSound(notify);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        notificationInteger(NOTIFICATION_ID);
+    }
+
+    /**
+     * Sets the notification ID between 0 and 9, allows 10 notifications from Justhealth to be
+     * displayed before they cancel each other out.
+     *
+     * @param count the current ID of the notification
+     */
+    private void notificationInteger(int count) {
+        if (count < 10) {
+            count += 1;
+            NOTIFICATION_ID = count;
+        }
+        else {
+            NOTIFICATION_ID = 0;
+        }
     }
 }

@@ -4,62 +4,112 @@
 
 {% block scriptsAndStyles %}
 <script>
-$(document).ready(function() {
-	//check password strength
-	//keyup event on password field so code will execute on every keypress
-	$('#password').keyup(function() {
-		$('#result').html(checkStrength($('#password').val()));
-	});
 
-	//check if email is valid
-	//focus out: validation is performed when different field is active
-	$('#validateEmail').focusout(function() {
-		if(validateEmail($('#validateEmail').val())) {
-			//show message if email is valid
-			$('#emailValidate').html('<i class="fa fa-check"></i> Email is valid').addClass('rightInputs');
-		}
-		else {
-			//show message if email is not valid
-			$('#emailValidate').html('<i class="fa fa-times"></i> Email is not valid').addClass('wrongInputs');
-		}
-	});
+  var emailCheck;
+  var confirmPasswordCheck;
+  var usernameCheck;
+  var dateOfBirthCheck;
 
-	$('#dob').focusout(function() {
-		if(isDate($('#dob').val())) {
-			//show message if email is valid
-			$('#dobValidate').html('<i class="fa fa-check"></i> Date of Birth is valid').addClass('rightInputs');
-		}
-		else {
-			//show message if email is not valid
-			$('#dobValidate').html('<i class="fa fa-times"></i> Date of Birth is not valid').addClass('wrongInputs');
-		}
-	});
+  function dobCheck() {
+    dateOfBirthCheck = checkDateOfBirth($('#dob'));
+  }
 
+  function validateEmailCheck() {
+      var email = $('#validateEmail');
+      emailCheck = validateEmail($(email).val());
+      
+      if (emailCheck) {
+        $(email).siblings("label").html("Valid Email");
+        $(email).parent().removeClass('has-error');
+        $(email).parent().addClass('has-success');
+      }
+      else {
+        $(email).siblings("label").html("Invalid Email");
+        $(email).parent().removeClass('has-success');
+        $(email).parent().addClass('has-error');
+      }
+    }
+
+    function passwordCheck() {
+      var password = $('#password');
+      var confirmPassword = $('#confirmPassword');
+
+      var strength = checkStrength($(password).val());
+      
+      $(password).siblings("label").html("Your password strength is " + strength);
+      if (strength == "Weak") {
+        $(password).parent().removeClass('has-warning');
+        $(password).parent().removeClass('has-success');
+        $(password).parent().addClass('has-error');
+      }
+      else if (strength == "Good") {
+        $(password).parent().removeClass('has-error');
+        $(password).parent().removeClass('has-success');
+        $(password).parent().addClass('has-warning');
+      }
+      else if (strength == "Strong"){
+        $(password).parent().removeClass('has-warning');
+        $(password).parent().removeClass('has-error');
+        $(password).parent().addClass('has-success');
+      }
+
+      if ($(confirmPassword).val() == $(password).val()) {
+        $(confirmPassword).siblings("label").html("Your passwords match");
+        $(confirmPassword).parent().removeClass('has-error');
+        $(confirmPassword).parent().addClass('has-success');
+        confirmPasswordCheck = true;
+      }
+      else {
+        $(confirmPassword).siblings("label").html("Your passwords do not match");
+        $(confirmPassword).parent().removeClass('has-success');
+        $(confirmPassword).parent().addClass('has-error');
+        confirmPasswordCheck = false;
+      }
+    }
+
+  $(document).ready(function() {
     //Check all fields are filled in
-	$('form').submit(function(e) {
-		$("form :input").each(function(){
-			if ($(this).val() == null || $(this).val() == "") {
-				alert("All fields must be filled out");
-				e.preventDefault();
-				return false;
-			}
-		});
-	});
+    $('form').submit(function(e) {
+      $("form :input").each(function() {
+        if ($(this).val() == null || $(this).val() == "") {
+          alert("All fields must be filled out");
+          e.preventDefault();
+          return false;
+        }
+      });
+      if (!usernameCheck || !emailCheck || !confirmPasswordCheck || !dateOfBirthCheck) {
+        alert("Please check the form for errors");
+        e.preventDefault();
+        return false;
+      }
+      var terms = $('#terms').prop('checked');
+      if (!terms) {
+        alert("Please accept the Terms and Conditions");
+        e.preventDefault();
+        return false;
+      }
+    });
+  
 
-	$('#usernameInput').keyup(function() {
-		content = $('#usernameInput').val();
-		$.post("http://raptor.kent.ac.uk:5000/api/usernameCheck", {username: content}).done(function( data ) {
-			if (data == "True") {
-				$('#usernameError').addClass("has-error");
-				$('#usernameErrorLabel').text("Username (Username already taken)");
-			}
-			else {
-				$('#usernameError').addClass("has-success");
-				$('#usernameErrorLabel').text("Username (Username available)");
-			}
-		});
-	});
-});
+    $('#usernameInput').keyup(function() {
+      content = $('#usernameInput').val();
+      $.post(
+        "http://raptor.kent.ac.uk:5000/api/usernameCheck",
+        {username: content}
+      ).done(function( data ) {
+        if (data == "True") {
+          $('#usernameError').addClass("has-error");
+          $('#usernameErrorLabel').text("Username (Username already taken)");
+          usernameCheck = false;
+        }
+        else {
+          $('#usernameError').addClass("has-success");
+          $('#usernameErrorLabel').text("Username (Username available)");
+          usernameCheck = true;
+        }
+      });
+    });
+  });
 </script>
 {% endblock %}
 
@@ -67,45 +117,45 @@ $(document).ready(function() {
 
 {% block content %}
 
-
 <!-- Display any messages -->
 
 {% if message != null %}
-<div class="alert alert-{{type}} alert-dismissible" role="alert">
-  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-  {{message}}
-</div>
+  <div class="alert alert-{{type}} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    {{message}}
+  </div>
 {% endif %}
 
 <fieldset class="register-outer">
-    <i class="fa fa-edit headingIcon pull-left"></i><h4 class="pull-left strong">Register your account here</h4>
-    <button class="btn btn-primary pull-right" onclick="javascript:location.href='/login'"><i class="fa fa-arrow-left"></i> Login</button>
-    </br>
-        <hr>
-    <fieldset class="register-inner">
+  <i class="fa fa-edit headingIcon pull-left"></i>
+  <h4 class="pull-left strong">Register your account here</h4>
+  <button class="btn btn-primary pull-right" onclick="javascript:location.href='/login'"><i class="fa fa-arrow-left"></i> Login</button>
+  <br />
+  <hr />
+  
+  <fieldset class="register-inner">
     <!--A form below for a user to fill in in order to register. Inputting a username, firstname, surname, dob, gender, account type, password and confirm password -->
 
-    <form name="register" action="/register" onSubmit="return ValidateFormRegister()" id="register" method="POST">
+    <form name="register" action="/register" id="register" method="POST">
 
       <div class="form-group" id="usernameError">
-        <label for="username" class="control-label" id="usernameErrorLabel">Username</label>
+        <label class="control-label" for="username" class="control-label" id="usernameErrorLabel">Username</label>
         <input id="usernameInput" class="form-control input-sm" type="text" name="username">
       </div>
 
       <div class="form-group">
-        <label for="firstname">First Name</label>
-        <input class="form-control input-sm" type="text" name="firstname">
+        <label class="control-label" for="firstname">First Name</label>
+        <input class="form-control input-sm" style="text-transform: capitalize;" type="text" name="firstname">
       </div>
 
       <div class="form-group">
-        <label for="surname">Surname</label>
-        <input class="form-control input-sm" type="text" name="surname">
+        <label class="control-label" for="surname">Surname</label>
+        <input class="form-control input-sm" style="text-transform: capitalize;" type="text" name="surname">
       </div>
 
       <div class="form-group">
-        <label for="dob">Date of Birth <span style="color:gray">(dd/mm/yyyy)</span></label>
-        <input class="form-control input-sm" type="date" name="dob" id="dob">
-    		<span id="dobValidate"></span>
+        <label class="control-label" for="dob">Date of Birth</label>
+        <input class="form-control input-sm" type="date" name="dob" id="dob" onkeyup="dobCheck();">
       </div>
 
       <div class="form-group">
@@ -117,73 +167,92 @@ $(document).ready(function() {
       <div class="form-group">
         <label for="accounttype">Account Type</label>
         <select name="accounttype" class="form-control input-sm">
-        	<option class="placeholder" disabled selected> -- Please select an account type -- </option>
-        	<option value="patient">Patient</option>
-        	<option value="carer">Carer</option>
+          <option class="placeholder" disabled selected> -- Please select an account type -- </option>
+          <option value="patient">Patient</option>
+          <option value="carer">Carer</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="email">Email Address</label>
-        <input class="form-control input-sm" type="text" id="validateEmail" name="email">
-    		<span id="emailValidate"></span>
-    	</div>
-
-      <div class="form-group">
-      	<label for="password">Password</label>
-        <input class="form-control input-sm" type="password" id="password" name="password">
-    		<span id="result"></span>
+        <label class="control-label" for="email">Email Address</label>
+        <input class="form-control input-sm" type="text" id="validateEmail" name="email" onkeyup="validateEmailCheck();">
       </div>
 
       <div class="form-group">
-        <label for="confirmpassword">Confirm Password</label>
-        <input class="form-control input-sm" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck(); return false;">
-    		<span id="confirmationMessage"></span>
+        <label class="control-label" for="password">Password</label>
+        <input class="form-control input-sm" type="password" id="password" name="password" onkeyup="passwordCheck();">
       </div>
 
-        <div class="form-group checkbox">
-    		<label for="terms"><input type="checkbox" name="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a></label>
-    	</div>
+      <div class="form-group">
+        <label class="control-label" for="confirmpassword">Confirm Password</label>
+        <input class="form-control input-sm" type="password" id="confirmPassword" name="confirmpassword" onkeyup="passwordCheck();">
+      </div>
 
-    	<div class="form-group">
-    		<input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
-    	</div>
+      <div class="form-group checkbox">
+        <label for="terms"><input type="checkbox" name="terms" id="terms">I accept the <a data-toggle="modal" data-target="#terms">terms and conditions <i class="fa fa-file"></i></a></label>
+      </div>
+
+      <div class="form-group">
+        <input class="btn btn-success pull-right" name="Submit" type="submit" value="Sign up">
+      </div>
     </form>
-    </fieldset>
+  </fieldset>
 </fieldset>
-	<!--A modal which shows the terms and conditions a user is agreeing to when they register -->
-	<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="termsLabel">JustHealth Terms and Conditions</h4>
-				</div>
-				<div class="modal-body">
-				<ol>
-					<li>Any data that is given to JustHealth may be processed by JustHealth to improve the ease of use, performance and/or functionality of the application.
-					</li> <br/>
-					<li>The data stored by JustHealth will not be passed to any third parties without the consent of the data subject.
-					</li> <br/>
-					<li>A user’s data may be viewed by their carer, relative, doctor and pharmacist but will not be visible to anyone that isn’t approved to view the data.
-					</li> <br/>
-					<li>It is the responsibility of the user to ensure that the information that JustHealth holds about them is accurate and up to date. This is not the responsibility of JustHealth or any of its affiliated parties.
-					</li> <br/>
-					<li>JustHealth will keep all data for the time that a data subject’s account is active; all of the data that JustHealth will hold about a user will be viewable within the mobile and web application.
-					</li> <br/>
-					<li>When a data subject deactivates their account with JustHealth they will be able to request to have their information removed from the centralised database. This will impact account reactivation.
-					</li> <br/>
-					<li>A data subject may request the personal data that JustHealth hold about them but this will only be able to be sent to the user within the UK by the postal service. This will not be sent by any other means.
-					</li> <br/>
-					<li>Users that download data from outside the UK will do so at their own risk and this will not be the responsibility of JustHealth. Any information that JustHealth will hold about a data subject will be stored within the UK.
-					</li>
-				</ol>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
+  
+<!--A modal which shows the terms and conditions a user is agreeing to when they register -->
+<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="termsLabel">JustHealth Terms and Conditions</h4>
+      </div>
+      <div class="modal-body">
+        <ol>
+          <li>Any data that is given to JustHealth may be processed by JustHealth to improve the ease of use, performance and/or functionality of the application.
+          </li>
+
+          <br />
+          
+          <li>The data stored by JustHealth will not be passed to any third parties without the consent of the data subject.
+          </li>
+
+          <br />
+          
+          <li>A user’s data may be viewed by their carer, relative, doctor and pharmacist but will not be visible to anyone that isn’t approved to view the data.
+          </li>
+
+          <br/>
+          
+          <li>It is the responsibility of the user to ensure that the information that JustHealth holds about them is accurate and up to date. This is not the responsibility of JustHealth or any of its affiliated parties.
+          </li>
+
+          <br/>
+          
+          <li>JustHealth will keep all data for the time that a data subject’s account is active; all of the data that JustHealth will hold about a user will be viewable within the mobile and web application.
+          </li>
+
+          <br/>
+          
+          <li>When a data subject deactivates their account with JustHealth they will be able to request to have their information removed from the centralised database. This will impact account reactivation.
+          </li>
+
+          <br/>
+          
+          <li>A data subject may request the personal data that JustHealth hold about them but this will only be able to be sent to the user within the UK by the postal service. This will not be sent by any other means.
+          </li>
+
+          <br/>
+          
+          <li>Users that download data from outside the UK will do so at their own risk and this will not be the responsibility of JustHealth. Any information that JustHealth will hold about a data subject will be stored within the UK.
+          </li>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block contactUsLink %}{% endblock %}
