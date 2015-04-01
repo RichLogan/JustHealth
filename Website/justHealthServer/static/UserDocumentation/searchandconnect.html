@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Connect to a user &mdash; JustHealth v1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="JustHealth v1 documentation" href="index.html"/>
+        <link rel="next" title="Appointments" href="appointments.html"/>
+        <link rel="prev" title="Deactivate Account" href="deactivate.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> JustHealth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="registration.html">Registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="registration.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="registration.html#android-application">Android Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Logging In</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="login.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="homepages.html">Home page Navigation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="homepages.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="homepages.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="forgotpassword.html">Forgotten Password</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="forgotpassword.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forgotpassword.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="accountLocked.html">Account Locked</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deactivate.html">Deactivate Account</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deactivate.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deactivate.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Connect to a user</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="appointments.html">Appointments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="appointments.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="appointments.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prescriptions.html">Prescriptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prescriptions.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prescriptions.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="medication.html">Medication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="searchnhs.html">Search NHS Website</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="searchnhs.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searchnhs.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changePassword.html">Change Password</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changePassword.html#web-application">Web Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contacUs.html">Contact Us</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contacUs.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contacUs.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Connect to a user</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/searchandconnect.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="connect-to-a-user">
+<h1>Connect to a user<a class="headerlink" href="#connect-to-a-user" title="Permalink to this headline">¶</a></h1>
+<p><em>All users</em></p>
+<p><em>We recommend all connections are established when the two users are physically together to avoid any confusion with the four digit passcode</em></p>
+<div class="section" id="web-application">
+<h2>Web Application<a class="headerlink" href="#web-application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-the-connection">
+<h3>1.0 Creating the Connection<a class="headerlink" href="#creating-the-connection" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>First, click on the &#8216;Search&#8217; link on the left hand side of the home page.</li>
+<li>Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note that Carers can not connect to another carer and a patient cannot connect to another patient.</li>
+</ol>
+<img alt="_images/connect1.png" src="_images/connect1.png" />
+<ol class="arabic simple" start="3">
+<li>Click &#8216;submit&#8217;</li>
+<li>The results of your search will then be displayed in a table underneath the search bar.</li>
+<li>Once you have found the right user click the connect button located at the end of the row.</li>
+<li>After you have clicked connect, you will see a 4 digit number appear on your screen. Please make a note of this number.</li>
+</ol>
+<img alt="_images/connect2.png" src="_images/connect2.png" />
+<ol class="arabic simple" start="7">
+<li>You have now made the connection request, the final step is for the person you have requested to accept the request.</li>
+</ol>
+</div>
+<div class="section" id="accepting-a-connection">
+<h3>2.0 Accepting a connection<a class="headerlink" href="#accepting-a-connection" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>To accept a connection you will receive a notification at the top of your home page. Or you can click on the &#8216;Pending connections&#8217; link of the left hand side of the home page.</li>
+</ol>
+<img alt="_images/connect3.png" src="_images/connect3.png" />
+<ol class="arabic simple">
+<li>Under the heading &#8216;Incoming&#8217; you will see the request made.</li>
+<li>To complete the connection click the green &#8216;Accept&#8217; button.</li>
+<li>Finally you will be asked to enter the 4 digit code the requester was sent. The reason for this is to ensure safe and secure connections.</li>
+</ol>
+<img alt="_images/connect4.png" src="_images/connect4.png" />
+<ol class="arabic simple">
+<li>On clicking complete the connection will be established.</li>
+</ol>
+<img alt="_images/connect5.png" src="_images/connect5.png" />
+</div>
+<div class="section" id="canceling-a-connection">
+<h3>3.0 Canceling a connection<a class="headerlink" href="#canceling-a-connection" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>If you wish to cancel a request, please navigate to the home page, the click on the &#8216;Pending requests&#8217; link.</li>
+<li>Under the heading &#8216;Outgoing&#8217; you will see the connection pending, to cancel simply click the cancel button at the end of the row.</li>
+</ol>
+<img alt="_images/connect2.png" src="_images/connect2.png" />
+</div>
+<div class="section" id="rejecting-a-connection">
+<h3>4.0 Rejecting a connection<a class="headerlink" href="#rejecting-a-connection" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>To reject a connection you need to navigate to the home page, the click on the &#8216;Pending requests&#8217; link.</li>
+<li>Under the heading &#8216;Incoming&#8217; you will see the request made.</li>
+<li>To reject the connection click the red &#8216;Reject&#8217; button.</li>
+</ol>
+<img alt="_images/connect3.png" src="_images/connect3.png" />
+</div>
+</div>
+<div class="section" id="mobile-application">
+<h2>Mobile Application<a class="headerlink" href="#mobile-application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>1.0 Creating the Connection<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>First click on the tile named search, this is also the tile with a magnifying glass.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/homecarer1.png"><img alt="_images/homecarer1.png" src="_images/homecarer1.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="2">
+<li>Then in the search box provided type either the username, firstname or surname of the user you wish to connect to. Please note that Carers can not connect to another carer and a patient cannot connect to another patient.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/search.png"><img alt="_images/search.png" src="_images/search.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="3">
+<li>Click &#8216;submit&#8217;</li>
+<li>The results of your search will then be displayed in a table underneath the search bar.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/search2.png"><img alt="_images/search2.png" src="_images/search2.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="5">
+<li>Once you have found the right user click the connect button located at the end of the row.</li>
+<li>After you have clicked connect you will then see a 4 digit number appear on your screen. Please make a note of this number.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/search3.png"><img alt="_images/search3.png" src="_images/search3.png" style="width: 245.0px; height: 122.5px;" /></a>
+<a class="reference internal image-reference" href="_images/search4.png"><img alt="_images/search4.png" src="_images/search4.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="7">
+<li>You have now made the connection request, the final step is for the person you have requested to accept the request.</li>
+</ol>
+</div>
+<div class="section" id="id2">
+<h3>2.0 Accepting a connection<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>To accept a connection you need to click on the connections tile and on the &#8216;Incoming&#8217; tab.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/connections5.png"><img alt="_images/connections5.png" src="_images/connections5.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="2">
+<li>Under the heading &#8216;Incoming&#8217; you will see the request made.</li>
+<li>To complete the connection click the green &#8216;Accept&#8217; button.</li>
+<li>Finally you will be asked to enter the 4 digit code the requester was sent. The reason for this is to ensure safe and secure connections.</li>
+<li>On clicking complete the connection will be established.</li>
+</ol>
+</div>
+<div class="section" id="id3">
+<h3>3.0 Canceling a connection<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>If you wish to cancel a request, click on the connections tile and on the &#8216;Outgoing&#8217; tab.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/connections3.png"><img alt="_images/connections3.png" src="_images/connections3.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="2">
+<li>Under the heading &#8216;Outgoing&#8217; you will see the connection pending, to cancel simply click the cancel button at the end of the row.</li>
+</ol>
+</div>
+<div class="section" id="id4">
+<h3>4.0 Rejecting a connection<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>If you wish to reject a request, click on the connections tile and on the &#8216;Incoming&#8217; tab.</li>
+<li>Under the heading &#8216;Incoming&#8217; you will see the request made.</li>
+<li>To reject the connection click the red &#8216;Reject&#8217; button.</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="appointments.html" class="btn btn-neutral float-right" title="Appointments"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="deactivate.html" class="btn btn-neutral" title="Deactivate Account"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, JustHealth.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

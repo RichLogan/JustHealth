@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Appointments &mdash; JustHealth v1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="JustHealth v1 documentation" href="index.html"/>
+        <link rel="next" title="Prescriptions" href="prescriptions.html"/>
+        <link rel="prev" title="Connect to a user" href="searchandconnect.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> JustHealth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="registration.html">Registration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="registration.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="registration.html#android-application">Android Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Logging In</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="login.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="homepages.html">Home page Navigation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="homepages.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="homepages.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="forgotpassword.html">Forgotten Password</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="forgotpassword.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forgotpassword.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="accountLocked.html">Account Locked</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deactivate.html">Deactivate Account</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deactivate.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deactivate.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="searchandconnect.html">Connect to a user</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="searchandconnect.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searchandconnect.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Appointments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="prescriptions.html">Prescriptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prescriptions.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prescriptions.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="medication.html">Medication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="searchnhs.html">Search NHS Website</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="searchnhs.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searchnhs.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notes.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changePassword.html">Change Password</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changePassword.html#web-application">Web Application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contacUs.html">Contact Us</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contacUs.html#web-application">Web Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contacUs.html#mobile-application">Mobile Application</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Appointments</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/appointments.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="appointments">
+<h1>Appointments<a class="headerlink" href="#appointments" title="Permalink to this headline">¶</a></h1>
+<p><em>Certain appointment features are only available to one user type</em></p>
+<div class="section" id="web-application">
+<h2>Web Application<a class="headerlink" href="#web-application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adding-an-appointment">
+<h3>1.0 Adding an appointment<a class="headerlink" href="#adding-an-appointment" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong>
+<em>A carer can add both personal appointments and appointments with a patient</em></p>
+<p><em>Creating personal appointment</em></p>
+<ol class="arabic simple">
+<li>Click on the appointments link on the home page</li>
+</ol>
+<img alt="_images/appointment4.png" src="_images/appointment4.png" />
+<ol class="arabic simple" start="2">
+<li>On the appointment page click the create appointment</li>
+</ol>
+<img alt="_images/appointment5.png" src="_images/appointment5.png" />
+<img alt="_images/appointment6.png" src="_images/appointment6.png" />
+<ol class="arabic simple" start="3">
+<li>To create an appointment you are required to fill in the fields:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Title- name of the appointment (text)</li>
+<li>Appointment type- select from the drop down list</li>
+<li>Description- details about the appointment (text)</li>
+<li>Address Name/ Number- (text or number)</li>
+<li>Postcode- (text and numbers)</li>
+<li>Start date- date of the appointment (YYYY-MM-DD)</li>
+<li>Start time- time the appointment starts (xx:xx)</li>
+<li>End date- date the appointment is scheduled to finished (YYYY-MM-DD)</li>
+<li>End time- time the appointment is scheduled to finish (xx:xx)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Click add appointment</li>
+<li>Your appointment is now created</li>
+</ol>
+<p><em>Creating a patient&#8217;s appointment</em></p>
+<ol class="arabic simple">
+<li>Either click on the &#8216;My Patients&#8217; link on the home page drop down menu or click on the name of the patient you wish to add the appointment for.</li>
+</ol>
+<img alt="_images/appointment1.png" src="_images/appointment1.png" />
+<ol class="arabic simple" start="2">
+<li>Click on &#8216;Appointments&#8217;</li>
+<li>Click the green button &#8216;Add new appointment&#8217;</li>
+</ol>
+<img alt="_images/appointment3.png" src="_images/appointment3.png" />
+<img alt="_images/appointment2.png" src="_images/appointment2.png" />
+<ol class="arabic simple" start="4">
+<li>To create an appointment you are required to fill in the fields:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Title- name of the appointment (text)</li>
+<li>Appointment type- select from the drop down list</li>
+<li>Description- details about the appointment (text)</li>
+<li>Address Name/ Number- (text or number)</li>
+<li>Postcode- (text and numbers)</li>
+<li>Start date- date of the appointment (YYYY-MM-DD)</li>
+<li>Start time- time the appointment starts (xx:xx)</li>
+<li>End date- date the appointment is scheduled to finished (YYYY-MM-DD)</li>
+<li>End time- time the appointment is scheduled to finish (xx:xx)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li>Click &#8216;Add Appointment&#8217;</li>
+</ol>
+<p><strong>Patient:</strong></p>
+<ol class="arabic simple">
+<li>Click on the appointment link on the home page</li>
+</ol>
+<img alt="_images/appointment4.png" src="_images/appointment4.png" />
+<ol class="arabic simple" start="2">
+<li>On the appointment page click the &#8216;create&#8217; tab</li>
+</ol>
+<img alt="_images/appointment5.png" src="_images/appointment5.png" />
+<img alt="_images/appointment6.png" src="_images/appointment6.png" />
+<ol class="arabic simple" start="3">
+<li>To create an appointment you are required to fill in the fields:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Title- name of the appointment (text)</li>
+<li>Appointment type- select from the drop down list</li>
+<li>Description- details about the appointment (text)</li>
+<li>Address Name/ Number- (text or number)</li>
+<li>Postcode- (text and numbers)</li>
+<li>Start date- date of the appointment (YYYY-MM-DD)</li>
+<li>Start time- time the appointment starts (xx:xx)</li>
+<li>End date- date the appointment is scheduled to finished (YYYY-MM-DD)</li>
+<li>End time- time the appointment is scheduled to finish (xx:xx)</li>
+<li>Private- Tick the box if you wish to mark the appointment private <em>(this means you do not want your carer being able to view this)</em></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Click &#8216;Add Appointment&#8217;</li>
+<li>Your appointment is now created</li>
+</ol>
+</div>
+<div class="section" id="editing-and-updating-an-appointment">
+<h3>2.0 Editing and updating an appointment<a class="headerlink" href="#editing-and-updating-an-appointment" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong>
+<em>A carer can edit their own appointments and only patient appointments they created</em></p>
+<p><em>Edit a personal appointment</em></p>
+<ol class="arabic simple">
+<li>Click on the link &#8216;Appointments&#8217; on the home screen.</li>
+<li>Find the appointment you wish to edit and click on it.</li>
+</ol>
+<img alt="_images/appointment7.png" src="_images/appointment7.png" />
+<ol class="arabic simple" start="3">
+<li>Click update and fill in the details you wish to change</li>
+</ol>
+<img alt="_images/appointment9.png" src="_images/appointment9.png" />
+<ol class="arabic simple" start="4">
+<li>Click update</li>
+</ol>
+<p><em>Edit a patients appointment you created</em></p>
+<ol class="arabic simple">
+<li>Click on mypatients page</li>
+<li>Find the patient that you want to edit the appointment for and click on their name</li>
+</ol>
+<img alt="_images/appointment1.png" src="_images/appointment1.png" />
+<ol class="arabic simple" start="3">
+<li>Click on appointments</li>
+</ol>
+<img alt="_images/appointment3.png" src="_images/appointment3.png" />
+<ol class="arabic simple" start="4">
+<li>Click edit and fill in the details you wish to change</li>
+<li>Click update</li>
+</ol>
+<p><strong>Patient:</strong>
+<em>A patient can only edit their own appointments</em></p>
+<ol class="arabic simple">
+<li>Click on the &#8216;your appointments&#8217; link on the home screen.</li>
+<li>Find the appointment you wish to edit and click on it.</li>
+</ol>
+<img alt="_images/appointment7.png" src="_images/appointment7.png" />
+<ol class="arabic simple" start="3">
+<li>Click update and fill in the details you wish to change</li>
+</ol>
+<img alt="_images/appointment9.png" src="_images/appointment9.png" />
+<ol class="arabic simple" start="4">
+<li>Click update</li>
+</ol>
+</div>
+<div class="section" id="deleting-an-appointment">
+<h3>3.0 Deleting an appointment<a class="headerlink" href="#deleting-an-appointment" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong>
+<em>A carer can delete their own appointments and only patient appointments they created</em></p>
+<p>To delete a personal appointment</p>
+<ol class="arabic simple">
+<li>Click on the &#8216;your appointments&#8217; link on the home screen.</li>
+<li>Find the appointment you wish to delete</li>
+</ol>
+<img alt="_images/appointment8.png" src="_images/appointment8.png" />
+<ol class="arabic simple" start="3">
+<li>Click the delete icon</li>
+<li>Click &#8216;Ok&#8217; to the pop up confirming the delete</li>
+</ol>
+<p>To delete a patients appointment you created</p>
+<ol class="arabic simple">
+<li>Click on mypatients page</li>
+<li>Find the patient that you want to delete the appointment for and click on their name</li>
+<li>Click on appointments</li>
+<li>Click delete</li>
+</ol>
+<img alt="images/appointmnet8.png" src="images/appointmnet8.png" />
+<ol class="arabic simple" start="5">
+<li>Click &#8216;Ok&#8217; to the pop up confirming the delete</li>
+</ol>
+<p><strong>Patient:</strong>
+<em>A patient can only edit their own appointments</em></p>
+<ol class="arabic simple">
+<li>Click on the &#8216;your appointments&#8217; link on the home screen.</li>
+<li>Find the appointment you wish to delete and click on it</li>
+<li>Click delete</li>
+<li>Click &#8216;Ok&#8217; to the pop up confirming the delete</li>
+</ol>
+</div>
+<div class="section" id="view-personal-appointments">
+<h3>4.0 View personal appointments<a class="headerlink" href="#view-personal-appointments" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong></p>
+<ol class="arabic simple">
+<li>A carer can view their personal appointments by clicking on the &#8216;view all appointments&#8217; link on the home screen</li>
+<li>On the tab layout to view upcoming appointment click the upcoming tab</li>
+<li>To view past appointments click the past tab</li>
+</ol>
+<p><strong>Patient:</strong></p>
+<ol class="arabic simple">
+<li>A patient can view their personal appointments by clicking on the &#8216;view all appointments&#8217; link on the home screen</li>
+<li>On the tab layout to view upcoming appointment click the upcoming tab</li>
+<li>To view past appointments click the past tab</li>
+</ol>
+</div>
+<div class="section" id="view-a-patients-appointment">
+<h3>5.0 View a patients appointment<a class="headerlink" href="#view-a-patients-appointment" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong></p>
+<ol class="arabic simple">
+<li>Click on &#8216;My Patients&#8217; page</li>
+<li>Click on the patient you wish to views name</li>
+<li>Next click on appointments</li>
+<li>Here lists all non private appointments from the patient</li>
+</ol>
+<img alt="_images/appointment3.png" src="_images/appointment3.png" />
+</div>
+<div class="section" id="accepting-and-declining-an-appointment">
+<h3>6.0 Accepting and declining an appointment<a class="headerlink" href="#accepting-and-declining-an-appointment" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer and Patient</strong></p>
+<ol class="arabic simple">
+<li>When someone has added an appointment with you, you will received a notification at the top of your home screen.</li>
+<li>Click on the notification and the appointment will be shown</li>
+<li>To accept click the &#8216;accept/ decline&#8217; button</li>
+</ol>
+<img alt="_images/appointment10.png" src="_images/appointment10.png" />
+<ol class="arabic simple" start="4">
+<li>On the new screen click the action you wish to take</li>
+</ol>
+</div>
+</div>
+<div class="section" id="mobile-application">
+<h2>Mobile Application<a class="headerlink" href="#mobile-application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>1.0 Adding an appointment<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong>
+<em>A carer can add both personal appointments and appointments to visit a patient</em></p>
+<p><em>Creating personal appointment</em></p>
+<ol class="arabic simple">
+<li>Click on the appointment tile</li>
+<li>On the appointment page click create appointment</li>
+</ol>
+<a class="reference internal image-reference" href="_images/appointments2.png"><img alt="_images/appointments2.png" src="_images/appointments2.png" style="width: 245.0px; height: 122.5px;" /></a>
+<a class="reference internal image-reference" href="_images/appointments3.png"><img alt="_images/appointments3.png" src="_images/appointments3.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="3">
+<li>To create an appointment you are required to fill in the fields:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Title- name of the appointment (text)</li>
+<li>Appointment type- select from the drop down list</li>
+<li>Description- details about the appointment (text)</li>
+<li>Address Name/ Number- (text or number)</li>
+<li>Postcode- (text and numbers)</li>
+<li>Start date- date of the appointment (YYYY-MM-DD)</li>
+<li>Start time- time the appointment starts (xx:xx)</li>
+<li>End date- date the appointment is scheduled to finished (YYYY-MM-DD)</li>
+<li>End time- time the appointment is scheduled to finish (xx:xx)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Click add appointment</li>
+</ol>
+<a class="reference internal image-reference" href="_images/appointments4.png"><img alt="_images/appointments4.png" src="_images/appointments4.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="5">
+<li>A pop up will then appear asking whether you would like to add this appointment to your phone calendar.</li>
+<li>Click either Yes (you would like to add the appointment to your calendar) or No (you do not want the appointment added to your calendar)</li>
+</ol>
+<p><em>Creating a patient&#8217;s appointment</em></p>
+<ol class="arabic simple">
+<li>Click on the &#8216;My Patients&#8217; tile on the home page</li>
+<li>Click on the patient&#8217;s name which you want to create and appointment for</li>
+</ol>
+<a class="reference internal image-reference" href="_images/mypatients.png"><img alt="_images/mypatients.png" src="_images/mypatients.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="3">
+<li>Click on &#8216;Appointments&#8217;</li>
+</ol>
+<a class="reference internal image-reference" href="_images/mypatientsoptions.png"><img alt="_images/mypatientsoptions.png" src="_images/mypatientsoptions.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="4">
+<li>Click the button &#8216;Add new appointment&#8217;</li>
+<li>To create an appointment you are required to fill in the fields:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Title- name of the appointment (text)</li>
+<li>Appointment type- select from the drop down list</li>
+<li>Description- details about the appointment (text)</li>
+<li>Address Name/ Number- (text or number)</li>
+<li>Postcode- (text and numbers)</li>
+<li>Start date- date of the appointment (date)</li>
+<li>Start time- time the appointment starts (xx:xx)</li>
+<li>End date- date the appointment is scheduled to finished (date)</li>
+<li>End time- time the appointment is scheduled to finish (xx:xx)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li>Click &#8216;Add Appointment&#8217;</li>
+<li>A pop up will then appear asking whether you would like to add this appointment to your phone calendar.</li>
+<li>Click either Yes (you would like to add the appointment to your calendar) or No (you do not want the appointment added to your calendar)</li>
+</ol>
+<p><strong>Patient:</strong></p>
+<ol class="arabic simple">
+<li>Click on the appointment tile</li>
+<li>On the appointment page click  &#8216;create&#8217;</li>
+</ol>
+<a class="reference internal image-reference" href="_images/appointments2.png"><img alt="_images/appointments2.png" src="_images/appointments2.png" style="width: 245.0px; height: 122.5px;" /></a>
+<a class="reference internal image-reference" href="_images/appointments3.png"><img alt="_images/appointments3.png" src="_images/appointments3.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="3">
+<li>To create an appointment you are required to fill in the fields:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Title- name of the appointment (text)</li>
+<li>Appointment type- select from the drop down list</li>
+<li>Description- details about the appointment (text)</li>
+<li>Address Name/ Number- (text or number)</li>
+<li>Postcode- (text and numbers)</li>
+<li>Start date- date of the appointment (YYYY-MM-DD)</li>
+<li>Start time- time the appointment starts (xx:xx)</li>
+<li>End date- date the appointment is scheduled to finished (YYYY-MM-DD)</li>
+<li>End time- time the appointment is scheduled to finish (xx:xx)</li>
+<li>Private- Tick the box if you wish to mark the appointment private <em>(this means you do not want your carer being able to view this)</em></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Click &#8216;Add Appointment&#8217;</li>
+<li>A pop up will then appear asking whether you would like to add this appointment to your phone calendar.</li>
+<li>Click either Yes (you would like to add the appointment to your calendar) or No (you do not want the appointment added to your calendar)</li>
+</ol>
+</div>
+<div class="section" id="id2">
+<h3>2.0 Editing and updating an appointment<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong>
+<em>A carer can edit their own appointments and only patient appointments they created</em></p>
+<p><em>Edit a personal appointment</em></p>
+<ol class="arabic simple">
+<li>Click on the calendar icon on the home screen.</li>
+<li>Find the appointment you wish to edit and click on it.</li>
+<li>Click update and fill in the details you wish to change</li>
+<li>Click update</li>
+</ol>
+<p><em>Edit a patient&#8217;s appointment you created</em></p>
+<ol class="arabic simple">
+<li>Click on &#8216;My Patients&#8217; page</li>
+<li>Find the patient that you want to edit the appointment for and click on their name</li>
+<li>Click on appointments</li>
+<li>Click edit and fill in the details you wish to change</li>
+<li>Click update</li>
+</ol>
+<p><strong>Patient:</strong>
+<em>A patient can only edit their own appointments</em></p>
+<ol class="arabic simple">
+<li>Click on the calendar icon on the home screen.</li>
+<li>Find the appointment you wish to edit and click on it.</li>
+<li>Click update and fill in the details you wish to change</li>
+<li>Click update</li>
+</ol>
+</div>
+<div class="section" id="id3">
+<h3>3.0 Deleting an appointment<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong>
+<em>A carer can delete their own appointments and only patient appointments they created</em></p>
+<p>To delete a personal appointment</p>
+<ol class="arabic simple">
+<li>Click on the calendar icon on the home screen.</li>
+<li>Find the appointment you wish to delete</li>
+<li>Click the delete icon</li>
+<li>Click &#8216;Ok&#8217; to the pop up confirming the delete</li>
+</ol>
+<p>To delete a patient&#8217;s appointment you created</p>
+<ol class="arabic simple">
+<li>Click on &#8216;My Patients&#8217; page</li>
+<li>Find the patient that you want to delete the appointment for and click on their name</li>
+<li>Click on appointments</li>
+<li>Click delete</li>
+<li>Click &#8216;Ok&#8217; to the pop up confirming the delete</li>
+</ol>
+<p><strong>Patient:</strong>
+<em>A patient can only edit their own appointments</em></p>
+<ol class="arabic simple">
+<li>Click on the calendar icon on the home page</li>
+<li>Find the appointment you wish to delete and click on it</li>
+<li>Click delete</li>
+<li>Click &#8216;Ok&#8217; to the pop up confirming the delete</li>
+</ol>
+</div>
+<div class="section" id="id4">
+<h3>4.0 View personal appointments<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong></p>
+<ol class="arabic simple">
+<li>A carer can view their personal appointments by clicking on the calendar icon on the home screen</li>
+<li>On the tab layout to view upcoming appointment click the upcoming tab</li>
+<li>To view past appointments click the past tab</li>
+</ol>
+<p><em>You can also view the appointments you added to your native calendar on your tablet or phone</em></p>
+<p><strong>Patient:</strong></p>
+<ol class="arabic simple">
+<li>A patient can view their personal appointments by clicking on the calendar icon on the home screen</li>
+</ol>
+<a class="reference internal image-reference" href="_images/patientHome.png"><img alt="_images/patientHome.png" src="_images/patientHome.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="2">
+<li>On the tab layout to view upcoming appointment click the upcoming tab</li>
+</ol>
+<a class="reference internal image-reference" href="_images/filterappointments.png"><img alt="_images/filterappointments.png" src="_images/filterappointments.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="3">
+<li>To view past appointments click the past tab</li>
+</ol>
+<p><em>You can also view the appointments you added to your native calendar on your tablet or phone</em></p>
+</div>
+<div class="section" id="view-a-patient-s-appointment">
+<h3>5.0 View a patient&#8217;s appointment<a class="headerlink" href="#view-a-patient-s-appointment" title="Permalink to this headline">¶</a></h3>
+<p><strong>Carer:</strong></p>
+<ol class="arabic simple">
+<li>Click on &#8216;My Patients&#8217; page</li>
+</ol>
+<a class="reference internal image-reference" href="_images/mypatients.png"><img alt="_images/mypatients.png" src="_images/mypatients.png" style="width: 245.0px; height: 122.5px;" /></a>
+<ol class="arabic simple" start="2">
+<li>Click on the patient you wish to views name</li>
+<li>Next click on appointments</li>
+<li>Here lists all non private appointments from the patient</li>
+</ol>
+<a class="reference internal image-reference" href="_images/patientappointments.png"><img alt="_images/patientappointments.png" src="_images/patientappointments.png" style="width: 245.0px; height: 122.5px;" /></a>
+<p><em>You can also view the appointments you added to your native calendar on your tablet or phone</em></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="prescriptions.html" class="btn btn-neutral float-right" title="Prescriptions"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="searchandconnect.html" class="btn btn-neutral" title="Connect to a user"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, JustHealth.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
