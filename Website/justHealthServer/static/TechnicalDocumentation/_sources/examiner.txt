@@ -27,6 +27,8 @@ Whilst you are welcome to create your own account, the following are provided wi
 +--------------------+------------+------------+ 
 | Patient            | andydavis  | hello123   | 
 +--------------------+------------+------------+ 
+| Admin              | admin      | admin      | 
++--------------------+------------+------------+ 
 
 **Please note:**
 There may be a large amount of notifications present on these accounts, depending on how long the application has remained inactive. 
