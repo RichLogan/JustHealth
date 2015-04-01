@@ -83,6 +83,17 @@ function runTests {
   echo -e "---------------Just Health Testing Suite---------------"
 
   echo -e "\n"
+  echo -e "Running against local server: http://127.0.0.1:9999"
+  echo -e "\n"
+
+  echo -e "For verbose output, please append tests run with -v"
+  echo -e "\n"
+  echo -e "Results will be shown as:"
+  echo -e ". = Pass"
+  echo -e "F = Fail"
+  echo -e "E = Error"
+
+  echo -e "\n"
 
   echo -e "======================================================================"
   echo "Iteration 4"
@@ -214,5 +225,37 @@ function runTests {
 
     echo "Get Reminders"
     python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetReminders.py 
-  echo -e "\n"
+    echo -e "\n"
+
+  echo -e "======================================================================"
+  echo "Iteration 8"
+  echo -e "======================================================================"
+
+    echo "Add Correspondence"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testAddCorrespondence.py 
+    echo -e "\n"
+
+    echo "Check Stock Level"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testCheckStockLevel.py
+    echo -e "\n"
+
+    echo "Delete Note"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testDeleteNote.py
+    echo -e "\n"
+
+    echo "Get Correspondence"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testGetCorrespondence.py
+    echo -e "\n"
+
+    echo "Get Patient Notes"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testGetPatientNotes.py
+    echo -e "\n"
+
+    echo "Get Prescription Count"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testGetPrescriptionCount.py
+    echo -e "\n"
+
+    echo "Take Prescription"
+    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 9/Test\ Cases/ testTakePrescription.py
+    echo -e "\n"
 }
