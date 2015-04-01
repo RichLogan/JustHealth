@@ -68,7 +68,9 @@ class testDismissNotification(unittest.TestCase):
       "notificationid" : 2
     }
 
-    dismiss = requests.post("http://127.0.0.1:9999/api/dismissNotification", data=payload)
+    passwordEncrypted = '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'
+
+    dismiss = requests.post("http://127.0.0.1:9999/api/dismissNotification", data=payload, auth=HTTPBasicAuth('patient', passwordEncrypted)
     self.assertEqual(dismiss.text, "Unauthorized Access")
 
   def tearDown(self):
