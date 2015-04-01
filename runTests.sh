@@ -228,7 +228,7 @@ function runTests {
     echo -e "\n"
 
   echo -e "======================================================================"
-  echo "Iteration 8"
+  echo "Iteration 9"
   echo -e "======================================================================"
 
     echo "Add Correspondence"

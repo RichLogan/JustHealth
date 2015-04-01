@@ -117,7 +117,7 @@ class testGetPatientNotes(unittest.TestCase):
         payload = {
             "username" : "patient"
         }
-        expectedResult = '[{"patient": "patient", "carer": "carer", "title": "title", "notes": "content", "datetime": "2015-03-31", "noteid": 1}]'
+        expectedResult = '[{"patient": "patient", "carer": "carer", "title": "title", "notes": "content", "datetime": ' + '"' + str(datetime.datetime.now().date()) + '"' + ', "noteid": 1}]'
         
         response = requests.post("http://127.0.0.1:9999/api/getPatientNotes", data=payload, auth=HTTPBasicAuth('patient', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         self.assertEqual(response.text, expectedResult)
