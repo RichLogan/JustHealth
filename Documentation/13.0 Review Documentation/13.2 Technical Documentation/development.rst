@@ -141,6 +141,12 @@ This file can be run from the root of the project, provided a local server is ru
 
 	$ . runTests.sh
 
+Below is the output from an example test running session, showing tests passing:
+
+.. image:: /images/tests.png
+   :scale: 70 %
+   :align: center
+
 The source of this file is below:
 
 .. code-block:: bash
