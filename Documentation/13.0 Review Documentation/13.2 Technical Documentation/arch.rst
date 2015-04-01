@@ -74,17 +74,3 @@ Push Notifications involved working with Google's Cloud Messaging Service in ord
 The native calender integration involved working with android on a lower level, and also working with version related issues that came into play depending on how evolved calendar interaction was on a specific Android SDK version. 
 
 Asynchronous Processing and Thread Management was also used in order to ensure that the Android application was never waiting for requests to finish, and would not appear to freeze to the user. This meant loading in data quietly after a user loaded a page, or displaying a loading icon where the former would not make sense. 
-
--------------
-Documentation
--------------
-
-Comprehensive documentation can be found in a number places depending on the content:
-
-**Examiner's Guide:** Accessible from the left pane.
-
-**User Documentation:** Available at: 
-
-**Technical Documentation:** Accessible from the left pane. 
-
-**Corpus Index:** Available at: 

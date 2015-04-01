@@ -29,6 +29,10 @@ If you desire, you can also query the API directly. For functions and parameters
 
 Note that when HTTP Basic authentication is required, the password is the encrypted version, which be accessed by sending the plaintext password to http://raptor.kent.ac.uk:5000/api/encryptPassword. 
 
+For the accounts above, 'hello123' resolves to:
+
+``736300023962325f8459e6763725467521acba39baa1133736f3303bf4528d68ca518fa55a3d27b5d25cd138842d2412fc0495176b2b8fee6d161d3c778386601c572dacb94744118d45671f``
+
 ------------------------
 Android
 ------------------------
@@ -60,10 +64,19 @@ The Testing Portal can be found running at: http://raptor.kent.ac.uk:5001/portal
 
 Here you can query tests by Iteration and filter by All/Passed/Failed to see how we tracked our testing. 
 
-------------------------
+---------------
 Documentation
-------------------------
+---------------
 
+Comprehensive documentation can be found in a number places depending on the content:
+
+**Examiner's Guide:** Accessible from the left pane.
+
+**User Documentation:** Available at: `User Documentation`_
+
+**Technical Documentation:** Accessible from the left pane. 
+
+**Android Documentation:** Available at: `Android`_
 
 -------------
 Other Links
@@ -86,3 +99,5 @@ They are sorted by Iteration and have labels associating them with specific part
 .. _`Android Studio`: http://developer.android.com/sdk/index.html
 .. _`PostMan`: https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en
 .. _`requests`: http://docs.python-requests.org/en/latest/
+.. _`User Documentation`: http://raptor.kent.ac.uk:5000/static/UserDocumentation/index.html
+.. _`Android`: http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html

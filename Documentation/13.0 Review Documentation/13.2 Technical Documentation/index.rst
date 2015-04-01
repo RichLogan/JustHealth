@@ -9,8 +9,6 @@
    :scale: 70 %
    :align: center
 
-
-
 JustHealth Technical Documentation
 =============================================
 
@@ -19,8 +17,6 @@ The JustHealth application is designed to facilitate the relationship between pa
 This document has been created to explain the architecture of the JustHealth platform. It explains how the API (Application Program Interface) works with each of the web and Android applications, is publicly accessible and is perfectly set-up for future development opportunities.
 
 It also explains the detailed security practices that have been implemented to ensure data encryption and user protection. Other sections explain the development processes and database structure.
-
-
 
 .. toctree::
    :maxdepth: 4
@@ -33,4 +29,5 @@ It also explains the detailed security practices that have been implemented to e
    database
    html
    security
+   Android JavaDoc <http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html>
    references
