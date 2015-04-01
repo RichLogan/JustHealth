@@ -2,6 +2,16 @@
 Examiners Guide to JustHealth 
 ==============================
 
+---------
+Welcome
+---------
+
+Welcome to JustHealth's Documentation!
+
+If you are viewing this online, you can skip this section. If this is the paper copy please note that our corpus index file (your starting place after this document) can be found at: /corpusIndex.html. This lists all documentation, authorship and links to the resources.  
+
+*Note: Above, '/' demonstrates the root of the filesystem on our hand in media (USB).*
+
 ------------------------
 Website
 ------------------------
@@ -84,15 +94,15 @@ Other Links
 
 **GitHub**
 
-Our project is hosted on GitHub, and we used their Issue Tracking and other tools to help manage our project. You can view all of this information here: https://github.com/RichLogan/JustHealth
-
-Issues, contributions, and all history can be viewed using the links on the right. 
+Our project is hosted on GitHub, and we used their Issue Tracking and other tools to help manage our project. You can view all of this information here: https://github.com/RichLogan/JustHealth. Issues, contributions, and all history can be viewed using the links on the right of that page. 
 
 **Trello**
 
 Trello is essentially an online version of an information radiator. We used it to track task assignments, due dates and progress. You can publically access and view cards from here: https://trello.com/b/GtDAe1wy/just-health
 
 They are sorted by Iteration and have labels associating them with specific parts of the project, such as documentation, API, database etc as well as green to mark complete. Faded cards are those that have not been interacted with recently.
+
+For both GitHub and Trello, offline versions can be found through the Corpus Index. 
 
 .. _`JustHealth Android Application`: http://raptor.kent.ac.uk:5000/static/JustHealth.apk
 .. _`Kent Android VPN Details`: http://blogs.kent.ac.uk/mobiledevices/2014/02/20/how-to-connect-to-kent-vpn-on-an-android-device/

@@ -17,7 +17,9 @@ It consists of 6 distinct parts:
 Overall Structure
 -----------------
 
-Image of structure here.
+.. image:: /images/architecture.png
+   :scale: 70 %
+   :align: center
 
 -----------------------------------
 The API server
