@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Examiners Guide to JustHealth &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="next" title="Architecture" href="arch.html"/>
+        <link rel="prev" title="JustHealth Technical Documentation" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> JustHealth</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Examiners Guide to JustHealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#welcome">Welcome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#website">Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#android">Android</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-portal">Testing Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-links">Other Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-api-server">The API server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-android-application">The Android application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#general-development-process">General Development Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#automated-api-tests">Automated API Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#runtests-sh">runTests.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#email-functions">Email Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#connnections">Connnections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#notifications">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reminders">Reminders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#correspondence">Correspondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#admin">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#system-functions">System Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Full Views Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-login">User Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#register">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#search">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#deactivate">Deactivate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-logout">User Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-verification">User Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#forgot-password">Forgot Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#password-reset">Password Reset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#my-patients">My Patients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#contact-us">Contact Us</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#justhealth-admin-portal">JustHealth Admin Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">HTML Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="html.html#frontpage-html">frontpage.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#login-html">login.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#register-html">register.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboard-html">dashboard.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboardcarer-html">dashboardCarer.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#editprofile-html">editProfile.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#deactivate-html">deactivate.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#search-html">search.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#changepassword-html">changePassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpassword-html">resetpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpasswordnowquestion-html">resetpasswordnowquestion.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#expiredpassword-html">expiredpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#mypatients-html">myPatients.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#carerappointments-html">carerAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientappointments-html">patientAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientupdateappointment-html">patientUpdateAppointment.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#prescriptions-html">prescriptions.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#correspondence-html">correspondence.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientnotes-html">patientNotes.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#contactus-html">contactUs.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#faq-html">faq.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#template-html">template.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#searchnhsdirect-html">searchNHSDirect.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#settings-html">settings.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#error-pages">error pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#admin-pages">Admin Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#password-security">Password Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#api-authentication">API Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#sql-injection">SQL Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android JavaDoc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#front-end">Front-End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#android-application">Android Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Examiners Guide to JustHealth</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/examiner.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="examiners-guide-to-justhealth">
+<h1>Examiners Guide to JustHealth<a class="headerlink" href="#examiners-guide-to-justhealth" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="welcome">
+<h2>Welcome<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h2>
+<p>Welcome to JustHealth&#8217;s Documentation!</p>
+<p>If you are viewing this online, you can skip this section. If this is the paper copy please note that our corpus index file (your starting place after this document) can be found at: /corpusIndex.html. This lists all documentation, authorship and links to the resources.</p>
+<p><em>Note: Above, &#8216;/&#8217; demonstrates the root of the filesystem on our hand in media (USB).</em></p>
+</div>
+<div class="section" id="website">
+<h2>Website<a class="headerlink" href="#website" title="Permalink to this headline">¶</a></h2>
+<p>The Website, and JustHealth&#8217;s API server can be found running at: <a class="reference external" href="http://raptor.kent.ac.uk:5000">http://raptor.kent.ac.uk:5000</a>.</p>
+<p>Whilst you are welcome to create your own account, the following are provided with example data to get a feel for how the application would look.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="27%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Account Type</th>
+<th class="head">Username</th>
+<th class="head">Password</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Carer</td>
+<td>emma19</td>
+<td>hello123</td>
+</tr>
+<tr class="row-odd"><td>Patient</td>
+<td>andydavis</td>
+<td>hello123</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Please note:</strong>
+There may be a large amount of notifications present on these accounts, depending on how long the application has remained inactive.</p>
+<p>If you desire, you can also query the API directly. For functions and parameters required, please consult the API document. You can send requests to these functions in many ways, but methods we can endorse are:</p>
+<ul class="simple">
+<li>The chrome extension <a class="reference external" href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en">PostMan</a></li>
+<li>The python <a class="reference external" href="http://docs.python-requests.org/en/latest/">requests</a> library</li>
+<li>CURL</li>
+</ul>
+<p>Note that when HTTP Basic authentication is required, the password is the encrypted version, which be accessed by sending the plaintext password to <a class="reference external" href="http://raptor.kent.ac.uk:5000/api/encryptPassword">http://raptor.kent.ac.uk:5000/api/encryptPassword</a>.</p>
+<p>For the accounts above, &#8216;hello123&#8217; resolves to:</p>
+<p><code class="docutils literal"><span class="pre">736300023962325f8459e6763725467521acba39baa1133736f3303bf4528d68ca518fa55a3d27b5d25cd138842d2412fc0495176b2b8fee6d161d3c778386601c572dacb94744118d45671f</span></code></p>
+</div>
+<div class="section" id="android">
+<h2>Android<a class="headerlink" href="#android" title="Permalink to this headline">¶</a></h2>
+<p>In order to run the Android application, you have two choices:</p>
+<ol class="arabic simple">
+<li>Run on an emulated device</li>
+<li>Run on a physical device.</li>
+</ol>
+<p><strong>Emulated</strong></p>
+<p>The easiest way, as the developers did, would be to load the /jhApp folder of the project into <a class="reference external" href="http://developer.android.com/sdk/index.html">Android Studio</a>, and click run at the top. Wizards for creating virtual devices should be presented as part of the setup of Android Studio.</p>
+<p>This will create the virtual device and load the JustHealth application. Please note that graphics quality and performance can be severely impacted by running on an emulated device, and a physical device will always give a better experience.</p>
+<p><strong>Physical</strong></p>
+<p>The final Android application .apk file is available here: <a class="reference external" href="http://raptor.kent.ac.uk:5000/static/JustHealth.apk">JustHealth Android Application</a>. Navigating to this page via an Android device&#8217;s browser should be enough to be able to install the application.</p>
+<p>This should run on any Android device running API level 11 (also known as HONEYCOMB or 3.0) and above.</p>
+<p>Please note, if running on a physical device, you must be connected either directly to the kent.ac.uk network, or through VPN: (<a class="reference external" href="http://blogs.kent.ac.uk/mobiledevices/2014/02/20/how-to-connect-to-kent-vpn-on-an-android-device/">Kent Android VPN Details</a>).</p>
+</div>
+<div class="section" id="testing-portal">
+<h2>Testing Portal<a class="headerlink" href="#testing-portal" title="Permalink to this headline">¶</a></h2>
+<p>The Testing Portal can be found running at: <a class="reference external" href="http://raptor.kent.ac.uk:5001/portal">http://raptor.kent.ac.uk:5001/portal</a></p>
+<p>Here you can query tests by Iteration and filter by All/Passed/Failed to see how we tracked our testing.</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>Comprehensive documentation can be found in a number places depending on the content:</p>
+<p><strong>Examiner&#8217;s Guide:</strong> Accessible from the left pane.</p>
+<p><strong>User Documentation:</strong> Available at: <a class="reference external" href="http://raptor.kent.ac.uk:5000/static/UserDocumentation/index.html">User Documentation</a></p>
+<p><strong>Technical Documentation:</strong> Accessible from the left pane.</p>
+<p><strong>Android Documentation:</strong> Available at: <a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android</a></p>
+</div>
+<div class="section" id="other-links">
+<h2>Other Links<a class="headerlink" href="#other-links" title="Permalink to this headline">¶</a></h2>
+<p><strong>GitHub</strong></p>
+<p>Our project is hosted on GitHub, and we used their Issue Tracking and other tools to help manage our project. You can view all of this information here: <a class="reference external" href="https://github.com/RichLogan/JustHealth">https://github.com/RichLogan/JustHealth</a>. Issues, contributions, and all history can be viewed using the links on the right of that page.</p>
+<p><strong>Trello</strong></p>
+<p>Trello is essentially an online version of an information radiator. We used it to track task assignments, due dates and progress. You can publically access and view cards from here: <a class="reference external" href="https://trello.com/b/GtDAe1wy/just-health">https://trello.com/b/GtDAe1wy/just-health</a></p>
+<p>They are sorted by Iteration and have labels associating them with specific parts of the project, such as documentation, API, database etc as well as green to mark complete. Faded cards are those that have not been interacted with recently.</p>
+<p>For both GitHub and Trello, offline versions can be found through the Corpus Index.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arch.html" class="btn btn-neutral float-right" title="Architecture">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="JustHealth Technical Documentation"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

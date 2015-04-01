@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Security Documentation &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="prev" title="HTML Listing" href="html.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> JustHealth</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examiner.html">Examiners Guide to JustHealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#website">Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#android">Android</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#testing-portal">Testing Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#other-links">Other Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-api-server">The API server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-android-application">The Android application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#general-development-process">General Development Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-tools">Development Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#automated-api-tests">Automated API Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#runtests-sh">runTests.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#email-functions">Email Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#connnections">Connnections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#notifications">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reminders">Reminders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#correspondence">Correspondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#admin">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#system-functions">System Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Full Views Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-login">User Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#register">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#search">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#deactivate">Deactivate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-logout">User Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-verification">User Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#forgot-password">Forgot Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#password-reset">Password Reset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#my-patients">My Patients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#contact-us">Contact Us</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#justhealth-admin-portal">JustHealth Admin Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">HTML Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="html.html#frontpage-html">frontpage.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#login-html">login.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#register-html">register.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboard-html">dashboard.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboardcarer-html">dashboardCarer.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#editprofile-html">editProfile.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#deactivate-html">deactivate.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#search-html">search.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#changepassword-html">changePassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpassword-html">resetpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpasswordnowquestion-html">resetpasswordnowquestion.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#expiredpassword-html">expiredpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#mypatients-html">myPatients.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#carerappointments-html">carerAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientappointments-html">patientAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientupdateappointment-html">patientUpdateAppointment.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#prescriptions-html">prescriptions.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#correspondence-html">correspondence.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientnotes-html">patientNotes.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#contactus-html">contactUs.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#faq-html">faq.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#template-html">template.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#searchnhsdirect-html">searchNHSDirect.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#settings-html">settings.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#error-pages">error pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#admin-pages">Admin Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Security Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#password-security">Password Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-authentication">API Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sql-injection">SQL Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android JavaDoc</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Security Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/security.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="security-documentation">
+<h1>Security Documentation<a class="headerlink" href="#security-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In order for JustHealth to be reputable, trusted and widely used it is necessary to ensure that patient confidentiality, data integrity and the availability of this data is exceptional. Therefore, JustHealth has implemented a strict security policy and implemented  security controls to ensure that the product meets customer expectation.</p>
+</div>
+<div class="section" id="https">
+<h2>HTTPS<a class="headerlink" href="#https" title="Permalink to this headline">¶</a></h2>
+<p>JustHealth set out to implement HTTPS on the webserver that was hosting the application. This would have ensured that all of the communication between a client&#8217;s browser and/or any Android device that they may be running the JustHealth mobile application would have been encrypted via SSL. JustHealth made the decision to utilise this protocol rather than standard HTTP as it ensures that user data is encrypted when being transmitted across the internet. This would have helped to ensure that the confidentiality of patient data is maintained.</p>
+<p>If the application had been hosted on our own server, this would have been implemented successfully. However, due to it being run on the University webserver (raptor) we were unable to use signed certificates. Despite using self-signed certificates, we found this was not supported with Android without implementing several exceptions. Therefore, the decision was made to not implement this. Although, below are the certificates that we have generated in order to prove that we the security could have been implemented on the web application providing we had deployed on our own server.</p>
+<p><strong>The Key:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAxyi4TLCJZwd9CmOZGDTYeo+bE/oyfMeeJUzzL9JH1xuezNr9
+vFHbPlsToHN1xDYjuf7en7GXVAr8sEaTJGo4zkfIWR8gMNvahIx9DvRsiVDtk32f
+qZyiDXYJK0nX6nH5r2bBN1jIAOswJ9rv068oCW5PEweUTUjEPxM1UoJMetChchke
+/rNGlRyt5SKB0XKqsqHXWGpHO6GNlycYH/cRF8D/ygPOlmnD+dbiLhkovLFkzuOf
+uXkpT/bfxrX0Zd/8zINvjEzCyiarOoRnGSlxj9MpXj6FdYL02haO56zhPZW7Sl91
+y+PezSOyHmgzATvQ8PdDBf88KSH3SLlWMoeP/QIDAQABAoIBAQC1cHmHFIX5YS8f
+meFN1kcqUU5dAuGgIFQJc3NSK+bbKASiaRgkywZMZrkYwleV7CTcPEAhiK9vF5ti
+FMnUsRkThP4Xg23WVVVc0IjWaQPAjgQDDL26zkIstU5hK6MTqcZpb9mzTKTZgWqb
+xLAdUEPPY7mSgqMvTY3MUPmRM7ftYi1fBhf1jsCIk2h5VVwwZKMd9IhF5Ar6fkZl
+T+5hMauf6ec7kucCl14wZGmCjw+bKxGi9xmdPXkZJUNbS7mIjo4aJeFL9JX2ZB+I
+iQoTefNokd6wV2DBldpFUL0h1OAoprgN84SI+q1U6RqgcrzV/ygh1uPAhKipi5Fx
+GwvnxCRBAoGBAOSbwsmLkP+3onjOBEPodn02xzfWV8x5q0F4vRxuHPFGYSQUvZxR
+KvIEvcDaCbnuSJY9l60FKjn/hGxEoqJmvju5Fb0Eae9loQWD4fWglBAMGkUJBQe5
+smoHGEJq7jEhWpSplSYrNwFOId4y2sXtaUKOAmcofIReMYBa8vXh1yyJAoGBAN8F
+pCRvPNWUPEwjPpB7tK/i+5GQENiyx0H51rYeOiXHjsTh/EqeOu6iaXtOLNZGh7Ee
+oenaZTiAkgYD/vnboSfHpe/allV+ZL53tvhTJujQcMArdCi0dFCiqrrkexsJ0xgz
+k5BcYD48h3Wi0936NTtzNgHvDdSw1/GCtaQxtvLVAoGABQ0L+LgEtCGyjUi//2Ab
+fhi/vhQWTIZDqmaohwBH02ziqJFsvw9sC3zfVGt824bQQ8GIoGIE1NM4ccvya/Qp
+L9ifClYWoRt1u1F2pJ6vpssdqXjRi6ImtwEBIDaMnLlH7xDwIq/Bv12ike49tzHP
+qZDJrM3QMnyCS3u28ofS4UECgYBj+SFle7/ndfW5o6ruFaYfmj5vOAd1PF76Akbv
+iIlEWjpzo2H3CQsd4gwqzBZpT2CQU0z9iXsKYwgSTkREOOH69RI7fN8bH/eFMiEB
+HDU69AU2/8OoY4wogWLLOJS+wB6yoJwrgF1cSMHoR791qC2oorK5FzI5/7QtfQxz
+uB1sqQKBgQCZ/y482vPfXZ8tKdNHgG5BJehlHbhxzmeW9If2NoF+9ybXcDvKXkvz
+mHffRaWFgtX6zgSUh9TQqocRZERiLydU+3Mp1RDObE7kftE3OhhZxhzIlDwDDVnB
+npUQPK4YxK7hv27XbApfmWIU6MEAmxIhb8rhbyxoVXu6Ba7am3DoPg==
+-----END RSA PRIVATE KEY-----
+</pre></div>
+</div>
+<p><strong>The Certificate:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>-----BEGIN CERTIFICATE-----
+MIIDXTCCAkWgAwIBAgIJAMuJH8m+dN+jMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV
+BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
+aWRnaXRzIFB0eSBMdGQwHhcNMTUwMTI0MTYxNzExWhcNMTYwMTI0MTYxNzExWjBF
+MQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50
+ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEAxyi4TLCJZwd9CmOZGDTYeo+bE/oyfMeeJUzzL9JH1xuezNr9vFHbPlsT
+oHN1xDYjuf7en7GXVAr8sEaTJGo4zkfIWR8gMNvahIx9DvRsiVDtk32fqZyiDXYJ
+K0nX6nH5r2bBN1jIAOswJ9rv068oCW5PEweUTUjEPxM1UoJMetChchke/rNGlRyt
+5SKB0XKqsqHXWGpHO6GNlycYH/cRF8D/ygPOlmnD+dbiLhkovLFkzuOfuXkpT/bf
+xrX0Zd/8zINvjEzCyiarOoRnGSlxj9MpXj6FdYL02haO56zhPZW7Sl91y+PezSOy
+HmgzATvQ8PdDBf88KSH3SLlWMoeP/QIDAQABo1AwTjAdBgNVHQ4EFgQUbYQVxLIs
+i0i5Tk4KBxyUFldOLxcwHwYDVR0jBBgwFoAUbYQVxLIsi0i5Tk4KBxyUFldOLxcw
+DAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAP6HN+3+w9eqi6prF5u5d
+mDpA4kUft1Zdowg+m4QhTMYGcyyt/jY+MAxltqF3wwtTWX1nrLiELEK+HD8Zcn8n
+frh38Fy/WvX1qfMeCwVzWWfSY/LCfDyxq5b/YmZTUN7Jc7aYqLJKMuNnYoLaFCb8
+BzXUuyp2oU8oGVSMj0Lf5/66Tyx4YWOcLUA4pbLqKUSeT+LeHsL7SR+fvRH6RXTA
+kmoBhJARajvUvNo6bSM8fIXAD53IS0pLpAo7mSBWuAvHYnJ/AhNRxl+UuEM28LtL
+If+kh/uGxhfF0NfDuFJLa8ntJTfg8Ef7+KdMfLoF/o0nPH17nIMSmfcknRokwpj3
+nA==
+-----END CERTIFICATE-----
+</pre></div>
+</div>
+<p>We would have implemented Transport Layer Security 1.2 (TLS 1.2), which is currently viewed as being the most secure application layer security protocol that is able to be implemented on the web. It is not vulnerable to the recently publicised and discovered POODLE vulnerability.</p>
+</div>
+<div class="section" id="password-security">
+<h2>Password Security<a class="headerlink" href="#password-security" title="Permalink to this headline">¶</a></h2>
+<p>Password Security has been extremely important to JustHealth and therefore, all user passwords are hashed in the database. This ensures that even administrators would not be able to convert the password to plaintext. This is important as although it is not advised users of JustHealth are likely to use their JustHealth login credentials on other accounts that they have. Although, very unlikely, if the JustHealth database was to be compromised it would not be feasible for a hacker to be able to convert passwords to plaintext.</p>
+<p>The hashing algorithm that JustHealth have adopted is the same one that is utilised by the Linux Operating System. This is a python algorithm named: SHA-256 Crypt. Currently, there are no known weaknesses or vulnerabilities. JustHealth make a conscious effort to review this regularly and if there are any vulnerabilities that come to light JustHealth will address this.</p>
+<p>Example of the implementation code:
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Encrypt password with SHA 256</span>
+<span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Example of the password &#8220;hello&#8221;, stored as a hash:</p>
+<div class="highlight-python"><div class="highlight"><pre>$5$rounds=110000$u.CYQ7BoQbYoEyCi$hzbrZqkoKPdHeVaWvCuZnastY17W/oenJudbcdcOwj2
+</pre></div>
+</div>
+<p>When a user logs into the JustHealth web or mobile application the password that they enter into the field is also Hashed in the same way and compared to their hashed password that is stored in JustHealths database.</p>
+<p>Example of the code used to authenticate a user at login:
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>hashedPassword = uq8LnAWi7D.get((uq8LnAWi7D.username == attempted.username) &amp; (uq8LnAWi7D.iscurrent==True)).password.strip()
+attemptedPassword = request.form[&#39;password&#39;]
+# This checks that the password that they have entered is the same as the password that is stored in the database.
+if sha256_crypt.verify(attemptedPassword, hashedPassword):
+        #other checks that check that the account is verified etc.
+</pre></div>
+</div>
+<p>Additionally, to avoid plaintext passwords being stored within the android application on login, the password is encrypted by a method in the API and then this is stored in the Android Application&#8217;s Shared Preferences. This is required to be stored by the application so that it is able to authenticate with the API through HTTP Basic. The encryption and decryption method are able to be seen below.</p>
+<p><strong>Encryption Method</strong>
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&quot;/api/encryptPassword&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">encryptPassword</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encrypts the users password and returns it to them</span>
+
+<span class="sd">    :param request.form: POST request containing plaintext [password].</span>
+<span class="sd">    :type request.form: dict.</span>
+
+<span class="sd">    :returns: str -- Encrypted password.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Used so that we are able to store the encrypted users password in android SharedPreferences</span>
+    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span>
+    <span class="n">cipherText</span> <span class="o">=</span> <span class="n">encrypt</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">secret_key</span><span class="p">,</span> <span class="n">plaintext</span><span class="p">)</span>
+    <span class="n">stringCipher</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">cipherText</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stringCipher</span>
+</pre></div>
+</div>
+<p><strong>Decryption Method</strong> ::
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>def decryptPassword(cipherText):
+&quot;&quot;&quot;
+Decrypts the users password and returns it so that we are able to authenticate them.
+
+:param cipherText: Encrypted password.
+:type cipherText: str.
+
+:returns: str -- Plaintext password.
+&quot;&quot;&quot;
+#used so that we are able to store the encrypted users password in android SharedPreferences
+bytesCipher = binascii.unhexlify(cipherText)
+plaintext = decrypt(app.secret_key, bytesCipher)
+return plaintext
+</pre></div>
+</div>
+</div>
+<div class="section" id="api-authentication">
+<h2>API Authentication<a class="headerlink" href="#api-authentication" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="http-basic">
+<h3>HTTP Basic<a class="headerlink" href="#http-basic" title="Permalink to this headline">¶</a></h3>
+<p>JustHealth acknowledge that both the web and the mobile application that they have developed use the API that was  simultaneously developed in the  Python programming language. This is achieved through the use of POST and GET requests, which without authentication makes user data vulnerable.</p>
+<p>For example, using the POSTMAN add-on that is available for the Google Chrome browser anyone would have been able to send a POST Request to JustHealth’s API. This would effectively enable them to read, modify and delete data from JustHealths database subsequently, impacting dramatically user’s data confidentiality, integrity and availability.</p>
+<p>In order to mitigate this threat, JustHealth have adopted HTTP Basic Authentication. This requires the person querying the API to be authenticated. This is achieved by setting the Headers of a POST/GET request to the username or password  of a legitimate user. In order for this to be able to work across both the web and mobile applications,  there is a method that contains the logic and a method that is able to be externally addressed and runs the corresponding method which contains the logic. This is required as from the web application authentication isn’t required as the method is able to be called internally from views.py. However, the android application is calling the method from an external source and therefore requires authentication to be encoded in the headers of the POST/GET request. Examples of the authentication methods are able to be seen below.</p>
+<p>The method that is used to check verify the person that is querying the API:
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">auth</span> <span class="o">=</span> <span class="n">HTTPBasicAuth</span><span class="p">()</span>
+
+<span class="nd">@auth.verify_password</span>
+<span class="k">def</span> <span class="nf">verify_password</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if the password entered is the current password for that account&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">hashedPassword</span> <span class="o">=</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="n">username</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">iscurrent</span><span class="o">==</span><span class="bp">True</span><span class="p">))</span><span class="o">.</span><span class="n">password</span>
+        <span class="k">return</span> <span class="n">sha256_crypt</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">hashedPassword</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Examples of internally and externally addressable methods in the API.
+Externally Addressable Method:
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/deactivateaccount&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@auth.login_required</span>
+<span class="k">def</span> <span class="nf">deactivateAccount</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">deactivateAccount</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Internally Addressable Method:
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>def deactivateAccount(details):
+#Method contents removed
+</pre></div>
+</div>
+<p>Example of internal call from views.py (The Web Application itself):
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/deactivate&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="nd">@needLogin</span>
+<span class="k">def</span> <span class="nf">deactivate</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Handles account deactivation form&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+    <span class="c">#Where the call to the API method deactivateAccount() is made</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">deactivateAccount</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example of the external method call (POST Request) from android:
+java:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>    public static String post(String url, HashMap&lt;String, String&gt; parameters, Context context) {
+    HttpClient httpClient = new DefaultHttpClient();
+    HttpPost httppost = new HttpPost(&quot;http://raptor.kent.ac.uk:5000/api/&quot; + url);
+
+    //Authentication for HTTP Basic
+    SharedPreferences account = context.getSharedPreferences(&quot;account&quot;, 0);
+    String username = account.getString(&quot;username&quot;, null);
+    String password = account.getString(&quot;password&quot;, null);
+    String authentication = username + &quot;:&quot; + password;
+    String encodedAuthentication = Base64.encodeToString(authentication.getBytes(), Base64.NO_WRAP);
+    httppost.setHeader(&quot;Authorization&quot;, &quot;Basic &quot; + encodedAuthentication);
+
+    try {
+        List&lt;NameValuePair&gt; nameValuePairs = new ArrayList&lt;NameValuePair&gt;(2);
+        Set&lt;Map.Entry&lt;String, String&gt;&gt; detailsSet = parameters.entrySet();
+        for (Map.Entry&lt;String, String&gt; string : detailsSet) {
+            nameValuePairs.add(new BasicNameValuePair(string.getKey(), string.getValue()));
+        }
+        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        HttpResponse response = httpClient.execute(httppost);
+
+        return EntityUtils.toString(response.getEntity());
+    }
+    catch (ClientProtocolException e) {
+        //TODO Auto-generated catch block
+    } catch (IOException e) {
+        //TODO Auto-generated catch block
+    } catch (NullPointerException e) {
+        //TODO Auto-generated catch block
+    }
+    Feedback.toast(&quot;Cannot connect to Server&quot;, false, context);
+    return null;
+}
+</pre></div>
+</div>
+<p>It should also be noted that the following methods do not require any API authentication. These are methods that do not require a user to be logged in to run and none of them pose a direct threat to existing user data.</p>
+</div>
+<div class="section" id="manual-authentication">
+<h3>Manual Authentication<a class="headerlink" href="#manual-authentication" title="Permalink to this headline">¶</a></h3>
+<p>As well HTTP Basic authentication to ensure that someone querying the API has a legitimate JustHealth user account, JustHealth have also ensured that users querying the API are only allowed to retrieve the information that they have permission to see. Permissions on the user accounts are as follows:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Account Type</th>
+<th class="head">Permissions</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Patient</td>
+<td><ul class="first last simple">
+<li>They are entitled to read/write information to and from their profile.</li>
+<li>They are entitled to read/write &#8216;self&#8217; appointments.</li>
+<li>They are entitled to read and accept/decline appointments that are created with them.</li>
+<li>They are entitled to read their own prescriptions.</li>
+<li>They are entitled to read their notes/correspondence.</li>
+<li>They are entitled to read and request to connect with other carers.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>Carer</td>
+<td><ul class="first last simple">
+<li>They are entitled to read/write information about themselves.</li>
+<li>They are entitled to read/write prescriptions of only patients they are connected too.</li>
+<li>They are entitled to read/write appointments that they have created with a patient that they are connected.</li>
+<li>They are entitled to read/write correspondence with patients that they are connected too.</li>
+<li>They are entitled to read when a patient that they are connected to has taken/missed medication.</li>
+<li>They are entitled to read appointments that the patient they have connected too has not marked as private.</li>
+<li>They are entitled to read and request to connect with other patient&#8217;s.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>Administrator</td>
+<td><ul class="first last simple">
+<li>Methods are currently not accessible from the public API.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This authentication has been implemented using several methods that check that the user who has authenticated through HTTP Basic has the permission to read and/or write for a given method. For example:</p>
+<ol class="arabic simple">
+<li>If a user is asking to read/write information about themselves, we check that the username that is sent and authenticated in the header of the request is the same user that is being read from or written too.</li>
+<li>If a user (Currently, account type: Carer) is asking to read/write information about a patient, we check that the carer is connected to the patient.</li>
+</ol>
+<p>If either of the above scenarios return False then the API will throw a HTTP 401 status code, not authenticated.</p>
+<p><strong>The Code</strong></p>
+<p>The method below is the first that JustHealth wrote. This allows us to get the username from the HTTP request headers and this is what we are able to compare permissions too.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">getUsernameFromHeader</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Method gets the HTTP Basic header, decodes it and gets the username&quot;&quot;&quot;</span>
+    <span class="n">authHeader</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Authorization&#39;</span><span class="p">))</span>
+    <span class="n">authHeader</span> <span class="o">=</span> <span class="n">authHeader</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;Basic &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">decodedAuthHeader</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">authHeader</span><span class="p">)</span>
+    <span class="n">authUsername</span> <span class="o">=</span> <span class="n">decodedAuthHeader</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">authUsername</span>
+</pre></div>
+</div>
+<p>The following method co-ordinates what we should check for. If the method is to update something for themselves then the second parameter is passed as a blank string and therefore, we just need to check that the person authorised, through HTTP Basic is the same as the username that is going to be edited. These checks are done through the two methods below this co-ordinating method.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>def verifyContentRequest(username, targetUsername):
+&quot;&quot;&quot;This co-ordinated the running of the other methods, depending on the parameters that are passed&quot;&quot;&quot;
+&quot;&quot;&quot;This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string&quot;&quot;&quot;
+    authUsername = getUsernameFromHeader()
+    if targetUsername == &quot;&quot;:
+        return verifySelf(authUsername, username)
+    elif verifySelf(authUsername, username):
+        return verifyCarer(username, targetUsername)
+    else:
+        return abort(401)
+</pre></div>
+</div>
+<p>This verifies that the record to be read/written of a particular user is the same user that has been authenticated through HTTP Basic.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>def verifySelf(authUsername, methodUsername):
+&quot;&quot;&quot;Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written&quot;&quot;&quot;
+    if authUsername == methodUsername:
+        return True
+    else:
+        return abort(401)
+</pre></div>
+</div>
+<p>This verifies that the record to be read/written for a particular user is a user that is connected to the user that has been authenticated through HTTP Basic.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre>def verifyCarer(username, targetUsername):
+&quot;&quot;&quot;Checks that the user authenticated by HTTP Basic is connected to the user that is associated with the records being read/written&quot;&quot;&quot;
+    accountInfo = json.loads(getAccountInfo(username))
+    if accountInfo[&#39;accounttype&#39;] == &quot;Carer&quot;:
+        if getConnectionStatus(username, targetUsername) == &quot;Already Connected&quot;:
+            return True
+        else:
+            return abort(401)
+    else:
+        return abort(401)
+</pre></div>
+</div>
+<p>All of the methods above are called in the publically accessible API function. The first method shows the call for a method that is retrieving records associated with the authenticated user.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/getAppointment&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@auth.login_required</span>
+<span class="k">def</span> <span class="nf">getAppointment</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">verifyContentRequest</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">],</span> <span class="s">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">getAppointment</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;appid&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The second method shows a call where the user making the request is different from the user associated with the records that are being requested.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/addCorrespondence&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">addCorrespondence</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">verifyContentRequest</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;carer&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;patient&#39;</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="n">addCorrespondence</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Below shows a method where in order to get the associated user of the records that are being requested, the database has to be queried. This occurs when the target username is not sent in the post request.
+python:type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/api/updateAppointment&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+<span class="nd">@auth.login_required</span>
+<span class="k">def</span> <span class="nf">updateAppointment</span><span class="p">():</span>
+    <span class="c">#username isn&#39;t sent with the request, so here we need to get the creator of the appointment from the database.</span>
+    <span class="n">appointment</span> <span class="o">=</span> <span class="n">Appointments</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Appointments</span><span class="o">.</span><span class="n">appid</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;appid&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">appointment</span><span class="o">.</span><span class="n">creator</span><span class="o">.</span><span class="n">username</span>
+    <span class="k">if</span> <span class="n">verifyContentRequest</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">updateAppointment</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;appid&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;apptype&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;addressnamenumber&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;postcode&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;startdate&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;starttime&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;enddate&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;endtime&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;other&#39;</span><span class="p">],</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;private&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Why is this necessary?</strong></p>
+<p>Without this manual security API implementation, anyone with valid credentials for the application would be able to query the API and read/write any information from or to the database.</p>
+</div>
+</div>
+<div class="section" id="sql-injection">
+<h2>SQL Injection<a class="headerlink" href="#sql-injection" title="Permalink to this headline">¶</a></h2>
+<p>JustHealth have adopted the use of an Object Relational Mapper (ORM) called <strong>peewee</strong>. All of the interactions that happen with JustHealth’s PostgreSQL database happen through the ORM. Not only is this quicker but it provides JustHealth with additional security enhancements; the biggest being the inability to inject SQL into the application. This is because of no direct SQL being run on the database and therefore, input data is placed into already waiting placeholders. If data is not in the correct format, it will simply be rejected by the ORM.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="html.html" class="btn btn-neutral" title="HTML Listing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

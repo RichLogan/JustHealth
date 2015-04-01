@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>justHealthServer.database &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../index.html" class="fa fa-home"> JustHealth</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examiner.html">Examiners Guide to JustHealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examiner.html#welcome">Welcome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examiner.html#website">Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examiner.html#android">Android</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examiner.html#testing-portal">Testing Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examiner.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examiner.html#other-links">Other Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-api-server">The API server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arch.html#the-android-application">The Android application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../development.html#general-development-process">General Development Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development.html#automated-api-tests">Automated API Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../development.html#runtests-sh">runTests.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#email-functions">Email Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#connnections">Connnections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#notifications">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#reminders">Reminders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#correspondence">Correspondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#admin">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#system-functions">System Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../views.html">Full Views Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#user-login">User Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#register">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#search">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#deactivate">Deactivate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#user-logout">User Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#user-verification">User Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#forgot-password">Forgot Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#password-reset">Password Reset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#my-patients">My Patients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#contact-us">Contact Us</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../views.html#justhealth-admin-portal">JustHealth Admin Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database.html#module-justHealthServer.database">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database.html#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../html.html">HTML Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#frontpage-html">frontpage.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#login-html">login.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#register-html">register.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#dashboard-html">dashboard.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#dashboardcarer-html">dashboardCarer.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#editprofile-html">editProfile.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#deactivate-html">deactivate.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#search-html">search.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#changepassword-html">changePassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#resetpassword-html">resetpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#resetpasswordnowquestion-html">resetpasswordnowquestion.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#expiredpassword-html">expiredpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#mypatients-html">myPatients.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#carerappointments-html">carerAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#patientappointments-html">patientAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#patientupdateappointment-html">patientUpdateAppointment.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#prescriptions-html">prescriptions.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#correspondence-html">correspondence.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#patientnotes-html">patientNotes.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#contactus-html">contactUs.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#faq-html">faq.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#template-html">template.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#searchnhsdirect-html">searchNHSDirect.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#settings-html">settings.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#error-pages">error pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../html.html#admin-pages">Admin Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../security.html">Security Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../security.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../security.html#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../security.html#password-security">Password Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../security.html#api-authentication">API Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../security.html#sql-injection">SQL Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android JavaDoc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#front-end">Front-End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#android-application">Android Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../references.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>justHealthServer.database</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for justHealthServer.database</h1><div class="highlight"><pre>
+<span class="c"># Generated From:</span>
+<span class="c"># $ pwiz.py -e postgresql -u justhealth -H penguin.kent.ac.uk -p 5432 justhealth -P dsomoid</span>
+<span class="kn">from</span> <span class="nn">peewee</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">database</span> <span class="o">=</span> <span class="n">PostgresqlDatabase</span><span class="p">(</span><span class="s">&#39;justhealth&#39;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s">&#39;host&#39;</span><span class="p">:</span> <span class="s">&#39;penguin.kent.ac.uk&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">:</span> <span class="s">&#39;dsomoid&#39;</span><span class="p">,</span> <span class="s">&#39;port&#39;</span><span class="p">:</span> <span class="mi">5432</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="s">&#39;justhealth&#39;</span><span class="p">})</span>
+
+<div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../../database.html#justHealthServer.database.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base Model with Database Object&quot;&quot;&quot;</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
+</div>
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a user of the application&quot;&quot;&quot;</span>
+    <span class="n">accountdeactivated</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">accountlocked</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">dob</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">()</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">loginattempts</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">profilepicture</span> <span class="o">=</span> <span class="n">TextField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s">&quot;default.png&quot;</span><span class="p">)</span>
+    <span class="n">telephonenumber</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">verified</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;client&#39;</span>
+</div>
+<div class="viewcode-block" id="Carer"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Carer">[docs]</a><span class="k">class</span> <span class="nc">Carer</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a carer account&quot;&quot;&quot;</span>
+    <span class="c"># Foreign Key to Client</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">ismale</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">nhscarer</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">surname</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;carer&#39;</span>
+</div>
+<div class="viewcode-block" id="Patient"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Patient">[docs]</a><span class="k">class</span> <span class="nc">Patient</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a patient account&quot;&quot;&quot;</span>
+    <span class="c"># Foreign Key to Client</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">ismale</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">surname</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;patient&#39;</span>
+</div>
+<div class="viewcode-block" id="Admin"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Admin">[docs]</a><span class="k">class</span> <span class="nc">Admin</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents an administrative account&quot;&quot;&quot;</span>
+    <span class="c"># Foreign Key to Client</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">ismale</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">surname</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;admin&#39;</span>
+</div>
+<div class="viewcode-block" id="uq8LnAWi7D"><a class="viewcode-back" href="../../database.html#justHealthServer.database.uq8LnAWi7D">[docs]</a><span class="k">class</span> <span class="nc">uq8LnAWi7D</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A pasword for a user&quot;&quot;&quot;</span>
+    <span class="c"># Foreign Key to Client</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+    <span class="n">expirydate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">iscurrent</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">primary_key</span> <span class="o">=</span> <span class="n">CompositeKey</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">,</span> <span class="s">&#39;username&#39;</span><span class="p">)</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;uq8lnawi7d&#39;</span>
+</div>
+<div class="viewcode-block" id="Deactivatereason"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Deactivatereason">[docs]</a><span class="k">class</span> <span class="nc">Deactivatereason</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a reason an account can be deactivated for&quot;&quot;&quot;</span>
+    <span class="n">reason</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;deactivatereason&#39;</span>
+</div>
+<div class="viewcode-block" id="Userdeactivatereason"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Userdeactivatereason">[docs]</a><span class="k">class</span> <span class="nc">Userdeactivatereason</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a user deactivating their account with reason and comments&quot;&quot;&quot;</span>
+    <span class="c"># Foreign Key to Deactivate Reason</span>
+    <span class="n">reason</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;reason&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Deactivatereason</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;reason&#39;</span><span class="p">)</span>
+    <span class="n">comments</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;userdeactivatereason&#39;</span>
+</div>
+<div class="viewcode-block" id="Relationship"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Relationship">[docs]</a><span class="k">class</span> <span class="nc">Relationship</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a non-complete relationship between two users&quot;&quot;&quot;</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">connectionid</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="c"># Client Object</span>
+    <span class="n">requestor</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;requestor&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span> <span class="o">=</span> <span class="s">&#39;requestor&#39;</span><span class="p">)</span>
+    <span class="n">requestortype</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># Client Object</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">)</span>
+    <span class="n">targettype</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;relationship&#39;</span>
+</div>
+<div class="viewcode-block" id="Patientcarer"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Patientcarer">[docs]</a><span class="k">class</span> <span class="nc">Patientcarer</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A completed Patient/Carer connection&quot;&quot;&quot;</span>
+    <span class="n">carer</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;carer&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;carer&#39;</span><span class="p">)</span>
+    <span class="n">patient</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;patient&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;patient&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">primary_key</span> <span class="o">=</span> <span class="n">CompositeKey</span><span class="p">(</span><span class="s">&#39;carer&#39;</span><span class="p">,</span> <span class="s">&#39;patient&#39;</span><span class="p">)</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;patientcarer&#39;</span>
+</div>
+<div class="viewcode-block" id="Appointmenttype"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Appointmenttype">[docs]</a><span class="k">class</span> <span class="nc">Appointmenttype</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A possible appointment type&quot;&quot;&quot;</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;appointmenttype&#39;</span>
+</div>
+<div class="viewcode-block" id="Appointments"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Appointments">[docs]</a><span class="k">class</span> <span class="nc">Appointments</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents an Appoinment&quot;&quot;&quot;</span>
+    <span class="n">appid</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="n">creator</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;creator&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;creator&#39;</span><span class="p">)</span>
+    <span class="n">invitee</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;invitee&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;invitee&#39;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">apptype</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;apptype&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Appointmenttype</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;apptype&#39;</span><span class="p">)</span>
+    <span class="n">addressnamenumber</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">postcode</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">startdate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">()</span>
+    <span class="n">starttime</span> <span class="o">=</span> <span class="n">TimeField</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="s">&#39;%H:%M&#39;</span><span class="p">)</span>
+    <span class="n">enddate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">()</span>
+    <span class="n">endtime</span> <span class="o">=</span> <span class="n">TimeField</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="s">&#39;%H:%M&#39;</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">private</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">androideventid</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">accepted</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;appointments&#39;</span>
+</div>
+<div class="viewcode-block" id="Medication"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Medication">[docs]</a><span class="k">class</span> <span class="nc">Medication</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A medication/drug supported by the applications&quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;medication&#39;</span>
+</div>
+<div class="viewcode-block" id="Prescription"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Prescription">[docs]</a><span class="k">class</span> <span class="nc">Prescription</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A prescription assigned to a patient&quot;&quot;&quot;</span>
+    <span class="n">prescriptionid</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+    <span class="n">medication</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Medication</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+    <span class="n">dosage</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dosageunit</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">stockleft</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">prerequisite</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dosageform</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># Booleans to represent what days a prescription should be taken.</span>
+    <span class="n">Monday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Tuesday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Wednesday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Thursday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Friday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Saturday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Sunday</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">startdate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">enddate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;prescription&#39;</span>
+</div>
+<div class="viewcode-block" id="Notes"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Notes">[docs]</a><span class="k">class</span> <span class="nc">Notes</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A note left by a patient or carer&quot;&quot;&quot;</span>
+    <span class="n">noteid</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="n">carer</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;carer&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;carernotes&#39;</span><span class="p">)</span>
+    <span class="n">patient</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;patient&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;patientnotes&#39;</span><span class="p">)</span>
+    <span class="n">notes</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">datetime</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;notes&#39;</span>
+</div>
+<div class="viewcode-block" id="TakePrescription"><a class="viewcode-back" href="../../database.html#justHealthServer.database.TakePrescription">[docs]</a><span class="k">class</span> <span class="nc">TakePrescription</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An instance of a patient taking their prescription&quot;&quot;&quot;</span>
+    <span class="n">takeid</span>  <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="n">prescriptionid</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;prescriptionid&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Prescription</span><span class="p">,</span><span class="n">to_field</span><span class="o">=</span><span class="s">&#39;prescriptionid&#39;</span><span class="p">)</span>
+    <span class="n">currentcount</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">startingcount</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">currentdate</span> <span class="o">=</span> <span class="n">DateField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;takeprescription&#39;</span>
+</div>
+<div class="viewcode-block" id="Notificationtype"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Notificationtype">[docs]</a><span class="k">class</span> <span class="nc">Notificationtype</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Possible Notification type with class of (danger/warning/success/info)&quot;&quot;&quot;</span>
+    <span class="n">typename</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">typeclass</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;notificationtype&#39;</span>
+</div>
+<div class="viewcode-block" id="Notification"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Notification">[docs]</a><span class="k">class</span> <span class="nc">Notification</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A notification to alert an account to something&quot;&quot;&quot;</span>
+    <span class="n">notificationid</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
+    <span class="n">notificationtype</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;notificationtype&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Notificationtype</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&quot;typename&quot;</span><span class="p">)</span>
+    <span class="n">dismissed</span> <span class="o">=</span> <span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">relatedObject</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">relatedObjectTable</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;notification&#39;</span>
+</div>
+<div class="viewcode-block" id="Reminder"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Reminder">[docs]</a><span class="k">class</span> <span class="nc">Reminder</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A non-dismissable time based notification&quot;&quot;&quot;</span>
+    <span class="n">reminder</span> <span class="o">=</span> <span class="n">PrimaryKeyField</span><span class="p">()</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">reminderClass</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">relatedObject</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">relatedObjectTable</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span>
+    <span class="n">extraDate</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">extraFrequency</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Androidregistration"><a class="viewcode-back" href="../../database.html#justHealthServer.database.Androidregistration">[docs]</a><span class="k">class</span> <span class="nc">Androidregistration</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Connects an account with an Android device for Push Notifications&quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">ForeignKeyField</span><span class="p">(</span><span class="n">db_column</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="n">rel_model</span><span class="o">=</span><span class="n">Client</span><span class="p">,</span> <span class="n">to_field</span><span class="o">=</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
+    <span class="n">registrationid</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">&#39;androidregistration&#39;</span>
+</div>
+<div class="viewcode-block" id="createAll"><a class="viewcode-back" href="../../database.html#justHealthServer.database.createAll">[docs]</a><span class="k">def</span> <span class="nf">createAll</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Creates all tables, dropping old instances if they exist&quot;&quot;&quot;</span>
+    <span class="n">dropAll</span><span class="p">()</span>
+    <span class="n">Client</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Carer</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Patient</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Deactivatereason</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Userdeactivatereason</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Relationship</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Patientcarer</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Appointmenttype</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Appointments</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Medication</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Prescription</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Notes</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">TakePrescription</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Notificationtype</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Notification</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Reminder</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Androidregistration</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    <span class="n">Admin</span><span class="o">.</span><span class="n">create_table</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="dropAll"><a class="viewcode-back" href="../../database.html#justHealthServer.database.dropAll">[docs]</a><span class="k">def</span> <span class="nf">dropAll</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Drops all tables providing that they exist&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">Client</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Client</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Patient</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Patient</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Carer</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Carer</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">uq8LnAWi7D</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Deactivatereason</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Deactivatereason</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Userdeactivatereason</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Userdeactivatereason</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Relationship</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Relationship</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Patientcarer</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Patientcarer</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Appointmenttype</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Appointmenttype</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Appointments</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Appointments</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Medication</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Medication</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Prescription</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Prescription</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Notes</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Notes</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">TakePrescription</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">TakePrescription</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Notificationtype</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Notificationtype</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Notification</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Notification</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Reminder</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Reminder</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Androidregistration</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Androidregistration</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Admin</span><span class="o">.</span><span class="n">table_exists</span><span class="p">():</span>
+        <span class="n">Admin</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">cascade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

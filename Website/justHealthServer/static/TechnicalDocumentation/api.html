@@ -1,0 +1,2014 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Full API Listing &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="next" title="Full Views Listing" href="views.html"/>
+        <link rel="prev" title="Development" href="development.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> JustHealth</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examiner.html">Examiners Guide to JustHealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#welcome">Welcome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#website">Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#android">Android</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#testing-portal">Testing Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#other-links">Other Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-api-server">The API server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-android-application">The Android application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#general-development-process">General Development Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#automated-api-tests">Automated API Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#runtests-sh">runTests.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#email-functions">Email Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connnections">Connnections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notifications">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reminders">Reminders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#correspondence">Correspondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admin">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-functions">System Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Full Views Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-login">User Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#register">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#search">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#deactivate">Deactivate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-logout">User Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-verification">User Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#forgot-password">Forgot Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#password-reset">Password Reset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#my-patients">My Patients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#contact-us">Contact Us</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#justhealth-admin-portal">JustHealth Admin Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">HTML Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="html.html#frontpage-html">frontpage.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#login-html">login.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#register-html">register.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboard-html">dashboard.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboardcarer-html">dashboardCarer.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#editprofile-html">editProfile.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#deactivate-html">deactivate.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#search-html">search.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#changepassword-html">changePassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpassword-html">resetpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpasswordnowquestion-html">resetpasswordnowquestion.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#expiredpassword-html">expiredpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#mypatients-html">myPatients.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#carerappointments-html">carerAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientappointments-html">patientAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientupdateappointment-html">patientUpdateAppointment.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#prescriptions-html">prescriptions.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#correspondence-html">correspondence.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientnotes-html">patientNotes.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#contactus-html">contactUs.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#faq-html">faq.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#template-html">template.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#searchnhsdirect-html">searchNHSDirect.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#settings-html">settings.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#error-pages">error pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#admin-pages">Admin Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#password-security">Password Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#api-authentication">API Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#sql-injection">SQL Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android JavaDoc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#front-end">Front-End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#android-application">Android Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="references.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Full API Listing</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/api.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="full-api-listing">
+<h1>Full API Listing<a class="headerlink" href="#full-api-listing" title="Permalink to this headline">¶</a></h1>
+<p>Listed below is the complete list of possible API functionality provided by JustHealth, broken down by their general function.</p>
+<p>All API calls require valid HTTP Basic Authentication using a registered username and encrypted password unless otherwise noted. When there is a single parameter, usually called &#8216;details&#8217;, it is a list of all post request data. The individual field will be noted in the description by [ ].</p>
+<div class="section" id="accounts">
+<h2>Accounts<a class="headerlink" href="#accounts" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.registerUser">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">registerUser</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#registerUser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.registerUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows registration of an account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/registerUser</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; The dictionary of user details. Includes[username], [firstname], [surname], [dob], [ismale], [email], [password], [confirmpassword], [accounttype], [terms]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Success as String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.usernameCheck">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">usernameCheck</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#usernameCheck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.usernameCheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if a username has already been taken</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/usernameCheck</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request.form</strong> (<em>dict.</em>) &#8211; The [username] to check.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">boolean - If username is available or not.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.authenticate">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">authenticate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticates a username and password and returns the result of the authentication check.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/authenticate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request.form</strong> (<em>dict.</em>) &#8211; [username, password].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Result message of authentication attempt.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deactivateAccount">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deactivateAccount</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deactivateAccount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deactivateAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ability to deactivate an account. A user can choose to have their data deleted or kept.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/deactivateaccount</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary of [username], [comments], [reason].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Deleted, Kept or an error message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.resetPassword">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">resetPassword</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#resetPassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.resetPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ability to reset a password if one is forgotton.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/resetpassword</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary of profile and password details [username], [confirmemail], [newpassword], [confirmnewpassword], [confirmdob].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; &#8216;True&#8217; is successful.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getProfilePictureAPI">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getProfilePictureAPI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getProfilePictureAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getProfilePictureAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns profile picture with the specified filename.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/images/&lt;filename&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>str.</em>) &#8211; The name of the file to return.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">file &#8211; Image requested.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAccountInfo">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAccountInfo</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAccountInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAccountInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all information about a user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getAccountInfo</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username whose details are desired.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; Dictionary of user&#8217;s details.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getCarers">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getCarers</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getCarers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getCarers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all carers connected to a patient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The patient whose carers should be retrieved.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list &#8211; List of carers usernames.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.setProfilePicture">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">setProfilePicture</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#setProfilePicture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.setProfilePicture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a profile picture for a user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/setProfilePicture</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Files to upload, although only accepts one file of key [image], is retained as a dictionary due to request standards.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Filename/path of newly uploaded file, or False.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.editProfile">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">editProfile</code><span class="sig-paren">(</span><em>profile</em>, <em>picture</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#editProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.editProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a user to edit their profile details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/editProfile</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>profile</strong> (<em>dict.</em>) &#8211; Dictionary of profile details.</li>
+<li><strong>picture</strong> (<em>file.</em>) &#8211; Optional profile picture to update.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str &#8211; Message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.changePasswordAPI">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">changePasswordAPI</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#changePasswordAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.changePasswordAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a user to change their password.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/changePassword</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Details of the user [username, oldpassword, newpassword, confirmnewpassword].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Success/Failure message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.lockAccount">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">lockAccount</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#lockAccount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.lockAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locks a user&#8217;s account and sends an unlock email.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username of the account to lock.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.passwordExpiration">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">passwordExpiration</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#passwordExpiration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.passwordExpiration" title="Permalink to this definition">¶</a></dt>
+<dd><p>This checks whether the password that the user is using is about to expire.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to check password for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">result &#8211; Whether the password is valid, expiring soon or needs to be reset.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.expiredResetPassword">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">expiredResetPassword</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#expiredResetPassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.expiredResetPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets a password that has expired or is expiring.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/expiredResetPassword</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> (<em>dict.</em>) &#8211; Dictionary of user and password details [username, newpassword, confirmnewpassword].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; True if successful, False if not.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="email-functions">
+<h2>Email Functions<a class="headerlink" href="#email-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.getSerializer">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getSerializer</code><span class="sig-paren">(</span><em>secret_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getSerializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a username into a random key, in order to create a unique link</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>secret_key</strong> (<em>str.</em>) &#8211; The secret key to use. Defaults to the applications secret key.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Serialized username.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.sendVerificationEmail">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">sendVerificationEmail</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#sendVerificationEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.sendVerificationEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends email to the user after registration asking for account verification</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to send the email to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getUserFromEmail">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getUserFromEmail</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getUserFromEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getUserFromEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the username an email address belongs to.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>email</strong> (<em>str.</em>) &#8211; The email whose owner should be returned.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The username or &#8216;Failed&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.sendForgotPasswordEmail">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">sendForgotPasswordEmail</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#sendForgotPasswordEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.sendForgotPasswordEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends email when password is forgotton.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; Username to send email to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.sendUnlockEmail">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">sendUnlockEmail</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#sendUnlockEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.sendUnlockEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends email to a user when account is locked due to too many unsuccessful attempts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; Username to send email to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.sendPasswordResetEmail">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">sendPasswordResetEmail</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#sendPasswordResetEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.sendPasswordResetEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends user email confirming password reset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; Username to send email to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.sendContactUs">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">sendContactUs</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#sendContactUs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.sendContactUs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends email to justhealth when a user has a question</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Contains the [message] and [username] who asked the question.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="appointments">
+<h2>Appointments<a class="headerlink" href="#appointments" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.addPatientAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addPatientAppointment</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addPatientAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addPatientAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a patient to add their own appointment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/addPatientAppointment</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Details of the appointment. 
+[creator]
+[name]
+[apptype]
+[addressnamenumber]
+[postcode]
+[startdate]
+[starttime]
+[enddate]
+[endtime]
+[description]
+[private]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The id of the newly created appointment.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.addInviteeAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addInviteeAppointment</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addInviteeAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addInviteeAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a carer to create an appointment with their patient</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/addInviteeAppointment</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Details of appointment. 
+[creator]
+[name]
+[apptype]
+[addressnamenumber]
+[postcode]
+[startdate]
+[starttime]
+[enddate]
+[endtime]
+[description]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The id of the appointment.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAllAppointments">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAllAppointments</code><span class="sig-paren">(</span><em>loggedInUser</em>, <em>targetUser</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAllAppointments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAllAppointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all appointments for a user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/getAllAppointments</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>loggedInUser</strong> (<em>str.</em>) &#8211; The user requesting.</li>
+<li><strong>targetUser</strong> (<em>str.</em>) &#8211; The user whose appointments are being requested.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json &#8211; List of appointments.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deleteAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deleteAppointment</code><span class="sig-paren">(</span><em>user</em>, <em>appid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deleteAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deleteAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows an appointment to be deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/deleteAppointment</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user</strong> (<em>str.</em>) &#8211; The username of the user attempting to delete.</li>
+<li><strong>appid</strong> (<em>int.</em>) &#8211; The id of the appointment to deleted.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str &#8211; Success message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getUpdateAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getUpdateAppointment</code><span class="sig-paren">(</span><em>user</em>, <em>appid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getUpdateAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getUpdateAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the details of the specified appointment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/getUpdateAppointment</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user</strong> (<em>str.</em>) &#8211; The user requesting the resource.</li>
+<li><strong>appid</strong> (<em>int.</em>) &#8211; The id of the requested appointment.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json &#8211; Details of the appointment.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.updateAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">updateAppointment</code><span class="sig-paren">(</span><em>appid</em>, <em>name</em>, <em>apptype</em>, <em>addressnamenumber</em>, <em>postcode</em>, <em>startDate</em>, <em>startTime</em>, <em>endDate</em>, <em>endTime</em>, <em>description</em>, <em>private</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#updateAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.updateAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a specified appointment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/updateAppointment</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>appid</strong> (<em>int.</em>) &#8211; The id of the appointment to update.</li>
+<li><strong>name</strong> (<em>str.</em>) &#8211; Appointment name.</li>
+<li><strong>apptype</strong> (<em>str.</em>) &#8211; Appointment type.</li>
+<li><strong>addressnamenumber</strong> (<em>str.</em>) &#8211; Address.</li>
+<li><strong>postcode</strong> (<em>str.</em>) &#8211; Postcode.</li>
+<li><strong>startDate</strong> (<em>date.</em>) &#8211; Start Date.</li>
+<li><strong>startTime</strong> (<em>time.</em>) &#8211; Start Time.</li>
+<li><strong>endDate</strong> (<em>date.</em>) &#8211; End Date.</li>
+<li><strong>endTime</strong> (<em>time.</em>) &#8211; End Time.</li>
+<li><strong>description</strong> (<em>str.</em>) &#8211; Description.</li>
+<li><strong>private</strong> (<em>boolean.</em>) &#8211; If the appointment is private or not.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str &#8211; Success message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAppointment</code><span class="sig-paren">(</span><em>user</em>, <em>appid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns details of an appointment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/getAppointment</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user</strong> (<em>str.</em>) &#8211; The user submitting the request.</li>
+<li><strong>appid</strong> (<em>int.</em>) &#8211; The id of the appointment.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json &#8211; Details of the appointment.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.acceptDeclineAppointment">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">acceptDeclineAppointment</code><span class="sig-paren">(</span><em>user</em>, <em>action</em>, <em>appointmentId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#acceptDeclineAppointment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.acceptDeclineAppointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows an appointment to be accepted or declined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/acceptDeclineAppointment</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> (<em>str.</em>) &#8211; The user submitting the action.</li>
+<li><strong>action</strong> (<em>str.</em>) &#8211; &#8220;Accept&#8221; to accept or anything else to &#8220;Decline&#8221;.</li>
+<li><strong>appointmentId</strong> (<em>int.</em>) &#8211; The id of the appointment to accept / decline.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.addAndroidEventId">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addAndroidEventId</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addAndroidEventId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addAndroidEventId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows an android event id of a calendar event to be stored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/addAndroidEventId</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request.form</strong> (<em>dict.</em>) &#8211; POST request containing [dbid](id of event) and [androidid](the android event id).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Success message</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="connnections">
+<h2>Connnections<a class="headerlink" href="#connnections" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.searchPatientCarer">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">searchPatientCarer</code><span class="sig-paren">(</span><em>username</em>, <em>searchterm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#searchPatientCarer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.searchPatientCarer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows users to search for other users.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/searchPatientCarer</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username who has submitted the search.</li>
+<li><strong>searchterm</strong> (<em>str.</em>) &#8211; The search term the user has submitted.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str/json &#8211; The resultant message or list of search results.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getConnectionStatus">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getConnectionStatus</code><span class="sig-paren">(</span><em>username</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getConnectionStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getConnectionStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the connection status between the two users. 
+Helper method for search.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The first username.</li>
+<li><strong>target</strong> (<em>str.</em>) &#8211; The second username:</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str &#8211; The connection status.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.createConnection">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">createConnection</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#createConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.createConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an initial connection between two users.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/createConnection</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; The two usernames as [username] and [target].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Result message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.completeConnection">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">completeConnection</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#completeConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.completeConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies the connection code to allow the completion of an attempted connection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/completeConnection</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; A [codeattempt] to connect [username] with [requestor].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Result message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.cancelRequest">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">cancelRequest</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#cancelRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.cancelRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancels a request before it is established.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/cancelConnection</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary giving [user]: The username of the cancelling party, [connection] The username user is connecting to.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; &#8216;True&#8217; or &#8216;False&#8217; for success.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deleteConnection">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deleteConnection</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deleteConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deleteConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete an existing connection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/deleteConnection</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; The dictionary of connection details: [user] (The deletion request), [connection] (The username of the connection delete).</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; &#8216;True&#8217; or &#8216;False&#8217; for success.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getConnections">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getConnections</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getConnections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getConnections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all connections for a specific user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getConnections</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username of the user to check.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; Dictionary of incoming, outgoing, completed connections. Each value is a list of dictionaries representing each connection.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="prescriptions">
+<h2>Prescriptions<a class="headerlink" href="#prescriptions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.addPrescription">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addPrescription</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addPrescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addPrescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows creation of a prescription</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/addPrescription</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing:
+[prescriptionid]
+[Monday],
+[Tuesday],
+[Wednesday],
+[Thursday],
+[Friday],
+[Saturday],
+[Sunday],
+[medication],
+[dosage],
+[frequency],
+[quantity],
+[dosageunit],
+[startdate],
+[enddate],
+[stockleft],
+[prerequisite],
+[dosageform]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Failed or details of success.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.editPrescription">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">editPrescription</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#editPrescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.editPrescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows facility to edit a prescription.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/editPrescription</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing:
+[prescriptionid]
+[Monday],
+[Tuesday],
+[Wednesday],
+[Thursday],
+[Friday],
+[Saturday],
+[Sunday],
+[medication],
+[dosage],
+[frequency],
+[quantity],
+[dosageunit],
+[startdate],
+[enddate],
+[stockleft],
+[prerequisite],
+[dosageform]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Failed or updated details.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deletePrescription">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deletePrescription</code><span class="sig-paren">(</span><em>prescriptionid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deletePrescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deletePrescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a specified prescriptions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/deletePrescription</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prescriptionid</strong> (<em>int.</em>) &#8211; The id of the prescription to delete.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; &#8216;Deleted&#8217; or &#8216;Failed&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getPrescriptions">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getPrescriptions</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getPrescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getPrescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all (active, upcoming and expired) prescriptions for a specified user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getPrescriptions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The user to check for.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; The list of prescriptions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getActivePrescriptions">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getActivePrescriptions</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getActivePrescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getActivePrescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all active prescriptions for a specified user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getActivePrescriptions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The specified user.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of prescriptions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getUpcomingPrescriptions">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getUpcomingPrescriptions</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getUpcomingPrescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getUpcomingPrescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all upcoming prescriptions for a specified user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getUpcomingPrescriptions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of prescriptions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getExpiredPrescriptions">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getExpiredPrescriptions</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getExpiredPrescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getExpiredPrescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all expired prescriptions for a specified user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getExpiredPrescriptions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of expired prescriptions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getPrescription">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getPrescription</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getPrescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getPrescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the details of a specified prescription.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getPrescription</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing [prescriptionid].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; Details of prescription.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.takePrescription">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">takePrescription</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#takePrescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.takePrescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a prescription to be taken.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/takeprescription</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing [currentcount] (number taken today), [prescriptionid].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True for success or &#8216;Invalid current count&#8217;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.checkStockLevel">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">checkStockLevel</code><span class="sig-paren">(</span><em>prescription</em>, <em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#checkStockLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.checkStockLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the stock level of a prescription after taking.
+Creates a notification is appropriate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>prescription</strong> (<em>int.</em>) &#8211; The id of the prescription.</li>
+<li><strong>count</strong> (<em>int.</em>) &#8211; The amount just taken.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getPrescriptionCount">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getPrescriptionCount</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getPrescriptionCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getPrescriptionCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of times a user has taken a prescription on the current day.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getPrescriptionCount</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing [prescriptionid].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int &#8211; The count.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="notifications">
+<h2>Notifications<a class="headerlink" href="#notifications" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.createNotificationRecord">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">createNotificationRecord</code><span class="sig-paren">(</span><em>user</em>, <em>notificationType</em>, <em>relatedObject</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#createNotificationRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.createNotificationRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a notification on the JustHealth platform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user</strong> (<em>str.</em>) &#8211; The user the notification belongs to.</li>
+<li><strong>notificationType</strong> (<em>str.</em>) &#8211; The type of notification to be created</li>
+<li><strong>relatedObject</strong> (<em>int.</em>) &#8211; The resource a notification pertains to, if any.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str &#8211; &#8216;True&#8217; if successful, else &#8216;False&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getNotifications">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getNotifications</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getNotifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getNotifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all of the notifications that have been associated with a user that have not been dismissed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getNotifications</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to get dismissed notifications for.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; The list of notifications each as a json dictionary.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAllNotifications">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAllNotifications</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAllNotifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAllNotifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all of the notifications that have been associated with a user, whether or not they have been dismissed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getAllNotifications</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to get dismissed notifications for.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; The list of notifications each as a json dictionary.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getDismissedNotifications">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getDismissedNotifications</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getDismissedNotifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getDismissedNotifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all of the notifications that have been dismissed for a username</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getDismissedNotifications</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to get dismissed notifications for.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; The list of notifications each as a json dictionary.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getNotificationContent">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getNotificationContent</code><span class="sig-paren">(</span><em>notification</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getNotificationContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getNotificationContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the body/content of the notification depending on its type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>notification</strong> (<em>dict.</em>) &#8211; Dictionary containing [notificationtype] element listing the type being queried.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The content of the notification or &#8216;DoesNotExist&#8217; if the queried object no longer exists.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getNotificationLink">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getNotificationLink</code><span class="sig-paren">(</span><em>notification</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getNotificationLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getNotificationLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the link that a specific notification type will link to for web usage.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>notification</strong> (<em>dict.</em>) &#8211; Dictionary containing [notificationtype] element listing the type being queried.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The web address of the notification subject for JustHealth Web Application.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getNotificationTypeClass">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getNotificationTypeClass</code><span class="sig-paren">(</span><em>notification</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getNotificationTypeClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getNotificationTypeClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the &#8216;class&#8217; of a notification type, used to identify importance / meaning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>notification</strong> (<em>dict.</em>) &#8211; Dictionary containing [notificationtype] element listing the type being queried.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; One of &#8216;danger&#8217;, &#8216;warning&#8217;, &#8216;success&#8217;, &#8216;info&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.dismissNotification">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">dismissNotification</code><span class="sig-paren">(</span><em>notificationid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#dismissNotification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.dismissNotification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dismisses a notification to hide from the user&#8217;s immediate view.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/dismissNotification</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>notificationid</strong> (<em>int.</em>) &#8211; The id of the notification to dismiss.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; &#8216;True&#8217; if successful, &#8216;False&#8217; if not.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="reminders">
+<h2>Reminders<a class="headerlink" href="#reminders" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.getMinutesDifference">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getMinutesDifference</code><span class="sig-paren">(</span><em>dateTimeOne</em>, <em>dateTimeTwo</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getMinutesDifference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getMinutesDifference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the difference found by dateTimeOne - dateTimeTwo in minutes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dateTimeOne</strong> (<em>datetime.</em>) &#8211; The first datetime.</li>
+<li><strong>dateTimeTwo</strong> (<em>datetime.</em>) &#8211; The second datetime.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">int &#8211; The number of minutes between the two times.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAppointmentsDueIn30">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAppointmentsDueIn30</code><span class="sig-paren">(</span><em>username</em>, <em>currentTime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAppointmentsDueIn30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAppointmentsDueIn30" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of appointments that are due in 30 minutes or less.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</li>
+<li><strong>currentTime</strong> (<em>datetime.</em>) &#8211; The current datetime.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list &#8211; A list of appointments represented by dicts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAppointmentsDueNow">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAppointmentsDueNow</code><span class="sig-paren">(</span><em>username</em>, <em>currentTime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAppointmentsDueNow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAppointmentsDueNow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of appointments that are due now or are in progress.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</li>
+<li><strong>currentTime</strong> (<em>datetime.</em>) &#8211; The current datetime.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list &#8211; A list of appointments represented by dicts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getPrescriptionsDueToday">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getPrescriptionsDueToday</code><span class="sig-paren">(</span><em>username</em>, <em>currentDateTime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getPrescriptionsDueToday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getPrescriptionsDueToday" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of prescriptions that are due today.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</li>
+<li><strong>currentDateTime</strong> (<em>datetime.</em>) &#8211; The current datetime.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list &#8211; A list of prescriptions represented by dicts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.checkMissedPrescriptions">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">checkMissedPrescriptions</code><span class="sig-paren">(</span><em>username</em>, <em>currentDate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#checkMissedPrescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.checkMissedPrescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if a patient has missed any prescriptions
+and creates notifications if so.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</li>
+<li><strong>currentDate</strong> (<em>datetime.</em>) &#8211; The current datetime.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.addReminders">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addReminders</code><span class="sig-paren">(</span><em>username</em>, <em>now</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addReminders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addReminders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all new reminders to the Reminder table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to add reminders for.</li>
+<li><strong>now</strong> (<em>datetime.</em>) &#8211; The current datetime.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deleteReminders">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deleteReminders</code><span class="sig-paren">(</span><em>username</em>, <em>now</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deleteReminders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deleteReminders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes any reminders for appointments or prescriptions
+that have expired or are no longer current.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to check.</li>
+<li><strong>now</strong> (<em>datetime.</em>) &#8211; The current datetime</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getReminders">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getReminders</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getReminders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getReminders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all reminders for a specific user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username to get reminders for.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="correspondence">
+<h2>Correspondence<a class="headerlink" href="#correspondence" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.getCorrespondence">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getCorrespondence</code><span class="sig-paren">(</span><em>carer</em>, <em>patient</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getCorrespondence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getCorrespondence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all notes for a patient/carer relationship.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body"><p class="first">/api/getCorrespondence</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>carer</strong> (<em>str.</em>) &#8211; The username of the carer.</li>
+<li><strong>patient</strong> (<em>str.</em>) &#8211; The username of the patient.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json &#8211; List of notes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getPatientNotes">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getPatientNotes</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getPatientNotes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getPatientNotes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all notes for a specific patient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">getPatientNotes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing [username] of target patient.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of notes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.addCorrespondence">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addCorrespondence</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addCorrespondence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addCorrespondence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a note for a patient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/addCorrespondence</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> (<em>dict.</em>) &#8211; Dictionary containing [carer], [patient], [notes] (note content), [title].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; True or False for success.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deleteNote">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deleteNote</code><span class="sig-paren">(</span><em>noteid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deleteNote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deleteNote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a specific note</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/deleteNote</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>noteid</strong> (<em>int.</em>) &#8211; The id of the note to delete.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str - Either &#8216;Deleted&#8217; or &#8216;Failed&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="admin">
+<h2>Admin<a class="headerlink" href="#admin" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.addMedication">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addMedication</code><span class="sig-paren">(</span><em>medicationName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addMedication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addMedication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a medication to be added to the system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>medicationName</strong> (<em>str.</em>) &#8211; The name of the medication to be added.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">&#8220;Added&#8221; or &#8220;Already Exists&#8221; or &#8220;False&#8221; for other error.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deleteMedication">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deleteMedication</code><span class="sig-paren">(</span><em>medicationName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deleteMedication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deleteMedication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a medication to be removed from the system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>medicationName</strong> (<em>str.</em>) &#8211; The name of the medication to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">&#8220;Deleted&#8221; or &#8220;Not Found&#8221;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getMedications">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getMedications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getMedications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getMedications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of all medications in JustHealth system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getMedications</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of medication names.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.addDeactivate">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">addDeactivate</code><span class="sig-paren">(</span><em>reason</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#addDeactivate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.addDeactivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a new add deactivate reasons to be added to the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reason</strong> (<em>str.</em>) &#8211; The reason to add.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; True or False for success.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.newMedication">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">newMedication</code><span class="sig-paren">(</span><em>medication</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#newMedication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.newMedication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a new medication to be inserted into the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>medication</strong> (<em>str.</em>) &#8211; The name of the medication to add.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; True or False.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getReasons">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getReasons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getReasons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getReasons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all pre-set reasons to deactivate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getReasons</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of reasons.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAllUsers">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAllUsers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAllUsers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAllUsers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns information about all users.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List containing dictionaries representing all users.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.updateAccountSettings">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">updateAccountSettings</code><span class="sig-paren">(</span><em>settings</em>, <em>accountlocked</em>, <em>accountdeactivated</em>, <em>verified</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#updateAccountSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.updateAccountSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows an admin to alter a user&#8217;s account settings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>settings</strong> (<em>dict.</em>) &#8211; Dictionary of users settings [username, ismale, firstname, surname, email, dob,
+accounttype, loginattempts].</li>
+<li><strong>accountlocked</strong> (<em>boolean.</em>) &#8211; Whether the account should be locked or not.</li>
+<li><strong>verified</strong> (<em>boolean.</em>) &#8211; Whether the account is verified.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.deleteAccount">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">deleteAccount</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#deleteAccount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.deleteAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a user&#8217;s account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> (<em>str.</em>) &#8211; The username who&#8217;s account should be deleted.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; &#8216;Deleted&#8217; if successful, else &#8216;Failed&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="security">
+<h2>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.verify_password">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">verify_password</code><span class="sig-paren">(</span><em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#verify_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.verify_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a supplied password is correct for a specific user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username submitting the request.</li>
+<li><strong>password</strong> (<em>str.</em>) &#8211; The encrypted password.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">boolean &#8211; Success</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getUsernameFromHeader">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getUsernameFromHeader</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getUsernameFromHeader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getUsernameFromHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes the HTTP Basic header and retrieves the username.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Username submitting the request.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.verifyContentRequest">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">verifyContentRequest</code><span class="sig-paren">(</span><em>username</em>, <em>targetUsername</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#verifyContentRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.verifyContentRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>This co-ordinates the running of the other methods, depending on the parameters that are passed.</p>
+<p>This method can be called from anywhere and if the method is retrieving records for the same person that is authenticated targetUsername should be sent accross as an empty string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username of the request originator.</li>
+<li><strong>targetUsername</strong> (<em>str.</em>) &#8211; The username owning the resource being accessed, if any.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">boolean &#8211; Success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">HTTP 401.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.verifySelf">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">verifySelf</code><span class="sig-paren">(</span><em>authUsername</em>, <em>methodUsername</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#verifySelf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.verifySelf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the user authenticated by HTTP Basic is the same as user that is associated with the records being read/written</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>authUsername</strong> (<em>str.</em>) &#8211; username from HTTP header.</li>
+<li><strong>methodUsername</strong> (<em>str.</em>) &#8211; The username being password to the method.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">boolean &#8211; success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">HTTP 401.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.verifyCarer">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">verifyCarer</code><span class="sig-paren">(</span><em>username</em>, <em>targetUsername</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#verifyCarer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.verifyCarer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the user authenticated by HTTP Basic is connected to the user that is associated with the records being read/written</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; Username of user sending the request.</li>
+<li><strong>targetUsername</strong> (<em>str.</em>) &#8211; Username of the owner of the requested resource.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if successful, else HTTP 401 Unauthorized.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.encryptPassword">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">encryptPassword</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#encryptPassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.encryptPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypts the users password and returns it to them</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/encryptPassword</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request.form</strong> (<em>dict.</em>) &#8211; POST request containing plaintext [password].</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Encrypted password.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.decryptPassword">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">decryptPassword</code><span class="sig-paren">(</span><em>cipherText</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#decryptPassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.decryptPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrypts the users password and returns it so that we are able to authenticate them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cipherText</strong> (<em>str.</em>) &#8211; Encrypted password.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; Plaintext password.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="system-functions">
+<h2>System Functions<a class="headerlink" href="#system-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.api.searchNHSDirect">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">searchNHSDirect</code><span class="sig-paren">(</span><em>search</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#searchNHSDirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.searchNHSDirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows a search term to be passed to the NHS website.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/searchNHSDirectWebsite</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>search</strong> (<em>str.</em>) &#8211; The search term.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The url of the website.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getDeactivateReasons">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getDeactivateReasons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getDeactivateReasons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getDeactivateReasons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of possible reasons a user can deactivate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getDeactivateReasons</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of possible reasons.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.getAppointmentTypes">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">getAppointmentTypes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#getAppointmentTypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.getAppointmentTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of possible appointment types</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/getAppointmentTypes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json &#8211; List of appointment types</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.createTakePrescriptionInstances">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">createTakePrescriptionInstances</code><span class="sig-paren">(</span><em>username</em>, <em>currentDateTime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#createTakePrescriptionInstances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.createTakePrescriptionInstances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates all TakePrescription instances for any prescription that needs to be taken today.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> (<em>str.</em>) &#8211; The username to check for.</li>
+<li><strong>currentDateTime</strong> (<em>datetime.</em>) &#8211; The current datetime.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.pingServer">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">pingServer</code><span class="sig-paren">(</span><em>sender</em>, <em>**extra</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#pingServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.pingServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if there are any reminders to create/delete, runs on every request.</p>
+<p>Also called by a scheduled task for all users. See <code class="xref py py-func docutils literal"><span class="pre">generation()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.api.generation">
+<code class="descclassname">justHealthServer.api.</code><code class="descname">generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/api.html#generation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.api.generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans up all Notifications / Reminders for all users, run via a scheduled task on the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Link:</th><td class="field-body">/api/generate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str &#8211; The number of reminders created/deleted.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="views.html" class="btn btn-neutral float-right" title="Full Views Listing">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="development.html" class="btn btn-neutral" title="Development"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
