@@ -1,0 +1,1513 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Full Views Listing &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="next" title="Database" href="database.html"/>
+        <link rel="prev" title="Full API Listing" href="api.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> JustHealth</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examiner.html">Examiners Guide to JustHealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#website">Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#android">Android</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#testing-portal">Testing Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#other-links">Other Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-api-server">The API server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-android-application">The Android application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#general-development-process">General Development Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-tools">Development Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#automated-api-tests">Automated API Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#runtests-sh">runTests.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#email-functions">Email Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#connnections">Connnections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#notifications">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reminders">Reminders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#correspondence">Correspondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#admin">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#system-functions">System Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Full Views Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-login">User Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#register">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deactivate">Deactivate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-logout">User Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-verification">User Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#forgot-password">Forgot Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#password-reset">Password Reset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#my-patients">My Patients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contact-us">Contact Us</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#justhealth-admin-portal">JustHealth Admin Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database.html#module-justHealthServer.database">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">HTML Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="html.html#frontpage-html">frontpage.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#login-html">login.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#register-html">register.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboard-html">dashboard.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboardcarer-html">dashboardCarer.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#editprofile-html">editProfile.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#deactivate-html">deactivate.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#search-html">search.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#changepassword-html">changePassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpassword-html">resetpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpasswordnowquestion-html">resetpasswordnowquestion.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#expiredpassword-html">expiredpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#mypatients-html">myPatients.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#carerappointments-html">carerAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientappointments-html">patientAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientupdateappointment-html">patientUpdateAppointment.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#prescriptions-html">prescriptions.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#correspondence-html">correspondence.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientnotes-html">patientNotes.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#contactus-html">contactUs.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#faq-html">faq.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#template-html">template.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#searchnhsdirect-html">searchNHSDirect.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#settings-html">settings.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#error-pages">error pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#admin-pages">Admin Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#password-security">Password Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#api-authentication">API Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#sql-injection">SQL Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android JavaDoc</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Full Views Listing</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/views.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="full-views-listing">
+<h1>Full Views Listing<a class="headerlink" href="#full-views-listing" title="Permalink to this headline">¶</a></h1>
+<p>Listed below is the complete list of views for the JustHealth web application, broken down by their general function.</p>
+<p>Each method will show its:</p>
+<ul class="simple">
+<li>URL</li>
+<li>Primary function</li>
+<li>Method type (POST or GET)</li>
+<li>POST / GET parameters</li>
+<li>Possible return values</li>
+</ul>
+<div class="section" id="user-login">
+<h2>User Login<a class="headerlink" href="#user-login" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.login">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the username from login in order to authenticate session, log the user in and redirects to index function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/login</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; Checks username is valid, posts to authenticate() API</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><ul class="first last simple">
+<li>Redirects to appropriate home page for user</li>
+<li>Fields not filled in/Input not valid</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="home">
+<h3>Home<a class="headerlink" href="#home" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.index">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">index</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends user to a dashboard according to account type if session is active, it shows their profile and connections. A patient will be able to see their notifications, prescriptions and appointments. A carer will be able to see their notifications, the patients that they are connected to (with prescriptions and appointments) and their own appointments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accounttype</strong> &#8211; Checks the type of account user has registered with</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>dashboard.html</dt>
+<dd><ul class="first last simple">
+<li>Sends the user to a home page designed specifically for a patient&#8217;s needs. Shows them the basic information they need in one place, and allows them to navigate to other pages easily.</li>
+</ul>
+</dd>
+<dt>dashboardCarer.html</dt>
+<dd><ul class="first last simple">
+<li>Sends the user to a home page designed specifically for a carer&#8217;s needs, simplifying the administrative work involved with care.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="profile-picture">
+<h3>Profile Picture<a class="headerlink" href="#profile-picture" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.getProfilePicture">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">getProfilePicture</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#getProfilePicture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.getProfilePicture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the user&#8217;s profile picture from the JustHealth images folder on the server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/images/&lt;filename&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> &#8211; Pulls the user&#8217;s profile picture from the image directory</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><ul class="first last simple">
+<li>Profile Picture</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="edit-profile">
+<h3>Edit Profile<a class="headerlink" href="#edit-profile" title="Permalink to this headline">¶</a></h3>
+<p>(Show source here when edit profile is complete)</p>
+</div>
+</div>
+<div class="section" id="register">
+<h2>Register<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.registration">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">registration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#registration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles user registration form</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/register</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>login.html</dt>
+<dd><ul class="first last simple">
+<li>Success: &#8220;Thanks for registering! Please check your email for a verification link&#8221;</li>
+</ul>
+</dd>
+<dt>register.html</dt>
+<dd><ul class="first last simple">
+<li>Failed: Fields not filled in/Input not valid</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="search">
+<h2>Search<a class="headerlink" href="#search" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.search">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">search</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search to find a different user, potentially so a connection can then be requested</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/search</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; Finds user assigned by their username</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>search.html</dt>
+<dd><ul class="first last simple">
+<li>Shows any users found that match the search term.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="section" id="nhs-search">
+<h3>NHS Search<a class="headerlink" href="#nhs-search" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.searchNHS">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">searchNHS</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#searchNHS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.searchNHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The POST request is no longer needed as this is done with Javascript</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/nhsSearch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>searchTerm</strong> &#8211; Provides the text that is sent to the NHS website to be searched for</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>searchNHSDirect.html</dt>
+<dd><ul class="first last simple">
+<li>After sending the search term to the NHS website, it opens the page in a new tab showing the results.</li>
+<li>The page remains on the search form once submitted.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="deactivate">
+<h2>Deactivate<a class="headerlink" href="#deactivate" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.deactivate">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">deactivate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#deactivate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.deactivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles account deactivation form</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/deactivate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; Finds account by username</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;Your account has been deleted&#8221;</dt>
+<dd><ul class="first last simple">
+<li>User account is deleted and all information is removed from the database.</li>
+</ul>
+</dd>
+<dt>&#8220;Your account has been deactivated&#8221;</dt>
+<dd><ul class="first last simple">
+<li>User account is deactivated and their information remains in the database.</li>
+</ul>
+</dd>
+<dt>Deactivation failed</dt>
+<dd><ul class="first last simple">
+<li>Fields not filled in/Input not valid</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="user-logout">
+<h2>User Logout<a class="headerlink" href="#user-logout" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.logout">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">logout</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#logout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates user session and redirects to the front page</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/logout</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd>Redirect to JustHealth home</dd>
+</dl>
+</div>
+<div class="section" id="user-verification">
+<h2>User Verification<a class="headerlink" href="#user-verification" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.verifyUser">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">verifyUser</code><span class="sig-paren">(</span><em>payload</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#verifyUser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.verifyUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>User confirmation of account verification</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/users/activate/&lt;payload&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;Thank you for verifying your account.&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Link directs user to login.html</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="forgot-password">
+<h2>Forgot Password<a class="headerlink" href="#forgot-password" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.forgotPassword">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">forgotPassword</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#forgotPassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.forgotPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the user&#8217;s account from the email address it was registered with</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/forgotPassword</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>email</strong> &#8211; Finds user account from valid email</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;An account with this email address does not exist.&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Message shown if email address is not found in the database.</li>
+</ul>
+</dd>
+<dt>&#8220;An email has been sent to you containing a link, which will allow you to reset your password.&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Message informs the user that they can successfully reset their password.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="password-reset">
+<h2>Password Reset<a class="headerlink" href="#password-reset" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.resetPasswordRedirect">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">resetPasswordRedirect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#resetPasswordRedirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.resetPasswordRedirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Follows unique link in email to allow user to reset password, only after forgotPassword form is submitted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/resetpassword</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>resetPassword()</strong> &#8211; Allows user to reset password if <code class="docutils literal"><span class="pre">&quot;True&quot;</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;Your password has been reset, please check your email and click the link to verify.&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Successful password reset, user has to click the link in their email to prove the reset was them.</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>Fields not filled in/Input not valid</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="appointments">
+<h2>Appointments<a class="headerlink" href="#appointments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="patient-appointments">
+<h3>Patient Appointments<a class="headerlink" href="#patient-appointments" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.appointments">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">appointments</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#appointments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.appointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form for patient to add an appointment, they choose privacy level for their carer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/appointments</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> &#8211; All appointment details must be filled in for the database entry</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;Appointment Added&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Successfully added appointment.</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>patientAppointments.html form is shown for user to try again.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="carer-appointments">
+<h3>Carer Appointments<a class="headerlink" href="#carer-appointments" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.carerappointments">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">carerappointments</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#carerappointments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.carerappointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form for carer to add a personal appointment, this is not shown to patients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/carerAppointments</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> &#8211; All appointment details must be filled in for the database entry</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>&#8220;Appointment Added&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Successfully added appointment.</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>carerAppointments.html form is shown for user to try again.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="invitee-appointments">
+<h3>Invitee Appointments<a class="headerlink" href="#invitee-appointments" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.inviteeappointments">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">inviteeappointments</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#inviteeappointments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.inviteeappointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form for carer to add an appointment with a specific patient they are connected with, this will show on the patient&#8217;s calendar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/inviteeappointments</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>details</strong> &#8211; All appointment details must be filled in for the database entry</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>Successfully added appointment to individual patient.</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>My Patients page with appointment form is shown for user to try again.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="accept-decline-appointments">
+<h3>Accept/Decline Appointments<a class="headerlink" href="#accept-decline-appointments" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.appointmentAcceptDecline_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">appointmentAcceptDecline_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#appointmentAcceptDecline_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.appointmentAcceptDecline_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the correct appointment to show the patient, handles the accept or decline option on appointments that they have been invited to by their carer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/appointmentDetails</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> &#8211; Handles the accept or decline option that the invited user chooses, shows the appropriate notification to the user depending on action</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Accept</dt>
+<dd><ul class="first last simple">
+<li>Notification type: &#8220;Success&#8221;</li>
+</ul>
+</dd>
+<dt>Reject</dt>
+<dd><ul class="first last simple">
+<li>Notification type: &#8220;Danger&#8221;</li>
+</ul>
+</dd>
+<dt>You have not been invited to this appointment</dt>
+<dd><ul class="first last simple">
+<li>Notification type: &#8220;Failed&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="update-appointment">
+<h3>Update Appointment<a class="headerlink" href="#update-appointment" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.getUpdateAppointment_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">getUpdateAppointment_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#getUpdateAppointment_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.getUpdateAppointment_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes the appointment ID to put the existing appointment information in the form, ready to be updated</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body"><p class="first">/updateAppointment</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body"><p class="first">POST, GET</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>appid</strong> &#8211; Uses the appointment ID to show the existing data in the form</li>
+<li><strong>updateAppointment</strong> &#8211; All appointment details must be filled in for the database entry</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success/Updated</dt>
+<dd><ul class="first last simple">
+<li>Successfully updated the appointment information.</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>Appointment page with form is shown for user to try again.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="delete-appointment">
+<h3>Delete Appointment<a class="headerlink" href="#delete-appointment" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.deleteAppointment_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">deleteAppointment_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#deleteAppointment_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.deleteAppointment_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows message to inform the user that the appointment has been deleted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/deleteAppointment</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>appid</strong> &#8211; Uses the appointment ID to delete a specific appointment</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success/Deleted</dt>
+<dd><ul class="first last simple">
+<li>Successfully deleted appointment to individual patient.</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>Appointment page with form is shown for user to try again.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="my-patients">
+<h2>My Patients<a class="headerlink" href="#my-patients" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.myPatients">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">myPatients</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#myPatients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.myPatients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows carer page listing their connected patients, they can edit each patient&#8217;s prescriptions and appointments from here</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/myPatients</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accounttype</strong> (<em>username,</em>) &#8211; The carer&#8217;s username is needed to pull the list of connected patients from the database</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>myPatients.html</dt>
+<dd><ul class="first last simple">
+<li>Page is shown listing all the carer&#8217;s connected patients, with their active prescriptions and appointments listed.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="prescriptions">
+<h2>Prescriptions<a class="headerlink" href="#prescriptions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.prescriptions">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">prescriptions</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#prescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.prescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows all the active prescriptions for the patient selected</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/prescriptions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; Patient&#8217;s medication is stored in the database associated with their username</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>prescriptions.html</dt>
+<dd><ul class="first last simple">
+<li>Page is shown listing current medication prescribed to the patient.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="section" id="add-prescription">
+<h3>Add Prescription<a class="headerlink" href="#add-prescription" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.addPrescription_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">addPrescription_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#addPrescription_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.addPrescription_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Informs Carer that the prescription has been added to the selected patient</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/addPrescription</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; Patient&#8217;s medication is stored in the database associated with their username</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success/Added</dt>
+<dd><ul class="first last simple">
+<li>myPatients.html, new prescription is shown for individual patient</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Could not add prescription&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="delete-prescription">
+<h3>Delete Prescription<a class="headerlink" href="#delete-prescription" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.deletePrescription_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">deletePrescription_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#deletePrescription_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.deletePrescription_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Informs Carer that the prescription has been deleted from the selected patient</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body"><p class="first">/deletePrescription</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> &#8211; Patient&#8217;s medication is stored in the database associated with their username</li>
+<li><strong>prescriptionid</strong> &#8211; Uses the prescription ID to delete a specific prescription</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success/Deleted</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">&quot;Deleted</span> <span class="pre">&quot;</span> <span class="pre">+</span> <span class="pre">prescription.medication.name</span> <span class="pre">+</span> <span class="pre">&quot;</span> <span class="pre">(&quot;</span> <span class="pre">+</span> <span class="pre">str(prescription.quantity)</span> <span class="pre">+</span> <span class="pre">&quot;x&quot;</span> <span class="pre">+</span> <span class="pre">str(prescription.dosage)</span> <span class="pre">+</span> <span class="pre">&quot;)</span> <span class="pre">&quot;</span> <span class="pre">+</span> <span class="pre">prescription.dosageunit</span> <span class="pre">+</span> <span class="pre">&quot;</span> <span class="pre">for</span> <span class="pre">&quot;</span> <span class="pre">+</span> <span class="pre">username</span></code></li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>myPatients.html, shows the prescription still exists</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="update-prescription">
+<h3>Update Prescription<a class="headerlink" href="#update-prescription" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.updatePrescription_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">updatePrescription_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#updatePrescription_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.updatePrescription_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Informs Carer that the prescription has been updated for the selected patient</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body"><p class="first">/updatePrescription</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body"><p class="first">POST</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> &#8211; Patient&#8217;s medication is stored in the database associated with their username</li>
+<li><strong>prescriptionid</strong> &#8211; Uses the prescription ID to update a specific prescription</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success/Updated</dt>
+<dd><ul class="first last simple">
+<li>myPatients.html, shows the updated prescription for the selected patient</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>myPatients.html, shows the prescription with no changes</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="connections">
+<h2>Connections<a class="headerlink" href="#connections" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-connection">
+<h3>Create Connection<a class="headerlink" href="#create-connection" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.createConnectionWeb">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">createConnectionWeb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#createConnectionWeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.createConnectionWeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows user a notification if a connection is attempted to tell them of the current connection state with that user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/createConnectionWeb</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Connection already established&#8221;</li>
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="complete-connection">
+<h3>Complete Connection<a class="headerlink" href="#complete-connection" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.completeConnectionWeb">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">completeConnectionWeb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#completeConnectionWeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.completeConnectionWeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows user a notification of whether their attempt to verify a connection was successful, the user has to put in the correct 4 digit code to complete the connection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/completeConnectionWeb</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Incorrect code&#8221;</li>
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="delete-connection">
+<h3>Delete Connection<a class="headerlink" href="#delete-connection" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.deleteConnectionWeb">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">deleteConnectionWeb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#deleteConnectionWeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.deleteConnectionWeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows user a notification if their attempt to delete a connection was successful or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/deleteConnectionWeb</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Delete successful&#8221;</li>
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Delete failed. Please try again or contact an administrator&#8221;</li>
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="cancel-connection">
+<h3>Cancel Connection<a class="headerlink" href="#cancel-connection" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.cancelConnectionWeb">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">cancelConnectionWeb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#cancelConnectionWeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.cancelConnectionWeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows user a notification if their attempt to cancel their request for a connection was successful or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/cancelConnectionWeb</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Cancellation successful&#8221;</li>
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Cancellation failed. Please try again or contact an administrator&#8221;</li>
+<li>Shows notification to inform the user of the result</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="correspondence">
+<h3>Correspondence<a class="headerlink" href="#correspondence" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.notes">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">notes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>JustHealth correspondence, shows notes between a patient and their carer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/notes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>Return the correspondence page</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>Return the appropriate dashboard</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="add-correspondence">
+<h3>Add Correspondence<a class="headerlink" href="#add-correspondence" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.addNote">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">addNote</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#addNote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.addNote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correspondence page, handles the form POST request to store a note between patient and carer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/addNote</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST, GET</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Note successfully added&#8221;</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Note could not be added&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="delete-correspondence">
+<h3>Delete Correspondence<a class="headerlink" href="#delete-correspondence" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.deleteNote_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">deleteNote_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#deleteNote_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.deleteNote_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correspondence page, handles the POST request from the delete button to remove the correct note from the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/deleteNote</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>Success</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Note successfully deleted&#8221;</li>
+</ul>
+</dd>
+<dt>Failed</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Note could not be deleted&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="contact-us">
+<h2>Contact Us<a class="headerlink" href="#contact-us" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.contactUs">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">contactUs</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#contactUs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.contactUs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a form to allow the user to contact JustHealth, it sends an email from the address associated with their account</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/contactUs</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>username</strong> &#8211; Takes the name and email of the user from the session variable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>contactUs.html, &#8220;Success&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Submits the contact form</li>
+<li>&#8220;Your message has been sent, please allow up to 24 hours for a response&#8221;</li>
+</ul>
+</dd>
+<dt>contactUs.html, &#8220;Failed&#8221;</dt>
+<dd><ul class="first last simple">
+<li>Stays on this page and doesn&#8217;t submit the form, handles specific error</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.views.internal_error">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">internal_error</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#internal_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.internal_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="docutils">
+<dt>Return Values</dt>
+<dd><dl class="first last docutils">
+<dt>The following errors are handled with appropriate images:</dt>
+<dd><ul class="first last simple">
+<li>500</li>
+<li>408</li>
+<li>404</li>
+<li>400</li>
+<li>401</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="justhealth-admin-portal">
+<h2>JustHealth Admin Portal<a class="headerlink" href="#justhealth-admin-portal" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="admin-portal-home">
+<h3>Admin Portal Home<a class="headerlink" href="#admin-portal-home" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.adminPortal">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">adminPortal</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#adminPortal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.adminPortal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the pages related to the tablist on the IM portal home page, this includes a list of active users, current medication list and deactivation options</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/adminPortal</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accounttype</strong> &#8211; Needed to display the user&#8217;s accounttype in user statistics</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>adminHome.html</dt>
+<dd><ul class="first last simple">
+<li>Shows the page with all tabs and content loaded for user accounts</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="delete-user-account">
+<h3>Delete User Account<a class="headerlink" href="#delete-user-account" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.deleteAccount_view">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">deleteAccount_view</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#deleteAccount_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.deleteAccount_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submits the form for an administrator to delete a user account from the management portal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/deleteAccount</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>adminHome.html, &#8220;Success&#8221;</dt>
+<dd><ul class="first last simple">
+<li>&#8220;User successfully deleted&#8221;</li>
+</ul>
+</dd>
+<dt>adminHome.html, &#8220;Failed&#8221;</dt>
+<dd><ul class="first last simple">
+<li>&#8220;User could not be deleted&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="new-deactivation-reason">
+<h3>New Deactivation Reason<a class="headerlink" href="#new-deactivation-reason" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.addNewDeactivate">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">addNewDeactivate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#addNewDeactivate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.addNewDeactivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submits the form to add a new deactivation reason to the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/addNewDeactivate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>adminHome.html, &#8220;Success&#8221;</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Deactivate Reason Added&#8221;</li>
+</ul>
+</dd>
+<dt>adminHome.html, &#8220;Warning&#8221;</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Update failed&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="new-medication-name">
+<h3>New Medication Name<a class="headerlink" href="#new-medication-name" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="justHealthServer.views.addNewMedication">
+<code class="descclassname">justHealthServer.views.</code><code class="descname">addNewMedication</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/views.html#addNewMedication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.views.addNewMedication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submits the form to add a new medication name to the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">URL:</th><td class="field-body">/addNewMedication</td>
+</tr>
+<tr class="field-even field"><th class="field-name">HTTP_METHOD:</th><td class="field-body">POST</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>Return values:</dt>
+<dd><dl class="first last docutils">
+<dt>adminHome.html, &#8220;Success&#8221;</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Medication Added&#8221;</li>
+</ul>
+</dd>
+<dt>adminHome.html, &#8220;Warning&#8221;</dt>
+<dd><ul class="first last simple">
+<li>&#8220;Update failed&#8221;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="database.html" class="btn btn-neutral float-right" title="Database">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api.html" class="btn btn-neutral" title="Full API Listing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -86,7 +86,6 @@ class testCreateConnection(unittest.TestCase):
 
         result = requests.post("http://127.0.0.1:9999/api/createConnection", data=payload, auth=HTTPBasicAuth('carer', '7363000287e45c448721f2b3bd6b0811e82725fc18030fe18fe8d97aa698e9c554e14099ccdc8f972df79c3d2209c2330924d6d677328fb99bf9fc1cb325667d9a5c6a3447201210'))
         code = testDatabase.Relationship.select().get().code
-        print code
         self.assertEqual(result.text, "Give the code " + "'" + str(code) + "'" + " to patient so they can accept your request")
 
     def testUserDoesNotExist(self):

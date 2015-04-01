@@ -1,0 +1,413 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Database &mdash; JustHealth 1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="JustHealth 1 documentation" href="index.html"/>
+        <link rel="next" title="HTML Listing" href="html.html"/>
+        <link rel="prev" title="Full Views Listing" href="views.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> JustHealth</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examiner.html">Examiners Guide to JustHealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#website">Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#android">Android</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#testing-portal">Testing Portal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examiner.html#other-links">Other Links</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#overall-structure">Overall Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-api-server">The API server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-orm">The ORM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-database">The Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-web-application">The Web application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arch.html#the-android-application">The Android application</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#general-development-process">General Development Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#development-tools">Development Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#automated-api-tests">Automated API Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#runtests-sh">runTests.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Full API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#email-functions">Email Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#connnections">Connnections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#notifications">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reminders">Reminders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#correspondence">Correspondence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#admin">Admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#system-functions">System Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">Full Views Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-login">User Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#register">Register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#search">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#deactivate">Deactivate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-logout">User Logout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#user-verification">User Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#forgot-password">Forgot Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#password-reset">Password Reset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#appointments">Appointments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#my-patients">My Patients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#prescriptions">Prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#connections">Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#contact-us">Contact Us</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#justhealth-admin-portal">JustHealth Admin Portal</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-justHealthServer.database">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">HTML Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="html.html#frontpage-html">frontpage.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#login-html">login.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#register-html">register.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboard-html">dashboard.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#dashboardcarer-html">dashboardCarer.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#editprofile-html">editProfile.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#deactivate-html">deactivate.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#search-html">search.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#changepassword-html">changePassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpassword-html">resetpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#resetpasswordnowquestion-html">resetpasswordnowquestion.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#expiredpassword-html">expiredpassword.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#mypatients-html">myPatients.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#carerappointments-html">carerAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientappointments-html">patientAppointments.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientupdateappointment-html">patientUpdateAppointment.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#prescriptions-html">prescriptions.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#correspondence-html">correspondence.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#patientnotes-html">patientNotes.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#contactus-html">contactUs.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#faq-html">faq.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#template-html">template.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#searchnhsdirect-html">searchNHSDirect.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#settings-html">settings.html</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#error-pages">error pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="html.html#admin-pages">Admin Pages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="security.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#https">HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#password-security">Password Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#api-authentication">API Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security.html#sql-injection">SQL Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html">Android JavaDoc</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">JustHealth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Database</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/database.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="database">
+<h1>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h1>
+<p>JustHealth uses a PostgreSQL database to store its data. This database is connected to using the PeeWee Python ORM. This allows the database/SQL layer to be abstracted to a certain point, as any tables/rows become classes/objects in our application, just like any other.</p>
+<p>Listed below are our model definitions that define our tables, as well as any helper methods.</p>
+<div class="section" id="module-justHealthServer.database">
+<span id="models"></span><h2>Models<a class="headerlink" href="#module-justHealthServer.database" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="justHealthServer.database.BaseModel">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#BaseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base Model with Database Object</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Client">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a user of the application</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Carer">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Carer</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Carer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Carer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a carer account</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Patient">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Patient</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Patient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Patient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a patient account</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Admin">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Admin</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents an administrative account</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.uq8LnAWi7D">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">uq8LnAWi7D</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#uq8LnAWi7D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.uq8LnAWi7D" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pasword for a user</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Deactivatereason">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Deactivatereason</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Deactivatereason"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Deactivatereason" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a reason an account can be deactivated for</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Userdeactivatereason">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Userdeactivatereason</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Userdeactivatereason"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Userdeactivatereason" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a user deactivating their account with reason and comments</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Relationship">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Relationship</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Relationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Relationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a non-complete relationship between two users</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Patientcarer">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Patientcarer</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Patientcarer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Patientcarer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A completed Patient/Carer connection</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Appointmenttype">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Appointmenttype</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Appointmenttype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Appointmenttype" title="Permalink to this definition">¶</a></dt>
+<dd><p>A possible appointment type</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Appointments">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Appointments</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Appointments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Appointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents an Appoinment</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Medication">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Medication</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Medication"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Medication" title="Permalink to this definition">¶</a></dt>
+<dd><p>A medication/drug supported by the applications</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Prescription">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Prescription</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Prescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Prescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>A prescription assigned to a patient</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Notes">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Notes</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A note left by a patient or carer</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.TakePrescription">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">TakePrescription</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#TakePrescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.TakePrescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of a patient taking their prescription</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Notificationtype">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Notificationtype</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Notificationtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Notificationtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Possible Notification type with class of (danger/warning/success/info)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Notification">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Notification</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Notification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Notification" title="Permalink to this definition">¶</a></dt>
+<dd><p>A notification to alert an account to something</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Reminder">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Reminder</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Reminder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Reminder" title="Permalink to this definition">¶</a></dt>
+<dd><p>A non-dismissable time based notification</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="justHealthServer.database.Androidregistration">
+<em class="property">class </em><code class="descclassname">justHealthServer.database.</code><code class="descname">Androidregistration</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#Androidregistration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.Androidregistration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects an account with an Android device for Push Notifications</p>
+</dd></dl>
+
+</div>
+<div class="section" id="helper-functions">
+<h2>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="justHealthServer.database.createAll">
+<code class="descclassname">justHealthServer.database.</code><code class="descname">createAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#createAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.createAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates all tables, dropping old instances if they exist</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="justHealthServer.database.dropAll">
+<code class="descclassname">justHealthServer.database.</code><code class="descname">dropAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/justHealthServer/database.html#dropAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#justHealthServer.database.dropAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drops all tables providing that they exist</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="html.html" class="btn btn-neutral float-right" title="HTML Listing">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="views.html" class="btn btn-neutral" title="Full Views Listing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Charlotte Hutchinson, Rich Logan, Ben McGregor, Stephen Tate.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
