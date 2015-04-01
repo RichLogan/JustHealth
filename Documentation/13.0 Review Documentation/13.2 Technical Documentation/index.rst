@@ -6,7 +6,7 @@
 .. image:: /images/logo.png
    :height: 100px
    :width: 500 px
-   :scale: 70 % 
+   :scale: 70 %
    :align: center
 
 JustHealth Technical Documentation
@@ -30,4 +30,4 @@ It also explains the detailed security practices that have been implemented to e
    html
    security
    Android JavaDoc <http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html>
-
+   references
