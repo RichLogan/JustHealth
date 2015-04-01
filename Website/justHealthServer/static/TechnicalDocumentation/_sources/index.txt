@@ -29,5 +29,5 @@ It also explains the detailed security practices that have been implemented to e
    database
    html
    security
-   Android JavaDoc <http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html>
+   Android JavaDoc <http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/index.html>
    references

@@ -110,4 +110,4 @@ For both GitHub and Trello, offline versions can be found through the Corpus Ind
 .. _`PostMan`: https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en
 .. _`requests`: http://docs.python-requests.org/en/latest/
 .. _`User Documentation`: http://raptor.kent.ac.uk:5000/static/UserDocumentation/index.html
-.. _`Android`: http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/justhealth/jhapp/index.html
+.. _`Android`: http://raptor.kent.ac.uk:5000/static/AndroidDocumentation/index.html
