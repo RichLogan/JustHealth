@@ -115,8 +115,8 @@ function runTests {
   #   # python -m unittest discover Iteration\ 4/Test\ Cases/ testGetConnections.py
   # echo -e "\n"
 
-  echo "Iteration 5"
-  echo "--"
+  # echo "Iteration 5"
+  # echo "--"
 
     # echo "Add Appointments"
     # python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 5/Test\ Cases/ testAddAppointments.py
@@ -136,8 +136,8 @@ function runTests {
     # echo "Delete Prescription"
     # python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 5/Test\ Cases/ testDeletePrescription.py
     
-    echo "Get Appointment"
-    python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 5/Test\ Cases/ testGetAppointments.py
+    # echo "Get Appointment"
+    # python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 5/Test\ Cases/ testGetAppointments.py
   
   # echo "Iteration 8"
   # echo "--"    
@@ -157,14 +157,14 @@ function runTests {
   #   echo "Delete Reminders"
   #   python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testDeleteReminders.py
 
-  #   echo "Dismiss Notifications"
-  #   python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testDimissNotification.py
+    # echo "Dismiss Notifications"
+    # python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testDimissNotification.py
 
   #   echo "Get appointments due in 30 minutes"
   #   python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetAppointmentsDueIn30.py
 
-  #   echo "Get appointments due now"
-  #   python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetAppointmentsDueNow.py
+    # echo "Get appointments due now"
+    # python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetAppointmentsDueNow.py
 
   #   echo "Get minutes difference"
   #   python -m unittest discover Iteration\ Specific\ Plans/Iteration\ 8/TestCases/ testGetMinutesDifference.py  
