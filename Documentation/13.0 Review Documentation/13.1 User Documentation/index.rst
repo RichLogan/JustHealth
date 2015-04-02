@@ -18,12 +18,14 @@ Prescribed medication is often critical to a patient’s health, but it’s also
 
 This document will list all the different elements that both the Android and Web-based appplications include and explains to each user-type how to use them.
 
-The application includes interfaces for two different types of users, these are:
+The application includes interfaces for three different types of users, these are:
 
 1. Patients
 2. Carers
+3. Administrator
 
-Under each functionality heading the features for the respective user will be listed.
+Under each element of functionality, the features for the respective user will be listed.
+**Please note:** Administrator priviledges only exist within the Information Management Portal so are individually documented on that page.
 
 
 .. toctree::
@@ -42,4 +44,5 @@ Under each functionality heading the features for the respective user will be li
    searchnhs
    notes
    changePassword
-   contacUs
+   contactUs
+   adminPortal
