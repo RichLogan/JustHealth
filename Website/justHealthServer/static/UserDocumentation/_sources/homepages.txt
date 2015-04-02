@@ -8,9 +8,9 @@ Web Application
 
 **Patient**
 
-The home page on the web consists of 5 sections. Right at the top of the page there is a Notifications sections, if you have any updates or reminders then they will be displayed here. Underneath that is a section which displays all active presctiptions and below that a section which displays upcoming appointments.
+The home page on the web consists of 5 sections. Right at the top of the page there is a Notifications section, if you have any updates or reminders then they will be displayed here. Underneath that is a section which displays all active presctiptions and below that a section which displays your upcoming appointments.
 
-On the left hand side at the top there is basic user information which shows the current users username, firstname and surname. In the top right hand side of this there is a icon which symbolises edit profile. Below the profile section there is a box which shows all completed connections and a link to view all connections information. Underneath this there are 2 more options: Search (for a user), Settings and NHS Search. 
+On the left hand side at the top, a box contains your user information: a profile picture, username, name and email. In the top right hand side of this there is an icon which indicates the ability to edit your profile. Below the profile section there is a box which shows all completed connections and a link to view all connections information. Underneath this there are 2 more options: Search (for a different user), NHS Search and Account Settings . 
 
 To navigate around the site click on different links on the home page or click on the navigation button in the top right hand side of the page which gives you a list of options.  
 
