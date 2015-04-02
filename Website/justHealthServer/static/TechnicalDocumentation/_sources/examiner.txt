@@ -6,7 +6,7 @@ Examiner's Guide to JustHealth
 Welcome
 ---------
 
-Welcome to JustHealth's Documentation!
+Welcome to JustHealth's Documentation! You can access the online version (recommended) at: http://raptor.kent.ac.uk:5000/static/TechnicalDocumentation/examiner.html
 
 If you are viewing this online, you can skip this section. If this is the paper copy please note that our corpus index file (your starting place after this document) can be found at: /corpusIndex.html. This lists all documentation, authorship and links to the resources.  
 
